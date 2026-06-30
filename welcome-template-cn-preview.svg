@@ -1,0 +1,19 @@
+<svg width="1200" height="1500" viewBox="0 0 1200 1500" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Preview of the Chinese ShoreVest welcome email">
+  <rect width="1200" height="1500" fill="#F3F0EA"></rect>
+  <rect x="160" y="90" width="880" height="1320" rx="6" fill="#11110D"></rect>
+  <rect x="160" y="90" width="880" height="170" rx="6" fill="#11110D" stroke="rgba(255,255,255,0.1)"></rect>
+  <text x="230" y="175" fill="#F5F2EB" font-family="DIN 2014" font-size="58" font-style="italic">ShoreVest</text>
+  <text x="230" y="225" fill="#958773" font-family="DIN 2014" font-size="20" letter-spacing="5">CHINA DEBT DYNAMICS</text>
+  <text x="230" y="350" fill="#C3A27C" font-size="20" letter-spacing="5"><tspan font-family="DIN 2014">SHOREVEST</tspan><tspan font-family="Noto Serif SC"> 洞察</tspan></text>
+  <text x="230" y="435" fill="#F5F2EB" font-size="60"><tspan font-family="Noto Serif SC">欢迎订阅 </tspan><tspan font-family="DIN 2014">ShoreVest</tspan></text>
+  <text x="230" y="505" fill="#F5F2EB" font-family="Noto Serif SC" font-size="60">洞察。</text>
+  <text x="230" y="620" fill="#D2CCC1" font-size="28"><tspan font-family="Noto Serif SC">您已加入 </tspan><tspan font-family="DIN 2014">ShoreVest</tspan><tspan font-family="Noto Serif SC"> 的机构洞察与精选公司动态邮件列表，</tspan></text>
+  <text x="230" y="662" fill="#D2CCC1" font-family="Noto Serif SC" font-size="28">包括《中国债务动态》的最新内容。</text>
+  <text x="230" y="748" fill="#D2CCC1" font-family="Noto Serif SC" font-size="28">我们的内容面向机构配置者，聚焦中国私募信贷、特殊机会</text>
+  <text x="230" y="790" fill="#D2CCC1" font-family="Noto Serif SC" font-size="28">与回收驱动型投资机会，提供来自市场一线的观点。</text>
+  <rect x="230" y="900" width="236" height="78" rx="39" fill="#B43B2F"></rect>
+  <text x="287" y="948" fill="#FFF7EF" font-family="Noto Serif SC" font-size="24" letter-spacing="1">查看最新研究</text>
+  <line x1="230" y1="1080" x2="970" y2="1080" stroke="rgba(255,255,255,0.14)"></line>
+  <text x="230" y="1160" fill="#9C9386" font-size="22"><tspan font-family="Noto Serif SC">您收到此邮件，是因为您在 </tspan><tspan font-family="DIN 2014">shorevest.com</tspan><tspan font-family="Noto Serif SC"> 提交了订阅申请。</tspan></text>
+  <text x="230" y="1198" fill="#9C9386" font-family="Noto Serif SC" font-size="22">后续邮件底部将提供偏好设置及退订链接。</text>
+</svg>
