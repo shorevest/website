@@ -1,0 +1,59 @@
+/* ============================================================
+   Investor portal sign-in — "neat boxes" alignment pass
+   Burford-style: the sign-in form sits in one clean, contained
+   card. LAYOUT ONLY. Loaded last. No typography overrides.
+   ============================================================ */
+
+.sv-signin {
+  --nb-fill: #FFFFFF;
+  --nb-border: rgba(30, 64, 64, 0.18);
+  --nb-hair: rgba(30, 64, 64, 0.12);
+}
+
+/* ------------------------------------------------------------
+   Wordmark lockup — tidy now that the medallion is gone
+   ------------------------------------------------------------ */
+.signin .signin__lockup {
+  gap: 0;
+}
+
+/* ------------------------------------------------------------
+   SIGN-IN FORM — contain everything in one crisp card
+   ------------------------------------------------------------ */
+.signin .signin__form-inner {
+  max-width: 432px;
+  background: var(--nb-fill);
+  border: 1px solid var(--nb-border);
+  padding: clamp(30px, 3.2vw, 42px);
+  box-sizing: border-box;
+}
+
+/* inputs read cleanly on the white card */
+.signin .form-control {
+  background: #FFFFFF;
+  border-color: var(--nb-border);
+}
+
+/* divider above the secondary (help) links so the card reads
+   as header / action / help — tidy and aligned */
+.signin .signin__aux {
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px solid var(--nb-hair);
+}
+
+/* encryption note: divider above, full card width */
+.signin .signin__secure-note {
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px solid var(--nb-hair);
+}
+
+/* ------------------------------------------------------------
+   LEFT BRAND PANEL — keep the confidential strip tidy/aligned
+   ------------------------------------------------------------ */
+.signin .signin__trust-rule {
+  border: 0;
+  border-top: 1px solid rgba(250, 246, 238, 0.20);
+  margin: 0 0 18px;
+}
