@@ -1,0 +1,509 @@
+body.legal-page,
+body.privacy-page,
+body.cookie-page,
+body.cookies-page,
+body.terms-page,
+body.disclaimers-page {
+  --site-page-margin: var(--sv-page-gutter, clamp(24px, 5vw, 72px));
+  --legal-document-max-width: 1120px;
+  --legal-reading-width: var(--sv-content-max-legal, 960px);
+  --legal-document-padding: clamp(24px, 5vw, 72px);
+  --legal-page-top: clamp(84px, 11vh, 132px);
+  --legal-page-bottom: clamp(96px, 12vh, 160px);
+  --legal-rule-color: var(--sv-xuan-dark, #d8ceb0);
+  background: var(--sv-xuan-light, #f2ecd8);
+  color: var(--sv-qing-dark, #0f2206);
+}
+
+.legal-main,
+.policy-main,
+.terms-main,
+.disclaimer-main,
+.legal-page__main {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: var(--legal-page-top) 0 var(--legal-page-bottom);
+  box-sizing: border-box;
+}
+
+.legal-content,
+.policy-content,
+.terms-content,
+.disclaimer-content,
+.legal-page__content,
+.legal-container,
+.legal-document__content {
+  width: 100%;
+  max-width: var(--legal-document-max-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--legal-document-padding);
+  padding-right: var(--legal-document-padding);
+  box-sizing: border-box;
+  color: #24331e;
+}
+
+.legal-main > .legal-container,
+.policy-main > .legal-container,
+.terms-main > .legal-container,
+.disclaimer-main > .legal-container {
+  padding-left: var(--legal-document-padding);
+  padding-right: var(--legal-document-padding);
+}
+
+.legal-page__intro-block,
+.legal-hero,
+.policy-hero,
+.terms-hero,
+.disclaimer-hero {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 0 clamp(40px, 5vw, 64px);
+  padding: 0 0 clamp(48px, 6vw, 72px);
+  border-bottom: 1px solid var(--legal-rule-color);
+  box-sizing: border-box;
+}
+
+.legal-document__prologue,
+.privacy-policy__prologue {
+  width: 100%;
+  max-width: var(--legal-reading-width);
+}
+
+.legal-page__intro-block h1,
+.legal-hero h1,
+.policy-hero h1,
+.terms-hero h1,
+.disclaimer-hero h1,
+.legal-content h1,
+.policy-content h1,
+.terms-content h1,
+.disclaimer-content h1,
+.legal-page__content h1,
+body:is(.legal-page, .privacy-page, .cookie-page, .cookies-page, .terms-page, .disclaimers-page) :is(.legal-title, .page-title) {
+  max-width: 900px;
+  margin: 0;
+  font-family: var(--sv-type-sans);
+  font-size: clamp(42px, 4.5vw, 56px) !important;
+  line-height: 0.98 !important;
+  letter-spacing: 0.02em !important;
+  font-weight: 700;
+  text-transform: none !important;
+  color: #0f2206;
+}
+
+.legal-page__kicker,
+.legal-content > .intro,
+.legal-eyebrow,
+.policy-eyebrow,
+.terms-eyebrow,
+.disclaimer-eyebrow,
+.legal-updated,
+.effective-date {
+  font-family: var(--sv-type-sans);
+  font-size: 10px;
+  line-height: 1.4;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #c93b2a;
+  margin: 0 0 28px;
+}
+
+.legal-page__intro-block h1 + .effective-date,
+.legal-content > h1 + .intro,
+.legal-page__content h1 + .effective-date,
+.effective-date {
+  margin-top: 28px;
+  margin-bottom: 0;
+}
+
+.legal-content > h1 + .intro,
+.legal-page__content > h1 + .intro,
+.legal-content > h1 + .effective-date,
+.legal-page__content > h1 + .effective-date {
+  padding-bottom: clamp(48px, 6vw, 72px);
+  border-bottom: 1px solid var(--legal-rule-color);
+  margin-bottom: clamp(40px, 5vw, 64px);
+}
+
+.effective-date strong {
+  font-weight: 700;
+}
+
+.legal-content p,
+.legal-content li,
+.policy-content p,
+.policy-content li,
+.terms-content p,
+.terms-content li,
+.disclaimer-content p,
+.disclaimer-content li,
+.legal-page__content p,
+.legal-page__content li {
+  max-width: var(--legal-reading-width);
+  font-family: var(--sv-type-sans);
+  font-size: 15.5px;
+  line-height: 1.72;
+  font-weight: 400;
+  color: #24331e;
+  overflow-wrap: anywhere;
+}
+
+.legal-content p,
+.policy-content p,
+.terms-content p,
+.disclaimer-content p,
+.legal-page__content p {
+  margin: 0 0 22px;
+}
+
+.legal-content :is(.section, section),
+.policy-content :is(.section, section),
+.terms-content :is(.section, section),
+.disclaimer-content :is(.section, section),
+.legal-page__content :is(.section, section) {
+  width: 100%;
+  max-width: var(--legal-reading-width);
+  margin-block: 0 clamp(56px, 6vw, 72px);
+}
+
+.legal-content :is(.section, section) > :last-child,
+.policy-content :is(.section, section) > :last-child,
+.terms-content :is(.section, section) > :last-child,
+.disclaimer-content :is(.section, section) > :last-child,
+.legal-page__content :is(.section, section) > :last-child {
+  margin-bottom: 0;
+}
+
+.legal-content h2,
+.policy-content h2,
+.terms-content h2,
+.disclaimer-content h2,
+.legal-page__content h2,
+body:is(.legal-page, .privacy-page, .cookie-page, .cookies-page, .terms-page, .disclaimers-page) .legal-section-title {
+  width: 100%;
+  max-width: var(--legal-reading-width);
+  margin-top: clamp(44px, 5vw, 64px);
+  margin-bottom: clamp(18px, 2vw, 28px);
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--legal-rule-color);
+  font-family: var(--sv-type-sans);
+  font-size: clamp(24px, 2.2vw, 30px) !important;
+  line-height: 1.15 !important;
+  font-weight: 700;
+  letter-spacing: 0.03em !important;
+  text-transform: none !important;
+  color: #0f2206;
+}
+
+.legal-content :is(.section, section) > h2:first-child,
+.policy-content :is(.section, section) > h2:first-child,
+.terms-content :is(.section, section) > h2:first-child,
+.disclaimer-content :is(.section, section) > h2:first-child,
+.legal-page__content :is(.section, section) > h2:first-child {
+  margin-top: 0;
+}
+
+.legal-content h3,
+.policy-content h3,
+.terms-content h3,
+.disclaimer-content h3,
+.legal-page__content h3,
+body:is(.legal-page, .privacy-page, .cookie-page, .cookies-page, .terms-page, .disclaimers-page) .legal-subsection-title {
+  max-width: var(--legal-reading-width);
+  margin-top: clamp(28px, 3vw, 40px);
+  margin-bottom: 14px;
+  font-family: var(--sv-type-sans);
+  font-size: clamp(18px, 1.4vw, 20px) !important;
+  line-height: 1.25 !important;
+  font-weight: 700;
+  letter-spacing: 0.03em !important;
+  text-transform: none !important;
+  color: #1e4040;
+}
+
+.legal-content ul,
+.legal-content ol,
+.policy-content ul,
+.policy-content ol,
+.terms-content ul,
+.terms-content ol,
+.disclaimer-content ul,
+.disclaimer-content ol,
+.legal-page__content ul,
+.legal-page__content ol {
+  max-width: var(--legal-reading-width);
+  padding-left: 1.25rem;
+  margin: 0 0 28px;
+}
+
+.legal-content table,
+.policy-content table,
+.terms-content table,
+.disclaimer-content table,
+.legal-page__content table {
+  width: 100%;
+  max-width: var(--legal-reading-width);
+  border-collapse: collapse;
+  margin-block: 32px;
+  font-size: 14px;
+}
+
+.legal-content th,
+.legal-content td,
+.policy-content th,
+.policy-content td,
+.terms-content th,
+.terms-content td,
+.disclaimer-content th,
+.disclaimer-content td,
+.legal-page__content th,
+.legal-page__content td {
+  border: 1px solid var(--legal-rule-color);
+  padding: 14px 16px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.legal-content a,
+.policy-content a,
+.terms-content a,
+.disclaimer-content a,
+.legal-page__content a {
+  color: #c93b2a;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.legal-contact-actions {
+  max-width: var(--legal-reading-width);
+}
+
+@media (max-width: 767px) {
+  body.legal-page,
+  body.privacy-page,
+  body.cookie-page,
+  body.cookies-page,
+  body.terms-page,
+  body.disclaimers-page {
+    --legal-document-padding: 24px;
+    --legal-page-top: clamp(72px, 12vh, 96px);
+    --legal-page-bottom: 72px;
+  }
+
+  .legal-page__intro-block h1,
+  .legal-hero h1,
+  .policy-hero h1,
+  .terms-hero h1,
+  .disclaimer-hero h1,
+  .legal-content h1,
+  .policy-content h1,
+  .terms-content h1,
+  .disclaimer-content h1,
+  .legal-page__content h1,
+  body:is(.legal-page, .privacy-page, .cookie-page, .cookies-page, .terms-page, .disclaimers-page) :is(.legal-title, .page-title) {
+    font-size: clamp(34px, 9vw, 42px) !important;
+    line-height: 1 !important;
+  }
+
+  .legal-content h2,
+  .policy-content h2,
+  .terms-content h2,
+  .disclaimer-content h2,
+  .legal-page__content h2,
+  body:is(.legal-page, .privacy-page, .cookie-page, .cookies-page, .terms-page, .disclaimers-page) .legal-section-title {
+    font-size: clamp(22px, 5vw, 26px) !important;
+    line-height: 1.16 !important;
+  }
+
+  .legal-content h3,
+  .policy-content h3,
+  .terms-content h3,
+  .disclaimer-content h3,
+  .legal-page__content h3,
+  body:is(.legal-page, .privacy-page, .cookie-page, .cookies-page, .terms-page, .disclaimers-page) .legal-subsection-title {
+    font-size: clamp(18px, 4.4vw, 20px) !important;
+    line-height: 1.25 !important;
+  }
+
+  .legal-content p,
+  .policy-content p,
+  .terms-content p,
+  .disclaimer-content p,
+  .legal-page__content p {
+    margin-bottom: 20px;
+  }
+}
+
+/* Investor-access legal documents load legacy refinement CSS with !important
+   page-frame rules; these scoped overrides keep that legal page on the same
+   single document container as the other legal templates. */
+body.legal-page .legal-page__main {
+  padding-top: var(--legal-page-top) !important;
+  padding-bottom: var(--legal-page-bottom) !important;
+  max-width: none !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+body.legal-page .legal-page__content {
+  max-width: var(--legal-document-max-width) !important;
+  padding-left: var(--legal-document-padding) !important;
+  padding-right: var(--legal-document-padding) !important;
+}
+
+body.legal-page .legal-page__content > h1 {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* All legal documents share the Privacy Policy's approved horizontal frame.
+   Keep the legal typography rules above intact while removing legacy narrow
+   document insets, nested gutters, and page-specific max-width drift. */
+body:is(.legal-page, .privacy-page, .cookie-page, .cookies-page, .terms-page, .disclaimers-page)
+  :is(.legal-container, .legal-content, .legal-page__content, .legal-document__content, .privacy-policy__content, .disclaimer-wrap) {
+  width: min(
+    calc(100% - (var(--sv-page-gutter, var(--site-page-margin, clamp(28px, 5vw, 72px))) * 2)),
+    var(--sv-content-max-standard, var(--site-max-width, 1320px))
+  );
+  max-width: none !important;
+  margin-inline: auto !important;
+  padding-inline: 0 !important;
+}
+
+body:is(.legal-page, .privacy-page, .cookie-page, .cookies-page, .terms-page, .disclaimers-page)
+  :is(.legal-document__prologue, .privacy-policy__prologue),
+body:is(.legal-page, .privacy-page, .cookie-page, .cookies-page, .terms-page, .disclaimers-page)
+  :is(.legal-container, .legal-content, .legal-page__content, .legal-document__content, .privacy-policy__content, .disclaimer-wrap)
+  :is(p, li, section, .section, ul, ol, table, h2, h3, .legal-contact-actions) {
+  max-width: 100%;
+}
+
+body:is(.legal-page, .privacy-page, .cookie-page, .cookies-page, .terms-page, .disclaimers-page)
+  :is(.legal-container, .legal-content, .legal-page__content, .legal-document__content, .privacy-policy__content, .disclaimer-wrap)
+  :is(.section, section) {
+  width: 100%;
+  max-width: 100%;
+  margin-block: 0 clamp(56px, 6vw, 72px) !important;
+}
+
+body:is(.legal-page, .privacy-page, .cookie-page, .cookies-page, .terms-page, .disclaimers-page)
+  :is(.legal-container, .legal-content, .legal-page__content, .legal-document__content, .privacy-policy__content, .disclaimer-wrap)
+  :is(.section, section) > h2:first-child {
+  margin-top: 0 !important;
+}
+
+body:is(.legal-page, .privacy-page, .cookie-page, .cookies-page, .terms-page, .disclaimers-page)
+  :is(.legal-container, .legal-content, .legal-page__content, .legal-document__content, .privacy-policy__content, .disclaimer-wrap)
+  h2 {
+  margin-top: clamp(44px, 5vw, 64px) !important;
+  margin-bottom: clamp(18px, 2vw, 28px) !important;
+  padding-bottom: 16px !important;
+  border-bottom: 1px solid var(--legal-rule-color) !important;
+}
+
+body:is(.legal-page, .privacy-page, .cookie-page, .cookies-page, .terms-page, .disclaimers-page)
+  :is(.legal-container, .legal-content, .legal-page__content, .legal-document__content, .privacy-policy__content, .disclaimer-wrap)
+  p:not(.legal-page__kicker):not(.effective-date) {
+  margin: 0 0 22px !important;
+}
+
+/* Mobile/tablet legal page frame guardrail.
+   Legal pages use a shared structure:
+   page root = body legal variant, page root wrapper = .legal-main,
+   content wrapper = .legal-container/.legal-document__content,
+   title/divider = .legal-page__intro-block, body copy = sections/p/lists.
+   Keep that entire column inside the viewport and neutralize legacy full-bleed
+   or desktop frame rules that can leak into legal templates on smaller screens. */
+@media (max-width: 1024px) {
+  body:is(.legal-page, .privacy-page, .cookie-page, .cookies-page, .terms-page, .disclaimers-page) {
+    --legal-mobile-gutter: var(--mobile-site-gutter, var(--sv-page-gutter, var(--site-page-gutter, 22px)));
+    --legal-document-padding: var(--legal-mobile-gutter);
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    margin-inline: 0 !important;
+    padding-inline: 0 !important;
+    overflow-x: hidden;
+  }
+
+  body:is(.legal-page, .privacy-page, .cookie-page, .cookies-page, .terms-page, .disclaimers-page)
+    :is(.legal-main, .policy-main, .terms-main, .disclaimer-main, .legal-page__main) {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin-inline: 0 !important;
+    padding-inline: 0 !important;
+    transform: none !important;
+    left: auto !important;
+    overflow-x: clip;
+  }
+
+  body:is(.legal-page, .privacy-page, .cookie-page, .cookies-page, .terms-page, .disclaimers-page)
+    :is(.legal-container, .legal-content, .legal-page__content, .legal-document__content, .privacy-policy__content, .disclaimer-wrap) {
+    width: var(--mobile-site-width, calc(100% - (var(--legal-mobile-gutter) * 2))) !important;
+    max-width: var(--legal-reading-width) !important;
+    min-width: 0 !important;
+    margin-inline: auto !important;
+    padding-inline: 0 !important;
+    box-sizing: border-box !important;
+    transform: none !important;
+    left: auto !important;
+  }
+
+  body:is(.legal-page, .privacy-page, .cookie-page, .cookies-page, .terms-page, .disclaimers-page)
+    :is(.legal-page__intro-block, .legal-hero, .policy-hero, .terms-hero, .disclaimer-hero, .legal-document__prologue, .privacy-policy__prologue),
+  body:is(.legal-page, .privacy-page, .cookie-page, .cookies-page, .terms-page, .disclaimers-page)
+    :is(.legal-container, .legal-content, .legal-page__content, .legal-document__content, .privacy-policy__content, .disclaimer-wrap)
+    :is(p, li, section, .section, ul, ol, table, h1, h2, h3, .effective-date, .legal-page__kicker, .legal-contact-actions) {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    transform: none !important;
+    left: auto !important;
+    box-sizing: border-box !important;
+  }
+
+  body:is(.legal-page, .privacy-page, .cookie-page, .cookies-page, .terms-page, .disclaimers-page)
+    :is(.legal-container, .legal-content, .legal-page__content, .legal-document__content, .privacy-policy__content, .disclaimer-wrap)
+    :is(p, li, h1, h2, h3, a) {
+    overflow-wrap: anywhere;
+    word-break: normal;
+  }
+
+  body:is(.legal-page, .privacy-page, .cookie-page, .cookies-page, .terms-page, .disclaimers-page)
+    :is(.sv-footer, .sv-footer--full-bleed) {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    transform: none !important;
+    left: auto !important;
+  }
+}
+
+/* Chinese legal mirrors use the same legal layout as English pages while
+   keeping the English typeface first in the stack so retained English legal
+   terms, entity names, fund names, and jurisdiction names render in the
+   English font before falling back to Chinese glyph coverage. */
+html[lang^="zh"] body:is(.legal-page, .privacy-page, .cookie-page, .cookies-page, .terms-page, .disclaimers-page) .legal-content :is(h1, h2, h3, p, li, a, strong),
+html[lang^="zh"] body:is(.legal-page, .privacy-page, .cookie-page, .cookies-page, .terms-page, .disclaimers-page) .legal-page__kicker,
+html[lang^="zh"] body:is(.legal-page, .privacy-page, .cookie-page, .cookies-page, .terms-page, .disclaimers-page) .effective-date {
+  font-family: var(--sv-type-sans);
+}
+
+/* Reserve the mobile sticky header for legal/investor access intro pages.
+   Header height inherits the canonical 96px declared in shared-header.css. */
+@media (max-width: 980px) {
+  body:is(.legal-page, .privacy-page, .cookie-page, .cookies-page, .terms-page, .disclaimers-page) {
+    --mobile-gutter: var(--mobile-site-gutter, 22px);
+    --mobile-content-width: var(--mobile-site-width, calc(100vw - (var(--mobile-gutter) * 2)));
+    --legal-page-top: calc(var(--mobile-header-height) + 32px);
+    --legal-mobile-gutter: var(--mobile-gutter);
+  }
+}

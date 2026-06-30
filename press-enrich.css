@@ -1,0 +1,337 @@
+/* ============================================================
+   PRESS · ENRICHMENT PASS  (loads LAST — after burford-polish)
+   Adds colour variety, image placeholders, and tighter spacing
+   on top of the "neat boxes + red" system. Layout + colour only.
+
+   Palette in play:
+     Cinnabar     #C93B2A   (brand red accent)
+     Cinnabar dk  #8A1F12
+     Ink green    #1E4040   (qing — deep panel fill)
+     Teal accent  #3D7070
+     Gold         #C89A2E   (dawn-redwood, sparing ceremonial accent)
+     Paper        #F2ECD8   (warm cream)
+     Xuan light   #FAF6EE
+   ============================================================ */
+body.press-page {
+  --pe-green: #1E4040;
+  --pe-green-deep: #143030;
+  --pe-gold: #E0B645;
+  --pe-cream: #FAF6EE;
+  --pe-paper: #F2ECD8;
+  --pe-sand: #EFE7D2;
+  --pe-section-gap: clamp(64px, 9vw, 116px);
+}
+
+/* ============================================================
+   MEDIA HERO · single clean cinnabar field (no split)
+   Four stylesheets were layering gradients + a desaturated photo
+   + two ::after bands on this hero, producing the "split colour"
+   look. Collapse it to ONE even cinnabar ground that matches the
+   Firm / Contact heroes, and disable every banding layer.
+   ============================================================ */
+html body.press-page .press-hero.hero--press.sv-hero,
+html body.press-page .press-hero.sv-hero,
+html body.press-page .press-hero {
+  background:
+    radial-gradient(120% 120% at 72% 46%, rgba(61, 112, 112, 0.34) 0%, rgba(15, 34, 32, 0) 58%),
+    radial-gradient(90% 120% at 8% 30%, rgba(20, 56, 52, 0.55) 0%, rgba(12, 28, 24, 0) 60%),
+    linear-gradient(150deg, #143A38 0%, #11302C 46%, #0C201C 100%) !important;
+}
+/* The cinnabar field lives on the element itself now — neutralise the
+   pseudo-element washes and the grayscale photo seam that caused banding. */
+html body.press-page .press-hero.hero--press.sv-hero::before,
+html body.press-page .press-hero.sv-hero::before,
+html body.press-page .press-hero::before,
+html body.press-page .press-hero.hero--press.sv-hero::after,
+html body.press-page .press-hero.sv-hero::after,
+html body.press-page .press-hero::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+}
+html body.press-page .press-hero .press-hero__media {
+  display: none !important;
+}
+/* ==========================================================================
+   MEDIA HERO — match the firm / strategy / team hero EXACTLY
+   The press hero already carries the shared .sv-hero / .sv-hero__inner /
+   __left / __eyebrow / __title / __body structure, but .press-page is
+   excluded from the shared :is() lists, so it diverged (italic DIN title,
+   narrow grid, custom spacing). This block (loads last) reproduces the shared
+   hero treatment so the eyebrow, title, lead, and meta sit, align, and space
+   identically to the other section heroes.
+   ========================================================================== */
+
+/* Inner: site container, copy anchored to the LOWER region like strategy/team. */
+body.press-page .press-hero.hero--press > .press-hero__inner,
+body.press-page .press-hero > .press-hero__inner {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: flex-end !important;
+  width: 100% !important;
+  max-width: var(--site-max-width, 1440px) !important;
+  margin-inline: auto !important;
+  padding: var(--hero-top-pad) var(--hero-side-pad) var(--hero-bottom-pad) !important;
+  min-height: inherit !important;
+  column-gap: 0 !important;
+  grid-template-columns: none !important;
+}
+
+body.press-page .press-hero .press-hero__copy {
+  width: 100% !important;
+  max-width: var(--hero-left-max, 760px) !important;
+  align-self: flex-start !important;
+}
+
+/* Eyebrow — same gap as the other heroes.
+   The press eyebrow's extra `.eyebrow` class catches the global
+   `main :is(.eyebrow,…){ margin-bottom: var(--sv-section-label-gap) !important }`
+   rule, so we also re-point that variable here to guarantee the 28px gap. */
+html body.press-page .press-hero .press-hero__copy .eyebrow.sv-hero__eyebrow,
+html body.press-page .press-hero .press-hero__copy .sv-hero__eyebrow,
+body.press-page .press-hero .eyebrow.sv-hero__eyebrow,
+body.press-page .press-hero .sv-hero__eyebrow {
+  --sv-section-label-gap: 28px !important;
+  margin-top: 0 !important;
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+  margin-bottom: 28px !important;
+}
+
+/* Title — Spectral serif, normal weight, NOT italic/uppercase, like the others. */
+body.press-page .press-hero .type-display-hero,
+body.press-page .press-hero .type-display-hero.sv-hero__title,
+body.press-page .press-hero .sv-hero__title {
+  font-family: "DIN 2014", "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif !important;
+  font-size: clamp(48px, 5.2vw, 82px) !important;
+  line-height: 0.98 !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.035em !important;
+  text-transform: none !important;
+  margin: 0 !important;
+  max-width: var(--hero-title-max, 980px) !important;
+  color: var(--press-xuan-light, #FAF6EE) !important;
+}
+
+/* Lead — same gap, copy width, and body type scale as the other heroes. */
+body.press-page .press-hero .lead.sv-hero__body,
+body.press-page .press-hero .sv-hero__body {
+  margin: clamp(28px, 4vw, 44px) 0 0 !important;
+  max-width: var(--hero-copy-max, 640px) !important;
+  font-size: clamp(16px, 1.34vw, 20px) !important;
+  line-height: 1.58 !important;
+}
+
+/* Meta — continues the same vertical rhythm beneath the lead. */
+body.press-page .press-hero .press-hero__meta {
+  margin: clamp(24px, 3vw, 32px) 0 0 !important;
+}
+
+/* Even vertical rhythm between the major bands. */
+body.press-page .press-gallery,
+body.press-page .press-upcoming,
+body.press-page .press-shell,
+body.press-page .press-disclosures {
+  margin-block: 0;
+  padding-block: clamp(40px, 6vw, 72px);
+}
+body.press-page .press-gallery { padding-top: clamp(48px, 7vw, 88px); }
+
+/* ============================================================
+   A · IN-THE-FIELD GALLERY  — 3 image placeholders, cream band
+   ============================================================ */
+body.press-page .press-gallery {
+  background: var(--pe-paper);
+  border-top: 1px solid rgba(30, 64, 64, 0.14);
+  border-bottom: 1px solid rgba(30, 64, 64, 0.14);
+}
+body.press-page .press-gallery__inner {
+  width: min(100% - 2 * clamp(22px, 6vw, 64px), 1180px);
+  margin-inline: auto;
+}
+body.press-page .press-gallery__head {
+  margin-bottom: clamp(24px, 3vw, 36px);
+}
+body.press-page .press-gallery__head .press-section-title {
+  margin-top: clamp(6px, 1vw, 10px);
+}
+body.press-page .press-gallery__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 26px);
+}
+body.press-page .press-gallery__item {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+body.press-page .press-gallery__slot {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border: 1px solid rgba(30, 64, 64, 0.18);
+  background: #E7DEC8;
+}
+body.press-page .press-gallery__item figcaption {
+  font-family: var(--sv-font-en, sans-serif);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(30, 64, 64, 0.68);
+}
+@media (max-width: 720px) {
+  body.press-page .press-gallery__grid { grid-template-columns: 1fr; gap: clamp(18px, 5vw, 26px); }
+  body.press-page .press-gallery__slot { aspect-ratio: 16 / 9; }
+}
+
+/* ============================================================
+   B · UPCOMING EVENTS  — deep ink-green colour block
+   ============================================================ */
+body.press-page .press-upcoming {
+  background: var(--pe-green);
+  color: var(--pe-cream);
+}
+body.press-page .press-upcoming__inner {
+  width: min(100% - 2 * clamp(22px, 6vw, 64px), 1180px);
+  margin-inline: auto;
+}
+body.press-page .press-upcoming .press-eyebrow {
+  color: var(--pe-gold) !important;
+}
+body.press-page .press-upcoming .press-section-title {
+  color: var(--pe-cream) !important;
+}
+body.press-page .press-upcoming .press-contact-caption__label {
+  color: rgba(250, 246, 238, 0.62) !important;
+}
+body.press-page .press-upcoming .press-contact-caption a {
+  color: var(--pe-cream) !important;
+  border-bottom: 1px solid rgba(200, 154, 46, 0.6);
+}
+body.press-page .press-upcoming .press-contact-caption a:hover {
+  color: var(--pe-gold) !important;
+}
+/* The events table sits as a translucent panel on the green. */
+body.press-page .press-upcoming .press-events-table {
+  background: rgba(250, 246, 238, 0.04) !important;
+  border-color: rgba(250, 246, 238, 0.18) !important;
+}
+body.press-page .press-upcoming .press-event-row {
+  border-bottom-color: rgba(250, 246, 238, 0.14) !important;
+}
+body.press-page .press-upcoming .press-event-date {
+  color: var(--pe-gold) !important;
+}
+body.press-page .press-upcoming .press-event-title {
+  color: var(--pe-cream) !important;
+}
+body.press-page .press-upcoming .press-event-title small {
+  color: rgba(250, 246, 238, 0.7) !important;
+}
+body.press-page .press-upcoming .press-event-location {
+  color: rgba(250, 246, 238, 0.82) !important;
+}
+body.press-page .press-upcoming .press-event-type {
+  border-color: rgba(200, 154, 46, 0.5) !important;
+  color: var(--pe-gold) !important;
+}
+body.press-page .press-upcoming .press-event-link {
+  color: var(--pe-cream) !important;
+}
+
+/* ============================================================
+   C · FEATURED APPEARANCE  — cinnabar-edged feature, big image
+   ============================================================ */
+body.press-page .press-featured {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: clamp(24px, 3vw, 48px);
+  align-items: stretch;
+  margin-bottom: clamp(32px, 4vw, 52px);
+  padding: clamp(16px, 1.6vw, 22px);
+  background: var(--pe-green);
+  border: 1px solid rgba(30, 64, 64, 0.2);
+}
+body.press-page .press-featured__media {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: clamp(220px, 28vw, 360px);
+  aspect-ratio: auto;
+  border: 0;
+  background: #143030;
+}
+body.press-page .press-featured__body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(12px, 1.4vw, 18px);
+  padding: clamp(14px, 2vw, 30px) clamp(14px, 2vw, 32px);
+}
+body.press-page .press-featured__source {
+  font-family: var(--sv-font-en, sans-serif);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--pe-gold) !important;
+  margin: 0;
+}
+body.press-page .press-featured__title {
+  color: var(--pe-cream) !important;
+  text-transform: none !important;
+  font-size: clamp(1.5rem, 2.6vw, 2.1rem) !important;
+  line-height: 1.12 !important;
+  margin: 0 !important;
+}
+body.press-page .press-featured__desc {
+  color: rgba(250, 246, 238, 0.82) !important;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+  max-width: 46ch;
+}
+body.press-page .press-featured__link {
+  align-self: flex-start;
+  margin-top: 4px;
+  white-space: nowrap;
+  font-family: var(--sv-font-en, sans-serif);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--pe-cream) !important;
+  border-bottom: 2px solid var(--sv-cinnabar, #C93B2A);
+  padding-bottom: 3px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+body.press-page .press-featured__link span { transition: transform 0.2s ease; display: inline-block; margin-left: 4px; }
+body.press-page .press-featured__link:hover span { transform: translateX(4px); }
+@media (max-width: 760px) {
+  body.press-page .press-featured {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  body.press-page .press-featured__media { min-height: clamp(200px, 56vw, 280px); }
+}
+
+/* ============================================================
+   D · DISCLOSURES  — warm sand panel with cinnabar accent rule
+   ============================================================ */
+body.press-page .press-disclosures {
+  background: var(--pe-sand);
+  border-top: 1px solid rgba(30, 64, 64, 0.14);
+}
+body.press-page .press-disclosures .disclosure-box {
+  background: transparent !important;
+  border: 0 !important;
+  border-left: 3px solid var(--sv-cinnabar, #C93B2A) !important;
+  padding: clamp(6px, 1vw, 12px) 0 clamp(6px, 1vw, 12px) clamp(20px, 2.4vw, 30px) !important;
+}
+body.press-page .press-disclosures .section-eyebrow {
+  color: var(--sv-cinnabar, #C93B2A) !important;
+}

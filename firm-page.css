@@ -1,0 +1,2117 @@
+:root {
+  --sv-cinnabar: #c93b2a;
+  --sv-qing: #3d7070;
+  --sv-qing-dark: #1e4040;
+  --sv-ink-green-dark: #0f2206;
+  --sv-xuan-light: #faf6ee;
+  --sv-xuan: #f2ecd8;
+  --sv-xuan-dark: #d8ceb0;
+  --sv-header-height: var(--sv-header-height-desktop, 72px);
+}
+
+html {
+  scroll-padding-top: var(--sv-header-height, 96px);
+}
+
+.firm-page {
+  margin: 0;
+  background: var(--sv-xuan-light);
+  color: var(--sv-ink-green-dark);
+  font-family: var(--font-din, "DIN 2014", "DIN2014", "DIN", sans-serif);
+}
+
+.firm-page .firm-main {
+  background: var(--sv-xuan);
+  color: var(--sv-ink-green-dark);
+}
+
+.firm-page .firm-main * {
+  box-sizing: border-box;
+}
+
+.firm-page section,
+.firm-page section[id],
+.firm-page .firm-section {
+  scroll-margin-top: calc(var(--sv-header-height) + 24px);
+}
+
+.firm-page .firm-section > .firm-inner {
+  width: min(calc(100% - (var(--sv-page-gutter, clamp(22px, 4.8vw, 64px)) * 2)), var(--sv-site-max, 1440px));
+  margin-inline: auto;
+  padding-block: clamp(44px, 4.6vw, 64px);
+}
+
+.firm-label {
+  margin: 0 0 16px;
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--sv-cinnabar);
+}
+
+.firm-heading {
+  margin: 0;
+  max-width: none;
+  font-size: clamp(32px, 3.1vw, 44px);
+  line-height: 1.04;
+  font-weight: 700;
+  letter-spacing: -0.016em;
+  text-transform: uppercase;
+  color: var(--sv-qing-dark);
+}
+
+.firm-body {
+  margin: 0;
+  max-width: none;
+  font-size: clamp(14.8px, 1.02vw, 16.8px);
+  line-height: 1.66;
+  color: var(--sv-ink-green-dark);
+}
+
+.firm-body + .firm-body {
+  margin-top: 12px;
+}
+
+.firm-two-col {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 0;
+  row-gap: 24px;
+  align-items: start;
+}
+
+
+.firm-page .firm-section-intro {
+  --firm-section-intro-divider-color: var(--sv-xuan-dark, #d8ceb0);
+  display: grid;
+  grid-template-columns: minmax(0, 0.66fr) 1px minmax(0, 1.34fr);
+  column-gap: var(--sv-section-divider-gap, clamp(24px, 2.4vw, 40px));
+  align-items: center;
+}
+
+.firm-page .firm-section-intro-heading {
+  grid-column: 1;
+  min-width: 0;
+}
+
+.firm-page .firm-section-intro-divider {
+  grid-column: 2;
+  width: 1px;
+  height: clamp(120px, 14vw, 190px);
+  background: var(--firm-section-intro-divider-color);
+  justify-self: center;
+}
+
+.firm-page .firm-section-intro-copy {
+  grid-column: 3;
+  min-width: 0;
+  width: 100%;
+  max-width: none;
+  justify-self: stretch;
+  padding-left: 0;
+}
+
+.firm-hero {
+  background: linear-gradient(102deg, #1e4040 0%, #23494b 30%, #214739 57%, #173514 79%, #0f2206 100%);
+  border-bottom: 1px solid rgba(250, 246, 238, 0.34);
+  min-height: clamp(640px, 78vh, 880px);
+  display: grid;
+  align-items: center;
+}
+
+.firm-page .firm-hero > .firm-inner {
+  width: min(calc(100% - (var(--sv-page-gutter, clamp(22px, 4.8vw, 64px)) * 2)), 1320px);
+  margin-inline: auto;
+  box-sizing: border-box;
+  padding-block: clamp(72px, 6.4vw, 100px) clamp(44px, 4.6vw, 64px);
+}
+
+.firm-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(300px, 0.52fr);
+  gap: clamp(40px, 5vw, 82px);
+  min-height: auto;
+  align-items: start;
+}
+
+.firm-hero .firm-label {
+  color: var(--sv-xuan-light) !important;
+  opacity: 0.94;
+}
+
+.firm-hero .firm-label span {
+  background: rgba(201, 59, 42, 0.82);
+}
+
+.firm-page .firm-hero .firm-hero-title {
+  margin: 0;
+  max-width: 20ch;
+  color: var(--sv-xuan-light) !important;
+  font-family: var(--type-display-hero-font-family) !important;
+  font-size: clamp(42px, 5vw, 72px) !important;
+  line-height: 0.98 !important;
+  letter-spacing: -0.028em;
+  font-style: var(--type-display-hero-font-style, italic);
+  font-weight: 300;
+  text-shadow: 0 1px 10px rgba(15, 34, 6, 0.3);
+}
+
+.firm-page .page-hero__title,
+.firm-page .firm-hero__title,
+.firm-page .firm-hero h1,
+.firm-page .firm-hero-title {
+  font-weight: 300 !important;
+  font-style: italic !important;
+}
+
+.firm-page .firm-hero .firm-hero-support {
+  margin-top: 24px !important;
+  max-width: 62ch;
+  color: var(--sv-xuan) !important;
+  font-size: clamp(15px, 1.04vw, 17px) !important;
+  line-height: 1.7 !important;
+  opacity: 0.96;
+  text-shadow: 0 1px 16px rgba(15, 34, 6, 0.36);
+}
+
+.firm-hero-proof {
+  display: grid;
+  gap: 0;
+  align-self: stretch;
+  justify-self: end;
+  width: min(100%, 390px);
+  margin-block-start: 0;
+  border-left: 1px solid rgba(216, 206, 176, 0.86);
+  padding-left: clamp(18px, 2vw, 26px);
+}
+
+.firm-page .firm-hero .firm-hero-proof-item {
+  margin: 0;
+  padding: clamp(16px, 1.8vw, 24px) 0;
+  border-top: 1px solid rgba(216, 206, 176, 0.62);
+}
+
+.firm-page .firm-hero .firm-hero-proof-item:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.firm-page .firm-hero .firm-hero-proof-item span {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--sv-xuan-light) !important;
+  font-size: clamp(30px, 2.5vw, 42px);
+  line-height: 1.02;
+  font-weight: 300;
+  letter-spacing: -0.022em;
+}
+
+.firm-page .firm-hero .firm-hero-proof-item p {
+  margin: 0;
+  max-width: 26ch;
+  color: rgba(250, 246, 238, 0.86) !important;
+  font-size: clamp(11px, 0.82vw, 13px);
+  line-height: 1.45;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.firm-page .firm-hero .firm-label {
+  color: var(--sv-xuan-light) !important;
+  opacity: 0.94;
+  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.34);
+}
+
+.firm-editorial {
+  background: linear-gradient(180deg, var(--sv-xuan-light), rgba(242, 236, 216, 0.88));
+  border-bottom: 1px solid rgba(216, 206, 176, 0.82);
+}
+
+.firm-editorial .firm-section-intro {
+  --firm-section-intro-divider-color: rgba(61, 112, 112, 0.4);
+}
+
+.firm-editorial .firm-section-intro-copy {
+  justify-self: start;
+}
+
+.firm-editorial .firm-section-intro-copy .firm-body {
+  max-width: none;
+}
+
+.firm-page .operational-geography {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(circle at 7% 26%, rgba(201, 59, 42, 0.26) 0%, rgba(201, 59, 42, 0.12) 20%, rgba(201, 59, 42, 0) 43%),
+    radial-gradient(circle at 26% 54%, rgba(61, 112, 112, 0.38) 0%, rgba(61, 112, 112, 0.14) 34%, rgba(61, 112, 112, 0) 63%),
+    linear-gradient(105deg, #245f60 0%, #17494a 29%, #123f37 53%, #10331f 76%, #0f2206 100%);
+  border-block: 1px solid rgba(216, 206, 176, 0.32);
+}
+
+.firm-page .operational-geography::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(250, 246, 238, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(250, 246, 238, 0.018) 1px, transparent 1px);
+  background-size: 38px 38px, 38px 38px;
+  opacity: 0.18;
+}
+
+.firm-page .operational-geography,
+.firm-page .operational-geography * {
+  color: #f2ecd8 !important;
+}
+
+.firm-page .operational-geography .firm-label,
+.firm-page .operational-geography [class*="eyebrow"],
+.firm-page .operational-geography [class*="label"],
+.firm-page .operational-geography [class*="meta"] {
+  color: #faf6ee !important;
+}
+
+.firm-page .operational-geography .firm-heading,
+.firm-page .operational-geography h1,
+.firm-page .operational-geography h2,
+.firm-page .operational-geography h3,
+.firm-page .operational-geography [class*="title"],
+.firm-page .operational-geography [class*="heading"] {
+  color: #faf6ee !important;
+}
+
+.firm-page .operational-geography .firm-body,
+.firm-page .operational-geography p,
+.firm-page .operational-geography [class*="copy"],
+.firm-page .operational-geography [class*="description"] {
+  color: rgba(250, 246, 238, 0.9) !important;
+}
+
+.firm-page .operational-geography .section-eyebrow {
+  position: relative;
+  width: max-content;
+  margin-bottom: clamp(52px, 5.1vw, 72px);
+  letter-spacing: 0.2em;
+}
+
+.firm-page .operational-geography .section-eyebrow::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -21px;
+  width: 68px;
+  height: 1px;
+  background: rgba(201, 59, 42, 0.92);
+}
+
+.firm-geo-intro {
+  --firm-section-intro-divider-color: rgba(250, 246, 238, 0.34);
+  column-gap: var(--sv-section-divider-gap, clamp(24px, 2.4vw, 40px));
+  row-gap: 24px;
+}
+
+.firm-page .firm-geo-intro .firm-section-intro-divider {
+  height: clamp(88px, 7.2vw, 118px);
+}
+
+.firm-page .firm-geo-intro .firm-heading {
+  max-width: none;
+  font-size: clamp(38px, 4.15vw, 66px);
+  line-height: 1.06;
+  letter-spacing: 0.045em;
+}
+
+.firm-page .operational-geography .firm-heading {
+  max-width: max-content;
+  text-wrap: balance;
+}
+
+.firm-page .operational-geography h2 span {
+  display: block;
+  white-space: nowrap;
+}
+
+.firm-page .firm-geo-intro > .firm-geo-intro-right {
+  width: 100%;
+  justify-self: stretch;
+  display: flex;
+  align-items: center;
+}
+
+.firm-geo-intro-right .firm-body {
+  max-width: none;
+  font-size: clamp(15px, 1.16vw, 21px);
+  line-height: 1.58;
+  letter-spacing: -0.025em;
+}
+
+.firm-geo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(18px, 2vw, 34px);
+  margin-top: clamp(50px, 5.2vw, 82px);
+}
+
+.firm-geo-grid article,
+.operational-card {
+  position: relative;
+  min-height: clamp(340px, 27vw, 390px);
+  padding: clamp(26px, 2.4vw, 36px) clamp(22px, 2.2vw, 34px) clamp(28px, 2.8vw, 38px);
+  border: 1px solid rgba(250, 246, 238, 0.56);
+  border-radius: 7px;
+  background: rgba(5, 24, 16, 0.16);
+  display: grid;
+  grid-template-rows: auto auto auto;
+  align-content: center;
+  justify-items: center;
+  text-align: center;
+  overflow: hidden;
+}
+
+.operational-card::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: clamp(22px, 2vw, 28px);
+  left: clamp(22px, 2vw, 30px);
+  width: 52px;
+  height: 1px;
+  background: rgba(201, 59, 42, 0.86);
+}
+
+.firm-page .operational-geography [class*="card"],
+.firm-page .operational-geography .firm-geo-grid article {
+  border-color: rgba(250, 246, 238, 0.56) !important;
+}
+
+.firm-page .operational-geography [class*="card"]::before,
+.firm-page .operational-geography .firm-geo-grid article::before {
+  background: rgba(201, 59, 42, 0.86);
+}
+
+.firm-page .operational-geography .operational-card__map-wrap,
+.firm-page .operational-geography .operational-card__visual,
+.firm-page .operational-geography .operational-card__icon,
+.firm-page .operational-geography .operational-card__media,
+.firm-page .operational-geography .operational-card figure {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+.firm-page .operational-geography-card img,
+.firm-page .geo-card img,
+.firm-page .location-card img {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.firm-page .operational-geography .operational-card__map {
+  display: block;
+  position: static !important;
+  inset: auto !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  width: clamp(220px, 16vw, 290px) !important;
+  height: clamp(150px, 11.2vw, 188px) !important;
+  max-width: 88% !important;
+  max-height: none !important;
+  margin: 0 auto clamp(16px, 1.6vw, 24px);
+  object-fit: contain;
+  object-position: center;
+  filter: none;
+  mix-blend-mode: normal;
+  opacity: 0.66;
+}
+
+.firm-page .operational-geography .location-card,
+.firm-page .operational-geography .operational-card {
+  min-height: 340px !important;
+  padding: 30px 30px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+}
+
+.firm-page .operational-geography .location-card__map,
+.firm-page .operational-geography .map-wrap,
+.firm-page .operational-geography .operational-card__map {
+  height: clamp(150px, 11.2vw, 188px) !important;
+  margin-top: clamp(26px, 2.2vw, 34px) !important;
+  margin-bottom: 16px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.firm-page .operational-geography .location-card__map svg,
+.firm-page .operational-geography .location-card__map img,
+.firm-page .operational-geography .map-wrap svg,
+.firm-page .operational-geography .map-wrap img,
+.firm-page .operational-geography .operational-card__map svg,
+.firm-page .operational-geography .operational-card__map img,
+.firm-page .operational-geography .operational-card__map {
+  width: clamp(220px, 16vw, 290px) !important;
+  height: auto !important;
+  opacity: 0.66 !important;
+  filter: contrast(1.15) brightness(1.08) !important;
+}
+
+.firm-page .operational-geography .location-card h3,
+.firm-page .operational-geography .operational-card h3 {
+  margin: 0 0 10px !important;
+}
+
+.firm-page .operational-geography .location-card p,
+.firm-page .operational-geography .operational-card p {
+  max-width: 300px !important;
+  margin: 0 auto !important;
+}
+
+.firm-page .operational-geography .operational-card--california .operational-card__map {
+  max-width: 112% !important;
+}
+
+.firm-page .operational-geography .operational-card--hong-kong .operational-card__map {
+  max-width: 82% !important;
+}
+
+.firm-page .operational-geography .operational-card--china .operational-card__map {
+  max-width: 82% !important;
+}
+
+.operational-geography .location-card::before,
+.operational-geography .location-card::after,
+.operational-geography .location-card .card-rule,
+.operational-geography .location-card .accent-rule,
+.operational-geography .location-card .rule,
+.operational-geography .location-card hr,
+.operational-geography .operational-card::before,
+.operational-geography .operational-card::after {
+  display: none !important;
+  content: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  border: 0 !important;
+  background: none !important;
+}
+
+.firm-geo-grid h3 {
+  position: relative;
+  margin: 0;
+  min-height: 2.08em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(24px, 2.05vw, 35px);
+  line-height: 1.05;
+  font-weight: 700;
+  letter-spacing: 0.075em;
+  text-align: center;
+}
+
+.firm-geo-grid p {
+  max-width: 31ch;
+  margin: clamp(10px, 1.1vw, 14px) auto 0;
+  font-size: clamp(14px, 1.05vw, 18px);
+  line-height: 1.6;
+  color: rgba(250, 246, 238, 0.82) !important;
+}
+
+.firm-process {
+  background: var(--sv-xuan-light);
+  border-block: 1px solid rgba(216, 206, 176, 0.85);
+}
+
+.firm-process-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  align-items: stretch;
+  grid-auto-rows: 1fr;
+  margin-top: clamp(16px, 2.1vw, 24px);
+}
+
+.firm-process-card {
+  padding: clamp(18px, 2vw, 26px);
+  border: 1px solid rgba(216, 206, 176, 0.95);
+  border-top: 2px solid var(--sv-cinnabar);
+  background: var(--sv-xuan);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.firm-process-num { margin: 0 0 18px; color: #8a1f12; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; }
+.firm-process-card h3 {
+  margin: 0;
+  min-height: calc(clamp(20px, 1.8vw, 26px) * 2.2);
+  color: var(--sv-qing-dark);
+  font-size: clamp(20px, 1.8vw, 26px);
+  display: flex;
+  align-items: flex-start;
+}
+.firm-process-card p {
+  margin: 12px 0 0;
+  color: var(--sv-ink-green-dark);
+  font-size: 14.5px;
+  line-height: 1.55;
+}
+
+
+.firm-process-grid--asymmetric {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-areas:
+    "orig orig orig und und und"
+    "orig orig orig leg leg leg"
+    "srv srv enf enf ext ext";
+}
+
+.firm-process-grid--asymmetric .firm-process-card { min-height: clamp(190px, 15vw, 240px); }
+.firm-process-grid--asymmetric .firm-process-card--origination {
+  grid-area: orig;
+  min-height: clamp(340px, 27vw, 430px);
+  background-image: none;
+}
+.firm-process-grid--asymmetric .firm-process-card--underwriting { grid-area: und; }
+.firm-process-grid--asymmetric .firm-process-card--legal { grid-area: leg; }
+.firm-process-grid--asymmetric .firm-process-card--servicing { grid-area: srv; }
+.firm-process-grid--asymmetric .firm-process-card--enforcement { grid-area: enf; }
+.firm-process-grid--asymmetric .firm-process-card--exit { grid-area: ext; }
+
+/* Keep the first Origination card clean: no contour/crosshair/technical overlays. */
+.firm-process-card--origination::before,
+.firm-process-card--origination::after,
+.firm-process-card--origination [class*="map"],
+.firm-process-card--origination [class*="contour"],
+.firm-process-card--origination [class*="crosshair"],
+.firm-process-card--origination svg {
+  display: none !important;
+}
+
+/* ── Governance / Accountability & Continuity ───────────────────────── */
+.firm-governance-section {
+  /* Local design tokens for this section */
+  --paper: #f2ecd8;
+  --card-fill: #faf6ee;
+  --card-fill-alt: #f4ecdb;
+  --ink: #0f2206;
+  --gov-body: #2b2620;
+  --gov-muted: #6b6258;
+  --gov-rule: #D8CEB0;
+  --gov-red: #c93b2a;
+  --gov-teal: #3d7070;
+  --ink-green-light: #4a7a40;
+  background: var(--paper);
+  border-top: 1px solid color-mix(in srgb, var(--sv-xuan-dark) 72%, transparent);
+}
+
+.firm-page .firm-governance-section > .firm-inner {
+  padding-block: 64px 60px;
+}
+
+.firm-governance-intro {
+  max-width: 820px;
+  margin-bottom: clamp(40px, 4vw, 56px);
+}
+
+.firm-governance-intro .section-eyebrow {
+  width: max-content;
+  margin-bottom: 18px;
+  color: var(--gov-red);
+  font-family: var(--font-din, "DIN 2014", "DIN2014", "DIN", sans-serif);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.firm-governance-intro .firm-heading {
+  max-width: min(100%, 820px);
+  color: var(--ink);
+  font-family: var(--font-din, "DIN 2014", "DIN2014", "DIN", sans-serif);
+  font-size: clamp(38px, 4.4vw, 60px);
+  line-height: 1.0;
+  font-weight: 700;
+  letter-spacing: -0.022em;
+  text-transform: none;
+  text-wrap: balance;
+}
+
+.firm-governance-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(24px, 2.4vw, 36px);
+  align-items: stretch;
+  margin-top: 0;
+}
+
+/* ── Card ──────────────────────────────────────────────────────────── */
+.gov-card {
+  --accent: var(--gov-teal);
+  --surface: var(--card-fill);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 360px;
+  padding: 40px 36px;
+  background: var(--surface);
+  border: 1px solid var(--gov-rule);
+  border-radius: 3px;
+  box-shadow: 0 14px 34px rgba(15, 34, 6, 0.05);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.gov-card--committee {
+  --accent: var(--gov-red);
+  --surface: var(--card-fill);
+}
+
+.gov-card--continuity {
+  --accent: var(--gov-teal);
+  --surface: var(--card-fill-alt);
+}
+
+/* Top accent border (single colour per card) */
+.gov-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 3px 3px 0 0;
+  transition: height 0.25s ease;
+}
+
+.gov-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 22px 46px rgba(15, 34, 6, 0.09);
+}
+
+.gov-card:hover::before {
+  height: 4px;
+}
+
+/* Icon mark */
+.gov-card__mark {
+  width: 26px;
+  height: 26px;
+  margin-bottom: 22px;
+  border: 1.5px solid var(--accent);
+  border-radius: 2px;
+  position: relative;
+}
+
+.gov-card__mark::after {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  background: var(--accent);
+  border-radius: 1px;
+}
+
+/* Eyebrow tag */
+.gov-card__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 14px;
+  color: var(--accent);
+  font-family: var(--font-din, "DIN 2014", "DIN2014", "DIN", sans-serif);
+  font-size: 11.5px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  transition: font-weight 0.2s ease;
+}
+
+.gov-card:hover .gov-card__tag {
+  font-weight: 700;
+}
+
+.gov-card__bullet {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex: none;
+}
+
+/* Title */
+.gov-card__title {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-din, "DIN 2014", "DIN2014", "DIN", sans-serif);
+  font-size: 28px;
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  text-transform: none;
+}
+
+/* Hairline divider in accent colour */
+.gov-card__rule {
+  width: 100%;
+  height: 1px;
+  margin: 18px 0;
+  border: 0;
+  background: color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+/* Lead paragraph */
+.gov-card__lead {
+  margin: 0;
+  max-width: none;
+  color: var(--gov-body);
+  font-family: var(--font-din, "DIN 2014", "DIN2014", "DIN", sans-serif);
+  font-size: 15px;
+  line-height: 1.55;
+  font-weight: 400;
+}
+
+/* Inline covers list */
+.gov-card__covers {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0;
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gov-card__covers li {
+  font-family: var(--font-din, "DIN 2014", "DIN2014", "DIN", sans-serif);
+  font-size: 13px;
+  font-weight: 400;
+  color: color-mix(in srgb, var(--ink) 82%, transparent);
+}
+
+.gov-card__covers li:not(:last-child)::after {
+  content: "/";
+  margin: 0 9px;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* Attribute row */
+.gov-card__attrs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin: auto 0 0;
+  padding-top: 24px;
+}
+
+.gov-card__attr {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  font-family: var(--font-din, "DIN 2014", "DIN2014", "DIN", sans-serif);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+}
+
+.gov-card__attr dt {
+  margin: 0;
+  color: var(--gov-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 10.5px;
+}
+
+.gov-card__attr dt::after {
+  content: " ·";
+  color: var(--accent);
+}
+
+.gov-card__attr dd {
+  margin: 0;
+  color: var(--ink);
+  font-weight: 700;
+}
+
+/* ── Governance signals strip ──────────────────────────────────────── */
+.gov-signals {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0;
+  margin-top: clamp(28px, 2.6vw, 36px);
+  padding: 18px 4px;
+  border-top: 1px solid var(--gov-rule);
+}
+
+.gov-signals__item {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-din, "DIN 2014", "DIN2014", "DIN", sans-serif);
+  font-size: 11.5px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.gov-signals__item:not(:last-child)::after {
+  content: "";
+  width: 5px;
+  height: 5px;
+  margin: 0 18px;
+  border-radius: 50%;
+  background: var(--gov-red);
+}
+
+.firm-capital-note {
+  position: relative;
+  background: #1e4040;
+  border-top: 1px solid rgba(250, 246, 238, 0.1);
+  border-bottom: 1px solid rgba(250, 246, 238, 0.14);
+}
+
+.firm-page .firm-capital-note > .firm-inner {
+  padding: 110px 72px;
+}
+
+.firm-capital-note__grid {
+  --firm-section-intro-divider-color: rgba(250, 246, 238, 0.22);
+  position: relative;
+  grid-template-columns: minmax(280px, 0.66fr) 1px minmax(420px, 1.34fr);
+  column-gap: var(--sv-section-divider-gap, clamp(24px, 2.4vw, 40px));
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.firm-capital-note__grid::before,
+.firm-capital-note__grid::after {
+  display: none;
+}
+
+.firm-capital-note__grid::before {
+  top: 0;
+}
+
+.firm-capital-note__grid::after {
+  display: none;
+}
+
+.firm-capital-note__headline {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.firm-capital-note .section-eyebrow {
+  --sv-section-eyebrow-heading-gap: clamp(12px, 1.3vw, 18px);
+  --sv-section-eyebrow-rule-gap: clamp(7px, 0.8vw, 10px);
+  letter-spacing: 0.2em;
+  color: #faf6ee !important;
+}
+
+.firm-capital-note .section-eyebrow::after {
+  width: 46px !important;
+}
+
+.firm-capital-note .firm-heading {
+  max-width: 25ch;
+  color: #faf6ee;
+  font-size: clamp(34px, 3.6vw, 52px);
+  line-height: 0.96;
+  letter-spacing: -0.022em;
+  font-weight: 700;
+  text-wrap: balance;
+}
+
+.firm-capital-note .firm-section-intro-divider {
+  height: clamp(112px, 10vw, 160px);
+  align-self: center;
+}
+
+.firm-capital-note__copy {
+  display: flex;
+  align-items: center;
+  justify-self: start;
+}
+
+
+/* Capital Base dark panel: ensure all copy is legible on dark background while keeping brand accents. */
+.capital-base,
+.capital-base *,
+.firm-capital-note,
+.firm-capital-note * {
+  color: #FAF6EE !important;
+}
+
+.capital-base p,
+.capital-base .body-copy,
+.firm-capital-note p,
+.firm-capital-note .firm-body {
+  color: rgba(250, 246, 238, 0.86) !important;
+}
+
+.capital-base .eyebrow,
+.capital-base .section-label,
+.firm-capital-note .section-eyebrow,
+.firm-capital-note .section-label {
+  color: #FAF6EE !important;
+}
+
+.capital-base .section-rule,
+.capital-base .eyebrow-rule,
+.firm-capital-note .section-rule,
+.firm-capital-note .eyebrow-rule,
+.firm-capital-note .section-eyebrow::after {
+  background: #C93B2A !important;
+}
+
+.capital-base .vertical-divider,
+.firm-capital-note .vertical-divider,
+.firm-capital-note .firm-section-intro-divider {
+  background: rgba(250, 246, 238, 0.35) !important;
+}
+
+.firm-capital-note__copy .firm-body {
+  max-width: 560px;
+  color: #faf6ee;
+  font-size: clamp(15.5px, 1.08vw, 17px);
+  line-height: 1.7;
+}
+
+.capital-base,
+.capital-base h1,
+.capital-base h2,
+.capital-base h3,
+.capital-base p,
+.capital-base .section-title,
+.capital-base .section-heading,
+.capital-base .body-copy {
+  color: #FAF6EE !important;
+}
+
+.capital-base p,
+.capital-base .body-copy {
+  color: rgba(250, 246, 238, 0.86) !important;
+}
+
+.capital-base .eyebrow,
+.capital-base .section-label {
+  color: #FAF6EE !important;
+}
+
+.capital-base .divider,
+.capital-base .vertical-divider,
+.capital-base hr {
+  border-color: rgba(250, 246, 238, 0.45) !important;
+  background: rgba(250, 246, 238, 0.45) !important;
+}
+
+
+/* Firm page eyebrow contrast: light sections need dark labels, while dark bands keep the existing off-white treatment. */
+.firm-page .firm-section:is(.firm-editorial, .firm-process, .firm-governance-section) :is(
+  .section-eyebrow,
+  .section-label,
+  .eyebrow,
+  .section-kicker,
+  .firm-section__eyebrow,
+  .firm-section__label,
+  .firm-label
+) {
+  --sv-section-eyebrow-color: var(--sv-qing-dark);
+  --sv-section-eyebrow-rule: var(--sv-cinnabar);
+  color: var(--sv-qing-dark) !important;
+}
+
+.firm-page .firm-section:is(.firm-editorial, .firm-process, .firm-governance-section, .firm-capital-note) :is(
+  .section-eyebrow,
+  .section-label,
+  .eyebrow,
+  .section-kicker,
+  .firm-section__eyebrow,
+  .firm-section__label,
+  .firm-label
+)::after {
+  background: var(--sv-cinnabar) !important;
+}
+
+.firm-page .firm-governance-section .section-eyebrow::after {
+  background: color-mix(in srgb, var(--sv-cinnabar) 74%, transparent) !important;
+}
+
+/* Governance eyebrow stays Cinnabar (overrides shared teal eyebrow rule) */
+body.firm-page .firm-governance-section .firm-governance-intro .section-eyebrow.firm-label {
+  color: var(--gov-red) !important;
+}
+
+@media (max-width: 1100px) {
+  .firm-two-col:not(.firm-section-intro) { grid-template-columns: 1fr; gap: 28px; }
+  .firm-two-col:not(.firm-section-intro) > div:first-child,
+  .firm-two-col:not(.firm-section-intro) > div:last-child { grid-column: 1 / -1; }
+
+  .firm-page .firm-section-intro {
+    grid-template-columns: 1fr;
+    row-gap: clamp(22px, 4vw, 34px);
+    column-gap: 0;
+    align-items: start;
+  }
+
+  .firm-page .firm-section-intro-heading,
+  .firm-page .firm-section-intro-divider,
+  .firm-page .firm-section-intro-copy {
+    grid-column: 1 / -1;
+  }
+
+  .firm-page .firm-section-intro-divider {
+    width: 100%;
+    height: 1px;
+    max-width: 100%;
+    justify-self: stretch;
+  }
+
+  .firm-page .firm-section-intro-copy {
+    max-width: 100%;
+    padding-left: 0;
+  }
+
+  .firm-capital-note__grid {
+    grid-template-columns: 1fr;
+    gap: clamp(22px, 4vw, 32px);
+    padding-top: clamp(22px, 4vw, 32px);
+    padding-bottom: clamp(22px, 4vw, 34px);
+  }
+
+  .firm-capital-note__headline {
+    display: block;
+  }
+
+  .firm-capital-note__copy {
+    padding-left: 0;
+  }
+
+  .firm-capital-note__copy .firm-body {
+    max-width: 52ch;
+  }
+
+  .firm-geo-intro { gap: 20px; }
+  .firm-page .firm-geo-intro > .firm-geo-intro-right {
+    min-height: auto;
+    padding-left: 0;
+    padding-top: 0;
+  }
+  .firm-page .firm-geo-intro .firm-heading { max-width: 17ch; }
+  .firm-page .operational-geography .firm-heading { max-width: 100%; }
+  .firm-page .operational-geography h2 span { white-space: normal; }
+  .firm-process-grid, .firm-governance-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .firm-process-grid--asymmetric {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+      "orig orig"
+      "und leg"
+      "srv enf"
+      "ext ext";
+  }
+}
+
+@media (max-width: 980px) {
+  .firm-hero-grid { grid-template-columns: 1fr; gap: 42px; align-items: start; }
+  .firm-page .firm-hero .firm-hero-title { font-size: clamp(42px, 13vw, 58px) !important; }
+  .firm-hero-proof {
+    justify-self: stretch;
+    align-self: start;
+    width: 100%;
+    margin-block-start: 0;
+    border-left: 0;
+    border-top: 1px solid rgba(216, 206, 176, 0.82);
+    padding-left: 0;
+    padding-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(20px, 4vw, 40px);
+  }
+  .firm-page .firm-hero .firm-hero-proof-item {
+    padding: 0 !important;
+    border-top: 0 !important;
+  }
+  .firm-geo-grid { grid-template-columns: 1fr; }
+  .firm-geo-grid article,
+  .operational-card {
+    min-height: auto;
+  }
+  /* Governance: stack to single column under 900px, keep card identity */
+  .firm-governance-grid { grid-template-columns: 1fr; }
+  .gov-card { min-height: auto; }
+}
+
+@media (max-width: 700px) {
+  .firm-page .firm-hero {
+    min-height: 100svh;
+    min-height: min(100svh, 100dvh);
+    align-items: stretch;
+    overflow: visible;
+  }
+
+  .firm-page .firm-hero > .firm-inner {
+    min-height: 100svh;
+    min-height: min(100svh, 100dvh);
+    padding-block: calc(var(--sv-header-height, 64px) + clamp(24px, 7vw, 34px)) clamp(24px, 7svh, 36px);
+  }
+
+  .firm-hero-grid {
+    gap: clamp(18px, 5vw, 24px);
+  }
+
+  .firm-hero .firm-label {
+    margin-bottom: 14px;
+  }
+
+  .firm-page .firm-hero .firm-hero-title {
+    font-size: clamp(34px, 9.4vw, 42px) !important;
+    line-height: 0.98 !important;
+  }
+
+  .firm-page .firm-hero .firm-hero-support {
+    margin-top: 14px !important;
+    font-size: 14px !important;
+    line-height: 1.52 !important;
+  }
+
+  .firm-hero-proof {
+    padding-top: 8px;
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .firm-page .firm-hero .firm-hero-proof-item {
+    padding: clamp(9px, 2.4vw, 12px) 0 !important;
+    border-top: 1px solid rgba(216, 206, 176, 0.4) !important;
+  }
+  .firm-page .firm-hero .firm-hero-proof-item:first-child {
+    border-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  .firm-page .firm-hero .firm-hero-proof-item span {
+    margin-bottom: 4px;
+    font-size: clamp(24px, 7.2vw, 31px);
+    line-height: 1;
+  }
+
+  .firm-page .firm-hero .firm-hero-proof-item p {
+    font-size: 10px;
+    line-height: 1.25;
+  }
+
+  .firm-page .firm-section > .firm-inner { padding-block: clamp(36px, 8vw, 50px); }
+  .firm-page .firm-capital-note > .firm-inner {
+    padding-block: clamp(42px, 9vw, 56px) clamp(44px, 10vw, 62px);
+  }
+  .firm-capital-note .firm-heading {
+    max-width: 25ch;
+    font-size: clamp(32px, 9vw, 42px);
+  }
+  .firm-page .operational-geography .section-eyebrow { margin-bottom: 42px; }
+  .firm-page .firm-geo-intro .firm-heading { font-size: clamp(34px, 10vw, 46px); }
+  .firm-geo-grid { margin-top: 36px; }
+  .firm-geo-grid h3 { font-size: clamp(22px, 7vw, 28px); }
+  .firm-process-grid, .firm-governance-grid { grid-template-columns: 1fr; }
+  .firm-process-grid--asymmetric {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "orig"
+      "und"
+      "leg"
+      "srv"
+      "enf"
+      "ext";
+  }
+}
+
+@media (max-width: 768px) {
+  .firm-process-card {
+    min-height: auto !important;
+    height: auto !important;
+    padding: 38px 36px !important;
+    margin-bottom: 28px !important;
+  }
+
+  .firm-process-num {
+    margin-bottom: 18px !important;
+  }
+
+  .firm-process-card h3 {
+    min-height: 0 !important;
+    margin-bottom: 28px !important;
+    line-height: 1.05 !important;
+  }
+
+  .firm-process-card p {
+    margin-bottom: 0 !important;
+    line-height: 1.45 !important;
+  }
+}
+
+@media (max-width: 800px) {
+  .firm-page .firm-governance-section {
+    width: 100%;
+    max-width: 100%;
+    padding-top: 0;
+    padding-bottom: 0;
+    overflow-x: clip;
+    box-sizing: border-box;
+  }
+
+  .firm-page .firm-governance-section > .firm-inner {
+    width: 100%;
+    max-width: 100%;
+    margin-inline: auto;
+    padding: 72px clamp(24px, 6vw, 32px) 84px;
+    box-sizing: border-box;
+  }
+
+  .firm-page .firm-governance-intro {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin-bottom: 42px;
+  }
+
+  .firm-page .firm-governance-intro .section-eyebrow {
+    width: auto;
+    max-width: 100%;
+    margin-left: 0;
+    margin-bottom: 42px;
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    overflow-wrap: anywhere;
+  }
+
+  .firm-page .firm-governance-intro .firm-heading {
+    max-width: 100%;
+    margin-left: 0;
+    font-size: clamp(34px, 9vw, 44px);
+    line-height: 1.05;
+    letter-spacing: 0.01em;
+    word-break: normal;
+    overflow-wrap: normal;
+  }
+
+  .firm-page .firm-governance-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+    width: 100%;
+    max-width: 100%;
+    margin-top: 0;
+    padding-inline: 0;
+    box-sizing: border-box;
+  }
+
+  .firm-page .firm-governance-grid .gov-card {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    min-height: auto;
+    padding: 34px clamp(24px, 6vw, 30px);
+    box-sizing: border-box;
+  }
+
+  .firm-page .firm-governance-grid .gov-card__title {
+    font-size: clamp(23px, 6.4vw, 28px);
+  }
+
+  .firm-page .firm-governance-grid .gov-card__lead {
+    max-width: 100%;
+    font-size: 14.5px;
+    word-break: normal;
+    overflow-wrap: break-word;
+  }
+
+  .firm-page .firm-governance-grid .gov-card__attrs {
+    gap: 16px 22px;
+  }
+
+  .firm-page .gov-signals {
+    gap: 10px 0;
+  }
+
+  .firm-page .gov-signals__item:not(:last-child)::after {
+    margin: 0 12px;
+  }
+
+  .firm-page .back-to-top,
+  .firm-page .sv-back-to-top {
+    right: max(8px, env(safe-area-inset-right));
+    bottom: max(12px, calc(env(safe-area-inset-bottom) + 12px));
+    width: 38px;
+    height: 38px;
+  }
+}
+
+/* Platform & Team contrast fix (Firm page only) */
+.firm-page .platform-team,
+.firm-page .platform-team * {
+  color: #F2ECD8 !important;
+}
+
+.firm-page .platform-team .section-eyebrow,
+.firm-page .platform-team [class*="eyebrow"],
+.firm-page .platform-team [class*="label"],
+.firm-page .platform-team [class*="meta"],
+.firm-page .platform-team .track-record-item__label {
+  color: #D8CEB0 !important;
+}
+
+.firm-page .platform-team .section-title,
+.firm-page .platform-team h1,
+.firm-page .platform-team h2,
+.firm-page .platform-team h3,
+.firm-page .platform-team [class*="title"],
+.firm-page .platform-team [class*="heading"],
+.firm-page .platform-team .track-record-item__value,
+.firm-page .platform-team [class*="stat"] [class*="value"],
+.firm-page .platform-team [class*="stat"] [class*="number"] {
+  color: #FAF6EE !important;
+}
+
+.firm-page .platform-team p,
+.firm-page .platform-team .section-copy,
+.firm-page .platform-team .section-copy p,
+.firm-page .platform-team [class*="copy"],
+.firm-page .platform-team [class*="description"],
+.firm-page .platform-team .track-record-item__description {
+  color: #F2ECD8 !important;
+}
+
+.firm-page .platform-team hr,
+.firm-page .platform-team [class*="divider"],
+.firm-page .platform-team [class*="rule"],
+.firm-page .platform-team .track-record-grid,
+.firm-page .platform-team .track-record-item,
+.firm-page .platform-team .track-record-item + .track-record-item,
+.firm-page .platform-team .section-eyebrow::after {
+  border-color: rgba(216, 206, 176, 0.35) !important;
+  background-color: rgba(216, 206, 176, 0.35) !important;
+}
+
+/* Chinese Firm mirror: preserve the English structural system while only changing copy. */
+html:lang(zh) body.firm-page,
+html[lang^="zh"] body.firm-page {
+  font-family: var(--sv-font-cn) !important;
+}
+
+html:lang(zh) body.firm-page .firm-main :is(h1, h2, h3, h4, h5, h6, p, a, li, span, button),
+html[lang^="zh"] body.firm-page .firm-main :is(h1, h2, h3, h4, h5, h6, p, a, li, span, button) {
+  font-family: var(--sv-font-cn) !important;
+  font-style: normal !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+
+html:lang(zh) body.firm-page .firm-main .en-term,
+html[lang^="zh"] body.firm-page .firm-main .en-term,
+html:lang(zh) body.firm-page .firm-main [lang="en"],
+html[lang^="zh"] body.firm-page .firm-main [lang="en"] {
+  font-family: var(--sv-font-en) !important;
+}
+
+html:lang(zh) body.firm-page .firm-label,
+html[lang^="zh"] body.firm-page .firm-label,
+html:lang(zh) body.firm-page .section-eyebrow,
+html[lang^="zh"] body.firm-page .section-eyebrow {
+  line-height: 1 !important;
+}
+
+html:lang(zh) body.firm-page .firm-heading,
+html[lang^="zh"] body.firm-page .firm-heading {
+  line-height: 1.04 !important;
+}
+
+html:lang(zh) body.firm-page .firm-hero .firm-hero-title,
+html[lang^="zh"] body.firm-page .firm-hero .firm-hero-title {
+  line-height: 0.96 !important;
+}
+
+html:lang(zh) body.firm-page .firm-governance-intro .firm-heading,
+html[lang^="zh"] body.firm-page .firm-governance-intro .firm-heading {
+  line-height: 0.95 !important;
+}
+
+html:lang(zh) body.firm-page .firm-capital-note .firm-heading,
+html[lang^="zh"] body.firm-page .firm-capital-note .firm-heading {
+  line-height: 0.96 !important;
+}
+
+html:lang(zh) body.firm-page .firm-body,
+html[lang^="zh"] body.firm-page .firm-body {
+  line-height: 1.66 !important;
+}
+
+html:lang(zh) body.firm-page .firm-section-intro-copy,
+html[lang^="zh"] body.firm-page .firm-section-intro-copy {
+  justify-self: stretch;
+  width: 100%;
+  max-width: none;
+}
+
+html:lang(zh) body.firm-page .firm-hero .firm-hero-proof-item span,
+html[lang^="zh"] body.firm-page .firm-hero .firm-hero-proof-item span {
+  line-height: 1.02 !important;
+}
+
+html:lang(zh) body.firm-page .firm-hero .firm-hero-proof-item p,
+html[lang^="zh"] body.firm-page .firm-hero .firm-hero-proof-item p {
+  line-height: 1.45 !important;
+}
+
+html:lang(zh) body.firm-page .firm-geo-intro .firm-heading,
+html[lang^="zh"] body.firm-page .firm-geo-intro .firm-heading {
+  line-height: 1.06 !important;
+}
+
+html:lang(zh) body.firm-page .firm-geo-intro-right .firm-body,
+html[lang^="zh"] body.firm-page .firm-geo-intro-right .firm-body {
+  line-height: 1.58 !important;
+}
+
+html:lang(zh) body.firm-page .firm-geo-grid h3,
+html[lang^="zh"] body.firm-page .firm-geo-grid h3,
+html:lang(zh) body.firm-page .firm-card--qing h3,
+html[lang^="zh"] body.firm-page .firm-card--qing h3 {
+  line-height: 1.05 !important;
+}
+
+html:lang(zh) body.firm-page .firm-geo-grid p,
+html[lang^="zh"] body.firm-page .firm-geo-grid p {
+  line-height: 1.6 !important;
+}
+
+html:lang(zh) body.firm-page .firm-process-card p,
+html[lang^="zh"] body.firm-page .firm-process-card p {
+  line-height: 1.55 !important;
+}
+
+html:lang(zh) body.firm-page .firm-card--qing p,
+html[lang^="zh"] body.firm-page .firm-card--qing p {
+  line-height: 1.68 !important;
+}
+
+@media (max-width: 800px) {
+  html:lang(zh) body.firm-page .firm-governance-intro .firm-heading,
+  html[lang^="zh"] body.firm-page .firm-governance-intro .firm-heading {
+    line-height: 1.05 !important;
+  }
+
+  html:lang(zh) body.firm-page .firm-governance-grid .firm-card--qing h3,
+  html[lang^="zh"] body.firm-page .firm-governance-grid .firm-card--qing h3 {
+    line-height: 1.08 !important;
+  }
+}
+
+html:lang(zh) body.firm-page .firm-main .en-term,
+html[lang^="zh"] body.firm-page .firm-main .en-term,
+html:lang(zh) body.firm-page .firm-main [lang="en"],
+html[lang^="zh"] body.firm-page .firm-main [lang="en"] {
+  font-style: inherit !important;
+  letter-spacing: inherit !important;
+  text-transform: inherit !important;
+}
+
+/* Mobile operational geography cleanup: the desktop intro divider reads as an empty media slot at iPhone widths. */
+@media (max-width: 767px) {
+  .firm-page .operational-geography .firm-inner {
+    width: 100%;
+    max-width: 100%;
+    padding-left: max(var(--sv-page-gutter, 20px), env(safe-area-inset-left, 0px));
+    padding-right: max(var(--sv-page-gutter, 20px), env(safe-area-inset-right, 0px));
+  }
+
+  .firm-page .operational-geography .firm-geo-intro {
+    row-gap: clamp(16px, 4vw, 22px);
+  }
+
+  .firm-page .operational-geography .firm-geo-intro .firm-section-intro-divider {
+    display: none !important;
+  }
+
+  .firm-page .operational-geography .section-eyebrow {
+    margin-bottom: 18px;
+  }
+
+  .firm-page .operational-geography .firm-geo-grid {
+    margin-top: clamp(30px, 8vw, 42px);
+  }
+}
+
+/* ============================================================
+   EXECUTION MODEL — Platform Architecture (flow redesign)
+   Scoped to .firm-process--flow so the shared 6-card CN
+   layout (firm_cn.html) keeps its existing treatment.
+   ============================================================ */
+.firm-process--flow {
+  --firm-flow-rule: color-mix(in srgb, var(--sv-cinnabar) 30%, transparent);
+  --firm-flow-rail-top: 34px;
+}
+
+/* Header: heading + four-stage workflow preview */
+.firm-process--flow .firm-process-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: clamp(20px, 3vw, 44px);
+}
+
+.firm-process--flow .firm-process-head-main { min-width: 0; }
+
+/* Principle 8 — title-case heading instead of all caps.
+   Overrides the global `html body h2 { text-transform: uppercase !important }`. */
+.firm-process--flow .firm-process-heading {
+  text-transform: none !important;
+  color: var(--sv-ink-green-dark) !important;
+  letter-spacing: -0.02em !important;
+  line-height: 1.04 !important;
+}
+
+/* Principle 9 — meta block previewing the four-stage workflow */
+.firm-process--flow .firm-process-meta {
+  flex: 0 0 auto;
+  padding-bottom: 4px;
+}
+
+.firm-process--flow .firm-process-meta-label {
+  margin: 0 0 10px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--sv-qing-dark);
+  text-align: right;
+}
+
+.firm-process--flow .firm-process-meta-flow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 6px 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--sv-ink-green-dark);
+}
+
+.firm-process--flow .firm-process-meta-flow li { display: inline-flex; align-items: center; }
+
+.firm-process--flow .firm-process-meta-flow li + li::before {
+  content: "\2192";
+  margin: 0 8px 0 0;
+  color: var(--sv-cinnabar);
+}
+
+.firm-process--flow .firm-process-meta-num {
+  margin-right: 5px;
+  font-weight: 700;
+  color: var(--sv-cinnabar);
+}
+
+/* Grid + connecting flow line (principle 3) */
+.firm-process-grid--flow {
+  position: relative;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(14px, 1.4vw, 20px);
+  margin-top: clamp(36px, 3.6vw, 52px);
+}
+
+.firm-process-grid--flow::before {
+  content: "";
+  position: absolute;
+  top: var(--firm-flow-rail-top);
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--firm-flow-rule);
+  z-index: 0;
+}
+
+/* Card shell */
+.firm-process--flow .firm-process-card {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  padding: clamp(54px, 4vw, 66px) clamp(22px, 2vw, 28px) clamp(20px, 1.8vw, 26px);
+  border: 1px solid var(--sv-xuan-dark);
+  border-top: 1px solid var(--sv-xuan-dark);
+  background: var(--sv-xuan);
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.firm-process--flow .firm-process-card:hover {
+  border-color: color-mix(in srgb, var(--sv-cinnabar) 55%, var(--sv-xuan-dark));
+}
+
+/* Principle 1 — large ghost numerals behind content */
+.firm-process--flow .firm-process-ghost {
+  position: absolute;
+  top: -0.34em;
+  right: 0.04em;
+  z-index: 0;
+  font-size: clamp(96px, 9vw, 140px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: color-mix(in srgb, var(--sv-ink-green-dark) 6%, transparent);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Principle 4 — marker node on the flow line; final node filled */
+.firm-process--flow .firm-process-node {
+  position: absolute;
+  top: var(--firm-flow-rail-top);
+  left: clamp(22px, 2vw, 28px);
+  z-index: 2;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--sv-xuan);
+  border: 1.5px solid var(--sv-cinnabar);
+  transform: translateY(-50%);
+}
+
+.firm-process--flow .firm-process-node--final {
+  background: var(--sv-cinnabar);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--sv-cinnabar) 16%, transparent);
+}
+
+/* Principle 6 — richer stage tag replacing the bare number */
+.firm-process--flow .firm-process-tag {
+  position: relative;
+  z-index: 1;
+  margin: 0 0 14px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--sv-cinnabar);
+}
+
+.firm-process--flow .firm-process-tag-em {
+  color: var(--sv-qing-dark);
+  letter-spacing: 0.13em;
+}
+
+/* Principle 2 — consistent title weight regardless of length
+   Principle 5 — cinnabar hairline under each title, grows on hover.
+   Uses !important to override the global `html body h3 { ... !important }`
+   so all four titles share one size, weight, case, and tracking. */
+.firm-process--flow .firm-process-card h3 {
+  position: relative;
+  z-index: 1;
+  display: block;
+  min-height: calc(2 * 1.12em);
+  margin: 0;
+  padding-bottom: 16px;
+  color: var(--sv-ink-green-dark) !important;
+  font-size: clamp(21px, 1.7vw, 25px) !important;
+  font-weight: 700 !important;
+  line-height: 1.12 !important;
+  letter-spacing: -0.012em !important;
+  text-transform: capitalize !important;
+  text-wrap: balance;
+}
+
+.firm-process--flow .firm-process-card h3::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 26px;
+  height: 2px;
+  background: var(--sv-cinnabar);
+  transition: width 0.32s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.firm-process--flow .firm-process-card:hover h3::after,
+.firm-process--flow .firm-process-card:focus-within h3::after { width: 64px; }
+
+.firm-process--flow .firm-process-desc {
+  position: relative;
+  z-index: 1;
+  margin: 16px 0 0;
+  color: var(--sv-ink-green-dark);
+  font-size: 14.5px;
+  line-height: 1.55;
+}
+
+/* Principle 7 — workflow role row pinned to the card foot */
+.firm-process--flow .firm-process-role {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: clamp(22px, 2.2vw, 30px) 0 0;
+  padding-top: 14px;
+  border-top: 1px solid color-mix(in srgb, var(--sv-xuan-dark) 80%, transparent);
+}
+
+.firm-process--flow .firm-process-card { display: flex; flex-direction: column; }
+.firm-process--flow .firm-process-role { margin-top: auto; }
+
+.firm-process--flow .firm-process-role-name {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+  color: var(--sv-qing-dark);
+}
+
+.firm-process--flow .firm-process-arrow {
+  font-size: 14px;
+  line-height: 1;
+  color: var(--sv-cinnabar);
+}
+
+.firm-process--flow .firm-process-arrow--end { font-size: 10px; }
+
+/* Principle 10 — footer legend strip + cue to the next section */
+.firm-process--flow .firm-process-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 28px;
+  margin-top: clamp(26px, 2.6vw, 36px);
+  padding-top: clamp(16px, 1.6vw, 22px);
+  border-top: 1px solid var(--sv-xuan-dark);
+}
+
+.firm-process--flow .firm-process-legend-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 22px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  color: var(--sv-ink-green-dark);
+}
+
+.firm-process--flow .firm-process-legend-list li { display: inline-flex; align-items: center; }
+
+.firm-process--flow .firm-process-legend-num {
+  margin-right: 7px;
+  font-weight: 700;
+  color: var(--sv-cinnabar);
+}
+
+.firm-process--flow .firm-process-legend-cue {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sv-cinnabar);
+  text-decoration: none;
+  transition: gap 0.3s ease;
+}
+
+.firm-process--flow .firm-process-legend-cue:hover { gap: 12px; }
+.firm-process--flow .firm-process-legend-cue span { font-size: 13px; }
+
+/* Responsive: drop the horizontal rail once the grid wraps */
+@media (max-width: 1100px) {
+  .firm-process-grid--flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .firm-process-grid--flow::before { display: none; }
+  .firm-process--flow .firm-process-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .firm-process--flow .firm-process-meta { padding-bottom: 0; }
+  .firm-process--flow .firm-process-meta-label,
+  .firm-process--flow .firm-process-meta-flow { justify-content: flex-start; text-align: left; }
+}
+
+@media (max-width: 700px) {
+  .firm-process-grid--flow { grid-template-columns: 1fr; }
+  .firm-process--flow .firm-process-card h3 { min-height: 0; }
+  .firm-process--flow .firm-process-legend { gap: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .firm-process--flow .firm-process-card,
+  .firm-process--flow .firm-process-card h3::after,
+  .firm-process--flow .firm-process-legend-cue { transition: none; }
+}
+
+/* ==========================================================================
+   Institutional Platform — editorial redesign
+   Sentence-case heading, compact padding, fact bar, chip strips, seal,
+   pull-quote, and a transition cue bridging into Operational Geography.
+   NOTE: the global shorevest-typography-system applies `!important` to
+   h2 / p / li / a / span, so the eyebrow, labels, chips, seal and headings
+   here re-assert their treatment with `!important` (site-wide pattern).
+   ========================================================================== */
+.firm-page .firm-editorial.ip {
+  /* Scoped editorial tokens (paper / cream / ink / rule / muted / body / accents) */
+  --ip-paper: #f2ecd8;
+  --ip-cream: #faf6ee;
+  --ip-ink: #0f2206;
+  --ip-body: #2b2620;
+  --ip-muted: #6b6258;
+  --ip-rule: #D8CEB0;
+  --ip-red: #c93b2a;
+  --ip-red-tint: #E8998F;
+  --ip-teal: #3d7070;
+  --ip-mono: var(--sv-font-en);
+  --ip-display: var(--sv-font-en);
+  background: var(--ip-paper);
+}
+
+/* Kill the trapped vertical whitespace: tight, intentional padding */
+.firm-page .firm-editorial.ip > .ip__inner {
+  padding-block: 64px 60px;
+}
+
+/* --- Heading row (full width so the 80px display sits as a clean two-line stack) --- */
+.firm-page .ip__head {
+  position: relative;
+  min-width: 0;
+}
+
+.firm-page .ip__head .ip__eyebrow {
+  margin: 0 0 22px !important;
+  font-family: var(--ip-mono) !important;
+  font-weight: 700 !important;
+  font-size: 10px !important;
+  line-height: 1 !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  color: var(--ip-red) !important;
+}
+
+.firm-page .ip__head .ip__heading {
+  margin: 0 !important;
+  max-width: none;
+  font-family: var(--ip-display) !important;
+  font-weight: 700 !important;
+  font-size: clamp(44px, 6vw, 80px) !important;
+  line-height: 0.98 !important;
+  letter-spacing: -0.022em !important;
+  color: var(--ip-ink) !important;
+  text-transform: none !important;
+}
+
+.firm-page .ip__heading-line {
+  display: block;
+}
+
+.firm-page .ip__heading .ip__period {
+  color: var(--ip-red) !important;
+}
+
+/* Quiet brand seal, sitting ~80% down the heading's height to its right */
+.firm-page .ip__head .ip__seal {
+  position: absolute;
+  right: 0;
+  top: 80%;
+  font-family: "Noto Serif SC"!important;
+  font-weight: 400 !important;
+  font-size: 36px !important;
+  line-height: 1 !important;
+  color: var(--ip-red) !important;
+  opacity: 0.92;
+  pointer-events: none;
+}
+
+/* --- Body: the two paragraphs as two columns, 64px gap (no vertical divider rule) --- */
+.firm-page .ip__body {
+  min-width: 0;
+  margin-top: clamp(28px, 3vw, 40px);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 64px;
+  row-gap: 18px;
+  align-items: start;
+}
+
+.firm-page .ip__body .ip__para {
+  max-width: none;
+  margin: 0;
+}
+
+/* Cinnabar pull-quote callout closing the second paragraph */
+.firm-page .ip__body .ip__pull {
+  font-style: italic;
+  font-weight: 700;
+  color: var(--ip-red) !important;
+  letter-spacing: -0.01em;
+}
+
+/* --- Four-column meta / fact bar on a thin top + bottom rule --- */
+.firm-page .ip__meta {
+  display: grid;
+  grid-template-columns: max-content max-content minmax(0, 1fr);
+  gap: clamp(20px, 3vw, 48px);
+  margin: clamp(32px, 3.4vw, 44px) 0 0;
+  padding: 22px 0 24px;
+  border-top: 1px solid var(--ip-rule);
+  border-bottom: 1px solid var(--ip-rule);
+}
+
+.firm-page .ip__meta-item {
+  min-width: 0;
+}
+
+/* dt/dd are not hit by the global p/li !important rules, but assert anyway */
+.firm-page .ip__meta .ip__meta-label {
+  margin: 0 0 10px;
+  font-family: var(--ip-mono);
+  font-weight: 700;
+  font-size: 10px;
+  line-height: 1;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ip-red);
+}
+
+.firm-page .ip__meta .ip__meta-value {
+  margin: 0;
+  font-family: var(--ip-display);
+  font-weight: 700;
+  font-size: clamp(22px, 2.4vw, 28px);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--ip-ink);
+}
+
+/* --- City + discipline chip strips --- */
+.firm-page .ip__strips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(24px, 4vw, 56px);
+  margin-top: clamp(28px, 3vw, 40px);
+}
+
+.firm-page .ip__strip {
+  min-width: 0;
+}
+
+.firm-page .ip__strip .ip__strip-label {
+  margin: 0 0 12px !important;
+  font-family: var(--ip-mono) !important;
+  font-weight: 400 !important;
+  font-size: 10px !important;
+  line-height: 1 !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  color: var(--ip-muted) !important;
+}
+
+.firm-page .ip__chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.firm-page .ip__chips li {
+  display: inline-flex;
+  align-items: baseline;
+  margin: 0 !important;
+  font-family: var(--ip-mono) !important;
+  font-weight: 700 !important;
+  font-size: 12px !important;
+  line-height: 1.4 !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  color: var(--ip-ink) !important;
+}
+
+/* Dot separators between chips — red for cities, teal for disciplines */
+.firm-page .ip__chips li + li::before {
+  content: "\00B7";
+  margin: 0 0.85em;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.firm-page .ip__chips--cities li + li::before {
+  color: var(--ip-red);
+}
+
+.firm-page .ip__chips--disc li + li::before {
+  color: var(--ip-teal);
+}
+
+/* --- Transition cue pointing into the Operational Geography map --- */
+.firm-page .ip__transition {
+  margin: clamp(32px, 4vw, 48px) 0 0;
+  text-align: right;
+}
+
+.firm-page .ip__transition .ip__transition-link {
+  font-family: var(--ip-mono) !important;
+  font-weight: 400 !important;
+  font-size: 11px !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  color: var(--ip-muted) !important;
+  text-decoration: none;
+  transition: color 0.18s ease;
+}
+
+.firm-page .ip__transition .ip__transition-link:hover,
+.firm-page .ip__transition .ip__transition-link:focus-visible {
+  color: var(--ip-ink) !important;
+}
+
+.firm-page .ip__transition .ip__transition-arrow {
+  margin-left: 0.5em;
+  color: var(--ip-red) !important;
+}
+
+/* --- Responsive --- */
+@media (max-width: 860px) {
+  .firm-page .ip__body {
+    grid-template-columns: 1fr;
+    row-gap: 16px;
+  }
+  .firm-page .ip__body .ip__para { max-width: 60ch; }
+  .firm-page .ip__head .ip__seal {
+    top: auto;
+    bottom: 0;
+    right: 0;
+  }
+}
+
+@media (max-width: 720px) {
+  .firm-page .firm-editorial.ip > .ip__inner {
+    padding-block: clamp(56px, 14vw, 72px) clamp(52px, 12vw, 64px);
+  }
+  .firm-page .ip__meta {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 26px 24px;
+  }
+  .firm-page .ip__transition { text-align: left; }
+}

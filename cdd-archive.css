@@ -1,0 +1,682 @@
+/* =========================================================================
+   China Debt Dynamics Archive — redesigned list page
+   Scoped under .cdd-arc so it does not collide with legacy .archive__* rules.
+   Display + body + labels: DIN 2014 (brand-compliant).
+   ========================================================================= */
+
+/* The legacy .issue-shell wrapper supplies its own large vertical padding.
+   When it hosts the redesigned archive, let .cdd-arc own the spacing instead. */
+body.insights-page .issue-shell:has(.cdd-arc) {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.cdd-arc {
+  /* Design tokens */
+  --paper:            #F2ECD8;
+  --cream:            #FAF6EE;
+  --row-hover:        #F4ECDB;
+  --row-featured:     #FAF1DC;
+  --ink:              #0F2206;
+  --body:             #2B2620;
+  --muted:            #6B6258;
+  --rule:             #D8CEB0;
+  --rule-soft:        #D8CEB0;
+  --red:              #C93B2A;
+  --red-tint:         #E8998F;
+  --teal:             #3D7070;
+  --ink-green-light:  #4A7A40;
+
+  --arc-display: var(--sv-font-en);
+  --arc-mono: var(--sv-font-en);
+
+  box-sizing: border-box;
+  width: 100%;
+  background: var(--paper);
+  --arc-max-width: 1180px;
+  --arc-page-gutter: clamp(24px, 5vw, 56px);
+  --arc-section-gap: clamp(28px, 4vw, 44px);
+  --arc-card-pad-x: clamp(20px, 2.6vw, 32px);
+  --arc-card-pad-y: clamp(22px, 3vw, 28px);
+  --arc-meta-col: 160px;
+  --arc-actions-col: 156px;
+  --arc-row-gap: clamp(24px, 2.8vw, 32px);
+
+  padding: clamp(56px, 7vw, 76px) 0 clamp(76px, 9vw, 104px);
+  font-family: var(--arc-display);
+  color: var(--body);
+}
+
+.cdd-arc *,
+.cdd-arc *::before,
+.cdd-arc *::after {
+  box-sizing: border-box;
+}
+
+.cdd-arc__inner {
+  width: min(calc(100% - (var(--arc-page-gutter) * 2)), var(--arc-max-width));
+  max-width: var(--arc-max-width);
+  margin-inline: auto;
+  padding-inline: 0;
+}
+
+/* -------------------------------------------------------------------------
+   1. Page header
+   ------------------------------------------------------------------------- */
+.cdd-arc__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+
+.cdd-arc__header-main {
+  min-width: 0;
+  flex: 1 1 460px;
+}
+
+.cdd-arc__eyebrow {
+  font-family: var(--arc-mono);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin: 0 0 14px;
+}
+
+.cdd-arc__title {
+  font-family: var(--arc-display) !important;
+  font-weight: 700 !important;
+  font-size: clamp(38px, 4.8vw, 58px) !important;
+  line-height: 1.02 !important;
+  letter-spacing: -0.02em !important;
+  color: var(--ink) !important;
+  margin: 0 0 16px !important;
+  max-width: none !important;
+}
+
+.cdd-arc__subhead {
+  font-family: var(--arc-display);
+  font-size: clamp(14px, 1.1vw, 16px);
+  line-height: 1.5;
+  color: var(--muted);
+  margin: 0;
+  max-width: 620px;
+}
+
+.cdd-arc__header-meta {
+  font-family: var(--arc-mono);
+  font-weight: 400;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: right;
+  flex: 0 0 auto;
+  padding-bottom: 6px;
+  white-space: nowrap;
+}
+
+.cdd-arc__latest-flag {
+  color: var(--red);
+  font-weight: 700;
+}
+
+/* -------------------------------------------------------------------------
+   2. Editorial fact strip
+   ------------------------------------------------------------------------- */
+.cdd-arc__facts {
+  display: grid;
+  column-gap: clamp(18px, 3vw, 40px);
+  row-gap: 18px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: var(--arc-section-gap);
+  padding: 22px 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+
+.cdd-arc__fact {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  min-width: 0;
+  padding-right: clamp(14px, 2vw, 24px);
+  border-right: 1px solid rgba(216, 206, 176, 0.72);
+}
+
+.cdd-arc__fact-num {
+  font-family: var(--arc-display);
+  font-weight: 700;
+  font-size: 26px;
+  min-width: 3.2ch;
+  line-height: 1;
+  color: var(--red);
+}
+
+.cdd-arc__fact-label {
+  font-family: var(--arc-mono);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  line-height: 1.3;
+  max-width: 14ch;
+}
+
+.cdd-arc__fact:last-of-type {
+  border-right: 0;
+  padding-right: 0;
+}
+
+.cdd-arc__dot {
+  display: none;
+}
+
+/* -------------------------------------------------------------------------
+   3. Filter chips
+   ------------------------------------------------------------------------- */
+.cdd-arc__controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: var(--arc-section-gap);
+  margin-bottom: 18px;
+}
+
+.cdd-arc__chips {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+
+.cdd-arc__chips::-webkit-scrollbar { display: none; }
+
+.cdd-arc__chip {
+  flex: 0 0 auto;
+  font-family: var(--arc-mono);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--body);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 17px;
+  min-height: 38px;
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+  white-space: nowrap;
+}
+
+.cdd-arc__chip:hover {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.cdd-arc__chip.is-active {
+  background: var(--red);
+  border-color: var(--red);
+  color: var(--paper);
+}
+
+.cdd-arc__chip:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 2px;
+}
+
+.cdd-arc__count {
+  flex: 0 0 auto;
+  font-family: var(--arc-mono);
+  font-weight: 400;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* -------------------------------------------------------------------------
+   4. Year markers + list
+   ------------------------------------------------------------------------- */
+.cdd-arc__list {
+  margin-top: 0;
+  border-top: 1px solid var(--rule);
+}
+
+.cdd-arc__year {
+  display: grid;
+  grid-template-columns: calc(var(--arc-card-pad-x) + var(--arc-meta-col) + var(--arc-row-gap)) minmax(0, 1fr);
+  align-items: center;
+  gap: 0;
+  padding: 22px 0 12px;
+  position: sticky;
+  top: var(--site-header-height, 72px);
+  background: var(--paper);
+  z-index: 2;
+}
+
+.cdd-arc__year > span {
+  font-family: var(--arc-display);
+  font-weight: 700;
+  font-size: clamp(24px, 3vw, 32px);
+  line-height: 1;
+  color: var(--ink-green-light);
+  grid-column: 1;
+}
+
+.cdd-arc__year::after {
+  content: "";
+  grid-column: 2;
+  height: 1px;
+  background: var(--red);
+}
+
+/* -------------------------------------------------------------------------
+   6 + 7. Rows
+   ------------------------------------------------------------------------- */
+.cdd-arc__row {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--arc-meta-col) minmax(0, 1fr) var(--arc-actions-col);
+  gap: var(--arc-row-gap);
+  align-items: start;
+  padding: var(--arc-card-pad-y) var(--arc-card-pad-x);
+  background: rgba(250, 246, 238, 0.62);
+  border: 1px solid rgba(216, 206, 176, 0.72);
+  border-radius: 2px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: background 0.18s ease;
+}
+
+.cdd-arc__row:hover {
+  background: var(--row-hover);
+  border-color: rgba(201, 59, 42, 0.28);
+}
+
+.cdd-arc__row:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 2px;
+}
+
+/* Left meta column: issue chip + topic tag, then short date */
+.cdd-arc__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.cdd-arc__tags {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.cdd-arc__chip-issue {
+  font-family: var(--arc-mono);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--red);
+  border: 1px solid var(--red-tint);
+  border-radius: 4px;
+  padding: 3px 7px;
+  line-height: 1;
+}
+
+.cdd-arc__topic {
+  font-family: var(--arc-mono);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+/* Topic colours: STRUCTURAL=red, POLICY=teal, MARKETS=ink-green-light, FIELD NOTES=muted */
+.cdd-arc__topic--structural { color: var(--red); }
+.cdd-arc__topic--policy     { color: var(--teal); }
+.cdd-arc__topic--markets    { color: var(--ink-green-light); }
+.cdd-arc__topic--field      { color: var(--muted); }
+
+.cdd-arc__date {
+  font-family: var(--arc-mono);
+  font-weight: 400;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Center body */
+.cdd-arc__body {
+  min-width: 0;
+}
+
+.cdd-arc__row-title {
+  font-family: var(--arc-display) !important;
+  font-weight: 700 !important;
+  font-size: 18px !important;
+  line-height: 1.25 !important;
+  letter-spacing: -0.005em !important;
+  color: var(--ink-green-light) !important;
+  margin: 0 !important;
+  max-width: 720px !important;
+  text-wrap: pretty;
+}
+
+.cdd-arc__row:hover .cdd-arc__row-title {
+  text-decoration: underline;
+  text-decoration-color: var(--red);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 2px;
+}
+
+.cdd-arc__excerpt {
+  font-family: var(--arc-display);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--muted);
+  margin: 12px 0 0;
+  max-width: 620px;
+}
+
+/* Right actions */
+.cdd-arc__actions {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  justify-content: flex-end;
+  padding-top: 1px;
+}
+
+/* Primary: READ — Cinnabar fill, paper text */
+.cdd-arc__read {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--arc-mono);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--paper) !important;
+  background: var(--red);
+  border: 0;
+  border-radius: 4px;
+  padding: 0 16px;
+  min-height: 44px;
+  text-decoration: none;
+  transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+  white-space: nowrap;
+}
+
+.cdd-arc__row:hover .cdd-arc__read,
+.cdd-arc__read:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(201, 59, 42, 0.28);
+}
+
+.cdd-arc__read:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+/* Secondary: PDF — text link only, no box */
+.cdd-arc__pdf {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--arc-mono);
+  font-weight: 400;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted) !important;
+  background: none;
+  border: 0;
+  text-decoration: none;
+  min-height: 44px;
+  transition: color 0.16s ease;
+  white-space: nowrap;
+}
+
+.cdd-arc__pdf:hover {
+  color: var(--red) !important;
+}
+
+.cdd-arc__pdf:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 2px;
+}
+
+/* -------------------------------------------------------------------------
+   5. Featured (latest) row
+   ------------------------------------------------------------------------- */
+.cdd-arc__row--featured {
+  background: rgba(250, 241, 220, 0.82);
+  border-color: rgba(201, 59, 42, 0.28);
+  padding-top: calc(var(--arc-card-pad-y) + 12px);
+  padding-bottom: calc(var(--arc-card-pad-y) + 6px);
+}
+
+.cdd-arc__row--featured .cdd-arc__row-title {
+  font-size: clamp(24px, 3vw, 31px) !important;
+  line-height: 1.12 !important;
+}
+
+.cdd-arc__latest-tag {
+  position: absolute;
+  top: 14px;
+  left: var(--arc-card-pad-x);
+  transform: none;
+  font-family: var(--arc-mono);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--paper);
+  background: var(--red);
+  border-radius: 999px;
+  padding: 5px 12px;
+  line-height: 1;
+}
+
+/* -------------------------------------------------------------------------
+   8. Editorial closer
+   ------------------------------------------------------------------------- */
+.cdd-arc__closer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 48px;
+  padding-top: 28px;
+  border-top: 1px solid var(--rule);
+}
+
+.cdd-arc__closer-end,
+.cdd-arc__closer-sub {
+  font-family: var(--arc-mono);
+  font-weight: 400;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  flex: 1 1 0;
+}
+
+.cdd-arc__closer-end {
+  color: var(--muted);
+  text-align: left;
+}
+
+.cdd-arc__closer-sub {
+  color: var(--red) !important;
+  text-align: right;
+  text-decoration: none;
+}
+
+.cdd-arc__closer-sub:hover { text-decoration: underline; }
+
+.cdd-arc__closer-seal {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  flex: 0 0 auto;
+  font-family: var(--arc-display);
+  font-size: 18px;
+  color: var(--red);
+}
+
+.cdd-arc__seal-rule {
+  width: 28px;
+  height: 1px;
+  background: var(--rule);
+}
+
+/* Hidden state used by filter JS */
+.cdd-arc [hidden] { display: none !important; }
+
+/* -------------------------------------------------------------------------
+   11. Responsive
+   ------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .cdd-arc {
+    padding: 48px 0 72px;
+    --arc-page-gutter: clamp(20px, 5vw, 40px);
+    --arc-card-pad-x: clamp(18px, 4vw, 26px);
+    --arc-meta-col: 150px;
+    --arc-actions-col: 150px;
+    --arc-row-gap: clamp(18px, 3vw, 26px);
+  }
+
+  .cdd-arc__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  .cdd-arc__header-meta {
+    text-align: left;
+    white-space: normal;
+  }
+
+  /* Stack each row: meta on top, title middle, buttons bottom-right */
+  .cdd-arc__facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cdd-arc__fact:nth-of-type(2n) {
+    border-right: 0;
+    padding-right: 0;
+  }
+
+  .cdd-arc__year {
+    grid-template-columns: minmax(86px, auto) minmax(0, 1fr);
+    column-gap: 14px;
+    padding-top: 20px;
+  }
+
+  .cdd-arc__row,
+  .cdd-arc__row--featured {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 20px var(--arc-card-pad-x);
+  }
+
+  .cdd-arc__row--featured {
+    padding-top: 46px;
+  }
+
+  .cdd-arc__meta {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .cdd-arc__actions {
+    justify-content: flex-start;
+    padding-top: 0;
+  }
+
+  .cdd-arc__row--featured .cdd-arc__row-title {
+    font-size: 26px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .cdd-arc {
+    --arc-page-gutter: clamp(18px, 5vw, 24px);
+  }
+
+  .cdd-arc__controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+
+  /* Filter chips wrap onto multiple rows on phones rather than overflowing
+     the page in a hidden horizontal-scroll strip. */
+  .cdd-arc__chips {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .cdd-arc__count { align-self: flex-start; }
+
+  .cdd-arc__facts {
+    grid-template-columns: 1fr;
+  }
+
+  .cdd-arc__fact {
+    justify-content: space-between;
+    border-right: 0;
+    border-bottom: 1px solid rgba(216, 206, 176, 0.55);
+    padding-right: 0;
+    padding-bottom: 12px;
+  }
+
+  .cdd-arc__fact:last-of-type {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  /* Year markers shrink */
+  .cdd-arc__year > span {
+    font-size: 22px;
+  }
+
+  /* Featured excerpt hidden on very small screens */
+  .cdd-arc__row--featured .cdd-arc__excerpt {
+    display: none;
+  }
+
+  .cdd-arc__closer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .cdd-arc__closer-end,
+  .cdd-arc__closer-sub {
+    text-align: left;
+  }
+}

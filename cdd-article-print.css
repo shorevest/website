@@ -1,0 +1,186 @@
+/* ==========================================================================
+   ShoreVest — China Debt Dynamics PRINT / PDF template (2026-06-22 rebuild)
+   Self-contained. Drives china-debt-dynamics-print.html, populated by the
+   shared renderer in isPrint mode. Screen view shows a centred white "sheet"
+   with a Save-as-PDF toolbar; print view is a clean A4 document. Institutional
+   system: white paper, ink text, cinnabar as structural rules, DIN/Barlow,
+   square edges, no shadows in print, no green, no English serif.
+   ========================================================================== */
+
+:root {
+  --p-cinnabar: #C93B2A;
+  --p-cinnabar-d: #9F2F24;
+  --p-ink: #182524;
+  --p-ink-2: #2A302E;
+  --p-muted: #6E7169;
+  --p-line: rgba(23, 53, 54, 0.16);
+  --p-line-soft: rgba(23, 53, 54, 0.10);
+  --p-paper: #FFFFFF;
+  --p-font: "DIN 2014", "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --p-cn: "Noto Serif SC", serif;
+}
+
+* { box-sizing: border-box; }
+
+@page { size: A4; margin: 17mm 16mm 18mm; }
+
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+body.cdd-print-layout {
+  margin: 0; padding: 32px 16px 56px;
+  background: #E7E4DC;                 /* screen backdrop only */
+  color: var(--p-ink-2);
+  font-family: var(--p-font);
+  font-size: 16px; line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+body.cdd-print-layout .wrap { max-width: 860px; margin-inline: auto; }
+
+/* ---- Running header strip (publication nameplate + screen toolbar) ---- */
+.cdd-print-layout .cdd-topline { max-width: 860px; margin: 0 auto 14px; padding: 0 4px; }
+.cdd-print-layout .cdd-topline__inner {
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+}
+.cdd-print-layout .cdd-topline__brand { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.cdd-print-layout .cdd-label {
+  font: 600 11px/1.2 var(--p-font); letter-spacing: 0.16em; text-transform: uppercase; color: var(--p-cinnabar); white-space: nowrap;
+}
+.cdd-print-layout .cdd-lockup { font: 500 14px/1.2 var(--p-cn); color: var(--p-ink-2); white-space: nowrap; }
+
+/* ---- Toolbar (screen only) ---- */
+.cdd-print-layout .cdd-topline__tools { display: flex; flex-direction: column; align-items: flex-end; gap: 7px; flex: none; }
+.cdd-print-layout .cdd-btn {
+  appearance: none; cursor: pointer; border-radius: 0; white-space: nowrap;
+  display: inline-flex; align-items: center; height: 44px; padding: 0 24px;
+  font: 600 12px/1 var(--p-font); letter-spacing: 0.08em; text-transform: uppercase;
+  background: var(--p-cinnabar); color: #fff; border: 1px solid var(--p-cinnabar);
+  transition: background .15s ease;
+}
+.cdd-print-layout .cdd-btn:hover { background: var(--p-cinnabar-d); border-color: var(--p-cinnabar-d); }
+.cdd-print-layout .cdd-print-note { margin: 0; max-width: 230px; text-align: right; font: 400 11px/1.45 var(--p-font); color: var(--p-muted); }
+/* The shared renderer injects a Share control into .cdd-actions; it has no place
+   on a print/PDF sheet, so hide the whole control (button + menu). */
+.cdd-print-layout .cdd-share { display: none !important; }
+
+/* ---- The sheet ---- */
+.cdd-print-layout .cdd-print-shell {
+  background: var(--p-paper);
+  border-top: 3px solid var(--p-cinnabar);
+  box-shadow: 0 1px 0 var(--p-line), 0 18px 50px rgba(20, 30, 28, 0.14);
+  padding: clamp(40px, 6vw, 64px) clamp(34px, 6vw, 60px) clamp(44px, 6vw, 60px);
+}
+
+/* ---- Masthead ---- */
+.cdd-print-layout .cdd-print-masthead { margin-bottom: 26px; }
+.cdd-print-layout .cdd-print-label { display: none; }   /* redundant with the running strip */
+.cdd-print-layout .cdd-meta {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px;
+  padding-bottom: 18px; border-bottom: 1px solid var(--p-line);
+  font: 600 11px/1.3 var(--p-font); letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--p-muted); font-variant-numeric: tabular-nums;
+}
+.cdd-print-layout .cdd-meta span { position: relative; }
+.cdd-print-layout .cdd-meta span + span { padding-left: 15px; }
+.cdd-print-layout .cdd-meta span + span::before {
+  content: ""; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+  width: 1px; height: 10px; background: var(--p-line);
+}
+.cdd-print-layout .cdd-meta span:first-child { color: var(--p-cinnabar); }
+
+/* ---- Title + dek ---- */
+.cdd-print-layout .cdd-print-hero { margin-bottom: 30px; }
+.cdd-print-layout .cdd-title {
+  margin: 22px 0 0; font: 500 clamp(28px, 4.4vw, 38px)/1.1 var(--p-font);
+  letter-spacing: -0.02em; color: var(--p-ink); text-wrap: balance;
+}
+/* Dek spans the full sheet width, aligning with the title — not a narrow column. */
+.cdd-print-layout .cdd-dek {
+  margin: 18px 0 0; max-width: none;
+  font: 400 clamp(15px, 1.6vw, 17px)/1.55 var(--p-font); color: var(--p-ink-2);
+  text-wrap: pretty;
+}
+.cdd-print-layout .cdd-dek:empty { display: none; }
+
+/* ---- Key findings (quiet ruled inset, no card) ---- */
+.cdd-print-layout .cdd-findings-row { margin: 0 0 30px; }
+.cdd-print-layout .cdd-findings-row[hidden] { display: none; }
+.cdd-print-layout .cdd-sidecard {
+  border-top: 1px solid var(--p-ink); border-bottom: 1px solid var(--p-line);
+  padding: 18px 0 6px;
+}
+.cdd-print-layout .cdd-sidecard h3 {
+  margin: 0 0 12px; font: 600 11px/1.3 var(--p-font); letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--p-muted);
+}
+.cdd-print-layout .cdd-sidecard ul { list-style: none; margin: 0; padding: 0; columns: 2; column-gap: 40px; }
+.cdd-print-layout .cdd-sidecard ul li {
+  position: relative; padding: 0 0 12px 18px; margin: 0; break-inside: avoid;
+  font: 400 13px/1.5 var(--p-font); color: var(--p-ink-2);
+}
+.cdd-print-layout .cdd-sidecard ul li::before {
+  content: ""; position: absolute; left: 0; top: 7px; width: 6px; height: 6px; background: var(--p-cinnabar);
+}
+
+/* ---- Body ---- */
+.cdd-print-layout .cdd-body { max-width: none; }
+.cdd-print-layout .cdd-body > h2 {
+  margin: 26px 0 12px; padding-top: 18px; border-top: 1px solid var(--p-line);
+  font: 500 clamp(18px, 2.4vw, 21px)/1.2 var(--p-font); letter-spacing: -0.01em; color: var(--p-ink);
+  position: relative; break-after: avoid;
+}
+.cdd-print-layout .cdd-body > h2::before {
+  content: none; display: none;
+}
+.cdd-print-layout .cdd-body > h2:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+.cdd-print-layout .cdd-body > h2:first-child::before { display: none; }
+.cdd-print-layout .cdd-body p {
+  margin: 0 0 1.15em; font: 400 14.5px/1.62 var(--p-font); color: var(--p-ink-2);
+  orphans: 2; widows: 2;
+}
+.cdd-print-layout .cdd-body ul { margin: 0 0 1.2em; padding: 0; list-style: none; }
+.cdd-print-layout .cdd-body ul li {
+  position: relative; padding: 0 0 0 20px; margin: 0 0 0.5em;
+  font: 400 14.5px/1.55 var(--p-font); color: var(--p-ink-2);
+}
+.cdd-print-layout .cdd-body ul li::before {
+  content: ""; position: absolute; left: 0; top: 0.62em; width: 6px; height: 6px; background: var(--p-cinnabar);
+}
+
+/* ---- Disclosures ---- */
+.cdd-print-layout .cdd-disclaimer {
+  margin-top: 34px; padding-top: 22px; border-top: 1px solid var(--p-ink);
+  break-inside: avoid;
+}
+.cdd-print-layout .cdd-disclaimer h4 {
+  margin: 0 0 16px; font: 600 11px/1.3 var(--p-font); letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--p-cinnabar);
+}
+.cdd-print-layout .cdd-disclaimer p[data-cdd-disclaimer] {
+  margin: 0; max-width: none;
+  font: 400 11px/1.6 var(--p-font); color: var(--p-muted);
+}
+.cdd-print-layout .cdd-disclaimer p[data-cdd-copyright] {
+  margin: 16px 0 0; padding-top: 14px; border-top: 1px solid var(--p-line-soft);
+  font: 500 10.5px/1.4 var(--p-font); letter-spacing: 0.04em; text-transform: uppercase; color: var(--p-muted);
+}
+
+/* ==========================================================================
+   PRINT
+   ========================================================================== */
+@media print {
+  body.cdd-print-layout { background: #fff; padding: 0; font-size: 11pt; }
+  .cdd-print-layout .cdd-print-hide,
+  .cdd-print-layout .cdd-topline__tools { display: none !important; }
+  .cdd-print-layout .cdd-topline { max-width: none; margin: 0 0 8px; padding: 0; }
+  .cdd-print-layout .wrap { max-width: none; }
+  .cdd-print-layout .cdd-print-shell { box-shadow: none; border-top: 3px solid var(--p-cinnabar); padding: 14px 0 0; }
+  .cdd-print-layout .cdd-body > h2 { break-after: avoid; }
+  .cdd-print-layout .cdd-disclaimer { break-inside: avoid; }
+}
+
+@media (max-width: 640px) {
+  .cdd-print-layout .cdd-topline__inner { flex-direction: column; align-items: flex-start; gap: 14px; }
+  .cdd-print-layout .cdd-topline__tools { align-items: flex-start; }
+  .cdd-print-layout .cdd-print-note { text-align: left; }
+  .cdd-print-layout .cdd-sidecard ul { columns: 1; }
+}

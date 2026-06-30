@@ -1,0 +1,169 @@
+/* Shared China Debt Dynamics franchise system
+   Source of truth: dedicated Insights hero + issue-live treatment. */
+
+:root {
+  --cdd-fr-bg-top: #15280f;
+  --cdd-fr-bg-mid: #101f0c;
+  --cdd-fr-bg-bottom: #0c1709;
+  --cdd-fr-paper: #f2ecd8;
+  --cdd-fr-paper-soft: #ece3d6;
+  --cdd-fr-muted: #d8ceb0;
+  --cdd-fr-rule: rgba(216, 206, 176, 0.24);
+  --cdd-fr-cinnabar: #c93b2a;
+}
+
+.cdd-franchise {
+  --cdd-signal: var(--cdd-fr-cinnabar);
+  --cdd-surface: var(--cdd-fr-paper);
+}
+
+.cdd-franchise .cdd-franchise__headline,
+.cdd-franchise .wordmark__title {
+  font-family: var(--sv-type-sans) !important;
+  font-weight: 300 !important;
+  font-style: italic !important;
+  letter-spacing: 0.005em !important;
+  line-height: 0.95 !important;
+  color: var(--cdd-fr-paper) !important;
+}
+
+.cdd-franchise .cdd-franchise__headline em,
+.cdd-franchise .wordmark__title em {
+  color: var(--cdd-fr-cinnabar) !important;
+  font-style: italic !important;
+  font-weight: 300 !important;
+}
+
+.cdd-franchise .cdd-franchise__eyebrow,
+.cdd-franchise .eyebrow--ghost {
+  color: #faf6ee !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.18em !important;
+}
+
+.cdd-franchise .cdd-franchise__eyebrow::after,
+.cdd-franchise .eyebrow--ghost::after {
+  background: #faf6ee !important;
+}
+
+.cdd-franchise .cdd-franchise__lede,
+.cdd-franchise .research-hero__desc,
+.cdd-franchise .cdd-editorial__lede {
+  color: var(--cdd-fr-paper-soft) !important;
+  font-size: 17px !important;
+  line-height: 1.62 !important;
+  letter-spacing: 0 !important;
+}
+
+/* Shared dark editorial atmosphere */
+section#cdd.cdd-franchise,
+section.research-hero.cdd-franchise {
+  background:
+    radial-gradient(circle at 84% 18%, color-mix(in srgb, var(--cdd-fr-cinnabar) 18%, transparent) 0%, transparent 46%),
+    radial-gradient(circle at 16% 10%, rgba(87, 138, 63, 0.3) 0%, rgba(33, 79, 24, 0) 52%),
+    linear-gradient(126deg, var(--cdd-fr-bg-top) 0%, var(--cdd-fr-bg-mid) 54%, var(--cdd-fr-bg-bottom) 100%) !important;
+  border-bottom: 1px solid var(--cdd-fr-rule) !important;
+}
+
+/* Shared featured panel logic */
+.cdd-franchise .cdd-franchise__panel,
+.cdd-franchise .issue-live,
+.cdd-franchise .cdd-feature {
+  border: 1px solid color-mix(in srgb, var(--cdd-fr-muted) 22%, transparent) !important;
+  border-top: 2px solid color-mix(in srgb, var(--cdd-fr-cinnabar) 56%, var(--cdd-fr-muted) 44%) !important;
+  background: linear-gradient(160deg, rgba(242, 236, 216, 0.08) 0%, rgba(242, 236, 216, 0.02) 100%) !important;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.18) !important;
+}
+
+.cdd-franchise .cdd-feature__top {
+  border-bottom: 1px solid color-mix(in srgb, var(--cdd-fr-muted) 22%, transparent) !important;
+}
+
+.cdd-franchise .cdd-feature__issue,
+.cdd-franchise .cdd-feature__date,
+.cdd-franchise .cdd-feature__label,
+.cdd-franchise .issue-live__k,
+.cdd-franchise .issue-live__meta span,
+.cdd-franchise .cdd-feature__meta {
+  color: color-mix(in srgb, var(--cdd-fr-paper) 72%, var(--cdd-fr-muted) 28%) !important;
+}
+
+.cdd-franchise .cdd-feature__issue,
+.cdd-franchise .cdd-feature__date {
+  border: 1px solid color-mix(in srgb, var(--cdd-fr-muted) 44%, transparent) !important;
+  background: color-mix(in srgb, var(--cdd-fr-paper) 8%, transparent) !important;
+}
+
+.cdd-franchise .cdd-feature__title,
+.cdd-franchise .issue-live__headline--title,
+.cdd-franchise .issue-live__headline--issue,
+.cdd-franchise .cdd-feature__thesis,
+.cdd-franchise .issue-live p {
+  color: var(--cdd-fr-paper) !important;
+}
+
+/* Shared CTA styling */
+.cdd-franchise .cdd-cta,
+.cdd-franchise .issue-live__meta a {
+  border-color: color-mix(in srgb, var(--cdd-fr-muted) 62%, var(--cdd-fr-cinnabar) 38%) !important;
+  color: var(--cdd-fr-paper) !important;
+}
+
+.cdd-franchise .cdd-cta__ring {
+  border-color: color-mix(in srgb, var(--cdd-fr-muted) 42%, transparent) !important;
+  color: var(--cdd-fr-paper) !important;
+}
+
+.cdd-franchise .cdd-cta:hover,
+.cdd-franchise .cdd-cta:focus-visible,
+.cdd-franchise .issue-live__meta a:hover,
+.cdd-franchise .issue-live__meta a:focus-visible {
+  border-color: var(--cdd-fr-cinnabar) !important;
+  background: color-mix(in srgb, var(--cdd-fr-cinnabar) 16%, transparent) !important;
+  color: var(--cdd-fr-paper) !important;
+}
+
+/* Compact adaptation for homepage while keeping same language */
+.cdd-franchise--compact .cdd-editorial__card {
+  gap: clamp(14px, 1.7vw, 20px);
+}
+
+.cdd-franchise--compact .cdd-editorial__intro {
+  border-bottom: 1px solid color-mix(in srgb, var(--cdd-fr-muted) 22%, transparent) !important;
+  padding-bottom: clamp(14px, 1.5vw, 18px);
+}
+
+.cdd-franchise--compact .cdd-feature__title--compact {
+  font-size: clamp(25px, 2.4vw, 32px) !important;
+  line-height: 1.09 !important;
+}
+
+@media (max-width: 1024px) {
+  .cdd-franchise .cdd-franchise__lede,
+  .cdd-franchise .research-hero__desc,
+  .cdd-franchise .cdd-editorial__lede {
+    font-size: 16px !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .cdd-franchise .cdd-franchise__lede,
+  .cdd-franchise .research-hero__desc,
+  .cdd-franchise .cdd-editorial__lede {
+    font-size: 15px !important;
+    line-height: 1.58 !important;
+  }
+
+  /* body prefix matches specificity of body.homepage .eyebrow in refinement-pass.css;
+     this file loads later so wins the cascade. ::after hidden to give text full width. */
+  body .cdd-franchise .cdd-franchise__eyebrow,
+  body .cdd-franchise .eyebrow--ghost {
+    letter-spacing: 0.08em !important;
+    font-size: 10px !important;
+  }
+  body .cdd-franchise .cdd-franchise__eyebrow::after,
+  body .cdd-franchise .eyebrow--ghost::after {
+    display: none !important;
+  }
+}

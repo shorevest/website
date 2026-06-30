@@ -1,0 +1,95 @@
+/* ==========================================================================
+   ShoreVest — CHROME PARITY (2026-06-23)
+   Some pages (contact, investor-portal, legal, _cn) still load legacy base
+   stylesheets (shorevest-typography-system.css, shorevest-layout-system.css,
+   shared-hero.css, burford-polish, refinement-pass, topbar-consistent …) whose
+   `html body footer.sv-footer …` / bare-element rules use !important and beat
+   homepage-rebuild.css — leaking green footer text, wrong sizes, etc.
+
+   This file re-asserts the EXACT homepage header + footer so the chrome matches
+   index.html everywhere. Load it DEAD LAST, after every other stylesheet, on any
+   page that carries body.homepage but also pulls the legacy stack. Values are
+   copied verbatim from homepage-rebuild.css (the canonical authority); the
+   --sv-* tokens it references are defined there and are in scope.
+   ========================================================================== */
+
+/* ---------- HEADER ---------- */
+body.homepage .sv-header {
+  position: fixed !important; inset: 0 0 auto 0 !important;
+  height: var(--header-h) !important; background: #FCF9F1 !important;
+  border-bottom: 1px solid rgba(23, 53, 54, 0.12) !important; z-index: 1000 !important;
+}
+body.homepage .sv-header__inner {
+  max-width: var(--page-max) !important; margin-inline: auto !important; height: 100% !important;
+  padding-inline: var(--pad-x) !important;
+  display: grid !important; grid-template-columns: auto 1fr auto !important;
+  align-items: center !important; gap: 28px !important;
+}
+body.homepage .sv-header__logo { display: inline-flex !important; align-items: center !important; }
+body.homepage .sv-header__logo img { width: 172px !important; height: auto !important; }
+
+body.homepage .sv-nav { justify-self: center !important; }
+body.homepage .sv-nav ul {
+  list-style: none !important; margin: 0 !important; padding: 0 !important;
+  display: flex !important; gap: clamp(18px, 2vw, 32px) !important;
+}
+body.homepage .sv-nav li { margin: 0 !important; }
+body.homepage .sv-nav a {
+  font: 600 12.5px/1 var(--sv-font) !important; letter-spacing: 0.08em !important;
+  text-transform: uppercase !important; color: var(--sv-ink) !important;
+  text-decoration: none !important; padding: 6px 0 !important;
+  border-bottom: 1px solid transparent !important;
+}
+body.homepage .sv-nav a:hover { color: var(--sv-cinnabar) !important; border-color: var(--sv-cinnabar) !important; }
+
+body.homepage .sv-utils { display: flex !important; align-items: center !important; gap: 14px !important; }
+body.homepage .sv-lang {
+  font: 600 12px/1 var(--sv-font) !important; letter-spacing: 0.06em !important;
+  color: var(--sv-ink-2) !important; text-decoration: none !important; white-space: nowrap !important;
+}
+body.homepage .sv-lang .on { color: var(--sv-ink) !important; }
+body.homepage .sv-lang .sep { color: var(--sv-border-light-strong) !important; margin: 0 4px !important; }
+body.homepage .sv-util-btn {
+  display: inline-flex !important; align-items: center !important; height: 42px !important; padding: 0 16px !important;
+  font: 600 11.5px/1 var(--sv-font) !important; letter-spacing: 0.08em !important; text-transform: uppercase !important;
+  text-decoration: none !important; border-radius: 0 !important;
+  border: 1px solid var(--sv-border-light-strong) !important; color: var(--sv-ink) !important;
+  background: transparent !important; white-space: nowrap !important;
+}
+body.homepage .sv-util-btn:hover { border-color: var(--sv-ink) !important; }
+body.homepage .sv-util-btn--cta {
+  background: var(--sv-cinnabar) !important; color: var(--sv-ivory) !important; border-color: var(--sv-cinnabar) !important;
+}
+body.homepage .sv-util-btn--cta:hover { background: var(--sv-cinnabar-d) !important; border-color: var(--sv-cinnabar-d) !important; }
+
+/* ---------- FOOTER ---------- */
+body.homepage .sv-footer { background: var(--sv-dark-footer) !important; color: var(--sv-meta-on-dark) !important; }
+body.homepage .sv-footer__inner { padding: 56px var(--pad-x) 28px !important; max-width: var(--page-max) !important; margin-inline: auto !important; }
+body.homepage .sv-footer__top {
+  display: grid !important; grid-template-columns: minmax(0,1fr) auto !important; gap: clamp(32px,5vw,72px) !important;
+  align-items: start !important; padding-bottom: 36px !important; border-bottom: 1px solid var(--sv-border-dark) !important;
+}
+body.homepage .sv-footer__logo img { width: 200px !important; height: auto !important; }
+body.homepage .sv-footer__offices { margin: 22px 0 0 !important; font: 400 13.5px/1.7 var(--sv-font) !important; color: var(--sv-meta-on-dark) !important; }
+body.homepage .sv-footer__offices a { color: var(--sv-ivory) !important; text-decoration: none !important; border-bottom: 1px solid rgba(252,249,241,0.3) !important; }
+body.homepage .sv-footer__nav { display: grid !important; grid-template-columns: repeat(2, auto) !important; gap: 10px 56px !important; }
+body.homepage .sv-footer__nav a {
+  font: 500 13px/1 var(--sv-font) !important; letter-spacing: 0.04em !important;
+  color: var(--sv-meta-on-dark) !important; text-decoration: none !important; padding: 5px 0 !important; display: inline-block !important;
+}
+body.homepage .sv-footer__nav a:hover { color: var(--sv-ivory) !important; }
+body.homepage .sv-footer__legal {
+  margin: 28px 0 0 !important; padding: 22px 0 0 !important;
+  border-top: 1px solid var(--sv-border-dark) !important;
+  font: 400 12px/1.55 var(--sv-font) !important; color: var(--sv-faint-on-dark) !important;
+}
+body.homepage .sv-footer__legal p { margin: 0 0 10px !important; }
+body.homepage .sv-footer__legal p:last-child { margin-bottom: 0 !important; }
+body.homepage .sv-footer__bottom {
+  display: flex !important; flex-wrap: wrap !important; gap: 14px 28px !important;
+  justify-content: space-between !important; align-items: center !important; padding-top: 22px !important;
+}
+body.homepage .sv-footer__links { display: flex !important; flex-wrap: wrap !important; gap: 8px 22px !important; }
+body.homepage .sv-footer__links a { font: 400 12px/1 var(--sv-font) !important; color: var(--sv-meta-on-dark) !important; text-decoration: none !important; }
+body.homepage .sv-footer__links a:hover { color: var(--sv-ivory) !important; }
+body.homepage .sv-footer__copy { font: 400 12px/1 var(--sv-font) !important; color: var(--sv-faint-on-dark) !important; margin: 0 !important; }

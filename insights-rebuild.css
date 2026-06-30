@@ -1,0 +1,348 @@
+/* ==========================================================================
+   ShoreVest — Insights / China Debt Dynamics (2026-06-22, institutional rebuild)
+   Self-contained on the homepage shell (homepage-rebuild.css). Strict ShoreVest
+   box system: dark-ink editorial hero with a paper-inset featured panel, a quiet
+   stat block, square filter buttons, and a research-archive LEDGER (no cards,
+   no shadows, no rounded corners, no forced-uppercase titles, no red row
+   outlines). Cinnabar is architecture: small rules, issue badges, the active
+   filter, Read buttons, the Latest spine, the subscribe button. Scoped to
+   body.insights-page so it never touches other pages.
+   ========================================================================== */
+
+body.insights-page { background: var(--sv-ivory); }
+
+/* ==========================================================================
+   2 · HERO — dark ink editorial header + paper-inset featured report
+   ========================================================================== */
+body.insights-page .cdd-hero { background: var(--sv-dark-footer); color: var(--sv-text-on-dark); }
+body.insights-page .cdd-hero__inner {
+  display: grid; grid-template-columns: repeat(12, 1fr); gap: clamp(32px, 4vw, 64px);
+  padding-block: clamp(96px, 9vw, 132px); align-items: center;
+}
+body.insights-page .cdd-hero__lead { grid-column: 1 / 7; min-width: 0; }
+body.insights-page .cdd-hero__rule { display: none; }
+body.insights-page .cdd-hero__eyebrow {
+  margin: 0 0 22px; font: 600 12px/1.4 var(--sv-font);
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--sv-meta-on-dark);
+}
+body.insights-page .cdd-hero__title {
+  margin: 0; font: 500 clamp(38px, 4.6vw, 62px)/1.04 var(--sv-font);
+  letter-spacing: -0.03em; color: var(--sv-ivory);
+}
+body.insights-page .cdd-hero__cn {
+  margin: 16px 0 0; font: 500 17px/1.4 var(--sv-cn);
+  letter-spacing: 0.06em; color: var(--sv-meta-on-dark);
+}
+body.insights-page .cdd-hero__body {
+  margin: 24px 0 0; max-width: 44ch;
+  font: 400 17px/1.66 var(--sv-font); color: var(--sv-meta-on-dark);
+}
+
+/* Paper inset featured report panel (NOT a card) */
+body.insights-page .cdd-hero__panel {
+  grid-column: 8 / 13; align-self: center;
+  border: 1px solid var(--sv-border-dark);
+  border-top: 2px solid var(--sv-cinnabar);
+  background: rgba(252, 249, 241, 0.03);
+  padding: clamp(28px, 2.6vw, 38px);
+}
+body.insights-page .cdd-hero__panel-cover {
+  display: block; width: 100%; height: clamp(120px, 12vw, 168px);
+  object-fit: cover; object-position: center;
+  margin: 0 0 24px;
+  border: 1px solid var(--sv-border-dark);
+  background: rgba(252, 249, 241, 0.06);
+}
+body.insights-page .cdd-hero__panel-label {
+  margin: 0 0 22px; font: 600 11px/1 var(--sv-font);
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--sv-cinnabar);
+}
+body.insights-page .cdd-hero__panel-issue {
+  margin: 0 0 12px; font: 500 13px/1.4 var(--sv-font);
+  letter-spacing: 0.04em; color: var(--sv-meta-on-dark);
+}
+body.insights-page .cdd-hero__panel-title {
+  margin: 0 0 26px; font: 500 clamp(22px, 2.1vw, 28px)/1.18 var(--sv-font);
+  letter-spacing: -0.012em; color: var(--sv-ivory); text-wrap: balance;
+}
+body.insights-page .cdd-hero__panel-cta {
+  display: inline-flex; align-items: center; gap: 10px; height: 50px; padding: 0 24px;
+  font: 600 12px/1 var(--sv-font); letter-spacing: 0.08em; text-transform: uppercase;
+  text-decoration: none; border-radius: 0;
+  background: var(--sv-cinnabar); color: var(--sv-ivory); border: 1px solid var(--sv-cinnabar);
+  transition: background .16s ease, border-color .16s ease;
+}
+body.insights-page .cdd-hero__panel-cta:hover { background: var(--sv-cinnabar-d); border-color: var(--sv-cinnabar-d); }
+
+/* ==========================================================================
+   3 · ARCHIVE STATS — quiet stat block (no cards, no icons)
+   ========================================================================== */
+body.insights-page .cdd-arc { background: var(--sv-ivory); }
+body.insights-page .cdd-arc__inner { padding-block: clamp(48px, 5vw, 76px); }
+
+body.insights-page .cdd-stats {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  background: #FFFFFF; border-left: 3px solid var(--sv-cinnabar);
+  box-shadow: 0 14px 34px rgba(23, 28, 28, 0.09);
+  padding: clamp(24px, 2.2vw, 32px) clamp(8px, 1vw, 16px);
+  margin-bottom: clamp(40px, 4vw, 60px);
+}
+body.insights-page .cdd-stat {
+  padding: 4px 28px; border-left: 1px solid var(--sv-border-light);
+}
+body.insights-page .cdd-stat:first-child { border-left: 0; padding-left: 0; }
+body.insights-page .cdd-stat__num {
+  display: block; font: 500 clamp(26px, 2.6vw, 36px)/1 var(--sv-font);
+  letter-spacing: -0.02em; color: var(--sv-cinnabar); font-variant-numeric: tabular-nums;
+}
+body.insights-page .cdd-stat__label {
+  display: block; margin-top: 12px;
+  font: 400 13.5px/1.4 var(--sv-font); color: var(--sv-ink-2);
+}
+
+/* ==========================================================================
+   4 · FILTERS — square ShoreVest filter buttons (no pills, no shadow)
+   ========================================================================== */
+body.insights-page .cdd-arc__controls {
+  display: flex; flex-wrap: wrap; gap: 18px 24px;
+  align-items: center; justify-content: space-between;
+  padding-bottom: 22px;
+}
+body.insights-page .cdd-arc__chips { display: flex; flex-wrap: wrap; gap: 10px; }
+body.insights-page .cdd-arc__chip {
+  appearance: none; cursor: pointer;
+  padding: 11px 20px; border-radius: 0;
+  font: 600 11.5px/1 var(--sv-font); letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--sv-ink); background: transparent;
+  border: 1px solid var(--sv-border-light-strong);
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
+}
+body.insights-page .cdd-arc__chip:hover { border-color: var(--sv-ink); }
+body.insights-page .cdd-arc__chip.is-active {
+  background: var(--sv-cinnabar); color: var(--sv-ivory); border-color: var(--sv-cinnabar);
+}
+body.insights-page .cdd-arc__chip:focus-visible { outline: 2px solid var(--sv-cinnabar); outline-offset: 2px; }
+body.insights-page .cdd-arc__count {
+  margin: 0; font: 400 13px/1.3 var(--sv-font); color: var(--sv-ink-2);
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+
+/* ==========================================================================
+   5 · ARCHIVE LEDGER — institutional index rows (NOT cards)
+   ========================================================================== */
+body.insights-page .cdd-arc__list { border-top: 1px solid var(--sv-ink); }
+
+/* Year header — label + thin cinnabar rule extending right */
+body.insights-page .cdd-arc__year {
+  display: flex; align-items: center; gap: 20px;
+  padding: clamp(34px, 3.4vw, 48px) 0 14px;
+}
+body.insights-page .cdd-arc__year:first-child { padding-top: clamp(22px, 2.2vw, 30px); }
+body.insights-page .cdd-arc__year span {
+  font: 500 15px/1 var(--sv-font); letter-spacing: 0.04em; color: var(--sv-ink-2);
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+body.insights-page .cdd-arc__year::after {
+  content: ""; flex: 1; height: 1px; background: var(--sv-cinnabar); opacity: 0.5;
+}
+body.insights-page .cdd-arc__year[hidden] { display: none; }
+
+/* Ledger row */
+body.insights-page .cdd-arc__row {
+  display: grid; grid-template-columns: 140px 130px minmax(0, 1fr) 170px;
+  gap: clamp(16px, 2vw, 32px); align-items: center;
+  padding: 30px 0; border-top: 1px solid var(--sv-border-light);
+  cursor: pointer; transition: background .15s ease;
+}
+body.insights-page .cdd-arc__list .cdd-arc__row:first-of-type { border-top: 0; }
+body.insights-page .cdd-arc__row:last-child { border-bottom: 1px solid var(--sv-border-light); }
+body.insights-page .cdd-arc__row:hover { background: rgba(23, 53, 54, 0.025); }
+body.insights-page .cdd-arc__row[hidden] { display: none; }
+body.insights-page .cdd-arc__row:focus-visible { outline: 2px solid var(--sv-cinnabar); outline-offset: -2px; }
+
+/* Latest row — spine panel logic, NOT a card */
+body.insights-page .cdd-arc__row--featured {
+  position: relative; background: rgba(201, 59, 42, 0.035);
+  padding-left: 22px;
+}
+body.insights-page .cdd-arc__row--featured::before {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--sv-cinnabar);
+}
+body.insights-page .cdd-arc__latest-tag {
+  position: absolute; top: 12px; left: 22px;
+  font: 600 10.5px/1 var(--sv-font); letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--sv-cinnabar);
+}
+body.insights-page .cdd-arc__row--featured .cdd-arc__meta { padding-top: 14px; }
+
+/* Request-only row — issue is known but not published online. Quiet, muted,
+   not clickable as a whole; routes to Contact to request access. */
+body.insights-page .cdd-arc__row--request { cursor: default; }
+body.insights-page .cdd-arc__row--request:hover { background: transparent; }
+body.insights-page .cdd-arc__row--request .cdd-arc__chip-issue { color: var(--sv-muted, #6E7169); border-color: var(--sv-border-light-strong); }
+body.insights-page .cdd-arc__row--request .cdd-arc__cat { color: var(--sv-cinnabar); }
+body.insights-page .cdd-arc__row--request .cdd-arc__row-title { color: var(--sv-ink-2); font-style: normal; }
+body.insights-page .cdd-arc__row--request:hover .cdd-arc__row-title { color: var(--sv-ink-2); }
+body.insights-page .cdd-arc__request-link {
+  font: 600 11.5px/1 var(--sv-font); letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--sv-cinnabar); text-decoration: none; white-space: nowrap;
+  border-bottom: 1px solid transparent; padding-bottom: 3px; transition: border-color .15s ease;
+}
+body.insights-page .cdd-arc__request-link:hover { border-color: var(--sv-cinnabar); }
+
+/* Column 1 — issue badge + date (chip and date sit inline; give them clear separation) */
+body.insights-page .cdd-arc__meta { min-width: 0; display: flex; flex-direction: row; align-items: center; column-gap: 16px; }
+body.insights-page .cdd-arc__tags { display: flex; align-items: center; gap: 10px; }
+body.insights-page .cdd-arc__chip-issue {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 38px; padding: 4px 8px;
+  font: 600 11px/1 var(--sv-font); letter-spacing: 0.04em;
+  color: var(--sv-cinnabar); border: 1px solid var(--sv-cinnabar);
+  font-variant-numeric: tabular-nums;
+}
+/* The topic chip inside the meta column is redundant with column 2 — hide it. */
+body.insights-page .cdd-arc__tags .cdd-arc__topic { display: none; }
+body.insights-page .cdd-arc__date {
+  margin-top: 0; font: 400 12.5px/1.3 var(--sv-font);
+  letter-spacing: 0.02em; color: var(--sv-muted, #6E7169);
+}
+
+/* Column 2 — category */
+body.insights-page .cdd-arc__row > .cdd-arc__topic,
+body.insights-page .cdd-arc__cat {
+  font: 600 11px/1.3 var(--sv-font); letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--sv-muted, #6E7169);
+}
+
+/* Column 3 — title (NOT forced uppercase, ink, no permanent underline) */
+body.insights-page .cdd-arc__body { min-width: 0; }
+body.insights-page .cdd-arc__row-title {
+  margin: 0; font: 500 17px/1.3 var(--sv-font); letter-spacing: -0.008em;
+  color: var(--sv-ink); text-transform: none; text-wrap: pretty;
+  transition: color .15s ease;
+}
+body.insights-page .cdd-arc__row:hover .cdd-arc__row-title { color: var(--sv-cinnabar-d); }
+body.insights-page .cdd-arc__excerpt {
+  margin: 8px 0 0; max-width: 60ch;
+  font: 400 14px/1.55 var(--sv-font); color: var(--sv-ink-2);
+}
+
+/* Column 4 — actions: square cinnabar Read + quiet PDF text link */
+body.insights-page .cdd-arc__actions {
+  display: flex; align-items: center; gap: 18px; justify-self: end;
+}
+body.insights-page .cdd-arc__read {
+  display: inline-flex; align-items: center; gap: 8px; height: 42px; padding: 0 18px;
+  font: 600 11.5px/1 var(--sv-font); letter-spacing: 0.08em; text-transform: uppercase;
+  text-decoration: none; border-radius: 0;
+  background: var(--sv-cinnabar); color: var(--sv-ivory); border: 1px solid var(--sv-cinnabar);
+  transition: background .15s ease, border-color .15s ease; white-space: nowrap;
+}
+body.insights-page .cdd-arc__read:hover { background: var(--sv-cinnabar-d); border-color: var(--sv-cinnabar-d); }
+body.insights-page .cdd-arc__pdf {
+  font: 500 11.5px/1 var(--sv-font); letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--sv-muted, #6E7169); text-decoration: none; white-space: nowrap;
+  transition: color .15s ease;
+}
+body.insights-page .cdd-arc__pdf:hover { color: var(--sv-cinnabar); }
+body.insights-page .cdd-arc__pdf.is-disabled { opacity: 0.55; pointer-events: none; }
+
+/* ==========================================================================
+   6 · END OF ARCHIVE — quiet closer row
+   ========================================================================== */
+body.insights-page .cdd-arc__closer {
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  margin-top: clamp(34px, 3.4vw, 48px); padding-top: 26px;
+  border-top: 1px solid var(--sv-border-light-strong);
+}
+body.insights-page .cdd-arc__closer-end {
+  font: 600 11px/1 var(--sv-font); letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--sv-muted, #6E7169);
+}
+body.insights-page .cdd-arc__closer-sub {
+  font: 600 11px/1 var(--sv-font); letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--sv-cinnabar); text-decoration: none;
+  border-bottom: 1px solid transparent; padding-bottom: 3px; transition: border-color .15s ease;
+}
+body.insights-page .cdd-arc__closer-sub:hover { border-color: var(--sv-cinnabar); }
+
+/* ==========================================================================
+   7 · SUBSCRIPTION STRIP — double-pane utility box on dark ink
+   ========================================================================== */
+body.insights-page .research-sub { background: var(--sv-dark-footer); color: var(--sv-meta-on-dark); }
+body.insights-page .research-sub__container {
+  max-width: var(--page-max); margin-inline: auto; padding-inline: var(--pad-x);
+  padding-block: clamp(48px, 5vw, 72px);
+}
+body.insights-page .research-sub__notice {
+  margin: 0 0 clamp(28px, 3vw, 40px); padding-bottom: clamp(24px, 2.4vw, 32px);
+  border-bottom: 1px solid var(--sv-border-dark);
+  max-width: 92ch; font: 400 12.5px/1.65 var(--sv-font); color: var(--sv-faint-on-dark);
+}
+body.insights-page .research-sub__inner {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: clamp(32px, 4vw, 72px); align-items: center;
+}
+body.insights-page .research-sub__copy h3 {
+  margin: 0 0 14px; font: 500 clamp(22px, 2.2vw, 30px)/1.16 var(--sv-font);
+  letter-spacing: -0.018em; color: var(--sv-ivory);
+}
+body.insights-page .research-sub__copy p {
+  margin: 0; max-width: 46ch; font: 400 15.5px/1.6 var(--sv-font); color: var(--sv-meta-on-dark);
+}
+body.insights-page .research-sub__form { display: grid; grid-template-columns: 1fr 1fr auto; gap: 12px; align-items: stretch; }
+body.insights-page .research-sub__field { display: block; margin: 0; min-width: 0; }
+body.insights-page .research-sub__field input {
+  width: 100%; height: 52px; padding: 0 16px; border-radius: 0;
+  background: rgba(252, 249, 241, 0.04); border: 1px solid var(--sv-border-dark);
+  color: var(--sv-ivory); font: 400 14px/1 var(--sv-font);
+}
+body.insights-page .research-sub__field input::placeholder { color: var(--sv-faint-on-dark); }
+body.insights-page .research-sub__field input:focus-visible { outline: none; border-color: var(--sv-cinnabar); }
+body.insights-page .research-sub__submit {
+  height: 52px; padding: 0 24px; cursor: pointer; border-radius: 0; white-space: nowrap;
+  font: 600 12px/1 var(--sv-font); letter-spacing: 0.08em; text-transform: uppercase;
+  background: var(--sv-cinnabar); color: var(--sv-ivory); border: 1px solid var(--sv-cinnabar);
+  transition: background .15s ease, border-color .15s ease;
+}
+body.insights-page .research-sub__submit:hover { background: var(--sv-cinnabar-d); border-color: var(--sv-cinnabar-d); }
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+@media (max-width: 980px) {
+  body.insights-page .sv-shell.cdd-hero__inner { grid-template-columns: 1fr !important; gap: 36px; }
+  body.insights-page .cdd-hero__lead { grid-column: 1 / -1; min-width: 0; max-width: 100%; }
+  body.insights-page .cdd-hero__lead > * { max-width: 100%; overflow-wrap: break-word; }
+  body.insights-page .cdd-hero__panel { grid-column: 1 / -1; margin-top: 8px; }
+  body.insights-page .cdd-stats { grid-template-columns: 1fr 1fr; }
+  body.insights-page .cdd-stat { padding: 22px 20px; border-top: 1px solid var(--sv-border-light); }
+  body.insights-page .cdd-stat:nth-child(-n+2) { border-top: 0; }
+  body.insights-page .cdd-stat:nth-child(odd) { border-left: 0; padding-left: 0; }
+  body.insights-page .research-sub__inner { grid-template-columns: 1fr; gap: 28px; }
+}
+
+@media (max-width: 760px) {
+  /* Ledger rows stack: issue/date · category · title · actions */
+  body.insights-page .cdd-arc__row {
+    grid-template-columns: 1fr;
+    grid-template-areas: "meta" "cat" "title" "actions";
+    gap: 12px; padding: 26px 0; align-items: start;
+  }
+  body.insights-page .cdd-arc__meta { grid-area: meta; }
+  body.insights-page .cdd-arc__row > .cdd-arc__topic,
+  body.insights-page .cdd-arc__cat { grid-area: cat; }
+  body.insights-page .cdd-arc__body { grid-area: title; }
+  body.insights-page .cdd-arc__actions { grid-area: actions; justify-self: start; }
+  body.insights-page .cdd-arc__pdf { padding: 11px 0; }
+  body.insights-page .cdd-arc__tags { gap: 12px; }
+  body.insights-page .cdd-arc__tags .cdd-arc__topic { display: inline-flex; }
+  body.insights-page .cdd-arc__date { display: inline-block; margin-top: 0; }
+  body.insights-page .cdd-arc__meta {
+    display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
+  }
+  body.insights-page .research-sub__form { grid-template-columns: 1fr; }
+  body.insights-page .cdd-arc__controls { align-items: flex-start; flex-direction: column; gap: 16px; }
+  /* Featured 'Latest' row keeps its spine inset so text clears the cinnabar bar */
+  body.insights-page .cdd-arc__row--featured { padding: 24px 16px 24px 22px; }
+}

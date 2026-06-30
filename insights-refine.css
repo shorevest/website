@@ -1,0 +1,95 @@
+/* ==========================================================================
+   INSIGHTS REFINE — de-green the China Debt Dynamics hero (loads LAST)
+   Brief: the research hero must read as deep charcoal / ink, NOT teal/ink-green.
+
+   The hero green is painted by shorevest-unify.css:
+     html body.insights-page .sv-hero.sv-hero:not(.home-hero):not(.press-hero)
+       { background: var(--u-hero-bg-green) !important; }
+   So the robust fix is to re-point --u-hero-bg-green (scoped to the insights
+   page) to a charcoal gradient — the var resolves to our value with no
+   specificity battle. A matching direct rule is added as a backstop.
+   Cinnabar stays the accent; markup / archive / filters / JS untouched.
+   ========================================================================== */
+
+/* ---- Restore font tokens (typography-lockdown removed for nav-weight fix)
+   and pull the CDD headline toward the HOMEPAGE vibe: clean DIN sans,
+   upright, medium weight — not light-italic serif. ---------------------- */
+body.insights-page {
+  --sv-type-sans: "DIN 2014", "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --sv-font: "DIN 2014", "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font: "DIN 2014", "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --sv-type-serif: "DIN 2014", "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --u-cinnabar: #C93B2A;
+}
+
+/* ---- Align all CDD content to the HEADER container (logo↔Contact rails):
+   max-width 1280px + padding-inline clamp(24px,5vw,48px), same as
+   .sv-header__inner — so nothing extends past the logo or Contact button. -- */
+html body.insights-page section.research-hero .home-container,
+html body.insights-page section.research-hero .sv-hero__inner,
+html body.insights-page .cdd-arc__inner,
+html body.insights-page .research-sub .wrap {
+  width: 100% !important;
+  max-width: 1280px !important;
+  margin-inline: auto !important;
+  padding-inline: clamp(24px, 5vw, 48px) !important;
+  box-sizing: border-box !important;
+}
+html body.insights-page .cdd-franchise .cdd-franchise__headline,
+html body.insights-page .cdd-franchise .wordmark__title {
+  font-family: "DIN 2014", "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif !important;
+  font-weight: 500 !important;
+  font-style: normal !important;
+  letter-spacing: -0.02em !important;
+}
+html body.insights-page .cdd-franchise .cdd-franchise__headline em,
+html body.insights-page .cdd-franchise .wordmark__title em {
+  font-weight: 500 !important;
+  font-style: normal !important;
+  color: var(--cdd-fr-cinnabar, #C93B2A) !important;
+}
+/* Featured report title → DIN sans (was serif fallback) */
+html body.insights-page .cdd-franchise .cdd-feature__title,
+html body.insights-page .cdd-franchise .issue-live__headline--title {
+  font-family: "DIN 2014", "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif !important;
+  font-weight: 600 !important;
+  font-style: normal !important;
+}
+
+body.insights-page.china-debt-page {
+  /* franchise ground tokens → warm charcoal (in case any surface reads them) */
+  --cdd-fr-bg-top: #232420;
+  --cdd-fr-bg-mid: #1C1D1A;
+  --cdd-fr-bg-bottom: #141512;
+
+  /* THE fix: re-point the unify hero gradient token to charcoal + cinnabar. */
+  --u-hero-bg-green:
+    radial-gradient(circle at 84% 16%, rgba(201, 59, 42, 0.16) 0%, rgba(201, 59, 42, 0) 46%),
+    linear-gradient(150deg, #232420 0%, #1C1D1A 56%, #141512 100%);
+}
+
+/* ---- Archive: de-green topic labels + hide LIVE indicator -------------- */
+body.insights-page .cdd-arc {
+  --teal: #2B2620;             /* POLICY label: green-teal → ink body */
+  --ink-green-light: #6B6258;  /* MARKETS label: green → muted */
+}
+body.insights-page .cdd-arc__topic--policy { color: #2B2620 !important; }
+body.insights-page .cdd-arc__topic--markets { color: #6B6258 !important; }
+/* LIVE indicator removed per brief (no gimmick dot). */
+body.insights-page .live-indicator,
+body.insights-page .issue-status-live { display: none !important; }
+
+/* ---- Subscription strip: green gradient → charcoal ink ---------------- */
+body.insights-page .research-sub {
+  background:
+    radial-gradient(circle at 18% 28%, rgba(201, 59, 42, 0.14) 0%, transparent 46%),
+    linear-gradient(125deg, #232420 0%, #1C1D1A 56%, #141512 100%) !important;
+  border-top: 1px solid rgba(216, 206, 176, 0.18) !important;
+}
+html body.insights-page.china-debt-page .sv-hero.sv-hero:not(.home-hero):not(.press-hero),
+html body.insights-page section.research-hero.cdd-franchise {
+  background:
+    radial-gradient(circle at 84% 16%, rgba(201, 59, 42, 0.16) 0%, rgba(201, 59, 42, 0) 46%),
+    linear-gradient(150deg, #232420 0%, #1C1D1A 56%, #141512 100%) !important;
+  border-bottom: 1px solid rgba(216, 206, 176, 0.18) !important;
+}

@@ -1,0 +1,118 @@
+/* ============================================================
+   Home page — "neat boxes" alignment pass
+   Matches the Strategy page system: tidy bordered panels on a
+   consistent grid, Burford-style. LAYOUT ONLY. Loaded last.
+   No typography overrides — the locked DIN type system stays.
+   ============================================================ */
+
+.home-page {
+  --nb-fill: #FAF6EE;
+  --nb-border: rgba(30, 64, 64, 0.18);   /* light-section panel border */
+  --nb-hair: rgba(30, 64, 64, 0.12);     /* light-section inner dividers */
+  --nb-border-dk: rgba(250, 246, 238, 0.26); /* dark-section panel border */
+  --nb-hair-dk: rgba(250, 246, 238, 0.18);   /* dark-section dividers */
+}
+
+/* ------------------------------------------------------------
+   SECTION INTROS — drop the cinnabar "spine"; use a calm,
+   neutral divider so the supporting copy aligns cleanly
+   ------------------------------------------------------------ */
+.home-page .platform-intro .section-copy,
+.home-page .principles-intro .section-copy,
+.home-page .strategy-intro .section-copy {
+  border-left: 1px solid var(--nb-hair);
+}
+.home-page .track-record-intro .section-copy {
+  border-left: 1px solid var(--nb-hair-dk);
+}
+
+/* ------------------------------------------------------------
+   PLATFORM STATS — complete the bordered box (it was only a
+   top/bottom strip) and unify the divider tone
+   ------------------------------------------------------------ */
+.home-page .platform-stats {
+  border: 1px solid var(--nb-border);
+  background: var(--nb-fill);
+}
+.home-page .platform-stats > .firm-stat + .firm-stat,
+.home-page .platform-stats .firm-stat + .firm-stat {
+  border-left-color: var(--nb-hair);
+}
+
+/* ------------------------------------------------------------
+   VISION & PRINCIPLES — give the panel a real border so it
+   reads as a deliberate box
+   ------------------------------------------------------------ */
+.home-page .principles-panel {
+  border: 1px solid var(--nb-border);
+}
+.home-page .principle-card + .principle-card {
+  border-left-color: var(--nb-hair);
+}
+
+/* ------------------------------------------------------------
+   INVESTMENT STRATEGY — loose rows -> one bordered container
+   with evenly divided rows (mirrors the Strategy page)
+   ------------------------------------------------------------ */
+.home-page .strategy-rows {
+  border: 1px solid var(--nb-border);
+  background: var(--nb-fill);
+}
+.home-page .strategy-row {
+  border-top: 0;
+  border-bottom: 1px solid var(--nb-hair);
+  padding: clamp(26px, 2.6vw, 36px) clamp(26px, 2.6vw, 36px);
+  align-items: start;
+}
+.home-page .strategy-row:last-child {
+  border-bottom: 0;
+}
+
+/* ------------------------------------------------------------
+   TRACK RECORD — ensure a full bordered box on the dark band
+   ------------------------------------------------------------ */
+.home-page .track-record-grid {
+  border: 1px solid var(--nb-border-dk);
+  border-bottom: 1px solid var(--nb-border-dk);
+}
+.home-page .track-record-item + .track-record-item {
+  border-left-color: var(--nb-hair-dk);
+}
+
+/* ------------------------------------------------------------
+   CHINA DEBT DYNAMICS — give the feature panel a border and
+   unify the internal divider
+   ------------------------------------------------------------ */
+.home-page .home-cdd__panel {
+  border: 1px solid var(--nb-border);
+}
+.home-page .home-cdd__recent {
+  border-left-color: var(--nb-hair);
+}
+
+/* ============================================================
+   RESPONSIVE — keep dividers correct as grids reflow
+   ============================================================ */
+
+/* Stats wrap to 2x2 around 1000px (site breakpoint) */
+@media (max-width: 1000px) {
+  .home-page .platform-stats .firm-stat:nth-child(n+3) {
+    border-top-color: var(--nb-hair);
+  }
+}
+
+/* Two-column intros collapse: divider becomes a top rule */
+@media (max-width: 900px) {
+  .home-page .platform-intro .section-copy,
+  .home-page .principles-intro .section-copy,
+  .home-page .strategy-intro .section-copy {
+    border-left: 0;
+    border-top: 1px solid var(--nb-hair);
+    padding-top: 18px;
+  }
+  .home-page .track-record-intro .section-copy {
+    border-left: 0;
+    border-top: 1px solid var(--nb-hair-dk);
+    padding-top: 18px;
+  }
+}

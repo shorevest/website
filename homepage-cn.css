@@ -1,0 +1,170 @@
+/* ==========================================================================
+   Homepage — Chinese typography overrides (Simplified Chinese)
+   Loads only on the Chinese homepage. Keeps the English layout intact and
+   suppresses Latin tracking / uppercase / italic rules that would visually
+   distort Chinese text.
+   ========================================================================== */
+
+html:lang(zh) body.homepage,
+html[lang^="zh"] body.homepage {
+  font-family: var(--sv-font-cn) !important;
+}
+
+/* Hero — drop italic + uppercase + tight Latin tracking; keep size and rhythm. */
+html:lang(zh) body.homepage .home-hero__headline,
+html[lang^="zh"] body.homepage .home-hero__headline,
+html:lang(zh) body.homepage .home-hero__headline-primary,
+html[lang^="zh"] body.homepage .home-hero__headline-primary,
+html:lang(zh) body.homepage .home-hero__headline-emphasis,
+html[lang^="zh"] body.homepage .home-hero__headline-emphasis {
+  font-family: var(--sv-font-cn) !important;
+  font-style: normal !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-weight: 400 !important;
+}
+
+
+/* Eyebrow / label tracking — keep weight & rule, drop letter-spacing. */
+html:lang(zh) body.homepage .home-hero__eyebrow,
+html[lang^="zh"] body.homepage .home-hero__eyebrow,
+html:lang(zh) body.homepage .section-eyebrow,
+html[lang^="zh"] body.homepage .section-eyebrow,
+html:lang(zh) body.homepage .platform-section__label,
+html[lang^="zh"] body.homepage .platform-section__label,
+html:lang(zh) body.homepage .firm-stat__label,
+html[lang^="zh"] body.homepage .firm-stat__label,
+html:lang(zh) body.homepage .track-record-item__label,
+html[lang^="zh"] body.homepage .track-record-item__label,
+html:lang(zh) body.homepage .home-cdd__kicker,
+html[lang^="zh"] body.homepage .home-cdd__kicker,
+html:lang(zh) body.homepage .home-cdd__label,
+html[lang^="zh"] body.homepage .home-cdd__label,
+html:lang(zh) body.homepage .home-cdd__live,
+html[lang^="zh"] body.homepage .home-cdd__live,
+html:lang(zh) body.homepage .home-cdd__recent-label,
+html[lang^="zh"] body.homepage .home-cdd__recent-label,
+html:lang(zh) body.homepage .home-cdd__issue span,
+html[lang^="zh"] body.homepage .home-cdd__issue span {
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-family: var(--sv-font-cn) !important;
+  font-weight: 700 !important;
+}
+
+/* Section titles — no uppercase tracking; allow softer letter-spacing. */
+html:lang(zh) body.homepage .section-title,
+html[lang^="zh"] body.homepage .section-title,
+html:lang(zh) body.homepage .platform-section__heading,
+html[lang^="zh"] body.homepage .platform-section__heading,
+html:lang(zh) body.homepage .home-cdd__title,
+html[lang^="zh"] body.homepage .home-cdd__title,
+html:lang(zh) body.homepage .home-cdd__feature h3,
+html[lang^="zh"] body.homepage .home-cdd__feature h3,
+html:lang(zh) body.homepage .principle-card__title,
+html[lang^="zh"] body.homepage .principle-card__title {
+  font-family: var(--sv-font-cn) !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-weight: 700 !important;
+  text-wrap: pretty;
+}
+
+/* Strategy headline — adjust line-height for Chinese punctuation / rhythm. */
+html:lang(zh) body.homepage .strategy-section .section-title,
+html[lang^="zh"] body.homepage .strategy-section .section-title {
+  line-height: 1.18 !important;
+  font-weight: 400 !important;
+}
+
+/* Hero CTAs — Chinese characters do not take uppercase tracking. */
+html:lang(zh) body.homepage .home-hero__cta,
+html[lang^="zh"] body.homepage .home-hero__cta,
+html:lang(zh) body.homepage .home-cdd__button,
+html[lang^="zh"] body.homepage .home-cdd__button,
+html:lang(zh) body.homepage .home-cdd__link,
+html[lang^="zh"] body.homepage .home-cdd__link,
+html:lang(zh) body.homepage .home-cdd__archive,
+html[lang^="zh"] body.homepage .home-cdd__archive {
+  font-family: var(--sv-font-cn) !important;
+  text-transform: none !important;
+  letter-spacing: 0.04em !important;
+  font-weight: 400 !important;
+}
+
+/* Stat numbers stay in DIN — Latin numerals belong to the number system. */
+html:lang(zh) body.homepage .firm-stat__value,
+html[lang^="zh"] body.homepage .firm-stat__value,
+html:lang(zh) body.homepage .track-record-item__value,
+html[lang^="zh"] body.homepage .track-record-item__value,
+html:lang(zh) body.homepage .platform-stat__number,
+html[lang^="zh"] body.homepage .platform-stat__number {
+  font-family: var(--sv-font-en) !important;
+  letter-spacing: -0.01em !important;
+}
+
+/* Stat suffix unit (e.g. 年, 笔交易) renders in Chinese face. */
+html:lang(zh) body.homepage .platform-stat__unit,
+html[lang^="zh"] body.homepage .platform-stat__unit {
+  font-family: var(--sv-font-cn) !important;
+  letter-spacing: 0 !important;
+  margin-left: 0.18em;
+}
+
+/* Footnote / supports — slightly looser line-height for CJK. */
+html:lang(zh) body.homepage .firm-stat__support,
+html[lang^="zh"] body.homepage .firm-stat__support,
+html:lang(zh) body.homepage .firm-stats-footnote,
+html[lang^="zh"] body.homepage .firm-stats-footnote,
+html:lang(zh) body.homepage .principle-card__lede,
+html[lang^="zh"] body.homepage .principle-card__lede,
+html:lang(zh) body.homepage .principle-card__body,
+html[lang^="zh"] body.homepage .principle-card__body,
+html:lang(zh) body.homepage .strategy-row__body,
+html[lang^="zh"] body.homepage .strategy-row__body,
+html:lang(zh) body.homepage .track-record-item__description,
+html[lang^="zh"] body.homepage .track-record-item__description,
+html:lang(zh) body.homepage .home-hero__support,
+html[lang^="zh"] body.homepage .home-hero__support,
+html:lang(zh) body.homepage .home-cdd__intro,
+html[lang^="zh"] body.homepage .home-cdd__intro,
+html:lang(zh) body.homepage .section-copy,
+html[lang^="zh"] body.homepage .section-copy,
+html:lang(zh) body.homepage .section-copy p,
+html[lang^="zh"] body.homepage .section-copy p {
+  font-family: var(--sv-font-cn) !important;
+  letter-spacing: 0 !important;
+  line-height: 1.78 !important;
+}
+
+/* Strategy row title — sentence case, no uppercase. */
+html:lang(zh) body.homepage .strategy-row__title,
+html[lang^="zh"] body.homepage .strategy-row__title {
+  font-family: var(--sv-font-cn) !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-weight: 700 !important;
+}
+
+/* CDD recent issue strong title — allow wrapping for Chinese (don't ellipsis-clip). */
+html:lang(zh) body.homepage .home-cdd__issue strong,
+html[lang^="zh"] body.homepage .home-cdd__issue strong {
+  font-family: var(--sv-font-cn) !important;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  letter-spacing: 0 !important;
+  line-height: 1.45;
+}
+
+/* Footer brand stays in Latin and keeps its tracking; legal labels follow Noto. */
+html:lang(zh) body.homepage .sv-footer__contact-label,
+html[lang^="zh"] body.homepage .sv-footer__contact-label,
+html:lang(zh) body.homepage .sv-footer__legal-toggle > summary,
+html[lang^="zh"] body.homepage .sv-footer__legal-toggle > summary,
+html:lang(zh) body.homepage .sv-footer__legal-links a,
+html[lang^="zh"] body.homepage .sv-footer__legal-links a {
+  font-family: var(--sv-font-cn) !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}

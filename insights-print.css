@@ -1,0 +1,312 @@
+@media screen {
+  .print-publication {
+    display: none;
+  }
+
+  body.print-preview {
+    margin: 0;
+    padding: 28px 20px 36px;
+    background:
+      radial-gradient(circle at 10% 12%, rgba(255, 255, 255, 0.78), transparent 38%),
+      radial-gradient(circle at 88% 14%, rgba(255, 255, 255, 0.62), transparent 34%),
+      #e6e3df;
+    color: #141310;
+  }
+
+  body.print-preview > :not(.print-publication) {
+    display: none !important;
+  }
+
+  body.print-preview .print-publication {
+    display: block;
+    width: 100%;
+    max-width: 210mm;
+    margin: 0 auto;
+    padding: 24mm 24mm 22mm;
+    box-sizing: border-box;
+    background: #fff;
+    border-radius: 2px;
+    border: 1px solid rgba(38, 32, 26, 0.08);
+    box-shadow: 0 18px 40px rgba(22, 17, 12, 0.13);
+    font-family: var(--font-din, "DIN 2014", "DIN2014", "DIN", sans-serif);
+    color: #141310;
+    font-size: 12pt;
+    line-height: 1.5;
+  }
+
+  body.print-preview .print-publication__masthead {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 2.3mm;
+    margin-bottom: 3.2mm;
+    border-bottom: 0.45pt solid #cbc5bc;
+    font-family: var(--font-din, "DIN 2014", "DIN2014", "DIN", sans-serif);
+    font-size: 8pt;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #5d5851;
+  }
+
+  body.print-preview .print-publication__brand {
+    display: flex;
+    align-items: center;
+    gap: 2.3mm;
+  }
+
+  body.print-preview .print-publication__logo {
+    width: 5mm;
+    height: auto;
+    flex: 0 0 auto;
+  }
+
+  body.print-preview .print-publication__meta {
+    margin-bottom: 4mm;
+    font-size: 10.5pt;
+    line-height: 1.2;
+    color: #5f564a;
+  }
+
+  body.print-preview .print-publication__title {
+    margin: 0;
+    max-width: 96%;
+    font-size: 30px;
+    line-height: 1.02;
+    letter-spacing: -0.015em;
+    font-weight: 400;
+    text-wrap: balance;
+  }
+
+  body.print-preview .print-publication__standfirst {
+    max-width: 90%;
+    margin: 4mm 0 5.4mm;
+    font-size: 13pt;
+    line-height: 1.5;
+    color: #2f2923;
+  }
+
+  body.print-preview .print-publication__callout,
+  body.print-preview .print-publication__folio {
+    display: none;
+  }
+
+  body.print-preview .print-publication .sv-footer {
+    display: none !important;
+  }
+
+  body.print-preview .print-body h2 {
+    margin: 7.2mm 0 2.6mm;
+    font-size: 26px;
+    line-height: 1.03;
+    letter-spacing: -0.012em;
+    font-weight: 400;
+    text-wrap: balance;
+  }
+
+  body.print-preview .print-body > h2:first-child {
+    margin-top: 0;
+  }
+
+  body.print-preview .print-body p,
+  body.print-preview .print-body li,
+  body.print-preview .print-body blockquote {
+    margin: 0 0 3.5mm;
+    font-size: 12pt;
+    line-height: 1.53;
+    color: #1f1c19;
+    text-rendering: optimizeLegibility;
+  }
+
+  body.print-preview .print-body__opening {
+    font-size: 13.2pt;
+    line-height: 1.55;
+  }
+
+  body.print-preview .print-body__opening::first-letter {
+    float: left;
+    margin-right: 0.06em;
+    font-size: 2.8em;
+    line-height: 0.86;
+    font-weight: 400;
+    color: #2b1f17;
+  }
+
+  body.print-preview .print-body blockquote {
+    padding: 0.8mm 0 0.8mm 4mm;
+    border-left: 1.2pt solid #bdb3a8;
+    color: #3b342c;
+  }
+
+  body.print-preview .print-body ul,
+  body.print-preview .print-body ol {
+    margin: 0 0 3.3mm;
+    padding-left: 6.2mm;
+  }
+
+  body.print-preview .print-body a {
+    color: inherit;
+    text-decoration-color: rgba(21, 18, 15, 0.4);
+    text-underline-offset: 0.11em;
+  }
+
+  body.print-preview::after {
+    content: "Preview scrolls continuously. PDF export paginates automatically across A4 pages.";
+    position: fixed;
+    right: 12px;
+    bottom: 12px;
+    z-index: 20;
+    max-width: min(72vw, 420px);
+    padding: 8px 10px;
+    border: 1px solid rgba(0, 0, 0, 0.14);
+    background: rgba(255, 255, 255, 0.92);
+    color: #4d483f;
+    font-family: var(--font-din, "DIN 2014", "DIN2014", "DIN", sans-serif);
+    font-size: 11px;
+    line-height: 1.35;
+    letter-spacing: 0.01em;
+  }
+
+  @media (max-width: 760px) {
+    body.print-preview .print-publication {
+      max-width: 100%;
+      margin: 0;
+      padding: 20px 17px 22px;
+      box-shadow: none;
+      border-radius: 0;
+      border: none;
+    }
+
+    body.print-preview .print-publication__standfirst,
+    body.print-preview .print-publication__title {
+      max-width: 100%;
+    }
+
+    body.print-preview .print-publication__title,
+    body.print-preview .print-body h2 {
+      font-size: clamp(22px, 8vw, 24px);
+    }
+
+    body.print-preview::after {
+      display: none;
+    }
+  }
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 25.4mm;
+  }
+
+  body {
+    margin: 0;
+    font-family: var(--font-din, "DIN 2014", "DIN2014", "DIN", sans-serif);
+    color: #141310;
+    background: #fff;
+    font-size: 12pt;
+    line-height: 1.45;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body > :not(.print-publication) {
+    display: none !important;
+  }
+
+  .print-publication {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .print-publication__masthead {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 2.3mm;
+    margin-bottom: 3.2mm;
+    border-bottom: 0.45pt solid #cbc5bc;
+    font-family: var(--font-din, "DIN 2014", "DIN2014", "DIN", sans-serif);
+    font-size: 8pt;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #5d5851;
+  }
+
+  .print-publication__brand {
+    display: flex;
+    align-items: center;
+    gap: 2.3mm;
+  }
+
+  .print-publication__logo {
+    width: 5mm;
+    height: auto;
+  }
+
+  .print-publication__meta {
+    margin-bottom: 4.3mm;
+    font-size: 10.5pt;
+    line-height: 1.2;
+    color: #2a2723;
+  }
+
+  .print-publication__title {
+    margin: 0;
+    font-size: 18pt;
+    line-height: 0.98;
+    letter-spacing: -0.015em;
+    font-weight: 400;
+  }
+
+  .print-publication__standfirst {
+    margin: 2.8mm 0 3.5mm;
+    font-size: 12pt;
+    line-height: 1.45;
+    color: #181613;
+  }
+
+  .print-publication__callout,
+  .print-publication__folio {
+    display: none;
+  }
+
+  .print-publication .sv-footer {
+    display: none !important;
+  }
+
+  .print-body h2 {
+    margin: 6mm 0 2.2mm;
+    font-size: 18pt;
+    line-height: 1.04;
+    letter-spacing: -0.01em;
+    font-weight: 400;
+    break-after: avoid;
+  }
+
+  .print-body > h2:first-child {
+    margin-top: 0;
+  }
+
+  .print-body p,
+  .print-body li,
+  .print-body blockquote {
+    margin: 0 0 3.3mm;
+    font-size: 12pt;
+    line-height: 1.43;
+    color: #171512;
+    widows: 3;
+    orphans: 3;
+  }
+
+  .print-body ul,
+  .print-body ol {
+    margin: 0 0 3.3mm;
+    padding-left: 6.2mm;
+    break-inside: avoid;
+  }
+}

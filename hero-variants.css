@@ -1,0 +1,180 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   SHOREVEST HERO VARIANT SYSTEM
+   Shared brand language, page-specific palette modifiers.
+
+   Each page hero uses a dark institutional base differentiated through
+   layered radial glows, atmospheric gradient washes, and page-specific
+   colour family emphasis.
+
+   Modifier classes are applied alongside existing hero element classes.
+   Only background + colour properties are governed here; spacing, grid,
+   and layout remain in page-level stylesheets.
+
+   Palette reference:
+     Cinnabar:       #C93B2A     Cinnabar Dark:  #8A1F12
+     Qing:           #3D7070     Qing Dark:      #1E4040
+     Ink Green:      #2E4A18     Ink Green Dark: #0F2206
+     Xuan Paper:     #F2ECD8     Xuan Paper Lt:  #FAF6EE
+   ═══════════════════════════════════════════════════════════════════════ */
+
+
+/* ─── 1. FIRM ────────────────────────────────────────────────────────────
+   Mood: foundational, calm, institutional — the most core ShoreVest tone
+   Primary: Qing Dark + Ink Green   Secondary: barely-there Xuan warmth
+   ──────────────────────────────────────────────────────────────────────*/
+.firm-panel--hero.hero--firm {
+  background:
+    radial-gradient(ellipse at 88% 12%,  rgba(242, 236, 216, 0.030) 0%, transparent 38%),
+    radial-gradient(ellipse at 74% 78%,  rgba(46,  74,  24,  0.16)  0%, transparent 50%),
+    radial-gradient(ellipse at 18% 34%,  rgba(61,  112, 112, 0.32)  0%, transparent 54%),
+    linear-gradient(156deg, #071818 0%, #050f0f 52%, #071b1b 100%) !important;
+  border-color: rgba(61, 112, 112, 0.22) !important;
+}
+
+/* Top hairline gradient kept as Qing-light fade (defined in existing
+   inline style as .firm-panel--hero::after; no change needed here) */
+
+
+/* ─── 2. STRATEGY ────────────────────────────────────────────────────────
+   Mood: sharper, more technical, conviction-led
+   Primary: Cinnabar Dark + deep oxblood   Balance: very faint Qing
+   Full-width dark section; wrap is transparent so gradient fills the hero.
+   ──────────────────────────────────────────────────────────────────────*/
+body.strategy-page .strategy-hero.hero--strategy {
+  background:
+    radial-gradient(ellipse at 78% 82%,  rgba(30,  64,  64,  0.10)  0%, transparent 44%),
+    radial-gradient(ellipse at 14% 22%,  rgba(138, 31,  18,  0.38)  0%, transparent 56%),
+    linear-gradient(160deg, #160805 0%, #0d0403 54%, #130706 100%) !important;
+}
+
+/* Wrap becomes transparent — gradient lives in the section */
+body.strategy-page .strategy-hero.hero--strategy .wrap {
+  background: transparent !important;
+  border-color: rgba(138, 31, 18, 0.22) !important;
+}
+
+/* Top hairline: cinnabar fade */
+body.strategy-page .strategy-hero.hero--strategy .wrap::before {
+  background: linear-gradient(
+    90deg,
+    rgba(138, 31, 18, 0.50) 0%,
+    rgba(138, 31, 18, 0.14) 100%
+  ) !important;
+}
+
+/* Text: flip from dark-on-light to light-on-dark */
+body.strategy-page .strategy-hero.hero--strategy .eyebrow {
+  color: rgba(204, 112, 92, 0.84) !important;
+}
+body.strategy-page .strategy-hero.hero--strategy .eyebrow::after {
+  background: rgba(138, 31, 18, 0.52) !important;
+}
+body.strategy-page .strategy-hero.hero--strategy h1,
+body.strategy-page .strategy-hero.hero--strategy .type-display-hero {
+  color: #faf6ee !important;
+}
+body.strategy-page .strategy-hero.hero--strategy .pagehero__lede {
+  color: rgba(250, 246, 238, 0.74) !important;
+}
+body.strategy-page .strategy-hero.hero--strategy .hero-meta {
+  color: rgba(250, 246, 238, 0.50) !important;
+}
+
+/* Aside: cinnabar divider on dark ground */
+body.strategy-page .strategy-hero.hero--strategy .hero-aside {
+  border-left-color: rgba(138, 31, 18, 0.26) !important;
+}
+@media (max-width: 1100px) {
+  body.strategy-page .strategy-hero.hero--strategy .hero-aside {
+    border-top-color: rgba(138, 31, 18, 0.24) !important;
+  }
+}
+
+/* KPI cards: dark glass panels */
+body.strategy-page .strategy-hero.hero--strategy .strategy-kpi {
+  background: rgba(242, 236, 216, 0.05) !important;
+  border-color: rgba(138, 31, 18, 0.22) !important;
+}
+body.strategy-page .strategy-hero.hero--strategy .strategy-kpi:last-child {
+  border-bottom-color: rgba(138, 31, 18, 0.22) !important;
+}
+body.strategy-page .strategy-hero.hero--strategy .strategy-kpi strong {
+  color: rgba(250, 246, 238, 0.92) !important;
+}
+body.strategy-page .strategy-hero.hero--strategy .strategy-kpi strong::before {
+  color: rgba(204, 112, 92, 0.66) !important;
+}
+body.strategy-page .strategy-hero.hero--strategy .strategy-kpi span {
+  color: rgba(250, 246, 238, 0.64) !important;
+}
+
+
+/* ─── 3. TEAM ────────────────────────────────────────────────────────────
+   Mood: human, integrated, sophisticated
+   Primary: Cinnabar + Qing — warmer than Strategy, still serious
+   ──────────────────────────────────────────────────────────────────────*/
+.team-hero.hero--team .wrap {
+  background:
+    radial-gradient(ellipse at 78% 22%,  rgba(61,  112, 112, 0.18)  0%, transparent 48%),
+    radial-gradient(ellipse at 22% 52%,  rgba(201, 59,  42,  0.26)  0%, transparent 56%),
+    linear-gradient(160deg, #1a0c0a 0%, #110908 48%, #0e1716 100%) !important;
+  border-color: rgba(179, 71, 52, 0.22) !important;
+}
+
+/* Top hairline: cinnabar origin, transitions toward Qing */
+.team-hero.hero--team .wrap::after {
+  background: linear-gradient(
+    90deg,
+    rgba(201, 59, 42, 0.44)  0%,
+    rgba(61,  112, 112, 0.24) 60%,
+    rgba(61,  112, 112, 0.08) 100%
+  ) !important;
+}
+
+
+/* ─── 4. INSIGHTS ────────────────────────────────────────────────────────
+   Mood: editorial, richest colour expression — multi-colour blended field
+   Primary: Qing + Cinnabar (existing treatment preserved and gently deepened)
+   ──────────────────────────────────────────────────────────────────────*/
+body.insights-page .research-hero.hero--insights {
+  background:
+    radial-gradient(circle at 84% 18%,  color-mix(in srgb, #C93B2A 20%, transparent) 0%, transparent 48%),
+    radial-gradient(circle at 16% 10%,  rgba(87,  138, 63,  0.34)  0%, rgba(33, 79, 24, 0) 54%),
+    linear-gradient(126deg, #15280f 0%, #101f0c 54%, #0c1709 100%) !important;
+}
+
+
+/* ─── 5. PRESS ───────────────────────────────────────────────────────────
+   Mood: clean, archival, restrained
+   Primary: deep Qing-black + faint Ink Green   Accent: minimal Cinnabar
+   Pure colour — background photo replaced with institutional dark field.
+   ──────────────────────────────────────────────────────────────────────*/
+.press-hero.hero--press {
+  background:
+    radial-gradient(ellipse at 84% 14%,  rgba(46,  74,  24,  0.12)  0%, transparent 44%),
+    radial-gradient(ellipse at 16% 74%,  rgba(30,  64,  64,  0.22)  0%, transparent 52%),
+    radial-gradient(ellipse at 52%  0%,  rgba(138, 31,  18,  0.06)  0%, transparent 36%),
+    linear-gradient(152deg, #081920 0%, #061318 52%, #071b1c 100%) !important;
+}
+
+
+/* ─── 6. CONTACT ─────────────────────────────────────────────────────────
+   Mood: calm, composed, service-oriented
+   Primary: deep Qing-black + subtle Ink Green
+   Pure colour — background photo replaced with clean institutional dark.
+   ──────────────────────────────────────────────────────────────────────*/
+.contact-hero.hero--contact {
+  background:
+    radial-gradient(ellipse at 82% 76%,  rgba(46,  74,  24,  0.14)  0%, transparent 48%),
+    radial-gradient(ellipse at 20% 32%,  rgba(30,  64,  64,  0.26)  0%, transparent 52%),
+    linear-gradient(154deg, #081720 0%, #051218 50%, #071a1a 100%) !important;
+}
+
+/* Remove background photo from contact hero pseudo-elements */
+.contact-hero.hero--contact::before {
+  background: none !important;
+  background-image: none !important;
+}
+.contact-hero.hero--contact::after {
+  background: none !important;
+}

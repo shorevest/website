@@ -1,0 +1,424 @@
+.history-timeline {
+  --sv-history-active: var(--cinnabar, #c93b2a);
+  --sv-history-paper: var(--paper-light, #faf6ee);
+  --sv-history-panel-paper: var(--paper, #f2ecd8);
+  --sv-history-text: var(--ink-green-dark, #0f2206);
+  --sv-history-soft-text: color-mix(in srgb, var(--ink-green-dark, #0f2206) 76%, var(--paper-dark, #d8ceb0) 24%);
+  --sv-history-structure: color-mix(in srgb, var(--blue-green-dark, #1e4040) 70%, var(--paper-dark, #d8ceb0) 30%);
+  --sv-history-rule: color-mix(in srgb, var(--paper-dark, #d8ceb0) 84%, var(--ink-green-dark, #0f2206) 16%);
+  --sv-history-progress: 0;
+  --sv-history-connector-x: 0px;
+  --sv-history-connector-strength: 0;
+}
+
+.history-timeline .wrap {
+  max-width: min(1380px, calc(100% - (var(--pad) * 2)));
+}
+
+.history-timeline__intro {
+  max-width: 88ch;
+}
+
+.history-timeline__scroll-area {
+  position: relative;
+}
+
+.history-timeline__stage {
+  position: relative;
+}
+
+.history-track {
+  position: relative;
+  padding: clamp(8px, 1vw, 12px) 0 clamp(46px, 5vw, 64px);
+}
+
+.history-track__line,
+.history-track__progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: clamp(26px, 2.4vw, 34px);
+  height: 1px;
+}
+
+.history-track__line {
+  background: color-mix(in srgb, var(--sv-history-structure) 45%, var(--sv-history-rule) 55%);
+}
+
+.history-track__progress {
+  background: var(--sv-history-active);
+  transform-origin: left center;
+  transform: scaleX(var(--sv-history-progress));
+  transition: transform 120ms linear;
+}
+
+.history-track__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: clamp(10px, 1vw, 18px);
+}
+
+.history-marker {
+  --sv-node-emphasis: 0;
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.history-marker__dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--sv-history-structure) 54%, var(--sv-history-rule) 46%);
+  background: color-mix(in srgb, var(--sv-history-panel-paper) 84%, var(--sv-history-rule) 16%);
+  transform: scale(calc(1 + var(--sv-node-emphasis) * 0.12));
+  opacity: calc(0.45 + var(--sv-node-emphasis) * 0.55);
+  transition: transform 280ms ease, opacity 280ms ease, border-color 280ms ease, background-color 280ms ease;
+}
+
+.history-marker.is-passed .history-marker__dot,
+.history-marker.is-active .history-marker__dot {
+  border-color: var(--sv-history-active);
+  background: var(--sv-history-active);
+}
+
+.history-marker__button {
+  border: 0;
+  background: transparent;
+  font: inherit;
+  color: color-mix(in srgb, var(--sv-history-structure) 68%, var(--sv-history-rule) 32%);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: clamp(10px, 0.9vw, 12px);
+  line-height: 1.3;
+  padding: 0;
+  text-align: center;
+  cursor: pointer;
+  opacity: calc(0.52 + var(--sv-node-emphasis) * 0.48);
+  transform: translateY(calc((1 - var(--sv-node-emphasis)) * 2px));
+  transition: color 240ms ease, opacity 240ms ease, transform 240ms ease;
+}
+
+.history-marker__button:hover,
+.history-marker__button:focus-visible {
+  opacity: 0.95;
+}
+
+.history-marker__button.is-active {
+  color: var(--sv-history-active);
+  opacity: 1;
+  font-weight: 400;
+  transform: translateY(0);
+}
+
+.history-track__connector {
+  position: absolute;
+  top: calc(clamp(26px, 2.4vw, 34px) + 8px);
+  left: var(--sv-history-connector-x);
+  width: 1px;
+  height: clamp(44px, 6vw, 66px);
+  background: var(--sv-history-active);
+  opacity: calc(var(--sv-history-connector-strength) * 0.65);
+  transform: scaleY(var(--sv-history-connector-strength));
+  transform-origin: top center;
+  transition: transform 280ms ease, opacity 280ms ease, left 220ms ease;
+  pointer-events: none;
+}
+
+.history-panel {
+  border: 1px solid var(--sv-history-rule);
+  background: var(--sv-history-panel-paper);
+  padding: clamp(22px, 2.5vw, 34px);
+  min-height: clamp(440px, 57vh, 560px);
+  display: grid;
+}
+
+.history-panel__stack {
+  position: relative;
+  min-height: 100%;
+}
+
+.history-panel__item {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(260px, 0.92fr);
+  gap: clamp(20px, 2.2vw, 36px);
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+  transition: opacity 520ms ease, transform 520ms ease;
+}
+
+.history-panel__item.is-active {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.history-timeline.is-static .history-timeline__scroll-area {
+  min-height: auto;
+}
+
+.history-timeline.is-static .history-timeline__stage {
+  position: static;
+  top: auto;
+  display: grid;
+  gap: clamp(18px, 2vw, 26px);
+}
+
+.history-timeline.is-static .history-track__progress,
+.history-timeline.is-static .history-track__connector {
+  display: none;
+}
+
+.history-timeline.is-static .history-panel {
+  min-height: auto;
+}
+
+.history-timeline.is-static .history-panel__stack {
+  position: static;
+  display: grid;
+  gap: clamp(14px, 1.6vw, 20px);
+}
+
+.history-timeline.is-static .history-panel__item {
+  position: static;
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+  border-top: 1px solid var(--sv-history-rule);
+  padding-top: clamp(16px, 1.8vw, 22px);
+}
+
+.history-timeline.is-static .history-panel__item:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.history-panel__content {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  max-width: 64ch;
+}
+
+.history-panel__year {
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--sv-history-structure);
+}
+
+.history-panel__title {
+  margin: 0;
+  font-size: clamp(28px, 2.5vw, 40px);
+  line-height: 1.14;
+  font-weight: 400;
+  color: var(--sv-history-text);
+}
+
+.history-panel__body {
+  margin: 0;
+  font-size: clamp(16px, 1.15vw, 18px);
+  line-height: 1.74;
+  color: var(--sv-history-soft-text);
+}
+
+.history-image-panel {
+  border: 1px solid var(--sv-history-rule);
+  background: color-mix(in srgb, var(--sv-history-paper) 76%, var(--sv-history-panel-paper) 24%);
+  min-height: clamp(230px, 29vw, 310px);
+  aspect-ratio: 4 / 3;
+  position: relative;
+  overflow: hidden;
+  padding: 18px;
+  display: grid;
+  align-content: end;
+  gap: 10px;
+}
+
+.history-image-panel__media {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--sv-history-structure) 8%, transparent), transparent 46%),
+    repeating-linear-gradient(0deg, transparent, transparent 13px, color-mix(in srgb, var(--sv-history-structure) 9%, transparent) 13px, color-mix(in srgb, var(--sv-history-structure) 9%, transparent) 14px);
+  opacity: 0.34;
+}
+
+.history-image-panel__year,
+.history-image-panel__label {
+  position: relative;
+  z-index: 1;
+}
+
+.history-image-panel__year {
+  font-size: clamp(34px, 3.1vw, 48px);
+  line-height: 1;
+  color: color-mix(in srgb, var(--sv-history-text) 74%, var(--sv-history-structure) 26%);
+}
+
+.history-image-panel__label {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--sv-history-structure) 82%, var(--sv-history-rule) 18%);
+}
+
+.history-timeline__cards {
+  display: none;
+  position: relative;
+  padding-left: 20px;
+}
+
+.history-timeline__cards::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 6px;
+  bottom: 6px;
+  width: 1px;
+  background: color-mix(in srgb, var(--sv-history-structure) 45%, var(--sv-history-rule) 55%);
+}
+
+.history-card {
+  border: 1px solid var(--sv-history-rule);
+  background: var(--sv-history-panel-paper);
+  padding: 22px;
+  display: grid;
+  gap: 14px;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 480ms ease-out, transform 480ms ease-out;
+  position: relative;
+}
+
+.history-card::before {
+  content: "";
+  position: absolute;
+  left: -20px;
+  top: 24px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid var(--sv-history-active);
+  background: color-mix(in srgb, var(--sv-history-active) 68%, var(--sv-history-panel-paper) 32%);
+}
+
+.history-card.is-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (min-width: 980px) {
+  .history-timeline__scroll-area {
+    min-height: var(--history-scroll-height, 660vh);
+  }
+
+  .history-timeline__stage {
+    position: sticky;
+    top: calc(var(--sv-header-height-desktop, 112px) + 20px);
+    min-height: calc(100vh - var(--sv-header-height-desktop, 112px) - 40px);
+    align-content: start;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: clamp(22px, 2.6vw, 34px);
+  }
+}
+
+@media (max-width: 979px) {
+  .history-timeline__scroll-area {
+    display: block;
+    min-height: 0;
+    margin-bottom: 14px;
+  }
+
+  .history-timeline__stage {
+    display: grid;
+    gap: 18px;
+  }
+
+  .history-track {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 8px 2px 14px;
+    scrollbar-width: thin;
+  }
+
+  .history-track__list {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    width: max-content;
+    min-width: max(100%, 560px);
+    padding: 0 6px 4px;
+  }
+
+  .history-marker {
+    min-width: 72px;
+  }
+
+  .history-marker__button {
+    white-space: nowrap;
+    font-size: 11px;
+  }
+
+  .history-track__connector,
+  .history-panel {
+    display: none;
+  }
+
+  .history-timeline__cards {
+    display: grid;
+    gap: 16px;
+  }
+
+  .history-card__year {
+    margin: 0;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--sv-history-structure);
+  }
+
+  .history-card__title {
+    margin: 0;
+    font-size: 24px;
+    line-height: 1.2;
+    color: var(--sv-history-text);
+    text-transform: none;
+  }
+
+  .history-card__body {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.68;
+    color: var(--sv-history-soft-text);
+  }
+
+  .history-card .history-image-panel {
+    min-height: 180px;
+    aspect-ratio: 16 / 10;
+  }
+
+  .history-card .history-image-panel__year {
+    font-size: 28px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .history-track__progress,
+  .history-marker__dot,
+  .history-marker__button,
+  .history-track__connector,
+  .history-panel__item,
+  .history-card {
+    transition: none !important;
+  }
+}

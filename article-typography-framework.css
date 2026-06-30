@@ -1,0 +1,260 @@
+:root {
+  --article-bg: #f6f4f0;
+  --article-surface: #fff;
+  --article-ink: #171512;
+  --article-copy: #3f3a34;
+  --article-muted: #7d786f;
+  --article-accent: #3d7070;
+  --article-rule: rgba(23, 21, 18, 0.14);
+  /* ShoreVest type system: DIN 2014 for all English text */
+  --article-sans: var(--font-din, "DIN 2014", "DIN2014", "DIN", sans-serif);
+  --article-heading: var(--font-din, "DIN 2014", "DIN2014", "DIN", sans-serif);
+  --article-max: 1200px;
+  --article-copy-max: 68ch;
+  --site-max-width: 1440px;
+}
+
+body {
+  margin: 0;
+  background: var(--article-bg);
+  color: var(--article-ink);
+  font-family: var(--article-sans);
+}
+
+main.article-page,
+.wrap,
+.insight-article-page .wrap {
+  width: 100%;
+  max-width: var(--site-max-width, 1440px);
+  margin-inline: auto;
+  margin-top: 140px;
+  margin-bottom: 88px;
+  padding-inline: var(--site-page-margin, clamp(22px, 4.8vw, 64px));
+  box-sizing: border-box;
+}
+
+main.article-page,
+.insight-article-page {
+  overflow-x: clip;
+}
+
+main.article-page * ,
+.insight-article-page * {
+  box-sizing: border-box;
+}
+
+:is(main.article-page, .insight-article-page) :where(img, table, iframe, figure, video, canvas, svg) {
+  max-width: 100%;
+}
+
+:is(main.article-page, .insight-article-page) table {
+  display: block;
+  overflow-x: auto;
+}
+
+:is(main.article-page, .insight-article-page) :is(.meta, .issue-meta-line, .article-title, .article-dek, .back, .action-button) {
+  min-width: 0;
+}
+
+.card {
+  background: var(--article-surface);
+  border: 1px solid #e3ded6;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  padding: clamp(22px, 3vw, 32px);
+}
+
+.issue-meta-line,
+.meta,
+.edition-label,
+.caption,
+small,
+.archive__row small {
+  font-family: var(--article-sans);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--article-muted);
+}
+
+.article-title,
+h1 {
+  font-family: var(--article-heading);
+  font-size: clamp(38px, 5.2vw, 72px);
+  line-height: 1.05;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0 0 18px;
+  color: var(--article-ink);
+}
+
+.article-dek,
+.dek,
+.subhead {
+  font-family: var(--article-heading);
+  font-size: clamp(21px, 2.3vw, 30px);
+  line-height: 1.25;
+  margin: 0 0 28px;
+  max-width: 40ch;
+  color: #2f2a25;
+}
+
+p,
+li,
+.article-body {
+  font-family: var(--article-heading);
+  font-size: clamp(18px, 1.5vw, 21px);
+  line-height: 1.78;
+  color: var(--article-copy);
+  max-width: var(--article-copy-max);
+}
+
+h2,
+h3,
+.section-heading,
+#content h2,
+#content h3 {
+  font-family: var(--article-heading);
+  color: var(--article-ink);
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+h2,
+#content h2 {
+  font-size: clamp(30px, 3vw, 44px);
+  margin: 1.45em 0 0.45em;
+  font-weight: 700;
+}
+
+h3,
+#content h3 {
+  font-size: clamp(24px, 2.3vw, 32px);
+  margin: 1.1em 0 0.35em;
+  font-weight: 400;
+}
+
+.sidebar__card h4,
+.article-sidebar h4 {
+  font-family: var(--article-heading);
+  font-size: clamp(22px, 2vw, 28px);
+  line-height: 1.25;
+  color: var(--article-ink);
+  text-transform: uppercase;
+}
+
+.sidebar__card p,
+.article-sidebar p {
+  font-family: var(--article-heading);
+  font-size: 18px;
+  line-height: 1.65;
+  color: var(--article-copy);
+}
+
+.action-button,
+.back,
+button,
+.btn,
+a[role="button"] {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 30px;
+  border: 1px solid var(--article-rule);
+  padding: 10px 14px;
+  font-family: var(--article-sans);
+  font-size: 11px;
+  line-height: 1;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--article-accent);
+  text-decoration: none;
+  background: transparent;
+  transition: all 0.2s ease;
+}
+
+.action-button:hover,
+.back:hover,
+button:hover,
+.btn:hover,
+a[role="button"]:hover {
+  background: var(--article-accent);
+  border-color: var(--article-accent);
+  color: #fff;
+}
+
+/* Footer and header fonts are controlled by the shared component CSS;
+   do not override them here. */
+
+.cdd-logo-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #1e4040;
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 0 0 18px;
+}
+
+.cdd-logo {
+  width: min(320px, 80%);
+  height: auto;
+  display: block;
+  filter: brightness(0) invert(1);
+}
+
+.err { color: #8b1e3f; font-weight: 700; }
+
+
+@media (max-width: 800px) {
+  .article-page,
+  .insight-page,
+  .insight-detail-page,
+  .article-page main,
+  .insight-page main,
+  .insight-detail-page main {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip;
+    box-sizing: border-box;
+  }
+
+  .article-page *,
+  .insight-page *,
+  .insight-detail-page *,
+  .article-page *::before,
+  .insight-page *::before,
+  .insight-detail-page *::before,
+  .article-page *::after,
+  .insight-page *::after,
+  .insight-detail-page *::after {
+    box-sizing: border-box;
+  }
+
+  main.article-page,
+  .wrap,
+  .insight-article-page .wrap {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip;
+  }
+}
+
+@media (max-width: 767px) {
+  main.article-page,
+  .wrap,
+  .insight-article-page .wrap {
+    margin: 124px auto 72px;
+    padding-inline: clamp(16px, 5vw, 22px);
+  }
+
+  p,
+  li,
+  .article-body,
+  .sidebar__card p,
+  .article-sidebar p {
+    font-size: 17px;
+    line-height: 1.72;
+  }
+}

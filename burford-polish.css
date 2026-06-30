@@ -1,0 +1,366 @@
+/* ============================================================
+   BURFORD-POLISH  ·  site-wide editorial refinement layer
+   ------------------------------------------------------------
+   Studied from burfordcapital.com: the institutional-editorial
+   feel comes from STRUCTURE, not type — generous section rhythm,
+   crisp full-width hairline rules, a small letterspaced eyebrow
+   sitting under a short accent tick, constrained headline measure,
+   and quiet bordered card grids that warm to the brand red on
+   hover.  We keep ShoreVest's locked fonts, colours and copy and
+   only refine layout / spacing / accents.
+   Loaded LAST, after each page's -clean.css.
+   ============================================================ */
+
+:root {
+  --bf-rule:      rgba(30, 64, 64, 0.16);   /* hairline on cream */
+  --bf-rule-soft: rgba(30, 64, 64, 0.10);
+  --bf-rule-dk:   rgba(250, 246, 238, 0.20);/* hairline on dark band */
+  --bf-red:       #C93B2A;                  /* cinnabar — brand accent */
+  --bf-red-deep:  #8A1F12;
+}
+
+/* ------------------------------------------------------------
+   1 · SECTION EYEBROW  →  Burford "ledger label"
+   A short, crisp accent tick above a wide-tracked label.
+   (The type system renders the tick as a flex ::before bar; we
+   refine its weight/length and widen the label tracking.)
+   ------------------------------------------------------------ */
+html body :is(.section-eyebrow, .section-intro__eyebrow) {
+  --sv-section-eyebrow-rule: var(--bf-red);
+  letter-spacing: 0.2em !important;
+}
+html body :is(.section-eyebrow, .section-intro__eyebrow)::before {
+  flex-basis: 40px !important;
+  height: 2px !important;
+  background: var(--bf-red) !important;
+}
+
+/* ------------------------------------------------------------
+   2 · SECTION TITLES  →  editorial measure + tighter leading
+   Constrain the line length so multi-word titles stack into
+   2–3 confident lines (Burford's signature headline rhythm)
+   without touching family, size, case or colour.
+   ------------------------------------------------------------ */
+/* Track-record (dark) section: title must read cream over the deep green —
+   a later typography rule was winning with dark ink. */
+html body .track-record-section .section-title {
+  color: var(--xuan-paper-light, #FAF6EE) !important;
+}
+
+html body .section-title {
+  max-width: none;
+  line-height: 1.12 !important;
+  text-wrap: balance;
+}
+/* copy blocks fill their column — the measure is set by the grid, not a ch cap */
+html body .section-copy p {
+  max-width: none;
+  text-wrap: pretty;
+}
+
+/* ------------------------------------------------------------
+   3 · SECTION INTRO RHYTHM
+   A touch more air between the intro block and the content
+   grid that follows — Burford breathes.
+   ------------------------------------------------------------ */
+html body .section-intro {
+  margin-bottom: clamp(34px, 4vw, 60px);
+}
+
+/* ------------------------------------------------------------
+   4 · HAIRLINE DIVIDERS  →  full-width editorial rules
+   Make every shared divider a crisp 1px brand hairline with
+   generous breathing room, like Burford's section rules.
+   ------------------------------------------------------------ */
+html body .section-divider {
+  height: 1px !important;
+  background: var(--bf-rule) !important;
+  border: 0 !important;
+  margin-block: clamp(40px, 5vw, 72px) !important;
+  opacity: 1 !important;
+}
+
+/* ------------------------------------------------------------
+   5 · QUIET BORDERED CARD GRIDS  →  warm to red on hover
+   Universal, gentle hover for the recurring card patterns so
+   interaction feels consistent site-wide. Borders/箱 already
+   set by the per-page clean passes; we only add the motion.
+   ------------------------------------------------------------ */
+html body :is(
+  .principle-card,
+  .track-record-item,
+  .strategy-row,
+  .opp-card,
+  .underwriting-item,
+  .risk-return-item,
+  .appearance-card
+) {
+  transition: border-color .22s ease, box-shadow .22s ease,
+              transform .22s ease, background-color .22s ease;
+}
+@media (hover: hover) {
+  html body :is(
+    .principle-card,
+    .opp-card,
+    .appearance-card
+  ):hover {
+    border-color: rgba(201, 59, 42, 0.45) !important;
+    box-shadow: 0 16px 38px -26px rgba(138, 31, 18, 0.5);
+    transform: translateY(-2px);
+  }
+}
+
+/* ------------------------------------------------------------
+   6 · INLINE CTA LINKS  →  Burford "Learn more →" affordance
+   Arrow links nudge on hover; quiet underline reveal on text
+   links inside copy. Scoped to known CTA / link classes so we
+   never restyle nav or wordmark links.
+   ------------------------------------------------------------ */
+html body :is(
+  .home-cdd__link, .home-cdd__archive, .home-cdd__button,
+  .press-appearances__more a, .appearance-card__link
+) {
+  transition: color .18s ease, gap .18s ease, opacity .18s ease;
+}
+@media (hover: hover) {
+  html body :is(
+    .home-cdd__link, .home-cdd__archive,
+    .press-appearances__more a, .appearance-card__link
+  ):hover {
+    color: var(--bf-red) !important;
+  }
+}
+
+/* ------------------------------------------------------------
+   7 · STAT FIGURES  →  confident, with a fine red underline
+   The recurring stat numbers get a hairline cinnabar rule under
+   the figure — a restrained Burford-style data accent.
+   ------------------------------------------------------------ */
+html body :is(.firm-stat__value, .track-record-item__value) {
+  position: relative;
+  padding-bottom: 0.18em;
+}
+html body :is(.firm-stat__value, .track-record-item__value)::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 28px;
+  height: 2px;
+  background: var(--bf-red);
+}
+
+/* keep the dark-band track-record figures' rule visible on dark */
+html body .track-record-section .track-record-item__value::after {
+  background: var(--bf-red);
+}
+
+/* ------------------------------------------------------------
+   8 · RESPONSIVE  ·  relax the headline measure on small screens
+   ------------------------------------------------------------ */
+@media (max-width: 720px) {
+  html body .section-title { max-width: none; }
+  html body .section-copy p { max-width: none; }
+}
+
+/* ------------------------------------------------------------
+   9 · CONTACT HERO  ·  match the standard hero size used on every
+   other page (home / firm / strategy / team / insights / press).
+   The routing hero is a left-copy + right-detail grid like the
+   others, so anchor its content to the bottom and let it hold the
+   full hero height rather than shrinking to its content.
+   ------------------------------------------------------------ */
+body.contact-page .cp-hero.sv-hero {
+  min-height: var(--hero-min-height) !important;
+  height: var(--hero-min-height) !important;
+}
+@media (min-width: 769px) {
+  body.contact-page .cp-hero.sv-hero {
+    min-height: var(--hero-min-height) !important;
+    height: var(--hero-min-height) !important;
+  }
+}
+@media (max-width: 768px) {
+  body.contact-page .cp-hero.sv-hero {
+    min-height: var(--hero-min-height) !important;
+    height: auto !important;
+  }
+}
+body.contact-page .cp-hero__inner.sv-hero__inner {
+  align-items: end !important;
+  align-content: end !important;
+  padding-bottom: var(--hero-bottom-pad, clamp(60px, 8vh, 96px)) !important;
+}
+
+/* ============================================================
+   10 · MOBILE POLISH  ·  ≤640px
+   Consistent vertical rhythm, comfortable gutters, and proper
+   touch targets so phones read as intentional rather than a
+   shrunk-down desktop. Conservative values within the existing
+   range — refines rhythm without jolting the layout.
+   ============================================================ */
+@media (max-width: 640px) {
+  /* Standardise section vertical rhythm across the homepage stack and
+     major page sections (was an uneven 56–85px). */
+  body.homepage .homepage-section-stack > section,
+  body.homepage .homepage-section-stack > .firm-section,
+  body.homepage .homepage-section-stack > .strategy-section,
+  body.homepage .homepage-section-stack > .track-record-section,
+  body.homepage .homepage-section-stack > .home-cdd {
+    padding-top: clamp(48px, 13vw, 62px) !important;
+    padding-bottom: clamp(48px, 13vw, 62px) !important;
+  }
+
+  /* Touch targets: every primary tap element clears 44px. */
+  a.sv-btn, a[class*="__btn"], button[class*="__btn"],
+  .home-cdd__archive, .cdd-arc__read, .cdd-arc__pdf,
+  .archive__read, .archive__pdf, .nav__lp {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* Tighten oversized hero display titles a touch so they don't
+     dominate the small viewport, and keep them from hyphenating. */
+  .sv-hero__title, .home-hero h1, .pagehero h1, .firm-hero h1 {
+    overflow-wrap: break-word;
+    hyphens: none;
+  }
+
+  /* A hair more breathing room at the page edges. */
+  :root { --arc-page-gutter: 22px; }
+}
+
+/* ============================================================
+   11 · HOMEPAGE HERO VIDEO ON MOBILE  ·  ≤700px
+   Desktop runs the hero MP4 (hero-option-4); the mobile block in
+   shared-hero.css was hiding .home-hero__media and showing only a
+   static still. Restore the live video on phones so the header
+   matches desktop. The PNG still remains underneath as the poster
+   / fallback while the video loads or if it fails.
+   ============================================================ */
+@media (max-width: 700px) {
+  body.homepage .home-hero {
+    min-height: min(86svh, 660px) !important;
+    height: auto !important;
+    overflow: hidden !important;
+  }
+  body.homepage .home-hero__media {
+    display: block !important;
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: 0 !important;
+    background: #0E1A12 !important;
+  }
+  body.homepage .home-hero__media .home-hero__video {
+    display: block !important;
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    opacity: 1 !important;
+    z-index: 1 !important;
+    filter: saturate(1.06) brightness(0.84) contrast(1.03) !important;
+  }
+  body.homepage .home-hero__inner {
+    position: relative !important;
+    z-index: 2 !important;
+  }
+
+  /* --- Top bar: match desktop's transparent overlay over the hero video.
+     The OPTION B float in shared-header.css is gated to ≥768px; phones were
+     given a solid cream bar. Now that the hero video runs on mobile, float
+     the bar transparently over it (light lockup + cream MENU), settling to
+     the solid cream bar on scroll — exactly like desktop. JS keeps the
+     sv-head-overlay / sv-head-solid classes in sync at all widths. --- */
+  body.homepage.sv-head-overlay #site-header-mount {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 1000 !important;
+  }
+  /* Hero content clears the floating bar. */
+  body.homepage.sv-head-overlay .home-hero__inner {
+    padding-top: calc(var(--mobile-header-height, 96px) + clamp(28px, 8vw, 48px)) !important;
+  }
+
+  /* Transparent (floating) state. */
+  body.homepage.sv-head-overlay:not(.sv-head-solid) #site-header-mount,
+  body.homepage.sv-head-overlay:not(.sv-head-solid) #site-header-mount#site-header-mount #nav#nav.site-header {
+    background: transparent !important;
+    border-bottom-color: transparent !important;
+    box-shadow: none !important;
+  }
+  /* Soft top scrim so the controls stay legible over bright footage. */
+  body.homepage.sv-head-overlay:not(.sv-head-solid) #site-header-mount::before {
+    content: "" !important;
+    position: absolute !important;
+    left: 0 !important; right: 0 !important; top: 0 !important;
+    height: 150% !important;
+    background: linear-gradient(to bottom, rgba(8, 18, 12, 0.55), rgba(8, 18, 12, 0)) !important;
+    pointer-events: none !important;
+    z-index: -1 !important;
+  }
+  /* Light MENU control over the hero. */
+  body.homepage.sv-head-overlay:not(.sv-head-solid) #site-header-mount#site-header-mount #nav#nav.site-header .nav__menu-btn,
+  body.homepage.sv-head-overlay:not(.sv-head-solid) #site-header-mount#site-header-mount #nav#nav.site-header .menu-button {
+    border-color: rgba(250, 246, 238, 0.5) !important;
+    color: var(--sv-xuan-light, #FAF6EE) !important;
+    background: rgba(250, 246, 238, 0.06) !important;
+  }
+  body.homepage.sv-head-overlay:not(.sv-head-solid) #site-header-mount#site-header-mount #nav#nav.site-header .nav__menu-btn-label {
+    color: var(--sv-xuan-light, #FAF6EE) !important;
+  }
+  /* Crossfade to the light (cream) lockup over the dark hero. */
+  body.homepage.sv-head-overlay:not(.sv-head-solid) #site-header-mount#site-header-mount #nav#nav.site-header .brand-lockup-svg--dark {
+    opacity: 0 !important;
+  }
+  body.homepage.sv-head-overlay:not(.sv-head-solid) #site-header-mount#site-header-mount #nav#nav.site-header .brand-lockup-svg--light {
+    opacity: 1 !important;
+  }
+  /* Solid (scrolled) state: the existing solid cream bar. */
+  body.homepage.sv-head-overlay.sv-head-solid #site-header-mount {
+    background: var(--paper, #F2ECD8) !important;
+    box-shadow: 0 10px 30px -22px rgba(40, 24, 16, 0.55) !important;
+  }
+}
+
+/* ============================================================
+   11 · UX POLISH  ·  site-wide
+   Smooth in-page anchor jumps (TOC links, "see the map", "view all
+   appearances", "subscribe"), accessible tap feedback, and momentum
+   scrolling on the few horizontal rails. All guarded for reduced
+   motion. Nothing here changes layout — only interaction feel.
+   ============================================================ */
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+/* Gentle pressed-state feedback on tappable cards and primary actions,
+   so touch interactions feel responsive rather than dead. */
+@media (hover: none) and (pointer: coarse) {
+  .appearance-card,
+  .cdd-arc__row,
+  .principle-card,
+  .cp-routing-card,
+  .team-profile,
+  .home-cdd__recent {
+    transition: transform 140ms ease, box-shadow 140ms ease;
+  }
+  .appearance-card:active,
+  .cdd-arc__row:active,
+  .cp-routing-card:active,
+  .home-cdd__recent:active {
+    transform: scale(0.988);
+  }
+}
+
+/* Momentum + edge padding on any horizontal scroll rail so partially
+   visible content reads as scrollable and never butts the viewport. */
+.cdd-arc__chips,
+[data-overflow-rail] {
+  -webkit-overflow-scrolling: touch;
+  scroll-padding-inline: 22px;
+}

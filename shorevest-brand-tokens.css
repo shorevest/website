@@ -1,0 +1,260 @@
+/* ==========================================================================
+   ShoreVest Brand Tokens — Single Source of Truth
+   Aligns the entire site to the ShoreVest Color & Typography Guide.
+   Two typefaces only: DIN 2014 (English) and Noto Serif SC (Chinese).
+   Palette: Cinnabar, 青 Blue-Green, Ink Green, Xuan Paper. Nothing else.
+
+   ── FONT LOADING ─────────────────────────────────────────────────────────
+   DIN 2014 is loaded centrally by din-2014-fonts.css. English stacks list
+   DIN 2014 aliases first and only then a generic sans-serif emergency fallback;
+   Chinese text remains pinned to Noto Serif SC.
+   ========================================================================== */
+
+
+/* ---- inlined @import din-2014-fonts.css ---- */
+/* ==========================================================================
+   DIN 2014 font loading
+
+   The site typography system uses only DIN 2014 for English text. These
+   @font-face rules map every allowed English weight/style to the matching
+   installed DIN 2014 face, and the font stacks elsewhere include only DIN 2014
+   aliases before a last-resort generic sans-serif emergency fallback.
+   ========================================================================== */
+
+@font-face {
+  font-family: "DIN 2014";
+  src:
+    local("DIN 2014 Light"),
+    local("DIN2014-Light"),
+    local("DIN2014 Light"),
+    local("DIN 2014");
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DIN 2014";
+  src:
+    local("DIN 2014 Light Italic"),
+    local("DIN2014-LightItalic"),
+    local("DIN2014 Light Italic"),
+    local("DIN 2014 Italic");
+  font-style: italic;
+  font-weight: 300;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DIN 2014";
+  src:
+    local("DIN 2014 Regular"),
+    local("DIN2014-Regular"),
+    local("DIN2014 Regular"),
+    local("DIN 2014");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DIN 2014";
+  src:
+    local("DIN 2014 Bold"),
+    local("DIN2014-Bold"),
+    local("DIN2014 Bold");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+/* ---- end din-2014-fonts.css ---- */
+
+
+:root {
+  /* ── COLOR TOKENS — exact hex from the brand guide ──────────────────────── */
+
+  /* CINNABAR (red) */
+  --cinnabar-light:  #E8998F;   /* tints, backgrounds, hover states */
+  --cinnabar:        #C93B2A;   /* primary — ring, rule, Chinese wordmark */
+  --cinnabar-dark:   #8A1F12;   /* active states, deep emphasis */
+
+  /* 青 BLUE-GREEN */
+  --qing-light:      #7AAFAF;   /* tints, tag backgrounds, highlights */
+  --qing:            #3D7070;   /* primary — shore, wave, accents */
+  --qing-dark:       #1E4040;   /* deep water, dark mode surfaces */
+
+  /* INK GREEN */
+  --ink-light:       #4A7A40;   /* upper canopy, lighter foliage */
+  --ink:             #2E4A18;   /* primary — mid canopy branches */
+  --ink-dark:        #0F2206;   /* deepest shadow, near-black green */
+
+  /* XUAN PAPER */
+  --xuan-light:      #FAF6EE;   /* lightest tint — near white with warmth */
+  --xuan:            #F2ECD8;   /* primary background — all documents and digital */
+  --xuan-dark:       #D8CEB0;   /* warm mid-tone — dividers, subtle surfaces */
+
+  /* DAWN REDWOOD GOLD (水杉) — seasonal/ceremonial accent ONLY.
+     Never a primary brand colour; always subordinate to Cinnabar and 青. */
+  --gold-light:      #FBF3DC;   /* highlight, warm glow, decorative accent */
+  --gold:            #C89A2E;   /* primary — seasonal accent, awards, special callouts */
+  --gold-dark:       #7A6030;   /* deep emphasis, dark-mode gold accents */
+
+  /* Semantic aliases for application */
+  --bg:              var(--xuan);
+  --bg-light:        var(--xuan-light);
+  --divider:         var(--xuan-dark);
+  --text-primary:    var(--ink-dark);
+  --text-body:       #2B2620;
+  --text-muted:      #6B6258;
+  --accent:          var(--cinnabar);
+  --accent-dark:     var(--cinnabar-dark);
+  --accent-gold:     var(--gold);
+
+  /* ── TYPOGRAPHY TOKENS ──────────────────────────────────────────────────── */
+  --font-din: "DIN 2014", "DIN2014", "DIN", "Barlow", system-ui, sans-serif;
+  --font-en: var(--font-din);
+  --font-cn: "Noto Serif SC";
+  /* Language-specific rules below select one approved family at a time. */
+  --font-bilingual: var(--font-en);
+  --sv-font-en: var(--font-en);
+  --sv-font-cn: var(--font-cn);
+  --sv-type-sans: var(--font-en);
+  --sv-type-cn: var(--font-cn);
+}
+
+/* ==========================================================================
+   TYPOGRAPHY SCALE — the ONLY approved text styles.
+   ========================================================================== */
+
+/* Display / Hero — Light Italic */
+.t-display {
+  font-family: var(--font-en);
+  font-weight: 300;
+  font-style: italic;
+  font-size: clamp(28px, 3.2vw, 48px);
+  line-height: 1.1;
+  letter-spacing: 0;
+  color: var(--ink-dark);
+}
+
+/* Heading 1 — Bold, All caps, +5 tracking */
+.t-h1 {
+  font-family: var(--font-en);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;   /* +5 tracking exactly */
+  font-size: clamp(24px, 2.4vw, 36px);
+  line-height: 1.15;
+  color: var(--ink-dark);
+}
+
+/* Heading 2 — Bold, Title case (no tracking) */
+.t-h2 {
+  font-family: var(--font-en);
+  font-weight: 700;
+  text-transform: none;     /* title case as written */
+  font-size: clamp(20px, 2vw, 28px);
+  line-height: 1.2;
+  letter-spacing: 0;
+  color: var(--ink-dark);
+}
+
+/* Heading 3 / Label — Bold, All caps, Cinnabar */
+.t-h3,
+.t-label {
+  font-family: var(--font-en);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 12px;
+  color: var(--cinnabar);
+}
+
+/* Body — Regular, 9–10pt */
+.t-body {
+  font-family: var(--font-en);
+  font-weight: 400;
+  font-size: 15px;       /* ~10pt at standard zoom */
+  line-height: 1.55;
+  color: var(--text-body);
+}
+
+/* Caption / Meta — Regular, 8pt, Ink Light */
+.t-caption {
+  font-family: var(--font-en);
+  font-weight: 400;
+  font-size: 11px;       /* ~8pt */
+  line-height: 1.4;
+  color: var(--ink-light);
+}
+
+/* Rule / Divider label — Bold, 7.5pt, All caps */
+.t-rule-label {
+  font-family: var(--font-en);
+  font-weight: 700;
+  font-size: 10px;       /* ~7.5pt */
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+/* Chinese typography */
+.t-cn-lockup {
+  font-family: var(--font-cn);
+  font-weight: 700;
+  letter-spacing: 0.07em;   /* +7 tracking exactly */
+  color: var(--cinnabar);
+}
+.t-cn-body {
+  font-family: var(--font-cn);
+  font-weight: 400;
+  color: var(--ink-dark);
+}
+
+/* ==========================================================================
+   BILINGUAL LOCKUP — SHOREVEST + 新岸資本
+   A thin Cinnabar rule separates the two languages in every configuration.
+   Apply .sv-lockup to the wrapper; the rule sits between the English wordmark
+   and the Chinese wordmark.
+     - horizontal lockup  → vertical rule
+     - stacked lockup     → horizontal rule
+   ========================================================================== */
+.sv-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  min-width: 100px;            /* minimum lockup width for digital */
+}
+.sv-lockup__en {
+  font-family: var(--font-en);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;       /* SHOREVEST always +5, never tighter */
+}
+.sv-lockup__cn {
+  font-family: var(--font-cn);
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  color: var(--cinnabar);
+}
+/* Thin Cinnabar rule — vertical for horizontal lockups */
+.sv-lockup__rule {
+  flex: 0 0 auto;
+  align-self: stretch;
+  width: 1px;
+  min-height: 1em;
+  background: var(--cinnabar);
+  border: 0;
+}
+/* Stacked lockup → horizontal rule */
+.sv-lockup--stacked {
+  flex-direction: column;
+  align-items: flex-start;
+}
+.sv-lockup--stacked .sv-lockup__rule {
+  width: 100%;
+  min-height: 0;
+  height: 1px;
+  align-self: stretch;
+}
