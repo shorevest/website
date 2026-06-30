@@ -1,0 +1,346 @@
+:root {
+  --site-font-size: 15px;
+  --site-line-height: 1.6;
+  --site-font-size-sm: 0.875rem;
+  --site-font-size-body: 16px;
+  --site-font-size-lead: 1.0625rem;
+  --site-font-size-h1: clamp(2rem, 5vw, 3.6rem);
+  --site-font-size-h2: clamp(1.6rem, 3.8vw, 2.8rem);
+  --site-font-size-h3: clamp(1.2rem, 2.3vw, 1.8rem);
+  --site-font-size-display: clamp(2rem, 7vw, 4.75rem);
+  --site-font-size-body-responsive: clamp(0.95rem, 1.25vw, 1.05rem);
+  --site-sans-en: var(--sv-font-en);
+  --site-sans-zh: var(--sv-font-cn);
+  --site-heading-en: var(--sv-font-en);
+  --site-heading-zh: var(--sv-font-cn);
+  --site-color-accent: #3d7070;
+  --site-color-ink: #0c0c0a;
+  --site-color-ink-soft: #3f3b36;
+  --site-color-muted: #888680;
+  --site-color-bg: #f2ecd8;
+  --site-color-bg-soft: #f6f4f0;
+  --site-color-rule: rgba(0, 0, 0, 0.08);
+  --site-color-ink-strong: #2B2620;
+}
+
+html {
+  font-size: var(--site-font-size);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body,
+input,
+select,
+textarea,
+button {
+  font-size: var(--site-font-size-body);
+  line-height: var(--site-line-height);
+  font-family: var(--site-sans-en);
+}
+
+label {
+  font-size: clamp(0.75rem, 0.72vw, 0.8125rem) !important;
+}
+
+body {
+  color: var(--site-color-ink-soft);
+  background: var(--site-color-bg);
+}
+
+/* Keep words intact across the site (avoid splits like "ambi-tion"). */
+p,
+li,
+a,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+blockquote,
+figcaption {
+  word-break: normal;
+  overflow-wrap: normal;
+  hyphens: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+."Noto Serif SC",
+[class*='"Noto Serif SC"'] {
+  font-family: var(--site-heading-en);
+  color: var(--site-color-ink);
+  font-weight: 700;
+}
+
+h1 {
+  text-transform: uppercase;
+  letter-spacing: 0.005em;
+}
+
+h3 {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #3d7070;
+}
+
+a {
+  color: var(--site-color-accent);
+}
+
+small,
+.muted,
+[class*='muted'],
+.kicker,
+.eyebrow {
+  color: var(--site-color-muted);
+}
+
+hr,
+table,
+th,
+td {
+  border-color: var(--site-color-rule);
+}
+
+html:lang(zh) body,
+html[lang^='zh'] body,
+html:lang(zh) input,
+html:lang(zh) select,
+html:lang(zh) textarea,
+html:lang(zh) button,
+html[lang^='zh'] input,
+html[lang^='zh'] select,
+html[lang^='zh'] textarea,
+html[lang^='zh'] button {
+  font-family: var(--site-sans-zh);
+}
+
+html:lang(zh) h1,
+html:lang(zh) h2,
+html:lang(zh) h3,
+html:lang(zh) h4,
+html:lang(zh) h5,
+html:lang(zh) h6,
+html[lang^='zh'] h1,
+html[lang^='zh'] h2,
+html[lang^='zh'] h3,
+html[lang^='zh'] h4,
+html[lang^='zh'] h5,
+html[lang^='zh'] h6 {
+  font-family: var(--site-heading-zh);
+}
+
+/* On Chinese pages, render explicitly English text with English font stacks. */
+html:lang(zh) :lang(en),
+html[lang^='zh'] :lang(en) {
+  font-family: var(--site-sans-en);
+}
+
+html:lang(zh) :is(h1, h2, h3, h4, h5, h6, ."Noto Serif SC", [class*='"Noto Serif SC"']):lang(en),
+html[lang^='zh'] :is(h1, h2, h3, h4, h5, h6, ."Noto Serif SC", [class*='"Noto Serif SC"']):lang(en),
+html:lang(zh) :is(h1, h2, h3, h4, h5, h6, ."Noto Serif SC", [class*='"Noto Serif SC"']) :lang(en),
+html[lang^='zh'] :is(h1, h2, h3, h4, h5, h6, ."Noto Serif SC", [class*='"Noto Serif SC"']) :lang(en) {
+  font-family: var(--site-heading-en);
+}
+
+/* Global button typography requirement. */
+:where(button, .btn, input[type='button'], input[type='submit'], input[type='reset']) {
+  font-family: var(--site-sans-en) !important;
+  font-size: clamp(0.78125rem, 0.82vw, 0.875rem) !important;
+}
+
+
+/* Sitewide horizontal gutters (keeps margins consistent across templates). */
+:root {
+  --site-page-margin: clamp(22px, 4.8vw, 64px);
+}
+
+:root {
+  --pad: var(--site-page-margin) !important;
+}
+
+@media (max-width: 1024px) {
+  :root {
+    --site-page-margin: clamp(20px, 4.8vw, 40px);
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --site-page-margin: clamp(16px, 5vw, 22px);
+  }
+}
+
+
+@media (max-width: 767px) {
+  :root {
+    --site-font-size-body: 15px;
+    --site-font-size-lead: 1rem;
+    --site-font-size-h1: clamp(1.7rem, 8vw, 2.3rem);
+    --site-font-size-h2: clamp(1.35rem, 6.2vw, 1.9rem);
+    --site-font-size-h3: clamp(1.1rem, 4.8vw, 1.45rem);
+    --site-font-size-display: clamp(1.7rem, 10vw, 2.8rem);
+    --site-font-size-body-responsive: clamp(0.92rem, 3.9vw, 1rem);
+  }
+}
+
+/* Sitewide visual rhythm + readable type scale. */
+body {
+  letter-spacing: 0.002em;
+}
+
+p,
+li {
+  font-size: var(--site-font-size-body);
+  max-width: none;
+}
+
+small,
+.kicker,
+.eyebrow {
+  font-size: clamp(0.75rem, 0.7vw, 0.8125rem);
+}
+
+/* Keep eyebrow labels aligned with homepage kicker sizing sitewide. */
+.eyebrow {
+  font-size: clamp(0.75rem, 0.72vw, 0.8125rem) !important;
+}
+
+h1 {
+  font-size: var(--site-font-size-h1) !important;
+  line-height: 1.1;
+}
+
+h2 {
+  font-size: var(--site-font-size-h2) !important;
+  line-height: 1.15;
+}
+
+h3 {
+  font-size: var(--site-font-size-h3) !important;
+  line-height: 1.22;
+}
+
+/* Cap oversized display text used in hero/stat sections across templates. */
+.hero__ttl,
+.hero-title,
+.display-title,
+.hs__n,
+.nb__n,
+.ac__img--glyph::after,
+.icard__glyph {
+  font-size: var(--site-font-size-display) !important;
+  line-height: 1.06;
+}
+
+.about__body p,
+.city-band__sub,
+.su__sub,
+.tm__bio,
+.ac__body {
+  font-size: var(--site-font-size-body-responsive) !important;
+  line-height: 1.75;
+}
+
+/* Contrast safeguard: prevent white text from sitting on very light inline surfaces. */
+:where(
+  [style*="background:#fff"][style*="color:#fff"],
+  [style*="background: #fff"][style*="color: #fff"],
+  [style*="background:#ffffff"][style*="color:#fff"],
+  [style*="background: #ffffff"][style*="color: #fff"],
+  [style*="background:rgba(255,255,255,0.6"][style*="color:#fff"],
+  [style*="background:rgba(255,255,255,0.7"][style*="color:#fff"],
+  [style*="background:rgba(255,255,255,0.8"][style*="color:#fff"],
+  [style*="background:rgba(255,255,255,0.9"][style*="color:#fff"],
+  [style*="background: rgba(255, 255, 255, 0.6"][style*="color: #fff"],
+  [style*="background: rgba(255, 255, 255, 0.7"][style*="color: #fff"],
+  [style*="background: rgba(255, 255, 255, 0.8"][style*="color: #fff"],
+  [style*="background: rgba(255, 255, 255, 0.9"][style*="color: #fff"]
+) {
+  color: var(--site-color-ink-strong) !important;
+}
+
+/* Chinese typography parity:
+   keep the same hierarchy/rhythm as EN while using approved CN type system. */
+html:lang(zh),
+html[lang^='zh'] {
+  --site-cn-display-size: var(--site-font-size-display);
+  --site-cn-h1-size: var(--site-font-size-h1);
+  --site-cn-h2-size: var(--site-font-size-h2);
+  --site-cn-label-size: clamp(0.75rem, 0.72vw, 0.8125rem);
+  --site-cn-body-size: var(--site-font-size-body);
+  --site-cn-caption-size: clamp(0.75rem, 0.7vw, 0.8125rem);
+}
+
+html:lang(zh) :is(h1, h2, h3, h4, h5, h6, ."Noto Serif SC", [class*='"Noto Serif SC"']),
+html[lang^='zh'] :is(h1, h2, h3, h4, h5, h6, ."Noto Serif SC", [class*='"Noto Serif SC"']) {
+  font-family: var(--site-heading-zh) !important;
+  font-style: normal !important;
+}
+
+html:lang(zh) :is(p, li, a, span, small, figcaption, label, .meta, .caption),
+html[lang^='zh'] :is(p, li, a, span, small, figcaption, label, .meta, .caption) {
+  font-family: var(--site-sans-zh) !important;
+}
+
+/* Keep Chinese headings from inheriting EN forced uppercase/small-caps patterns. */
+html:lang(zh) :is(h1, h2, h3, .eyebrow, .kicker, .hero__kicker, .label, .meta),
+html[lang^='zh'] :is(h1, h2, h3, .eyebrow, .kicker, .hero__kicker, .label, .meta) {
+  text-transform: none !important;
+  font-variant: normal !important;
+}
+
+/* Hierarchy mapping: display → page heading → section heading → label/meta → body → caption. */
+html:lang(zh) :is(.hero__hed, .hero__ttl, .hero-title, .display-title, .wordmark__title, .pagehero h1),
+html[lang^='zh'] :is(.hero__hed, .hero__ttl, .hero-title, .display-title, .wordmark__title, .pagehero h1) {
+  font-size: var(--site-cn-display-size) !important;
+  line-height: 1.06 !important;
+  letter-spacing: 0 !important;
+  font-weight: 400 !important;
+}
+
+html:lang(zh) :is(h1, .h1, .about__hed, .strat__hed, .research-main h2),
+html[lang^='zh'] :is(h1, .h1, .about__hed, .strat__hed, .research-main h2) {
+  font-size: var(--site-cn-h1-size) !important;
+  line-height: 1.1 !important;
+  letter-spacing: 0 !important;
+  font-weight: 400 !important;
+}
+
+html:lang(zh) :is(h2, .h2, .section-title, .issue-card__t),
+html[lang^='zh'] :is(h2, .h2, .section-title, .issue-card__t) {
+  font-size: var(--site-cn-h2-size) !important;
+  line-height: 1.16 !important;
+  letter-spacing: 0 !important;
+  font-weight: 400 !important;
+}
+
+html:lang(zh) :is(.eyebrow, .kicker, .hero__kicker, .label, .meta, .issue-card__k, .issue-card__bar),
+html[lang^='zh'] :is(.eyebrow, .kicker, .hero__kicker, .label, .meta, .issue-card__k, .issue-card__bar) {
+  font-size: var(--site-cn-label-size) !important;
+  line-height: 1.4 !important;
+  letter-spacing: 0.08em !important;
+  font-weight: 400 !important;
+}
+
+html:lang(zh) :is(body, p, li, .hero__copy, .lead, .research-main__intro, .issue-card__s, .tm__bio, .ac__body),
+html[lang^='zh'] :is(body, p, li, .hero__copy, .lead, .research-main__intro, .issue-card__s, .tm__bio, .ac__body) {
+  font-size: var(--site-cn-body-size) !important;
+  line-height: 1.7 !important;
+  letter-spacing: 0.002em !important;
+  font-weight: 400 !important;
+}
+
+html:lang(zh) :is(small, figcaption, .caption, .data-note, .sv-footer__copyright, .sv-footer__legal-links),
+html[lang^='zh'] :is(small, figcaption, .caption, .data-note, .sv-footer__copyright, .sv-footer__legal-links) {
+  font-size: var(--site-cn-caption-size) !important;
+  line-height: 1.55 !important;
+  letter-spacing: 0.01em !important;
+  font-weight: 400 !important;
+}

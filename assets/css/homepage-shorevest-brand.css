@@ -1,0 +1,1203 @@
+:root {
+  --xuan-paper-light: #FAF6EE;
+  --paper-light: var(--surface-inverse, #f8f3e8);
+  --paper: var(--bg-main, #f5f0e4);
+  --paper-dark: var(--border-strong, #c8bda6);
+  --cinnabar: var(--accent-red, #C93B2A);
+  --cinnabar-light: #cc7b6f;
+  --cinnabar-dark: var(--accent-red-hover, #8A1F12);
+  --blue-green: var(--accent-green, #284631);
+  --blue-green-light: #496755;
+  --blue-green-dark: #193126;
+  --ink-green: #2E4A18;
+  --ink-green-dark: #0F2206;
+  --text-main: var(--text-primary, #102a18);
+  --text-secondary: var(--sv-text-secondary, #41543f);
+
+  --red: var(--cinnabar);
+  --white: var(--paper-light);
+  --off: var(--paper-light);
+  --rule: var(--paper-dark);
+  --ink: var(--text-main);
+  --ink2: var(--text-secondary);
+  --mist: var(--text-muted, #6b7264);
+  --stone: var(--paper-light);
+  --en-role-font: var(--sv-font-en);
+  --sans: var(--sv-font-en);
+  --sans-zh: var(--sv-font-cn);
+  --zh-role-font: var(--sv-font-cn);
+}
+
+body.homepage {
+  --bg-main: #F2ECD8;
+  --paper: #F2ECD8;
+}
+
+html,
+body,
+body * {
+  font-family: var(--sans) !important;
+}
+
+:root {
+  --shorevest-lockup-tracking: var(--sv-header-wordmark-tracking, 0.30em);
+}
+
+:lang(zh),
+[lang="zh"],
+[lang^="zh"],
+[lang="zh-Hans"],
+[lang="zh-Hant"],
+.nav__logo-cn,
+.nav__logo-cn *,
+.type-sheet__cn,
+.type-sheet__line-value--cn {
+  font-family: var(--sans-zh) !important;
+}
+
+body,
+#nav,
+#about,
+#strategy,
+#team,
+#insights,
+#signup,
+.quote-band,
+.num-band,
+.city-band,
+.sv-footer {
+  background: var(--paper) !important;
+  color: var(--text-main) !important;
+}
+
+#strategy,
+#insights,
+.quote-band,
+.num-band {
+  background: var(--paper) !important;
+}
+
+#about,
+#strategy,
+#team,
+#insights,
+#signup,
+#cdd,
+.city-band {
+  border-color: var(--paper-dark) !important;
+}
+
+.issue-card,
+.icard,
+.cdd-subscribe__card,
+.cdd-subscribe__cards {
+  background: var(--paper-light) !important;
+  border-color: var(--paper-dark) !important;
+}
+
+body.homepage #stats .stat {
+  background: transparent !important;
+  border-color: color-mix(in srgb, var(--paper-dark) 68%, transparent) !important;
+  padding-top: clamp(16px, 1.8vw, 22px);
+  padding-bottom: clamp(14px, 1.6vw, 18px);
+}
+
+body.homepage #stats .stat__n {
+  color: color-mix(in srgb, var(--text-main) 90%, #000 10%) !important;
+}
+
+body.homepage #stats .stat__l {
+  color: color-mix(in srgb, var(--text-main) 64%, transparent) !important;
+}
+
+#cdd .cdd-hero__card {
+  background: rgba(250, 246, 238, 0.03) !important;
+  border-color: rgba(250, 246, 238, 0.12) !important;
+}
+
+.hero__hed,
+#hero h1,
+#hero h1 em {
+  font-family: var(--sans) !important;
+  font-weight: 300 !important;
+  font-style: italic !important;
+  letter-spacing: 0.008em !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+.about__hed,
+.strat__hed,
+.sg__title,
+.tm__name,
+.icard__title,
+.cdd-subscribe__title,
+.cdd-subscribe__card-title,
+.issue-title {
+  font-family: var(--en-role-font) !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+}
+
+.eyebrow,
+.hero__kicker,
+.sg__n,
+.tm__role,
+.icard__cat,
+.cta,
+.nav__lp,
+.nav__menu-btn,
+.ulink,
+.icard__link,
+.nb__l,
+.stat__l,
+.nav__links a,
+.nav__zh,
+label,
+button,
+input,
+textarea {
+  font-family: var(--sans) !important;
+  font-weight: 400 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+p,
+li,
+.ac__body,
+.sg__body,
+.tm__bio,
+.strat__intro,
+.hero__copy,
+.about__body p,
+.cdd__body,
+.su__sub,
+.icard__date {
+  font-family: var(--sans) !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+  color: var(--text-secondary) !important;
+}
+
+.nav__logo-en {
+  font-family: var(--font-din, "DIN 2014", "DIN2014", "DIN", sans-serif) !important;
+  letter-spacing: var(--shorevest-lockup-tracking) !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  color: var(--ink-green-dark) !important;
+}
+
+.nav__logo-lockup {
+  position: relative;
+  padding-left: 10px;
+  margin-left: 3px;
+  min-width: 100px;
+}
+
+.nav__logo-lockup::before {
+  content: none;
+}
+
+.nav__logo-cn {
+  font-size: 11px !important;
+  font-family: var(--zh-role-font) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.07em !important;
+  color: var(--cinnabar) !important;
+}
+
+.nav__logo-en,
+.nav__logo-cn {
+  line-height: 1.1 !important;
+}
+
+.hero__copy,
+.about__body p,
+.strat__intro,
+.sg__body,
+.tm__bio,
+.cdd__body,
+.issue-thesis,
+.stats__note {
+  font-size: clamp(15px, 1.1vw, 19px) !important;
+  line-height: 1.72 !important;
+}
+
+.eyebrow,
+.hero__divline,
+.ins__hd,
+.strat__grid,
+.strat__actions,
+.sv-footer,
+.founder-split,
+.founder-split * {
+  border-color: var(--paper-dark) !important;
+}
+
+.eyebrow--red,
+.hero__kicker,
+.nav__links a[aria-current="page"],
+.cta--red,
+.it__label {
+  color: var(--cinnabar) !important;
+}
+
+.hero__kicker::before,
+.live-dot,
+.cdd__dot,
+.issue-label {
+  background: var(--cinnabar) !important;
+}
+
+.live-dot {
+  box-shadow: 0 0 0 rgba(201, 59, 42, 0.75) !important;
+}
+
+@keyframes liveBlink {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(201, 59, 42, 0.65);
+  }
+
+  50% {
+    opacity: 0.25;
+    box-shadow: 0 0 0 6px rgba(201, 59, 42, 0);
+  }
+}
+
+.cta__ring,
+.ulink__ring,
+.icard__ring,
+.su__submit-ring,
+.nav__lp,
+.nav__menu-btn {
+  border-color: color-mix(in srgb, var(--paper-dark) 78%, var(--text-main) 22%) !important;
+}
+
+.cta--dark,
+.nav__links a,
+.nav__lp,
+.nav__zh,
+.ulink,
+.icard__link {
+  color: var(--blue-green-dark) !important;
+}
+
+.cta--dark:hover .cta__ring,
+.cta--light:hover .cta__ring,
+.ulink:hover .ulink__ring,
+.icard:hover .icard__ring,
+.su__submit:hover .su__submit-ring,
+.su__submit:focus-visible .su__submit-ring,
+.nav__lp:hover,
+.nav__menu-btn:hover {
+  background: var(--blue-green) !important;
+  border-color: var(--blue-green) !important;
+  color: var(--paper-light) !important;
+}
+
+.cta--red:hover .cta__ring {
+  background: var(--cinnabar) !important;
+  border-color: var(--cinnabar) !important;
+  color: var(--paper-light) !important;
+}
+
+.su__status[data-state="error"] {
+  color: var(--cinnabar-light) !important;
+}
+
+.su__status[data-state="success"] {
+  color: var(--blue-green-dark) !important;
+}
+
+.city-band__overlay {
+  background: linear-gradient(
+    to bottom,
+    rgba(30, 64, 64, 0.12) 0%,
+    rgba(30, 64, 64, 0.05) 52%,
+    rgba(30, 64, 64, 0.15) 100%
+  ) !important;
+}
+
+#hero .hero__overlay,
+#hero .hero__overlay * {
+  color: var(--paper-light) !important;
+}
+
+#hero .hero__overlay {
+  background: transparent !important;
+}
+
+.hero__sliver {
+  background-image:
+    linear-gradient(
+      to bottom,
+      rgba(10, 5, 2, 0.06) 0%,
+      rgba(10, 5, 2, 0.18) 46%,
+      rgba(10, 5, 2, 0.32) 100%
+    ) !important;
+}
+
+/* China Debt Dynamics (homepage): enforce dark editorial contrast hierarchy */
+#cdd {
+  --cdd-bg: #1E4040;
+  --cdd-surface: #0F2206;
+  --cdd-secondary-surface: #0F2206;
+  --cdd-structure: #D8CEB0;
+  --cdd-text: #FAF6EE;
+  --cdd-body: #EAE3D7;
+  --cdd-muted: #D8CEB0;
+  --cdd-accent: #3D7070;
+  --cdd-signal: #3D7070;
+  background: var(--cdd-bg) !important;
+  color: var(--cdd-text) !important;
+  border-top-color: color-mix(in srgb, var(--cdd-structure) 60%, transparent) !important;
+  border-bottom-color: color-mix(in srgb, var(--cdd-surface) 80%, transparent) !important;
+}
+
+#cdd .cdd-editorial__card,
+#cdd .cdd-feature,
+#cdd .cdd-feature__panel {
+  background: var(--cdd-surface) !important;
+  border-color: color-mix(in srgb, var(--cdd-structure) 34%, transparent) !important;
+}
+
+#cdd .wordmark__title,
+#cdd .wordmark__title em,
+#cdd .cdd-feature__title,
+#cdd .cdd-feature__quote,
+#cdd .cdd-cta {
+  color: var(--cdd-text) !important;
+}
+
+#cdd .cdd-editorial__lede,
+#cdd .cdd-feature__thesis,
+#cdd .cdd-feature__finding,
+#cdd .cdd-editorial__meta-value {
+  color: var(--cdd-body) !important;
+}
+
+#cdd .cdd-editorial__kicker,
+#cdd .cdd-feature__issue,
+#cdd .cdd-feature__date,
+#cdd .cdd-feature__label,
+#cdd .cdd-feature__volume,
+#cdd .cdd-editorial__meta-label {
+  color: var(--cdd-muted) !important;
+}
+
+#cdd .cdd-editorial__kicker::after {
+  background: color-mix(in srgb, var(--cdd-accent) 78%, transparent) !important;
+}
+
+#cdd .cdd-feature__finding {
+  border-left-color: color-mix(in srgb, var(--cdd-accent) 62%, transparent) !important;
+}
+
+#cdd .cdd-feature__quote {
+  border-left-color: var(--cdd-signal) !important;
+}
+
+/* === Homepage institutional refinement pass (April 2026) === */
+body.homepage {
+  background: var(--paper) !important;
+}
+
+body.homepage .hero__sliver {
+  border-bottom: 1px solid color-mix(in srgb, var(--paper-dark) 72%, transparent) !important;
+  background-image:
+    linear-gradient(
+      to bottom,
+      rgba(8, 6, 5, 0.22) 0%,
+      rgba(8, 6, 5, 0.36) 48%,
+      rgba(8, 6, 5, 0.58) 100%
+    ) !important;
+}
+
+body.homepage .hero__overlay {
+  background: transparent !important;
+}
+
+body.homepage .hero__overlay h1.hero__hed {
+  color: var(--text-main) !important;
+}
+
+body.homepage .hero__overlay h1.hero__hed .hero__hed-main {
+  color: var(--text-main) !important;
+}
+
+body.homepage .hero__overlay h1.hero__hed em {
+  color: var(--cinnabar) !important;
+}
+
+body.homepage .hero__overlay .cta--light {
+  border: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+  color: var(--text-main) !important;
+}
+
+body.homepage .hero__overlay .cta--light .cta__ring {
+  color: var(--blue-green-dark) !important;
+  border-color: color-mix(in srgb, var(--blue-green-dark) 42%, var(--paper-dark) 58%) !important;
+  background: color-mix(in srgb, var(--paper-light) 84%, transparent) !important;
+}
+
+body.homepage .hero__overlay .cta--light:hover,
+body.homepage .hero__overlay .cta--light:focus-visible {
+  border-color: transparent !important;
+  background: transparent !important;
+}
+
+body.homepage .hero__overlay .cta--light:hover .cta__ring,
+body.homepage .hero__overlay .cta--light:focus-visible .cta__ring {
+  background: var(--blue-green-dark) !important;
+  border-color: var(--blue-green-dark) !important;
+  color: var(--paper-light) !important;
+}
+
+body.homepage #hero {
+  padding-top: clamp(76px, 8vw, 112px) !important;
+  position: relative;
+}
+
+body.homepage #hero::before {
+  content: "";
+  position: absolute;
+  left: var(--pad);
+  right: var(--pad);
+  top: clamp(42px, 5.6vw, 62px);
+  height: 1px;
+  background: color-mix(in srgb, var(--paper-dark) 82%, transparent);
+}
+
+body.homepage .hero__copy {
+  color: color-mix(in srgb, var(--text-main) 70%, #324d4d 30%) !important;
+}
+
+body.homepage #stats {
+  padding-bottom: clamp(34px, 4.5vw, 56px);
+}
+
+body.homepage .stats {
+  background: transparent !important;
+  border-color: color-mix(in srgb, var(--paper-dark) 92%, transparent) !important;
+}
+
+body.homepage #strategy .sg {
+  padding-top: clamp(8px, 0.8vw, 12px);
+}
+
+body.homepage #strategy .sg:nth-child(2) {
+  background: color-mix(in srgb, var(--paper) 76%, var(--paper-light) 24%) !important;
+}
+
+body.homepage #strategy .sg:nth-child(3) {
+  background: color-mix(in srgb, var(--paper) 62%, var(--paper-light) 38%) !important;
+}
+
+/* China Debt Dynamics: readability-first dark editorial treatment */
+body.homepage #cdd {
+  --cdd-bg: #152321;
+  --cdd-surface: #111917;
+  --cdd-secondary-surface: #0e1614;
+  --cdd-structure: #5f736e;
+  --cdd-text: #f6f0e6;
+  --cdd-body: #ece3d6;
+  --cdd-muted: #c5b8a2;
+  --cdd-accent: #7ea4a0;
+  --cdd-signal: #3d7070;
+  background: radial-gradient(120% 120% at 12% 8%, #1d2f2d 0%, #152321 54%, #0f1a18 100%) !important;
+  /* Set base colour directly — prevents typography-system's global
+     element-type rules from landing a dark colour via inheritance    */
+  color: #f6f0e6 !important;
+  border-top: 1px solid rgba(197, 184, 162, 0.36) !important;
+  border-bottom: 1px solid rgba(95, 115, 110, 0.35) !important;
+}
+
+body.homepage #cdd .cdd-editorial__card,
+body.homepage #cdd .cdd-feature,
+body.homepage #cdd .cdd-feature__panel,
+body.homepage #cdd .cdd-feature__quote {
+  background: var(--cdd-surface) !important;
+}
+
+body.homepage #cdd .wordmark__title,
+body.homepage #cdd .cdd-editorial__lede,
+body.homepage #cdd .cdd-feature__title,
+body.homepage #cdd .cdd-feature__thesis,
+body.homepage #cdd .cdd-feature__finding,
+body.homepage #cdd .cdd-feature__quote,
+body.homepage #cdd .cdd-cta,
+body.homepage #cdd .cdd-editorial__meta-value {
+  color: var(--cdd-text) !important;
+}
+
+body.homepage #cdd .cdd-editorial__kicker,
+body.homepage #cdd .cdd-feature__issue,
+body.homepage #cdd .cdd-feature__date,
+body.homepage #cdd .cdd-feature__label,
+body.homepage #cdd .cdd-editorial__meta-label {
+  color: var(--cdd-muted) !important;
+}
+
+body.homepage #cdd .cdd-feature__finding {
+  border-left-color: rgba(126, 164, 160, 0.55) !important;
+}
+
+body.homepage #cdd .cdd-feature__quote {
+  border-left-color: var(--cdd-signal) !important;
+  border-top-color: rgba(95, 115, 110, 0.34) !important;
+}
+
+body.homepage #cdd .cdd-cta {
+  border-color: rgba(95, 115, 110, 0.7) !important;
+  color: #f6f0e6 !important;
+}
+
+/* Ring needs its own colour declaration — refinement-pass.css sets
+   .cdd-cta__ring { color: var(--sv-brand-accent) } which would land
+   the dark #3d7070 teal on the arrow character without this fix.     */
+body.homepage #cdd .cdd-cta__ring {
+  border-color: rgba(246, 240, 230, 0.32) !important;
+  color: #f6f0e6 !important;
+}
+
+body.homepage #cdd .cdd-cta:hover,
+body.homepage #cdd .cdd-cta:focus-visible {
+  border-color: rgba(126, 164, 160, 0.95) !important;
+  background: rgba(22, 35, 33, 0.95) !important;
+}
+
+
+/* Strict institutional color-role enforcement (April 2026) */
+body.homepage,
+body.homepage #stats,
+body.homepage #about,
+body.homepage #strategy,
+body.homepage .sv-footer {
+  background: var(--paper) !important;
+}
+
+body.homepage #strategy {
+  border-top: 1px solid var(--paper-dark) !important;
+}
+
+/* Remove stray divider between the principles and strategy boxes.
+   Keep borders on the inner .home-section-shell containers intact. */
+body.homepage #principles + #strategy {
+  border-top: 0 !important;
+}
+
+body.homepage #about,
+body.homepage .stats,
+body.homepage #strategy .sg,
+body.homepage .ac__panel {
+  background: var(--paper) !important;
+}
+
+/* Homepage strategy cards only (01/02/03): dark green treatment */
+body.homepage #strategy .strat__grid > .sg {
+  background: var(--ink-green, #2E4A18) !important;
+  border: 1px solid rgba(250, 246, 238, 0.22) !important;
+}
+
+body.homepage #strategy .strat__grid > .sg:hover,
+body.homepage #strategy .strat__grid > .sg:focus-visible,
+body.homepage #strategy .strat__grid > .sg.is-active {
+  background: var(--ink-green-dark, #0F2206) !important;
+  border-color: rgba(250, 246, 238, 0.34) !important;
+}
+
+body.homepage #strategy .strat__grid > .sg :is(.sg__n, .sg__title, .sg__body) {
+  color: #FAF6EE !important;
+}
+
+body.homepage p,
+body.homepage li,
+body.homepage .hero__copy,
+body.homepage .about__body p,
+body.homepage .strat__intro,
+body.homepage .sg__body,
+body.homepage .ac__body,
+body.homepage .stats__note {
+  color: var(--text-secondary) !important;
+}
+
+body.homepage .hero__hed,
+body.homepage .about__hed,
+body.homepage .strat__hed,
+body.homepage .sg__title,
+body.homepage .stat__n {
+  color: var(--text-main) !important;
+}
+
+body.homepage a,
+body.homepage .nav__links a,
+body.homepage .cta,
+body.homepage .ulink,
+body.homepage .icard__link {
+  color: var(--blue-green-dark) !important;
+}
+
+body.homepage .cta--dark .cta__ring,
+body.homepage .cta--light .cta__ring,
+body.homepage .nav__menu-btn {
+  border-color: color-mix(in srgb, var(--blue-green-dark) 28%, var(--paper-dark) 72%) !important;
+}
+
+body.homepage .cta--dark:hover .cta__ring,
+body.homepage .cta--light:hover .cta__ring,
+body.homepage .nav__menu-btn:hover {
+  background: var(--blue-green) !important;
+  border-color: var(--blue-green) !important;
+  color: var(--paper-light) !important;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CDD FLAGSHIP PANEL — DEFINITIVE CONTRAST FIX (April 2026)
+   Two-layer defence so neither the typography system (loaded last) nor any
+   other global rule can produce dark-on-dark text inside the dark CDD panel.
+
+   Layer 1 — CSS variable redirect
+   The typography system uses `color: var(--sv-ink-soft) !important` etc.
+   By re-declaring those variables on #cdd with higher specificity, every
+   descendant that resolves var(--sv-ink-soft) gets a light value instead
+   of the global dark green.
+
+   Layer 2 — Explicit !important locks with maximum selector specificity
+   Covers every visible text element so no generic rule can override them.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* LAYER 1: Redirect global colour tokens to dark-panel equivalents */
+html body.homepage #cdd {
+  /* ShoreVest typography-system ink variables */
+  --sv-ink:              #f6f0e6;
+  --sv-ink-soft:         #ece3d6;
+  --sv-ink-muted:        #c5b8a2;
+  --sv-color-ink:        #f6f0e6;
+  --sv-color-soft-ink:   #ece3d6;
+  --sv-color-muted:      #c5b8a2;
+  --sv-color-accent:     #7ea4a0;
+
+  /* Site/page-level ink variables */
+  --site-color-ink:       #f6f0e6;
+  --site-color-ink-soft:  #ece3d6;
+  --site-color-ink-strong:#f6f0e6;
+  --site-color-muted:     #c5b8a2;
+
+  /* Homepage palette variables */
+  --text-main:      #f6f0e6;
+  --text-secondary: #ece3d6;
+  --ink:            #f6f0e6;
+  --ink2:           #ece3d6;
+  --mist:           #c5b8a2;
+
+  /* Prevent dark teal link colour bleeding into CTAs */
+  --blue-green-dark: #7ea4a0;
+}
+
+/* LAYER 2: Explicit colour locks — heading-level text */
+html body.homepage #cdd .wordmark__title,
+html body.homepage #cdd .wordmark__title em,
+html body.homepage #cdd .cdd-feature__title,
+html body.homepage #cdd .cdd-feature__title .cdd-feature__title-quoted {
+  color: #f6f0e6 !important;
+}
+
+/* China Debt Dynamics title parity:
+   keep homepage and insights heading on the same typographic source. */
+body.insights-page .wordmark__title,
+body.homepage #cdd .wordmark__title {
+  font-family: var(--sv-type-sans) !important;
+  font-style: normal !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.005em !important;
+  margin: 0 !important;
+}
+
+body.insights-page .research-hero .wordmark__title,
+body.homepage #cdd .wordmark__title {
+  color: #f2ecd8 !important;
+}
+
+body.insights-page .research-hero .wordmark__title em,
+body.homepage #cdd .wordmark__title em {
+  color: #c93b2a !important;
+}
+
+/* LAYER 2: Explicit colour locks — body/paragraph text */
+html body.homepage #cdd .cdd-editorial__lede,
+html body.homepage #cdd .cdd-feature__thesis,
+html body.homepage #cdd .cdd-feature__finding,
+html body.homepage #cdd .cdd-editorial__meta-value {
+  color: #ece3d6 !important;
+}
+
+/* LAYER 2: Explicit colour locks — labels, metadata, secondary text */
+html body.homepage #cdd .cdd-editorial__kicker,
+html body.homepage #cdd .cdd-feature__issue,
+html body.homepage #cdd .cdd-feature__date,
+html body.homepage #cdd .cdd-feature__label,
+html body.homepage #cdd .cdd-feature__volume,
+html body.homepage #cdd .cdd-editorial__meta-label {
+  color: #c5b8a2 !important;
+}
+
+/* LAYER 2: Explicit colour locks — quote */
+html body.homepage #cdd .cdd-feature__quote {
+  color: #f6f0e6 !important;
+}
+
+/* ==========================================================================
+   Homepage mobile readability + rhythm refinements (April 2026)
+   ========================================================================== */
+
+body.homepage .home-hero__eyebrow,
+body.homepage .home-hero__headline,
+body.homepage .home-hero__support,
+body.homepage .home-hero__cta {
+  color: #FAF6EE !important;
+}
+
+body.homepage .home-hero__eyebrow {
+  color: var(--sv-xuan-dark, #D8CEB0) !important;
+  opacity: 1;
+  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.35);
+}
+
+body.homepage .home-hero__headline {
+  color: #FAF6EE !important;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.42);
+}
+
+body.homepage .home-hero__headline-emphasis {
+  color: var(--cinnabar) !important;
+}
+
+body.homepage .home-hero__support {
+  max-width: min(100%, 52ch);
+  color: var(--sv-xuan, #F2ECD8) !important;
+  opacity: 0.96;
+  text-shadow: 0 1px 18px rgba(0, 0, 0, 0.42);
+}
+
+body.homepage .home-hero::before,
+body.homepage .home-hero::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+  opacity: 0 !important;
+}
+
+@media (max-width: 767px) {
+  body.homepage .home-hero .home-hero__eyebrow::after,
+  body.homepage .home-hero .hero-eyebrow::after,
+  body.homepage .home-hero .eyebrow::after,
+  body.homepage .home-hero .kicker::after {
+    display: none !important;
+    content: none !important;
+  }
+
+  body.homepage .home-hero .home-hero__eyebrow::before,
+  body.homepage .home-hero .hero-eyebrow::before,
+  body.homepage .home-hero .eyebrow::before,
+  body.homepage .home-hero .kicker::before {
+    display: block !important;
+  }
+
+  body.homepage .home-hero {
+    min-height: clamp(560px, 77vh, 700px);
+  }
+
+  body.homepage .home-hero__inner {
+    padding-top: clamp(24px, 4vh, 38px);
+  }
+
+  body.homepage .home-hero__support {
+    margin-top: 16px;
+    font-size: 15px;
+    line-height: 1.56;
+    max-width: 30ch;
+  }
+
+  body.homepage .home-hero__cta {
+    margin-top: 24px;
+  }
+
+  body.homepage #stats {
+    padding-top: 22px;
+    padding-bottom: 24px;
+  }
+
+  body.homepage #stats .stats__transition {
+    font-size: clamp(22px, 5.9vw, 30px);
+    line-height: 1.44;
+    margin-bottom: 20px;
+  }
+
+  body.homepage #stats .stat {
+    padding-top: 14px;
+    padding-bottom: 12px;
+  }
+
+  body.homepage #stats .stat__n {
+    font-size: clamp(54px, 16vw, 76px);
+    line-height: 0.95;
+  }
+
+  body.homepage #stats .stat__l {
+    margin-top: 8px;
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    line-height: 1.38;
+  }
+
+  body.homepage #stats .stats__context {
+    margin-top: 14px;
+  }
+
+  body.homepage #stats .stats__note {
+    margin-top: 18px;
+    font-size: 13.5px !important;
+    line-height: 1.62 !important;
+  }
+}
+
+@media (max-width: 479px) {
+  body.homepage #stats .stat {
+    padding-top: 12px;
+    padding-bottom: 10px;
+  }
+
+  body.homepage #stats .stat__n {
+    font-size: clamp(44px, 13vw, 58px);
+    letter-spacing: -0.01em;
+    line-height: 0.98;
+  }
+
+  body.homepage #stats .stat__l {
+    font-size: 10px;
+    letter-spacing: 0.11em;
+  }
+}
+
+/* LAYER 2: Explicit colour locks — CTA text and ring */
+html body.homepage #cdd .cdd-cta {
+  color: #f6f0e6 !important;
+}
+
+html body.homepage #cdd .cdd-cta__ring {
+  color: #7ea4a0 !important;
+  border-color: rgba(95, 115, 110, 0.65) !important;
+}
+
+/* LAYER 2: Ensure dark backgrounds are never overridden by page-level rules */
+html body.homepage #cdd .cdd-editorial__card,
+html body.homepage #cdd .cdd-feature {
+  background: #111917 !important;
+  color: #f6f0e6 !important;
+}
+
+html body.homepage #cdd .cdd-feature__panel {
+  background: #0e1614 !important;
+}
+
+html body.homepage #cdd .cdd-feature__quote {
+  background: #111917 !important;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CDD NOTICE + SUBSCRIPTION — Homepage section
+   Sits directly after the #cdd dark editorial panel. Returns to the light
+   paper palette. Two-column editorial layout: notice (subordinate, left)
+   anchored by a hairline rule / subscription invitation (primary, right).
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+body.homepage #cdd-notice {
+  padding: clamp(52px, 6.5vw, 86px) 0;
+  background: var(--paper) !important;
+  border-top: 1px solid color-mix(in srgb, var(--paper-dark) 78%, transparent) !important;
+  border-bottom: 1px solid color-mix(in srgb, var(--paper-dark) 52%, transparent) !important;
+}
+
+body.homepage .cdd-notice__inner {
+  display: grid;
+  grid-template-columns: 5fr 8fr;
+  gap: 0 clamp(44px, 6vw, 88px);
+  align-items: start;
+}
+
+body.homepage .cdd-notice__left {
+  padding-right: clamp(28px, 3.5vw, 52px);
+  border-right: 1px solid color-mix(in srgb, var(--paper-dark) 80%, transparent);
+}
+
+body.homepage .cdd-notice__label {
+  font-size: 0.68rem !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.17em !important;
+  text-transform: uppercase !important;
+  color: var(--mist) !important;
+  margin: 0 0 14px 0 !important;
+}
+
+body.homepage .cdd-notice__legal {
+  font-size: 0.79rem !important;
+  line-height: 1.74 !important;
+  color: color-mix(in srgb, var(--text-secondary) 65%, transparent) !important;
+  font-weight: 400 !important;
+  margin: 0 !important;
+}
+
+body.homepage .cdd-notice__hed {
+  font-size: clamp(1.08rem, 1.75vw, 1.4rem) !important;
+  line-height: 1.22 !important;
+  color: var(--text-main) !important;
+  margin: 0 0 clamp(10px, 1.2vw, 16px) 0 !important;
+}
+
+body.homepage .cdd-notice__copy {
+  font-size: clamp(0.86rem, 0.98vw, 0.93rem) !important;
+  line-height: 1.7 !important;
+  color: var(--text-secondary) !important;
+  font-weight: 400 !important;
+  margin: 0 0 clamp(20px, 2.8vw, 32px) 0 !important;
+}
+
+@media (max-width: 768px) {
+  body.homepage .cdd-notice__inner {
+    grid-template-columns: 1fr;
+    gap: clamp(28px, 6vw, 44px) 0;
+  }
+
+  body.homepage .cdd-notice__left {
+    padding-right: 0;
+    padding-bottom: clamp(24px, 5vw, 36px);
+    border-right: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--paper-dark) 80%, transparent);
+  }
+}
+
+/* ==========================================================================
+   Track Record — aligned with editorial section shell
+   ========================================================================== */
+
+body.homepage #stats {
+  padding: clamp(6px, 0.95vw, 12px) 0 clamp(22px, 2.3vw, 30px) !important;
+}
+
+body.homepage #stats .hero__stats {
+  padding-top: 0;
+  border-top: 0;
+}
+
+body.homepage #stats .track-record__toprow {
+  grid-template-columns: minmax(260px, 3.05fr) minmax(0, 8.95fr);
+  gap: clamp(20px, 2.3vw, 30px);
+  margin-bottom: clamp(10px, 1.2vw, 15px);
+  padding-bottom: 0;
+  border-bottom: 0;
+  align-items: start;
+}
+
+body.homepage #stats .track-record__heading {
+  display: grid;
+  align-content: start;
+  gap: clamp(5px, 0.7vw, 8px);
+}
+
+body.homepage #stats .track-record__heading .eyebrow {
+  margin: 0 0 clamp(5px, 0.75vw, 8px);
+  align-items: baseline;
+}
+
+body.homepage #stats .track-record__title {
+  margin: 0 !important;
+  max-width: none;
+  font-size: var(--sv-section-title-size) !important;
+  line-height: var(--sv-section-title-line) !important;
+  letter-spacing: 0.01em;
+  font-weight: var(--sv-section-title-weight) !important;
+  white-space: normal;
+}
+
+body.homepage #stats .track-record__summary {
+  justify-self: end;
+  width: min(58ch, 100%);
+  max-width: min(58ch, 100%) !important;
+  margin-inline-start: auto;
+  gap: clamp(3px, 0.45vw, 6px);
+  align-content: start;
+  padding-top: 0;
+  padding-left: clamp(24px, 3.1vw, 56px);
+  justify-items: start;
+}
+
+body.homepage #stats .track-record__summary > p {
+  margin: 0;
+  max-width: min(112ch, 100%);
+}
+
+body.homepage #stats .track-record__summary > p:first-child {
+  font-size: clamp(13px, 0.9vw, 15px);
+  line-height: 1.42;
+  color: color-mix(in srgb, var(--text-main) 70%, var(--paper-dark) 30%) !important;
+  max-width: 60ch;
+}
+
+body.homepage #stats .track-record__asof {
+  margin-top: 1px;
+  font-size: 0.53rem;
+  line-height: 1.28;
+  letter-spacing: 0.045em;
+  text-transform: none;
+  color: color-mix(in srgb, var(--text-main) 44%, var(--paper-dark) 56%) !important;
+  max-width: 66ch;
+}
+
+body.homepage #stats .track-record__proof-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(10px, 1.2vw, 14px);
+  row-gap: clamp(10px, 1.2vw, 14px);
+  border-top: 0;
+  margin-top: 0;
+  padding-top: clamp(4px, 0.55vw, 7px);
+}
+
+
+body.homepage #stats .track-record__heading .eyebrow::after {
+  display: block;
+  flex: 0 0 clamp(54px, 7vw, 90px);
+  width: clamp(54px, 7vw, 90px);
+  height: 1px;
+  background: currentColor;
+  transform: translateY(-0.06em);
+}
+
+body.homepage #stats .track-record__metric {
+  border: 1px solid color-mix(in srgb, var(--paper-dark) 34%, transparent);
+  border-radius: 0;
+  padding: clamp(10px, 0.95vw, 12px) clamp(10px, 1vw, 14px) clamp(9px, 0.85vw, 11px);
+  background: color-mix(in srgb, var(--paper) 94%, var(--paper-dark) 6%);
+  transition: none;
+  cursor: default;
+  display: grid;
+  gap: clamp(2px, 0.3vw, 4px);
+  align-content: start;
+}
+
+body.homepage #stats .track-record__metric-label {
+  margin: 0;
+  font-size: 0.53rem;
+  font-weight: 700;
+  letter-spacing: 0.078em;
+  text-transform: uppercase;
+  line-height: 1.22;
+  color: color-mix(in srgb, var(--text-main) 58%, var(--paper-dark) 42%) !important;
+}
+
+body.homepage #stats .track-record__metric-value {
+  margin: 0;
+  font-family: var(--font-din, "DIN 2014", "DIN2014", "DIN", sans-serif);
+  font-size: clamp(1.58rem, 2.05vw, 1.9rem);
+  line-height: 1.01;
+  letter-spacing: -0.013em;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: color-mix(in srgb, var(--text-main) 88%, var(--red) 12%) !important;
+  transition: none;
+}
+
+body.homepage #stats .track-record__metric-description {
+  margin: 0;
+  max-width: 38ch;
+  font-size: 0.58rem;
+  line-height: 1.33;
+  color: color-mix(in srgb, var(--text-main) 68%, var(--paper-dark) 32%) !important;
+}
+
+body.homepage #stats .track-record__note {
+  margin: clamp(7px, 0.9vw, 10px) 0 0;
+  padding-top: clamp(2px, 0.35vw, 4px);
+  font-size: 0.52rem;
+  line-height: 1.32;
+  letter-spacing: 0.044em;
+  text-transform: none;
+  color: color-mix(in srgb, var(--text-main) 38%, var(--paper-dark) 62%) !important;
+}
+
+@media (max-width: 980px) {
+  body.homepage #stats .track-record__toprow {
+    grid-template-columns: 1fr;
+    gap: clamp(9px, 1.25vw, 13px);
+  }
+
+  body.homepage #stats .track-record__title {
+    max-width: none;
+    white-space: normal;
+  }
+
+  body.homepage #stats .track-record__summary {
+    width: 100%;
+    max-width: 100% !important;
+    margin-inline-start: 0;
+    padding-left: 0;
+    justify-self: start;
+  }
+
+  body.homepage #stats .track-record__metric-value {
+    font-size: clamp(1.48rem, 4.1vw, 1.78rem);
+  }
+}
+
+@media (max-width: 760px) {
+  body.homepage #stats {
+    padding-top: clamp(3px, 0.85vw, 7px) !important;
+  }
+
+  body.homepage #stats .track-record__heading .eyebrow {
+    margin-bottom: clamp(5px, 1vw, 8px);
+  }
+
+  body.homepage #stats .track-record__heading .eyebrow::after {
+    flex-basis: clamp(50px, 19vw, 78px);
+    width: clamp(50px, 19vw, 78px);
+  }
+
+  body.homepage #stats .track-record__summary {
+    gap: 4px;
+    width: 100%;
+    max-width: 100% !important;
+    margin-inline-start: 0;
+    padding-left: 0;
+    justify-self: start;
+  }
+
+  body.homepage #stats .track-record__proof-grid {
+    grid-template-columns: 1fr;
+    row-gap: clamp(8px, 1.8vw, 10px);
+    padding-top: clamp(4px, 0.9vw, 7px);
+  }
+
+  body.homepage #stats .track-record__metric:nth-child(even) {
+    border-left: 0;
+    padding-left: clamp(9px, 2vw, 12px);
+  }
+
+  body.homepage #stats .track-record__metric {
+    padding: clamp(9px, 1.55vw, 11px) clamp(9px, 2vw, 12px);
+  }
+
+  body.homepage #stats .track-record__title {
+    font-size: var(--sv-section-title-size) !important;
+    line-height: var(--sv-section-title-line) !important;
+  }
+}
