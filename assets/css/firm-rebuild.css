@@ -77,7 +77,7 @@ body.firm-page .fm-hero__frame::before {
 body.firm-page .fm-hero__frame .fm-eyebrow { color: rgba(252, 249, 241, 0.82); }
 body.firm-page .fm-hero__frame .fm-open__h1 { color: var(--sv-ivory); max-width: none; }
 body.firm-page .fm-open__body p {
-  margin: 0; font: 400 17px/1.66 var(--sv-font); color: var(--sv-ink-2); max-width: 46ch;
+  margin: 0; font: 400 17px/1.66 var(--sv-font); color: var(--sv-ink-2); max-width: none;
 }
 body.firm-page .fm-open__body p + p { margin-top: 18px; }
 @media (max-width: 880px) {
