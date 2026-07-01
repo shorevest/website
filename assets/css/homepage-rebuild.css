@@ -496,7 +496,9 @@ body.homepage .home-firm-preview .home-firm-preview__statement {
   display: flex; flex-direction: column; justify-content: flex-start;
 }
 body.homepage .home-firm-preview .home-firm-preview__statement p {
-  margin: 0; max-width: 38ch;
+  margin: 0;
+  max-width: none;
+  width: 100%;
   font: 400 clamp(18px, 1.5vw, 21px)/1.62 var(--sv-font); color: var(--sv-ink-2);
 }
 body.homepage .home-firm-preview .home-firm-preview__link {
