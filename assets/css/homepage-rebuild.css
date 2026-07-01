@@ -794,3 +794,207 @@ body.homepage .sv-totop svg { width: 16px; height: 16px; }
   body.homepage .sv-reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; }
   body.homepage .sv-reveal.is-in { opacity: 1; transform: none; }
 }
+
+/* ========================================================================== 
+   Mobile audit refinements (320px–430px)
+   Keep the homepage institutional at narrow widths: calmer line lengths,
+   fewer forced two-column fragments, and no horizontal overflow.
+   ========================================================================== */
+@media (max-width: 430px) {
+  :root {
+    --pad-x: clamp(18px, 5.625vw, 22px);
+    --section-y: 64px;
+  }
+
+  body.homepage {
+    overflow-wrap: break-word;
+  }
+
+  body.homepage .sv-header__inner {
+    padding-inline: var(--pad-x);
+  }
+
+  body.homepage .sv-header__logo img {
+    width: clamp(148px, 47vw, 164px);
+  }
+
+  body.homepage .sv-mobile-menu {
+    padding-inline: var(--pad-x);
+  }
+
+  body.homepage .sv-hero__inner {
+    padding-top: 42px;
+    padding-bottom: 52px;
+  }
+
+  body.homepage .sv-hero__main {
+    padding-block: 44px 34px;
+  }
+
+  body.homepage .sv-hero__label,
+  body.homepage .sv-label,
+  body.homepage .sv-cdd__label,
+  body.homepage .sv-cdd__feature-tag,
+  body.homepage .sv-cddrow__cat {
+    letter-spacing: 0.105em;
+  }
+
+  body.homepage .sv-hero__headline {
+    font-size: clamp(34px, 10.8vw, 44px);
+    line-height: 1.07;
+    letter-spacing: -0.026em;
+    max-width: 14ch;
+    text-wrap: balance;
+  }
+
+  body.homepage .sv-hero__body {
+    margin-top: 20px;
+    font-size: 16px;
+    line-height: 1.62;
+  }
+
+  body.homepage .sv-textlink {
+    align-items: flex-start;
+    max-width: 100%;
+    white-space: normal;
+    line-height: 1.25;
+  }
+
+  body.homepage .sv-hero__field {
+    margin-inline: calc(var(--pad-x) * -1);
+    padding: 28px var(--pad-x);
+  }
+
+  body.homepage .sv-hero__panel {
+    padding: 24px 20px;
+    box-shadow: 0 10px 24px rgba(23,28,28,0.16);
+  }
+
+  body.homepage .sv-hero__panel-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 15px 0;
+  }
+
+  body.homepage .sv-hero__panel-row dd {
+    font-size: 15.5px;
+    line-height: 1.42;
+  }
+
+  body.homepage .sv-h2,
+  body.homepage .sv-cdd__title {
+    font-size: clamp(28px, 9vw, 36px);
+    line-height: 1.12;
+  }
+
+  body.homepage .home-firm-preview .home-firm-preview__copy .sv-h2 {
+    max-width: 14ch;
+  }
+
+  body.homepage .home-firm-preview .home-firm-preview__statement p,
+  body.homepage .sv-bridge__body p {
+    font-size: 17px;
+    line-height: 1.6;
+  }
+
+  body.homepage .sv-strategy__inner,
+  body.homepage .sv-cdd__inner {
+    padding-block: 62px;
+  }
+
+  body.homepage .sv-srow {
+    padding-block: 20px;
+  }
+
+  body.homepage .sv-srow__title {
+    font-size: 19px;
+    line-height: 1.25;
+  }
+
+  body.homepage .sv-cdd__head {
+    gap: 18px;
+  }
+
+  body.homepage .sv-cdd__feature {
+    padding-block: 26px;
+  }
+
+  body.homepage .sv-cdd__feature-title {
+    font-size: clamp(20px, 6.2vw, 24px);
+    line-height: 1.2;
+  }
+
+  body.homepage .sv-cddrow {
+    gap: 10px 12px;
+    padding: 20px 0;
+  }
+
+  body.homepage .sv-cddrow__id {
+    font-size: 11px;
+    letter-spacing: 0.065em;
+  }
+
+  body.homepage .sv-cddrow__read {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+  }
+
+  body.homepage .sv-cddrow__title {
+    font-size: 15.5px;
+    line-height: 1.36;
+  }
+
+  body.homepage .sv-cdd__archive-btn {
+    width: 100%;
+    justify-content: center;
+    padding-inline: 18px;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  body.homepage .sv-footer__inner {
+    padding-inline: var(--pad-x);
+    padding-top: 48px;
+  }
+
+  body.homepage .sv-footer__logo img {
+    width: 178px;
+  }
+
+  body.homepage .sv-footer__legal {
+    font-size: 11.5px;
+    line-height: 1.58;
+  }
+
+  body.homepage .sv-footer__links {
+    flex-direction: column;
+    gap: 0;
+  }
+}
+
+@media (max-width: 360px) {
+  :root { --pad-x: 18px; }
+
+  body.homepage .sv-hero__headline {
+    font-size: 34px;
+    max-width: 13ch;
+  }
+
+  body.homepage .sv-hero__panel {
+    padding-inline: 18px;
+  }
+
+  body.homepage .sv-hero__panel-row dd {
+    font-size: 15px;
+  }
+
+  body.homepage .sv-cddrow {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "id" "title" "cat" "read";
+  }
+
+  body.homepage .sv-cddrow__read {
+    justify-self: start;
+  }
+}
