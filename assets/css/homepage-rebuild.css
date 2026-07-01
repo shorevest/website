@@ -998,3 +998,39 @@ body.homepage .sv-totop svg { width: 16px; height: 16px; }
     justify-self: start;
   }
 }
+
+/* Mobile header balance pass: keep the official ShoreVest lockup intact while
+   tightening phone chrome so the logo, Chinese characters, and hamburger sit on
+   one optical centerline with professional edge spacing. */
+@media (max-width: 767px) {
+  :root { --header-h: 68px; --header-height: 68px; }
+  body.homepage .sv-header__inner {
+    gap: 16px;
+    align-items: center;
+  }
+  body.homepage .sv-header__logo {
+    min-width: 0;
+  }
+  body.homepage .sv-header__logo img {
+    width: clamp(150px, 42vw, 164px);
+    max-width: calc(100vw - (var(--pad-x) * 2) - 56px);
+  }
+  body.homepage .sv-burger {
+    width: 40px;
+    height: 40px;
+  }
+  body.homepage .sv-mobile-menu {
+    top: var(--header-h);
+    padding-top: 10px;
+  }
+}
+
+@media (max-width: 360px) {
+  body.homepage .sv-header__logo img {
+    width: clamp(140px, 44vw, 150px);
+  }
+  body.homepage .sv-burger {
+    width: 38px;
+    height: 38px;
+  }
+}
