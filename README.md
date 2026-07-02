@@ -7,22 +7,26 @@ Static website for ShoreVest Partners, including English and Chinese pages, the 
 | Path | Purpose |
 | --- | --- |
 | `index.html`, `*_cn.html`, and other root HTML files | Published static pages served from the site root. Keep these at the root unless links and hosting rules are updated together. |
-| `assets/brand/` | Approved ShoreVest logo and brandmark files used by pages. |
-| `assets/css/` and `css/` | Site stylesheets. Prefer `assets/css/` for new shared styles and keep legacy root-level CSS in place until references are migrated. |
-| `assets/js/` and root `*.js` files | Site JavaScript. Prefer `assets/js/` for new shared scripts and keep legacy root-level scripts in place until references are migrated. |
-| `assets/images/`, `assets/img/` | Organized image assets. Place new reusable images here instead of adding more root-level screenshots or exports. |
-| `investor-portal/` | Investor portal static entry point and related files. |
-| `docs/` | Maintenance notes, setup guides, and historical implementation reports. |
+| Root `*.pdf` files | Published China Debt Dynamics issues and white papers linked from `insights.html` and article pages. Filenames are live URLs — do not rename or move without updating every reference. |
+| `assets/brand/` | Approved ShoreVest logo, brandmark, and vector master files. |
+| `assets/css/` | All site stylesheets. |
+| `assets/js/` | All site JavaScript. |
+| `assets/data/` | Structured article data (China Debt Dynamics issue JSON). |
+| `assets/email/` | HubSpot welcome-email templates and previews (see `docs/integrations/HUBSPOT_SETUP.md`). |
+| `assets/images/`, `assets/img/` | Organized image assets. Place new reusable images here, never at the repository root. |
+| `investor-portal/` | Investor portal static entry point. |
+| `docs/` | Maintenance notes, setup guides, historical reports, and source documents (`docs/source-documents/`). |
 | `scripts/` | Utility scripts for one-off generation or content maintenance tasks. |
 
 For a more detailed organization guide, see [`docs/REPOSITORY_STRUCTURE.md`](docs/REPOSITORY_STRUCTURE.md).
 
 ## Working conventions
 
-1. **Do not move published root assets casually.** Many pages still reference PDFs, images, CSS, and JavaScript from the repository root. Move assets only when you also update every reference and verify the affected pages.
-2. **Use organized folders for new work.** New documentation belongs in `docs/`, new utilities in `scripts/`, shared CSS in `assets/css/`, shared JS in `assets/js/`, and reusable images in `assets/images/` or `assets/img/`.
+1. **Published URLs stay stable.** Root HTML pages and root PDFs are live URLs. Rename or move them only when you also update every reference and verify the affected pages.
+2. **Use organized folders for new work.** New documentation belongs in `docs/`, new utilities in `scripts/`, CSS in `assets/css/`, JS in `assets/js/`, and images in `assets/images/` or `assets/img/`. Do not add new CSS, JS, images, screenshots, or working files to the repository root.
 3. **Preserve bilingual parity.** When changing public content, check the matching English and Chinese pages where applicable.
-4. **Keep generated clutter out of Git.** Local caches, logs, generated screenshots, and temporary exports should remain untracked; see `.gitignore`.
+4. **Keep generated clutter out of Git.** Local caches, logs, QA screenshots, and temporary exports should remain untracked; see `.gitignore`.
+5. **No symlinks.** Asset files under `assets/` must be real files — static hosts do not reliably follow symlinks.
 
 ## Local development
 
