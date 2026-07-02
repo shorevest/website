@@ -81,7 +81,9 @@
     row.appendChild(createTextElement('span', 'pr-event-type', event.type));
 
     var title = createTextElement('span', 'pr-event-title', event.title);
-    title.insertBefore(createTextElement('span', 'pr-event-status', event.status), title.firstChild);
+    var status = createTextElement('span', 'pr-event-status', event.status);
+    title.insertBefore(status, title.firstChild);
+    title.insertBefore(document.createTextNode(' '), status.nextSibling);
     title.appendChild(createTextElement('small', '', event.description));
     row.appendChild(title);
 
