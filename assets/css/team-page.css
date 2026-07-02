@@ -111,12 +111,7 @@
 .team-profile__photo::after { content: ""; position: absolute; inset: 0; border: 1px solid rgba(216, 206, 176, 0.45); pointer-events: none; }
 .team-profile__photo img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center top; filter: grayscale(100%); transition: filter var(--team-photo-filter-transition); }
 
-/* ── Team photo protection ─────────────────────────────────────────────
-   Deterrent layer: blocks drag-to-save, text/image selection, the iOS
-   long-press "Save Image" callout, and routes pointer events to the
-   container so right-click lands on a non-image element (no "Save image"
-   / "Open image in new tab"). Container keeps click-to-open-bio + hover.
-   NOTE: client-side only — not absolute. See team-page.js for the JS guard. */
+/* Image styles are retained only as a defensive fallback if a future portrait is added. */
 .team-profile__photo img {
   pointer-events: none;
   -webkit-user-select: none;
