@@ -113,7 +113,6 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
        brand panel — calmer and more institutional. Balance the vertical
        composition so the copy isn't stranded in dead space.
        ---------------------------------------------------------------- */
-    body.sv-signin .signin__video { display: none !important; }
     body.sv-signin .signin__brand {
       background-image:
         radial-gradient(120% 90% at 12% 8%, rgba(40, 78, 70, 0.55) 0%, rgba(15, 34, 6, 0) 58%),
@@ -135,9 +134,6 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 
     <!-- ===================== LEFT — Brand panel ===================== -->
     <section class="signin__brand" aria-label="ShoreVest investor portal">
-
-      <!-- Background motion (relocated from the homepage hero) -->
-      <video class="signin__video" data-src="assets/video/hero-option-b.mp4" muted loop playsinline preload="auto" aria-hidden="true"></video>
 
       <!-- Middle: institutional framing -->
       <div class="signin__intro">
@@ -341,21 +337,6 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
     window.addEventListener('load', function () {
       new Login(document.getElementById('vdr-login-form'));
     });
-  })();
-</script>
-<script>
-  /* Load the brand-panel background video (blob fetch keeps the token interceptor happy). */
-  (function () {
-    var v = document.querySelector('.signin__brand .signin__video[data-src]');
-    if (!v || v.src) return;
-    var src = (window.__svTok ? window.__svTok(v.dataset.src) : v.dataset.src);
-    fetch(src)
-      .then(function (r) { return r.blob(); })
-      .then(function (blob) {
-        v.src = URL.createObjectURL(blob);
-        var p = v.play(); if (p && p.catch) p.catch(function () {});
-      })
-      .catch(function () {});
   })();
 </script>
 </body>
