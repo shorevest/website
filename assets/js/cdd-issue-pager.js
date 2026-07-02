@@ -6,8 +6,8 @@
   // Newest first. file = article page; label = issue number; title = short title.
   var ISSUES = [
     { file: "china-debt-dynamics-v10i1.html", label: "10.1", title: "The End of the \u201CChina Is Uninvestable\u201D Myth" },
-    { file: "45. China Debt Dynamics - Beijing's Campaign Against Overcapacity Creates Private Credit Opportunities.pdf", label: "9.4", title: "Beijing\u2019s Campaign Against Overcapacity Creates Private Credit Opportunities" },
-    { file: "44. China Debt Dynamics_Into the Shadows of US Private Credit.pdf", label: "9.3", title: "Into the Shadows of US Private Credit" },
+    { file: "assets/pdfs/china-debt-dynamics-45-beijings-campaign-against-overcapacity.pdf", label: "9.4", title: "Beijing\u2019s Campaign Against Overcapacity Creates Private Credit Opportunities" },
+    { file: "assets/pdfs/china-debt-dynamics-44-into-the-shadows-of-us-private-credit.pdf", label: "9.3", title: "Into the Shadows of US Private Credit" },
     { file: "china-debt-dynamics-v9i2.html", label: "9.2", title: "China: An Uncorrelated Harbor in a Stormy World" },
     { file: "china-debt-dynamics-v9i1.html", label: "9.1", title: "Green Finance: Sowing the Seeds of China\u2019s Next Wave of NPLs" },
     { file: "china-debt-dynamics-v8i5.html", label: "8.5", title: "United States of China" },

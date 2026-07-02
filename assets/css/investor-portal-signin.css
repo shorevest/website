@@ -66,21 +66,7 @@ body.sv-signin {
     transparent);
 }
 
-/* Background motion (relocated from the homepage hero) */
-.signin__video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  z-index: 0;
-  filter: saturate(0.62) brightness(0.66) contrast(1.02);
-  pointer-events: none;
-  animation: none !important;
-}
-
-/* Legibility scrim over the footage — same ink-green wash as the panel ground */
+/* Legibility scrim — same ink-green wash as the panel ground */
 .signin__brand::before {
   content: "";
   position: absolute;
@@ -94,7 +80,7 @@ body.sv-signin {
       rgba(30, 64, 64, 0.66) 100%);
 }
 
-/* Keep every content layer above the video + scrim */
+/* Keep every content layer above the scrim */
 .signin__lockup,
 .signin__intro,
 .signin__trust { position: relative; z-index: 2; }
