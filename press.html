@@ -114,27 +114,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
         </div>
       </div>
       <div class="pr-events__table" role="table" aria-label="Upcoming public appearances">
-        <article class="pr-event-row" role="row" data-start-date="2026-06-15" data-end-date="2026-06-17">
-          <time class="pr-event-date" datetime="2026-06-15">15–17 Jun 26</time>
-          <span class="pr-event-type">Conference</span>
-          <span class="pr-event-title">
-            SuperReturn Emerging Markets
-            <small>ShoreVest speaking participation.</small>
-          </span>
-          <span class="pr-event-location">Amsterdam</span>
-          <a class="pr-event-link" href="https://informaconnect.com/superreturn-emerging-markets/" target="_blank" rel="noopener noreferrer">View <span aria-hidden="true">→</span></a>
-        </article>
-        <article class="pr-event-row" role="row" data-start-date="2026-06-24" data-end-date="2026-06-25">
-          <time class="pr-event-date" datetime="2026-06-24">24–25 Jun 26</time>
-          <span class="pr-event-type">Panel</span>
-          <span class="pr-event-title">
-            PDI APAC Forum
-            <small>Panel on opportunistic private credit and special situations in Asia. ShoreVest represented.</small>
-          </span>
-          <span class="pr-event-location">Singapore</span>
-          <a class="pr-event-link" href="https://www.peievents.com/en/event/pdi-apac-forum/" target="_blank" rel="noopener noreferrer">View <span aria-hidden="true">→</span></a>
-        </article>
-        <p class="pr-events__empty" id="pr-events-empty" hidden>No recent or upcoming public events are currently listed.</p>
+        <p class="pr-events__empty" id="pr-events-empty" hidden>No recent or upcoming events are currently scheduled.</p>
       </div>
     </div>
   </section>
@@ -526,58 +506,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   if(toTop){var onScroll=function(){if(window.scrollY>600)toTop.classList.add('is-visible');else toTop.classList.remove('is-visible');};window.addEventListener('scroll',onScroll,{passive:true});onScroll();toTop.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});}
 })();
 </script>
-<script>
-/* Recent & upcoming events — date-based filtering.
-   Each event stays listed from now until ~1 month after its end date, then is
-   hidden automatically (multi-day events count from their final day). Shows a
-   quiet empty state when none remain. Reads ISO dates from data-start-date /
-   data-end-date — never the display text. To add/edit events, edit the
-   .pr-event-row markup + its dates. */
-(function(){
-  var GRACE_DAYS = 30; // how long a finished event lingers as "recent"
-  function isShownEvent(endDate, today){
-    today = today || new Date();
-    var todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    var dropOff = new Date(endDate + "T23:59:59");
-    dropOff.setDate(dropOff.getDate() + GRACE_DAYS);
-    return dropOff >= todayDate;
-  }
-  function isEndedEvent(endDate, today){
-    today = today || new Date();
-    var todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    var end = new Date(endDate + "T23:59:59");
-    return end < todayDate; // concluded once today is past its final day
-  }
-  function markPast(row, ended){
-    row.classList.toggle('pr-event-row--past', ended);
-    var titleCell = row.querySelector('.pr-event-title');
-    var badge = row.querySelector('.pr-event-status');
-    if (ended && titleCell && !badge){
-      badge = document.createElement('span');
-      badge.className = 'pr-event-status';
-      badge.textContent = 'Concluded';
-      titleCell.insertBefore(badge, titleCell.firstChild);
-    } else if (!ended && badge){
-      badge.parentNode.removeChild(badge);
-    }
-  }
-  function applyEventFilter(today){
-    var rows = document.querySelectorAll('.pr-event-row[data-end-date]');
-    var emptyEl = document.getElementById('pr-events-empty');
-    var visible = 0;
-    for (var i = 0; i < rows.length; i++){
-      var end = rows[i].getAttribute('data-end-date');
-      var shown = isShownEvent(end, today);
-      rows[i].hidden = !shown;
-      if (shown){ visible++; markPast(rows[i], isEndedEvent(end, today)); }
-    }
-    if (emptyEl) emptyEl.hidden = visible > 0;
-  }
-  // Expose for QA / simulated-date testing: applyEventFilter(new Date('2026-08-01')).
-  window.__svApplyEventFilter = applyEventFilter;
-  if (document.readyState !== 'loading') applyEventFilter();
-  else document.addEventListener('DOMContentLoaded', function(){ applyEventFilter(); });
-})();
-</script>
+<script src="assets/js/event-visibility.js"></script>
+<script src="assets/js/press-events.js"></script>
 </body>
 </html>
