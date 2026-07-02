@@ -142,6 +142,7 @@ body.press-page .pr-event-link {
   border-bottom: 1px solid transparent; padding-bottom: 3px; transition: border-color .15s ease;
 }
 body.press-page .pr-event-link:hover { border-color: var(--sv-cinnabar); }
+body.press-page .pr-event-link--plain:hover { border-color: transparent; }
 
 /* Concluded (recent-but-past) events: greyed back, with a quiet status badge.
    Applied by the inline date filter while the event is still inside its

@@ -1,0 +1,106 @@
+(function () {
+  var eventVisibility = window.ShoreVestEventVisibility;
+  if (!eventVisibility) return;
+
+  var EVENTS = [
+    {
+      startDate: '2026-09-24',
+      endDate: '2026-09-25',
+      timeZone: 'Asia/Hong_Kong',
+      displayDate: '24–25 Sep 26',
+      type: 'INVESTOR EVENT',
+      title: 'ShoreVest Annual General Meeting 2026',
+      location: 'Location TBC',
+      description: 'ShoreVest’s annual meeting for investors and invited guests.',
+      ctaLabel: 'INVITE ONLY',
+      isClickable: false
+    },
+    {
+      startDate: '2026-06-24',
+      endDate: '2026-06-25',
+      timeZone: 'Asia/Singapore',
+      displayDate: '24–25 Jun 26',
+      type: 'PANEL',
+      title: 'PDI APAC Forum',
+      location: 'Singapore',
+      description: 'Benjamin Fanger joined a panel on Asian distressed debt and special situations.',
+      ctaLabel: 'VIEW →',
+      href: 'https://www.peievents.com/en/event/pdi-apac-forum/',
+      ariaLabel: 'View PDI APAC Forum event page',
+      isClickable: true
+    },
+    {
+      startDate: '2026-06-15',
+      endDate: '2026-06-17',
+      timeZone: 'Europe/Amsterdam',
+      displayDate: '15–17 Jun 26',
+      type: 'CONFERENCE',
+      title: 'SuperReturn Emerging Markets',
+      location: 'Amsterdam',
+      description: 'Benjamin Fanger participated as a speaker.',
+      ctaLabel: 'VIEW →',
+      href: 'https://informaconnect.com/superreturn-emerging-markets/speakers/benjamin-fanger/',
+      ariaLabel: 'View Benjamin Fanger’s SuperReturn speaker profile',
+      isClickable: true
+    }
+  ];
+
+  function createTextElement(tagName, className, text) {
+    var element = document.createElement(tagName);
+    element.className = className;
+    element.textContent = text;
+    return element;
+  }
+
+  function renderEvent(event) {
+    var row = document.createElement('article');
+    row.className = 'pr-event-row';
+    if (event.status === eventVisibility.STATUS.CONCLUDED) row.classList.add('pr-event-row--past');
+    row.setAttribute('role', 'row');
+    row.setAttribute('data-start-date', event.startDate);
+    row.setAttribute('data-end-date', event.endDate);
+    row.setAttribute('data-time-zone', event.timeZone);
+
+    var date = createTextElement('time', 'pr-event-date', event.displayDate);
+    date.setAttribute('datetime', event.startDate);
+    row.appendChild(date);
+    row.appendChild(createTextElement('span', 'pr-event-type', event.type));
+
+    var title = createTextElement('span', 'pr-event-title', event.title);
+    title.insertBefore(createTextElement('span', 'pr-event-status', event.status), title.firstChild);
+    title.appendChild(createTextElement('small', '', event.description));
+    row.appendChild(title);
+
+    row.appendChild(createTextElement('span', 'pr-event-location', event.location));
+
+    if (event.isClickable) {
+      var link = createTextElement('a', 'pr-event-link', event.ctaLabel);
+      link.href = event.href;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      if (event.ariaLabel) link.setAttribute('aria-label', event.ariaLabel);
+      row.appendChild(link);
+    } else {
+      row.appendChild(createTextElement('span', 'pr-event-link pr-event-link--plain', event.ctaLabel));
+    }
+
+    return row;
+  }
+
+  function applyEventFilter(now) {
+    var table = document.querySelector('.pr-events__table');
+    var emptyEl = document.getElementById('pr-events-empty');
+    if (!table || !emptyEl) return;
+
+    var visibleEvents = eventVisibility.sortVisibleEvents(EVENTS, now || new Date());
+    table.querySelectorAll('.pr-event-row').forEach(function (row) { row.remove(); });
+    visibleEvents.forEach(function (event) { table.insertBefore(renderEvent(event), emptyEl); });
+    emptyEl.hidden = visibleEvents.length > 0;
+  }
+
+  window.__svMediaEvents = EVENTS;
+  window.__svApplyEventFilter = applyEventFilter;
+
+  if (document.readyState !== 'loading') applyEventFilter();
+  else document.addEventListener('DOMContentLoaded', function () { applyEventFilter(); });
+}());
