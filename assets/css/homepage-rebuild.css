@@ -1247,3 +1247,67 @@ body.homepage .sv-totop svg { width: 16px; height: 16px; }
     gap: 5px;
   }
 }
+
+/* ==========================================================================
+   Homepage hero alignment + containment pass — 2026-07-02
+   Keep every hero text element inside its visual borders and align fact-panel
+   copy to a single left edge for a quieter, more uniform read.
+   ========================================================================== */
+body.homepage .sv-hero,
+body.homepage .sv-hero__inner,
+body.homepage .sv-hero__main,
+body.homepage .sv-hero__field,
+body.homepage .sv-hero__panel,
+body.homepage .sv-hero__panel * {
+  box-sizing: border-box;
+}
+
+body.homepage .sv-hero__main,
+body.homepage .sv-hero__field,
+body.homepage .sv-hero__panel,
+body.homepage .sv-hero__panel-row,
+body.homepage .sv-hero__panel-row dd {
+  min-width: 0;
+}
+
+body.homepage .sv-hero__headline,
+body.homepage .sv-hero__body,
+body.homepage .sv-hero__panel-label,
+body.homepage .sv-hero__panel-row dt,
+body.homepage .sv-hero__panel-row dd {
+  max-width: 100%;
+}
+
+body.homepage .sv-hero__panel-row {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 7px;
+  align-items: start;
+}
+
+body.homepage .sv-hero__panel-row dt,
+body.homepage .sv-hero__panel-row dd {
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+body.homepage .sv-hero__panel-row dt {
+  padding-top: 0;
+}
+
+@media (max-width: 767px) {
+  body.homepage .sv-hero__field {
+    margin-inline: 0;
+    width: 100%;
+  }
+
+  body.homepage .sv-hero__panel-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+}
+
+@media (max-width: 430px) {
+  body.homepage .sv-hero__field {
+    margin-inline: 0;
+  }
+}
