@@ -150,7 +150,7 @@ body.press-page .pr-event-link--plain:hover { border-color: transparent; }
 body.press-page .pr-event-row--past { opacity: 0.5; }
 body.press-page .pr-event-row--past:hover { opacity: 0.72; transition: opacity .15s ease; }
 body.press-page .pr-event-status {
-  display: inline-block; margin: 0 0 9px;
+  display: inline-block; margin: 0 9px 9px 0;
   font: 600 10px/1 var(--sv-font); letter-spacing: 0.14em; text-transform: uppercase;
   color: var(--sv-muted, #6E7169);
   padding: 4px 9px; border: 1px solid var(--sv-border-light-strong);
