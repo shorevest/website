@@ -1,59 +1,62 @@
 # Repository structure guide
 
-This repository is a static ShoreVest website with a historically flat root. The long-term goal is to make new work predictable without breaking existing production URLs.
+This repository is a static ShoreVest website. Published pages and publication PDFs live at the repository root (their filenames are live URLs); everything else lives in organized folders.
 
 ## Current structure
 
 ```text
 .
-├── index.html and other root HTML pages
+├── index.html and other root HTML pages   # published pages (EN + _cn Chinese)
+├── *.pdf                                   # published CDD issues / white papers
 ├── assets/
-│   ├── brand/        # approved logos and brandmarks
-│   ├── css/          # shared site stylesheets
-│   ├── data/         # structured site data
-│   ├── images/       # organized images
-│   ├── img/          # organized legacy images
-│   └── js/           # shared scripts
-├── css/              # legacy stylesheet location
+│   ├── brand/            # approved logos, brandmarks, vector masters
+│   ├── css/              # all site stylesheets
+│   ├── data/             # article data (CDD issue JSON)
+│   ├── email/            # HubSpot email templates (+ previews/)
+│   ├── images/, img/     # organized images (img/offices/ = office photos)
+│   └── js/               # all site scripts
 ├── docs/
-│   ├── integrations/ # third-party setup notes
-│   └── reports/      # historical implementation and QA reports
-├── investor-portal/  # investor portal static files
-└── scripts/          # maintenance/generation utilities
+│   ├── integrations/     # third-party setup notes (HubSpot, …)
+│   ├── reports/          # historical implementation and QA reports
+│   └── source-documents/ # bilingual legal source docs, team bios, brand specs
+├── investor-portal/      # investor portal static files
+└── scripts/              # maintenance/generation utilities
 ```
 
 ## Placement rules for new files
 
-| File type | Preferred location | Notes |
+| File type | Location | Notes |
 | --- | --- | --- |
 | Public pages | Repository root | Required while the site is served as flat static HTML. |
-| Shared CSS | `assets/css/` | Avoid creating additional root-level CSS files. |
-| Shared JavaScript | `assets/js/` | Avoid creating additional root-level JS files. |
-| Brand assets | `assets/brand/` | Use only approved exports and descriptive filenames. |
-| Reusable images | `assets/images/` or `assets/img/` | Prefer descriptive, lowercase names for new assets. |
-| Documents and guides | `docs/` | Use subfolders such as `docs/reports/` and `docs/integrations/`. |
-| Utility scripts | `scripts/` | Include usage notes in the script header or related docs. |
-| Temporary exports | Do not commit | Keep screenshots, local generated PDFs, and scratch files untracked. |
+| Published PDFs | Repository root | Filenames are live URLs linked from `insights.html` and `assets/data/*.json`. |
+| CSS | `assets/css/` | Never create root-level CSS files. |
+| JavaScript | `assets/js/` | Never create root-level JS files. |
+| Brand assets | `assets/brand/` | Approved exports and vector masters only. |
+| Images | `assets/images/` or `assets/img/` | Descriptive, lowercase names. |
+| Email templates | `assets/email/` | Previews in `assets/email/previews/`. |
+| Docs and guides | `docs/` | Use `docs/reports/`, `docs/integrations/`, `docs/source-documents/`. |
+| Utility scripts | `scripts/` | Include usage notes in the script header. |
+| Screenshots, QA captures, scratch exports | Do not commit | Covered by `.gitignore`; keep them out of the repository. |
 
-## Migration approach
+## Conventions
 
-The root contains many production-linked PDFs, images, and legacy stylesheets. To avoid broken links:
-
-1. Move one asset group at a time.
-2. Use `rg` to find every reference before and after the move.
-3. Update HTML, CSS, JavaScript, and documentation references in the same commit.
-4. Serve the site locally and spot-check affected pages.
-5. Keep redirects or duplicate files only when external URLs must remain stable.
+- **No symlinks.** All tracked assets must be real files; static hosting does not reliably follow symlinks.
+- **One copy per asset.** Do not commit hash-suffixed or " 2" duplicate variants; replace the canonical file instead.
+- **Reference checks before moves.** Root HTML/PDF names are production URLs. Before renaming or moving anything, run `rg -n "filename"` across the repo and update HTML, CSS, JS, JSON, and docs in the same commit.
 
 ## Useful commands
 
 ```bash
-# Show top-level clutter by extension
-find . -maxdepth 1 -type f | sed 's#^./##' | awk 'function ext(name){n=split(name,a,"."); if(n==1)return "[no ext]"; return tolower(a[n])} {c[ext($0)]++} END{for(e in c) print e, c[e]}' | sort
-
 # Find tracked files by folder
 git ls-files | awk -F/ '{print $1}' | sort | uniq -c | sort -nr
 
 # Search for references before moving a file
 rg -n "filename-or-path"
+
+# Confirm no symlinks are tracked
+git ls-files -s | awk '$1=="120000"'
 ```
+
+## History
+
+The root previously held ~600 untracked-in-spirit files (QA screenshots, duplicate brand exports, superseded CSS/JS, and PDF duplicates). These were removed in the July 2026 reorganization; recover anything needed from git history.

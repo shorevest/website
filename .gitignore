@@ -36,3 +36,14 @@ venv/
 coverage/
 playwright-report/
 test-results/
+
+# QA screenshots and scratch captures (keep these out of the repo root)
+/Screenshot*.png
+/Screenshot*.svg
+/pasted-*.png
+/IMG_*.png
+/_*.png
+/[0-9][0-9]-*.png
+/u-*.png
+/mh-*.png
+/mobile-*.png
