@@ -42,6 +42,20 @@
       href: 'https://informaconnect.com/superreturn-emerging-markets/speakers/benjamin-fanger/',
       ariaLabel: 'View Benjamin Fanger’s SuperReturn speaker profile',
       isClickable: true
+    },
+    {
+      startDate: '2026-06-10',
+      endDate: '2026-06-10',
+      timeZone: 'Asia/Hong_Kong',
+      displayDate: '10 Jun 26',
+      type: 'CONFERENCE',
+      title: 'Bloomberg Invest Hong Kong',
+      location: 'Hong Kong',
+      description: 'ShoreVest participated in Bloomberg’s flagship investment conference in Hong Kong.',
+      ctaLabel: 'VIEW →',
+      href: 'https://events.bloomberglive.com/event/InvestHK_2026/summary?RefId=blive_tile',
+      ariaLabel: 'View Bloomberg Invest Hong Kong event page',
+      isClickable: true
     }
   ];
 
