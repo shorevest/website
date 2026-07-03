@@ -15,6 +15,8 @@ Static website for ShoreVest Partners, including English and Chinese pages, the 
 | `assets/email/` | HubSpot welcome-email templates and previews (see `docs/integrations/HUBSPOT_SETUP.md`). |
 | `assets/img/` | Organized image assets. Place new reusable images here, never at the repository root. |
 | `investor-portal/` | Investor portal static entry point. |
+| `employee-portal/` | ShoreVest Operations — private employee portal entry point (see `docs/employee-portal/ARCHITECTURE.md`). |
+| `assets/js/employee-portal/` | Employee portal application: rules engine, file handling, workflow store, integration adapters, and views. |
 | `docs/` | Maintenance notes, setup guides, and source documents (`docs/source-documents/`). |
 | `scripts/` | Utility scripts for one-off generation or content maintenance tasks. |
 

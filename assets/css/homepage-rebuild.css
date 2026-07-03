@@ -1311,3 +1311,26 @@ body.homepage .sv-hero__panel-row dt {
     margin-inline: 0;
   }
 }
+
+/* ==========================================================================
+   Footer "Access" group — Investor Portal + Employee Portal entry points.
+   The Employee Portal is the private ShoreVest Operations application and
+   opens in a new tab; the public site is only the entry point.
+   ========================================================================== */
+body.homepage .sv-footer__access {
+  grid-column: 1 / -1;
+  display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px 26px;
+  margin-top: 16px; padding-top: 14px;
+  border-top: 1px solid var(--sv-border-dark);
+}
+body.homepage .sv-footer__access-label {
+  margin: 0;
+  font: 700 10px/1 var(--sv-font);
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--sv-faint-on-dark);
+}
+body.homepage .sv-footer__access a {
+  font: 500 13px/1 var(--sv-font); letter-spacing: 0.04em;
+  color: var(--sv-meta-on-dark); text-decoration: none; padding: 5px 0; display: inline-block;
+}
+body.homepage .sv-footer__access a:hover { color: var(--sv-ivory); }
