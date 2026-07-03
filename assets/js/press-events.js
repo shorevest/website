@@ -4,11 +4,25 @@
 
   var EVENTS = [
     {
+      startDate: '2026-09-08',
+      endDate: '2026-09-09',
+      timeZone: 'Asia/Shanghai',
+      displayDate: '8–9 Sep 2026',
+      type: 'Summit',
+      title: 'APAC Family Office Investment Summit',
+      location: 'Shanghai',
+      description: 'An Asia-Pacific investment summit for family offices and institutional investors.',
+      ctaLabel: 'View →',
+      href: 'https://apacfamilysummit.com/',
+      ariaLabel: 'View APAC Family Office Investment Summit event page',
+      isClickable: true
+    },
+    {
       startDate: '2026-09-24',
       endDate: '2026-09-25',
       timeZone: 'Asia/Hong_Kong',
-      displayDate: '24–25 Sep 26',
-      type: 'INVESTOR EVENT',
+      displayDate: '24–25 Sep 2026',
+      type: 'Investor Event',
       title: 'ShoreVest Annual General Meeting 2026',
       location: 'Guangzhou',
       description: 'ShoreVest’s annual meeting for investors and invited guests.',
@@ -16,15 +30,96 @@
       isClickable: false
     },
     {
+      startDate: '2026-09-28',
+      endDate: '2026-10-01',
+      timeZone: 'Asia/Singapore',
+      displayDate: '28 Sep–1 Oct 2026',
+      type: 'Conference',
+      title: 'SuperReturn Asia 2026',
+      location: 'Singapore',
+      description: 'ShoreVest will be represented by Benjamin Fanger and Kelvin Chan.',
+      ctaLabel: 'View →',
+      href: 'https://informaconnect.com/superreturnasia/',
+      ariaLabel: 'View SuperReturn Asia 2026 event page',
+      isClickable: true
+    },
+    {
+      startDate: '2026-10-15',
+      endDate: '2026-10-16',
+      timeZone: 'Asia/Hong_Kong',
+      displayDate: '15–16 Oct 2026',
+      type: 'Forum',
+      title: 'World Family Office Forum | Asia 2026',
+      location: 'Hong Kong',
+      description: 'ShoreVest will be represented by Kelvin Chan.',
+      ctaLabel: 'View →',
+      href: 'https://asia.worldfamilyofficeforum.com/',
+      ariaLabel: 'View World Family Office Forum Asia 2026 event page',
+      isClickable: true
+    },
+    {
+      startDate: '2026-10-15',
+      endDate: '2026-10-15',
+      timeZone: 'Asia/Hong_Kong',
+      displayDate: '15 Oct 2026',
+      type: 'Summit',
+      title: 'Caproasia Family Office Summit Hong Kong 2026',
+      location: 'Hong Kong',
+      description: 'A regional summit for family-office principals, investment professionals and wealth-management leaders.',
+      ctaLabel: 'View →',
+      href: 'https://my.caproasia.com/the-2026-family-office-summit/',
+      ariaLabel: 'View Caproasia Family Office Summit Hong Kong 2026 event page',
+      isClickable: true
+    },
+    {
+      startDate: '2026-10-26',
+      endDate: '2026-10-29',
+      timeZone: 'Asia/Riyadh',
+      displayDate: '26–29 Oct 2026',
+      type: 'Conference',
+      title: 'FII 10th Edition 2026',
+      location: 'Riyadh',
+      description: 'The tenth edition of the Future Investment Initiative’s global investment conference.',
+      ctaLabel: 'View →',
+      href: 'https://fii-institute.org/conference/fii-10th-edition/',
+      ariaLabel: 'View FII 10th Edition 2026 event page',
+      isClickable: true
+    },
+    {
+      startDate: '2026-11-05',
+      endDate: '2026-11-05',
+      timeZone: 'Asia/Singapore',
+      displayDate: '5 Nov 2026',
+      type: 'Summit',
+      title: 'Caproasia Family Office Summit Singapore 2026',
+      location: 'Singapore',
+      description: 'A regional summit for family-office principals, investment professionals and wealth-management leaders.',
+      ctaLabel: 'View →',
+      href: 'https://my.caproasia.com/the-2026-family-office-summit/',
+      ariaLabel: 'View Caproasia Family Office Summit Singapore 2026 event page',
+      isClickable: true
+    },
+    {
+      startDate: '2026-11-10',
+      endDate: '2026-11-11',
+      timeZone: 'Europe/London',
+      displayDate: '10–11 Nov 2026',
+      type: 'Summit',
+      title: 'Alea Global Family Office Summit 2026',
+      location: 'London',
+      description: 'A global summit for family-office principals, investors and advisers.',
+      isClickable: false
+    },
+    {
       startDate: '2026-06-24',
       endDate: '2026-06-25',
       timeZone: 'Asia/Singapore',
-      displayDate: '24–25 Jun 26',
-      type: 'PANEL',
+      displayDate: '24–25 Jun 2026',
+      type: 'Panel',
       title: 'PDI APAC Forum',
       location: 'Singapore',
       description: 'Benjamin Fanger joined a panel on Asian distressed debt and special situations.',
-      ctaLabel: 'VIEW →',
+      ctaLabel: 'View →',
       href: 'https://www.peievents.com/en/event/pdi-apac-forum/',
       ariaLabel: 'View PDI APAC Forum event page',
       isClickable: true
@@ -33,12 +128,12 @@
       startDate: '2026-06-15',
       endDate: '2026-06-17',
       timeZone: 'Europe/Amsterdam',
-      displayDate: '15–17 Jun 26',
-      type: 'CONFERENCE',
+      displayDate: '15–17 Jun 2026',
+      type: 'Conference',
       title: 'SuperReturn Emerging Markets',
       location: 'Amsterdam',
       description: 'Benjamin Fanger participated as a speaker.',
-      ctaLabel: 'VIEW →',
+      ctaLabel: 'View →',
       href: 'https://informaconnect.com/superreturn-emerging-markets/speakers/benjamin-fanger/',
       ariaLabel: 'View Benjamin Fanger’s SuperReturn speaker profile',
       isClickable: true
@@ -47,12 +142,12 @@
       startDate: '2026-06-10',
       endDate: '2026-06-10',
       timeZone: 'Asia/Hong_Kong',
-      displayDate: '10 Jun 26',
-      type: 'CONFERENCE',
+      displayDate: '10 Jun 2026',
+      type: 'Conference',
       title: 'Bloomberg Invest Hong Kong',
       location: 'Hong Kong',
       description: 'ShoreVest participated in Bloomberg’s flagship investment conference in Hong Kong.',
-      ctaLabel: 'VIEW →',
+      ctaLabel: 'View →',
       href: 'https://events.bloomberglive.com/event/InvestHK_2026/summary?RefId=blive_tile',
       ariaLabel: 'View Bloomberg Invest Hong Kong event page',
       isClickable: true
@@ -96,7 +191,7 @@
       link.rel = 'noopener noreferrer';
       if (event.ariaLabel) link.setAttribute('aria-label', event.ariaLabel);
       row.appendChild(link);
-    } else {
+    } else if (event.ctaLabel) {
       row.appendChild(createTextElement('span', 'pr-event-link pr-event-link--plain', event.ctaLabel));
     }
 
