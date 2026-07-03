@@ -19,7 +19,7 @@
    Re-declare "DIN 2014" here (loads last) to resolve from LOCAL across the
    full weight range, replicating the homepage: local DIN when installed,
    otherwise nothing → falls through to Barlow in the stack. No embedded URL,
-   so it can't reintroduce the single-weight faux/700 behaviour. */
+   so it can't reintroduce the single-weight faux/700 behavior. */
 @font-face {
   font-family: "DIN 2014";
   src: local("DIN 2014"), local("DIN2014"), local("DIN-2014");

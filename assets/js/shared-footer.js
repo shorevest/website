@@ -98,7 +98,7 @@
     node.className = `sv-footer ${isChinesePath ? 'sv-footer--cn' : 'sv-footer--en'}`;
     node.innerHTML = localeSuffix === 'cn' ? footerTemplateCn : footerTemplateEn;
 
-    /* CSS handles all font-family, letter-spacing, and colour via:
+    /* CSS handles all font-family, letter-spacing, and color via:
          shared-footer.css  (highest specificity footer rules)
          shorevest-typography-system.css  (canonical role system)
        No inline style overrides are applied here so that the CSS
