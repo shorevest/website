@@ -2,7 +2,7 @@
 /* ==========================================================================
    ShoreVest Typography System — Canonical Role Implementation
    Loaded after shared-header.css on all pages.
-   Defines all 7 approved text roles, font tokens, and colour roles.
+   Defines all 7 approved text roles, font tokens, and color roles.
    Chinese pages follow the same structural system with Noto Serif SC.
    ========================================================================== */
 
@@ -285,7 +285,7 @@
   --sans-zh:  var(--sv-font-cn);
   --zh-role-font: var(--sv-font-cn);
 
-  /* Colour roles */
+  /* Color roles */
   --sv-ink:       #0F2206;  /* Primary text — dark ink */
   --sv-ink-soft:  #2E4A18;  /* Secondary body text */
   --sv-ink-muted: #1E4040;  /* Muted / label / subdued */
@@ -295,7 +295,7 @@
   --sv-bg-soft:   #F2ECD8;
   --sv-rule:      #D8CEB0;
 
-  /* Backward-compat colour aliases used across older page CSS */
+  /* Backward-compat color aliases used across older page CSS */
   --sv-type-cinnabar:  var(--sv-cinnabar);
   --sv-color-signal:   var(--sv-cinnabar);
   --sv-color-accent:   var(--sv-accent);

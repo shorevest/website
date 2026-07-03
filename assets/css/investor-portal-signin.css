@@ -3,7 +3,7 @@
    A split-screen LP gateway: Ink-Dark brand panel + Xuan Paper form panel.
    Brand system only — DIN 2014 (English) + Noto Serif SC (logo lockup only).
    Cinnabar marks action and structure only; never decorative fills.
-   Colour + font tokens come from shorevest-brand-tokens.css; fallbacks inline.
+   Color + font tokens come from shorevest-brand-tokens.css; fallbacks inline.
    ========================================================================== */
 
 /* ── Reset (scoped to the gateway) ──────────────────────────────────────── */
@@ -138,7 +138,7 @@ body.sv-signin {
   line-height: 1;
 }
 
-/* — Middle: institutional framing (vertically centred) — */
+/* — Middle: institutional framing (vertically centerd) — */
 .signin__intro {
   flex: 1 1 auto;
   display: flex;

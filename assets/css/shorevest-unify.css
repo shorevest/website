@@ -6,8 +6,8 @@
    heroes, square corners throughout, and an even vertical rhythm.
 
    Direction reference: Burford, Apollo, Sequoia, Long Ridge, Oak HC/FT, CMCC,
-   Montfort — calm, confident, editorial; lots of air; one signature colour.
-   ShoreVest's signature colour is CINNABAR. Green is demoted to a rare support
+   Montfort — calm, confident, editorial; lots of air; one signature color.
+   ShoreVest's signature color is CINNABAR. Green is demoted to a rare support
    tone. Warm Xuan paper remains the body ground. No rounded corners. No top
    "red bar".
 
@@ -191,7 +191,7 @@ html[lang="zh-CN"] body .sv-hero.sv-hero .cdd-franchise__headline {
   font-family: "Noto Serif SC", serif !important;
   text-transform: none !important;
 }
-/* shared display size + colour for every hero headline */
+/* shared display size + color for every hero headline */
 html body .sv-hero.sv-hero .sv-hero__title,
 html body .sv-hero.sv-hero .home-hero__headline,
 html body .sv-hero.sv-hero .firm-hero-title,
@@ -376,7 +376,7 @@ html[lang="en"] body :is(
   line-height: 1.12 !important;
 }
 /* Chinese section headings keep Noto Serif SC (already serif) but pick up the
-   same soft head colour and case. */
+   same soft head color and case. */
 html[lang="zh-CN"] body :is(
   .opp-heading, .tss-heading, .strategy-section-intro__heading, .section-title,
   .platform-section__heading, .home-cdd__title, .ip__heading, .ogeo__heading,
@@ -640,8 +640,8 @@ html body :is(
 }
 
 /* ───────────────────────────────────────────────────────────────────────
-   HERO COLOURWAYS — green ground for Insights & Team
-   These two pages use the flat-gradient hero (.sv-hero--gradient). Recolour
+   HERO COLORWAYS — green ground for Insights & Team
+   These two pages use the flat-gradient hero (.sv-hero--gradient). Recolor
    their ground from the cinnabar field to the deep pine/teal green from the
    palette (--u-qing-dark / --u-ink), matching the Firm hero so the site reads
    as one family with two grounds. Scoped to the two body classes only, so
@@ -664,7 +664,7 @@ html body.team-page .sv-hero.sv-hero:not(.home-hero):not(.press-hero) {
    near-opaque on the LEFT behind the headline and fades to nearly clear on
    the RIGHT so the FII photo reads through cleanly — no awkward half-covered
    overlay. Highest-specificity selector so it re-enables the ::before that
-   legacy press rules disable (content:none) and force-greys.
+   legacy press rules disable (content:none) and force-grays.
    ─────────────────────────────────────────────────────────────────────── */
 html body.press-page .press-hero.hero--press.sv-hero::before,
 html body.press-page .press-hero.sv-hero::before,

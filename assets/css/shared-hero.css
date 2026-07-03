@@ -755,7 +755,7 @@ body.strategy-page .strategy-hero__note {
   --hero-side-pad: var(--site-page-margin, var(--sv-page-gutter, clamp(24px, 4.8vw, 68px)));
   --hero-grid-gap: clamp(36px, 4.8vw, 72px);
   --hero-divider-width: 1px;
-  --hero-divider-colour: rgba(250, 246, 238, 0.55);
+  --hero-divider-color: rgba(250, 246, 238, 0.55);
   --hero-copy-max: 640px;
   --hero-left-max: 760px;
   --hero-right-max: 520px;
@@ -875,7 +875,7 @@ body:is(.firm-page, .insights-page, .team-page, .contact-page) .sv-hero__right {
 }
 
 body:is(.firm-page, .insights-page, .team-page) .sv-hero__right {
-  border-left: var(--hero-divider-width) solid var(--hero-divider-colour) !important;
+  border-left: var(--hero-divider-width) solid var(--hero-divider-color) !important;
   padding-left: var(--sv-section-intro-divider-gap) !important;
 }
 
@@ -884,7 +884,7 @@ body.contact-page .sv-hero__divider {
   width: var(--hero-divider-width) !important;
   min-height: clamp(220px, 30vh, 320px) !important;
   height: 100% !important;
-  background: var(--hero-divider-colour) !important;
+  background: var(--hero-divider-color) !important;
   align-self: stretch !important;
   justify-self: center !important;
 }
@@ -1064,7 +1064,7 @@ body.cdd-article-page .cdd-meta {
   body:is(.firm-page, .insights-page, .team-page) .sv-hero__right {
     max-width: var(--hero-copy-max) !important;
     border-left: 0 !important;
-    border-top: var(--hero-divider-width) solid var(--hero-divider-colour) !important;
+    border-top: var(--hero-divider-width) solid var(--hero-divider-color) !important;
     padding-left: 0 !important;
     padding-top: var(--sv-section-intro-mobile-rule-gap) !important;
   }
@@ -1397,7 +1397,7 @@ body.homepage.home-page .home-hero h1.home-hero__headline {
   }
 
   body:is(.firm-page, .team-page) .sv-hero__right {
-    border-top: var(--hero-divider-width) solid var(--hero-divider-colour) !important;
+    border-top: var(--hero-divider-width) solid var(--hero-divider-color) !important;
     padding-top: var(--sv-section-intro-mobile-rule-gap) !important;
   }
 
