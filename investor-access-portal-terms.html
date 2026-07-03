@@ -27,24 +27,59 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   <!--svstripped-->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <!-- TODO: ADD ADOBE FONTS KIT FOR DIN 2014 — replace [KIT_ID] below and uncomment. Until configured, pages use the canonical DIN 2014 stack with only a generic sans-serif emergency fallback. -->
-  <!-- <link rel="stylesheet" href="https://use.typekit.net/[KIT_ID].css"> -->
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
 
-  
-  <!-- Typography lockdown — MUST load last; final authority over all type. -->
-
-
-  <script>document.write('<link rel="stylesheet" href="assets/css/legal-rebuild.css?v=20260627-lg2&t='+window.__SVT+'">');</script>
-<link rel="icon" href="/favicon.ico?v=20260703" sizes="32x32">
+<script>document.write('<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260701-mobile-audit-430&t='+window.__SVT+'">');</script>
+<script>document.write('<link rel="stylesheet" href="assets/css/legal-rebuild.css?v=20260703-legal-home-chrome&t='+window.__SVT+'">');</script>
 <link rel="icon" href="/assets/favicon.svg?v=20260702" type="image/svg+xml" sizes="any">
 <link rel="shortcut icon" href="/favicon.ico?v=20260703">
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png?v=20260703">
 </head>
-<body class="legal-page">
-  <div id="site-header-mount"></div>
+<body id="top" class="homepage legal-page">
+<!-- ============================================================ A · HEADER -->
+<header class="sv-header">
+  <div class="sv-header__inner">
+    <a class="sv-header__logo" href="index.html" aria-label="ShoreVest — home">
+      <img src="assets/brand/sv-lockup-fc-dark.png" alt="ShoreVest" width="172" height="41">
+    </a>
+    <nav class="sv-nav" aria-label="Primary">
+      <ul>
+        <li><a href="firm.html">Firm</a></li>
+        <li><a href="strategy.html">Strategy</a></li>
+        <li><a href="insights.html">Insights</a></li>
+        <li><a href="press.html">Media</a></li>
+        <li><a href="team.html">Team</a></li>
+      </ul>
+    </nav>
+    <div class="sv-utils">
+      <a class="sv-lang" href="investor-access-portal-terms_cn.html"><span class="on">EN</span><span class="sep">|</span>中文</a>
+      <a class="sv-util-btn" href="investor-portal/index.html">Investor Portal</a>
+      <a class="sv-util-btn sv-util-btn--cta" href="contact.html">Contact</a>
+    </div>
+    <button class="sv-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="sv-mobile-menu">
+      <span></span>
+    </button>
+  </div>
+</header>
 
-  <main class="legal-main legal-page__main">
+<div class="sv-mobile-menu" id="sv-mobile-menu">
+  <nav aria-label="Mobile">
+    <ul>
+      <li><a href="firm.html">Firm</a></li>
+      <li><a href="strategy.html">Strategy</a></li>
+      <li><a href="insights.html">Insights</a></li>
+      <li><a href="press.html">Media</a></li>
+      <li><a href="team.html">Team</a></li>
+    </ul>
+    <div class="sv-mobile-utils">
+      <a class="sv-util-btn" href="investor-access-portal-terms_cn.html">中文</a>
+      <a class="sv-util-btn" href="investor-portal/index.html">Investor Portal</a>
+      <a class="sv-util-btn sv-util-btn--cta" href="contact.html">Contact</a>
+    </div>
+  </nav>
+</div>
+
+  <main id="content" class="legal-main legal-page__main">
     <article class="sv-container legal-page__content legal-container legal-content legal-document__content">
       <header class="legal-page__intro-block">
         <p class="legal-page__kicker">Legal Notice</p>
@@ -55,20 +90,20 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   <p>These Investor Portal Terms (Portal Terms) govern access to and use of the investor-access portal, restricted materials, data room environments and any downloadable documents made available by ShoreVest Partners, Ltd. and its relevant affiliates (collectively, ShoreVest, we, us or our) through this website (the Portal). These Portal Terms supplement the Terms of Use, Legal Notices and Disclaimers, Privacy Policy and Cookie Notice. In the event of any inconsistency, these Portal Terms prevail with respect to your Portal access. By clicking Confirm and Continue, you confirm you have read, understood and agree to be bound by these Portal Terms and all referenced documents.</p>
 
   <h2>1. Eligibility</h2>
-  <p>Access to the Portal is strictly limited to persons who satisfy all of the following conditions: (a) you are a professional investor, institutional investor, qualified purchaser, accredited investor or equivalent classification recognised under the laws of your jurisdiction; (b) you are not a retail investor; (c) access to these materials is lawful in the jurisdiction from which you are accessing the Portal; (d) you are accessing the Portal on your own account, or if acting on behalf of an institution, you have full authority to bind that entity to these Portal Terms; and (e) you are not a person subject to sanctions administered by the UN, EU, UK, US, Hong Kong or any other relevant jurisdiction.</p>
+  <p>Access to the Portal is strictly limited to persons who satisfy all of the following conditions: (a) you are a professional investor, institutional investor, qualified purchaser, accredited investor or equivalent classification recognized under the laws of your jurisdiction; (b) you are not a retail investor; (c) access to these materials is lawful in the jurisdiction from which you are accessing the Portal; (d) you are accessing the Portal on your own account, or if acting on behalf of an institution, you have full authority to bind that entity to these Portal Terms; and (e) you are not a person subject to sanctions administered by the UN, EU, UK, US, Hong Kong or any other relevant jurisdiction.</p>
   <p>ShoreVest may request evidence of eligibility at any time and reserves the right to deny, suspend or revoke access at its sole discretion and without explanation.</p>
 
   <h2>2. Purpose of access</h2>
   <p>Materials made available through the Portal are provided solely to enable eligible persons to conduct diligence on ShoreVest and any ShoreVest-managed vehicle in connection with a potential investment relationship. Access must not be used for any other purpose. Nothing in the Portal constitutes an offer to sell, solicitation of an offer to buy or a recommendation regarding any security or investment product. Any offering will be made only through definitive offering documents delivered separately to eligible persons.</p>
 
   <h2>3. Confidentiality</h2>
-  <p>All materials accessed through the Portal are confidential and proprietary. By accessing the Portal, you agree: (a) to treat all materials as strictly confidential and not to disclose them to any third party without ShoreVest’s prior written consent, except to professional advisers bound by equivalent confidentiality obligations; (b) not to reproduce, copy, distribute, publish, upload, transmit or otherwise disseminate any Portal materials in any form; (c) to use Portal materials solely for the purpose described in section 2; and (d) to notify ShoreVest promptly if you become aware of any unauthorised access to or disclosure of Portal materials. The obligations in this section survive termination or withdrawal of Portal access.</p>
+  <p>All materials accessed through the Portal are confidential and proprietary. By accessing the Portal, you agree: (a) to treat all materials as strictly confidential and not to disclose them to any third party without ShoreVest’s prior written consent, except to professional advisors bound by equivalent confidentiality obligations; (b) not to reproduce, copy, distribute, publish, upload, transmit or otherwise disseminate any Portal materials in any form; (c) to use Portal materials solely for the purpose described in section 2; and (d) to notify ShoreVest promptly if you become aware of any unauthorized access to or disclosure of Portal materials. The obligations in this section survive termination or withdrawal of Portal access.</p>
 
   <h2>4. No reliance and no advice</h2>
-  <p>Materials in the Portal are provided for informational and diligence purposes only. They are not complete, may contain assumptions and estimates, and are subject to change without notice. You must not rely on Portal materials as the sole basis for any investment decision. Nothing in the Portal constitutes investment, legal, tax, accounting or other professional advice. You are responsible for conducting your own independent analysis and consulting your own advisers before making any investment decision.</p>
+  <p>Materials in the Portal are provided for informational and diligence purposes only. They are not complete, may contain assumptions and estimates, and are subject to change without notice. You must not rely on Portal materials as the sole basis for any investment decision. Nothing in the Portal constitutes investment, legal, tax, accounting or other professional advice. You are responsible for conducting your own independent analysis and consulting your own advisors before making any investment decision.</p>
 
   <h2>5. Authentication and account security</h2>
-  <p>Where access requires authentication credentials, you are responsible for maintaining their confidentiality and security. You must not share your credentials with any other person. You must notify ShoreVest immediately at <a href="mailto:privacy@shorevest.com">privacy@shorevest.com</a> if you become aware of any actual or suspected unauthorised access to your account. ShoreVest reserves the right to require re-authentication at any time and to revoke credentials where security may have been compromised.</p>
+  <p>Where access requires authentication credentials, you are responsible for maintaining their confidentiality and security. You must not share your credentials with any other person. You must notify ShoreVest immediately at <a href="mailto:privacy@shorevest.com">privacy@shorevest.com</a> if you become aware of any actual or suspected unauthorized access to your account. ShoreVest reserves the right to require re-authentication at any time and to revoke credentials where security may have been compromised.</p>
 
   <h2>6. Monitoring and logging</h2>
   <p>ShoreVest may log and monitor all access to and activity within the Portal for security, compliance and regulatory purposes, including recording the time, nature and extent of access to specific materials. By accessing the Portal, you consent to such monitoring and logging. Records of access may be retained for the periods required by applicable law and ShoreVest’s internal policies.</p>
@@ -77,7 +112,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   <p>Materials in the Portal are provided on an as is basis. ShoreVest makes no representation or warranty as to the accuracy, completeness, timeliness or fitness for purpose of any Portal material. ShoreVest reserves the right to update, correct, withdraw or supplement any material at any time without notice.</p>
 
   <h2>8. Intellectual property</h2>
-  <p>All Portal materials are proprietary and confidential information of ShoreVest or its affiliates. No right, title or licence is granted other than the limited right to access and review materials for the purpose described in section 2. Any unauthorised use, reproduction or distribution may constitute a breach of these Portal Terms and applicable intellectual property law.</p>
+  <p>All Portal materials are proprietary and confidential information of ShoreVest or its affiliates. No right, title or license is granted other than the limited right to access and review materials for the purpose described in section 2. Any unauthorized use, reproduction or distribution may constitute a breach of these Portal Terms and applicable intellectual property law.</p>
 
   <h2>9. Termination of access</h2>
   <p>ShoreVest may terminate or suspend your Portal access at any time and without notice, including where: (a) you breach these Portal Terms; (b) ShoreVest determines at its sole discretion that your continued access is inappropriate; or (c) ShoreVest ceases to make the Portal available. Termination does not affect any accrued obligations, including confidentiality obligations under section 3.</p>
@@ -86,7 +121,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   <p>Personal data collected in connection with Portal registration, access and use will be processed in accordance with ShoreVest’s Privacy Policy. By registering for and accessing the Portal, you acknowledge that processing in accordance with the Privacy Policy will occur.</p>
 
   <h2>11. Limitation of liability</h2>
-  <p>To the fullest extent permitted by applicable law, ShoreVest and its affiliates, directors, officers, partners, employees and agents shall not be liable for any loss, damage, cost or expense arising from your access to or use of, or inability to access or use, the Portal or any Portal materials, including for reliance on Portal materials, technical failures, interruptions or unauthorised access by third parties despite reasonable security measures.</p>
+  <p>To the fullest extent permitted by applicable law, ShoreVest and its affiliates, directors, officers, partners, employees and agents shall not be liable for any loss, damage, cost or expense arising from your access to or use of, or inability to access or use, the Portal or any Portal materials, including for reliance on Portal materials, technical failures, interruptions or unauthorized access by third parties despite reasonable security measures.</p>
 
   <h2>12. Governing law</h2>
   <p>[Governing law to be confirmed by counsel.]</p>
@@ -113,9 +148,75 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
     </article>
   </main>
 
-  <footer class="sv-footer" data-shared-footer></footer>
+<!-- ============================================================ I · FOOTER -->
+<footer class="sv-footer" aria-label="Site footer">
+  <div class="sv-footer__inner">
+    <div class="sv-footer__top">
+      <div>
+        <a class="sv-footer__logo" href="index.html" aria-label="ShoreVest — home">
+          <!-- Dark footer → FullColor_Light variant (ivory wordmark, reads on teal). -->
+          <img src="assets/brand/sv-lockup-fc-light.png" alt="ShoreVest" width="200" height="48">
+        </a>
+        <p class="sv-footer__offices">
+          Guangzhou · Shanghai · Beijing · Hong Kong<br>
+          <a href="contact.html">General inquiries</a>
+        </p>
+      </div>
+      <nav class="sv-footer__nav" aria-label="Footer">
+        <a href="firm.html">Firm</a>
+        <a href="insights.html">Insights</a>
+        <a href="strategy.html">Strategy</a>
+        <a href="press.html">Media</a>
+        <a href="team.html">Team</a>
+        <a href="contact.html">Contact</a>
+        <a href="investor-portal/index.html">Investor Portal</a>
+        <a href="insights.html#archive">China Debt Dynamics</a>
+      </nav>
+    </div>
 
-  
-<script>(function(){var T=window.__SVT;function tk(u){return u+(u.indexOf("?")>-1?"&":"?")+"t="+T;}var s=["assets/js/shared-header.js","assets/js/shared-footer.js"];(function n(i){if(i>=s.length)return;var e=document.createElement("script");e.src=tk(s[i]);e.onload=e.onerror=function(){n(i+1);};document.head.appendChild(e);})(0);})();</script>
+    <div class="sv-footer__legal">
+      <p>ShoreVest Partners and its affiliates provide investment management services to institutional investors. This website is for informational purposes only and does not constitute an offer to sell or a solicitation of an offer to buy any security or investment product, nor investment, legal, or tax advice.</p>
+      <p>Past performance is not indicative of future results. Investments in private credit and private debt involve risk, including the possible loss of principal. Figures shown are approximate and subject to change.</p>
+    </div>
+
+    <div class="sv-footer__bottom">
+      <div class="sv-footer__links">
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="cookie-notice.html">Cookie Notice</a>
+        <a href="terms-of-use.html">Terms of Use</a>
+        <a href="important-information.html">Important Information</a>
+        <a href="legal-notices-disclaimers.html">Legal Notices &amp; Disclaimers</a>
+      </div>
+      <p class="sv-footer__copy">© 2026 ShoreVest Partners. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<button class="sv-totop" type="button" aria-label="Back to top">
+  <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 13V3M8 3L3.5 7.5M8 3l4.5 4.5" stroke="currentColor" stroke-width="1.5"/></svg>
+</button>
+
+<script>
+(function(){
+  // Mobile menu toggle
+  var burger = document.querySelector('.sv-burger');
+  var menu = document.getElementById('sv-mobile-menu');
+  if (burger && menu) {
+    burger.addEventListener('click', function(){
+      var open = menu.classList.toggle('is-open');
+      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    });
+    menu.addEventListener('click', function(e){ if (e.target.closest('a')) { menu.classList.remove('is-open'); burger.setAttribute('aria-expanded','false'); } });
+  }
+  // Scroll-to-top
+  var toTop = document.querySelector('.sv-totop');
+  if (toTop) {
+    var onScroll = function(){ if (window.scrollY > 600) toTop.classList.add('is-visible'); else toTop.classList.remove('is-visible'); };
+    window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+    toTop.addEventListener('click', function(){ window.scrollTo({ top: 0, behavior: 'smooth' }); });
+  }
+})();
+</script>
 </body>
 </html>
