@@ -199,19 +199,84 @@ body.strategy-page .st-thresholds__note {
   font: 400 12px/1.5 var(--sv-font); color: var(--sv-muted, #6E7169);
 }
 
-/* Three sleeves — ledger rows: title | body + meta */
-body.strategy-page .st-sleeves { border-top: 1px solid var(--sv-border-light-strong); margin-top: clamp(8px, 1.4vw, 18px); }
+/* Three sleeves — homepage-standard animated strategy rows */
+body.strategy-page .st-sleeves {
+  border-top: 2px solid var(--sv-cinnabar);
+  margin-top: clamp(8px, 1.4vw, 18px);
+}
 body.strategy-page .st-sleeve {
   display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 9fr);
   gap: clamp(20px, 3vw, 56px);
-  padding: clamp(32px, 3.6vw, 46px) 0; border-bottom: 1px solid var(--sv-border-light);
+  padding: clamp(32px, 3.6vw, 46px) clamp(20px, 2vw, 28px);
+  border-bottom: 1px solid var(--sv-border-light-strong);
   align-items: baseline;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  cursor: default;
+  transition:
+    background-color 260ms ease,
+    border-color 260ms ease,
+    transform 260ms ease;
+}
+body.strategy-page .st-sleeve::before {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  background: var(--sv-cinnabar);
+  transform: scaleY(0);
+  transform-origin: 50% 50%;
+  transition: transform 300ms cubic-bezier(.2,.8,.2,1);
+  z-index: 1;
+}
+body.strategy-page .st-sleeve::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(201, 59, 42, 0.105), rgba(201, 59, 42, 0.035) 48%, rgba(201, 59, 42, 0));
+  opacity: 0;
+  transform: translateX(-18px);
+  transition:
+    opacity 300ms ease,
+    transform 360ms cubic-bezier(.2,.8,.2,1);
+  z-index: 0;
+}
+body.strategy-page .st-sleeve:hover,
+body.strategy-page .st-sleeve:focus-within {
+  background-color: rgba(252, 249, 241, 0.42);
+  border-bottom-color: rgba(201, 59, 42, 0.32);
+}
+body.strategy-page .st-sleeve:hover::before,
+body.strategy-page .st-sleeve:focus-within::before {
+  transform: scaleY(1);
+}
+body.strategy-page .st-sleeve:hover::after,
+body.strategy-page .st-sleeve:focus-within::after {
+  opacity: 1;
+  transform: translateX(0);
 }
 body.strategy-page .st-sleeve__title {
+  position: relative;
+  z-index: 2;
   margin: 0; font: 500 23px/1.16 var(--sv-font); letter-spacing: -0.012em; color: var(--sv-ink);
+  transition:
+    color 220ms ease,
+    transform 300ms cubic-bezier(.2,.8,.2,1);
 }
+body.strategy-page .st-sleeve:hover .st-sleeve__title,
+body.strategy-page .st-sleeve:focus-within .st-sleeve__title {
+  color: var(--sv-cinnabar-d);
+  transform: translateX(10px);
+}
+body.strategy-page .st-sleeve > div { position: relative; z-index: 2; }
 body.strategy-page .st-sleeve__body {
   margin: 0; font: 400 16.5px/1.62 var(--sv-font); color: var(--sv-ink-2); max-width: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.strategy-page .st-sleeve,
+  body.strategy-page .st-sleeve::before,
+  body.strategy-page .st-sleeve::after,
+  body.strategy-page .st-sleeve__title { transition: none; }
 }
 body.strategy-page .st-sleeve__meta {
   margin: clamp(16px, 1.8vw, 22px) 0 0; display: flex; flex-wrap: wrap; gap: 8px 18px;
