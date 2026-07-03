@@ -39,6 +39,7 @@
         <a href="${siteHref('privacy-policy.html')}">Privacy Policy</a>
         <a href="${siteHref('cookie-notice.html')}">Cookie Notice</a>
         <a href="${siteHref('terms-of-use.html')}">Terms of Use</a>
+        <a href="${siteHref('important-information.html')}">Important Information</a>
         <a href="${siteHref('legal-notices-disclaimers.html')}">Legal Notices &amp; Disclaimers</a>
       </div>
       <p class="sv-footer__copy">&copy; 2026 ShoreVest Partners. All rights reserved.</p>
@@ -74,6 +75,7 @@
         <a href="${siteHref('privacy-policy_cn.html')}">隐私政策</a>
         <a href="${siteHref('cookie-notice_cn.html')}">Cookie 通知</a>
         <a href="${siteHref('terms-of-use_cn.html')}">使用条款</a>
+        <a href="${siteHref('important-information_cn.html')}">重要信息</a>
         <a href="${siteHref('legal-notices-disclaimers_cn.html')}">法律声明与免责声明</a>
       </div>
       <p class="sv-footer__copy">&copy; 2026 新岸资本（ShoreVest Partners）。保留所有权利。</p>
