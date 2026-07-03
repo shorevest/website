@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<script>
+try{window.addEventListener('error',function(e){if(e&&typeof e.message==='string'&&e.message.indexOf('ResizeObserver loop')!==-1){e.stopImmediatePropagation();e.preventDefault();}},true);}catch(_){}
+window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
+(function(){
+  var T=window.__SVT;
+  function tok(u){try{var url=new URL(u,location.href);if(url.origin===location.origin&&!url.searchParams.get('t')){url.searchParams.set('t',T);return url.href;}return u;}catch(e){return u;}}
+  window.__svTok=tok;
+  (function(){var _f=window.fetch;if(_f){window.fetch=function(i,n){try{var u;if(typeof i==='string'){u=new URL(i,location.href);if(u.origin===location.origin&&!u.searchParams.get('t')){u.searchParams.set('t',T);i=u.href;}}else if(i&&i.url){u=new URL(i.url,location.href);if(u.origin===location.origin&&!u.searchParams.get('t')){u.searchParams.set('t',T);i=new Request(u.href,i);}}}catch(e){}return _f.call(this,i,n);};}var _o=window.XMLHttpRequest&&window.XMLHttpRequest.prototype.open;if(_o){window.XMLHttpRequest.prototype.open=function(m,u){try{var x=new URL(u,location.href);if(x.origin===location.origin&&!x.searchParams.get('t')){x.searchParams.set('t',T);u=x.href;}}catch(e){}return _o.apply(this,[m,u].concat([].slice.call(arguments,2)));};}})();
+  function fixEl(el){
+    if(el.nodeType!==1)return;
+    if(el.hasAttribute('data-svsrc')&&!el.__sd){el.__sd=1;el.setAttribute('src',tok(el.getAttribute('data-svsrc')));}
+    if(el.hasAttribute('data-svsrcset')&&!el.__ss){el.__ss=1;el.setAttribute('srcset',el.getAttribute('data-svsrcset').split(',').map(function(p){var q=p.trim().split(/\s+/);if(q[0])q[0]=tok(q[0]);return q.join(' ');}).join(', '));}
+    if(el.tagName==='IMG'){var s=el.getAttribute('src');if(s){var ts=tok(s);if(ts!==s)el.setAttribute('src',ts);}}
+  }
+  function scan(root){if(!root||root.nodeType!==1)return;fixEl(root);if(root.querySelectorAll){var n=root.querySelectorAll('img,source,[data-svsrc],[data-svsrcset]');for(var i=0;i<n.length;i++)fixEl(n[i]);}}
+  new MutationObserver(function(ms){for(var j=0;j<ms.length;j++){var a=ms[j].addedNodes;for(var i=0;i<a.length;i++)scan(a[i]);}}).observe(document.documentElement,{childList:true,subtree:true});
+  if(document.readyState!=='loading')scan(document.body);else document.addEventListener('DOMContentLoaded',function(){scan(document.body);});
+  document.addEventListener('click',function(e){var t=e.target;var a=t&&t.closest?t.closest('a[href]'):null;if(!a)return;var h=a.getAttribute('href');if(!h||h.charAt(0)==='#'||/^(mailto:|tel:|javascript:|https?:|\/\/)/i.test(h))return;var url;try{url=new URL(h,location.href);}catch(_){return;}if(url.origin!==location.origin)return;e.preventDefault();if(!url.searchParams.get('t'))url.searchParams.set('t',T);window.location.href=url.href;},true);
+})();
+</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ShoreVest | 重要信息</title>
+  <meta name="description" content="关于新岸资本（ShoreVest Partners）网站的重要信息。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- TODO: ADD ADOBE FONTS KIT FOR DIN 2014 — replace [KIT_ID] below and uncomment. Until configured, pages use the canonical DIN 2014 stack with only a generic sans-serif emergency fallback. -->
+  <!-- <link rel="stylesheet" href="https://use.typekit.net/[KIT_ID].css"> -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<script>document.write('<link rel="stylesheet" href="assets/css/chinese-latin-typography.css?t='+window.__SVT+'">');</script>
+
+  <script>document.write('<link rel="stylesheet" data-sv-chrome href="assets/css/sv-chrome.css?v=20260630-legal-chrome&t='+window.__SVT+'">');</script>
+  <script>document.write('<link rel="stylesheet" href="assets/css/legal-rebuild.css?v=20260630-legal-chrome&t='+window.__SVT+'">');</script>
+<link rel="icon" href="/assets/favicon.svg?v=20260702" type="image/svg+xml" sizes="any">
+<link rel="shortcut icon" href="/assets/favicon.svg?v=20260702" type="image/svg+xml">
+</head>
+<body class="legal-page">
+  <div id="site-header-mount"></div>
+
+  <main class="legal-main">
+    <article class="sv-container legal-container legal-content legal-document__content">
+      <header class="legal-page__intro-block">
+        <p class="legal-page__kicker">法律声明</p>
+        <h1>重要信息</h1>
+      </header>
+
+  <p>本网站所载信息仅供一般参考之用，不构成投资、法律或税务建议，亦不构成购买或出售任何证券或任何投资基金权益的要约或要约邀请。</p>
+
+  <p>任何发售将仅通过适用的最终发售文件进行，并仅面向符合适用法律下相关资格要求的投资者。投资产品未必在所有司法管辖区均可提供。</p>
+
+  <p>访问本网站的人士有责任自行了解并遵守其所在司法管辖区适用的任何法律或监管限制。投资涉及风险，包括可能损失本金。过往业绩不代表未来结果。</p>
+
+  <p>更多信息请参阅<a href="legal-notices-disclaimers_cn.html">法律声明与免责声明</a>、<a href="terms-of-use_cn.html">使用条款</a>、<a href="privacy-policy_cn.html">隐私政策</a>及 <a href="cookie-notice_cn.html"><span class="latin-text" lang="en">Cookie</span> 通知</a>。</p>
+
+  <div class="legal-contact-actions">
+    <a href="index_cn.html">返回首页</a>
+  </div>
+
+    </article>
+  </main>
+
+  <footer class="sv-footer" data-shared-footer></footer>
+
+<script>(function(){var T=window.__SVT;function tk(u){return u+(u.indexOf("?")>-1?"&":"?")+"t="+T;}var s=["assets/js/shared-header.js","assets/js/shared-footer.js"];(function n(i){if(i>=s.length)return;var e=document.createElement("script");e.src=tk(s[i]);e.onload=e.onerror=function(){n(i+1);};document.head.appendChild(e);})(0);})();</script>
+</body>
+</html>
