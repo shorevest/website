@@ -47,7 +47,7 @@ body.terms-page .legal-main,
 body.legal-page .legal-main,
 body.disclaimers-page .legal-main {
   background: var(--lg-ivory);
-  padding: calc(var(--sv-header-height-desktop, 80px) + clamp(40px, 4.5vw, 68px)) 0 clamp(72px, 8vw, 120px);
+  padding: clamp(40px, 4.5vw, 68px) 0 clamp(44px, 5vw, 72px);
 }
 body.privacy-page .legal-content,
 body.cookie-page .legal-content,
