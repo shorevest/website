@@ -1869,7 +1869,7 @@ body.site-loader-active:not(.menu-open) {
   animation: lmSettle 0.7s cubic-bezier(0.34, 1.3, 0.64, 1) 1.5s both;
 }
 
-/* soft halo behind the mark — centred on the mark, not the wrap's top-left */
+/* soft halo behind the mark — centerd on the mark, not the wrap's top-left */
 .loader-mark-wrap::before {
   content: "";
   position: absolute;
@@ -1897,7 +1897,7 @@ body.site-loader-active:not(.menu-open) {
 
 /* "Ink-in" (approved option F): the outline reveals bottom-to-top first,
    then cross-fades into the solid badge — a drawing that becomes the mark.
-   Two stacked mask-rendered layers in the loader ink colour; no distortion,
+   Two stacked mask-rendered layers in the loader ink color; no distortion,
    no wordmark. */
 .loader-mark-ink {
   aspect-ratio: 356 / 481;
@@ -2389,7 +2389,7 @@ body.site-loader-active:not(.menu-open) {
 }
 
 /* Official badge artwork in the top bar: currentColor through a mask so the
-   existing cream/green colour flip keeps working. */
+   existing cream/green color flip keeps working. */
 #site-header-mount#site-header-mount #nav#nav.site-header .nav__brand-mark-art {
   aspect-ratio: 356 / 481 !important;
   background-color: currentColor !important;
@@ -2432,7 +2432,7 @@ body.site-loader-active:not(.menu-open) {
    one chrome: homepage cream (#FCF9F1) instead of the tan parchment,
    and a cinnabar nav hover/active accent instead of the legacy qing
    green. Markup and JS are unchanged — this only harmonises the
-   solid-state colour tokens. The dark-hero overlay state (which mirrors
+   solid-state color tokens. The dark-hero overlay state (which mirrors
    the homepage hero's own light-nav treatment) is intentionally kept.
    ============================================================ */
 :root {
@@ -2455,9 +2455,9 @@ body.site-loader-active:not(.menu-open) {
   color: var(--sv-cinnabar) !important;
 }
 
-/* Solid-state resting nav colour → homepage ink #182524 (was qing-teal
+/* Solid-state resting nav color → homepage ink #182524 (was qing-teal
    #1E4040). Now that the overlay is disabled site-wide, every mounted page
-   sits in this solid state, so this matches the homepage .sv-nav a colour.
+   sits in this solid state, so this matches the homepage .sv-nav a color.
    Hover/active above still win via :hover/[aria-current]. */
 #site-header-mount#site-header-mount #nav#nav.site-header .nav__links a,
 #site-header-mount#site-header-mount #nav#nav.site-header .nav__menu-link {

@@ -512,8 +512,8 @@ body.homepage #cdd {
   --cdd-accent: #7ea4a0;
   --cdd-signal: #3d7070;
   background: radial-gradient(120% 120% at 12% 8%, #1d2f2d 0%, #152321 54%, #0f1a18 100%) !important;
-  /* Set base colour directly — prevents typography-system's global
-     element-type rules from landing a dark colour via inheritance    */
+  /* Set base color directly — prevents typography-system's global
+     element-type rules from landing a dark color via inheritance    */
   color: #f6f0e6 !important;
   border-top: 1px solid rgba(197, 184, 162, 0.36) !important;
   border-bottom: 1px solid rgba(95, 115, 110, 0.35) !important;
@@ -559,7 +559,7 @@ body.homepage #cdd .cdd-cta {
   color: #f6f0e6 !important;
 }
 
-/* Ring needs its own colour declaration — refinement-pass.css sets
+/* Ring needs its own color declaration — refinement-pass.css sets
    .cdd-cta__ring { color: var(--sv-brand-accent) } which would land
    the dark #3d7070 teal on the arrow character without this fix.     */
 body.homepage #cdd .cdd-cta__ring {
@@ -661,7 +661,7 @@ body.homepage .nav__menu-btn:hover {
 
 /* ═══════════════════════════════════════════════════════════════════════════
    CDD FLAGSHIP PANEL — DEFINITIVE CONTRAST FIX (April 2026)
-   Two-layer defence so neither the typography system (loaded last) nor any
+   Two-layer defense so neither the typography system (loaded last) nor any
    other global rule can produce dark-on-dark text inside the dark CDD panel.
 
    Layer 1 — CSS variable redirect
@@ -674,7 +674,7 @@ body.homepage .nav__menu-btn:hover {
    Covers every visible text element so no generic rule can override them.
    ═══════════════════════════════════════════════════════════════════════════ */
 
-/* LAYER 1: Redirect global colour tokens to dark-panel equivalents */
+/* LAYER 1: Redirect global color tokens to dark-panel equivalents */
 html body.homepage #cdd {
   /* ShoreVest typography-system ink variables */
   --sv-ink:              #f6f0e6;
@@ -698,11 +698,11 @@ html body.homepage #cdd {
   --ink2:           #ece3d6;
   --mist:           #c5b8a2;
 
-  /* Prevent dark teal link colour bleeding into CTAs */
+  /* Prevent dark teal link color bleeding into CTAs */
   --blue-green-dark: #7ea4a0;
 }
 
-/* LAYER 2: Explicit colour locks — heading-level text */
+/* LAYER 2: Explicit color locks — heading-level text */
 html body.homepage #cdd .wordmark__title,
 html body.homepage #cdd .wordmark__title em,
 html body.homepage #cdd .cdd-feature__title,
@@ -731,7 +731,7 @@ body.homepage #cdd .wordmark__title em {
   color: #c93b2a !important;
 }
 
-/* LAYER 2: Explicit colour locks — body/paragraph text */
+/* LAYER 2: Explicit color locks — body/paragraph text */
 html body.homepage #cdd .cdd-editorial__lede,
 html body.homepage #cdd .cdd-feature__thesis,
 html body.homepage #cdd .cdd-feature__finding,
@@ -739,7 +739,7 @@ html body.homepage #cdd .cdd-editorial__meta-value {
   color: #ece3d6 !important;
 }
 
-/* LAYER 2: Explicit colour locks — labels, metadata, secondary text */
+/* LAYER 2: Explicit color locks — labels, metadata, secondary text */
 html body.homepage #cdd .cdd-editorial__kicker,
 html body.homepage #cdd .cdd-feature__issue,
 html body.homepage #cdd .cdd-feature__date,
@@ -749,7 +749,7 @@ html body.homepage #cdd .cdd-editorial__meta-label {
   color: #c5b8a2 !important;
 }
 
-/* LAYER 2: Explicit colour locks — quote */
+/* LAYER 2: Explicit color locks — quote */
 html body.homepage #cdd .cdd-feature__quote {
   color: #f6f0e6 !important;
 }
@@ -887,7 +887,7 @@ body.homepage .home-hero::after {
   }
 }
 
-/* LAYER 2: Explicit colour locks — CTA text and ring */
+/* LAYER 2: Explicit color locks — CTA text and ring */
 html body.homepage #cdd .cdd-cta {
   color: #f6f0e6 !important;
 }

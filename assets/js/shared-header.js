@@ -33,7 +33,7 @@
 
   // Loader tree mark — "Ink-in" (approved option F): the outline reveals
   // first, then inks into the solid badge. Two mask-rendered layers in the
-  // loader ink colour; mark only, no wordmark.
+  // loader ink color; mark only, no wordmark.
   const BRAND_MARK_FILLED_PATH = assetHref('assets/brand/tree-mark-filled.png');
   const LOADER_MARK_SVG = `<span class="loader-mark-svg loader-mark-ink" aria-hidden="true"><span class="loader-mark-art loader-mark-art--out" style="-webkit-mask-image:url('${BRAND_MARK_PATH}');mask-image:url('${BRAND_MARK_PATH}')"></span><span class="loader-mark-art loader-mark-art--fill" style="-webkit-mask-image:url('${BRAND_MARK_FILLED_PATH}');mask-image:url('${BRAND_MARK_FILLED_PATH}')"></span></span>`;
 
@@ -244,7 +244,7 @@
     document.head.appendChild(chromeLink);
   }
 
-  // Burger toggle (canonical behaviour).
+  // Burger toggle (canonical behavior).
   const svBurger = mount.querySelector('.sv-burger');
   const svMenu = mount.querySelector('#sv-mobile-menu');
   if (svBurger && svMenu) {
