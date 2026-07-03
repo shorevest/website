@@ -143,7 +143,11 @@ body.cdd-article-page .cdd-edition-kicker {
 body.cdd-article-page .cdd-edition-kicker::before {
   content: none; display: none;
 }
-body.cdd-article-page .cdd-intro__grid { max-width: 1000px; }
+body.cdd-article-page .cdd-intro__grid {
+  /* Let the CDD title/dek line up with the global header shell so long
+     subheadings can run to the same right edge as the Contact button. */
+  max-width: var(--page-max);
+}
 body.cdd-article-page .cdd-title {
   margin: 0; font: 500 clamp(32px, 4vw, 52px)/1.08 var(--sv-font);
   letter-spacing: -0.022em; color: var(--sv-ink); text-wrap: balance;
@@ -351,4 +355,22 @@ body.cdd-article-page .cdd-pager__home:hover { color: var(--sv-cinnabar); border
   body.cdd-article-page .cdd-btn { flex: 1 1 150px; justify-content: center; }
   body.cdd-article-page .cdd-body p { font-size: 16.5px; }
   body.cdd-article-page .sv-back-to-top { right: 16px; bottom: 16px; }
+}
+
+/* CDD hero copy width alignment: applies to every China Debt Dynamics issue. */
+body.cdd-article-page .cdd-intro.sv-hero {
+  --site-max-width: var(--page-max);
+  --site-page-margin: var(--pad-x);
+  --hero-side-pad: var(--pad-x);
+}
+
+body.cdd-article-page .cdd-intro__bar,
+body.cdd-article-page .cdd-intro__grid.sv-hero__inner {
+  max-width: var(--page-max) !important;
+}
+
+body.cdd-article-page .cdd-intro__lede.sv-hero__left,
+body.cdd-article-page .cdd-dek.sv-hero__body {
+  max-width: 100% !important;
+  width: 100% !important;
 }
