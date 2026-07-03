@@ -10,7 +10,7 @@
       displayDate: '24–25 Sep 26',
       type: 'INVESTOR EVENT',
       title: 'ShoreVest Annual General Meeting 2026',
-      location: 'Location TBC',
+      location: 'Guangzhou',
       description: 'ShoreVest’s annual meeting for investors and invited guests.',
       ctaLabel: 'INVITE ONLY',
       isClickable: false
