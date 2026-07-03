@@ -1,0 +1,35 @@
+{
+  "series": "China Debt Dynamics",
+  "volumeIssue": "Volume 8 | Issue 4",
+  "published": "1 October 2024",
+  "edition": "Structural Edition",
+  "title": "Quantifying China’s NPL Market",
+  "dek": "China's nonperforming loan (NPL) market is the biggest in the world, but it's also one of the most opaque.",
+  "keyFindings": [],
+  "sections": [
+    {
+      "heading": null,
+      "paragraphs": [
+        "China's nonperforming loan (NPL) market is the biggest in the world, but it's also one of the most opaque. The annual volume of NPLs that becomes available to investors to purchase is huge - far bigger than any other market globally - and will continue to be so for years to come. But there is very little publicly available data on the volume of NPLs that flow from the banks, through the asset management companies (AMCs), and onto the secondary market of distressed debt investors. However, data from banking regulators as well as market participants, such as one local AMC, provide a degree of insight.",
+        "Since 2019, China's banks have disposed of about RMB 3 trillion (USD 427 billion) worth of NPLs annually. We estimate about half of this amount is resolved internally by the banks themselves. In such cases, the banks claw back the value of the bad loans, either by selling the assets posted as security against the loan (which is typically some form of property), through debt-for-equity swaps, or by seeking repayment from third-parties that guaranteed the loans.",
+        "Those loans the banks can't fully redeem are spun off, usually by selling the loans to AMCs, otherwise known as “bad banks.” China has five AMCs that operate nationally - four of which were established in 1999 and 2000 to deal with China's last debt crisis (Cinda, Great Wall, Orient, and CITIC, which until recently was called Huarong), and a fifth, Galaxy, that was set up in 2021. Additionally, there are about 60 local AMCs that are permitted to operate in a single province only, the first of which were established in 2014.",
+        "According to a recent report by Zheshang Asset Management (“ZSAMC”) - a Zhejiang province-based AMC and one of the most active of the local AMCs - in 2023 China's banks raised about RMB 400.7 billion (USD 57 billion) from the sale of NPLs, up 0.5% from 2022. We estimate those loans – the primary market - had a face value of RMB 1.5 trillion (we arrived at the figure by adding NPL sales to the total value of banks' write-downs in 2023, which were RMB 1.1 trillion). That's roughly equivalent to half of all NPLs disposed of by banks last year.",
+        "Most of the loans were sold by joint stock banks (40%) - the 12 second-tier banks, like China Merchants Bank and CITIC Bank, that are licensed to operate nationally - and the big five banks (23%). City commercial banks (16%) and rural commercial banks (18%) made up most of the remainder.",
+        "AMCs acquired RMB 326.6 billion, or 82%, of the total: Cinda purchased 21%, CITIC 16%, Great Wall 10%, China Orient 9%, Galaxy 2%, and the local AMCs combined took 23%. The remainder - RMB 73 billion, or 18% - was acquired by \"investors.\" ZSAMC didn't provide detail about who the investors were. However, while banks can only sell portfolios of three or more NPLs to AMCs, they are permitted to sell loans individually and in pairs to whoever they like, and often use JD.com and Taobao - Alibaba's auction platform - to market them. We suspect NPLs sold by banks directly to investors fall into this category.",
+        "After acquiring NPLs, AMCs have the option of keeping them on their books and resolving them internally, or selling them onward to investors like ShoreVest in the secondary market. In 2023, the AMCs raised RMB 379.7 billion (USD 54 billion) from selling NPLs into the secondary market. The five national AMCs generated 63% of sales, and the local AMCs 37%. Those sales are the core of the secondary market."
+      ]
+    },
+    {
+      "heading": "What comes next?",
+      "paragraphs": [
+        "Given the slowdown of China's economy, the pace at which banks dispose of NPLs will - at the very least - remain at their current elevated levels. The only constraint is banks' narrowing profits. As we've written previously, we believe banks in recent years have prioritized using profits to replenish capital rather than write-down NPLs. However, weakening profits mean sustaining capital levels might no longer be possible without help from the state.",
+        "Help is on its way. The National Financial Regulatory Administration (NFRA) - China's banking regulator - recently announced it intends to recapitalize China's big six commercial banks. We expect that will create space for the banks to potentially ramp up NPLs disposals.",
+        "What does it mean for ShoreVest: Every year, a huge volume of new NPLs become available for sale. However, China has very few experienced and institutional distressed debt investors like ShoreVest. Most of the big international credit funds who had tested the waters buying Chinese NPLs between 2014-2019 pulled out of China in 2020 with the onset of the COVID-19 pandemic. Most domestic Chinese NPL buyers are smaller fragmented regional groups or opportunistic larger investors that either want the collateral underlying a loan, or see strategic advantages in acquiring a competitor's debts.",
+        "For ShoreVest, this creates a unique opportunity. AMCs are under significant pressure to move large volumes of NPLs, but few investors are interested in purchasing more than a handful at most. As one of the few investors capable of acquiring large portfolios of NPLs, we're the preferred partner of most AMCs."
+      ]
+    }
+  ],
+  "disclaimer": "This letter expresses the views of the author as of the date indicated and such views are subject to change without notice. ShoreVest Partners has no duty or obligation to update the information contained herein. Certain information contained herein concerning economic trends is based on or derived from information provided by independent third-party sources. ShoreVest Partners believes that the sources from which such information has been obtained are reliable; however, it cannot guarantee the accuracy of such information and has not independently verified the accuracy or completeness of such information or the assumptions on which such information is based. This letter, including the information contained herein, may not be copied, reproduced, republished, or posted in whole or in part, in any form without the prior written consent of ShoreVest Partners.",
+  "contact": "Guangzhou International Commercial Center Suite 1503 No.235 Tianhe North Road Guangzhou, China 510610",
+  "copyright": "Copyright © 2024 All rights reserved."
+}

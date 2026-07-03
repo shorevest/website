@@ -1,0 +1,49 @@
+{
+  "series": "China Debt Dynamics",
+  "volumeIssue": "Volume 7 | Issue 2",
+  "published": "28 June 2023",
+  "edition": "Markets Edition",
+  "title": "Bank Exposure to Developers: A Challenge but Not a Risk",
+  "dek": "Given that housing construction has long been one of the foundational pillars of China's economy, it’s necessary to ask whether distress among the country's developers potentially poses a systemic risk to the financial system? The short answer? No, it does not.",
+  "keyFindings": [],
+  "sections": [
+    {
+      "heading": null,
+      "paragraphs": [
+        "With China's property developers continuing to struggle under the burden of declining sales, it's inevitable that attention has turned to China's banks. Given that housing construction has long been one of the foundational pillars of China's economy, it’s necessary to ask whether distress among the country's developers potentially poses a systemic risk to the financial system?",
+        "The short answer? No, it does not.",
+        "Developers pose far less of a threat to financial stability than generally assumed, largely because loans to developers constitute a relatively small percentage of banks' total loans. A sudden spike in developers' nonperforming loans (NPLs) is unlikely to pose an insurmountable challenge to all but a small number of banks.",
+        "Managing developers' NPLs will require banks to maintain elevated levels of NPL disposals for years to come, but we expect such disposals to be sustainable."
+      ]
+    },
+    {
+      "heading": "Developers’ loans",
+      "paragraphs": [
+        "We collected data from the earnings reports of China’s 58 listed banks - a group that together accounts for about 80% of total banking sector assets - on their exposure to the property sector. At the end of 2022, real estate loans (a category that is made up mostly of loans to developers) accounted for less than 10% of most banks' total lending. Moreover, most banks are reducing their exposure. 29 banks in our sample saw their total outstanding loans to developers decline in H2 2022, five more than in H1. For the banks in our sample, loans to developers on average represented only 6% of total loans at end-2022.",
+        "Given banks' relatively low exposure to developers, even if the NPL ratio for developers' loans increased to 30% or even 40%, the impact on the capital of most banks should be fairly manageable. However, gauging the level of developer NPLs is difficult because banks' NPL disclosures are unreliable. That's clear from inconsistencies between banks' NPL disclosures.",
+        "At the end of 2022, China's big four banks - Industrial and Commercial Bank of China (ICBC), China Construction Bank (CCB), Bank of China (BOC), and Agricultural Bank of China (ABC) - disclosed a higher NPL ratio on loans to developers than all but a handful of other banks in our sample. That’s unlikely a fair representation of reality. China's big four banks are generally regarded as having the best corporate clients. Consequently, their asset quality should be significantly better than most smaller banks. However, the NPL ratios don’t bear that out, which leads us to believe disclosures among smaller banks don’t accurately reflect distress among their real estate assets.",
+        "Additionally, small banks' real estate exposure is typically concentrated in relatively small geographies. Whereas China's biggest banks - the big four, plus the Bank of Communications, China Postal Savings Bank, and the 12 joint stock banks - are licensed to operate nationwide, China's hundreds of city and rural commercial banks are limited to one province only. In most cases, their businesses don't go much beyond one city or county.",
+        "China's bigger banks can afford to reduce their exposure to weak geographies. A number of joint stock banks said in their 2022 earnings reports that their new lending to developers was concentrated in first and second tier cities. However, small banks can't diversify their lending footprint, which should mean that their developer NPLs are higher than their larger peers.",
+        "We've recently seen instances where small banks’ developer NPLs suddenly increase without warning and without explanation. For example, in mid-2022, Bank of Guizhou said that its property NPL ratio was 0.51%. At the end of the year, the bank disclosed that developer NPLs had jumped to 20.21%. Meanwhile, in mid-2022 Qingdao Rural Commercial Bank said its ratio was 1.80%. Six months later it was 6.10%.",
+        "Neither bank has explained the sudden jump in NPLs. Our best guess is that large, local private-sector developers defaulted during H2 and that they were big borrowers from the banks.",
+        "Still, even with the sudden spike, the two banks' overall NPL ratios remained manageable. In the case of Bank of Guizhou, at the end of 2022 its NPL ratio was 1.47% (loans to developers accounted for only 3.5% of the bank's end-2022 total lending). For Qingdao Rural it was 2.19%."
+      ]
+    },
+    {
+      "heading": "Local governments are a far bigger challenge",
+      "paragraphs": [
+        "Overall, we're not overly concerned about the ability of China's banks to manage rising distress among property developers, although banks with concentrated exposure to locations with particularly weak housing demand will suffer disproportionately. However, China's property sector readjustment could prove a more serious challenge to lenders through another channel - local governments.",
+        "The property sector has traditionally been a major contributor to local government income, both through land sales and taxes generated through housing construction. Given the decline in land sales over the last couple of years, and the precipitous decline in the construction of new projects, many local authorities are struggling to generate enough income to service their debts.",
+        "Sadly, China's banks typically don't make detailed disclosures about the extent of their exposure to local governments and their corporate subsidiaries (known as local government financing vehicles - LGFVs). However, some government advisors believe banks’ exposure to weak local government poses a real challenge to financial sector stability.",
+        "Yin Yanlin, the former deputy director of the Office of the Central Leading Group for Finance and Economics - China’s top body for economic policy making - recently said the following:",
+        "\"The impact of real estate on the economy cannot be ignored...It has exacerbated the local debt problem and increased the risk of \"gray rhinos\" turning into \"black swans\". If this situation is not changed as soon as possible, the exposure and explosion of [local government] bonds in some places will lead to an increase in bad debts of small and medium-sized banks, which will inevitably lead to regional and even systemic financial risks.\"",
+        "The consequences of local government financial pressures are just starting to bubble to the surface. In recent months there have been a number of instances reported in the Chinese media of municipal authorities failing to pay state employees on time, imposing pay cuts on workers, or increasing the cost of public services. As yet, no local government has defaulted on a bond, but there have been plenty of instances where local governments and LGFVs have failed to pay contractors and suppliers.",
+        "The degree to which local government financial pressure impacts banks remains to be seen and will depend on many factors, such as whether housing demand rebounds, and whether the People's Bank of China slashes interest rates, thereby reducing local governments' debt servicing costs.",
+        "Still, based on our analysis, most banks should be able to manage the immediate challenges posed by distress among developers. However, the extent of the problems posed by local governments are more difficult to gauge, and may prove more costly to resolve."
+      ]
+    }
+  ],
+  "disclaimer": "This letter expresses the views of the author as of the date indicated and such views are subject to change without notice. ShoreVest Partners has no duty or obligation to update the information contained herein. Certain information contained herein concerning economic trends is based on or derived from information provided by independent third-party sources. ShoreVest Partners believes that the sources from which such information has been obtained are reliable; however, it cannot guarantee the accuracy of such information and has not independently verified the accuracy or completeness of such information or the assumptions on which such information is based. This letter, including the information contained herein, may not be copied, reproduced, republished, or posted in whole or in part, in any form without the prior written consent of ShoreVest Partners.",
+  "contact": "Guangzhou International Commercial Center Suite 1503 No.235 Tianhe North Road Guangzhou, China 510610",
+  "copyright": "Copyright © 2023 All rights reserved."
+}

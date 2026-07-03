@@ -143,13 +143,14 @@ body.cdd-article-page .cdd-edition-kicker {
 body.cdd-article-page .cdd-edition-kicker::before {
   content: none; display: none;
 }
-body.cdd-article-page .cdd-intro__grid { max-width: 1000px; }
+/* Title + dek span the full shell width — no side cap, no left bunching. */
+body.cdd-article-page .cdd-intro__grid { max-width: none; }
 body.cdd-article-page .cdd-title {
   margin: 0; font: 500 clamp(32px, 4vw, 52px)/1.08 var(--sv-font);
   letter-spacing: -0.022em; color: var(--sv-ink); text-wrap: balance;
 }
 body.cdd-article-page .cdd-dek {
-  margin: 22px 0 0; max-width: 72ch;
+  margin: 22px 0 0; max-width: none;
   font: 400 clamp(17px, 1.5vw, 20px)/1.55 var(--sv-font); color: var(--sv-ink-2);
 }
 
