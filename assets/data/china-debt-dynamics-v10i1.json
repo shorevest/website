@@ -1,10 +1,10 @@
 {
   "series": "China Debt Dynamics",
   "volumeIssue": "Volume 10 | Issue 1",
-  "published": "25 January 2026",
+  "published": "January 25, 2026",
   "edition": "Allocator Edition",
   "title": "The End of the “China Is Uninvestable” Myth",
-  "dek": "This edition examines how dislocation has altered market mechanics and where private credit remains investable when underwriting discipline, enforcement paths, and downside analysis are treated as the starting point.",
+  "dek": "Almost five years after China was widely condemned as being uninvestable, the narrative is changing as regulators stabilize capital markets and foreign investors reassess allocations.",
   "keyFindings": [
     "China was never universally uninvestable across all asset classes.",
     "Regulatory overhauls in private credit created more predictable creditor outcomes over the past decade.",
@@ -33,8 +33,17 @@
     {
       "heading": "Long-term policy underpinning regulatory shifts",
       "paragraphs": [
-        "When liquidity retreats, sellers often value speed and certainty. Banks, non-bank lenders, property-related borrowers, and other holders of stressed assets may seek transactions that reduce balance-sheet pressure or resolve legacy exposures. That can create openings for private credit capital that is patient, structured, and grounded in downside analysis.",
-        "The opportunity is not uniform. Some borrowers remain overleveraged, some collateral is difficult to monetize, and some situations lack a practical enforcement route. The investable portion of the market is therefore defined by selectivity: identifiable collateral, appropriate entry price, realistic timelines, and alignment with counterparties that need a solution."
+        "Of course, the uninvestable narrative wasn't just about returns. It was about the unpredictability of a system where the state reserves the right to intervene in the economy without considering the interests of investors. And yet, even as equity investors claimed China was uninvestable, Beijing was consciously making ShoreVest’s private credit space far more predictable and \"investable.\"",
+        "Long-time followers of ShoreVest will be familiar with the transformation. About a decade ago, Beijing recognized the importance of private sector investors in helping clean up the banking system. To that end, authorities overhauled the legal system to better protect creditors' rights, and formalized the asset resolution process so that secured credit investors could usually be confident of a legal resolution in about 18 months. Collateral assets were then auctioned publicly and transparently by the courts using online platforms like JD.com and Alibaba's Taobao.",
+        "Beijing also cleaned up its financial system by reining in property development lending, as well as shutting down most of the shadow banking system. Although some of this short-term pain contributed to global allocators’ reluctance to invest in China, ultimately the moves have put China’s financial system and property markets on surer footing for the long-term.",
+        "We're now seeing regulators reforming China's stocks markets in ways comparable to what we previously experienced in private credit. For decades, China's stock markets have been relatively peripheral to China's economic performance. That's now changing. Beijing wants innovative tech firms - which typically struggle to tap bank credit - to fund themselves via the capital market. It also wants the capital market to replace housing as the engine for middle class wealth generation. And with China's population rapidly aging - and the state pension system inadequately funded to meet the needs of a rising number of retirees - rising stock valuations could help finance the pension system.",
+        "To that end, Beijing wants to deliver a \"slow bull\" market whereby - notwithstanding two-way volatility, and the occasional correction - stock prices gradually rise over time. Since Q1 2023, the government has been striving to deliver this by:"
+      ],
+      "bullets": [
+        "Building public trust in the market by imposing discipline on market participants",
+        "Delivering real returns",
+        "Ensuring corrections are short-lived by rebalancing the market away from retail investors toward long-term institutional investors",
+        "Creating exciting investment opportunities by encouraging companies with innovative technologies to list"
       ]
     },
     {
@@ -50,6 +59,5 @@
     }
   ],
   "disclaimer": "This letter expresses the views of the author as of the date indicated and such views are subject to change without notice. ShoreVest Partners has no duty or obligation to update the information contained herein. Certain information contained herein concerning economic trends is based on or derived from information provided by independent third-party sources. ShoreVest Partners believes that the sources from which such information has been obtained are reliable; however, it cannot guarantee the accuracy of such information and has not independently verified the accuracy or completeness of such information or the assumptions on which such information is based. This letter, including the information contained herein, may not be copied, reproduced, republished, or posted in whole or in part, in any form without the prior written consent of ShoreVest Partners.",
-  "contact": "Guangzhou International Commercial Center Suite 1503 No.235 Tianhe North Road Guangzhou, China 510610",
-  "copyright": "Copyright © 2026 All rights reserved."
+  "copyright": "© 2026 ShoreVest Partners. All rights reserved."
 }

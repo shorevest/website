@@ -153,7 +153,7 @@ body.cdd-article-page .cdd-title {
   letter-spacing: -0.022em; color: var(--sv-ink); text-wrap: balance;
 }
 body.cdd-article-page .cdd-dek {
-  margin: 22px 0 0; max-width: 72ch;
+  margin: 22px 0 0; max-width: none;
   font: 400 clamp(17px, 1.5vw, 20px)/1.55 var(--sv-font); color: var(--sv-ink-2);
 }
 
