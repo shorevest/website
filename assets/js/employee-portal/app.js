@@ -120,7 +120,7 @@
     var sidebar = el('aside', { class: 'ops-sidebar' + (SVOps.state.menuOpen ? ' is-open' : '') });
     sidebar.appendChild(el('div', { class: 'ops-sidebar__brand' }, [
       el('img', { src: LOGO, alt: 'ShoreVest', width: '148', height: '36' }),
-      el('p', { class: 'ops-sidebar__title', html: '<span class="rule"></span>ShoreVest Operations' }),
+      el('p', { class: 'ops-sidebar__title', html: '<span class="rule"></span>ShoreVest One' }),
       el('p', { class: 'ops-sidebar__env', text: I.demoMode() ? 'Demonstration environment' : 'Production' })
     ]));
 
@@ -148,7 +148,7 @@
     var topbar = el('div', { class: 'ops-topbar' }, [
       el('div', { style: 'display:flex;align-items:center;gap:14px' }, [
         burger,
-        el('span', { class: 'ops-topbar__crumb', html: 'ShoreVest Operations / <strong>' + esc(navItem ? navItem.label : titleFor(viewId)) + '</strong>' })
+        el('span', { class: 'ops-topbar__crumb', html: 'ShoreVest One / <strong>' + esc(navItem ? navItem.label : titleFor(viewId)) + '</strong>' })
       ]),
       el('div', { class: 'ops-topbar__right' }, [
         el('span', { text: S.RULES_VERSION + ' · ' + S.TEMPLATE_VERSION }),
@@ -264,50 +264,83 @@
   /* ── Sign-in gate ──────────────────────────────────────────────────────── */
 
   function renderGate() {
+    var demo = I.demoMode();
     var gate = el('div', { class: 'gate' });
 
-    var brand = el('div', { class: 'gate__brand' });
-    brand.appendChild(el('img', { src: LOGO, alt: 'ShoreVest', width: '190', height: '46' }));
-    brand.appendChild(el('div', {}, [
-      el('h1', { html: '<span class="rule"></span>ShoreVest Operations' }),
-      el('p', { text: 'A private internal platform for controlled list processing, weekly reporting, Salesforce data quality, and outreach preparation. Access is restricted to authorised ShoreVest personnel.' })
+    /* ── Brand aside — restrained ShoreVest identity ──────────────────────── */
+    var aside = el('aside', { class: 'gate__aside' });
+    aside.appendChild(el('div', { class: 'gate__mark' }, [
+      el('img', { src: LOGO, alt: 'ShoreVest', width: '196', height: '48' })
     ]));
-    brand.appendChild(el('p', { class: 'gate__legal', text:
-      'This system is for authorised ShoreVest employees only. Access and actions are logged and audited. ' +
-      'Unauthorised access is prohibited.' }));
-    gate.appendChild(brand);
+    aside.appendChild(el('div', { class: 'gate__intro' }, [
+      el('p', { class: 'gate__eyebrow', html: '<span class="rule"></span>ShoreVest One' }),
+      el('h1', { class: 'gate__headline', text: 'The firm’s internal operating platform.' }),
+      el('p', { class: 'gate__sub', text: 'A single, controlled entry point for routine list processing, weekly reporting, Salesforce data quality and outreach preparation.' })
+    ]));
+    aside.appendChild(el('p', { class: 'gate__legal', text:
+      'For authorised ShoreVest personnel only. Access and actions are logged and audited. Unauthorised access is prohibited.' }));
+    gate.appendChild(aside);
 
+    /* ── Sign-in panel ────────────────────────────────────────────────────── */
     var panel = el('div', { class: 'gate__panel' });
     var box = el('div', { class: 'gate__box' });
-    box.appendChild(el('h2', { text: 'Sign in' }));
-    box.appendChild(el('p', { class: 'ops-lede', text: 'Sign in with your ShoreVest Microsoft account. Multi-factor authentication is enforced by ShoreVest policy.' }));
+    box.appendChild(el('p', { class: 'gate__box-eyebrow', text: 'Sign in' }));
+    box.appendChild(el('h2', { class: 'gate__box-title', text: 'Welcome to ShoreVest One' }));
 
-    var msBtn = el('button', { class: 'gate__ms', type: 'button' });
-    msBtn.appendChild(frag('<svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><rect x="1" y="1" width="7.6" height="7.6" fill="#F35325"/><rect x="9.4" y="1" width="7.6" height="7.6" fill="#81BC06"/><rect x="1" y="9.4" width="7.6" height="7.6" fill="#05A6F0"/><rect x="9.4" y="9.4" width="7.6" height="7.6" fill="#FFBA08"/></svg>'));
-    msBtn.appendChild(el('span', { text: 'Sign in with Microsoft' }));
-    msBtn.addEventListener('click', function () {
-      if (I.demoMode()) {
-        U.toast('Microsoft Entra ID is not configured in demonstration mode. Use a demonstration role below.');
-      } else {
-        I.EntraAuth.signIn().catch(function (e) { U.toast(e.message); });
-      }
-    });
-    box.appendChild(msBtn);
+    if (demo) {
+      box.appendChild(el('p', { class: 'gate__box-lede', text:
+        'This is a demonstration preview. Sign-in is simulated — choose a role to explore ShoreVest One with synthetic data. Each role sees only what its permissions allow.' }));
 
-    if (I.demoMode()) {
-      box.appendChild(el('div', { class: 'gate__divider', text: 'Demonstration access' }));
-      var demo = el('div', { class: 'gate__demo' });
-      demo.appendChild(el('p', { text: 'No tenant is connected. Choose a role to explore the portal with synthetic data. Each role sees only what its permissions allow.' }));
-      var sel = el('select', { 'aria-label': 'Demonstration role' });
+      var err = el('p', { class: 'gate__error', role: 'alert', hidden: true });
+      function hideErr() { err.hidden = true; err.textContent = ''; }
+      function showErr(m) { err.textContent = m; err.hidden = false; }
+
+      var sel = el('select', { class: 'gate__select', id: 'gate-role' });
       sel.appendChild(el('option', { value: '', text: 'Select a role…' }));
       DEMO_USERS.forEach(function (u, i) { sel.appendChild(el('option', { value: String(i), text: u.name + ' — ' + u.role })); });
-      var enter = el('button', { class: 'btn btn--primary', text: 'Enter portal', style: 'width:100%;margin-top:12px', onclick: function () {
-        if (sel.value === '') { U.toast('Select a demonstration role.'); return; }
-        signInDemo(DEMO_USERS[Number(sel.value)]);
-      } });
-      demo.appendChild(sel);
-      demo.appendChild(enter);
-      box.appendChild(demo);
+      sel.addEventListener('change', hideErr);
+
+      var enter = el('button', { class: 'gate__submit', type: 'button' }, [
+        el('span', { class: 'gate__submit-label', text: 'Enter ShoreVest One' }),
+        el('span', { class: 'gate__submit-spinner', 'aria-hidden': 'true' })
+      ]);
+      enter.addEventListener('click', function () {
+        if (enter.classList.contains('is-loading')) return;
+        if (sel.value === '') { showErr('Select a role to continue.'); sel.focus(); return; }
+        hideErr();
+        enter.classList.add('is-loading');
+        enter.disabled = true; sel.disabled = true;
+        var u = DEMO_USERS[Number(sel.value)];
+        /* Brief settle so the loading state is perceptible before the shell mounts. */
+        setTimeout(function () { signInDemo(u); }, 260);
+      });
+
+      box.appendChild(el('div', { class: 'gate__field' }, [
+        el('label', { class: 'gate__label', for: 'gate-role', text: 'Demonstration role' }),
+        sel
+      ]));
+      box.appendChild(err);
+      box.appendChild(enter);
+      box.appendChild(el('p', { class: 'gate__note', text:
+        'Connected Microsoft sign-in and multi-factor authentication are enabled in the production configuration.' }));
+    } else {
+      box.appendChild(el('p', { class: 'gate__box-lede', text:
+        'Sign in with your ShoreVest Microsoft account. Multi-factor authentication is enforced by ShoreVest policy.' }));
+
+      var msBtn = el('button', { class: 'gate__ms', type: 'button' });
+      msBtn.appendChild(frag('<svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><rect x="1" y="1" width="7.6" height="7.6" fill="#F35325"/><rect x="9.4" y="1" width="7.6" height="7.6" fill="#81BC06"/><rect x="1" y="9.4" width="7.6" height="7.6" fill="#05A6F0"/><rect x="9.4" y="9.4" width="7.6" height="7.6" fill="#FFBA08"/></svg>'));
+      msBtn.appendChild(el('span', { class: 'gate__ms-label', text: 'Sign in with Microsoft' }));
+      msBtn.appendChild(el('span', { class: 'gate__submit-spinner', 'aria-hidden': 'true' }));
+      msBtn.addEventListener('click', function () {
+        if (msBtn.classList.contains('is-loading')) return;
+        msBtn.classList.add('is-loading'); msBtn.disabled = true;
+        I.EntraAuth.signIn().catch(function (e) {
+          msBtn.classList.remove('is-loading'); msBtn.disabled = false; U.toast(e.message);
+        });
+      });
+      box.appendChild(msBtn);
+      box.appendChild(el('p', { class: 'gate__note', text:
+        'ShoreVest One is a private internal system. Do not share access to this application.' }));
     }
 
     panel.appendChild(box);
