@@ -1,11 +1,16 @@
 {
   "series": "China Debt Dynamics",
   "volumeIssue": "Volume 6 | Issue 3",
-  "published": "21 December 2022",
+  "published": "December 21, 2022",
   "edition": "Policy Edition",
   "title": "China’s Property Support Measures: Rescue, not Reflation",
-  "dek": "Despite the scale of the resources being mobilized by both the central bank and commercial banks, the support measures aren't stimulus. Nor are they an effort to reflate housing demand. The measures are primarily an exercise in triage.",
-  "keyFindings": [],
+  "dek": "Beijing has mobilized a wave of support for the property sector. ShoreVest argues the measures are designed to rescue well-run developers and finish stalled homes — not to reflate the housing market.",
+  "keyFindings": [
+    "The support package marks a major shift after years of deleveraging under the “three red lines.”",
+    "Its aims are to keep viable private developers alive and ensure pre-sold homes get finished.",
+    "Reviving housing demand — not just supply-side credit — is what a true recovery would require.",
+    "The measures are unequivocally positive for developers and improve sentiment after a difficult 2022."
+  ],
   "sections": [
     {
       "heading": null,
@@ -43,19 +48,23 @@
       ]
     },
     {
-      "heading": null,
+      "heading": "Rescue, not reflation",
       "paragraphs": [
         "The fallout from Beijing's deleveraging efforts has far exceeded anything China's regulators envisioned or planned for. Those efforts, embodied by the three-red-line policy, were supposed to surgically reduce the amount of debt propping up the property sector by going after the most over-leveraged developers.",
-        "However, contagion has spread well beyond a handful of firms. Credit conditions are tighter for all developers, but private sector developers – even well-managed firms – have found it increasingly difficult to get adequate funding. Funds from presales, traditionally a major source of cash, have plunged in the face of massively reduced demand for new housing, no doubt partly as a result of the COVID-zero lockdowns which have loosened in recent weeks. Dozens of defaults have resulted in developers being effectively shut out of the offshore dollar bond market. And mainland bond investors have grown increasingly wary of buying debt issued by private-sector developers.",
+        "However, contagion has spread well beyond a handful of firms. Credit conditions are tighter for all developers, but private sector developers – even well-managed firms – have found it increasingly difficult to get adequate funding. Funds from presales, traditionally a major source of cash, have plunged in the face of massively reduced demand for new housing, no doubt partly as a result of the COVID-zero lockdowns which have loosened in recent weeks as we wrote about here. Dozens of defaults have resulted in developers being effectively shut out of the offshore dollar bond market. And mainland bond investors have grown increasingly wary of buying debt issued by private-sector developers.",
         "Even banks have been reluctant to lend. Starting December last year, regulators repeatedly called on banks to increase their support for the property sector. However, 40% of publicly traded banks reduced their outstanding loans to developers in the first half of 2022, with many saying they had pared back exposure to those deemed overly risky.",
         "To preserve China's best private sector developers – those that haven't already defaulted – it's become clear that state support is necessary. The new support measures will not distribute funds equally to all developers. They will mainly go to state-owned developers, those that aren't considered state-owned but nonetheless have significant state ownership (like Vanke), and private sector developers that haven't as yet defaulted on their public debt.",
-        "Those developers that have already defaulted on their bonds are unlikely to enjoy much of the new credit being unleashed. To the extent that they do, it will because state-owned developers are being encouraged to borrow in order to buy assets from distressed developers. However, state developers have so far proved reluctant to buy distressed developers' assets, and it's unclear whether more readily available credit will change that.",
+        "Those developers that have already defaulted on their bonds are unlikely to enjoy much of the new credit being unleashed. To the extent that they do, it will because state-owned developers are being encouraged to borrow in order to buy assets from distressed developers. However, state developers have so far proved reluctant to buy distressed developers' assets, and it's unclear whether more readily available credit will change that."
+      ]
+    },
+    {
+      "heading": "What it means for ShoreVest",
+      "paragraphs": [
         "The package of measures rolled out over the past few weeks are unequivocally good for the property sector, and by extension the economy. However, it doesn't signal the imminent reflation China's housing market or a meaningful boost to economic growth. Nor does it represent a broad-based loosening of credit conditions. It's merely an attempt to keep good developers alive and lessen the disruptive impact of distressed developers as they unravel.",
         "ShoreVest welcomes the news that Beijing is attempting to mitigate the severity of further stresses. Similar to China’s move in recent weeks to reverse the prior COVID-zero policies, the government’s effort to provide targeted support in the property developer market should boost sentiment after a very difficult 2022 in China."
       ]
     }
   ],
   "disclaimer": "This letter expresses the views of the author as of the date indicated and such views are subject to change without notice. ShoreVest Partners has no duty or obligation to update the information contained herein. Certain information contained herein concerning economic trends is based on or derived from information provided by independent third-party sources. ShoreVest Partners believes that the sources from which such information has been obtained are reliable; however, it cannot guarantee the accuracy of such information and has not independently verified the accuracy or completeness of such information or the assumptions on which such information is based. This letter, including the information contained herein, may not be copied, reproduced, republished, or posted in whole or in part, in any form without the prior written consent of ShoreVest Partners.",
-  "contact": "Guangzhou International Commercial Center Suite 1503 No.235 Tianhe North Road Guangzhou, China 510610",
-  "copyright": "Copyright © 2022 All rights reserved."
+  "copyright": "© 2022 ShoreVest Partners. All rights reserved."
 }

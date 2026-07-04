@@ -1,14 +1,19 @@
 {
   "series": "China Debt Dynamics",
   "volumeIssue": "Volume 2 | Issue 4",
-  "published": "5 July 2018",
+  "published": "July 5, 2018",
   "edition": "Policy Edition",
   "title": "“Disclose & Dispose”: Stricter Accounting Requirements to Push Up NPLs Further",
-  "dek": "China continues to develop the regulatory infrastructure and enforcement procedures to require banks to more appropriately “disclose and dispose” of non-performing loans.",
-  "keyFindings": [],
+  "dek": "Chinese regulators now require banks to classify every loan overdue by more than 90 days as nonperforming. ShoreVest details the accounting change, the tiered provisioning “carrot and stick,” and why it accelerates the flow of NPLs to market.",
+  "keyFindings": [
+    "China’s banks must now classify all loans overdue by 90+ days as nonperforming, ending prior collateral-based leeway.",
+    "Joint-stock and provincial banks are most affected; the big-four state banks are already compliant.",
+    "The CBIRC softened provisioning rules into tiered ranges to reward recognition, disposal, and capital strength.",
+    "The change accelerates the flow of NPLs into the market — expanding ShoreVest’s opportunity set."
+  ],
   "sections": [
     {
-      "heading": "Now ALL loans that are past due greater than 90 days are to be classified as NPL",
+      "heading": "All 90-day-overdue loans must be classified as NPL",
       "paragraphs": [
         "As we have been describing in many of our previous articles, China continues to develop the regulatory infrastructure and enforcement procedures to require banks to more appropriately “disclose and dispose” of non-performing loans (NPLs). There has now been another very important development in this process which is resulting in a material increase in the flow of NPLs into the marketplace.",
         "We understand from recent local media reports, as well as from our discussions with industry contacts, that the China Banking and Insurance Regulatory Commission (CBIRC) has very recently requested commercial banks to account for ALL loans that are overdue for 90 days or longer as NPL.",
@@ -17,26 +22,32 @@
       ]
     },
     {
-      "heading": "This accounting change has many challenging implications for noncompliant banks",
+      "heading": "Challenging implications for noncompliant banks",
       "paragraphs": [
         "While this change would simply bring China’s NPL accounting standards in-line with most other countries globally, the adjustment process has material implications for the banking sector. Once a loan is classified as an NPL, there are three important negative implications on earnings and capital:"
       ],
       "bullets": [
-        "Net interest margin declines – an NPL is a negative-spread asset. When a loan is classified as an NPL, the loan stops accruing interest, such that there is a cost of funding the loan but no income recognition. This lowers the bank’s recurrent earnings.",
-        "Provision expense rises – depending on the classification status, additional provision expenses will be required to be held against the NPL, thereby lowering the bank’s earnings.",
+        "Net interest margin declines – an NPL is a negative-spread asset. When a loan is classified as an NPL, the loan stops accruing interest, such that there is a cost of funding the loan but no income recognition. This lowers the bank’s recurrent earnings;",
+        "Provision expense rises – depending on the classification status (see table 4 below), additional provision expenses will be required to be held against the NPL, thereby lowering the bank’s earnings;",
         "Tier 1 ratio drops – NPLs generally carry a risk weight of 150% versus a performing loan of, say, 60-100%, so a change from performing status to non-performing status will dilute a bank’s Tier 1 capital ratio as risk-weighted assets increase."
       ]
     },
     {
-      "heading": "The CBIRC wants to soften the blow while also incentivizing NPL recognition and sales",
+      "heading": "Softening the blow to incentivize recognition and sales",
       "paragraphs": [
-        "Recognizing the negative implications for banks, and in a deliberate effort to encourage NPL recognition and sales, the CBIRC had recently lowered provisioning requirements on the back of Circular 46 implications, and apparently in preparation for this accounting change related to loans past due greater than 90 days.",
-        "Under a notice issued by the CBRC on 28 February 2018, depending on certain conditions surrounding (1) NPL recognition; (2) NPL disposals, and; (3) Capital Adequacy levels, the required loan-loss reserve coverage ratios have been softened from a flat ratio of 150% to a range of 120%-150% of NPLs, and from 2.5% of total loans to a range of 1.5%-2.5% of total loans in an effort to incentivize banks to accurately report NPLs, dispose of NPLs, and carry adequate levels of loss absorbing capital.",
-        "NPL Recognition – This first condition is a measure of how diligently a bank has been categorizing its past-due loans as NPLs. The CBIRC uses a ratio of “NPLs/loans past due 90 days+” to gauge this topic. A value of 100% means that all debts past due more than 90 days are accounted for as NPLs and implies greater disclosure and accuracy of reporting, thus warranting a reduced provision ratio. Going forward, we understand that all banks will be required to classify ALL loans past due greater than 90-days as NPL, meaning that all banks will be required to maintain a ratio of at least 100%.",
-        "NPL Disposals – This is a ratio of a bank’s rate of disposal of NPLs to its rate of recognition of new NPLs. A higher value implies the bank may have new NPLs on its books for a shorter period of time, thus warranting a reduced provision ratio. We should note that we are not clear on the timing element of this measure but presume it to be applied annually. Regardless, this measure clearly incentivizes banks to dispose of NPLs from their balance sheets, and rewards them with lower provisioning requirements for compliance. It is one of many reasons we are seeing an increasing flow of NPLs into the marketplace.",
-        "Capital Adequacy – This is a measure of how much total capital, meaning both Tier 1 (un-encumbered capital such as core equity) and Tier 2 (encumbered capital such as bonds issued) that the bank holds against its risk-weighted assets – keeping in mind that NPLs tend to be 150% risk-weighted; meaning that an NPL requires higher capital to be held against it. A higher CAR value provides a greater capital cushion to absorb potential losses, thus warranting a reduced provision coverage ratio.",
-        "Importantly, we understand that banks are held to the highest provision requirement of any of these three criteria, meaning that if they fall short on any one of these individual measures, then they are subject to the higher provision ratio as determined by that weakest measure.",
-        "These events are the latest in a progression of measures related to classification and provisioning, all of which are increasingly designed to get the banks to recognize, classify, provide for, and dispose of NPLs. Chronology of key events for recognition of NPLs:"
+        "Recognizing the negative implications for banks, and in a deliberate effort to encourage NPL recognition and sales, the CBIRC had recently lowered provisioning requirements on the back of Circular 46 implications (see CDD on Circular 46), and apparently in preparation for this accounting change related to loans past due greater than 90 days.",
+        "As seen below from a notice issued by the CBRC on 28 February 2018, depending on certain conditions surrounding (1) NPL recognition; (2) NPL disposals, and; (3) Capital Adequacy levels, the required loan-loss reserve coverage ratios have been softened from a flat ratio of 150% to a range of 120%-150% of NPLs, and from 2.5% of total loans to a range of 1.5%-2.5% of total loans in an effort to incentivize banks to accurately report NPLs, dispose of NPLs, and carry adequate levels of loss absorbing capital:",
+        "(1) NPL Recognition - This first condition is a measure of how diligently a bank has been categorizing its past-due loans as NPLs. The CBIRC uses a ratio of “NPLs/loans past due 90 days+” to gauge this topic. A value of 100% means that all debts past due more than 90 days are accounted for as NPLs and implies greater disclosure and accuracy of reporting, thus warranting a reduced provision ratio. Going forward, we understand that all banks will be required to classify ALL loans past due greater than 90- days as NPL, meaning that all banks will be required to maintain a ratio of at least 100%.",
+        "(2) NPL Disposals - This is a ratio of a bank’s rate of disposal of NPLs to its rate of recognition of new NPLs. A higher value implies the bank may have new NPLs on its books for a shorter period of time, thus warranting a reduced provision ratio. We should note that we are not clear on the timing element of this measure but presume it to be applied annually. Regardless, this measure clearly incentivizes banks to dispose of NPLs from their balance sheets, and rewards them with lower provisioning requirements for compliance. It is one of many reasons we are seeing an increasing flow of NPLs into the marketplace.",
+        "(3) Capital Adequacy - This is a measure of how much total capital, meaning both Tier 1 (un-encumbered capital such as core equity) and Tier 2 (encumbered capital such as bonds issued) that the bank holds against its risk-weighted assets – keeping in mind that NPLs tend to be 150% risk-weighted; meaning that an NPL requires higher capital to be held against it. A higher CAR value provides a greater capital cushion to absorb potential losses, thus warranting a reduced provision coverage ratio.",
+        "Importantly, we understand that banks are held to the highest provision requirement of any of these three criteria, meaning that if they fall short on any one of these individual measures, then they are subject to the higher provision ratio as determined by that weakest measure."
+      ]
+    },
+    {
+      "heading": "A progression of measures",
+      "paragraphs": [
+        "These events are the latest in a progression of measures related to classification and provisioning, all of which are increasingly designed to get the banks to recognize, classify, provide for, and dispose of NPLs:",
+        "Chronology of key events for recognition of NPLs:"
       ],
       "bullets": [
         "2004 - Loan Classification: China adopts the international 5 tier system of loan classification as “Performing”, “Watch-List” (some jurisdictions call this “Special Mention”), “Substandard”, “Doubtful”, and “Loss”, with the latter three classifications requiring a loan to be classified as non-performing.",
@@ -46,21 +57,27 @@
       ]
     },
     {
-      "heading": "Requiring ALL loans PD 90 days+ as NPL will involve much higher provisions for some",
+      "heading": "Higher single-loan provisions for some banks",
       "paragraphs": [
-        "This latest development is also important from a single-loan provisioning requirement, based on its classification in the 5-tier system. The minimum provision requirements are applied at the “portfolio” level, whereas provisioning required at the single-loan level is determined by its classification status within the 5-tier system. As a result, for those banks that currently account for loans past due greater than 90-days as performing (i.e., many joint-stock banks and second tier, provincial-level banks), this new accounting requirement will have significant negative earnings implications as higher provision expenses will be required as these loans are re-classified into NPL status.",
-        "Essentially, this new requirement that ALL loans that are past due greater than 90-days be accounted as NPL means that they must now be classified as either “Substandard”, “Doubtful”, or “Loss” category, whereas previously many were classified as “Performing” or “Watchlist”. This re-classification into NPL status will require substantially higher provisioning at the individual loan level for those banks that are currently non-compliant, with required provisioning increasing as a loan’s quality deteriorates and migrates through the classification status."
+        "Requiring ALL loans PD 90 days+ as NPL will involve much higher provisions for some… This latest development is also important from a single-loan provisioning requirement, based on its classification in the 5-tier system. The provision requirements mentioned in the tables above are minimum requirements applied at the “portfolio” level, whereas provisioning required at the single-loan level is determined by its classification status within the 5-tier system. As a result, for those banks that currently account for loans past due greater than 90-days as performing (i.e., many joint-stock banks and second tier, provincial-level banks), this new accounting requirement will have significant negative earnings implications as higher provision expenses will be required as these loans are re-classified into NPL status.",
+        "Essentially, this new requirement that ALL loans that are past due greater than 90-days be accounted as NPL means that they must now be classified as either “Substandard”, “Doubtful”, or “Loss” category, whereas previously many were classified as “Performing” or “Watchlist”. This re-classification into NPL status will require substantially higher provisioning at the individual loan level for those banks that are currently non-compliant. As a loan’s quality deteriorates and migrates through the classification status, it requires an increasing provision as follows:"
+      ],
+      "bullets": [
+        "Performing — 1% provisioning",
+        "Watch-List — 2%",
+        "Substandard — 25%*",
+        "Doubtful — 50%*",
+        "Loss — 100%"
       ]
     },
     {
-      "heading": "Net result is that the flow of NPLs into the marketplace is increasing at an increasing pace",
+      "heading": "An accelerating flow of NPLs into the marketplace",
       "paragraphs": [
         "In essence, the CBIRC continues to develop the infrastructure to clear the banking system of NPLs. This new requirement for all loans past due greater than 90 days to be accounted for as NPL, and the tiering of provisioning requirements based on recognition, disposal, and capital cushion are important steps in this process. They are essentially putting in place a “carrot-and-stick” approach to incentivize banks to appropriately recognize NPLs and then dispose of those NPLs.",
         "The net result is a continued flow of NPLs into the marketplace at an increasing pace. ShoreVest is very well-placed as an important part of this government-driven process to clear NPLs from banks’ balance sheets, and is expecting the flow of NPL portfolios into our pipeline to continue to increase substantially for the foreseeable future. We now have 551 portfolios in our database with an asking price (not principal balance) of US$64 billion, which has been growing at about US$3 billion per month so far this year, and now appears set to potentially accelerate from here on the back of these new regulatory-driven rules."
       ]
     }
   ],
-  "disclaimer": "This letter expresses the views of the author as of the date indicated and such views are subject to change without notice. ShoreVest Capital Partners has no duty or obligation to update the information contained herein. Certain information contained herein concerning economic trends is based on or derived from information provided by independent third-party sources. ShoreVest Capital Partners believes that the sources from which such information has been obtained are reliable; however, it cannot guarantee the accuracy of such information and has not independently verified the accuracy or completeness of such information or the assumptions on which such information is based. This letter, including the information contained herein, may not be copied, reproduced, republished, or posted in whole or in part, in any form without the prior written consent of ShoreVest Capital Partners.",
-  "contact": "International Finance Center Suite 3601, 5 Zhujiangxi Road, Tianhe District, Guangzhou, China",
-  "copyright": "Copyright © 2018 All rights reserved."
+  "disclaimer": "This letter expresses the views of the author as of the date indicated and such views are subject to change without notice. ShoreVest Partners has no duty or obligation to update the information contained herein. Certain information contained herein concerning economic trends is based on or derived from information provided by independent third-party sources. ShoreVest Partners believes that the sources from which such information has been obtained are reliable; however, it cannot guarantee the accuracy of such information and has not independently verified the accuracy or completeness of such information or the assumptions on which such information is based. This letter, including the information contained herein, may not be copied, reproduced, republished, or posted in whole or in part, in any form without the prior written consent of ShoreVest Partners.",
+  "copyright": "© 2018 ShoreVest Partners. All rights reserved."
 }

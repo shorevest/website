@@ -1,11 +1,16 @@
 {
   "series": "China Debt Dynamics",
   "volumeIssue": "Volume 7 | Issue 2",
-  "published": "28 June 2023",
+  "published": "June 28, 2023",
   "edition": "Markets Edition",
   "title": "Bank Exposure to Developers: A Challenge but Not a Risk",
-  "dek": "Given that housing construction has long been one of the foundational pillars of China's economy, it’s necessary to ask whether distress among the country's developers potentially poses a systemic risk to the financial system? The short answer? No, it does not.",
-  "keyFindings": [],
+  "dek": "As property developers struggle, do their bank loans threaten China’s financial system? ShoreVest’s read of 58 listed banks says no — the bigger, quieter risk sits with local governments.",
+  "keyFindings": [
+    "Loans to developers were just ~6% of the 58 listed banks’ total lending at end-2022.",
+    "Even a sharp rise in developer NPLs would be manageable for all but a few small banks.",
+    "Small banks’ developer exposure is concentrated and sometimes spikes without disclosure.",
+    "Local government and LGFV exposure is larger, more opaque, and a greater systemic concern."
+  ],
   "sections": [
     {
       "heading": null,
@@ -44,6 +49,5 @@
     }
   ],
   "disclaimer": "This letter expresses the views of the author as of the date indicated and such views are subject to change without notice. ShoreVest Partners has no duty or obligation to update the information contained herein. Certain information contained herein concerning economic trends is based on or derived from information provided by independent third-party sources. ShoreVest Partners believes that the sources from which such information has been obtained are reliable; however, it cannot guarantee the accuracy of such information and has not independently verified the accuracy or completeness of such information or the assumptions on which such information is based. This letter, including the information contained herein, may not be copied, reproduced, republished, or posted in whole or in part, in any form without the prior written consent of ShoreVest Partners.",
-  "contact": "Guangzhou International Commercial Center Suite 1503 No.235 Tianhe North Road Guangzhou, China 510610",
-  "copyright": "Copyright © 2023 All rights reserved."
+  "copyright": "© 2023 ShoreVest Partners. All rights reserved."
 }

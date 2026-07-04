@@ -1,11 +1,16 @@
 {
   "series": "China Debt Dynamics",
   "volumeIssue": "Volume 8 | Issue 3",
-  "published": "14 July 2024",
+  "published": "July 14, 2024",
   "edition": "Policy Edition",
-  "title": "Bailing Out the Banks: The Hidden Significance of Beijing Property Support Measures",
-  "dek": "While Beijing is clearly hoping that it’s laying the foundations for a long-term market recovery, we think the more immediate impact will be to reduce banks' bad loans.",
-  "keyFindings": [],
+  "title": "Bailing Out the Banks: The Hidden Significance of Beijing’s Property Support Measures",
+  "dek": "Beijing’s May 2024 property package looks like homebuyer relief, but ShoreVest argues its real purpose is to shore up the banks — with lenders, ironically, funding their own bailout.",
+  "keyFindings": [
+    "The PBoC’s May 2024 package scrapped mortgage-rate floors and funded SOE purchases of unsold housing.",
+    "State firms will pay steep discounts, leaving developers just enough to repay their bank loans.",
+    "The banks are the clear winners, swapping risky developer loans for low-interest loans to state firms.",
+    "The program should relieve pressure on banks but won’t, on its own, revive housing demand."
+  ],
   "sections": [
     {
       "heading": null,
@@ -54,7 +59,7 @@
       ]
     },
     {
-      "heading": "And the winner is...",
+      "heading": "And the winner is…",
       "paragraphs": [
         "The unambiguous winner is the banks. When developers get paid, their first responsibility will be to repay the banks. Banks are secured creditors – they don't lend to developers without collateral. Typically, the loan-to-value is between 60% and 70% – that is for every RMB 100 worth of collateral, banks lend 60-70 yuan. When a developer defaults, the bank should be able to sell the collateral at a steep discount without suffering a loss.",
         "However, in this market, it's unclear whether banks would be able to sell the collateral – especially new residential developments in immature markets – at any price in a timely manner. ShoreVest’s experience in recent years has been that the completed commercial properties in mature markets that we have used as collateral can generally sell quickly, because there is immediate commercial need for such assets. But new residential developments, which make up the majority of developers’ stock of assets, have been much slower to sell. Having developers sell their inventory to state firms provides a way out. It allows developers to pay down their loans and banks to avoid accumulating nonperforming loans (NPLs).",
@@ -71,6 +76,5 @@
     }
   ],
   "disclaimer": "This letter expresses the views of the author as of the date indicated and such views are subject to change without notice. ShoreVest Partners has no duty or obligation to update the information contained herein. Certain information contained herein concerning economic trends is based on or derived from information provided by independent third-party sources. ShoreVest Partners believes that the sources from which such information has been obtained are reliable; however, it cannot guarantee the accuracy of such information and has not independently verified the accuracy or completeness of such information or the assumptions on which such information is based. This letter, including the information contained herein, may not be copied, reproduced, republished, or posted in whole or in part, in any form without the prior written consent of ShoreVest Partners.",
-  "contact": "Guangzhou International Commercial Center Suite 1503 No.235 Tianhe North Road Guangzhou, China 510610",
-  "copyright": "Copyright © 2024 All rights reserved."
+  "copyright": "© 2024 ShoreVest Partners. All rights reserved."
 }

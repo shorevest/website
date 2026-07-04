@@ -1,30 +1,37 @@
 {
   "series": "China Debt Dynamics",
   "volumeIssue": "Volume 9 | Issue 3",
-  "published": "24 July 2025",
+  "published": "July 24, 2025",
   "edition": "Markets Edition",
   "title": "Into the Shadows of US Private Credit: A China Perspective",
-  "dek": "As we observe the booming US private credit market from our perch here in China, we see multiple striking parallels with China’s shadow banking system, which ballooned by trillions of dollars before 2017.",
-  "keyFindings": [],
+  "dek": "ShoreVest shares its white paper on the parallels between today’s booming, lightly regulated US private credit market and China’s pre-2017 shadow banking system — and the systemic risks the US has yet to confront.",
+  "keyFindings": [
+    "The US private credit market mirrors China’s pre-2017 shadow banking system in scale and structure.",
+    "US private credit protections are weakening — lighter covenants, less collateral, more leverage — heading into any downturn.",
+    "Rising interconnection between US banks, insurers, and private credit funds amplifies systemic risk.",
+    "China’s proactive regulation left a disciplined market where remaining private credit players can structure better downside protection."
+  ],
   "sections": [
     {
       "heading": null,
       "paragraphs": [
         "As we observe the booming US private credit market from our perch here in China, we see multiple striking parallels with China’s shadow banking system, which ballooned by trillions of dollars before 2017. Between 2017-2018 Beijing clamped down on the space, due to clear systemic risks. In contrast, despite US private credit’s steadily expanding scale and weakening fundamentals, the US seems to be taking little action to mitigate the potential systemic risk.",
-        "In this issue of China Debt Dynamics, ShoreVest would like to share our full white paper on this topic: “Into the Shadows of US Private Credit: A China Perspective”.",
-        "In the white paper, we elaborate on one thing we think is clear: Explosive growth in unregulated US private credit is metastasizing systemic risks. On the other hand, China continues to regulate its shadow banks, creating opportunities for institutional private credit. Several additional “Key Takeaways” from the white paper are as follows:"
-      ],
-      "bullets": [
-        "Overview – The current US private credit market mirrors the pre-pandemic China shadow banking space in various ways.",
-        "Lengthening Shadows – The rapid growth, in number and size, of private credit funds in the US has resulted in issues with both deploying capital, and exiting investments or achieving distributions to paid-in capital (DPI).",
-        "Darkening Shadows – Private credit in the US is seeing deteriorating protections (lighter covenants, less/no collateral, more leverage, synthetic liquidity), which raises the question of just how protected the product is, particularly if the US has a downcycle (when over 95% of US direct lending managers weren’t around during the last downturn).",
-        "Interconnectedness in US Private Credit Enhances Systemic Risk – US banks and insurance companies are increasingly interconnected to the US shadow banking industry (via fund financing, investments, etc.), enhancing systemic risk.",
-        "Lessons from China’s Shadow Banking – To address systematic risk, China proactively cracked down on the entire shadow banking sector through a coordinated regulatory effort, prohibiting many of the exact things the US private credit market is doing.",
-        "Regulatory Discipline Means Better Private Credit Opportunity – Proactive regulation fosters investment discipline among market participants and distinguishes astute investment/risk managers (such as ShoreVest) from newcomers or non-institutional players. This also produces a tighter credit environment where the few private credit participants that remain can structure better downside protections in their investments."
+        "In this issue of China Debt Dynamics, ShoreVest would like to share our full white paper on this topic, available here:",
+        "“Into the Shadows of US Private Credit: A China Perspective” In the white paper, we elaborate on one thing we think is clear: Explosive growth in unregulated US private credit is metastasizing systemic risks. On the other hand, China continues to regulate its shadow banks, creating opportunities for institutional private credit. Several additional “Key Takeaways” from the white paper are as follows:"
+      ]
+    },
+    {
+      "heading": "Key takeaways from the white paper",
+      "paragraphs": [
+        " Overview – The current US private credit market mirrors the pre-pandemic China shadow banking space in various ways",
+        " Lengthening Shadows – The rapid growth, in number and size, of private credit funds in the US has resulted in issues with both deploying capital, and exiting investments or achieving distributions to paid-in capital (DPI).",
+        " Darkening Shadows – Private credit in the US is seeing deteriorating protections (lighter covenants, less/no collateral, more leverage, synthetic liquidity), which raises the question of just how protected the product is, particularly if the US has a downcycle (when over 95% of US direct lending managers weren’t around during the last downturn).",
+        " Interconnectedness in US Private Credit Enhances Systemic Risk – US banks and insurance companies are increasingly interconnected to the US shadow banking industry (via fund financing, investments, etc.), enhancing systemic risk.",
+        " Lessons from China’s Shadow Banking – To address systematic risk, China proactively cracked down on the entire shadow banking sector through a coordinated regulatory effort, prohibiting many of the exact things the US private credit market is doing.",
+        " Regulatory Discipline Means Better Private Credit Opportunity – Proactive regulation fosters investment discipline among market participants and distinguishes astute investment/risk managers (such as ShoreVest) from newcomers or non-institutional players. This also produces a tighter credit environment where the few private credit participants that remain can structure better downside protections in their investments."
       ]
     }
   ],
   "disclaimer": "This letter expresses the views of the author as of the date indicated and such views are subject to change without notice. ShoreVest Partners has no duty or obligation to update the information contained herein. Certain information contained herein concerning economic trends is based on or derived from information provided by independent third-party sources. ShoreVest Partners believes that the sources from which such information has been obtained are reliable; however, it cannot guarantee the accuracy of such information and has not independently verified the accuracy or completeness of such information or the assumptions on which such information is based. This letter, including the information contained herein, may not be copied, reproduced, republished, or posted in whole or in part, in any form without the prior written consent of ShoreVest Partners.",
-  "contact": "Guangzhou International Commercial Center Suite 1503 No.235 Tianhe North Road Guangzhou, China 510610",
-  "copyright": "Copyright © 2025 All rights reserved."
+  "copyright": "© 2025 ShoreVest Partners. All rights reserved."
 }

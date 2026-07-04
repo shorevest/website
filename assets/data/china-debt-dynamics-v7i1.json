@@ -4,8 +4,13 @@
   "published": "March 2023",
   "edition": "Policy Edition",
   "title": "New Regulations Set to Accelerate NPL Disposals",
-  "dek": "Banks' disposals of nonperforming assets are set to accelerate this year.",
-  "keyFindings": [],
+  "dek": "New CBIRC asset-classification rules force China’s banks to recognize more bad loans. ShoreVest explains the three key changes and why they will accelerate distressed-debt supply.",
+  "keyFindings": [
+    "From February 2023, banks must classify a far wider range of assets by risk and recognize overdue loans as NPLs.",
+    "A single distressed borrower can now taint all of its loans across the banking system.",
+    "Recognizing more NPLs pressures bank capital, but disposals are still expected to rise significantly.",
+    "ShoreVest is already seeing a surge in banks marketing NPLs ahead of the new rules."
+  ],
   "sections": [
     {
       "heading": null,
@@ -17,7 +22,7 @@
       ]
     },
     {
-      "heading": "What's new?",
+      "heading": "What’s new?",
       "paragraphs": [
         "There are three key changes to the way banks currently assess asset quality that we believe will have a significant impact on China's distressed debt market.",
         "First, the new measures will greatly expand the range of bank assets that must be given a risk classification. Currently, all loans must be classed as being normal, special mention, substandard, doubtful, or loss. The last three are collectively considered to be nonperforming. In the future, banks will have to allocate all on-balance sheet and off-balance sheet financial assets that bear credit risk – including bond holdings and interbank lending – to the same five categories.",
@@ -39,11 +44,12 @@
       ]
     },
     {
-      "heading": "To what extent will this result in an acceleration of disposals?",
+      "heading": "To what extent will this accelerate disposals?",
       "paragraphs": [
         "Recognizing more NPLs requires banks to raise more capital. Ideally, banks replenish their capital from retained earnings. However, failing that it falls upon the state – either through state-owned firms, local government financing vehicles, other financial institutions, or even local government finance bureaus – to recapitalize banks (the private sector hasn't played a meaningful role in banks' core tier 1 capital replenishment for at least five years).",
         "We think it unlikely that regulators will push banks to disclose NPLs to a point at which the pressure on local governments to maintain banks' capital at adequate levels is unsustainable. Nonetheless, we expect loan disposals to increase significantly.",
-        "This is a uniquely opportune moment for regulators to call on banks to accelerate their recognition of nonperforming assets. The official NPL ratio for China's banking sector was 1.63% at the end of 2023, the lowest level since end-2014. China's banks can comfortably recognize marginally higher NPL ratios without it being too much of a burden. Meanwhile, although banks' disposal of nonperforming assets is large in absolute terms, it's been gradually declining as a share of total outstanding loans.",
+        "This is a uniquely opportune moment for regulators to call on banks to accelerate their recognition of nonperforming assets. The official NPL ratio for China's banking sector was 1.63% at the end of 2023, the lowest level since end- 2014. China's banks can comfortably recognize marginally higher NPL ratios without it being too much of a burden.",
+        "Meanwhile, although banks' disposal of nonperforming assets is large in absolute terms, it's been gradually declining as a share of total outstanding loans.",
         "In 2022, China's banks disposed of 3.1 trillion yuan worth of nonperforming assets, the same level as 2021, and up from 3.02 trillion yuan in 2020. While these volumes make clear that China is the largest NPL market in the world, 2022's figure represents only 1.70% of total outstanding loans at the end of the year, the lowest level since 2017.",
         "Banks accelerated their nonperforming asset disposals in 2020 as they rushed to become compliant with wealth management product (WMP) rules that took effect at end 2021. Banks had to move NPLs that had been packaged into WMPs back on their balance sheets, resulting in a surge of disposals. By 2022, the effects of the WMPs-related regulation were not so acute and disposals as a percentage of total loans declined. But the absolute volume has still persisted above 3 trillion yuan. Regardless of where future years stand as a percentage of overall loans, the new measures will undoubtedly generate a significant increase in the supply of distress assets."
       ]
@@ -58,6 +64,5 @@
     }
   ],
   "disclaimer": "This letter expresses the views of the author as of the date indicated and such views are subject to change without notice. ShoreVest Partners has no duty or obligation to update the information contained herein. Certain information contained herein concerning economic trends is based on or derived from information provided by independent third-party sources. ShoreVest Partners believes that the sources from which such information has been obtained are reliable; however, it cannot guarantee the accuracy of such information and has not independently verified the accuracy or completeness of such information or the assumptions on which such information is based. This letter, including the information contained herein, may not be copied, reproduced, republished, or posted in whole or in part, in any form without the prior written consent of ShoreVest Partners.",
-  "contact": "Guangzhou International Commercial Center Suite 1503 No.235 Tianhe North Road Guangzhou, China 510610",
-  "copyright": "Copyright © 2023 All rights reserved."
+  "copyright": "© 2023 ShoreVest Partners. All rights reserved."
 }

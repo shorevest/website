@@ -1,11 +1,16 @@
 {
   "series": "China Debt Dynamics",
   "volumeIssue": "Volume 5 | Issue 4",
-  "published": "27 April 2021",
+  "published": "April 27, 2021",
   "edition": "Structural Edition",
   "title": "Sustained Shadow Banking Contraction Creating Private Credit Opportunities",
-  "dek": "Tight lending conditions outside of the formal banking system look likely to continue for the foreseeable future. That is creating unprecedented private credit opportunities.",
-  "keyFindings": [],
+  "dek": "As Beijing normalizes policy after the pandemic, it is sustaining a multi-year crackdown on shadow banking. ShoreVest explains how a bifurcated credit market and tighter non-bank funding create private credit opportunities.",
+  "keyFindings": [
+    "China’s crackdown on shadow banking has contracted trust, entrusted, and WMP credit for years.",
+    "The credit market is bifurcated: bank-favored borrowers versus private firms squeezed out of funding.",
+    "Tighter non-bank credit persists as regulators keep reining in risky channels.",
+    "The resulting funding gap is creating unprecedented private credit opportunities."
+  ],
   "sections": [
     {
       "heading": null,
@@ -54,6 +59,5 @@
     }
   ],
   "disclaimer": "This letter expresses the views of the author as of the date indicated and such views are subject to change without notice. ShoreVest Partners has no duty or obligation to update the information contained herein. Certain information contained herein concerning economic trends is based on or derived from information provided by independent third-party sources. ShoreVest Partners believes that the sources from which such information has been obtained are reliable; however, it cannot guarantee the accuracy of such information and has not independently verified the accuracy or completeness of such information or the assumptions on which such information is based. This letter, including the information contained herein, may not be copied, reproduced, republished, or posted in whole or in part, in any form without the prior written consent of ShoreVest Partners.",
-  "contact": "International Finance Center Suite 3601, 5 Zhujiangxi Road, Tianhe District, Guangzhou, China",
-  "copyright": "Copyright © 2021 All rights reserved."
+  "copyright": "© 2021 ShoreVest Partners. All rights reserved."
 }

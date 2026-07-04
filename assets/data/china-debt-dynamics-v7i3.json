@@ -1,11 +1,16 @@
 {
   "series": "China Debt Dynamics",
   "volumeIssue": "Volume 7 | Issue 3",
-  "published": "3 October 2023",
+  "published": "October 3, 2023",
   "edition": "Policy Edition",
   "title": "Where’s the Stimulus? Parsing Beijing’s Lackluster Response to Growth",
-  "dek": "Beijing has so far taken a unique approach that eschews a short-term economic boost in favor of measures designed to permanently bolster consumption over the long-term.",
-  "keyFindings": [],
+  "dek": "China’s post-COVID rebound has fizzled, yet Beijing has withheld big-bang stimulus. ShoreVest explains the deliberate, supply-plus-consumption approach replacing the old playbook — and why rate cuts stay modest.",
+  "keyFindings": [
+    "Beijing has avoided large fiscal or monetary stimulus despite a faltering recovery.",
+    "Policy favors boosting consumption and household income over debt-funded infrastructure.",
+    "Narrowing bank net interest margins and capital needs limit how far the PBoC will cut rates.",
+    "Authorities are prioritizing financial stability and a less property-dependent growth path."
+  ],
   "sections": [
     {
       "heading": null,
@@ -32,8 +37,7 @@
       "heading": "Monetary policy",
       "paragraphs": [
         "In theory, Beijing could bring much needed relief to the economy by slashing interest rates. In fact, some government advisors have advocated doing exactly that. However, the PBoC has taken a firm stand against aggressive monetary policy partly because deliberately widening the spread between US and Chinese interest rates would further weaken the RMB, and partly because lower rates would undermine financial sector stability. Of the two issues, the PBoC seems to be more concerned by the latter.",
-        "By relentlessly pushing down lending rates over the last couple of years, the PBoC has squeezed banks' net interest margins (NIMs), banks' main source of profit. At the end of June, banks’ average NIM was 1.74%, down from 1.94% a year earlier, and about half the level enjoyed by banks in the US. The PBoC is worried that weaker profits will undermine banks' ability to deal with mounting financial sector risks.",
-        "The problem is that Chinese banks aren’t allowed to issue new shares at a price lower than their net asset value (NAV) per share, otherwise known as price-book. For years now, most listed Chinese banks have traded at prices well below price-book. Equity in non-listed banks has also consistently sold below that level.",
+        "By relentlessly pushing down lending rates over the last couple of years, the PBoC has squeezed banks' net interest margins (NIMs), banks' main source of profit. At the end of June, banks’ average NIM was 1.74%, down from 1.94% a year earlier, and about half the level enjoyed by banks in the US. The PBoC is worried that weaker profits will undermine banks' ability to deal with mounting financial sector risks. The problem is that Chinese banks aren’t allowed to issue new shares at a price lower than their net asset value (NAV) per share, otherwise known as price-book. For years now, most listed Chinese banks have traded at prices well below price-book. Equity in non-listed banks has also consistently sold below that level.",
         "That's left banks with two ways to replenish core tier-one capital, which is used to make provisions and write-down bad loans. They can either retain earnings, or they can sell new shares to state institutions that are willing to pay inflated prices.",
         "However, with local governments' finances under mounting pressure, many have found it increasingly difficult to find the resources necessary to recapitalize their banks. Consequently, retained earnings have become increasingly important to ensuring banks are adequately capitalized.",
         "Nonetheless, the PBoC is willing to make minor cuts. Benchmark interest rates have declined twice in recent months. In June, the PBoC announced that both the one-year loan prime rate (LPR) - the benchmark for pricing most corporate loans - and the five-year LPR - which is used to price mortgages - had fallen by 10 bps. In August, the one-year fell by a further 10 bps. That brings the one-year LPR to 3.45%, and the five-year to 4.2%. (The LPRs are calculated based on the average interest rate charged by China’s biggest commercial banks to their lowest-risk customers.)",
@@ -50,6 +54,5 @@
     }
   ],
   "disclaimer": "This letter expresses the views of the author as of the date indicated and such views are subject to change without notice. ShoreVest Partners has no duty or obligation to update the information contained herein. Certain information contained herein concerning economic trends is based on or derived from information provided by independent third-party sources. ShoreVest Partners believes that the sources from which such information has been obtained are reliable; however, it cannot guarantee the accuracy of such information and has not independently verified the accuracy or completeness of such information or the assumptions on which such information is based. This letter, including the information contained herein, may not be copied, reproduced, republished, or posted in whole or in part, in any form without the prior written consent of ShoreVest Partners.",
-  "contact": "Guangzhou International Commercial Center Suite 1503 No.235 Tianhe North Road Guangzhou, China 510610",
-  "copyright": "Copyright © 2023 All rights reserved."
+  "copyright": "© 2023 ShoreVest Partners. All rights reserved."
 }

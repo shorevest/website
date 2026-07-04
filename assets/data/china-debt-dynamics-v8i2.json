@@ -1,18 +1,23 @@
 {
   "series": "China Debt Dynamics",
   "volumeIssue": "Volume 8 | Issue 2",
-  "published": "31 March 2024",
+  "published": "March 31, 2024",
   "edition": "Policy Edition",
   "title": "China Refocuses on Financial Risk and Ramps Up NPL Disposals",
-  "dek": "China’s banks have disposed of a record amount of nonperforming loans (NPLs) over the past four years. That’s set to ramp up further in 2024.",
-  "keyFindings": [],
+  "dek": "China’s banks quietly slowed how fast they recognized bad loans in order to protect thin capital. ShoreVest explains why authorities are now refocusing on financial risk — and the disposal opportunities that follow.",
+  "keyFindings": [
+    "Banks disposed of record NPLs from 2020–2023 but slowed recognition to preserve scarce capital.",
+    "Narrowing net interest margins and weak share demand have squeezed banks’ ability to raise capital.",
+    "The PBoC and NFRA are pushing banks to recognize and dispose of more bad loans, including via recapitalization.",
+    "Renewed official focus on financial risk creates fresh distressed-debt opportunities for ShoreVest."
+  ],
   "sections": [
     {
       "heading": null,
       "paragraphs": [
         "China’s banks have disposed of a record amount of nonperforming loans (NPLs) over the past four years. That’s set to ramp up further in 2024.",
         "This year, the People’s Bank of China (PBoC) has said writing off NPLs will be part of its campaign to \"revitalize the inefficient stock of credit.” Meanwhile, the National Financial Regulatory Administration (NFRA) – China’s banking and insurance regulator – has ranked increasing NPL disposals as its number 2 goal for 2024. The NFRA has also said it wants to encourage foreign distressed debt investors to come to China.",
-        "That was echoed in our recent meeting with PBoC Gov. Pan Gongsheng who said he strongly encourages long-term experienced foreign investors like ShoreVest to be part of the country’s debt cleanup ecosystem. In a rare one-on-one meeting with foreigners – we believe the last was in October when Pan met with US Treasury Secretary Janet Yellen – Pan said the volume of distressed and special situations opportunities is likely to be very high for the near- to mid-term.",
+        "That was echoed in our recent meeting with PBoC Gov. Pan Gongsheng who said he strongly encourages long-term experienced foreign investors like ShoreVest to be part of the country’s debt cleanup ecosystem. In a rare one-on-one meeting with foreigners – we believe the last was in October when Pan met with US Treasury Secretary Janet Yellen – Pan said the volume of distressed and special situations opportunities is likely to be very high for the near-to mid-term.",
         "At first glance, it seems odd China’s financial authorities want to ramp up NPL disposals. The banking sector's NPL ratio is currently at its lowest level since 2016. Moreover, banks have disposed of about 3 trillion yuan worth of NPLs annually for the last four years, a massive amount in absolute terms.",
         "However, between 2020 and 2023 lending by China’s banks expanded by almost 40%. Consequently, while RMB 3 trillion was impressive in 2020, it wasn't in 2023. The relative decline in disposals casts doubt on the feasibility of NPLs being able to fall during that period, particularly given mounting financial stress among property developers and local governments, and weak business confidence.",
         "What has likely happened is that, in spite of the large amount of disposals in absolute terms, China's banks have allowed NPLs to accumulate unrecognized on their balance sheet over the last four years.",
@@ -27,7 +32,8 @@
         "Banks have been able to sell new equity to state buyers at inflated prices, but many overstretched local authorities have found it increasingly difficult to muster the resources. Hence, banks are mostly dependent on their own profits to sustain their capital.",
         "However, bank profits have been squeezed in recent years by narrowing net interest margins (NIMs), the result of the PBoC supporting the economy with lower lending rates. With new loans typically growing by about 10% a year, it's becoming increasingly difficult for banks to generate enough new capital.",
         "One way banks can boost profit – and generate capital – is by recognizing fewer NPLs.",
-        "NPLs erode bank profits. Banks are required to make loan loss provisions every time they recognize a new bad loan. China's regulators require most banks to make provisions equivalent to one-and-a-half times – 150% – the value of their NPLs. When a bank writes down a bad loan, the banks' accumulated provisions decline by the size of the write-down.",
+        "NPLs erode bank profits. Banks are required to make loan loss provisions every time they recognize a new bad loan. China's regulators require most banks to make provisions equivalent to one-and-a-half times –",
+        "150% – the value of their NPLs. When a bank writes down a bad loan, the banks' accumulated provisions decline by the size of the write-down.",
         "The provisions are an expense. Every yuan that goes toward provisions is one less yuan that would otherwise go toward profits. Consequently, recognizing fewer NPLs means a bank needs to set aside fewer provisions – and can record higher profits.",
         "Banks appear to have started prioritizing capital over NPLs in Q4 2020. After almost a year of COVID, bank profits were falling. But loan growth remained strong, making it difficult for banks to generate enough new capital. The NPL ratio – which had been rising since 2012 – suddenly started falling. Meanwhile, the provisions ratio shot up even though banks set aside fewer provisions than the year before.",
         "Since then, the NPL ratio has continued to fall and the provisions ratio rise, even as banks have set aside fewer provisions. That’s allowed banks to generate more profit than would otherwise be possible. But it also means NPLs have likely been accumulating on banks' balance sheets.",
@@ -48,6 +54,5 @@
     }
   ],
   "disclaimer": "This letter expresses the views of the author as of the date indicated and such views are subject to change without notice. ShoreVest Partners has no duty or obligation to update the information contained herein. Certain information contained herein concerning economic trends is based on or derived from information provided by independent third-party sources. ShoreVest Partners believes that the sources from which such information has been obtained are reliable; however, it cannot guarantee the accuracy of such information and has not independently verified the accuracy or completeness of such information or the assumptions on which such information is based. This letter, including the information contained herein, may not be copied, reproduced, republished, or posted in whole or in part, in any form without the prior written consent of ShoreVest Partners.",
-  "contact": "Guangzhou International Commercial Center Suite 1503 No.235 Tianhe North Road Guangzhou, China 510610",
-  "copyright": "Copyright © 2024 All rights reserved."
+  "copyright": "© 2024 ShoreVest Partners. All rights reserved."
 }
