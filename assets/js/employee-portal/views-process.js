@@ -704,7 +704,7 @@
         var blob = new Blob([batch.outputText], { type: 'text/plain;charset=utf-8' });
         var a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = 'ShoreVest-Operations-Output-' + batch.batchId + '.txt';
+        a.download = 'ShoreVest-One-Output-' + batch.batchId + '.txt';
         a.click();
         setTimeout(function () { URL.revokeObjectURL(a.href); }, 5000);
       } }));

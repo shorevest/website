@@ -1,6 +1,6 @@
 /* ==========================================================================
    ShoreVest Operations — Rules Engine
-   Pure, deterministic business rules for the Employee Portal:
+   Pure, deterministic business rules for ShoreVest One (legacy employee-portal path):
    error codes, column mapping, file/row validation, classification,
    reconciliation, execution keys, execution conditions, and the
    natural-language instruction interpreter.

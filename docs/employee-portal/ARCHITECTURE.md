@@ -1,6 +1,13 @@
-# ShoreVest Operations — Employee Portal
+# ShoreVest One — internal operating platform
 
-A private internal operations platform for ShoreVest personnel. It provides one
+> **Naming:** the product is presented to users as **ShoreVest One**. The
+> `employee-portal/` folder and URL path are retained as the current *legacy
+> implementation path* for ShoreVest One to avoid routing/deployment risk; a
+> folder rename is intentionally out of scope for now. Internal code namespaces
+> (`SVOps`, `ops-*`, `svops`) are unchanged. Do not reintroduce the user-facing
+> names "Employee Portal" or "ShoreVest Operations" in rendered copy.
+
+A private internal operating platform for ShoreVest personnel. It provides one
 controlled entry point for routine list processing, weekly reporting, Salesforce
 data quality, and outreach preparation. The public ShoreVest website is only the
 entry point; all operational functions live inside this authenticated
@@ -27,9 +34,10 @@ application.
 | `assets/js/employee-portal/app.js` | Application shell: authentication gate, navigation, hash router, dashboard. |
 | `tests/employee-portal-rules.test.js` | Node test suite (`node tests/employee-portal-rules.test.js`). |
 
-The public site links to the portal from a footer **Access** group (Investor
-Portal + Employee Portal) added to every page and to the shared footer
-(`assets/js/shared-footer.js`). The Employee Portal link opens in a new tab.
+The public site links to the platform from a footer **Access** group (Investor
+Portal + ShoreVest One) added to every page and to the shared footer
+(`assets/js/shared-footer.js`). The ShoreVest One link opens in a new tab and
+still points at `employee-portal/index.html` (the legacy path).
 
 ## Demonstration mode vs. production
 
