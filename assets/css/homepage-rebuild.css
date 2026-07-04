@@ -318,7 +318,7 @@ body.homepage .sv-hero__inner {
   align-items: stretch;
 }
 body.homepage .sv-hero__main {
-  grid-column: 1 / 8; min-width: 0;
+  grid-column: 1 / 7; min-width: 0;
   align-self: center;
   padding-block: clamp(84px, 8vw, 104px) clamp(76px, 7vw, 92px);
 }
@@ -344,7 +344,7 @@ body.homepage .sv-hero__headline {
 }
 body.homepage .sv-hero__body {
   margin: 24px 0 0;
-  max-width: 560px;
+  max-width: min(48ch, calc((var(--page-max) - (2 * var(--pad-x))) / 2));
   font: 400 17px/1.68 var(--sv-font);
   color: var(--sv-ink-2);
 }
@@ -361,9 +361,9 @@ body.homepage .sv-hero__cta .sv-btn--primary:hover {
 body.homepage .sv-hero__cta .sv-btn--ghost-light { border-color: rgba(27,31,30,0.28); }
 
 /* Cinnabar architectural field on the right — inset top/bottom so it reads as
-   a formal colour block, and bleeding to the viewport edge. */
+   a formal color block, and bleeding to the viewport edge. */
 body.homepage .sv-hero__field {
-  grid-column: 8 / 13;
+  grid-column: 7 / 13;
   position: relative;
   align-self: stretch;
   margin-block: clamp(56px, 6vw, 72px);
@@ -1103,7 +1103,7 @@ body.homepage .sv-totop svg { width: 16px; height: 16px; }
 /* ==========================================================================
    Homepage hero mobile institutional refinement — 2026-07-01
    Tighten the existing hero system only: spacing, hierarchy, alignment, and
-   type rhythm. No copy, colour, logo, or section changes.
+   type rhythm. No copy, color, logo, or section changes.
    ========================================================================== */
 @media (max-width: 767px) {
   body.homepage .sv-hero__inner {
@@ -1311,3 +1311,26 @@ body.homepage .sv-hero__panel-row dt {
     margin-inline: 0;
   }
 }
+
+/* ==========================================================================
+   Footer "Access" group — Investor Portal + Employee Portal entry points.
+   The Employee Portal is the private ShoreVest Operations application and
+   opens in a new tab; the public site is only the entry point.
+   ========================================================================== */
+body.homepage .sv-footer__access {
+  grid-column: 1 / -1;
+  display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px 26px;
+  margin-top: 16px; padding-top: 14px;
+  border-top: 1px solid var(--sv-border-dark);
+}
+body.homepage .sv-footer__access-label {
+  margin: 0;
+  font: 700 10px/1 var(--sv-font);
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--sv-faint-on-dark);
+}
+body.homepage .sv-footer__access a {
+  font: 500 13px/1 var(--sv-font); letter-spacing: 0.04em;
+  color: var(--sv-meta-on-dark); text-decoration: none; padding: 5px 0; display: inline-block;
+}
+body.homepage .sv-footer__access a:hover { color: var(--sv-ivory); }

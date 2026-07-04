@@ -26,8 +26,12 @@
         <a href="${siteHref('press.html')}">Media</a>
         <a href="${siteHref('team.html')}">Team</a>
         <a href="${siteHref('contact.html')}">Contact</a>
-        <a href="${siteHref('investor-portal/index.html')}">Investor Portal</a>
         <a href="${siteHref('insights.html')}#archive">China Debt Dynamics</a>
+        <span class="sv-footer__access" role="group" aria-label="Access">
+          <span class="sv-footer__access-label">Access</span>
+          <a href="${siteHref('investor-portal/index.html')}">Investor Portal</a>
+          <a href="${siteHref('employee-portal/index.html')}" target="_blank" rel="noopener">Employee Portal</a>
+        </span>
       </nav>
     </div>
     <div class="sv-footer__legal">
@@ -62,8 +66,12 @@
         <a href="${siteHref('press_cn.html')}">媒体</a>
         <a href="${siteHref('team_cn.html')}">团队</a>
         <a href="${siteHref('contact_cn.html')}">联系</a>
-        <a href="${siteHref('investor-portal/index.html')}">投资者门户</a>
         <a href="${siteHref('insights_cn.html')}#archive">中国债务动态</a>
+        <span class="sv-footer__access" role="group" aria-label="访问">
+          <span class="sv-footer__access-label">访问</span>
+          <a href="${siteHref('investor-portal/index.html')}">投资者门户</a>
+          <a href="${siteHref('employee-portal/index.html')}" target="_blank" rel="noopener">员工门户</a>
+        </span>
       </nav>
     </div>
     <div class="sv-footer__legal">
@@ -98,7 +106,7 @@
     node.className = `sv-footer ${isChinesePath ? 'sv-footer--cn' : 'sv-footer--en'}`;
     node.innerHTML = localeSuffix === 'cn' ? footerTemplateCn : footerTemplateEn;
 
-    /* CSS handles all font-family, letter-spacing, and colour via:
+    /* CSS handles all font-family, letter-spacing, and color via:
          shared-footer.css  (highest specificity footer rules)
          shorevest-typography-system.css  (canonical role system)
        No inline style overrides are applied here so that the CSS

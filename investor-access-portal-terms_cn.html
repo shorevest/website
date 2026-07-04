@@ -27,71 +27,69 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   <!--svstripped-->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <!-- TODO: ADD ADOBE FONTS KIT FOR DIN 2014 — replace [KIT_ID] below and uncomment. Until configured, pages use the canonical DIN 2014 stack with only a generic sans-serif emergency fallback. -->
-  <!-- <link rel="stylesheet" href="https://use.typekit.net/[KIT_ID].css"> -->
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <script>document.write('<link rel="stylesheet" href="assets/css/refinement-pass.css?t='+window.__SVT+'">');</script>
-  <script>document.write('<link rel="stylesheet" href="assets/css/homepage-shorevest-brand.css?t='+window.__SVT+'">');</script>
-  
-
-  <script>document.write('<link rel="stylesheet" href="assets/css/typography-consistent.css?t='+window.__SVT+'">');</script>
-  <script>document.write('<link rel="stylesheet" href="assets/css/shorevest-enforcement.css?t='+window.__SVT+'">');</script>
 <script>document.write('<link rel="stylesheet" href="assets/css/chinese-latin-typography.css?t='+window.__SVT+'">');</script>
 
-  <style>
-    :root{--red:#3d7070;--ink:#0c0c0a;--ink-soft:#3f3b36;--paper:#fff;--rule:rgba(12,12,10,.12);--en-role-font:var(--sv-font-cn);--sans:var(--sv-font-cn)}
-    *{box-sizing:border-box}
-    body{font-family:var(--sans);max-width:980px;margin:0 auto;padding:120px var(--pad) 40px;line-height:1.65;color:var(--ink-soft);font-size:13px;background:var(--paper)}
-    h1,h2{color:var(--ink);font-family:var(--en-role-font);font-weight:400;letter-spacing:.01em}
-    h1{font-size:38px;line-height:1.08;margin-bottom:8px}
-    h2{font-size:24px;line-height:1.16;margin-bottom:10px}
-    p,li{font-size:13px}
-    a{color:var(--red)}
-    ul{margin-top:4px;padding-left:20px}
-    .section{margin-bottom:28px}
-    .muted{color:#5b554f}
-    body.legal-page{
-      max-width:none;
-      margin:0;
-      padding:0;
-      font-family: var(--sv-font-cn);
-      font-size:12px;
-      line-height:1.55;
-      letter-spacing:normal;
-    }
-    @media (max-width:980px){body.legal-page{padding:0}}
-    body.legal-page p,body.legal-page li{
-      font-family: var(--sv-font-cn);
-      font-size:12px !important;
-      max-width:none;
-    }
-    body.legal-page h1{font-family: var(--sv-font-cn);font-size:38px !important;line-height:1.04}
-    body.legal-page h2{font-family: var(--sv-font-cn);font-size:24px !important;line-height:1.12}
-    .legal-contact-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px;margin-bottom:36px}
-    .legal-contact-actions a{display:inline-block;padding:10px 14px;border:1px solid rgba(0,0,0,.18);text-decoration:none;color:var(--red);transition:all .2s ease}
-    .legal-contact-actions a:hover{background:var(--red);border-color:var(--red);color:#fff}
-  </style>
-
-  
-  
-
-
-  <!-- Typography lockdown — MUST load last; final authority over all type. -->
-
-
-
-
-
-
-  <script>document.write('<link rel="stylesheet" href="assets/css/legal-rebuild.css?v=20260627-lg2&t='+window.__SVT+'">');</script>
+<script>document.write('<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260701-mobile-audit-430&t='+window.__SVT+'">');</script>
+<script>document.write('<link rel="stylesheet" href="assets/css/legal-rebuild.css?v=20260703-legal-home-chrome&t='+window.__SVT+'">');</script>
+<!-- Keep the chrome on the DIN/Barlow stack with CJK fallbacks (same block as index_cn/firm_cn). -->
+<style>
+  body.homepage {
+    --sv-font: "DIN 2014", "Barlow", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+    --sv-serif: "DIN 2014", "Barlow", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+    --sv-cn: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  }
+</style>
 <link rel="icon" href="/assets/favicon.svg?v=20260702" type="image/svg+xml" sizes="any">
-<link rel="shortcut icon" href="/assets/favicon.svg?v=20260702" type="image/svg+xml">
+<link rel="shortcut icon" href="/favicon.ico?v=20260703">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png?v=20260703">
 </head>
-<body class="legal-page homepage">
-  <div id="site-header-mount"></div>
+<body id="top" class="homepage legal-page">
+<!-- ============================================================ A · HEADER -->
+<header class="sv-header">
+  <div class="sv-header__inner">
+    <a class="sv-header__logo" href="index_cn.html" aria-label="新岸资本 — 首页">
+      <img src="assets/brand/sv-lockup-fc-dark.png" alt="ShoreVest 新岸资本" width="172" height="41">
+    </a>
+    <nav class="sv-nav" aria-label="主导航">
+      <ul>
+        <li><a href="firm_cn.html">公司</a></li>
+        <li><a href="strategy_cn.html">策略</a></li>
+        <li><a href="insights_cn.html">洞察</a></li>
+        <li><a href="press_cn.html">媒体</a></li>
+        <li><a href="team_cn.html">团队</a></li>
+      </ul>
+    </nav>
+    <div class="sv-utils">
+      <a class="sv-lang" href="investor-access-portal-terms.html">EN<span class="sep">|</span><span class="on">中文</span></a>
+      <a class="sv-util-btn" href="investor-portal/index.html">投资者门户</a>
+      <a class="sv-util-btn sv-util-btn--cta" href="contact_cn.html">联系</a>
+    </div>
+    <button class="sv-burger" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="sv-mobile-menu">
+      <span></span>
+    </button>
+  </div>
+</header>
 
-  <main class="legal-main">
+<div class="sv-mobile-menu" id="sv-mobile-menu">
+  <nav aria-label="移动导航">
+    <ul>
+      <li><a href="firm_cn.html">公司</a></li>
+      <li><a href="strategy_cn.html">策略</a></li>
+      <li><a href="insights_cn.html">洞察</a></li>
+      <li><a href="press_cn.html">媒体</a></li>
+      <li><a href="team_cn.html">团队</a></li>
+    </ul>
+    <div class="sv-mobile-utils">
+      <a class="sv-util-btn" href="investor-access-portal-terms.html">EN</a>
+      <a class="sv-util-btn" href="investor-portal/index.html">投资者门户</a>
+      <a class="sv-util-btn sv-util-btn--cta" href="contact_cn.html">联系</a>
+    </div>
+  </nav>
+</div>
+
+  <main id="content" class="legal-main">
     <article class="sv-container legal-page__content legal-container legal-content legal-document__content">
       <header class="legal-page__intro-block">
         <p class="legal-page__kicker">法律声明</p>
@@ -160,8 +158,74 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
     </article>
   </main>
 
-  <footer class="sv-footer" data-shared-footer></footer>
+<!-- ============================================================ I · FOOTER -->
+<footer class="sv-footer" aria-label="网站页脚">
+  <div class="sv-footer__inner">
+    <div class="sv-footer__top">
+      <div>
+        <a class="sv-footer__logo" href="index_cn.html" aria-label="新岸资本 — 首页">
+          <img src="assets/brand/sv-lockup-fc-light.png" alt="ShoreVest 新岸资本" width="200" height="48">
+        </a>
+        <p class="sv-footer__offices">
+          广州 · 上海 · 北京 · 香港<br>
+          <a href="contact_cn.html">一般查询</a>
+        </p>
+      </div>
+      <nav class="sv-footer__nav" aria-label="页脚导航">
+        <a href="firm_cn.html">公司</a>
+        <a href="insights_cn.html">洞察</a>
+        <a href="strategy_cn.html">策略</a>
+        <a href="press_cn.html">媒体</a>
+        <a href="team_cn.html">团队</a>
+        <a href="contact_cn.html">联系</a>
+        <a href="investor-portal/index.html">投资者门户</a>
+        <a href="insights_cn.html#archive">中国债务动态</a>
+      </nav>
+    </div>
+
+    <div class="sv-footer__legal">
+      <p>新岸资本（ShoreVest Partners）及其关联机构向机构投资者提供投资管理服务。本网站仅供参考，不构成出售要约或购买任何证券或投资产品的要约邀请，亦不构成投资、法律或税务建议。</p>
+      <p>过往表现并不代表未来结果。私募信贷与私募债务投资涉及风险，包括可能损失本金。所示数据为近似值，可能发生变动。</p>
+    </div>
+
+    <div class="sv-footer__bottom">
+      <div class="sv-footer__links">
+        <a href="privacy-policy_cn.html">隐私政策</a>
+        <a href="cookie-notice_cn.html">Cookie 通知</a>
+        <a href="terms-of-use_cn.html">使用条款</a>
+        <a href="important-information_cn.html">重要信息</a>
+        <a href="legal-notices-disclaimers_cn.html">法律声明与免责声明</a>
+      </div>
+      <p class="sv-footer__copy">© 2026 新岸资本（ShoreVest Partners）。保留所有权利。</p>
+    </div>
+  </div>
+</footer>
+
+<button class="sv-totop" type="button" aria-label="返回顶部">
+  <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 13V3M8 3L3.5 7.5M8 3l4.5 4.5" stroke="currentColor" stroke-width="1.5"/></svg>
+</button>
   
-<script>(function(){var T=window.__SVT;function tk(u){return u+(u.indexOf("?")>-1?"&":"?")+"t="+T;}var s=["assets/js/shared-header.js","assets/js/shared-header.js","assets/js/shared-footer.js","assets/js/shared-footer.js"];(function n(i){if(i>=s.length)return;var e=document.createElement("script");e.src=tk(s[i]);e.onload=e.onerror=function(){n(i+1);};document.head.appendChild(e);})(0);})();</script>
+<script>
+(function(){
+  // Mobile menu toggle
+  var burger = document.querySelector('.sv-burger');
+  var menu = document.getElementById('sv-mobile-menu');
+  if (burger && menu) {
+    burger.addEventListener('click', function(){
+      var open = menu.classList.toggle('is-open');
+      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      burger.setAttribute('aria-label', open ? '关闭菜单' : '打开菜单');
+    });
+    menu.addEventListener('click', function(e){ if (e.target.closest('a')) { menu.classList.remove('is-open'); burger.setAttribute('aria-expanded','false'); } });
+  }
+  // Scroll-to-top
+  var toTop = document.querySelector('.sv-totop');
+  if (toTop) {
+    var onScroll = function(){ if (window.scrollY > 600) toTop.classList.add('is-visible'); else toTop.classList.remove('is-visible'); };
+    window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+    toTop.addEventListener('click', function(){ window.scrollTo({ top: 0, behavior: 'smooth' }); });
+  }
+})();
+</script>
 </body>
 </html>

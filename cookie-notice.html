@@ -27,22 +27,60 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   <!--svstripped-->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <!-- TODO: ADD ADOBE FONTS KIT FOR DIN 2014 — replace [KIT_ID] below and uncomment. Until configured, pages use the canonical DIN 2014 stack with only a generic sans-serif emergency fallback. -->
-  <!-- <link rel="stylesheet" href="https://use.typekit.net/[KIT_ID].css"> -->
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
-  
-  <!-- Typography lockdown — MUST load last; final authority over all type. -->
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
 
 
-  <script>document.write('<link rel="stylesheet" data-sv-chrome href="assets/css/sv-chrome.css?v=20260630-legal-chrome&t='+window.__SVT+'">');</script>
-  <script>document.write('<link rel="stylesheet" href="assets/css/legal-rebuild.css?v=20260630-legal-chrome&t='+window.__SVT+'">');</script>
+<script>document.write('<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260701-mobile-audit-430&t='+window.__SVT+'">');</script>
+<script>document.write('<link rel="stylesheet" href="assets/css/legal-rebuild.css?v=20260703-legal-home-chrome&t='+window.__SVT+'">');</script>
 <link rel="icon" href="/assets/favicon.svg?v=20260702" type="image/svg+xml" sizes="any">
-<link rel="shortcut icon" href="/assets/favicon.svg?v=20260702" type="image/svg+xml">
+<link rel="shortcut icon" href="/favicon.ico?v=20260703">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png?v=20260703">
 </head>
-<body class="cookie-page">
-  <div id="site-header-mount"></div>
+<body id="top" class="homepage cookie-page">
+<!-- ============================================================ A · HEADER -->
+<header class="sv-header">
+  <div class="sv-header__inner">
+    <a class="sv-header__logo" href="index.html" aria-label="ShoreVest — home">
+      <img src="assets/brand/sv-lockup-fc-dark.png" alt="ShoreVest" width="172" height="41">
+    </a>
+    <nav class="sv-nav" aria-label="Primary">
+      <ul>
+        <li><a href="firm.html">Firm</a></li>
+        <li><a href="strategy.html">Strategy</a></li>
+        <li><a href="insights.html">Insights</a></li>
+        <li><a href="press.html">Media</a></li>
+        <li><a href="team.html">Team</a></li>
+      </ul>
+    </nav>
+    <div class="sv-utils">
+      <a class="sv-lang" href="cookie-notice_cn.html"><span class="on">EN</span><span class="sep">|</span>中文</a>
+      <a class="sv-util-btn" href="investor-portal/index.html">Investor Portal</a>
+      <a class="sv-util-btn sv-util-btn--cta" href="contact.html">Contact</a>
+    </div>
+    <button class="sv-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="sv-mobile-menu">
+      <span></span>
+    </button>
+  </div>
+</header>
 
-  <main class="legal-main">
+<div class="sv-mobile-menu" id="sv-mobile-menu">
+  <nav aria-label="Mobile">
+    <ul>
+      <li><a href="firm.html">Firm</a></li>
+      <li><a href="strategy.html">Strategy</a></li>
+      <li><a href="insights.html">Insights</a></li>
+      <li><a href="press.html">Media</a></li>
+      <li><a href="team.html">Team</a></li>
+    </ul>
+    <div class="sv-mobile-utils">
+      <a class="sv-util-btn" href="cookie-notice_cn.html">中文</a>
+      <a class="sv-util-btn" href="investor-portal/index.html">Investor Portal</a>
+      <a class="sv-util-btn sv-util-btn--cta" href="contact.html">Contact</a>
+    </div>
+  </nav>
+</div>
+
+  <main id="content" class="legal-main">
     <article class="sv-container legal-container legal-content legal-document__content">
       <header class="legal-page__intro-block">
         <p class="legal-page__kicker">Legal Notice</p>
@@ -92,7 +130,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   <p>Data collected through cookies may be processed in multiple jurisdictions where ShoreVest or its service providers operate. By using the Site, you acknowledge that such transfers may occur, subject to applicable legal safeguards described in the Privacy Policy.</p>
 
   <h2>9. Security</h2>
-  <p>Cookies may form part of broader security measures to protect the Site from unauthorized access and detect malicious activity. No security system can be guaranteed to be completely effective. Users remain responsible for maintaining the security of their own devices and connections.</p>
+  <p>Cookies may form part of broader security measures to protect the Site from unauthorized access and detect malicious activity. No security system can be assured to be completely effective. Users remain responsible for maintaining the security of their own devices and connections.</p>
 
   <h2>10. Changes</h2>
   <p>ShoreVest may update this Cookie Notice at any time. Any revised version will be posted with an updated effective date. Where changes to non-essential cookie usage are material and require fresh consent, ShoreVest will seek that consent before deploying the relevant cookies. Continued use of the Site where no fresh consent is required constitutes acknowledgement of the revised Notice.</p>
@@ -108,8 +146,79 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
     </article>
   </main>
 
-  <footer class="sv-footer" data-shared-footer></footer>
+<!-- ============================================================ I · FOOTER -->
+<footer class="sv-footer" aria-label="Site footer">
+  <div class="sv-footer__inner">
+    <div class="sv-footer__top">
+      <div>
+        <a class="sv-footer__logo" href="index.html" aria-label="ShoreVest — home">
+          <!-- Dark footer → FullColor_Light variant (ivory wordmark, reads on teal). -->
+          <img src="assets/brand/sv-lockup-fc-light.png" alt="ShoreVest" width="200" height="48">
+        </a>
+        <p class="sv-footer__offices">
+          Guangzhou · Shanghai · Beijing · Hong Kong<br>
+          <a href="contact.html">General inquiries</a>
+        </p>
+      </div>
+      <nav class="sv-footer__nav" aria-label="Footer">
+        <a href="firm.html">Firm</a>
+        <a href="insights.html">Insights</a>
+        <a href="strategy.html">Strategy</a>
+        <a href="press.html">Media</a>
+        <a href="team.html">Team</a>
+        <a href="contact.html">Contact</a>
+        <a href="insights.html#archive">China Debt Dynamics</a>
+        <span class="sv-footer__access" role="group" aria-label="Access">
+          <span class="sv-footer__access-label">Access</span>
+          <a href="investor-portal/index.html">Investor Portal</a>
+          <a href="employee-portal/index.html" target="_blank" rel="noopener">Employee Portal</a>
+        </span>
+      </nav>
+    </div>
+
+    <div class="sv-footer__legal">
+      <p>ShoreVest Partners and its affiliates provide investment management services to institutional investors. This website is for informational purposes only and does not constitute an offer to sell or a solicitation of an offer to buy any security or investment product, nor investment, legal, or tax advice.</p>
+      <p>Past performance is not indicative of future results. Investments in private credit and private debt involve risk, including the possible loss of principal. Figures shown are approximate and subject to change.</p>
+    </div>
+
+    <div class="sv-footer__bottom">
+      <div class="sv-footer__links">
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="cookie-notice.html">Cookie Notice</a>
+        <a href="terms-of-use.html">Terms of Use</a>
+        <a href="important-information.html">Important Information</a>
+        <a href="legal-notices-disclaimers.html">Legal Notices &amp; Disclaimers</a>
+      </div>
+      <p class="sv-footer__copy">© 2026 ShoreVest Partners. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<button class="sv-totop" type="button" aria-label="Back to top">
+  <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 13V3M8 3L3.5 7.5M8 3l4.5 4.5" stroke="currentColor" stroke-width="1.5"/></svg>
+</button>
   
-<script>(function(){var T=window.__SVT;function tk(u){return u+(u.indexOf("?")>-1?"&":"?")+"t="+T;}var s=["assets/js/shared-header.js","assets/js/shared-footer.js"];(function n(i){if(i>=s.length)return;var e=document.createElement("script");e.src=tk(s[i]);e.onload=e.onerror=function(){n(i+1);};document.head.appendChild(e);})(0);})();</script>
+<script>
+(function(){
+  // Mobile menu toggle
+  var burger = document.querySelector('.sv-burger');
+  var menu = document.getElementById('sv-mobile-menu');
+  if (burger && menu) {
+    burger.addEventListener('click', function(){
+      var open = menu.classList.toggle('is-open');
+      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    });
+    menu.addEventListener('click', function(e){ if (e.target.closest('a')) { menu.classList.remove('is-open'); burger.setAttribute('aria-expanded','false'); } });
+  }
+  // Scroll-to-top
+  var toTop = document.querySelector('.sv-totop');
+  if (toTop) {
+    var onScroll = function(){ if (window.scrollY > 600) toTop.classList.add('is-visible'); else toTop.classList.remove('is-visible'); };
+    window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+    toTop.addEventListener('click', function(){ window.scrollTo({ top: 0, behavior: 'smooth' }); });
+  }
+})();
+</script>
 </body>
 </html>

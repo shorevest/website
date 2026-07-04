@@ -33,12 +33,12 @@
 
   // Loader tree mark — "Ink-in" (approved option F): the outline reveals
   // first, then inks into the solid badge. Two mask-rendered layers in the
-  // loader ink colour; mark only, no wordmark.
+  // loader ink color; mark only, no wordmark.
   const BRAND_MARK_FILLED_PATH = assetHref('assets/brand/tree-mark-filled.png');
   const LOADER_MARK_SVG = `<span class="loader-mark-svg loader-mark-ink" aria-hidden="true"><span class="loader-mark-art loader-mark-art--out" style="-webkit-mask-image:url('${BRAND_MARK_PATH}');mask-image:url('${BRAND_MARK_PATH}')"></span><span class="loader-mark-art loader-mark-art--fill" style="-webkit-mask-image:url('${BRAND_MARK_FILLED_PATH}');mask-image:url('${BRAND_MARK_FILLED_PATH}')"></span></span>`;
 
   const pathname = window.location.pathname;
-  const isInvestorPortalPath = /\/investor-portal(?:\.html|\/)?$/i.test(pathname);
+  const isInvestorPortalPath = /\/investor-portal(?:\.html|\/|\/index\.html)?$/i.test(pathname);
   const path = isInvestorPortalPath ? 'investor-portal' : (pathname.split('/').pop() || 'index.html');
   const localeSuffixMatch = path.match(/[-_](cn)\.html$/i);
   const localeSuffix = localeSuffixMatch ? localeSuffixMatch[1].toLowerCase() : 'en';
@@ -131,7 +131,7 @@
     return match && basePages.includes(match[1]) ? match[1] : 'index';
   })();
   const localeHrefs = {
-    en: localeBase === 'investor-portal' ? pageHref('investor-portal.html') : localizedPageHref(localeBase, 'en'),
+    en: localeBase === 'investor-portal' ? pageHref('investor-portal/index.html') : localizedPageHref(localeBase, 'en'),
     cn: localeBase === 'investor-portal' ? pageHref('index_cn.html') : localizedPageHref(localeBase, 'cn')
   };
 
@@ -161,7 +161,7 @@
         { href: pageHref('press.html'), label: 'Media' },
         { href: pageHref('team.html'), label: 'Team' }
       ],
-      investorPortalHref: pageHref('investor-portal.html'),
+      investorPortalHref: pageHref('investor-portal/index.html'),
       investorPortalLabel: 'Investor portal',
       headerCtaHref: pageHref('contact.html'),
       headerCtaLabel: 'Contact',
@@ -178,7 +178,7 @@
         { href: pageHref('press_cn.html'), label: '媒体' },
         { href: pageHref('team_cn.html'), label: '团队' }
       ],
-      investorPortalHref: pageHref('investor-portal.html'),
+      investorPortalHref: pageHref('investor-portal/index.html'),
       investorPortalLabel: '投资者门户',
       headerCtaHref: pageHref('contact_cn.html'),
       headerCtaLabel: '联系',
@@ -244,7 +244,7 @@
     document.head.appendChild(chromeLink);
   }
 
-  // Burger toggle (canonical behaviour).
+  // Burger toggle (canonical behavior).
   const svBurger = mount.querySelector('.sv-burger');
   const svMenu = mount.querySelector('#sv-mobile-menu');
   if (svBurger && svMenu) {
@@ -451,7 +451,7 @@
     insights: ['insights.html', 'insights_cn.html', pageHref('insights.html'), pageHref('insights_cn.html')],
     press: ['press.html', 'press_cn.html', pageHref('press.html'), pageHref('press_cn.html')],
     team: ['team.html', 'team_cn.html', pageHref('team.html'), pageHref('team_cn.html')],
-    investor: [pageHref('investor-portal.html'), 'investor-portal', 'investor-access.html', 'investor-access_cn.html', pageHref('investor-access.html'), pageHref('investor-access_cn.html')]
+    investor: [pageHref('investor-portal/index.html'), 'investor-portal', 'investor-access.html', 'investor-access_cn.html', pageHref('investor-access.html'), pageHref('investor-access_cn.html')]
   };
 
   const inferActiveSection = (currentPath) => {

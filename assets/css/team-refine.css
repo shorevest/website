@@ -246,12 +246,13 @@ html body.team-page-v2 .team-profile__photo {
     linear-gradient(135deg, rgba(216, 206, 176, 0.45), rgba(250, 246, 238, 0.78)),
     var(--tr-parchment);
   border: 1px solid var(--tr-border);
+  max-height: none !important;
 }
 html body.team-page-v2 .team-profile__photo img {
   width: 100% !important;
   height: 100% !important;
   object-fit: cover !important;
-  object-position: 50% 22% !important;   /* keep eyes/shoulders well placed */
+  object-position: 50% 0 !important;    /* keep the top of each head visible */
   display: block;
   filter: grayscale(1) contrast(1.02);   /* consistent normalized set */
   transition: filter 0.3s ease;

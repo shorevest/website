@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ShoreVest Operations</title>
+  <meta name="description" content="ShoreVest Operations — private employee portal. Authorised ShoreVest personnel only." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- DIN 2014 loads via the site's Adobe Fonts kit when configured; Barlow is the
+       structural fallback used across the public site. Spectral is the approved
+       secondary (serif) face. -->
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;700&family=Spectral:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/employee-portal.css?v=20260703" />
+  <link rel="icon" href="../assets/favicon.svg?v=20260703" type="image/svg+xml" sizes="any" />
+</head>
+<body class="svops">
+  <noscript>
+    <div style="max-width:520px;margin:80px auto;font-family:system-ui,sans-serif;text-align:center">
+      <h1 style="font-size:20px">ShoreVest Operations</h1>
+      <p>This internal application requires JavaScript. Please enable JavaScript and reload.</p>
+    </div>
+  </noscript>
+
+  <!-- The entire application renders into this root. All markup is produced by
+       app.js after the authentication gate resolves. -->
+  <div id="svops-root" aria-live="polite">
+    <div class="state" role="status">
+      <div class="spinner" aria-hidden="true"></div>
+      <h2>Loading ShoreVest Operations</h2>
+      <p>Preparing the secure application…</p>
+    </div>
+  </div>
+
+  <!-- Deployment configuration (placeholders only — see file header). -->
+  <script src="../assets/js/employee-portal/portal-config.js?v=20260703"></script>
+  <!-- Pure rules engine (also exercised by the Node test suite). -->
+  <script src="../assets/js/employee-portal/rules.js?v=20260703"></script>
+  <!-- File sniffing, CSV parsing, minimal XLSX reader. -->
+  <script src="../assets/js/employee-portal/files.js?v=20260703"></script>
+  <!-- Demonstration-mode workflow store (Dataverse entity contract). -->
+  <script src="../assets/js/employee-portal/store.js?v=20260703"></script>
+  <!-- Entra ID / Dataverse / SharePoint / Power Automate / Salesforce /
+       Office Scripts adapters with fail-closed placeholders. -->
+  <script src="../assets/js/employee-portal/integrations.js?v=20260703"></script>
+  <!-- UI primitives shared by all views. -->
+  <script src="../assets/js/employee-portal/ui.js?v=20260703"></script>
+  <!-- Demonstration processing engine (pipeline, workbook, execution). -->
+  <script src="../assets/js/employee-portal/workflow.js?v=20260703"></script>
+  <!-- Views -->
+  <script src="../assets/js/employee-portal/views-process.js?v=20260703"></script>
+  <script src="../assets/js/employee-portal/views-review.js?v=20260703"></script>
+  <script src="../assets/js/employee-portal/views-admin.js?v=20260703"></script>
+  <!-- Shell: authentication gate, navigation, router, dashboard. -->
+  <script src="../assets/js/employee-portal/app.js?v=20260703"></script>
+</body>
+</html>

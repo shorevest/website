@@ -19,7 +19,7 @@
    Re-declare "DIN 2014" here (loads last) to resolve from LOCAL across the
    full weight range, replicating the homepage: local DIN when installed,
    otherwise nothing → falls through to Barlow in the stack. No embedded URL,
-   so it can't reintroduce the single-weight faux/700 behaviour. */
+   so it can't reintroduce the single-weight faux/700 behavior. */
 @font-face {
   font-family: "DIN 2014";
   src: local("DIN 2014"), local("DIN2014"), local("DIN-2014");
@@ -63,7 +63,8 @@
   box-sizing: border-box;
 }
 /* Reserve the fixed-header space (homepage does this via body padding). */
-body.contact-page, body.insights-page, body.press-page, body.investor-portal-page { padding-top: var(--sv-chrome-header-h); }
+body.contact-page, body.insights-page, body.press-page, body.investor-portal-page,
+body.privacy-page, body.cookie-page, body.terms-page, body.legal-page, body.disclaimers-page { padding-top: var(--sv-chrome-header-h); }
 .sv-header *, .sv-mobile-menu *, .sv-footer *, .sv-totop * { box-sizing: border-box; }
 .sv-header__inner {
   max-width: var(--sv-chrome-page-max); margin-inline: auto; height: 100%;
@@ -191,7 +192,8 @@ body.contact-page, body.insights-page, body.press-page, body.investor-portal-pag
 /* ---------- RESPONSIVE --------------------------------------------------- */
 @media (max-width: 1024px) {
   .sv-header { height: var(--sv-chrome-header-h-tablet); }
-  body.contact-page, body.insights-page, body.press-page, body.investor-portal-page { padding-top: var(--sv-chrome-header-h-tablet); }
+  body.contact-page, body.insights-page, body.press-page, body.investor-portal-page,
+  body.privacy-page, body.cookie-page, body.terms-page, body.legal-page, body.disclaimers-page { padding-top: var(--sv-chrome-header-h-tablet); }
   .sv-mobile-menu { top: var(--sv-chrome-header-h-tablet); max-height: calc(100vh - var(--sv-chrome-header-h-tablet)); }
 }
 @media (max-width: 1023px) {
@@ -273,7 +275,8 @@ html body .sv-mobile-menu a {
    one optical centerline with professional edge spacing. */
 @media (max-width: 767px) {
   .sv-header { height: var(--sv-chrome-header-h-mobile); }
-  body.contact-page, body.insights-page, body.press-page, body.investor-portal-page { padding-top: var(--sv-chrome-header-h-mobile); }
+  body.contact-page, body.insights-page, body.press-page, body.investor-portal-page,
+  body.privacy-page, body.cookie-page, body.terms-page, body.legal-page, body.disclaimers-page { padding-top: var(--sv-chrome-header-h-mobile); }
   .sv-header__inner {
     padding-inline: var(--sv-chrome-pad-x-mobile);
     gap: 16px;
@@ -305,4 +308,18 @@ html body .sv-mobile-menu a {
     width: 38px;
     height: 38px;
   }
+}
+
+/* Footer "Access" group — Investor Portal + Employee Portal entry points. */
+html body footer.sv-footer .sv-footer__access {
+  grid-column: 1 / -1;
+  display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px 26px;
+  margin-top: 16px; padding-top: 14px;
+  border-top: 1px solid var(--sv-chrome-border-dark);
+}
+html body footer.sv-footer .sv-footer__access-label {
+  margin: 0;
+  font: 700 10px/1 var(--sv-chrome-font);
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--sv-chrome-faint-on-dark);
 }

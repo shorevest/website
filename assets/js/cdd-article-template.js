@@ -147,10 +147,10 @@
       keyFindings: [],
       sections: [
         {
-          heading: 'Issue available as PDF',
+          heading: 'Publication details',
           paragraphs: [
-            'The HTML article data for this issue is temporarily unavailable, so this page is showing the issue summary and direct publication link instead of a blank article.',
-            directPdf ? `Open the PDF for the complete issue: ${directPdf}` : 'Use the PDF button above to open the complete issue.'
+            archive.excerpt || 'Read this China Debt Dynamics issue from ShoreVest.',
+            directPdf ? `Complete issue PDF: ${directPdf}` : 'Use the PDF button above to open the complete issue.'
           ]
         }
       ],
