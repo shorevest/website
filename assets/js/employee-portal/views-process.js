@@ -113,7 +113,7 @@
       row.appendChild(next);
     }
     row.appendChild(el('button', { class: 'btn btn--quiet', text: 'Cancel', onclick: function () {
-      resetWizard(); location.hash = '#/dashboard';
+      resetWizard(); location.hash = '#/tools';
     } }));
     if (opts && opts.note) row.appendChild(el('p', { class: 'btn-note', text: opts.note }));
     body.appendChild(row);
@@ -550,7 +550,7 @@
     });
     actions.appendChild(confirmBtn);
     actions.appendChild(el('button', { class: 'btn', text: 'Edit Settings', onclick: function () { w.step = 4; rerender(); } }));
-    actions.appendChild(el('button', { class: 'btn btn--quiet', text: 'Cancel', onclick: function () { resetWizard(); location.hash = '#/dashboard'; } }));
+    actions.appendChild(el('button', { class: 'btn btn--quiet', text: 'Cancel', onclick: function () { resetWizard(); location.hash = '#/tools'; } }));
     body.appendChild(actions);
   }
 
@@ -732,7 +732,7 @@
       }
       actions.appendChild(b);
     });
-    actions.appendChild(el('a', { class: 'btn btn--quiet', href: '#/dashboard', text: 'Return to Dashboard' }));
+    actions.appendChild(el('a', { class: 'btn btn--quiet', href: '#/tools', text: 'Return to Tools' }));
     panel.appendChild(actions);
 
     var gates = W.executionGate(batch.batchId, 'prepareDraftEmails', user);
