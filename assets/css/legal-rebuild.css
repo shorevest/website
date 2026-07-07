@@ -30,6 +30,30 @@ body.disclaimers-page {
   font-family: var(--lg-font);
 }
 
+/* Keep any browser canvas, safe-area, or post-footer whitespace on legal pages
+   aligned with the dark footer so no ivory/white strip can show below it. */
+html:has(body.privacy-page),
+html:has(body.cookie-page),
+html:has(body.terms-page),
+html:has(body.legal-page),
+html:has(body.disclaimers-page),
+body.privacy-page,
+body.cookie-page,
+body.terms-page,
+body.legal-page,
+body.disclaimers-page {
+  background: var(--sv-dark-footer, #20211F);
+}
+
+body.privacy-page .sv-footer,
+body.cookie-page .sv-footer,
+body.terms-page .sv-footer,
+body.legal-page .sv-footer,
+body.disclaimers-page .sv-footer {
+  margin-bottom: 0;
+  border-bottom: 0;
+}
+
 /* Clear the fixed top bar (forced position:fixed, ~80px) so the masthead
    never tucks under the header. Anchor jumps clear it too. */
 html:has(body.privacy-page),
