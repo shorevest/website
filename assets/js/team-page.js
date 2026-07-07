@@ -51,7 +51,7 @@
     const closeButton = document.createElement("button");
     closeButton.type = "button";
     closeButton.className = "team-bio-panel__close";
-    closeButton.textContent = isChinesePage ? "关闭简介" : "Close Bio";
+    closeButton.textContent = isChinesePage ? "关闭简介" : "Close bio";
     closeButton.setAttribute(
       "aria-label",
       isChinesePage ? "关闭简介面板" : "Close biography panel",
