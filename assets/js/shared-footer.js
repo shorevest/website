@@ -30,7 +30,6 @@
         <span class="sv-footer__access" role="group" aria-label="Access">
           <span class="sv-footer__access-label">Access</span>
           <a href="${siteHref('investor-portal/index.html')}">Investor Portal</a>
-          <a href="${siteHref('employee-portal/index.html')}" target="_blank" rel="noopener">ShoreVest One</a>
         </span>
       </nav>
     </div>
@@ -70,7 +69,6 @@
         <span class="sv-footer__access" role="group" aria-label="访问">
           <span class="sv-footer__access-label">访问</span>
           <a href="${siteHref('investor-portal/index.html')}">投资者门户</a>
-          <a href="${siteHref('employee-portal/index.html')}" target="_blank" rel="noopener">ShoreVest One</a>
         </span>
       </nav>
     </div>
