@@ -108,15 +108,23 @@ body.firm-page .fm-statcard.svb--band .svb-stat__c { color: rgba(252, 249, 241, 
 body.firm-page .fm-statcard.svb--band .svb-stats--row .svb-stat { border-left-color: rgba(252, 249, 241, 0.28); }
 
 /* Firm · "A human business" closing → 03 Offset (kept inside .sv-shell) */
-body.firm-page .fm-close__inner.svb { display: block; border-left: 0; padding-left: 0; }
+body.firm-page .fm-close__inner.svb {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: clamp(24px, 4vw, 64px);
+  border-left: 0;
+  padding-left: 0;
+}
 body.firm-page .fm-close__inner .svb--offset {
-  width: 100%;
+  grid-column: 2 / -1;
+  width: auto;
   margin-inline: 0;
   box-sizing: border-box;
 }
 body.firm-page .fm-close__inner .svb-card { max-width: none; }
 body.firm-page .fm-close__inner .svb-statement { max-width: none; }
-@media (max-width: 700px) {
+@media (max-width: 880px) {
+  body.firm-page .fm-close__inner.svb { display: block; }
   body.firm-page .fm-close__inner .svb--offset { width: 100%; }
 }
 
