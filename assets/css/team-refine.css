@@ -258,7 +258,7 @@ html body.team-page-v2 .grid[data-team-grid] {
     var(--team-cols),
     minmax(0, var(--team-card-width))
   ) !important;
-  justify-content: center !important;
+  justify-content: start !important;
   gap: clamp(24px, 2.4vw, 36px) clamp(20px, 2vw, 30px) !important;
 }
 html body.team-page-v2 .grid[data-team-count="2"] {
@@ -273,9 +273,13 @@ html body.team-page-v2 .grid[data-team-count="5"] {
 html body.team-page-v2 .group--leadership .grid[data-team-grid] {
   --team-cols: 5;
 }
+html body.team-page-v2 .team-profile {
+  text-align: left;
+}
 html body.team-page-v2 .team-profile__photo {
   display: grid;
   place-items: center;
+  width: 100%;
   aspect-ratio: 4 / 5;
   overflow: hidden;
   background:
@@ -287,12 +291,13 @@ html body.team-page-v2 .team-profile__photo {
     var(--tr-parchment);
   border: 1px solid var(--tr-border);
   max-height: none !important;
+  margin: 0 !important;
 }
 html body.team-page-v2 .team-profile__photo img {
   width: 100% !important;
   height: 100% !important;
   object-fit: cover !important;
-  object-position: 50% 0 !important; /* keep the top of each head visible */
+  object-position: center top !important;
   display: block;
   filter: grayscale(1) contrast(1.02); /* consistent normalized set */
   transition: filter 0.3s ease;
@@ -342,6 +347,9 @@ html body.team-page-v2 .team-profile__secondary {
   margin-top: 2px !important;
   font-size: 12.5px !important;
   color: rgba(110, 113, 105, 0.82) !important;
+}
+html body.team-page-v2 .team-profile__actions {
+  justify-content: flex-start;
 }
 html body.team-page-v2 .team-profile__bio-toggle,
 html body.team-page-v2 .team-profile__linkedin {
