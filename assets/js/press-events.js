@@ -146,7 +146,7 @@
       type: 'Conference',
       title: 'Bloomberg Invest Hong Kong',
       location: 'Hong Kong',
-      description: 'ShoreVest participated in Bloomberg’s flagship investment conference in Hong Kong.',
+      description: 'ShoreVest participated in Bloomberg’s investment conference in Hong Kong.',
       ctaLabel: 'View →',
       href: 'https://events.bloomberglive.com/event/InvestHK_2026/summary?RefId=blive_tile',
       ariaLabel: 'View Bloomberg Invest Hong Kong event page',
@@ -175,10 +175,11 @@
     row.appendChild(date);
     row.appendChild(createTextElement('span', 'pr-event-type', event.type));
 
-    var title = createTextElement('span', 'pr-event-title', event.title);
-    var status = createTextElement('span', 'pr-event-status', event.status);
-    title.insertBefore(status, title.firstChild);
-    title.insertBefore(document.createTextNode(' '), status.nextSibling);
+    var title = document.createElement('span');
+    title.className = 'pr-event-title';
+    var statusLabel = event.status === eventVisibility.STATUS.CONCLUDED ? 'Concluded' : 'Upcoming';
+    title.appendChild(createTextElement('span', 'pr-event-status', statusLabel));
+    title.appendChild(createTextElement('span', '', event.title));
     title.appendChild(createTextElement('small', '', event.description));
     row.appendChild(title);
 

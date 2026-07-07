@@ -45,7 +45,7 @@
       '<span class="press-row__content"><span class="press-type-line"><span class="press-tag">' + esc(item.type) + "</span></span>" +
       '<span class="press-headline">' + esc(item.headline) + "</span>" +
       '<span class="press-row__summary">' + esc(item.summary) + "</span></span>" +
-      '<span class="press-row__meta"><span class="press-attribution">' + esc(item.attribution || "ShoreVest commentary") + "</span>" +
+      '<span class="press-row__meta">' +
       '<time class="press-date" datetime="' + esc(item.date) + '">' + esc(item.dateDisplay || item.date) + "</time></span>";
     art.appendChild(a);
     return art;
