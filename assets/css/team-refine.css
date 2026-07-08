@@ -739,8 +739,8 @@ html body.team-page-v2 .team-bio-panel__close {
 }
 
 html body.team-page-v2 .team-bio-panel__body {
-  grid-column: 5 / span 6;
-  max-width: 68ch !important;
+  grid-column: 5 / -1;
+  max-width: none !important;
   margin: 0 !important;
   padding: 0 0 clamp(12px, 1.8vw, 22px) !important;
 }
@@ -778,7 +778,7 @@ html body.team-page-v2 .team-bio-panel__body p + p {
 
   html body.team-page-v2 .group__summary,
   html body.team-page-v2 .team-bio-panel__body {
-    grid-column: 4 / span 5;
+    grid-column: 4 / -1;
   }
 
   html body.team-page-v2 .grid[data-team-grid],
