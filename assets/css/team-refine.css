@@ -883,3 +883,21 @@ html body.team-page-v2 :is(
   border-bottom: 0 !important;
   background-image: none !important;
 }
+
+/* Follow-up: remove remaining horizontal cinnabar rules from Team content. */
+html body.team-page-v2 .group::before,
+html body.team-page-v2 .team-bio-panel::before,
+html body.team-page-v2 .team-bio-panel::after {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html body.team-page-v2 .team-bio-panel {
+  border-top: 0 !important;
+}
