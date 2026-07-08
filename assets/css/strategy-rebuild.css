@@ -726,3 +726,56 @@ body.strategy-page .st-reason:last-child {
   border: 0 !important;
   background: transparent !important;
 }
+
+/* ==========================================================================
+   Page divider standard — warm xuan hairline
+   Matches the supplied reference: one full-width, 1px warm paper rule.
+   ========================================================================== */
+:root {
+  --sv-page-divider-color: rgba(216, 206, 176, 0.82);
+  --sv-page-divider-thickness: 1px;
+  --sv-page-divider-max: var(--page-max, 1684px);
+  --sv-page-divider-pad: var(--pad-x, clamp(24px, 8.9vw, 182px));
+}
+
+:where(
+  hr,
+  [role="separator"],
+  .section-divider,
+  .principles-rule,
+  .home-cdd__rule,
+  .strategy-section-intro__divider,
+  .strategy-section-intro__rule,
+  .strategy-rotation__divider,
+  .strategy-rotation__rule,
+  .opp-lead__rule,
+  .tss-row__bar,
+  .ip__seal,
+  .tss-closer__seal,
+  .cdd-arc__closer-seal,
+  .cdd-arc__seal-rule,
+  .cp-hero__title-rule,
+  .cp-hero__divider,
+  .cp-routing-card__rule,
+  .cp-section-head__rule,
+  .ogeo__divider
+):not(svg):not(path):not(img) {
+  display: block !important;
+  width: min(calc(100% - (2 * var(--sv-page-divider-pad))), var(--sv-page-divider-max)) !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  margin: clamp(56px, 6.3vw, 129px) auto !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-top: var(--sv-page-divider-thickness) solid var(--sv-page-divider-color) !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  color: transparent !important;
+  overflow: hidden !important;
+}
+
+main > section + section {
+  border-top-color: var(--sv-page-divider-color) !important;
+  border-top-width: var(--sv-page-divider-thickness) !important;
+}
