@@ -229,10 +229,10 @@
         var divider = document.createElement('div');
         divider.className = 'pr-events__divider';
         divider.setAttribute('role', 'separator');
-        divider.setAttribute('aria-label', 'Concluded events');
-        var dividerText = document.createElement('span');
-        dividerText.textContent = 'Recently concluded';
-        divider.appendChild(dividerText);
+        divider.setAttribute('aria-label', 'Past events');
+        divider.appendChild(createTextElement('span', 'pr-events__divider-label', 'Past events'));
+        divider.appendChild(createTextElement('span', 'pr-events__divider-note',
+          'Concluded appearances remain listed for ' + eventVisibility.DISPLAY_DAYS_AFTER_END + ' days'));
         table.insertBefore(divider, emptyEl);
         dividerInserted = true;
       }
