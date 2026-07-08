@@ -122,7 +122,9 @@
       ctaLabel: 'View →',
       href: 'https://www.peievents.com/en/event/pdi-apac-forum/',
       ariaLabel: 'View PDI APAC Forum event page',
-      isClickable: true
+      isClickable: true,
+      imageSrc: 'assets/img/media-hero-fii-priority.svg',
+      imageAlt: 'Audience at a ShoreVest event panel'
     },
     {
       startDate: '2026-06-15',
@@ -136,7 +138,9 @@
       ctaLabel: 'View →',
       href: 'https://informaconnect.com/superreturn-emerging-markets/speakers/benjamin-fanger/',
       ariaLabel: 'View Benjamin Fanger’s SuperReturn speaker profile',
-      isClickable: true
+      isClickable: true,
+      imageSrc: 'assets/img/media-hero-fii-priority.svg',
+      imageAlt: 'Conference audience listening to a ShoreVest panel'
     },
     {
       startDate: '2026-06-10',
@@ -165,6 +169,7 @@
     var row = document.createElement('article');
     row.className = 'pr-event-row';
     if (event.status === eventVisibility.STATUS.CONCLUDED) row.classList.add('pr-event-row--past');
+    if (event.imageSrc) row.classList.add('pr-event-row--with-media');
     row.setAttribute('role', 'row');
     row.setAttribute('data-start-date', event.startDate);
     row.setAttribute('data-end-date', event.endDate);
@@ -184,6 +189,18 @@
     row.appendChild(title);
 
     row.appendChild(createTextElement('span', 'pr-event-location', event.location));
+
+    if (event.imageSrc) {
+      var media = document.createElement('figure');
+      media.className = 'pr-event-media';
+      var img = document.createElement('img');
+      img.src = event.imageSrc;
+      img.alt = event.imageAlt || '';
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      media.appendChild(img);
+      row.appendChild(media);
+    }
 
     if (event.isClickable) {
       var link = createTextElement('a', 'pr-event-link', event.ctaLabel);
@@ -205,8 +222,22 @@
     if (!table || !emptyEl) return;
 
     var visibleEvents = eventVisibility.sortVisibleEvents(EVENTS, now || new Date());
-    table.querySelectorAll('.pr-event-row').forEach(function (row) { row.remove(); });
-    visibleEvents.forEach(function (event) { table.insertBefore(renderEvent(event), emptyEl); });
+    table.querySelectorAll('.pr-event-row, .pr-events__divider').forEach(function (row) { row.remove(); });
+    var dividerInserted = false;
+    visibleEvents.forEach(function (event) {
+      if (!dividerInserted && event.status === eventVisibility.STATUS.CONCLUDED) {
+        var divider = document.createElement('div');
+        divider.className = 'pr-events__divider';
+        divider.setAttribute('role', 'separator');
+        divider.setAttribute('aria-label', 'Concluded events');
+        var dividerText = document.createElement('span');
+        dividerText.textContent = 'Recently concluded';
+        divider.appendChild(dividerText);
+        table.insertBefore(divider, emptyEl);
+        dividerInserted = true;
+      }
+      table.insertBefore(renderEvent(event), emptyEl);
+    });
     emptyEl.hidden = visibleEvents.length > 0;
   }
 
