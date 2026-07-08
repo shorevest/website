@@ -1344,3 +1344,117 @@ body.homepage .sv-footer__access a {
   color: var(--sv-meta-on-dark); text-decoration: none; padding: 5px 0; display: inline-block;
 }
 body.homepage .sv-footer__access a:hover { color: var(--sv-qing-light, #7AAFAF); }
+
+/* ==========================================================================
+   B2 · HERO — layered editorial composition (approved 2026-07-08)
+   Square photograph on the right with offset cinnabar + oxide blocks behind
+   it and the ivory "at a glance" card floating over the photo edge. The left
+   column keeps plain text on the ivory page ground.
+   ========================================================================== */
+body.homepage .sv-hero__inner {
+  align-items: center;
+  min-height: 0;
+  padding-block: clamp(56px, 6vw, 88px) clamp(72px, 7vw, 104px);
+}
+body.homepage .sv-hero__main {
+  padding-block: 0;
+  padding-right: clamp(24px, 3vw, 56px);
+}
+body.homepage .sv-hero__field {
+  position: relative;
+  align-self: center;
+  margin-block: 0;
+  min-height: 0;
+  background: transparent;
+  padding: 0;
+  display: block;
+}
+/* Deep-oxide column, furthest layer right */
+body.homepage .sv-hero__field::after {
+  content: "";
+  position: absolute;
+  top: clamp(110px, 13vw, 150px);
+  bottom: -34px;
+  left: auto;
+  right: clamp(-64px, -4vw, -36px);
+  width: clamp(48px, 5vw, 78px);
+  background: var(--sv-oxide);
+  z-index: 0;
+}
+/* Cinnabar block offset down-and-right behind the photograph */
+body.homepage .sv-hero__field::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: clamp(44px, 4.5vw, 68px);
+  right: clamp(-36px, -2.2vw, -20px);
+  bottom: -26px;
+  left: clamp(36px, 3.5vw, 56px);
+  width: auto;
+  background: var(--sv-cinnabar);
+  z-index: 0;
+}
+body.homepage .sv-hero__image {
+  position: relative; z-index: 1;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border: 1px solid rgba(82, 71, 54, 0.18);
+  background: var(--sv-stone);
+  overflow: hidden;
+}
+body.homepage .sv-hero__image img {
+  display: block; width: 100%; height: 100%;
+  object-fit: cover; object-position: center;
+}
+body.homepage .sv-hero__panel {
+  position: absolute; z-index: 2;
+  right: clamp(24px, 2.8vw, 44px);
+  bottom: clamp(26px, 3vw, 44px);
+  width: min(440px, 76%);
+  max-width: none;
+  padding: clamp(26px, 2.8vw, 38px);
+  background: #FFFFFF;
+  border: 1px solid rgba(82, 71, 54, 0.18);
+  border-top: 1px solid rgba(82, 71, 54, 0.18);
+  box-shadow: 0 18px 42px rgba(23, 28, 28, 0.10);
+}
+@media (max-width: 1023px) and (min-width: 768px) {
+  body.homepage .sv-hero__main { padding-block: 40px 56px; }
+  body.homepage .sv-hero__field {
+    grid-column: 2 / 12;
+    padding: 0;
+    margin-bottom: 34px;
+  }
+  body.homepage .sv-hero__field::after { display: block; }
+  body.homepage .sv-hero__panel { max-width: none; }
+}
+@media (max-width: 767px) {
+  body.homepage .sv-hero { overflow: hidden; }
+  body.homepage .sv-hero__main { padding-block: 48px 36px; }
+  body.homepage .sv-hero__field {
+    background: transparent;
+    padding: 0 0 22px;
+    margin-inline: 0;
+    width: 100%;
+  }
+  body.homepage .sv-hero__field::before {
+    display: block;
+    top: 40px; right: calc(var(--pad-x) * -1); bottom: 0; left: 28px;
+  }
+  body.homepage .sv-hero__field::after { display: none; }
+  body.homepage .sv-hero__image { margin-right: 14px; width: auto; }
+  body.homepage .sv-hero__panel {
+    position: relative;
+    right: auto; bottom: auto;
+    width: auto;
+    margin: -56px 0 0 22px;
+    padding: 26px 22px;
+    background: #FFFFFF;
+    border-left: 1px solid rgba(82, 71, 54, 0.18);
+    box-shadow: 0 14px 30px rgba(23, 28, 28, 0.10);
+  }
+}
+@media (max-width: 430px) {
+  body.homepage .sv-hero__field { margin-inline: 0; padding: 0 0 20px; }
+  body.homepage .sv-hero__panel { margin: -44px 0 0 14px; }
+}
