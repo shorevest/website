@@ -871,8 +871,6 @@ html body.team-page-v2 :is(
 
 html body.team-page-v2 :is(
   .group__head,
-  .team-hero__proof,
-  .team-hero__proof article,
   .team-bio-panel,
   .team-profile,
   .team-profile__media,
@@ -882,6 +880,33 @@ html body.team-page-v2 :is(
   border-top: 0 !important;
   border-bottom: 0 !important;
   background-image: none !important;
+}
+
+/* Keep the Team hero stats card/box intact while removing the unrelated
+   decorative horizontal rules from the rest of the page. */
+html body.team-page-v2 .team-hero__proof {
+  border: 0 !important;
+  background-image: linear-gradient(
+    152deg,
+    var(--tr-cinnabar-lt) 0%,
+    var(--tr-cinnabar) 52%,
+    var(--tr-oxblood) 100%
+  ) !important;
+}
+
+html body.team-page-v2 .team-hero__statcard {
+  background: #fcfaf4 !important;
+  border: 1px solid rgba(30, 30, 26, 0.16) !important;
+  box-shadow: 0 18px 45px rgba(30, 30, 26, 0.12);
+}
+
+html body.team-page-v2 .team-hero__statcard-label,
+html body.team-page-v2 .team-hero__proof article {
+  border-bottom: 1px solid var(--tr-border) !important;
+}
+
+html body.team-page-v2 .team-hero__proof article:last-child {
+  border-bottom: 0 !important;
 }
 
 /* Follow-up: remove remaining horizontal cinnabar rules from Team content. */
