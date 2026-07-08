@@ -1448,3 +1448,79 @@ body.homepage .sv-hero__panel {
   body.homepage .sv-hero__field { margin-inline: 0; padding: 0 0 20px; }
   body.homepage .sv-hero__panel { margin: -44px 0 0 14px; }
 }
+
+/* ==========================================================================
+   NO HORIZONTAL LINES / BARS — 2026-07-08
+   Client directive: decorative horizontal rules and bars are banned site-wide.
+   Keep content and layout intact while suppressing visible rule/bar elements,
+   horizontal pseudo-element accents, and standalone <hr> separators.
+   ========================================================================== */
+:where(hr, [role="separator"]),
+:where(
+  [class*="rule"],
+  [class*="divider"],
+  [class*="topline"],
+  [class*="bar"],
+  [class*="separator"],
+  [class*="__line"],
+  [class*="-line"],
+  [class*="line-"]
+):not(svg):not(path):not(img) {
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  background-image: none !important;
+}
+
+:where(
+  [class*="rule"],
+  [class*="divider"],
+  [class*="topline"],
+  [class*="separator"],
+  [class*="__line"],
+  [class*="-line"],
+  [class*="line-"]
+):not(svg):not(path):not(img) {
+  display: none !important;
+}
+
+:where(
+  [class*="eyebrow"],
+  [class*="kicker"],
+  [class*="label"],
+  [class*="heading"],
+  [class*="title"],
+  [class*="intro"],
+  [class*="hero"],
+  [class*="section"]
+)::before,
+:where(
+  [class*="eyebrow"],
+  [class*="kicker"],
+  [class*="label"],
+  [class*="heading"],
+  [class*="title"],
+  [class*="intro"],
+  [class*="hero"],
+  [class*="section"]
+)::after {
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+}
+
+:where(
+  [class*="eyebrow"],
+  [class*="kicker"],
+  [class*="label"]
+)::before,
+:where(
+  [class*="eyebrow"],
+  [class*="kicker"],
+  [class*="label"]
+)::after {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}

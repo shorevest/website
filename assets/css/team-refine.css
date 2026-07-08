@@ -835,3 +835,46 @@ html body.team-page-v2 .team-bio-panel__body p + p {
     padding-top: clamp(20px, 5vw, 28px) !important;
   }
 }
+
+/* Client directive follow-up: no horizontal rules/bars may remain on Team. */
+html body.team-page-v2 :is(
+  .eyebrow,
+  .eyebrow--red,
+  .sv-hero__eyebrow,
+  .team-hero__statcard-label,
+  .group__head .eyebrow,
+  .team-profile__bio-toggle,
+  .team-profile__linkedin
+)::before,
+html body.team-page-v2 :is(
+  .eyebrow,
+  .eyebrow--red,
+  .sv-hero__eyebrow,
+  .team-hero__statcard-label,
+  .group__head .eyebrow,
+  .team-profile__bio-toggle,
+  .team-profile__linkedin
+)::after {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html body.team-page-v2 :is(
+  .group__head,
+  .team-hero__proof,
+  .team-hero__proof article,
+  .team-bio-panel,
+  .team-profile,
+  .team-profile__media,
+  .team-profile__body,
+  .team-profile__actions
+) {
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  background-image: none !important;
+}

@@ -253,3 +253,20 @@ body.contact-page .cp-pref__v { margin: 0; font: 400 14px/1.6 var(--sv-font); co
   body.contact-page .cp-route { grid-template-columns: 32px minmax(0, 1fr) auto; gap: 14px; }
   body.contact-page .cp-hero__title { max-width: none; }
 }
+
+/* Client directive: no decorative horizontal rules/bars. */
+:where(hr, [role="separator"], [class*="__rule"], [class*="-rule"], [class*="__divider"], [class*="-divider"], [class*="topline"], [class*="separator"]):not(svg):not(path):not(img) {
+  display: none !important;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  background-image: none !important;
+}
+:where([class*="eyebrow"], [class*="kicker"], [class*="label"])::before,
+:where([class*="eyebrow"], [class*="kicker"], [class*="label"])::after {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}

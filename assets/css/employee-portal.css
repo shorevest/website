@@ -623,3 +623,11 @@ table.tbl { border-collapse: collapse; width: 100%; font: 400 13px/1.45 var(--op
   .ops-shell { grid-template-columns: 1fr; }
   body.svops { background: #fff; }
 }
+
+/* Client directive: decorative horizontal rules and bars are banned site-wide. */
+:where(hr, [role="separator"], [class*="rule"], [class*="divider"], [class*="topline"], [class*="separator"], [class*="__line"], [class*="-line"], [class*="line-"]):not(svg):not(path):not(img) {
+  display: none !important;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  background-image: none !important;
+}
