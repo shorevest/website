@@ -169,14 +169,22 @@ body.cdd-print-layout .wrap { max-width: 860px; margin-inline: auto; }
    ========================================================================== */
 @media print {
   /*
-     Keep the print/PDF rendering visually identical to the prepared sheet shown
-     on screen. Earlier print-specific overrides changed the page margins, shell
-     padding, background, type scale, and shadow when the browser entered print
-     media, so “Save as PDF” no longer matched the ready-to-print preview. The
-     only print-media change should be removing the interactive toolbar.
+     Export only the white document area: the beige browser-preview backdrop,
+     toolbar/nameplate strip, and screen shadow are intentionally removed for
+     print-ready PDFs while the sheet padding and A4 page proportions remain
+     governed by the base template and @page rule above.
   */
+  body.cdd-print-layout {
+    padding: 0;
+    background: var(--p-paper);
+  }
+  .cdd-print-layout .cdd-topline,
   .cdd-print-layout .cdd-print-hide,
   .cdd-print-layout .cdd-topline__tools { display: none !important; }
+  .cdd-print-layout .wrap { max-width: none; }
+  .cdd-print-layout .cdd-print-shell {
+    box-shadow: none;
+  }
   .cdd-print-layout .cdd-body > h2 { break-after: avoid; }
   .cdd-print-layout .cdd-disclaimer { break-inside: avoid; }
 }
