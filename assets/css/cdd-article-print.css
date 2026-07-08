@@ -56,7 +56,10 @@ body.cdd-print-layout .wrap { max-width: 860px; margin-inline: auto; }
   background: var(--p-cinnabar); color: #fff; border: 1px solid var(--p-cinnabar);
   transition: background .15s ease;
 }
+.cdd-print-layout .cdd-actions { display: flex; align-items: center; justify-content: flex-end; gap: 10px; flex-wrap: wrap; }
 .cdd-print-layout .cdd-btn:hover { background: var(--p-cinnabar-d); border-color: var(--p-cinnabar-d); }
+.cdd-print-layout .cdd-btn--secondary { background: transparent; color: var(--p-cinnabar); text-decoration: none; }
+.cdd-print-layout .cdd-btn--secondary:hover { background: rgba(201, 59, 42, 0.08); color: var(--p-cinnabar-d); }
 .cdd-print-layout .cdd-print-note { margin: 0; max-width: 230px; text-align: right; font: 400 11px/1.45 var(--p-font); color: var(--p-muted); }
 /* The shared renderer injects a Share control into .cdd-actions; it has no place
    on a print/PDF sheet, so hide the whole control (button + menu). */
