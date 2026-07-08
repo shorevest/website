@@ -385,46 +385,11 @@ body.press-page .pr-hero-media img {
 }
 
 /* ==========================================================================
-   Media hero — square photograph with layered cinnabar/oxide blocks
-   (matches the homepage hero composition, 2026-07-08).
+   Media hero (2026-07-08) — the hero itself now reuses the homepage layered
+   system (.sv-hero in homepage-rebuild.css; body carries .homepage). Only
+   media-specific adjustments live here: the photograph renders greyscale,
+   and the proof band follows the hero directly.
    ========================================================================== */
-body.press-page .pr-open__right {
-  position: relative;
-  align-self: start;
-  padding: 0 clamp(20px, 2vw, 32px) clamp(26px, 2.6vw, 38px) 0;
-}
-body.press-page .pr-hero-media {
-  position: relative; z-index: 1;
-  aspect-ratio: 1 / 1;
-  margin: 0; width: 100%; height: auto;
-  border: 1px solid rgba(82, 71, 54, 0.18);
-  background: var(--sv-stone, #EFEADD);
-  overflow: hidden;
-}
-/* Cinnabar block offset down-and-right behind the photograph */
-body.press-page .pr-open__right::before {
-  content: "";
-  position: absolute;
-  top: clamp(36px, 3.6vw, 56px);
-  right: 0;
-  bottom: 0;
-  left: clamp(30px, 3vw, 48px);
-  background: var(--sv-cinnabar);
-  z-index: 0;
-}
-/* Deep-oxide column, furthest layer right */
-body.press-page .pr-open__right::after {
-  content: "";
-  position: absolute;
-  top: clamp(84px, 9vw, 120px);
-  bottom: -14px;
-  right: clamp(-14px, -1vw, -8px);
-  width: clamp(38px, 3.6vw, 58px);
-  background: var(--sv-oxide, #9F2F24);
-  z-index: 0;
-}
-@media (max-width: 880px) {
-  body.press-page .pr-open__right { padding: 0 16px 20px 0; }
-  body.press-page .pr-open__right::before { top: 28px; left: 22px; }
-  body.press-page .pr-open__right::after { display: none; }
-}
+body.press-page .sv-hero__image img { filter: grayscale(1); }
+body.press-page .pr-open { padding-block: 0; }
+body.press-page .pr-proof-band { margin-top: 0; }
