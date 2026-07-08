@@ -353,3 +353,174 @@ body.strategy-page .st-disc__label {
 body.strategy-page .st-disc__note {
   margin: 0; max-width: none; font: 400 13px/1.62 var(--sv-font); color: var(--sv-muted, #6E7169);
 }
+
+
+/* ==========================================================================
+   2026-07-08 clarity pass — cleaner section rhythm, aligned cells and panels
+   ========================================================================== */
+body.strategy-page .st-section {
+  padding-block: clamp(72px, 8vw, 112px);
+}
+body.strategy-page .st-head {
+  align-items: start;
+  margin-bottom: clamp(36px, 4.5vw, 64px);
+}
+body.strategy-page .st-head__l {
+  grid-column: 1 / 7;
+  max-width: 660px;
+}
+body.strategy-page .st-head__r {
+  grid-column: 8 / 13;
+  align-self: start;
+  padding-top: 6px;
+}
+body.strategy-page .st-head__r p {
+  max-width: 42rem;
+}
+body.strategy-page .st-reasons,
+body.strategy-page .st-thresholds,
+body.strategy-page .st-sleeves,
+body.strategy-page .st-risk {
+  clear: both;
+}
+body.strategy-page .st-reasons__kicker {
+  margin-top: clamp(34px, 4vw, 54px);
+  padding-top: clamp(20px, 2vw, 28px);
+  border-top: 1px solid var(--sv-border-light-strong);
+}
+body.strategy-page .st-reasons {
+  gap: clamp(18px, 2vw, 28px);
+  border-top: 0;
+  margin-top: 18px;
+}
+body.strategy-page .st-reason {
+  min-height: 100%;
+  padding: clamp(24px, 2.8vw, 34px);
+  border: 1px solid var(--sv-border-light);
+  border-top: 3px solid var(--sv-qing, #3D7070);
+  background: rgba(252, 249, 241, 0.56);
+}
+body.strategy-page .st-reason:first-child,
+body.strategy-page .st-reason:last-child {
+  padding-inline: clamp(24px, 2.8vw, 34px);
+}
+body.strategy-page .st-reason__body {
+  max-width: 31rem;
+}
+body.strategy-page .st-thresholds {
+  padding: clamp(28px, 3.3vw, 44px);
+  border: 1px solid var(--sv-border-light);
+  border-top: 3px solid var(--sv-qing, #3D7070);
+  background: rgba(252, 249, 241, 0.62);
+  margin-bottom: clamp(34px, 4vw, 56px);
+}
+body.strategy-page .st-thresholds__label {
+  margin-bottom: clamp(20px, 2.2vw, 30px);
+}
+body.strategy-page .st-threshold {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 100%;
+  padding: 0 clamp(22px, 2.4vw, 34px);
+  border-top: 0;
+  border-left: 1px solid var(--sv-border-light-strong);
+}
+body.strategy-page .st-threshold:first-of-type {
+  padding-left: 0;
+}
+body.strategy-page .st-threshold__v,
+body.strategy-page .st-threshold__l {
+  margin: 0;
+}
+body.strategy-page .st-thresholds__note {
+  margin-top: clamp(22px, 2.6vw, 34px);
+  padding-top: 18px;
+  border-top: 1px solid var(--sv-border-light);
+}
+body.strategy-page .st-sleeves {
+  border-top-width: 3px;
+}
+body.strategy-page .st-sleeve {
+  grid-template-columns: minmax(220px, 3.2fr) minmax(0, 8.8fr);
+  align-items: start;
+  padding-inline: clamp(24px, 3vw, 42px);
+}
+body.strategy-page .st-sleeve__body {
+  max-width: 64rem;
+}
+body.strategy-page .sv-exec {
+  padding-block: clamp(72px, 8vw, 112px);
+}
+body.strategy-page .sv-flow {
+  align-items: stretch;
+}
+body.strategy-page .sv-flow__step {
+  height: 100%;
+}
+body.strategy-page .st-risk {
+  grid-template-columns: minmax(0, 2.15fr) minmax(300px, 0.85fr);
+  border: 0;
+  gap: 0;
+  margin-top: 0;
+  background: var(--sv-ivory);
+  box-shadow: inset 0 0 0 1px var(--sv-border-light);
+}
+body.strategy-page .st-risk__cols {
+  min-width: 0;
+}
+body.strategy-page .st-risk__col {
+  padding: clamp(30px, 3.2vw, 46px);
+}
+body.strategy-page .st-risk__col h3 {
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--sv-border-light-strong);
+}
+body.strategy-page .st-risk__panel {
+  min-height: 100%;
+  padding: clamp(34px, 3.6vw, 52px);
+  justify-content: flex-start;
+}
+body.strategy-page .st-risk__panel-body + .st-risk__panel-body {
+  margin-top: 14px;
+}
+@media (max-width: 900px) {
+  body.strategy-page .st-head__l,
+  body.strategy-page .st-head__r {
+    grid-column: 1 / 13;
+  }
+  body.strategy-page .st-head__r {
+    padding-top: 0;
+  }
+  body.strategy-page .st-risk {
+    box-shadow: none;
+    border: 1px solid var(--sv-border-light);
+  }
+}
+@media (max-width: 880px) {
+  body.strategy-page .st-reasons {
+    gap: 14px;
+  }
+  body.strategy-page .st-reason,
+  body.strategy-page .st-reason:first-child,
+  body.strategy-page .st-reason:last-child {
+    padding: 24px;
+    border: 1px solid var(--sv-border-light);
+    border-top: 3px solid var(--sv-qing, #3D7070);
+  }
+  body.strategy-page .st-thresholds {
+    padding: 24px;
+  }
+  body.strategy-page .st-threshold {
+    padding: 20px 0 0;
+    border-left: 0;
+    border-top: 1px solid var(--sv-border-light-strong);
+  }
+  body.strategy-page .st-threshold:first-of-type {
+    padding-top: 0;
+    border-top: 0;
+  }
+  body.strategy-page .st-sleeve {
+    padding-inline: 0;
+  }
+}
