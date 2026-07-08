@@ -676,3 +676,170 @@ html body.team-page-v2 .group--leadership .grid {
 html body.team-page-v2 .team-profile__photo img {
   object-position: center top;
 }
+
+/* ==========================================================================
+   5 · REVERSED TEAM LOOK — dark editorial canvas + mirrored hero composition
+   ========================================================================== */
+html:has(body.team-page--reversed) {
+  background: #f7f1e6;
+}
+
+html body.team-page-v2.team-page--reversed {
+  --tr-ink: #f7f1e6;
+  --tr-ink-2: rgba(247, 241, 230, 0.84);
+  --tr-ivory: #20211f;
+  --tr-parchment: #2a2b28;
+  --tr-muted: rgba(247, 241, 230, 0.62);
+  --tr-border: rgba(247, 241, 230, 0.16);
+  --tr-dark-footer: #f7f1e6;
+  --tr-on-dark: rgba(26, 27, 23, 0.78);
+  --tr-faint-on-dark: rgba(26, 27, 23, 0.58);
+  --tr-border-dark: rgba(26, 27, 23, 0.16);
+
+  background: var(--tr-ivory) !important;
+  color: var(--tr-ink) !important;
+}
+
+html body.team-page-v2.team-page--reversed .team-hero.hero--team {
+  background: var(--tr-ivory) !important;
+  border-bottom-color: var(--tr-border) !important;
+}
+
+html body.team-page-v2.team-page--reversed .team-hero__layout {
+  grid-template-columns: 0.95fr 1.05fr !important;
+}
+
+html body.team-page-v2.team-page--reversed .team-hero__proof {
+  grid-column: 1;
+  grid-row: 1;
+  justify-content: flex-end;
+  padding: clamp(36px, 4vw, 60px) clamp(32px, 3.6vw, 60px)
+    clamp(36px, 4vw, 60px) 0 !important;
+}
+
+html body.team-page-v2.team-page--reversed .team-hero__proof::after {
+  left: auto;
+  right: 100%;
+}
+
+html body.team-page-v2.team-page--reversed .team-hero .pagehero__intro {
+  grid-column: 2;
+}
+
+html body.team-page-v2.team-page--reversed .team-hero .pagehero__intro {
+  background: #2a2b28 !important;
+  border-left-color: transparent !important;
+  border-right: 3px solid var(--sv-cinnabar) !important;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.24) !important;
+}
+
+
+html body.team-page-v2.team-page--reversed .team-hero__statcard {
+  background: var(--tr-ivory);
+  border-color: rgba(247, 241, 230, 0.18);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.22);
+}
+
+html body.team-page-v2.team-page--reversed .team-hero__statcard-label,
+html body.team-page-v2.team-page--reversed .team-hero__proof article {
+  border-bottom-color: rgba(247, 241, 230, 0.14) !important;
+}
+
+html body.team-page-v2.team-page--reversed .team-groups {
+  background: var(--tr-ivory) !important;
+}
+
+html body.team-page-v2.team-page--reversed .group {
+  border-top-color: var(--tr-border) !important;
+}
+
+html body.team-page-v2.team-page--reversed .group__head {
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  border-bottom-color: var(--tr-border) !important;
+}
+
+html body.team-page-v2.team-page--reversed .group__head-main {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+html body.team-page-v2.team-page--reversed .group__summary {
+  grid-column: 1;
+  grid-row: 1;
+  margin-top: 0;
+  color: var(--tr-muted) !important;
+}
+
+html body.team-page-v2.team-page--reversed .sv-section-title,
+html body.team-page-v2.team-page--reversed .team-profile__name,
+html body.team-page-v2.team-page--reversed .team-bio-panel__meta h3,
+html body.team-page-v2.team-page--reversed .team-bio-panel__body p {
+  color: var(--tr-ink) !important;
+}
+
+html body.team-page-v2.team-page--reversed .team-profile__role,
+html body.team-page-v2.team-page--reversed .team-bio-panel__meta p {
+  color: var(--tr-muted) !important;
+}
+
+html body.team-page-v2.team-page--reversed .team-profile__photo {
+  background: linear-gradient(135deg, rgba(247, 241, 230, 0.12), rgba(247, 241, 230, 0.04));
+}
+
+html body.team-page-v2.team-page--reversed .team-profile__photo::after {
+  border-color: rgba(247, 241, 230, 0.14);
+}
+
+html body.team-page-v2.team-page--reversed .team-profile__bio-toggle,
+html body.team-page-v2.team-page--reversed .team-profile__linkedin,
+html body.team-page-v2.team-page--reversed .team-bio-panel__close {
+  color: rgba(247, 241, 230, 0.7) !important;
+}
+
+html body.team-page-v2.team-page--reversed .team-profile__bio-toggle:hover,
+html body.team-page-v2.team-page--reversed .team-profile__bio-toggle:focus-visible,
+html body.team-page-v2.team-page--reversed .team-profile__linkedin:hover,
+html body.team-page-v2.team-page--reversed .team-profile__linkedin:focus-visible,
+html body.team-page-v2.team-page--reversed .team-profile:hover .team-profile__name,
+html body.team-page-v2.team-page--reversed .team-profile:focus-within .team-profile__name {
+  color: var(--tr-ink) !important;
+}
+
+html body.team-page-v2.team-page--reversed .team-bio-panel {
+  background: #2a2b28;
+  border-color: var(--tr-border);
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.2);
+}
+
+html body.team-page-v2.team-page--reversed .team-bio-panel__meta {
+  border-bottom-color: var(--tr-border);
+}
+
+html body.team-page-v2.team-page--reversed .sv-footer {
+  background: var(--tr-dark-footer) !important;
+  color: var(--tr-on-dark) !important;
+}
+
+@media (max-width: 1180px) {
+  html body.team-page-v2.team-page--reversed .group__head,
+  html body.team-page-v2.team-page--reversed .team-hero__layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  html body.team-page-v2.team-page--reversed .team-hero__proof,
+  html body.team-page-v2.team-page--reversed .team-hero .pagehero__intro,
+  html body.team-page-v2.team-page--reversed .group__head-main,
+  html body.team-page-v2.team-page--reversed .group__summary {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  html body.team-page-v2.team-page--reversed .team-hero__proof {
+    justify-content: center;
+    padding: clamp(28px, 6vw, 44px) var(--tr-gutter) !important;
+  }
+
+  html body.team-page-v2.team-page--reversed .group__summary {
+    border-top-color: var(--tr-border);
+  }
+}
