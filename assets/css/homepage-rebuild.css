@@ -1347,9 +1347,10 @@ body.homepage .sv-footer__access a:hover { color: var(--sv-qing-light, #7AAFAF);
 
 /* ==========================================================================
    B2 · HERO — layered editorial composition (approved 2026-07-08)
-   Square photograph on the right with offset cinnabar + oxide blocks behind
+   Square photograph on the right with a single offset cinnabar block behind
    it and the ivory "at a glance" card floating over the photo edge. The left
-   column keeps plain text on the ivory page ground.
+   column keeps plain text on the ivory page ground. This hero system is
+   shared by the Media page (body.press-page also carries .homepage).
    ========================================================================== */
 body.homepage .sv-hero__inner {
   align-items: center;
@@ -1369,18 +1370,8 @@ body.homepage .sv-hero__field {
   padding: 0;
   display: block;
 }
-/* Deep-oxide column, furthest layer right */
-body.homepage .sv-hero__field::after {
-  content: "";
-  position: absolute;
-  top: clamp(110px, 13vw, 150px);
-  bottom: -34px;
-  left: auto;
-  right: clamp(-64px, -4vw, -36px);
-  width: clamp(48px, 5vw, 78px);
-  background: var(--sv-oxide);
-  z-index: 0;
-}
+/* Single layered square: only the cinnabar block sits behind the photo */
+body.homepage .sv-hero__field::after { display: none; }
 /* Cinnabar block offset down-and-right behind the photograph */
 body.homepage .sv-hero__field::before {
   content: "";
@@ -1425,7 +1416,6 @@ body.homepage .sv-hero__panel {
     padding: 0;
     margin-bottom: 34px;
   }
-  body.homepage .sv-hero__field::after { display: block; }
   body.homepage .sv-hero__panel { max-width: none; }
 }
 @media (max-width: 767px) {
