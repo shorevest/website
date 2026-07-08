@@ -482,14 +482,29 @@ body.homepage .sv-bridge__body p {
    Overrides the shared .sv-bridge layout for this one section without touching
    the Strategy page's .sv-bridge.st-band Recovery section or any other page.
    ========================================================================== */
-body.homepage .home-firm-preview { background: var(--sv-ivory); padding-block: clamp(76px, 7.8vw, 108px); }
+body.homepage .home-firm-preview {
+  background:
+    radial-gradient(circle at 14% 22%, rgba(201, 59, 42, 0.07), transparent 28%),
+    linear-gradient(180deg, var(--sv-ivory) 0%, #F8F1E3 100%);
+  padding-block: clamp(76px, 7.8vw, 108px);
+}
 
 /* The whole block sits inside a thin warm ruled band: top + bottom boundary,
    both columns aligned to the upper rule. */
 body.homepage .home-firm-preview .home-firm-preview__grid {
   align-items: stretch;
   border-top: 2px solid var(--sv-cinnabar);
+  border-bottom: 1px solid var(--sv-border-light-strong);
   padding-block: clamp(42px, 4.2vw, 60px);
+  position: relative;
+}
+body.homepage .home-firm-preview .home-firm-preview__grid::after {
+  content: "";
+  position: absolute;
+  inset: clamp(42px, 4.2vw, 60px) calc(var(--pad-x) * -0.25) auto auto;
+  width: clamp(120px, 18vw, 230px);
+  height: 1px;
+  background: rgba(201, 59, 42, 0.36);
 }
 
 /* Left — eyebrow + heading (cols 1–6), anchored to the upper rule. */
@@ -514,6 +529,27 @@ body.homepage .home-firm-preview .home-firm-preview__statement p {
   width: 100%;
   font: 400 clamp(18px, 1.5vw, 21px)/1.62 var(--sv-font); color: var(--sv-ink-2);
 }
+body.homepage .home-firm-preview .home-firm-preview__proof {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  margin-top: clamp(28px, 3vw, 42px);
+  border-top: 1px solid var(--sv-border-light-strong);
+  border-bottom: 1px solid var(--sv-border-light);
+}
+body.homepage .home-firm-preview .home-firm-preview__proof span {
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  padding: 18px 18px 18px 0;
+  border-right: 1px solid var(--sv-border-light);
+  font: 600 12px/1.35 var(--sv-font);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--sv-ink);
+}
+body.homepage .home-firm-preview .home-firm-preview__proof span:not(:first-child) { padding-left: 18px; }
+body.homepage .home-firm-preview .home-firm-preview__proof span:last-child { border-right: 0; }
 body.homepage .home-firm-preview .home-firm-preview__link {
   margin-top: auto; padding-top: clamp(28px, 3vw, 44px);
   align-self: flex-start;
@@ -530,31 +566,42 @@ body.homepage .home-firm-preview .home-firm-preview__link {
   body.homepage .home-firm-preview { padding-block: clamp(64px, 12vw, 96px); }
   body.homepage .home-firm-preview .home-firm-preview__grid { padding-block: clamp(32px, 7vw, 44px); }
   body.homepage .home-firm-preview .home-firm-preview__statement { margin-top: 24px; }
+  body.homepage .home-firm-preview .home-firm-preview__proof { grid-template-columns: 1fr; }
+  body.homepage .home-firm-preview .home-firm-preview__proof span,
+  body.homepage .home-firm-preview .home-firm-preview__proof span:not(:first-child) { padding-left: 0; border-right: 0; border-bottom: 1px solid var(--sv-border-light); min-height: 58px; }
+  body.homepage .home-firm-preview .home-firm-preview__proof span:last-child { border-bottom: 0; }
 }
 
 /* ==========================================================================
    E · STRATEGY (memo)
    ========================================================================== */
-body.homepage .sv-strategy { background: var(--sv-stone); }
+body.homepage .sv-strategy {
+  background:
+    linear-gradient(135deg, rgba(252, 249, 241, 0.76) 0%, rgba(241, 235, 221, 0) 46%),
+    var(--sv-stone);
+}
 body.homepage .sv-strategy__inner { padding-block: var(--section-y); align-items: start; }
 body.homepage .sv-strategy__lead { grid-column: 1 / 6; }
 body.homepage .sv-strategy__lead .sv-h2 { margin: 16px 0 22px; }
 body.homepage .sv-strategy__lead p:not(.sv-label) { margin: 0 0 26px; max-width: 44ch; font: 400 16px/1.66 var(--sv-font); color: var(--sv-ink-2); }
 body.homepage .sv-strategy__rows { grid-column: 7 / 13; }
-body.homepage .sv-strategy__rows { display: flex; flex-direction: column; gap: 0; border-top: 2px solid var(--sv-cinnabar); }
+body.homepage .sv-strategy__rows { display: flex; flex-direction: column; gap: 0; border-top: 2px solid var(--sv-cinnabar); box-shadow: 0 1px 0 var(--sv-border-light-strong); }
 body.homepage .sv-srow {
-  display: flex; align-items: center;
-  min-height: 82px;
+  display: grid; grid-template-columns: 52px minmax(0, 1fr) auto; align-items: center; gap: 22px;
+  min-height: 112px;
   padding: clamp(22px, 2.2vw, 30px) clamp(20px, 2vw, 28px);
   border-bottom: 1px solid var(--sv-border-light-strong);
   position: relative;
   overflow: hidden;
   isolation: isolate;
-  cursor: default;
+  cursor: pointer;
+  text-decoration: none;
+  background: rgba(252, 249, 241, 0.34);
   transition:
     background-color 260ms ease,
     border-color 260ms ease,
-    transform 260ms ease;
+    transform 260ms ease,
+    box-shadow 260ms ease;
 }
 body.homepage .sv-srow::before {
   content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
@@ -579,8 +626,9 @@ body.homepage .sv-srow::after {
 }
 body.homepage .sv-srow:hover,
 body.homepage .sv-srow:focus-within {
-  background-color: rgba(252, 249, 241, 0.42);
+  background-color: rgba(252, 249, 241, 0.72);
   border-bottom-color: rgba(201, 59, 42, 0.32);
+  box-shadow: 0 18px 42px rgba(24, 37, 36, 0.07);
 }
 body.homepage .sv-srow:hover::before,
 body.homepage .sv-srow:focus-within::before {
@@ -591,11 +639,17 @@ body.homepage .sv-srow:focus-within::after {
   opacity: 1;
   transform: translateX(0);
 }
-body.homepage .sv-srow__title {
+body.homepage .sv-srow__index {
   position: relative;
   z-index: 2;
+  font: 600 12px/1 var(--sv-font);
+  letter-spacing: 0.12em;
+  color: var(--sv-cinnabar);
+}
+body.homepage .sv-srow__content { position: relative; z-index: 2; display: block; }
+body.homepage .sv-srow__title {
   margin: 0;
-  font: 500 21px/1.2 var(--sv-font);
+  font: 500 22px/1.2 var(--sv-font);
   letter-spacing: -0.012em;
   color: var(--sv-ink);
   transition:
@@ -607,7 +661,25 @@ body.homepage .sv-srow:focus-within .sv-srow__title {
   color: var(--sv-cinnabar-d);
   transform: translateX(10px);
 }
-body.homepage .sv-srow__body { margin: 0; font: 400 15.5px/1.6 var(--sv-font); color: var(--sv-ink-2); }
+body.homepage .sv-srow__body { display: block; margin-top: 9px; max-width: 50ch; font: 400 15.5px/1.56 var(--sv-font); color: var(--sv-ink-2); }
+body.homepage .sv-srow__arrow {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--sv-border-light-strong);
+  color: var(--sv-cinnabar);
+  transition: transform 260ms ease, border-color 260ms ease, background 260ms ease;
+}
+body.homepage .sv-srow:hover .sv-srow__arrow,
+body.homepage .sv-srow:focus-within .sv-srow__arrow {
+  transform: translateX(4px);
+  border-color: var(--sv-cinnabar);
+  background: rgba(201, 59, 42, 0.08);
+}
 
 /* ==========================================================================
    F · EXECUTION MODEL (workflow)
@@ -667,7 +739,12 @@ body.homepage .sv-platform__proof {
 /* ==========================================================================
    H · CHINA DEBT DYNAMICS (dark research archive)
    ========================================================================== */
-body.homepage .sv-cdd { background: var(--sv-dark); color: var(--sv-text-on-dark); }
+body.homepage .sv-cdd {
+  background:
+    radial-gradient(circle at 82% 18%, rgba(200, 154, 46, 0.12), transparent 28%),
+    linear-gradient(145deg, #1A1B18 0%, #20211F 58%, #161715 100%);
+  color: var(--sv-text-on-dark);
+}
 body.homepage .sv-cdd__inner { padding-block: var(--section-y); }
 body.homepage .sv-cdd__head {
   display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: clamp(24px, 4vw, 64px);
@@ -684,10 +761,13 @@ body.homepage .sv-cdd__desc { margin: 0; font: 400 16px/1.66 var(--sv-font); col
    issue" emphasis), so it no longer competes with the cinnabar CTAs. */
 body.homepage .sv-cdd__feature {
   display: grid; grid-template-columns: 200px minmax(0,1fr); gap: clamp(20px, 3vw, 56px);
-  padding: clamp(28px,3vw,40px) 0; margin-top: clamp(28px,3vw,40px);
+  padding: clamp(28px,3vw,40px); margin-top: clamp(28px,3vw,40px);
   border-top: 1px solid var(--sv-gold, #C89A2E);
   border-bottom: 1px solid var(--sv-border-dark);
+  border-left: 1px solid rgba(200, 154, 46, 0.4);
+  background: rgba(252, 249, 241, 0.035);
   text-decoration: none; color: inherit;
+  transition: background .18s ease, border-color .18s ease, transform .18s ease;
 }
 body.homepage .sv-cdd__feature-meta { display: flex; flex-direction: column; gap: 10px; }
 body.homepage .sv-cdd__feature-tag { font: 600 11px/1 var(--sv-font); letter-spacing: 0.16em; text-transform: uppercase; color: var(--sv-gold, #C89A2E); }
@@ -696,6 +776,7 @@ body.homepage .sv-cdd__feature-title { margin: 0 0 14px; font: 500 clamp(22px,2.
 body.homepage .sv-cdd__feature-body { margin: 0 0 18px; font: 400 15.5px/1.6 var(--sv-font); color: var(--sv-meta-on-dark); max-width: 60ch; }
 body.homepage .sv-cdd__feature-read { font: 600 12px/1 var(--sv-font); letter-spacing: 0.1em; text-transform: uppercase; color: var(--sv-ivory); }
 body.homepage .sv-cdd__feature-read span { color: var(--sv-gold, #C89A2E); }
+body.homepage .sv-cdd__feature:hover { background: rgba(252, 249, 241, 0.06); border-left-color: var(--sv-gold, #C89A2E); transform: translateY(-2px); }
 body.homepage .sv-cdd__feature:hover .sv-cdd__feature-title { color: #E8C9C2; }
 
 /* Archive table */
