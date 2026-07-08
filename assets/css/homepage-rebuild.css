@@ -1344,3 +1344,65 @@ body.homepage .sv-footer__access a {
   color: var(--sv-meta-on-dark); text-decoration: none; padding: 5px 0; display: inline-block;
 }
 body.homepage .sv-footer__access a:hover { color: var(--sv-qing-light, #7AAFAF); }
+
+/* ==========================================================================
+   2026-07-08 · Reference-standard layout differentiation pass
+   Media / Insights use stronger blocking, section-specific spacing and inset
+   information panels. The homepage keeps the same tokens and components, but
+   adds an equivalent civic masthead + editorial ledger treatment so it no
+   longer reads as a generic split template.
+   ========================================================================== */
+@media (min-width: 881px) {
+  body.homepage:not(.press-page):not(.insights-page):not(.strategy-page):not(.firm-page):not(.team-page-v2) .sv-hero__inner {
+    min-height: 690px;
+    grid-template-columns: repeat(12, 1fr);
+    align-items: center;
+  }
+  body.homepage:not(.press-page):not(.insights-page):not(.strategy-page):not(.firm-page):not(.team-page-v2) .sv-hero__main {
+    grid-column: 1 / 8;
+    padding-right: clamp(24px, 4vw, 72px);
+  }
+  body.homepage:not(.press-page):not(.insights-page):not(.strategy-page):not(.firm-page):not(.team-page-v2) .sv-hero__field {
+    grid-column: 8 / 13;
+    margin-block: clamp(42px, 5vw, 66px);
+    min-height: 560px;
+    justify-content: flex-start;
+    padding-left: clamp(34px, 4vw, 64px);
+  }
+  body.homepage:not(.press-page):not(.insights-page):not(.strategy-page):not(.firm-page):not(.team-page-v2) .sv-hero__field::before {
+    content: "";
+    display: block;
+    left: auto;
+    right: 100%;
+    width: clamp(36px, 4.6vw, 72px);
+    background: var(--sv-oxide);
+  }
+  body.homepage:not(.press-page):not(.insights-page):not(.strategy-page):not(.firm-page):not(.team-page-v2) .sv-hero__panel {
+    transform: translateX(clamp(-42px, -3.6vw, -28px));
+    box-shadow: 0 18px 42px rgba(23, 28, 28, 0.10);
+  }
+}
+
+body.homepage:not(.press-page):not(.insights-page):not(.strategy-page):not(.firm-page):not(.team-page-v2) .sv-proof__inner {
+  padding-block: clamp(42px, 4.2vw, 58px);
+}
+body.homepage:not(.press-page):not(.insights-page):not(.strategy-page):not(.firm-page):not(.team-page-v2) .sv-proof__row {
+  background: #fff;
+  border-top: 0;
+  border-left: 3px solid var(--sv-cinnabar);
+  box-shadow: 0 14px 34px rgba(23, 28, 28, 0.08);
+  padding: clamp(20px, 2vw, 28px) clamp(8px, 1vw, 16px);
+}
+body.homepage:not(.press-page):not(.insights-page):not(.strategy-page):not(.firm-page):not(.team-page-v2) .sv-stat {
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+body.homepage:not(.press-page):not(.insights-page):not(.strategy-page):not(.firm-page):not(.team-page-v2) .sv-bridge__body {
+  border-top: 2px solid var(--sv-qing, #3D7070);
+}
+body.homepage:not(.press-page):not(.insights-page):not(.strategy-page):not(.firm-page):not(.team-page-v2) .sv-bridge__body p {
+  max-width: none;
+  padding: clamp(20px, 2vw, 28px) 0;
+  border-bottom: 1px solid var(--sv-border-light-strong);
+}
+body.homepage:not(.press-page):not(.insights-page):not(.strategy-page):not(.firm-page):not(.team-page-v2) .sv-bridge__body p:last-child { border-bottom: 0; }
