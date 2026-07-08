@@ -726,3 +726,85 @@ body.strategy-page .st-reason:last-child {
   border: 0 !important;
   background: transparent !important;
 }
+
+/* ==========================================================================
+   2026-07-08 · Origination panel polish
+   Turn the loose execution copy into a balanced editorial card with equal
+   thirds below, mirroring the boxed presentation requested by the client.
+   ========================================================================== */
+body.strategy-page .sv-exec {
+  background: var(--sv-ivory);
+}
+body.strategy-page .sv-exec__inner {
+  position: relative;
+  padding: clamp(42px, 4.6vw, 68px) clamp(38px, 5vw, 96px);
+  background: #fff;
+  border-left: 5px solid var(--sv-cinnabar);
+  box-shadow: 0 20px 48px rgba(23, 28, 28, 0.08);
+}
+body.strategy-page .sv-exec__head {
+  align-items: start;
+  margin-bottom: clamp(28px, 3.2vw, 44px);
+  padding-bottom: clamp(28px, 3vw, 40px);
+  border-bottom: 1px solid var(--sv-border-light-strong);
+}
+body.strategy-page .sv-exec__head-l {
+  grid-column: 1 / 7;
+}
+body.strategy-page .sv-exec__head-r {
+  grid-column: 8 / 13;
+  align-self: start;
+  padding-top: clamp(34px, 4vw, 56px);
+}
+body.strategy-page .sv-exec__intro {
+  max-width: 48ch;
+  font-size: clamp(17px, 1.35vw, 20px);
+  line-height: 1.62;
+}
+body.strategy-page .sv-flow {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(18px, 2vw, 28px);
+  padding: 0;
+  border-top: 0;
+}
+body.strategy-page .sv-flow__step {
+  display: flex;
+  flex-direction: column;
+  min-height: clamp(210px, 18vw, 260px);
+  padding: clamp(24px, 2.4vw, 34px);
+  background: var(--sv-ivory);
+  border: 1px solid var(--sv-border-light);
+  border-top: 3px solid var(--sv-qing, #3D7070);
+}
+body.strategy-page .sv-flow__title {
+  max-width: 12ch;
+  margin-bottom: clamp(16px, 1.8vw, 24px);
+  font-size: clamp(22px, 1.9vw, 28px);
+  line-height: 1.08;
+}
+body.strategy-page .sv-flow__body {
+  max-width: 30ch;
+  color: var(--sv-ink-2);
+}
+@media (max-width: 900px) {
+  body.strategy-page .sv-exec__inner {
+    padding: clamp(30px, 7vw, 44px) clamp(24px, 6vw, 34px);
+  }
+  body.strategy-page .sv-exec__head-l,
+  body.strategy-page .sv-exec__head-r {
+    grid-column: 1 / 13;
+  }
+  body.strategy-page .sv-exec__head-r {
+    padding-top: 0;
+  }
+  body.strategy-page .sv-flow {
+    grid-template-columns: 1fr;
+  }
+  body.strategy-page .sv-flow__step {
+    min-height: 0;
+  }
+  body.strategy-page .sv-flow__title,
+  body.strategy-page .sv-flow__body {
+    max-width: none;
+  }
+}
