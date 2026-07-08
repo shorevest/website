@@ -709,3 +709,20 @@ body.strategy-page .st-reason:last-child {
 @media (max-width: 880px) {
   body.strategy-page .st-reasons { grid-template-columns: 1fr; gap: 14px; }
 }
+
+/* Client directive: no decorative horizontal rules/bars. */
+:where(hr, [role="separator"], [class*="__rule"], [class*="-rule"], [class*="__divider"], [class*="-divider"], [class*="topline"], [class*="separator"]):not(svg):not(path):not(img) {
+  display: none !important;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  background-image: none !important;
+}
+:where([class*="eyebrow"], [class*="kicker"], [class*="label"])::before,
+:where([class*="eyebrow"], [class*="kicker"], [class*="label"])::after {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
