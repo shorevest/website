@@ -207,7 +207,7 @@ html body.team-page-v2 .group + .group {
 /* ---- section header: heading left, description right, thin rule ------- */
 html body.team-page-v2 .group__head {
   display: grid !important;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  grid-template-columns: max-content minmax(0, 1fr) !important;
   gap: clamp(20px, 4vw, 56px) !important;
   align-items: end !important;
   margin-bottom: clamp(28px, 3vw, 40px) !important;
@@ -225,6 +225,11 @@ html body.team-page-v2 .sv-section-title {
   line-height: 1.1 !important;
   letter-spacing: -0.02em !important;
   color: var(--tr-ink) !important;
+}
+@media (min-width: 761px) {
+  html body.team-page-v2 .sv-section-title {
+    white-space: nowrap;
+  }
 }
 html body.team-page-v2 .group__summary {
   margin: 0 !important;
