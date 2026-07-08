@@ -493,8 +493,15 @@ body.strategy-page .st-risk__panel-body + .st-risk__panel-body {
     padding-top: 0;
   }
   body.strategy-page .st-risk {
+    grid-template-columns: 1fr;
     box-shadow: none;
     border: 1px solid var(--sv-border-light);
+  }
+  body.strategy-page .st-risk__cols {
+    grid-template-columns: 1fr;
+  }
+  body.strategy-page .st-risk__panel {
+    min-height: 0;
   }
 }
 @media (max-width: 880px) {
@@ -521,6 +528,8 @@ body.strategy-page .st-risk__panel-body + .st-risk__panel-body {
     border-top: 0;
   }
   body.strategy-page .st-sleeve {
+    grid-template-columns: 1fr;
+    gap: 12px;
     padding-inline: 0;
   }
 }
