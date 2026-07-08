@@ -545,9 +545,9 @@ html body.team-page-v2 .sv-section-title {
 }
 
 html body.team-page-v2 .group__summary {
-  grid-column: 5 / span 6;
+  grid-column: 5 / -1;
   margin: 0 !important;
-  max-width: 56ch !important;
+  max-width: none !important;
   padding: 0 !important;
   border: 0 !important;
   font: 400 clamp(15px, 1.05vw, 17px) / 1.62 var(--tr-font) !important;
