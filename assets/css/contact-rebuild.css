@@ -215,17 +215,26 @@ body.contact-page .cp-prefs__lead h2 {
 }
 body.contact-page .cp-prefs__lead .cp-eyebrow { color: var(--sv-ivory); }
 body.contact-page .cp-prefs__grid {
-  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(28px, 4vw, 56px);
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
 }
 body.contact-page .cp-pref {
-  padding: 0; background: transparent;
+  position: relative; min-height: 156px; padding: 24px 24px 26px; overflow: hidden;
+  background: linear-gradient(180deg, rgba(252,249,241,0.075), rgba(252,249,241,0.035));
+  border: 1px solid rgba(252,249,241,0.2); border-top: 2px solid var(--sv-cinnabar);
+}
+body.contact-page .cp-pref::after {
+  content: ""; position: absolute; left: 24px; right: 24px; bottom: 0; height: 3px;
+  background: var(--sv-cinnabar); transform: scaleX(0.34); transform-origin: left center; opacity: 0.9;
+}
+body.contact-page .cp-pref__icon {
+  display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; margin-bottom: 26px;
+  border: 1px solid rgba(252,249,241,0.26); color: var(--sv-ivory);
+  font: 600 11px/1 var(--sv-font); letter-spacing: 0.08em; font-variant-numeric: tabular-nums;
 }
 body.contact-page .cp-pref__k {
-  margin: 0 0 12px; font: 600 12px/1.2 var(--sv-font); letter-spacing: 0.14em; text-transform: uppercase; color: var(--sv-ivory);
+  margin: 0 0 10px; font: 600 11px/1.2 var(--sv-font); letter-spacing: 0.14em; text-transform: uppercase; color: var(--sv-ivory);
 }
-body.contact-page .cp-pref__v {
-  margin: 0; max-width: 27ch; font: 400 15px/1.62 var(--sv-font); color: rgba(252,249,241,0.76);
-}
+body.contact-page .cp-pref__v { margin: 0; font: 400 14px/1.6 var(--sv-font); color: rgba(252,249,241,0.82); }
 
 /* ==========================================================================
    RESPONSIVE
