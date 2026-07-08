@@ -48,7 +48,7 @@ body.strategy-page .sv-bridge__body p {
 body.strategy-page .sv-bridge__body p:last-child { border-bottom: 0; }
 body.strategy-page .sv-bridge__body p::before {
   content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 0;
-  background: var(--sv-cinnabar); transition: width .15s ease;
+  background: var(--sv-qing, #3D7070); transition: width .15s ease; /* secondary hover: 青, not cinnabar */
 }
 body.strategy-page .sv-bridge__body p:hover { padding-left: 22px; }
 body.strategy-page .sv-bridge__body p:hover::before { width: 3px; }
@@ -179,11 +179,13 @@ body.strategy-page .st-thresholds__label {
   font: 600 11px/1.3 var(--sv-font); letter-spacing: 0.15em; text-transform: uppercase; color: var(--sv-ink);
   padding-top: 0; border-top: 0;
 }
-/* Flat ruled cells: shared cinnabar top rule + thin column dividers. */
+/* Flat ruled cells: shared 青 top rule + thin column dividers. The page's
+   glance ledger, sleeve hovers and risk panel already carry cinnabar, so the
+   underwriting thresholds take the secondary accent. */
 body.strategy-page .st-threshold {
   padding: 24px 32px 0;
   background: transparent; box-shadow: none;
-  border-top: 2px solid var(--sv-cinnabar);
+  border-top: 2px solid var(--sv-qing, #3D7070);
   border-left: 1px solid var(--sv-border-light);
 }
 body.strategy-page .st-threshold:first-of-type { border-left: 0; padding-left: 0; }
@@ -288,8 +290,8 @@ body.strategy-page .st-sleeve__tag {
 }
 @media (max-width: 880px) {
   body.strategy-page .st-thresholds { grid-template-columns: 1fr; }
-  body.strategy-page .st-threshold { padding: 22px 0 0; border-left: 0; border-top: 2px solid var(--sv-cinnabar); }
-  body.strategy-page .st-threshold:first-of-type { border-top: 2px solid var(--sv-cinnabar); }
+  body.strategy-page .st-threshold { padding: 22px 0 0; border-left: 0; border-top: 2px solid var(--sv-qing, #3D7070); }
+  body.strategy-page .st-threshold:first-of-type { border-top: 2px solid var(--sv-qing, #3D7070); }
   body.strategy-page .st-sleeve { grid-template-columns: 1fr; gap: 12px; padding: 26px 0; }
 }
 

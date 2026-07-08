@@ -87,11 +87,12 @@ body.firm-page .fm-open__body p + p { margin-top: 18px; }
   body.firm-page .fm-open__body { grid-column: auto; grid-row: auto; align-self: start; margin-top: 22px; }
 }
 
-/* ---- Firm-profile PROOF LEDGER — full-bleed cinnabar glance band, mirroring
-   the Strategy hero's "at a glance" ledger so both interior heroes share the
-   ivory-hero + cinnabar-ledger silhouette. ---------------------------------- */
+/* ---- Firm-profile PROOF LEDGER — full-bleed deep-water 青 band. Same
+   silhouette as the Strategy hero's "at a glance" ledger, but qing-dark
+   instead of cinnabar so the two interior heroes read as siblings rather
+   than copies; qing-light carries the labels. ------------------------------ */
 body.firm-page .fm-proof-band {
-  position: relative; z-index: 1; background: var(--sv-cinnabar);
+  position: relative; z-index: 1; background: var(--sv-qing-dark, #1E4040);
   margin-top: clamp(46px, 5vw, 78px);
   padding-block: clamp(34px, 3.6vw, 52px) clamp(38px, 4vw, 58px);
 }
@@ -104,7 +105,7 @@ body.firm-page .fm-proof__item {
 body.firm-page .fm-proof__item:first-child { border-left: 0; padding-left: 0; }
 body.firm-page .fm-proof__k {
   margin: 0 0 14px; font: 600 11px/1.2 var(--sv-font);
-  letter-spacing: 0.15em; text-transform: uppercase; color: rgba(252, 249, 241, 0.82);
+  letter-spacing: 0.15em; text-transform: uppercase; color: var(--sv-qing-light, #7AAFAF);
 }
 body.firm-page .fm-proof__v {
   margin: 0; font: 400 16.5px/1.5 var(--sv-font); color: var(--sv-ivory); text-wrap: pretty;
