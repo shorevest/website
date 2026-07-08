@@ -1396,6 +1396,11 @@ body.homepage .sv-hero__image {
 body.homepage .sv-hero__image img {
   display: block; width: 100%; height: 100%;
   object-fit: cover; object-position: center;
+  filter: grayscale(1);
+  transition: filter 280ms ease;
+}
+body.homepage .sv-hero__image:hover img {
+  filter: grayscale(0);
 }
 body.homepage .sv-hero__panel {
   position: absolute; z-index: 2;
