@@ -591,10 +591,9 @@ body.strategy-page .st-thresholds::before {
 }
 
 /* ==========================================================================
-   Strategy hero — layered editorial composition (2026-07-08)
-   Square canopy photograph on the right with an offset deep-oxide block and
-   a cinnabar column behind it, matching the homepage hero system. The lead
-   copy stacks on the left; the cinnabar glance ledger below is unchanged.
+   Strategy hero — editorial composition (2026-07-08)
+   A single clean portrait photograph on the right (no layered blocks) with the
+   lead copy on the left; the cinnabar glance ledger below is unchanged.
    ========================================================================== */
 body.strategy-page .sx-hero { padding-block: 0; }
 body.strategy-page .sx-hero__top {
@@ -633,13 +632,12 @@ body.strategy-page .sx-hero__body p + p { margin-top: 16px; }
 body.strategy-page .sx-hero__media {
   position: relative;
   min-width: 0;
-  padding: 0 clamp(20px, 2vw, 34px) clamp(24px, 2.4vw, 36px) 0;
+  padding: 0;
 }
 body.strategy-page .sx-hero__image {
   position: relative; z-index: 1;
   margin: 0; width: 100%;
-  aspect-ratio: 1 / 1;
-  border: 1px solid rgba(82, 71, 54, 0.18);
+  aspect-ratio: 4 / 5;
   background: var(--sv-stone, #F1EBDD);
   overflow: hidden;
 }
@@ -647,33 +645,53 @@ body.strategy-page .sx-hero__image img {
   display: block; width: 100%; height: 100%;
   object-fit: cover; object-position: center;
 }
-/* Deep-oxide block offset down-and-right behind the photograph */
-body.strategy-page .sx-hero__media::before {
-  content: "";
-  position: absolute;
-  top: clamp(34px, 3.4vw, 52px);
-  right: 0;
-  bottom: 0;
-  left: clamp(28px, 2.8vw, 46px);
-  background: var(--sv-oxide, #9F2F24);
-  z-index: 0;
-}
-/* Cinnabar column, furthest layer right */
-body.strategy-page .sx-hero__media::after {
-  content: "";
-  position: absolute;
-  top: clamp(78px, 8vw, 112px);
-  bottom: -12px;
-  right: clamp(-12px, -0.8vw, -6px);
-  width: clamp(34px, 3.2vw, 52px);
-  background: var(--sv-cinnabar);
-  z-index: 0;
-}
 @media (max-width: 880px) {
   body.strategy-page .sx-hero__top { grid-template-columns: 1fr; gap: 36px; }
   body.strategy-page .sx-hero__lead { grid-column: auto; padding-right: 0; }
   body.strategy-page .sx-hero__body { margin-top: 22px; }
-  body.strategy-page .sx-hero__media { grid-column: auto; padding: 0 16px 20px 0; max-width: 560px; }
-  body.strategy-page .sx-hero__media::before { top: 26px; left: 20px; }
-  body.strategy-page .sx-hero__media::after { display: none; }
+  body.strategy-page .sx-hero__media { grid-column: auto; padding: 0; max-width: 560px; }
+  body.strategy-page .sx-hero__image { aspect-ratio: 5 / 4; }
+}
+
+/* ==========================================================================
+   2026-07-08 · Tidy pass — calm the Opportunity section
+   The earlier differentiation pass over-decorated this section: a stone box
+   with a cinnabar top rule around the heading, a qing side-border on the copy,
+   and a reasons panel carrying a cinnabar left bar (poking past its corners),
+   a drop shadow AND qing card-tops. Too many competing accents in one screen.
+   Bring it back in line with the restrained grammar used elsewhere: a plain
+   section head and flat, evenly spaced cards with a single structural rule.
+   Last-in-file so these win the cascade cleanly.
+   ========================================================================== */
+body.strategy-page #opportunity .st-head { align-items: start; }
+body.strategy-page #opportunity .st-head__l {
+  padding: 0;
+  background: none;
+  border-top: 0;
+}
+body.strategy-page #opportunity .st-head__r {
+  align-self: start;
+  border-left: 0;
+  padding-left: 0;
+  padding-top: 6px;
+}
+body.strategy-page .st-reasons {
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(18px, 2vw, 28px);
+  margin-top: 20px;
+  padding: 0;
+  background: none;
+  border: 0;
+  box-shadow: none;
+}
+body.strategy-page .st-reason,
+body.strategy-page .st-reason:first-child,
+body.strategy-page .st-reason:last-child {
+  padding: clamp(24px, 2.6vw, 32px);
+  border: 1px solid var(--sv-border-light);
+  border-top: 2px solid var(--sv-qing, #3D7070);
+  background: #fff;
+}
+@media (max-width: 880px) {
+  body.strategy-page .st-reasons { grid-template-columns: 1fr; gap: 14px; }
 }
