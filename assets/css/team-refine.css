@@ -483,13 +483,13 @@ body.team-page-v2 {
   --tr-max: var(--page-max, 1280px);
   --tr-page-pad: var(--pad-x, clamp(24px, 5vw, 48px));
   --tr-gutter-fixed: var(--gutter, 24px);
-  --tr-section-y: var(--section-y, clamp(68px, 6.4vw, 96px));
+  --tr-section-y: var(--section-y, clamp(44px, 4.8vw, 64px));
   --tr-fast: 0.16s ease;
 }
 
 html body.team-page-v2 .team-groups {
   background: var(--tr-ivory) !important;
-  padding-block: 0 clamp(68px, 6vw, 96px) !important;
+  padding-block: 0 clamp(48px, 5vw, 72px) !important;
 }
 
 html body.team-page-v2 .team-groups .team-inner {
@@ -796,7 +796,7 @@ html body.team-page-v2 .team-bio-panel__body p + p {
 
   html body.team-page-v2 .group,
   html body.team-page-v2 .group:first-child {
-    padding-block: clamp(56px, 10vw, 72px) !important;
+    padding-block: clamp(40px, 8vw, 56px) !important;
   }
 
   html body.team-page-v2 .group::before {
