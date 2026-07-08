@@ -890,7 +890,7 @@ body.homepage .sv-totop svg { width: 16px; height: 16px; }
   body.homepage .sv-reveal.is-in { opacity: 1; transform: none; }
 }
 
-/* ========================================================================== 
+/* ==========================================================================
    Mobile audit refinements (320px–430px)
    Keep the homepage institutional at narrow widths: calmer line lengths,
    fewer forced two-column fragments, and no horizontal overflow.
