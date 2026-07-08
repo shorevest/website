@@ -214,12 +214,27 @@ body.contact-page .cp-prefs__lead h2 {
   margin: 0; font: 500 clamp(22px, 2.2vw, 30px)/1.18 var(--sv-font); letter-spacing: -0.015em; color: var(--sv-ivory); max-width: 16ch;
 }
 body.contact-page .cp-prefs__lead .cp-eyebrow { color: var(--sv-ivory); }
-body.contact-page .cp-prefs__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(252,249,241,0.28); border: 1px solid rgba(252,249,241,0.28); }
-body.contact-page .cp-pref { background: var(--sv-cinnabar); padding: 22px 24px; }
-body.contact-page .cp-pref__k {
-  margin: 0 0 10px; font: 600 11px/1.2 var(--sv-font); letter-spacing: 0.12em; text-transform: uppercase; color: var(--sv-ivory);
+body.contact-page .cp-prefs__grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
 }
-body.contact-page .cp-pref__v { margin: 0; font: 400 13.5px/1.55 var(--sv-font); color: rgba(252,249,241,0.9); }
+body.contact-page .cp-pref {
+  position: relative; min-height: 156px; padding: 24px 24px 26px; overflow: hidden;
+  background: linear-gradient(180deg, rgba(252,249,241,0.075), rgba(252,249,241,0.035));
+  border: 1px solid rgba(252,249,241,0.2); border-top: 2px solid var(--sv-cinnabar);
+}
+body.contact-page .cp-pref::after {
+  content: ""; position: absolute; left: 24px; right: 24px; bottom: 0; height: 3px;
+  background: var(--sv-cinnabar); transform: scaleX(0.34); transform-origin: left center; opacity: 0.9;
+}
+body.contact-page .cp-pref__icon {
+  display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; margin-bottom: 26px;
+  border: 1px solid rgba(252,249,241,0.26); color: var(--sv-ivory);
+  font: 600 11px/1 var(--sv-font); letter-spacing: 0.08em; font-variant-numeric: tabular-nums;
+}
+body.contact-page .cp-pref__k {
+  margin: 0 0 10px; font: 600 11px/1.2 var(--sv-font); letter-spacing: 0.14em; text-transform: uppercase; color: var(--sv-ivory);
+}
+body.contact-page .cp-pref__v { margin: 0; font: 400 14px/1.6 var(--sv-font); color: rgba(252,249,241,0.82); }
 
 /* ==========================================================================
    RESPONSIVE
