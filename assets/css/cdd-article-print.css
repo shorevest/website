@@ -168,12 +168,15 @@ body.cdd-print-layout .wrap { max-width: 860px; margin-inline: auto; }
    PRINT
    ========================================================================== */
 @media print {
-  body.cdd-print-layout { background: #fff; padding: 0; font-size: 11pt; }
+  /*
+     Keep the print/PDF rendering visually identical to the prepared sheet shown
+     on screen. Earlier print-specific overrides changed the page margins, shell
+     padding, background, type scale, and shadow when the browser entered print
+     media, so “Save as PDF” no longer matched the ready-to-print preview. The
+     only print-media change should be removing the interactive toolbar.
+  */
   .cdd-print-layout .cdd-print-hide,
   .cdd-print-layout .cdd-topline__tools { display: none !important; }
-  .cdd-print-layout .cdd-topline { max-width: none; margin: 0 0 8px; padding: 0; }
-  .cdd-print-layout .wrap { max-width: none; }
-  .cdd-print-layout .cdd-print-shell { box-shadow: none; border-top: 3px solid var(--p-cinnabar); padding: 14px 0 0; }
   .cdd-print-layout .cdd-body > h2 { break-after: avoid; }
   .cdd-print-layout .cdd-disclaimer { break-inside: avoid; }
 }
