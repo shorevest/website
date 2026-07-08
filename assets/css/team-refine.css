@@ -557,10 +557,10 @@ html body.team-page-v2 .group__summary {
 html body.team-page-v2 .grid[data-team-grid],
 html body.team-page-v2 .grid[data-team-count],
 html body.team-page-v2 .group--leadership .grid[data-team-grid] {
-  --team-cols: 4;
+  --team-cols: 5;
   display: grid !important;
-  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  gap: clamp(42px, 4.8vw, 68px) var(--tr-gutter-fixed) !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap: clamp(36px, 4vw, 56px) var(--tr-gutter-fixed) !important;
   justify-content: stretch !important;
   place-content: start !important;
   align-items: start !important;
@@ -784,7 +784,7 @@ html body.team-page-v2 .team-bio-panel__body p + p {
   html body.team-page-v2 .grid[data-team-grid],
   html body.team-page-v2 .grid[data-team-count],
   html body.team-page-v2 .group--leadership .grid[data-team-grid] {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
   }
 }
 
