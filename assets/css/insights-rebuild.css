@@ -117,9 +117,11 @@ body.insights-page .cdd-arc__chip {
   border: 1px solid var(--sv-border-light-strong);
   transition: background .15s ease, color .15s ease, border-color .15s ease;
 }
-body.insights-page .cdd-arc__chip:hover { border-color: var(--sv-ink); }
+/* Filter state is secondary UI — it takes 青 so the cinnabar Read buttons
+   and subscribe CTA stay the only red on the archive. */
+body.insights-page .cdd-arc__chip:hover { border-color: var(--sv-qing, #3D7070); color: var(--sv-qing-dark, #1E4040); }
 body.insights-page .cdd-arc__chip.is-active {
-  background: var(--sv-cinnabar); color: var(--sv-ivory); border-color: var(--sv-cinnabar);
+  background: var(--sv-qing-dark, #1E4040); color: var(--sv-ivory); border-color: var(--sv-qing-dark, #1E4040);
 }
 body.insights-page .cdd-arc__chip:focus-visible { outline: 2px solid var(--sv-cinnabar); outline-offset: 2px; }
 body.insights-page .cdd-arc__count {
@@ -156,7 +158,7 @@ body.insights-page .cdd-arc__row {
 }
 body.insights-page .cdd-arc__list .cdd-arc__row:first-of-type { border-top: 0; }
 body.insights-page .cdd-arc__row:last-child { border-bottom: 1px solid var(--sv-border-light); }
-body.insights-page .cdd-arc__row:hover { background: rgba(23, 53, 54, 0.025); }
+body.insights-page .cdd-arc__row:hover { background: rgba(122, 175, 175, 0.12); } /* 青 wash */
 body.insights-page .cdd-arc__row[hidden] { display: none; }
 body.insights-page .cdd-arc__row:focus-visible { outline: 2px solid var(--sv-cinnabar); outline-offset: -2px; }
 

@@ -29,6 +29,15 @@ html { scroll-behavior: smooth; }
   --sv-oxide: #9F2F24;
   --sv-teal-900: #1C4040;
   --sv-teal-950: #102628;
+  /* 青 blue-green + Dawn Redwood gold — secondary accents from the brand
+     guide (see shorevest-brand-tokens.css). Qing carries quiet structure
+     (secondary hovers, tags, one background block per page); gold is
+     reserved for featured/ceremonial callouts only. Cinnabar stays lead. */
+  --sv-qing-light: #7AAFAF;
+  --sv-qing: #3D7070;
+  --sv-qing-dark: #1E4040;
+  --sv-gold: #C89A2E;
+  --sv-gold-dark: #7A6030;
   /* Dark surfaces are ink/charcoal (NOT green) so cinnabar leads the brand
      and the page never reads festive. Hero is a cinnabar field; CDD + footer
      are quiet ink. */
@@ -670,22 +679,23 @@ body.homepage .sv-cdd__title { margin: 0; font: 500 clamp(34px, 4vw, 56px)/1.0 v
 body.homepage .sv-cdd__cn { margin: 10px 0 0; font: 500 16px/1.4 var(--sv-cn); letter-spacing: 0.06em; color: var(--sv-meta-on-dark); }
 body.homepage .sv-cdd__desc { margin: 0; font: 400 16px/1.66 var(--sv-font); color: var(--sv-meta-on-dark); max-width: none; width: 100%; justify-self: stretch; }
 
-/* Featured report — prioritized with a cinnabar top ledge */
+/* Featured report — the one ceremonial callout on the page: gold top ledge
+   and tag (Dawn Redwood gold is reserved for exactly this kind of "special
+   issue" emphasis), so it no longer competes with the cinnabar CTAs. */
 body.homepage .sv-cdd__feature {
   display: grid; grid-template-columns: 200px minmax(0,1fr); gap: clamp(20px, 3vw, 56px);
   padding: clamp(28px,3vw,40px) 0; margin-top: clamp(28px,3vw,40px);
-  border-top: 2px solid var(--sv-cinnabar);
-  border-top: 1px solid var(--sv-cinnabar);
+  border-top: 1px solid var(--sv-gold, #C89A2E);
   border-bottom: 1px solid var(--sv-border-dark);
   text-decoration: none; color: inherit;
 }
 body.homepage .sv-cdd__feature-meta { display: flex; flex-direction: column; gap: 10px; }
-body.homepage .sv-cdd__feature-tag { font: 600 11px/1 var(--sv-font); letter-spacing: 0.16em; text-transform: uppercase; color: var(--sv-cinnabar); }
+body.homepage .sv-cdd__feature-tag { font: 600 11px/1 var(--sv-font); letter-spacing: 0.16em; text-transform: uppercase; color: var(--sv-gold, #C89A2E); }
 body.homepage .sv-cdd__feature-issue { font: 500 13px/1.4 var(--sv-font); color: var(--sv-meta-on-dark); }
 body.homepage .sv-cdd__feature-title { margin: 0 0 14px; font: 500 clamp(22px,2.2vw,30px)/1.16 var(--sv-font); letter-spacing: -0.012em; color: var(--sv-ivory); }
 body.homepage .sv-cdd__feature-body { margin: 0 0 18px; font: 400 15.5px/1.6 var(--sv-font); color: var(--sv-meta-on-dark); max-width: 60ch; }
 body.homepage .sv-cdd__feature-read { font: 600 12px/1 var(--sv-font); letter-spacing: 0.1em; text-transform: uppercase; color: var(--sv-ivory); }
-body.homepage .sv-cdd__feature-read span { color: var(--sv-cinnabar); }
+body.homepage .sv-cdd__feature-read span { color: var(--sv-gold, #C89A2E); }
 body.homepage .sv-cdd__feature:hover .sv-cdd__feature-title { color: #E8C9C2; }
 
 /* Archive table */
@@ -739,7 +749,7 @@ body.homepage .sv-footer__nav a {
   font: 500 13px/1 var(--sv-font); letter-spacing: 0.04em;
   color: var(--sv-meta-on-dark); text-decoration: none; padding: 5px 0; display: inline-block;
 }
-body.homepage .sv-footer__nav a:hover { color: var(--sv-ivory); }
+body.homepage .sv-footer__nav a:hover { color: var(--sv-qing-light, #7AAFAF); }
 body.homepage .sv-footer__legal {
   margin: 30px 0 0; padding: 24px 0 0;
   border-top: 1px solid var(--sv-border-dark);
@@ -753,7 +763,7 @@ body.homepage .sv-footer__bottom {
 }
 body.homepage .sv-footer__links { display: flex; flex-wrap: wrap; gap: 8px 22px; }
 body.homepage .sv-footer__links a { font: 400 12px/1 var(--sv-font); color: var(--sv-meta-on-dark); text-decoration: none; }
-body.homepage .sv-footer__links a:hover { color: var(--sv-ivory); }
+body.homepage .sv-footer__links a:hover { color: var(--sv-qing-light, #7AAFAF); }
 body.homepage .sv-footer__copy { font: 400 12px/1 var(--sv-font); color: var(--sv-faint-on-dark); }
 
 /* ==========================================================================
@@ -1333,4 +1343,4 @@ body.homepage .sv-footer__access a {
   font: 500 13px/1 var(--sv-font); letter-spacing: 0.04em;
   color: var(--sv-meta-on-dark); text-decoration: none; padding: 5px 0; display: inline-block;
 }
-body.homepage .sv-footer__access a:hover { color: var(--sv-ivory); }
+body.homepage .sv-footer__access a:hover { color: var(--sv-qing-light, #7AAFAF); }

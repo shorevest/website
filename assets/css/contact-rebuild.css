@@ -84,7 +84,10 @@ body.contact-page .cp-route {
   display: grid; grid-template-columns: 48px minmax(0, 1fr) auto;
   gap: clamp(16px, 2vw, 32px); align-items: center;
   padding: clamp(22px, 2.2vw, 28px) clamp(22px, 2.2vw, 30px);
-  background: #FFFFFF; border-left: 3px solid var(--sv-cinnabar);
+  /* 青 ledge + arrow: the routing cards sit beside a full cinnabar statement
+     panel, so their structure takes the secondary accent; only the row
+     number stays cinnabar. */
+  background: #FFFFFF; border-left: 3px solid var(--sv-qing, #3D7070);
   box-shadow: 0 12px 30px rgba(23, 28, 28, 0.09);
   text-decoration: none; transition: box-shadow .15s ease, transform .15s ease;
 }
@@ -100,7 +103,7 @@ body.contact-page .cp-route__copy {
   margin: 14px 0 0; font: 400 14px/1.5 var(--sv-font); color: var(--sv-ink-2);
 }
 body.contact-page .cp-route__copy a { color: var(--sv-cinnabar); text-decoration: none; border-bottom: 1px solid currentColor; }
-body.contact-page .cp-route__arrow { color: var(--sv-cinnabar); font-size: 18px; justify-self: end; transition: transform .15s ease; }
+body.contact-page .cp-route__arrow { color: var(--sv-qing, #3D7070); font-size: 18px; justify-self: end; transition: transform .15s ease; }
 body.contact-page a.cp-route:hover .cp-route__arrow { transform: translateX(4px); }
 
 /* ==========================================================================

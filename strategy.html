@@ -26,7 +26,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <script>document.write('<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260701-mobile-audit-430&t='+window.__SVT+'">');</script>
-<script>document.write('<link rel="stylesheet" href="assets/css/strategy-rebuild.css?v=20260703-standard-row-hover&t='+window.__SVT+'">');</script>
+<script>document.write('<link rel="stylesheet" href="assets/css/strategy-rebuild.css?v=20260708-clarity-layout&t='+window.__SVT+'">');</script>
 <script>document.write('<link rel="stylesheet" href="assets/css/box-system.css?v=20260626-bx3-c11&t='+window.__SVT+'">');</script>
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="shortcut icon" href="/favicon.ico">
@@ -261,14 +261,12 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
           </ul>
         </div>
       </div>
-      <div class="st-risk__panel svb svb--split">
-        <div class="svb-card">
-          <p class="svb-label" style="color:var(--sv-cinnabar)">Risk qualification</p>
-          <h3 class="svb-title">Recovery risk</h3>
-          <p class="svb-body">Recovery remains subject to legal, commercial, market and enforcement risk.</p>
-          <p class="svb-body">ShoreVest underwrites around legal control, collateral coverage where applicable and recoverability, rather than relying principally on growth assumptions or market direction.</p>
-        </div>
-      </div>
+      <aside class="st-risk__panel" aria-label="Risk qualification">
+        <p class="st-risk__panel-label">Risk qualification</p>
+        <h3 class="st-risk__panel-title">Recovery risk</h3>
+        <p class="st-risk__panel-body">Recovery remains subject to legal, commercial, market and enforcement risk.</p>
+        <p class="st-risk__panel-body">ShoreVest underwrites around legal control, collateral coverage where applicable and recoverability, rather than relying principally on growth assumptions or market direction.</p>
+      </aside>
     </div>
   </div>
 </section>
