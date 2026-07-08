@@ -507,8 +507,8 @@ html body.team-page-v2 .team-groups .team-inner {
 html body.team-page-v2 .group,
 html body.team-page-v2 .group:first-child {
   margin: 0 !important;
-  padding-block: var(--tr-section-y) !important;
-  border-top: 1px solid var(--tr-border-soft) !important;
+  padding-block: clamp(34px, 5vw, 70px) !important;
+  border-top: 0 !important;
   background: transparent !important;
 }
 
@@ -526,23 +526,28 @@ html body.team-page-v2 .group::before {
 }
 
 html body.team-page-v2 .group__head {
+  position: relative !important;
   display: grid !important;
-  grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
-  column-gap: var(--tr-gutter-fixed) !important;
-  row-gap: clamp(14px, 2vw, 24px) !important;
-  align-items: start !important;
-  margin: 0 0 clamp(30px, 4vw, 48px) !important;
-  padding: 0 0 clamp(22px, 2.6vw, 34px) !important;
-  border-bottom: 1px solid var(--tr-border) !important;
+  grid-template-columns: minmax(220px, 0.72fr) minmax(0, 1.28fr) !important;
+  column-gap: clamp(34px, 5vw, 78px) !important;
+  row-gap: clamp(18px, 2vw, 26px) !important;
+  align-items: center !important;
+  margin: 0 0 clamp(34px, 4.2vw, 58px) !important;
+  padding: clamp(40px, 5vw, 72px) clamp(42px, 6vw, 90px) !important;
+  border: 0 !important;
+  border-left: 5px solid var(--tr-cinnabar) !important;
+  background: #fff !important;
+  box-shadow: 0 24px 56px rgba(24, 32, 34, 0.10) !important;
 }
 
 html body.team-page-v2 .group__head-main {
-  grid-column: 1 / span 4;
+  grid-column: auto;
+  min-width: 0;
 }
 
 html body.team-page-v2 .sv-section-title {
   margin: 0 !important;
-  max-width: 12ch;
+  max-width: 13ch;
   font: 500 clamp(28px, 3vw, 40px) / 1.12 var(--tr-font) !important;
   letter-spacing: -0.018em !important;
   color: var(--tr-ink) !important;
@@ -550,12 +555,14 @@ html body.team-page-v2 .sv-section-title {
 }
 
 html body.team-page-v2 .group__summary {
-  grid-column: 5 / -1;
+  grid-column: auto;
+  justify-self: start;
+  width: 100%;
   margin: 0 !important;
-  max-width: none !important;
+  max-width: 64ch !important;
   padding: 0 !important;
   border: 0 !important;
-  font: 400 clamp(15px, 1.05vw, 17px) / 1.62 var(--tr-font) !important;
+  font: 400 clamp(19px, 1.75vw, 27px) / 1.55 var(--tr-font) !important;
   color: var(--tr-ink-2) !important;
   text-align: left !important;
 }
@@ -772,17 +779,20 @@ html body.team-page-v2 .team-bio-panel__body p + p {
 }
 
 @media (max-width: 1180px) {
-  html body.team-page-v2 .group__head,
+  html body.team-page-v2 .group__head {
+    grid-template-columns: minmax(190px, 0.65fr) minmax(0, 1.35fr) !important;
+    column-gap: clamp(28px, 4vw, 54px) !important;
+    padding-inline: clamp(34px, 5vw, 60px) !important;
+  }
+
   html body.team-page-v2 .team-bio-panel {
     grid-template-columns: repeat(8, minmax(0, 1fr)) !important;
   }
 
-  html body.team-page-v2 .group__head-main,
   html body.team-page-v2 .team-bio-panel__meta {
     grid-column: 1 / span 3;
   }
 
-  html body.team-page-v2 .group__summary,
   html body.team-page-v2 .team-bio-panel__body {
     grid-column: 4 / -1;
   }
@@ -811,6 +821,10 @@ html body.team-page-v2 .team-bio-panel__body p + p {
   html body.team-page-v2 .group__head,
   html body.team-page-v2 .team-bio-panel {
     grid-template-columns: 1fr !important;
+  }
+
+  html body.team-page-v2 .group__head {
+    padding: clamp(28px, 8vw, 40px) clamp(24px, 7vw, 34px) !important;
   }
 
   html body.team-page-v2 .group__head-main,
