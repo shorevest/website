@@ -524,3 +524,59 @@ body.strategy-page .st-risk__panel-body + .st-risk__panel-body {
     padding-inline: 0;
   }
 }
+
+/* ==========================================================================
+   2026-07-08 · Strategy layout differentiation pass
+   Pulls forward Media/Insights techniques (asymmetric blocking, inset ledgers,
+   stronger spacing rhythm) without copying their silhouettes.
+   ========================================================================== */
+body.strategy-page #opportunity { padding-top: clamp(82px, 8vw, 122px); }
+body.strategy-page #opportunity .st-head {
+  align-items: stretch;
+  margin-bottom: clamp(42px, 4.6vw, 66px);
+}
+body.strategy-page #opportunity .st-head__l {
+  grid-column: 1 / 7;
+  padding: clamp(30px, 3vw, 46px) clamp(30px, 3vw, 48px);
+  background: var(--sv-stone);
+  border-top: 3px solid var(--sv-cinnabar);
+}
+body.strategy-page #opportunity .st-head__r {
+  grid-column: 8 / 13;
+  align-self: center;
+  border-left: 2px solid var(--sv-qing, #3D7070);
+  padding-left: clamp(24px, 2.6vw, 40px);
+}
+body.strategy-page .st-reasons {
+  border-top: 0;
+  background: #fff;
+  border-left: 3px solid var(--sv-cinnabar);
+  box-shadow: 0 14px 34px rgba(23, 28, 28, 0.07);
+  padding: clamp(20px, 2vw, 28px) clamp(8px, 1vw, 16px);
+}
+body.strategy-page .st-reason { padding-bottom: 4px; }
+body.strategy-page #sub-strategies .st-head {
+  padding-bottom: clamp(28px, 3vw, 44px);
+  border-bottom: 1px solid var(--sv-border-light-strong);
+}
+body.strategy-page .st-thresholds {
+  position: relative;
+  background: var(--sv-ivory);
+  padding: clamp(28px, 3vw, 42px);
+  border: 1px solid var(--sv-border-light-strong);
+  border-top: 0;
+}
+body.strategy-page .st-thresholds::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: clamp(28px, 3vw, 42px);
+  right: clamp(28px, 3vw, 42px);
+  height: 3px;
+  background: var(--sv-qing, #3D7070);
+}
+@media (max-width: 900px) {
+  body.strategy-page #opportunity .st-head__l,
+  body.strategy-page #opportunity .st-head__r { grid-column: 1 / 13; }
+  body.strategy-page #opportunity .st-head__r { border-left: 0; padding-left: 0; }
+}
