@@ -281,7 +281,7 @@ html body.team-page-v2 .team-profile__photo {
   display: grid;
   place-items: center;
   width: 100%;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
   background:
     linear-gradient(
@@ -588,7 +588,7 @@ html body.team-page-v2 .team-profile__photo {
   max-width: none !important;
   max-height: none !important;
   margin: 0 !important;
-  aspect-ratio: 4 / 5 !important;
+  aspect-ratio: 1 / 1 !important;
   overflow: hidden !important;
   border: 0 !important;
   border-radius: 0 !important;
@@ -609,7 +609,7 @@ html body.team-page-v2 .team-profile__photo img {
   display: block !important;
   width: 100% !important;
   height: 100% !important;
-  aspect-ratio: 4 / 5 !important;
+  aspect-ratio: 1 / 1 !important;
   object-fit: cover !important;
   object-position: center top !important;
   border-radius: 0 !important;
