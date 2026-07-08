@@ -117,16 +117,26 @@ body.press-page .pr-event-row {
   gap: clamp(16px, 2.4vw, 36px); align-items: baseline;
   padding: 24px 0; border-bottom: 1px solid var(--sv-border-light);
 }
+/* Boundary between upcoming and past events: the upcoming ledger closes on
+   its own thin rule, a wide band of bare page follows, then the past section
+   re-opens as a stone band under a strong ink rule — the tint plus the note
+   signal "archive" before any date is read. */
 body.press-page .pr-events__divider {
-  display: flex; align-items: center; gap: 18px;
-  padding: 30px 0 12px; border-top: 3px solid var(--sv-ink);
+  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
+  gap: 8px 24px;
+  margin-top: clamp(40px, 4.6vw, 56px);
+  padding: 15px 18px;
+  border-top: 3px solid var(--sv-ink);
+  border-bottom: 1px solid var(--sv-border-light-strong);
+  background: var(--sv-stone);
   color: var(--sv-ink);
 }
-body.press-page .pr-events__divider::after {
-  content: ""; height: 1px; flex: 1; background: var(--sv-border-light-strong);
+body.press-page .pr-events__divider-label {
+  font: 700 11px/1.2 var(--sv-font); letter-spacing: 0.18em; text-transform: uppercase;
 }
-body.press-page .pr-events__divider span {
-  font: 700 11px/1 var(--sv-font); letter-spacing: 0.18em; text-transform: uppercase;
+body.press-page .pr-events__divider-note {
+  font: 400 12px/1.4 var(--sv-font); letter-spacing: 0.02em;
+  color: var(--sv-muted, #6E7169);
 }
 body.press-page .pr-event-date {
   font: 600 13px/1.3 var(--sv-font); letter-spacing: 0.04em; color: var(--sv-ink);
