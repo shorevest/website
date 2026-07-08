@@ -890,7 +890,7 @@ body.homepage .sv-totop svg { width: 16px; height: 16px; }
   body.homepage .sv-reveal.is-in { opacity: 1; transform: none; }
 }
 
-/* ========================================================================== 
+/* ==========================================================================
    Mobile audit refinements (320px–430px)
    Keep the homepage institutional at narrow widths: calmer line lengths,
    fewer forced two-column fragments, and no horizontal overflow.
@@ -1406,3 +1406,160 @@ body.homepage:not(.press-page):not(.insights-page):not(.strategy-page):not(.firm
   border-bottom: 1px solid var(--sv-border-light-strong);
 }
 body.homepage:not(.press-page):not(.insights-page):not(.strategy-page):not(.firm-page):not(.team-page-v2) .sv-bridge__body p:last-child { border-bottom: 0; }
+
+
+/* ==========================================================================
+   2026-07-08 · Hero-only layered editorial update
+   Scope intentionally limited to the homepage hero. All downstream homepage
+   sections remain on the pre-existing structure and styling.
+   ========================================================================== */
+:root {
+  --color-ivory-card: #FFFDF8;
+  --color-cinnabar: var(--sv-cinnabar);
+  --color-red-dark: var(--sv-cinnabar-d);
+  --color-border: rgba(82, 71, 54, 0.18);
+  --ledge-offset: clamp(24px, 3vw, 40px);
+}
+body.homepage .sv-hero {
+  overflow: hidden;
+  padding-block: clamp(54px, 6vw, 86px) clamp(78px, 7vw, 110px);
+}
+body.homepage .sv-hero__inner {
+  min-height: 650px;
+  align-items: center;
+}
+body.homepage .sv-hero__main {
+  grid-column: 1 / 7 !important;
+  position: relative;
+  z-index: 4;
+  align-self: center;
+  max-width: 660px;
+  margin-right: clamp(-118px, -8vw, -70px);
+  padding: clamp(42px, 5vw, 72px);
+  background: var(--color-ivory-card);
+  border: 1px solid var(--color-border);
+  box-shadow: none;
+}
+body.homepage .sv-hero__label {
+  color: var(--color-cinnabar);
+}
+body.homepage .sv-hero__headline {
+  font-size: clamp(42px, 4vw, 58px);
+  max-width: 12.5ch;
+}
+body.homepage .sv-hero__field {
+  grid-column: 6 / 13 !important;
+  display: block;
+  position: relative;
+  z-index: 1;
+  min-height: clamp(520px, 47vw, 650px);
+  margin: 0;
+  padding: 0;
+  background: transparent;
+}
+body.homepage .sv-hero__field::before {
+  content: "";
+  display: block !important;
+  position: absolute;
+  inset: var(--ledge-offset) -28px -28px 34px;
+  width: auto;
+  background: var(--color-cinnabar);
+  z-index: -2;
+}
+body.homepage .sv-hero__field::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: calc(var(--ledge-offset) * 2);
+  right: -42px;
+  bottom: -28px;
+  left: auto;
+  width: 68px;
+  background: var(--color-red-dark);
+  z-index: -3;
+}
+body.homepage .sv-hero__image {
+  position: absolute;
+  inset: 0 0 34px 0;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  background: var(--sv-stone);
+}
+body.homepage .sv-hero__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+body.homepage .sv-hero__panel {
+  position: absolute;
+  right: clamp(26px, 3.2vw, 52px);
+  bottom: 0;
+  z-index: 5;
+  max-width: min(470px, 58%);
+  padding: clamp(28px, 3vw, 42px);
+  background: var(--color-ivory-card);
+  border: 1px solid var(--color-border);
+  border-top: 0;
+  transform: none !important;
+  box-shadow: none !important;
+}
+body.homepage .sv-hero__panel-row {
+  border-top-color: var(--color-border);
+}
+@media (max-width: 1023px) {
+  body.homepage .sv-hero__inner {
+    min-height: 0;
+  }
+  body.homepage .sv-hero__main {
+    grid-column: 1 / 11 !important;
+    margin: 0 0 -80px;
+  }
+  body.homepage .sv-hero__field {
+    grid-column: 1 / 13 !important;
+    min-height: 600px;
+  }
+  body.homepage .sv-hero__panel {
+    max-width: 65%;
+  }
+}
+@media (max-width: 767px) {
+  body.homepage .sv-hero {
+    padding-block: 32px 58px;
+  }
+  body.homepage .sv-hero__main {
+    grid-column: 1 / 13 !important;
+    max-width: none;
+    margin: 0;
+    padding: 30px 24px;
+  }
+  body.homepage .sv-hero__headline {
+    max-width: 13ch;
+  }
+  body.homepage .sv-hero__field {
+    grid-column: 1 / 13 !important;
+    display: grid;
+    gap: 18px;
+    min-height: 0;
+    padding-top: 18px;
+  }
+  body.homepage .sv-hero__field::before {
+    inset: 36px 0 auto 0;
+    height: 220px;
+  }
+  body.homepage .sv-hero__field::after {
+    display: none;
+  }
+  body.homepage .sv-hero__image {
+    position: relative;
+    inset: auto;
+    height: 310px;
+  }
+  body.homepage .sv-hero__panel {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    max-width: none;
+    padding: 24px 20px;
+  }
+}
