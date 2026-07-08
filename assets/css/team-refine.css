@@ -17,13 +17,12 @@ body.team-page-v2 {
   --tr-ivory: #f7f1e6;
   --tr-parchment: #efe6d5;
   --tr-cinnabar: #c93b2a;
-  --tr-cinnabar-lt: #cf3a2b;
-  --tr-oxblood: #8f2a20;
+  --tr-oxide: var(--sv-oxide, #9f2f24);
   --tr-muted: #6e7169;
   --tr-border: rgba(30, 30, 26, 0.14);
   --tr-gutter: clamp(24px, 5vw, 72px);
   --tr-max: 1280px;
-  --tr-font: var(--font-en, "DIN 2014", system-ui, sans-serif);
+  --tr-font: var(--sv-font, "DIN 2014", "Barlow", system-ui, sans-serif);
   --tr-dark-footer: #20211f;
   --tr-on-dark: rgba(252, 249, 241, 0.78);
   --tr-faint-on-dark: rgba(252, 249, 241, 0.58);
@@ -82,7 +81,7 @@ html body.team-page-v2 .team-hero .eyebrow {
   font: 600 12px/1.4 var(--sv-font) !important;
   letter-spacing: 0.16em !important;
   text-transform: uppercase !important;
-  color: var(--tr-ink) !important;
+  color: var(--tr-oxide) !important;
   background: none !important;
 }
 html body.team-page-v2 .team-hero .sv-hero__eyebrow::before,
@@ -100,8 +99,8 @@ html body.team-page-v2 .team-hero h1 {
   margin: 0 0 24px !important;
   font-family: var(--tr-font) !important;
   font-weight: 500 !important;
-  font-size: clamp(38px, 4.6vw, 62px) !important;
-  line-height: 1.04 !important;
+  font-size: clamp(40px, 4.4vw, 60px) !important;
+  line-height: 1.06 !important;
   letter-spacing: -0.03em !important;
   color: var(--tr-ink) !important;
   text-wrap: balance;
@@ -109,9 +108,9 @@ html body.team-page-v2 .team-hero h1 {
 html body.team-page-v2 .team-hero .pagehero__lede,
 html body.team-page-v2 .team-hero .sv-hero__body {
   margin: 0 !important;
-  font: 400 17px/1.66 var(--tr-font) !important;
+  font: 400 17px/1.68 var(--tr-font) !important;
   color: var(--tr-ink-2) !important;
-  max-width: 44ch !important;
+  max-width: 48ch !important;
 }
 
 /* ---- right: cinnabar architectural block (bleeds to viewport edge) ---- */
@@ -123,12 +122,7 @@ html body.team-page-v2 .team-hero__proof {
   gap: 0 !important;
   padding: clamp(36px, 4vw, 60px) 0 clamp(36px, 4vw, 60px)
     clamp(32px, 3.6vw, 60px) !important;
-  background: linear-gradient(
-    152deg,
-    var(--tr-cinnabar-lt) 0%,
-    var(--tr-cinnabar) 52%,
-    var(--tr-oxblood) 100%
-  ) !important;
+  background: var(--sv-cinnabar, var(--tr-cinnabar)) !important;
   border: 0 !important;
 }
 html body.team-page-v2 .team-hero__proof::after {
@@ -138,48 +132,52 @@ html body.team-page-v2 .team-hero__proof::after {
   bottom: 0;
   left: 100%;
   width: 50vw;
-  background: var(--tr-oxblood);
+  background: var(--tr-oxide);
 }
 
 /* ---- the ivory stats card sitting on the cinnabar block --------------- */
+/* Matches the homepage sv-hero__panel component: white field, 2px oxide top
+   rule, symmetric padding, ink hairlines between rows. */
 html body.team-page-v2 .team-hero__statcard {
   position: relative;
   z-index: 1;
   width: 100%;
   max-width: 360px;
   margin: clamp(24px, 3vw, 44px) 0;
-  padding: clamp(24px, 2.6vw, 34px) clamp(24px, 2.6vw, 32px)
-    clamp(10px, 1.4vw, 16px);
-  background: #fcfaf4;
-  border: 1px solid rgba(30, 30, 26, 0.16);
-  border-radius: 2px;
+  padding: clamp(26px, 2.6vw, 34px) clamp(26px, 2.8vw, 36px);
+  background: #ffffff;
+  border: 1px solid rgba(27, 31, 30, 0.16);
+  border-top: 2px solid var(--tr-oxide);
+  border-radius: 0;
 }
 html body.team-page-v2 .team-hero__statcard-label {
   margin: 0 0 6px;
   padding-bottom: 16px;
-  border-bottom: 1px solid var(--tr-border);
+  border-bottom: 1px solid rgba(27, 31, 30, 0.12);
   font: 600 11px/1.3 var(--tr-font);
-  letter-spacing: 0.18em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--tr-muted);
+  color: var(--tr-oxide);
 }
 html body.team-page-v2 .team-hero__proof article {
   display: block !important;
   margin: 0 !important;
   padding: 16px 0 !important;
   border: 0 !important;
-  border-bottom: 1px solid var(--tr-border) !important;
+  border-bottom: 1px solid rgba(27, 31, 30, 0.12) !important;
   background: none !important;
 }
 html body.team-page-v2 .team-hero__proof article:last-child {
   border-bottom: 0 !important;
+  padding-bottom: 0 !important;
 }
 html body.team-page-v2 .team-hero__proof article span {
   display: block !important;
   margin-bottom: 5px !important;
   font: 500 27px/1 var(--tr-font) !important;
   letter-spacing: -0.02em !important;
-  color: var(--tr-ink) !important;
+  font-variant-numeric: tabular-nums;
+  color: var(--tr-oxide) !important;
 }
 html body.team-page-v2 .team-hero__proof article p {
   margin: 0 !important;
@@ -188,121 +186,8 @@ html body.team-page-v2 .team-hero__proof article p {
 }
 
 /* ==========================================================================
-   2 · TEAM GROUPS — warm ivory, container-aligned, tightened rhythm
+   2 · PORTRAIT PLACEHOLDER — monogram for profiles without a portrait
    ========================================================================== */
-html body.team-page-v2 .team-groups {
-  background: var(--tr-ivory) !important;
-  padding-block: clamp(52px, 6vw, 80px) clamp(44px, 5vw, 68px) !important;
-}
-html body.team-page-v2 .team-groups .team-inner {
-  width: auto !important;
-  max-width: var(--page-max, 1280px) !important;
-  margin-inline: auto;
-  padding-inline: var(--pad-x, clamp(24px, 5vw, 48px)) !important;
-}
-html body.team-page-v2 .group + .group {
-  margin-top: clamp(48px, 5.5vw, 76px) !important;
-}
-
-/* ---- section header: heading left, description right, thin rule ------- */
-html body.team-page-v2 .group__head {
-  display: grid !important;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
-  gap: clamp(20px, 4vw, 56px) !important;
-  align-items: end !important;
-  margin-bottom: clamp(28px, 3vw, 40px) !important;
-  padding-bottom: clamp(18px, 2vw, 26px) !important;
-  border-bottom: 1px solid var(--tr-border) !important;
-}
-html body.team-page-v2 .group__head-main {
-  margin: 0 !important;
-}
-html body.team-page-v2 .sv-section-title {
-  margin: 0 !important;
-  font-family: var(--tr-font) !important;
-  font-weight: 500 !important;
-  font-size: clamp(24px, 2.6vw, 34px) !important;
-  line-height: 1.1 !important;
-  letter-spacing: -0.02em !important;
-  color: var(--tr-ink) !important;
-}
-html body.team-page-v2 .group__summary {
-  margin: 0 !important;
-  align-self: end;
-  font: 400 15px/1.55 var(--tr-font) !important;
-  color: var(--tr-muted) !important;
-  max-width: none;
-  border-left: 3px solid var(--tr-cinnabar) !important;
-  padding-left: clamp(16px, 1.4vw, 22px) !important;
-}
-@media (max-width: 760px) {
-  html body.team-page-v2 .group__summary {
-    border-left: 0 !important;
-    padding-left: 0 !important;
-  }
-}
-@media (max-width: 760px) {
-  html body.team-page-v2 .group__head {
-    grid-template-columns: 1fr !important;
-    align-items: start !important;
-  }
-}
-
-/* ==========================================================================
-   3 · PORTRAIT GRID — consistent 4-col editorial grid, faces protected
-   ========================================================================== */
-html body.team-page-v2 .grid[data-team-grid] {
-  --team-card-width: 232px;
-  --team-cols: min(var(--team-count, 4), 4);
-  display: grid !important;
-  grid-template-columns: repeat(
-    var(--team-cols),
-    minmax(0, var(--team-card-width))
-  ) !important;
-  justify-content: start !important;
-  gap: clamp(24px, 2.4vw, 36px) clamp(20px, 2vw, 30px) !important;
-}
-html body.team-page-v2 .grid[data-team-count="2"] {
-  --team-count: 2;
-}
-html body.team-page-v2 .grid[data-team-count="3"] {
-  --team-count: 3;
-}
-html body.team-page-v2 .grid[data-team-count="5"] {
-  --team-count: 5;
-}
-html body.team-page-v2 .group--leadership .grid[data-team-grid] {
-  --team-cols: 5;
-}
-html body.team-page-v2 .team-profile {
-  text-align: left;
-}
-html body.team-page-v2 .team-profile__photo {
-  display: grid;
-  place-items: center;
-  width: 100%;
-  aspect-ratio: 4 / 5;
-  overflow: hidden;
-  background:
-    linear-gradient(
-      135deg,
-      rgba(216, 206, 176, 0.45),
-      rgba(250, 246, 238, 0.78)
-    ),
-    var(--tr-parchment);
-  border: 1px solid var(--tr-border);
-  max-height: none !important;
-  margin: 0 !important;
-}
-html body.team-page-v2 .team-profile__photo img {
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover !important;
-  object-position: center top !important;
-  display: block;
-  filter: grayscale(1) contrast(1.02); /* consistent normalized set */
-  transition: filter 0.3s ease;
-}
 html body.team-page-v2 .team-profile__photo::before {
   content: "";
   width: clamp(54px, 5vw, 72px);
@@ -323,7 +208,7 @@ html body.team-page-v2 .team-profile__photo::before {
 }
 /* Profiles with a delivered portrait: drop the placeholder monogram. */
 html body.team-page-v2 .team-profile__photo:has(img) {
-  display: block;
+  display: block !important;
 }
 html body.team-page-v2 .team-profile__photo:has(img)::before {
   content: none;
@@ -332,83 +217,7 @@ html body.team-page-v2 .team-profile:hover .team-profile__photo img,
 html body.team-page-v2 .team-profile.is-active .team-profile__photo img {
   filter: grayscale(0) contrast(1);
 }
-html body.team-page-v2 .team-profile__name {
-  margin-top: 16px !important;
-  font: 500 17px/1.2 var(--tr-font) !important;
-  letter-spacing: -0.01em !important;
-  color: var(--tr-ink) !important;
-}
-html body.team-page-v2 .team-profile__role,
-html body.team-page-v2 .team-profile__secondary {
-  margin-top: 5px !important;
-  font: 400 13.5px/1.4 var(--tr-font) !important;
-  color: var(--tr-muted) !important;
-}
-html body.team-page-v2 .team-profile__secondary {
-  margin-top: 2px !important;
-  font-size: 12.5px !important;
-  color: rgba(110, 113, 105, 0.82) !important;
-}
-html body.team-page-v2 .team-profile__actions {
-  justify-content: flex-start;
-}
-html body.team-page-v2 .team-profile__bio-toggle,
-html body.team-page-v2 .team-profile__linkedin {
-  margin-top: 12px !important;
-  margin-right: 18px;
-  padding: 0 !important;
-  font: 600 11px/1.2 var(--tr-font) !important;
-  letter-spacing: 0.14em !important;
-  text-transform: uppercase !important;
-  color: var(--tr-ink) !important;
-  background: none !important;
-  border: 0 !important;
-  cursor: pointer;
-  display: inline-block;
-  position: relative;
-}
-html body.team-page-v2 .team-profile__bio-toggle::after,
-html body.team-page-v2 .team-profile__linkedin::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -4px;
-  height: 1px;
-  background: var(--tr-cinnabar);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.2s ease;
-}
-html body.team-page-v2 .team-profile__bio-toggle:hover::after,
-html body.team-page-v2 .team-profile__linkedin:hover::after {
-  transform: scaleX(1);
-}
-@media (max-width: 1180px) and (min-width: 901px) {
-  html body.team-page-v2 .group--leadership .grid[data-team-grid] {
-    --team-cols: 3;
-  }
-  html
-    body.team-page-v2
-    .grid[data-team-count="5"]
-    .team-profile:nth-last-child(2) {
-    grid-column: 1 / 2;
-  }
-}
-@media (max-width: 900px) {
-  html body.team-page-v2 .grid[data-team-grid] {
-    --team-cols: min(var(--team-count, 2), 2);
-    --team-card-width: min(100%, 320px);
-  }
-  html body.team-page-v2 .group--leadership .grid[data-team-grid] {
-    --team-cols: 2;
-  }
-}
 @media (max-width: 560px) {
-  html body.team-page-v2 .grid[data-team-grid] {
-    --team-cols: 1;
-    --team-card-width: 100%;
-  }
   html body.team-page-v2 .team-hero__layout {
     grid-template-columns: 1fr !important;
   }
@@ -421,17 +230,6 @@ html body.team-page-v2 .team-profile__linkedin:hover::after {
   /* Match the global mobile gutter (--pad-x: 20px) so team margins align with every other page. */
   html body.team-page-v2 {
     --tr-gutter: 20px;
-  }
-  /* Enlarge Bio / LinkedIn tap targets to ~44px tall, underline kept under the text. */
-  html body.team-page-v2 .team-profile__bio-toggle,
-  html body.team-page-v2 .team-profile__linkedin {
-    padding-block: 11px !important;
-    display: inline-flex !important;
-    align-items: center !important;
-  }
-  html body.team-page-v2 .team-profile__bio-toggle::after,
-  html body.team-page-v2 .team-profile__linkedin::after {
-    bottom: 7px !important;
   }
 }
 
@@ -489,7 +287,7 @@ body.team-page-v2 {
 
 html body.team-page-v2 .team-groups {
   background: var(--tr-ivory) !important;
-  padding-block: 0 clamp(68px, 6vw, 96px) !important;
+  padding-block: 0 var(--tr-section-y) !important;
 }
 
 html body.team-page-v2 .team-groups .team-inner {
@@ -503,7 +301,9 @@ html body.team-page-v2 .group,
 html body.team-page-v2 .group:first-child {
   margin: 0 !important;
   padding-block: var(--tr-section-y) !important;
-  border-top: 1px solid var(--tr-border-soft) !important;
+  /* Section boundaries use the site's structural hairline weight
+     (--sv-border-light-strong), matching header/strategy-row dividers. */
+  border-top: 1px solid var(--tr-border) !important;
   background: transparent !important;
 }
 
@@ -535,13 +335,14 @@ html body.team-page-v2 .group__head-main {
   grid-column: 1 / span 4;
 }
 
+/* Section titles use the homepage sv-h2 scale. */
 html body.team-page-v2 .sv-section-title {
   margin: 0 !important;
-  max-width: 12ch;
-  font: 500 clamp(28px, 3vw, 40px) / 1.12 var(--tr-font) !important;
+  font: 500 clamp(30px, 3.4vw, 46px) / 1.12 var(--tr-font) !important;
   letter-spacing: -0.018em !important;
   color: var(--tr-ink) !important;
   text-align: left !important;
+  text-wrap: balance;
 }
 
 html body.team-page-v2 .group__summary {
@@ -582,7 +383,10 @@ html body.team-page-v2 .grid[data-team-count="5"] .team-profile:nth-last-child(2
 }
 
 html body.team-page-v2 .team-profile__photo {
-  display: block !important;
+  /* grid + place-items keeps the placeholder monogram centered; photos are
+     switched to display:block by the :has(img) rule above. */
+  display: grid !important;
+  place-items: center;
   width: 100% !important;
   height: auto !important;
   max-width: none !important;
@@ -642,7 +446,8 @@ html body.team-page-v2 .team-profile:focus-within .team-profile__name {
 
 html body.team-page-v2 .team-profile__role,
 html body.team-page-v2 .team-profile__secondary {
-  min-height: 2.8em;
+  /* No reserved min-height: row height follows actual content so sections
+     with short rosters don't carry orphaned whitespace. */
   margin-top: 6px !important;
   font: 400 14px / 1.42 var(--tr-font) !important;
   color: var(--tr-muted) !important;
@@ -655,7 +460,6 @@ html body.team-page-v2 .team-profile__actions {
   justify-content: flex-start !important;
   align-items: baseline;
   gap: 10px 18px !important;
-  min-height: 28px;
   margin-top: 14px !important;
 }
 
