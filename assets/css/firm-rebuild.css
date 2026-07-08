@@ -265,3 +265,11 @@ body.firm-page .fm-close__text {
   body.firm-page .fm-close__label { grid-column: 1 / 13; }
   body.firm-page .fm-close__text { grid-column: 1 / 13; margin-top: 18px; max-width: none; }
 }
+
+/* Align the Firm hero headline with the left edge of the navigation logo.
+   The frame still bleeds to the viewport edge, but its copy starts on the
+   same content rail as .sv-header__logo and the global .sv-shell system. */
+body.firm-page .fm-hero__frame {
+  margin-left: calc(var(--pad-x) * -1);
+  padding-left: var(--pad-x);
+}
