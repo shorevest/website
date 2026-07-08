@@ -53,6 +53,12 @@
     pdfLink.href = pdfHref;
   }
 
+  const issueHref = issueHrefFromSource(source);
+  const backToIssueLink = document.querySelector('[data-cdd-back-to-issue]');
+  if (issueHref && backToIssueLink) {
+    backToIssueLink.href = issueHref;
+  }
+
   (data.sections || []).forEach((section) => {
     if (section.heading) {
       const h2 = document.createElement('h2');
@@ -122,6 +128,13 @@
     requestAnimationFrame(() => {
       setTimeout(() => window.print(), 120);
     });
+  }
+
+  function issueHrefFromSource(src) {
+    if (!src) return '';
+    const fileName = String(src).split('?')[0].split('#')[0].split('/').pop() || '';
+    const match = fileName.match(/^china-debt-dynamics-(v\d+i\d+)\.json$/i);
+    return match ? `china-debt-dynamics-${match[1].toLowerCase()}.html` : '';
   }
 
 
