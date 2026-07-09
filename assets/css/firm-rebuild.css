@@ -389,3 +389,106 @@ main > section + section {
   border-top-color: var(--sv-page-divider-color) !important;
   border-top-width: var(--sv-page-divider-thickness) !important;
 }
+
+/* 2026-07-09 · Firm/Who We Are investor-base card refinement
+   Turn the investor list into a companion institutional-card system so it
+   balances the editorial Who We Are panel rather than reading as a plain rail. */
+body.firm-page .fm-cap__rail {
+  position: relative;
+  padding: 0;
+  border-left: 0;
+}
+body.firm-page .fm-cap__rail-card {
+  position: sticky;
+  top: clamp(86px, 8vw, 116px);
+  overflow: hidden;
+  min-height: 100%;
+  padding: clamp(30px, 3.4vw, 52px);
+  background:
+    linear-gradient(145deg, rgba(122, 175, 175, 0.18), rgba(122, 175, 175, 0) 48%),
+    var(--sv-stone);
+  border: 1px solid rgba(216, 206, 176, 0.72);
+  box-shadow: 0 14px 34px rgba(23, 28, 28, 0.07);
+}
+body.firm-page .fm-cap__rail-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: var(--sv-qing-light, #7AAFAF);
+}
+body.firm-page .fm-cap__rail-card::after {
+  content: "";
+  position: absolute;
+  right: clamp(22px, 2.4vw, 34px);
+  top: clamp(22px, 2.4vw, 34px);
+  width: clamp(70px, 8vw, 118px);
+  aspect-ratio: 1;
+  border: 1px solid rgba(122, 175, 175, 0.38);
+  opacity: 0.72;
+  pointer-events: none;
+}
+body.firm-page .fm-cap__rail-label {
+  position: relative;
+  z-index: 1;
+  margin: 0 0 12px;
+  padding: 0;
+  border: 0;
+  color: var(--sv-cinnabar);
+}
+body.firm-page .fm-cap__rail-intro {
+  position: relative;
+  z-index: 1;
+  max-width: 28ch;
+  margin: 0 0 clamp(24px, 2.4vw, 34px);
+  font: 500 clamp(20px, 2vw, 27px)/1.2 var(--sv-font);
+  letter-spacing: -0.02em;
+  color: var(--sv-ink);
+  text-wrap: balance;
+}
+body.firm-page .fm-cap__list {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+body.firm-page .fm-cap__list li {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 74px;
+  padding: 16px 16px 16px 46px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(216, 206, 176, 0.78);
+  color: var(--sv-ink);
+  font: 500 15.5px/1.28 var(--sv-font);
+  box-shadow: 0 8px 22px rgba(23, 28, 28, 0.045);
+}
+body.firm-page .fm-cap__list li::before {
+  content: "";
+  position: absolute;
+  left: 17px;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  transform: translateY(-50%) rotate(45deg);
+  background: var(--sv-ivory);
+  border: 2px solid var(--sv-qing-light, #7AAFAF);
+}
+body.firm-page .fm-cap__list li:nth-child(3n + 1)::before { border-color: var(--sv-cinnabar); }
+body.firm-page .fm-cap__list li span { position: relative; z-index: 1; }
+@media (max-width: 1100px) {
+  body.firm-page .fm-cap__list { grid-template-columns: 1fr; }
+  body.firm-page .fm-cap__list li { min-height: 58px; }
+}
+@media (max-width: 880px) {
+  body.firm-page .fm-cap__rail { padding-left: 0; border-left: 0; }
+  body.firm-page .fm-cap__rail-card { position: relative; top: auto; }
+  body.firm-page .fm-cap__rail-intro { max-width: 36ch; }
+  body.firm-page .fm-cap__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  body.firm-page .fm-cap__rail-card { padding: 28px 22px; }
+  body.firm-page .fm-cap__list { grid-template-columns: 1fr; }
+}
