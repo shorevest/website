@@ -957,3 +957,136 @@ body.strategy-page .sv-exec__head-r {
   height: 0 !important;
   background: transparent !important;
 }
+
+/* ==========================================================================
+   2026-07-09 · COHESION PASS (definitive, last-in-file)
+   The page had accreted three competing accent treatments (qing top-rules,
+   cinnabar left-bars, cinnabar top-rules), bolted-on "callout boxes" for the
+   support copy, and one section (Origination) wrapped in a heavy shadowed
+   panel while every other section sat flat. This pass unifies everything on a
+   single restrained grammar so the page reads as one system:
+
+     · section head  = label + H2 (left) · plain editorial deck (right)
+     · card grids     = white card, 1px hairline, single 2px qing top-rule
+     · cinnabar       = reserved for real emphasis (indices, sleeve hover,
+                        the recovery-risk panel) — never as ambient chrome
+     · sections sit flat on the page; no panel wrappers, no drop shadows
+   ========================================================================== */
+
+/* --- Shared section-head rhythm ----------------------------------------- */
+body.strategy-page .st-head,
+body.strategy-page .sv-exec__head {
+  align-items: start;
+  column-gap: clamp(32px, 5vw, 88px);
+  margin-bottom: clamp(40px, 4.6vw, 64px);
+}
+body.strategy-page .st-head__l,
+body.strategy-page .sv-exec__head-l { grid-column: 1 / 7; }
+body.strategy-page .st-head__r,
+body.strategy-page .sv-exec__head-r { grid-column: 7 / 13; }
+body.strategy-page .st-head__l .sv-h2,
+body.strategy-page .sv-exec__head-l .sv-h2 { margin-top: 14px; }
+
+/* Support copy: plain editorial deck — no box, no border, no bar, no shadow.
+   This is the single biggest fix for the "amateurish" feel. */
+body.strategy-page .st-head__r,
+body.strategy-page .sv-exec__head-r {
+  align-self: start;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+  padding-top: 8px;
+  max-width: 46ch;
+}
+body.strategy-page .st-head__r p,
+body.strategy-page .sv-exec__head-r p,
+body.strategy-page .sv-exec__intro {
+  margin: 0;
+  font: 400 clamp(16px, 1.15vw, 18px)/1.66 var(--sv-font);
+  color: var(--sv-ink-2);
+  max-width: none;
+}
+body.strategy-page .st-head__r p + p,
+body.strategy-page .sv-exec__head-r p + p { margin-top: 16px; }
+
+/* --- One card style, everywhere ----------------------------------------- */
+body.strategy-page .st-reason,
+body.strategy-page .st-reason:first-child,
+body.strategy-page .st-reason:last-child,
+body.strategy-page .sv-flow__step {
+  padding: clamp(26px, 2.6vw, 34px);
+  background: #fff;
+  border: 1px solid var(--sv-border-light);
+  border-top: 2px solid var(--sv-qing, #3D7070);
+  border-radius: 0;
+  box-shadow: none;
+}
+body.strategy-page .st-reasons,
+body.strategy-page .sv-flow {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(18px, 2vw, 26px);
+  margin-top: 22px;
+  padding: 0;
+  background: none;
+  border: 0;
+  box-shadow: none;
+}
+
+/* Reasons kicker: plain label, no top rule (matches other section labels) */
+body.strategy-page .st-reasons__kicker {
+  margin: clamp(40px, 4.4vw, 60px) 0 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+/* --- Origination: strip the panel wrapper; flat like every other section - */
+body.strategy-page .sv-exec { background: var(--sv-ivory); }
+body.strategy-page .sv-exec__inner {
+  padding: 0;
+  background: none;
+  border: 0;
+  border-left: 0;
+  box-shadow: none;
+}
+body.strategy-page .sv-exec__head {
+  margin-bottom: clamp(40px, 4.6vw, 64px);
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+body.strategy-page .sv-exec__head-r { padding-top: 8px; }
+body.strategy-page .sv-flow__step { min-height: clamp(200px, 17vw, 240px); }
+body.strategy-page .sv-flow__title { max-width: 12ch; }
+body.strategy-page .sv-flow__body { max-width: none; }
+
+/* --- Sub-strategies underwriting panel: single flat framed group -------- */
+body.strategy-page .st-thresholds {
+  background: #fff;
+  border: 1px solid var(--sv-border-light);
+  border-top: 2px solid var(--sv-qing, #3D7070);
+  box-shadow: none;
+}
+body.strategy-page .st-thresholds::before { content: none; }
+
+/* --- Risk block: keep the strong contained frame, calm the border ------- */
+body.strategy-page .st-risk {
+  box-shadow: inset 0 0 0 1px var(--sv-border-light-strong);
+}
+
+@media (max-width: 900px) {
+  body.strategy-page .st-head__l,
+  body.strategy-page .st-head__r,
+  body.strategy-page .sv-exec__head-l,
+  body.strategy-page .sv-exec__head-r { grid-column: 1 / 13; }
+  body.strategy-page .st-head__r,
+  body.strategy-page .sv-exec__head-r {
+    margin-top: clamp(16px, 4vw, 24px);
+    padding-top: 0;
+    max-width: none;
+  }
+}
+@media (max-width: 880px) {
+  body.strategy-page .st-reasons,
+  body.strategy-page .sv-flow { grid-template-columns: 1fr; gap: 14px; }
+}
