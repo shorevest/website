@@ -411,6 +411,11 @@ body.insights-page .cdd-hero__image {
 body.insights-page .cdd-hero__image img {
   display: block; width: 100%; height: 100%;
   object-fit: cover; object-position: center;
+  filter: grayscale(100%);
+  transition: filter 320ms ease;
+}
+body.insights-page .cdd-hero__image:hover img {
+  filter: grayscale(0%);
 }
 /* Dark-cinnabar block offset down-and-right behind the photograph
    (mirrors the homepage hero, dark cinnabar for the dark page ground) */
