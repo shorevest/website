@@ -89,10 +89,7 @@
    over the page's own grid styles (higher specificity, loads last).
    ========================================================================== */
 
-/* Firm · "Platform at a glance" statcard → 07 LEDGE CARD: ivory card
-   anchored to a deep-water 青 base with a qing-light ledge. The firm hero is
-   already a full cinnabar field, so the facts block takes the secondary 青
-   accent instead of repeating it. */
+/* Firm · "Platform at a glance" statcard → cinnabar facts block with light text. */
 body.firm-page .fm-statcard.svb--band {
   display: block; grid-column: 1 / -1; margin: clamp(8px, 1.4vw, 18px) 0 0;
   background: transparent; padding: 0 0 clamp(26px, 2.8vw, 38px);
@@ -101,24 +98,27 @@ body.firm-page .fm-statcard.svb--band {
 body.firm-page .fm-statcard.svb--band::after {
   content: ""; position: absolute; z-index: 0;
   left: clamp(-34px, -2.4vw, -18px); right: clamp(18px, 2.4vw, 34px); bottom: 0;
-  height: clamp(72px, 8vw, 110px); background: var(--sv-qing-dark, #1E4040);
+  height: clamp(72px, 8vw, 110px); background: var(--sv-cinnabar-d, #9F2F24);
 }
 body.firm-page .fm-statcard.svb--band .svb-band {
-  background: var(--sv-qing-light, #7AAFAF);
+  background: var(--sv-cinnabar-d, #9F2F24);
+  color: var(--sv-ivory);
   margin: 0 clamp(-34px, -2.4vw, -18px) 0 clamp(18px, 2.4vw, 34px);
   padding: clamp(16px, 1.8vw, 22px) clamp(28px, 3vw, 44px) clamp(42px, 4.4vw, 58px);
   border-bottom: 0;
 }
-body.firm-page .fm-statcard.svb--band .svb-band .svb-label { color: var(--sv-ink); }
+body.firm-page .fm-statcard.svb--band .svb-band .svb-label { color: var(--sv-ivory); }
 body.firm-page .fm-statcard.svb--band .svb-panel {
-  position: relative; z-index: 1; background: var(--sv-ivory);
+  position: relative; z-index: 1;
+  background: linear-gradient(152deg, var(--sv-cinnabar, #C93B2A) 0%, var(--sv-cinnabar, #C93B2A) 58%, var(--sv-cinnabar-d, #9F2F24) 100%);
+  color: var(--sv-ivory);
   margin: clamp(-40px, -3vw, -30px) clamp(22px, 2.8vw, 44px) 0;
   padding: clamp(26px, 3vw, 40px);
   box-shadow: 0 18px 44px rgba(15, 34, 34, 0.18);
 }
-body.firm-page .fm-statcard.svb--band .svb-stat__v { color: var(--sv-ink); }
-body.firm-page .fm-statcard.svb--band .svb-stat__c { color: var(--svb-muted); }
-body.firm-page .fm-statcard.svb--band .svb-stats--row .svb-stat { border-left-color: var(--svb-divider); }
+body.firm-page .fm-statcard.svb--band .svb-stat__v { color: var(--sv-ivory); }
+body.firm-page .fm-statcard.svb--band .svb-stat__c { color: var(--sv-meta-on-cinnabar, rgba(252, 249, 241, 0.82)); }
+body.firm-page .fm-statcard.svb--band .svb-stats--row .svb-stat { border-left-color: rgba(252, 249, 241, 0.24); }
 
 /* Firm · relationship closing → centered editorial trust panel. */
 body.firm-page .fm-close__inner.svb {
