@@ -426,7 +426,9 @@ body.press-page .media-hero__bg {
   position: absolute; inset: 0; z-index: 0;
   display: block; width: 100%; height: 100%;
   object-fit: cover; object-position: center 16%;
+  -webkit-filter: grayscale(100%); filter: grayscale(100%);
 }
+
 /* Warm scrim, heavier on the left so the paper card sits over quiet tone
    while the speaker stays visible on the right. */
 body.press-page .media-hero::after {
