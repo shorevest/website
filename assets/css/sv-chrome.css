@@ -310,16 +310,13 @@ html body .sv-mobile-menu a {
   }
 }
 
-/* Footer "Access" group — Investor Portal + Employee Portal entry points. */
+/* Footer access link — keep Investor Portal visually aligned with the rest of the nav. */
 html body footer.sv-footer .sv-footer__access {
-  grid-column: 1 / -1;
-  display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px 26px;
-  margin-top: 16px; padding-top: 14px;
-  border-top: 1px solid var(--sv-chrome-border-dark);
+  display: contents;
 }
 html body footer.sv-footer .sv-footer__access-label {
-  margin: 0;
-  font: 700 10px/1 var(--sv-chrome-font);
-  letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--sv-chrome-faint-on-dark);
+  display: none;
+}
+html body footer.sv-footer .sv-footer__access a::after {
+  content: none;
 }
