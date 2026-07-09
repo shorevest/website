@@ -410,66 +410,67 @@ body.press-page .pr-hero-media img {
 }
 
 /* ==========================================================================
-   Media hero (2026-07-09) — full-bleed conference photograph as the hero
-   background, with the heading set inside a paper card. Overrides the
-   homepage two-column grid the hero would otherwise inherit.
+   Media hero (2026-07-09) — square paper card matched to the homepage hero
+   image proportions. The media page intentionally uses no side accent bar.
    ========================================================================== */
 body.press-page .media-hero {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  background: #0c1a1e;
+  background: var(--sv-ivory);
 }
-/* The conference photograph fills the whole hero; the vertical crop favours
-   the speaker's face and upper body. */
-body.press-page .media-hero__bg {
-  position: absolute; inset: 0; z-index: 0;
-  display: block; width: 100%; height: 100%;
-  object-fit: cover; object-position: center 16%;
-}
-/* Warm scrim, heavier on the left so the paper card sits over quiet tone
-   while the speaker stays visible on the right. */
-body.press-page .media-hero::after {
-  content: ""; position: absolute; inset: 0; z-index: 1;
-  background: linear-gradient(90deg,
-    rgba(10, 22, 26, 0.66) 0%,
-    rgba(10, 22, 26, 0.36) 46%,
-    rgba(10, 22, 26, 0.00) 74%);
-}
+body.press-page .media-hero__bg { display: none; }
+body.press-page .media-hero::after { content: none; }
 body.press-page .media-hero .sv-hero__inner {
-  position: relative; z-index: 2;
-  display: block;                 /* drop the inherited 12-column grid */
-  min-height: clamp(520px, 62vh, 660px);
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  align-items: center;
+  gap: clamp(32px, 5vw, 72px);
+  min-height: clamp(620px, calc(100svh - var(--site-header-height, 88px)), 760px);
   padding-block: clamp(72px, 9vw, 116px);
 }
-/* The heading card — ivory paper, cinnabar edge, lifted off the photograph. */
 body.press-page .media-hero__box {
-  max-width: 560px;
-  padding: clamp(30px, 3.4vw, 46px);
-  background: rgba(250, 246, 238, 0.96);
-  border-left: 4px solid var(--sv-cinnabar);
-  border-radius: 4px;
-  box-shadow: 0 26px 60px rgba(8, 16, 18, 0.36);
-  -webkit-backdrop-filter: blur(2px);
-  backdrop-filter: blur(2px);
+  grid-column: 7 / 13;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  padding: clamp(34px, 4vw, 58px);
+  background: rgba(250, 246, 238, 0.98);
+  border: 1px solid rgba(27, 31, 30, 0.14);
+  border-radius: 14px;
+  box-shadow: 0 24px 58px rgba(20, 28, 27, 0.10);
 }
 body.press-page .media-hero__box .sv-hero__label {
-  margin: 0 0 14px; color: var(--sv-cinnabar);
+  margin: 0 0 14px;
+  color: var(--sv-ink-2);
 }
 body.press-page .media-hero__box .sv-hero__headline { margin: 0; }
 body.press-page .media-hero__box .sv-hero__body { max-width: none; }
 
-@media (max-width: 720px) {
-  body.press-page .media-hero__bg { object-position: center 14%; }
+@media (max-width: 980px) {
   body.press-page .media-hero .sv-hero__inner {
-    min-height: 0; padding-block: clamp(48px, 12vw, 72px);
+    grid-template-columns: 1fr;
+    min-height: 0;
+    padding-block: clamp(56px, 12vw, 84px);
   }
-  body.press-page .media-hero::after {
-    background: linear-gradient(180deg,
-      rgba(10, 22, 26, 0.28) 0%,
-      rgba(10, 22, 26, 0.52) 100%);
+  body.press-page .media-hero__box {
+    grid-column: 1;
+    max-width: min(100%, 560px);
+    margin-inline: auto;
   }
-  body.press-page .media-hero__box { max-width: none; padding: 26px 22px; }
+}
+
+@media (max-width: 560px) {
+  body.press-page .media-hero__box {
+    aspect-ratio: auto;
+    min-height: min(100vw - (2 * var(--pad-x)), 420px);
+    padding: 28px 24px;
+  }
 }
 
 body.press-page .pr-open { padding-block: 0; }
