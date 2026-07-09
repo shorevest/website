@@ -217,7 +217,7 @@
   }
 
   // How many upcoming events to show before the "Show more" toggle takes over.
-  var INITIAL_UPCOMING_VISIBLE = 4;
+  var INITIAL_UPCOMING_VISIBLE = 3;
 
   function buildDivider() {
     var divider = document.createElement('div');
