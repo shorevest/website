@@ -1090,3 +1090,115 @@ body.strategy-page .st-risk {
   body.strategy-page .st-reasons,
   body.strategy-page .sv-flow { grid-template-columns: 1fr; gap: 14px; }
 }
+
+/* ==========================================================================
+   2026-07-09 · RISK BLOCK REFINEMENT (last-in-file, wins on #risk specificity)
+   The three cells (Transaction / Portfolio / Recovery-risk panel) previously
+   read as bolted-together fragments: the two column headings sat on one
+   baseline while the cinnabar panel carried a small kicker above a much larger
+   title, so nothing lined up. This gives all three cells one header rhythm —
+   a title with a hairline rule beneath — with "Risk qualification" demoted to
+   an inline tag on the panel's title row so every title and every divider
+   lands on the same baseline. Cinnabar stays reserved for the panel alone.
+   ========================================================================== */
+body.strategy-page #risk .st-risk {
+  grid-template-columns: minmax(0, 2fr) minmax(300px, 0.92fr);
+  gap: 0;
+  border: 0;
+  margin-top: clamp(10px, 1vw, 16px);
+  background: var(--sv-ivory);
+  box-shadow: inset 0 0 0 1px var(--sv-border-light-strong);
+}
+body.strategy-page #risk .st-risk__cols { grid-template-columns: 1fr 1fr; min-width: 0; }
+
+/* Uniform cells */
+body.strategy-page #risk .st-risk__col,
+body.strategy-page #risk .st-risk__panel {
+  padding: clamp(28px, 3vw, 44px);
+  min-width: 0;
+}
+body.strategy-page #risk .st-risk__col {
+  background: var(--sv-ivory);
+  border-right: 1px solid var(--sv-border-light);
+  border-bottom: 0;
+}
+body.strategy-page #risk .st-risk__col:last-child { border-right: 0; }
+
+/* Shared header rhythm: title + hairline, aligned across all three cells */
+body.strategy-page #risk .st-risk__cell-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  margin: 0 0 clamp(18px, 1.9vw, 26px);
+  padding-bottom: 13px;
+  border-bottom: 1px solid var(--sv-border-light-strong);
+}
+body.strategy-page #risk .st-risk__cell-head h3 {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: 500 clamp(16px, 1.15vw, 18px)/1.28 var(--sv-font);
+  letter-spacing: -0.01em;
+  color: var(--sv-ink);
+}
+
+/* Lists */
+body.strategy-page #risk .st-risk__col ul { list-style: none; margin: 0; padding: 0; }
+body.strategy-page #risk .st-risk__col li {
+  position: relative;
+  padding-left: 20px;
+  margin: 0 0 14px;
+  font: 400 clamp(14px, 1vw, 15px)/1.58 var(--sv-font);
+  color: var(--sv-ink-2);
+}
+body.strategy-page #risk .st-risk__col li:last-child { margin-bottom: 0; }
+body.strategy-page #risk .st-risk__col li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 9px;
+  width: 9px;
+  height: 1.5px;
+  background: var(--sv-cinnabar);
+}
+
+/* Recovery-risk panel — the one cinnabar fill on the page */
+body.strategy-page #risk .st-risk__panel {
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(158deg, #C4382A 0%, #A83124 100%);
+  color: var(--sv-ivory);
+}
+body.strategy-page #risk .st-risk__panel .st-risk__cell-head {
+  border-bottom-color: rgba(252, 249, 241, 0.28);
+}
+body.strategy-page #risk .st-risk__panel-title {
+  color: var(--sv-ivory);
+}
+body.strategy-page #risk .st-risk__panel-tag {
+  flex: none;
+  font: 600 10px/1 var(--sv-font);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sv-faint-on-cinnabar, rgba(252, 249, 241, 0.72));
+}
+body.strategy-page #risk .st-risk__panel-body {
+  margin: 0;
+  max-width: 44ch;
+  font: 400 clamp(14px, 1vw, 15px)/1.62 var(--sv-font);
+  color: var(--sv-meta-on-cinnabar, rgba(252, 249, 241, 0.9));
+}
+body.strategy-page #risk .st-risk__panel-body + .st-risk__panel-body { margin-top: 14px; }
+
+@media (max-width: 900px) {
+  body.strategy-page #risk .st-risk {
+    grid-template-columns: 1fr;
+    box-shadow: inset 0 0 0 1px var(--sv-border-light-strong);
+  }
+  body.strategy-page #risk .st-risk__cols { grid-template-columns: 1fr; }
+  body.strategy-page #risk .st-risk__col {
+    border-right: 0;
+    border-bottom: 1px solid var(--sv-border-light);
+  }
+}

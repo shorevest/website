@@ -286,7 +286,9 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
     <div class="st-risk">
       <div class="st-risk__cols">
         <div class="st-risk__col">
-          <h3>承销控制</h3>
+          <div class="st-risk__cell-head">
+            <h3>承销控制</h3>
+          </div>
           <ul>
             <li>审慎的入场基础，并采用压力情境下的回收假设。</li>
             <li>第一顺位债权，并在中国法文件下进行可执行性审查。</li>
@@ -294,7 +296,9 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
           </ul>
         </div>
         <div class="st-risk__col">
-          <h3>投资组合控制</h3>
+          <div class="st-risk__cell-head">
+            <h3>投资组合控制</h3>
+          </div>
           <ul>
             <li>按借款人、抵押品、省份及投资年份进行分散。</li>
             <li>自寻源至处置期间持续监控。</li>
@@ -302,11 +306,15 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
           </ul>
         </div>
       </div>
-      <div class="st-risk__panel">
-        <p class="st-risk__panel-label">承销方针</p>
-        <p class="st-risk__panel-title">抵押品优先</p>
-        <p class="st-risk__panel-body">每一项头寸均围绕法律控制、抵押品覆盖与可回收性进行承销，而非围绕利差、再融资或市场方向。</p>
-      </div>
+      <aside class="st-risk__panel" aria-label="风险管理">
+        <div class="st-risk__cell-head st-risk__panel-head">
+          <h3 class="st-risk__panel-title">抵押品优先</h3>
+          <span class="st-risk__panel-tag">承销方针</span>
+        </div>
+        <div class="st-risk__panel-body-wrap">
+          <p class="st-risk__panel-body">每一项头寸均围绕法律控制、抵押品覆盖与可回收性进行承销，而非围绕利差、再融资或市场方向。</p>
+        </div>
+      </aside>
     </div>
   </div>
 </section>

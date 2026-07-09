@@ -256,7 +256,9 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
     <div class="st-risk">
       <div class="st-risk__cols">
         <div class="st-risk__col">
-          <h3>Transaction-level considerations</h3>
+          <div class="st-risk__cell-head">
+            <h3>Transaction-level considerations</h3>
+          </div>
           <ul>
             <li>Entry terms are assessed against downside cases and expected recovery value.</li>
             <li>Claim priority, documentation and enforceability are reviewed under applicable law.</li>
@@ -265,7 +267,9 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
           </ul>
         </div>
         <div class="st-risk__col">
-          <h3>Portfolio-level considerations</h3>
+          <div class="st-risk__cell-head">
+            <h3>Portfolio-level considerations</h3>
+          </div>
           <ul>
             <li>Concentration, duration and execution risk are considered in portfolio construction.</li>
             <li>Investments are monitored through repayment, restructuring, sale or other resolution.</li>
@@ -274,10 +278,14 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
         </div>
       </div>
       <aside class="st-risk__panel" aria-label="Risk qualification">
-        <p class="st-risk__panel-label">Risk qualification</p>
-        <h3 class="st-risk__panel-title">Recovery risk</h3>
-        <p class="st-risk__panel-body">Recovery remains subject to legal, commercial, market and enforcement risk.</p>
-        <p class="st-risk__panel-body">ShoreVest underwrites around legal control, collateral coverage where applicable and recoverability, rather than relying principally on growth assumptions or market direction.</p>
+        <div class="st-risk__cell-head st-risk__panel-head">
+          <h3 class="st-risk__panel-title">Recovery risk</h3>
+          <span class="st-risk__panel-tag">Risk qualification</span>
+        </div>
+        <div class="st-risk__panel-body-wrap">
+          <p class="st-risk__panel-body">Recovery remains subject to legal, commercial, market and enforcement risk.</p>
+          <p class="st-risk__panel-body">ShoreVest underwrites around legal control, collateral coverage where applicable and recoverability, rather than relying principally on growth assumptions or market direction.</p>
+        </div>
       </aside>
     </div>
   </div>
