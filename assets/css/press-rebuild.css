@@ -410,38 +410,68 @@ body.press-page .pr-hero-media img {
 }
 
 /* ==========================================================================
-   Media hero (2026-07-08) — the hero itself now reuses the homepage layered
-   system (.sv-hero in homepage-rebuild.css; body carries .homepage). Only
-   media-specific adjustments live here: the photograph renders greyscale,
-   and the proof band follows the hero directly.
+   Media hero (2026-07-09) — full-bleed conference photograph as the hero
+   background, with the heading set inside a paper card. Overrides the
+   homepage two-column grid the hero would otherwise inherit.
    ========================================================================== */
-/* The base photograph fills the cinnabar field edge-to-edge, so no bare red
-   corners show; the field's oxide edge (from the homepage system) then reads
-   as a deliberate architectural stripe rather than a gap. */
-body.press-page .sv-hero__field { padding: 0; align-items: stretch; justify-content: stretch; }
-body.press-page .sv-hero__image {
-  position: relative; width: 100%; height: 100%;
-  align-self: stretch; overflow: hidden;
-  border-radius: 14px;
+body.press-page .media-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #0c1a1e;
 }
-body.press-page .sv-hero__image img {
+/* The conference photograph fills the whole hero; the vertical crop favours
+   the speaker's face and upper body. */
+body.press-page .media-hero__bg {
+  position: absolute; inset: 0; z-index: 0;
   display: block; width: 100%; height: 100%;
-  object-fit: cover; object-position: center 26%;
-  filter: grayscale(1) contrast(1.03);
+  object-fit: cover; object-position: center 16%;
 }
-/* A single portrait inset — clean white frame, restrained shadow — keeps a
-   human presence without the floating, over-shadowed look. */
-body.press-page .sv-hero__image img.sv-hero__image-overlay {
-  position: absolute; z-index: 2;
-  right: clamp(14px, 2.4vw, 26px);
-  bottom: clamp(14px, 2.4vw, 26px);
-  width: clamp(140px, 34%, 250px);
-  height: auto; aspect-ratio: 4 / 5;
-  object-fit: cover; object-position: center 18%;
-  border: 4px solid #FFFFFF;
-  border-radius: 10px;
-  box-shadow: 0 8px 20px rgba(20, 24, 24, 0.20);
+/* Warm scrim, heavier on the left so the paper card sits over quiet tone
+   while the speaker stays visible on the right. */
+body.press-page .media-hero::after {
+  content: ""; position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(90deg,
+    rgba(10, 22, 26, 0.66) 0%,
+    rgba(10, 22, 26, 0.36) 46%,
+    rgba(10, 22, 26, 0.00) 74%);
 }
+body.press-page .media-hero .sv-hero__inner {
+  position: relative; z-index: 2;
+  display: block;                 /* drop the inherited 12-column grid */
+  min-height: clamp(520px, 62vh, 660px);
+  padding-block: clamp(72px, 9vw, 116px);
+}
+/* The heading card — ivory paper, cinnabar edge, lifted off the photograph. */
+body.press-page .media-hero__box {
+  max-width: 560px;
+  padding: clamp(30px, 3.4vw, 46px);
+  background: rgba(250, 246, 238, 0.96);
+  border-left: 4px solid var(--sv-cinnabar);
+  border-radius: 4px;
+  box-shadow: 0 26px 60px rgba(8, 16, 18, 0.36);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+}
+body.press-page .media-hero__box .sv-hero__label {
+  margin: 0 0 14px; color: var(--sv-cinnabar);
+}
+body.press-page .media-hero__box .sv-hero__headline { margin: 0; }
+body.press-page .media-hero__box .sv-hero__body { max-width: none; }
+
+@media (max-width: 720px) {
+  body.press-page .media-hero__bg { object-position: center 14%; }
+  body.press-page .media-hero .sv-hero__inner {
+    min-height: 0; padding-block: clamp(48px, 12vw, 72px);
+  }
+  body.press-page .media-hero::after {
+    background: linear-gradient(180deg,
+      rgba(10, 22, 26, 0.28) 0%,
+      rgba(10, 22, 26, 0.52) 100%);
+  }
+  body.press-page .media-hero__box { max-width: none; padding: 26px 22px; }
+}
+
 body.press-page .pr-open { padding-block: 0; }
 body.press-page .pr-proof-band { margin-top: 0; }
 
