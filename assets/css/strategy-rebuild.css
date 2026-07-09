@@ -657,6 +657,15 @@ body.strategy-page .sx-hero__image {
 body.strategy-page .sx-hero__image img {
   display: block; width: 100%; height: 100%;
   object-fit: cover; object-position: center;
+  filter: grayscale(1);
+  transition: filter 320ms ease;
+}
+body.strategy-page .sx-hero__media:hover .sx-hero__image img,
+body.strategy-page .sx-hero__media:focus-within .sx-hero__image img {
+  filter: grayscale(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  body.strategy-page .sx-hero__image img { transition: none; }
 }
 @media (max-width: 880px) {
   body.strategy-page .sx-hero__top { grid-template-columns: 1fr; gap: 36px; }
