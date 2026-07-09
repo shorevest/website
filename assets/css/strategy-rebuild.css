@@ -808,3 +808,57 @@ body.strategy-page .sv-flow__body {
     max-width: none;
   }
 }
+
+/* ==========================================================================
+   2026-07-09 · Clarity & polish pass
+   Three focused refinements for a cleaner, easier-to-follow read:
+   (1) number the three strategies so the "three strategies" set is scannable,
+   (2) tighten the loose vertical gap under the sub-strategies heading, and
+   (3) make the risk block read as one crisp, contained unit with a
+       full-height downside panel.
+   Last-in-file so these resolve the cascade cleanly.
+   ========================================================================== */
+
+/* (1) Numbered strategy rows — the left cell now stacks an accent index above
+   the title. The index anchors while the title slides on hover, giving the
+   rows a quiet editorial rhythm without adding new decorative rules. */
+body.strategy-page .st-sleeve__lead {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 1.2vw, 18px);
+  align-self: start;
+}
+body.strategy-page .st-sleeve__no {
+  font: 500 14px/1 var(--sv-font);
+  letter-spacing: 0.18em;
+  font-variant-numeric: tabular-nums;
+  color: var(--sv-cinnabar);
+}
+body.strategy-page .st-sleeve__lead .st-sleeve__title {
+  margin: 0;
+}
+
+/* (2) Sub-strategies — remove the floating rule under the heading and pull the
+   underwriting panel up so the section reads as one continuous thought. */
+body.strategy-page #sub-strategies .st-head {
+  padding-bottom: 0;
+  border-bottom: 0;
+  margin-bottom: clamp(30px, 3.4vw, 46px);
+}
+
+/* (3) Risk block — a single crisp frame with a full-height downside panel. */
+body.strategy-page .st-risk {
+  box-shadow: inset 0 0 0 1px var(--sv-border-light-strong);
+}
+body.strategy-page .st-risk__panel {
+  align-self: stretch;
+  min-height: 100%;
+  justify-content: flex-start;
+}
+@media (max-width: 900px) {
+  body.strategy-page .st-risk__panel {
+    align-self: auto;
+  }
+}
