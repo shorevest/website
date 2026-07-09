@@ -430,7 +430,7 @@ body.insights-page .cdd-hero__panel {
   bottom: clamp(44px, 4.2vw, 66px);
   width: min(380px, 78%);
   align-self: auto;
-  background: var(--sv-ivory, #FCF9F1);
+  background: #FFFFFF;
   border: 1px solid rgba(82, 71, 54, 0.18);
   border-top: 1px solid rgba(82, 71, 54, 0.18);
   padding: clamp(24px, 2.4vw, 34px);
