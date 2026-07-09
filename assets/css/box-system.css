@@ -120,24 +120,56 @@ body.firm-page .fm-statcard.svb--band .svb-stat__v { color: var(--sv-ink); }
 body.firm-page .fm-statcard.svb--band .svb-stat__c { color: var(--svb-muted); }
 body.firm-page .fm-statcard.svb--band .svb-stats--row .svb-stat { border-left-color: var(--svb-divider); }
 
-/* Firm · "A human business" closing → 03 Offset (kept inside .sv-shell) */
+/* Firm · relationship closing → centered editorial trust panel. */
 body.firm-page .fm-close__inner.svb {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: clamp(24px, 4vw, 64px);
+  display: flex;
+  justify-content: center;
   border-left: 0;
-  padding-left: 0;
+  padding-left: var(--pad-x, clamp(24px, 8.9vw, 182px));
 }
 body.firm-page .fm-close__inner .svb--offset {
-  grid-column: 2 / -1;
-  width: auto;
-  margin-inline: 0;
+  width: min(100%, 980px);
+  margin-inline: auto;
+  padding: clamp(18px, 2.2vw, 30px);
+  background:
+    linear-gradient(135deg, rgba(122, 175, 175, 0.18), rgba(122, 175, 175, 0) 42%),
+    var(--sv-stone);
   box-sizing: border-box;
+  text-align: center;
 }
-body.firm-page .fm-close__inner .svb-card { max-width: none; }
-body.firm-page .fm-close__inner .svb-statement { max-width: none; }
+body.firm-page .fm-close__inner .svb-card {
+  position: relative;
+  max-width: none;
+  padding: clamp(36px, 4.8vw, 70px) clamp(28px, 5vw, 82px);
+  border-left: 0;
+  border-top: 4px solid var(--sv-cinnabar);
+  box-shadow: 0 18px 48px rgba(23, 28, 28, 0.10);
+}
+body.firm-page .fm-close__inner .svb-card::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: clamp(20px, 2vw, 28px);
+  width: clamp(46px, 5vw, 72px);
+  height: 2px;
+  transform: translateX(-50%);
+  background: var(--sv-qing-light, #7AAFAF);
+}
+body.firm-page .fm-close__inner .svb-label {
+  margin-bottom: clamp(18px, 2vw, 26px);
+  text-align: center;
+}
+body.firm-page .fm-close__inner .svb-statement {
+  max-width: 760px;
+  margin-inline: auto;
+  text-align: center;
+  font-size: clamp(24px, 2.8vw, 38px);
+  line-height: 1.28;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
 @media (max-width: 880px) {
-  body.firm-page .fm-close__inner.svb { display: block; }
+  body.firm-page .fm-close__inner.svb { display: flex; }
   body.firm-page .fm-close__inner .svb--offset { width: 100%; }
 }
 
