@@ -56,15 +56,17 @@ html body.team-page-v2 .team-hero .team-inner {
   z-index: 1;
   max-width: var(--tr-max);
   margin-inline: auto;
-  padding: clamp(64px, 7vw, 104px) var(--pad-x, clamp(24px, 5vw, 48px))
+  padding: clamp(50px, 6vw, 90px) var(--pad-x, clamp(24px, 5vw, 48px))
     clamp(64px, 7vw, 104px);
 }
 
 html body.team-page-v2 .team-hero__layout {
   display: grid !important;
-  grid-template-columns: 1.05fr 0.95fr !important;
+  /* Right column fixed to the homepage hero square width so the cinnabar box
+     reads as the same 1:1 square, in the same position, as the homepage. */
+  grid-template-columns: minmax(0, 1fr) min(570px, 48vw) !important;
   gap: clamp(32px, 5vw, 80px) !important;
-  align-items: stretch !important;
+  align-items: start !important;
 }
 
 /* ---- left: editorial intro (sans, ink) ------------------------------- */
@@ -121,7 +123,12 @@ html body.team-page-v2 .team-hero__proof {
   align-items: center;
   justify-content: flex-start;
   gap: 0 !important;
-  padding: clamp(36px, 4vw, 60px) 0 clamp(36px, 4vw, 60px)
+  /* 1:1 square matching the homepage hero image square. Vertical padding is
+     kept modest so the stat card fits inside the square without forcing it
+     taller than 1:1. */
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  padding: clamp(22px, 2.4vw, 34px) 0 clamp(22px, 2.4vw, 34px)
     clamp(32px, 3.6vw, 60px) !important;
   background: linear-gradient(
     152deg,
@@ -147,7 +154,7 @@ html body.team-page-v2 .team-hero__statcard {
   z-index: 1;
   width: 100%;
   max-width: 360px;
-  margin: clamp(24px, 3vw, 44px) 0;
+  margin: clamp(12px, 1.6vw, 22px) 0;
   padding: clamp(24px, 2.6vw, 34px) clamp(24px, 2.6vw, 32px)
     clamp(10px, 1.4vw, 16px);
   background: #fcfaf4;
@@ -445,6 +452,7 @@ html body.team-page-v2 .team-profile__linkedin:hover::after {
     grid-template-columns: 1fr !important;
   }
   html body.team-page-v2 .team-hero__proof {
+    aspect-ratio: auto;
     padding: clamp(28px, 6vw, 44px) var(--tr-gutter) !important;
     margin-top: clamp(28px, 5vw, 44px);
   }
@@ -507,8 +515,8 @@ html body.team-page-v2 .team-groups .team-inner {
 html body.team-page-v2 .group,
 html body.team-page-v2 .group:first-child {
   margin: 0 !important;
-  padding-block: var(--tr-section-y) !important;
-  border-top: 1px solid var(--tr-border-soft) !important;
+  padding-block: clamp(34px, 5vw, 70px) !important;
+  border-top: 0 !important;
   background: transparent !important;
 }
 
@@ -526,23 +534,28 @@ html body.team-page-v2 .group::before {
 }
 
 html body.team-page-v2 .group__head {
+  position: relative !important;
   display: grid !important;
-  grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
-  column-gap: clamp(32px, 4vw, 64px) !important;
-  row-gap: clamp(14px, 2vw, 24px) !important;
-  align-items: start !important;
-  margin: 0 0 clamp(30px, 4vw, 48px) !important;
-  padding: 0 0 clamp(22px, 2.6vw, 34px) !important;
-  border-bottom: 1px solid var(--tr-border) !important;
+  grid-template-columns: minmax(220px, 0.72fr) minmax(0, 1.28fr) !important;
+  column-gap: clamp(34px, 5vw, 78px) !important;
+  row-gap: clamp(18px, 2vw, 26px) !important;
+  align-items: center !important;
+  margin: 0 0 clamp(34px, 4.2vw, 58px) !important;
+  padding: clamp(40px, 5vw, 72px) clamp(42px, 6vw, 90px) !important;
+  border: 0 !important;
+  border-left: 5px solid var(--tr-cinnabar) !important;
+  background: #fff !important;
+  box-shadow: 0 24px 56px rgba(24, 32, 34, 0.10) !important;
 }
 
 html body.team-page-v2 .group__head-main {
-  grid-column: 1 / span 4;
+  grid-column: auto;
+  min-width: 0;
 }
 
 html body.team-page-v2 .sv-section-title {
   margin: 0 !important;
-  max-width: 12ch;
+  max-width: 13ch;
   font: 500 clamp(28px, 3vw, 40px) / 1.12 var(--tr-font) !important;
   letter-spacing: -0.018em !important;
   color: var(--tr-ink) !important;
@@ -550,16 +563,14 @@ html body.team-page-v2 .sv-section-title {
 }
 
 html body.team-page-v2 .group__summary {
-  grid-column: 6 / -1;
+  grid-column: auto;
   justify-self: start;
+  width: 100%;
   margin: 0 !important;
-  max-width: 54ch !important;
-  padding: clamp(14px, 1.5vw, 20px) clamp(18px, 2vw, 26px) !important;
+  max-width: 64ch !important;
+  padding: 0 !important;
   border: 0 !important;
-  border-left: 3px solid var(--tr-cinnabar) !important;
-  background: #fff !important;
-  box-shadow: 0 14px 34px rgba(24, 32, 34, 0.08) !important;
-  font: 400 clamp(14px, 0.98vw, 16px) / 1.58 var(--tr-font) !important;
+  font: 400 clamp(19px, 1.75vw, 27px) / 1.55 var(--tr-font) !important;
   color: var(--tr-ink-2) !important;
   text-align: left !important;
 }
@@ -776,17 +787,20 @@ html body.team-page-v2 .team-bio-panel__body p + p {
 }
 
 @media (max-width: 1180px) {
-  html body.team-page-v2 .group__head,
+  html body.team-page-v2 .group__head {
+    grid-template-columns: minmax(190px, 0.65fr) minmax(0, 1.35fr) !important;
+    column-gap: clamp(28px, 4vw, 54px) !important;
+    padding-inline: clamp(34px, 5vw, 60px) !important;
+  }
+
   html body.team-page-v2 .team-bio-panel {
     grid-template-columns: repeat(8, minmax(0, 1fr)) !important;
   }
 
-  html body.team-page-v2 .group__head-main,
   html body.team-page-v2 .team-bio-panel__meta {
     grid-column: 1 / span 3;
   }
 
-  html body.team-page-v2 .group__summary,
   html body.team-page-v2 .team-bio-panel__body {
     grid-column: 4 / -1;
   }
@@ -815,6 +829,10 @@ html body.team-page-v2 .team-bio-panel__body p + p {
   html body.team-page-v2 .group__head,
   html body.team-page-v2 .team-bio-panel {
     grid-template-columns: 1fr !important;
+  }
+
+  html body.team-page-v2 .group__head {
+    padding: clamp(28px, 8vw, 40px) clamp(24px, 7vw, 34px) !important;
   }
 
   html body.team-page-v2 .group__head-main,
@@ -875,8 +893,6 @@ html body.team-page-v2 :is(
 
 html body.team-page-v2 :is(
   .group__head,
-  .team-hero__proof,
-  .team-hero__proof article,
   .team-bio-panel,
   .team-profile,
   .team-profile__media,
@@ -886,6 +902,33 @@ html body.team-page-v2 :is(
   border-top: 0 !important;
   border-bottom: 0 !important;
   background-image: none !important;
+}
+
+/* Keep the Team hero stats card/box intact while removing the unrelated
+   decorative horizontal rules from the rest of the page. */
+html body.team-page-v2 .team-hero__proof {
+  border: 0 !important;
+  background-image: linear-gradient(
+    152deg,
+    var(--tr-cinnabar-lt) 0%,
+    var(--tr-cinnabar) 52%,
+    var(--tr-oxblood) 100%
+  ) !important;
+}
+
+html body.team-page-v2 .team-hero__statcard {
+  background: #fcfaf4 !important;
+  border: 1px solid rgba(30, 30, 26, 0.16) !important;
+  box-shadow: 0 18px 45px rgba(30, 30, 26, 0.12);
+}
+
+html body.team-page-v2 .team-hero__statcard-label,
+html body.team-page-v2 .team-hero__proof article {
+  border-bottom: 1px solid var(--tr-border) !important;
+}
+
+html body.team-page-v2 .team-hero__proof article:last-child {
+  border-bottom: 0 !important;
 }
 
 /* Follow-up: remove remaining horizontal cinnabar rules from Team content. */

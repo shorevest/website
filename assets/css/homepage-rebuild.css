@@ -482,14 +482,29 @@ body.homepage .sv-bridge__body p {
    Overrides the shared .sv-bridge layout for this one section without touching
    the Strategy page's .sv-bridge.st-band Recovery section or any other page.
    ========================================================================== */
-body.homepage .home-firm-preview { background: var(--sv-ivory); padding-block: clamp(76px, 7.8vw, 108px); }
+body.homepage .home-firm-preview {
+  background:
+    radial-gradient(circle at 14% 22%, rgba(201, 59, 42, 0.07), transparent 28%),
+    linear-gradient(180deg, var(--sv-ivory) 0%, #F8F1E3 100%);
+  padding-block: clamp(76px, 7.8vw, 108px);
+}
 
 /* The whole block sits inside a thin warm ruled band: top + bottom boundary,
    both columns aligned to the upper rule. */
 body.homepage .home-firm-preview .home-firm-preview__grid {
   align-items: stretch;
   border-top: 2px solid var(--sv-cinnabar);
+  border-bottom: 1px solid var(--sv-border-light-strong);
   padding-block: clamp(42px, 4.2vw, 60px);
+  position: relative;
+}
+body.homepage .home-firm-preview .home-firm-preview__grid::after {
+  content: "";
+  position: absolute;
+  inset: clamp(42px, 4.2vw, 60px) calc(var(--pad-x) * -0.25) auto auto;
+  width: clamp(120px, 18vw, 230px);
+  height: 1px;
+  background: rgba(201, 59, 42, 0.36);
 }
 
 /* Left — eyebrow + heading (cols 1–6), anchored to the upper rule. */
@@ -514,6 +529,27 @@ body.homepage .home-firm-preview .home-firm-preview__statement p {
   width: 100%;
   font: 400 clamp(18px, 1.5vw, 21px)/1.62 var(--sv-font); color: var(--sv-ink-2);
 }
+body.homepage .home-firm-preview .home-firm-preview__proof {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  margin-top: clamp(28px, 3vw, 42px);
+  border-top: 1px solid var(--sv-border-light-strong);
+  border-bottom: 1px solid var(--sv-border-light);
+}
+body.homepage .home-firm-preview .home-firm-preview__proof span {
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  padding: 18px 18px 18px 0;
+  border-right: 1px solid var(--sv-border-light);
+  font: 600 12px/1.35 var(--sv-font);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--sv-ink);
+}
+body.homepage .home-firm-preview .home-firm-preview__proof span:not(:first-child) { padding-left: 18px; }
+body.homepage .home-firm-preview .home-firm-preview__proof span:last-child { border-right: 0; }
 body.homepage .home-firm-preview .home-firm-preview__link {
   margin-top: auto; padding-top: clamp(28px, 3vw, 44px);
   align-self: flex-start;
@@ -530,31 +566,42 @@ body.homepage .home-firm-preview .home-firm-preview__link {
   body.homepage .home-firm-preview { padding-block: clamp(64px, 12vw, 96px); }
   body.homepage .home-firm-preview .home-firm-preview__grid { padding-block: clamp(32px, 7vw, 44px); }
   body.homepage .home-firm-preview .home-firm-preview__statement { margin-top: 24px; }
+  body.homepage .home-firm-preview .home-firm-preview__proof { grid-template-columns: 1fr; }
+  body.homepage .home-firm-preview .home-firm-preview__proof span,
+  body.homepage .home-firm-preview .home-firm-preview__proof span:not(:first-child) { padding-left: 0; border-right: 0; border-bottom: 1px solid var(--sv-border-light); min-height: 58px; }
+  body.homepage .home-firm-preview .home-firm-preview__proof span:last-child { border-bottom: 0; }
 }
 
 /* ==========================================================================
    E · STRATEGY (memo)
    ========================================================================== */
-body.homepage .sv-strategy { background: var(--sv-stone); }
+body.homepage .sv-strategy {
+  background:
+    linear-gradient(135deg, rgba(252, 249, 241, 0.76) 0%, rgba(241, 235, 221, 0) 46%),
+    var(--sv-stone);
+}
 body.homepage .sv-strategy__inner { padding-block: var(--section-y); align-items: start; }
 body.homepage .sv-strategy__lead { grid-column: 1 / 6; }
 body.homepage .sv-strategy__lead .sv-h2 { margin: 16px 0 22px; }
 body.homepage .sv-strategy__lead p:not(.sv-label) { margin: 0 0 26px; max-width: 44ch; font: 400 16px/1.66 var(--sv-font); color: var(--sv-ink-2); }
 body.homepage .sv-strategy__rows { grid-column: 7 / 13; }
-body.homepage .sv-strategy__rows { display: flex; flex-direction: column; gap: 0; border-top: 2px solid var(--sv-cinnabar); }
+body.homepage .sv-strategy__rows { display: flex; flex-direction: column; gap: 0; border-top: 2px solid var(--sv-cinnabar); box-shadow: 0 1px 0 var(--sv-border-light-strong); }
 body.homepage .sv-srow {
-  display: flex; align-items: center;
-  min-height: 82px;
+  display: grid; grid-template-columns: 52px minmax(0, 1fr) auto; align-items: center; gap: 22px;
+  min-height: 112px;
   padding: clamp(22px, 2.2vw, 30px) clamp(20px, 2vw, 28px);
   border-bottom: 1px solid var(--sv-border-light-strong);
   position: relative;
   overflow: hidden;
   isolation: isolate;
-  cursor: default;
+  cursor: pointer;
+  text-decoration: none;
+  background: rgba(252, 249, 241, 0.34);
   transition:
     background-color 260ms ease,
     border-color 260ms ease,
-    transform 260ms ease;
+    transform 260ms ease,
+    box-shadow 260ms ease;
 }
 body.homepage .sv-srow::before {
   content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
@@ -579,8 +626,9 @@ body.homepage .sv-srow::after {
 }
 body.homepage .sv-srow:hover,
 body.homepage .sv-srow:focus-within {
-  background-color: rgba(252, 249, 241, 0.42);
+  background-color: rgba(252, 249, 241, 0.72);
   border-bottom-color: rgba(201, 59, 42, 0.32);
+  box-shadow: 0 18px 42px rgba(24, 37, 36, 0.07);
 }
 body.homepage .sv-srow:hover::before,
 body.homepage .sv-srow:focus-within::before {
@@ -591,11 +639,17 @@ body.homepage .sv-srow:focus-within::after {
   opacity: 1;
   transform: translateX(0);
 }
-body.homepage .sv-srow__title {
+body.homepage .sv-srow__index {
   position: relative;
   z-index: 2;
+  font: 600 12px/1 var(--sv-font);
+  letter-spacing: 0.12em;
+  color: var(--sv-cinnabar);
+}
+body.homepage .sv-srow__content { position: relative; z-index: 2; display: block; }
+body.homepage .sv-srow__title {
   margin: 0;
-  font: 500 21px/1.2 var(--sv-font);
+  font: 500 22px/1.2 var(--sv-font);
   letter-spacing: -0.012em;
   color: var(--sv-ink);
   transition:
@@ -607,7 +661,25 @@ body.homepage .sv-srow:focus-within .sv-srow__title {
   color: var(--sv-cinnabar-d);
   transform: translateX(10px);
 }
-body.homepage .sv-srow__body { margin: 0; font: 400 15.5px/1.6 var(--sv-font); color: var(--sv-ink-2); }
+body.homepage .sv-srow__body { display: block; margin-top: 9px; max-width: 50ch; font: 400 15.5px/1.56 var(--sv-font); color: var(--sv-ink-2); }
+body.homepage .sv-srow__arrow {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--sv-border-light-strong);
+  color: var(--sv-cinnabar);
+  transition: transform 260ms ease, border-color 260ms ease, background 260ms ease;
+}
+body.homepage .sv-srow:hover .sv-srow__arrow,
+body.homepage .sv-srow:focus-within .sv-srow__arrow {
+  transform: translateX(4px);
+  border-color: var(--sv-cinnabar);
+  background: rgba(201, 59, 42, 0.08);
+}
 
 /* ==========================================================================
    F · EXECUTION MODEL (workflow)
@@ -667,7 +739,12 @@ body.homepage .sv-platform__proof {
 /* ==========================================================================
    H · CHINA DEBT DYNAMICS (dark research archive)
    ========================================================================== */
-body.homepage .sv-cdd { background: var(--sv-dark); color: var(--sv-text-on-dark); }
+body.homepage .sv-cdd {
+  background:
+    radial-gradient(circle at 82% 18%, rgba(200, 154, 46, 0.12), transparent 28%),
+    linear-gradient(145deg, #1A1B18 0%, #20211F 58%, #161715 100%);
+  color: var(--sv-text-on-dark);
+}
 body.homepage .sv-cdd__inner { padding-block: var(--section-y); }
 body.homepage .sv-cdd__head {
   display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: clamp(24px, 4vw, 64px);
@@ -684,10 +761,13 @@ body.homepage .sv-cdd__desc { margin: 0; font: 400 16px/1.66 var(--sv-font); col
    issue" emphasis), so it no longer competes with the cinnabar CTAs. */
 body.homepage .sv-cdd__feature {
   display: grid; grid-template-columns: 200px minmax(0,1fr); gap: clamp(20px, 3vw, 56px);
-  padding: clamp(28px,3vw,40px) 0; margin-top: clamp(28px,3vw,40px);
+  padding: clamp(28px,3vw,40px); margin-top: clamp(28px,3vw,40px);
   border-top: 1px solid var(--sv-gold, #C89A2E);
   border-bottom: 1px solid var(--sv-border-dark);
+  border-left: 1px solid rgba(200, 154, 46, 0.4);
+  background: rgba(252, 249, 241, 0.035);
   text-decoration: none; color: inherit;
+  transition: background .18s ease, border-color .18s ease, transform .18s ease;
 }
 body.homepage .sv-cdd__feature-meta { display: flex; flex-direction: column; gap: 10px; }
 body.homepage .sv-cdd__feature-tag { font: 600 11px/1 var(--sv-font); letter-spacing: 0.16em; text-transform: uppercase; color: var(--sv-gold, #C89A2E); }
@@ -696,6 +776,7 @@ body.homepage .sv-cdd__feature-title { margin: 0 0 14px; font: 500 clamp(22px,2.
 body.homepage .sv-cdd__feature-body { margin: 0 0 18px; font: 400 15.5px/1.6 var(--sv-font); color: var(--sv-meta-on-dark); max-width: 60ch; }
 body.homepage .sv-cdd__feature-read { font: 600 12px/1 var(--sv-font); letter-spacing: 0.1em; text-transform: uppercase; color: var(--sv-ivory); }
 body.homepage .sv-cdd__feature-read span { color: var(--sv-gold, #C89A2E); }
+body.homepage .sv-cdd__feature:hover { background: rgba(252, 249, 241, 0.06); border-left-color: var(--sv-gold, #C89A2E); transform: translateY(-2px); }
 body.homepage .sv-cdd__feature:hover .sv-cdd__feature-title { color: #E8C9C2; }
 
 /* Archive table */
@@ -736,48 +817,82 @@ body.homepage .sv-cdd { border-bottom: 3px solid var(--sv-cinnabar); }
    I · FOOTER / LEGAL (dark teal)
    ========================================================================== */
 body.homepage .sv-footer { background: var(--sv-dark-footer); color: var(--sv-meta-on-dark); }
-body.homepage .sv-footer__inner { padding: 64px var(--pad-x) 30px; max-width: var(--page-max); margin-inline: auto; }
+body.homepage .sv-footer__inner { padding: clamp(52px,6vw,76px) var(--pad-x) 30px; max-width: var(--page-max); margin-inline: auto; }
 body.homepage .sv-footer__top {
-  display: grid; grid-template-columns: minmax(0,1fr) auto; gap: clamp(32px,5vw,72px);
-  align-items: start; padding-bottom: 36px; border-bottom: 1px solid var(--sv-border-dark);
+  display: grid; grid-template-columns: minmax(0,1fr) auto; gap: clamp(40px,6vw,104px);
+  align-items: start; padding-bottom: clamp(34px,4vw,44px); border-bottom: 1px solid var(--sv-border-dark);
 }
-body.homepage .sv-footer__logo img { width: 200px; height: auto; }
-body.homepage .sv-footer__offices { margin: 22px 0 0; font: 400 13.5px/1.7 var(--sv-font); color: var(--sv-meta-on-dark); }
-body.homepage .sv-footer__offices a { color: var(--sv-ivory); text-decoration: none; border-bottom: 1px solid rgba(252,249,241,0.3); }
-body.homepage .sv-footer__nav { display: grid; grid-template-columns: repeat(2, auto); gap: 10px 56px; }
+body.homepage .sv-footer__logo img { width: 190px; height: auto; display: block; }
+body.homepage .sv-footer__offices { margin: 20px 0 0; font: 400 13.5px/1.75 var(--sv-font); color: var(--sv-meta-on-dark); }
+body.homepage .sv-footer__offices a {
+  display: inline-block; margin-top: 6px;
+  color: var(--sv-ivory); text-decoration: none; border-bottom: 1px solid rgba(252,249,241,0.28);
+  transition: border-color .2s ease;
+}
+body.homepage .sv-footer__offices a:hover { border-color: var(--sv-ivory); }
+
+/* Nav: one tidy 2-column set of links; the Investor Portal "access" link is
+   folded in as the final grid item so both columns run to an even height and
+   the left brand column no longer strands a tall empty gap beside it. */
+body.homepage .sv-footer__nav {
+  display: grid; grid-template-columns: repeat(2, minmax(0, max-content));
+  gap: 12px clamp(48px, 5vw, 80px);
+}
 body.homepage .sv-footer__nav a {
-  font: 500 13px/1 var(--sv-font); letter-spacing: 0.04em;
-  color: var(--sv-meta-on-dark); text-decoration: none; padding: 5px 0; display: inline-block;
+  font: 500 13px/1 var(--sv-font); letter-spacing: 0.02em;
+  color: var(--sv-meta-on-dark); text-decoration: none; padding: 4px 0; display: inline-block;
+  transition: color .18s ease;
 }
-body.homepage .sv-footer__nav a:hover { color: var(--sv-qing-light, #7AAFAF); }
+body.homepage .sv-footer__nav a:hover { color: var(--sv-ivory); }
+/* Investor Portal — dissolve the wrapper into the nav grid and hide its label. */
+body.homepage .sv-footer__access { display: contents; }
+body.homepage .sv-footer__access-label { display: none; }
+body.homepage .sv-footer__access a {
+  font: 500 13px/1 var(--sv-font); letter-spacing: 0.02em;
+  color: var(--sv-ivory); text-decoration: none; padding: 4px 0; display: inline-flex; align-items: center; gap: 6px;
+  transition: color .18s ease;
+}
+body.homepage .sv-footer__access a::after {
+  content: "→"; font-size: 11px; opacity: .55; transition: transform .18s ease, opacity .18s ease;
+}
+body.homepage .sv-footer__access a:hover { color: var(--sv-ivory); }
+body.homepage .sv-footer__access a:hover::after { transform: translateX(3px); opacity: 1; }
+
 body.homepage .sv-footer__legal {
-  margin: 30px 0 0; padding: 24px 0 0;
-  border-top: 1px solid var(--sv-border-dark);
-  font: 400 12px/1.6 var(--sv-font); color: var(--sv-faint-on-dark);
+  margin: clamp(28px,3.5vw,38px) 0 0; padding: 0;
+  max-width: 84ch;
+  font: 400 12px/1.7 var(--sv-font); color: var(--sv-faint-on-dark);
 }
 body.homepage .sv-footer__legal p { margin: 0 0 10px; }
 body.homepage .sv-footer__legal p:last-child { margin-bottom: 0; }
 body.homepage .sv-footer__bottom {
   display: flex; flex-wrap: wrap; gap: 14px 28px; justify-content: space-between; align-items: center;
-  padding-top: 22px;
+  margin-top: clamp(28px,3.5vw,38px); padding-top: 22px;
+  border-top: 1px solid var(--sv-border-dark);
 }
 body.homepage .sv-footer__links { display: flex; flex-wrap: wrap; gap: 8px 22px; }
-body.homepage .sv-footer__links a { font: 400 12px/1 var(--sv-font); color: var(--sv-meta-on-dark); text-decoration: none; }
-body.homepage .sv-footer__links a:hover { color: var(--sv-qing-light, #7AAFAF); }
+body.homepage .sv-footer__links a {
+  font: 400 12px/1 var(--sv-font); color: var(--sv-meta-on-dark); text-decoration: none;
+  transition: color .18s ease;
+}
+body.homepage .sv-footer__links a:hover { color: var(--sv-ivory); }
 body.homepage .sv-footer__copy { font: 400 12px/1 var(--sv-font); color: var(--sv-faint-on-dark); }
 
 /* ==========================================================================
    Scroll-to-top
    ========================================================================== */
 body.homepage .sv-totop {
-  position: fixed; width: 44px; height: 44px;
-  right: max(24px, calc((100vw - var(--page-max)) / 2)); bottom: 24px;
+  position: fixed; width: 46px; height: 46px; border-radius: 999px;
+  right: max(24px, calc((100vw - var(--page-max)) / 2)); bottom: 28px;
   display: flex; align-items: center; justify-content: center;
-  background: var(--sv-ivory); border: 1px solid var(--sv-border-light-strong);
+  background: rgba(252,249,241,0.94); border: 1px solid var(--sv-border-light-strong);
   color: var(--sv-ink); cursor: pointer; z-index: 900;
-  opacity: 0; visibility: hidden; transition: opacity .2s ease, visibility .2s ease;
+  box-shadow: 0 6px 20px rgba(24,37,36,0.16);
+  opacity: 0; visibility: hidden; transform: translateY(8px);
+  transition: opacity .2s ease, visibility .2s ease, transform .2s ease, background .2s ease, color .2s ease, border-color .2s ease;
 }
-body.homepage .sv-totop.is-visible { opacity: 1; visibility: visible; }
+body.homepage .sv-totop.is-visible { opacity: 1; visibility: visible; transform: translateY(0); }
+body.homepage .sv-totop:hover { background: var(--sv-dark-footer); border-color: var(--sv-dark-footer); color: var(--sv-ivory); }
 body.homepage .sv-totop svg { width: 16px; height: 16px; }
 
 /* ==========================================================================
@@ -875,9 +990,10 @@ body.homepage .sv-totop svg { width: 16px; height: 16px; }
   body.homepage .sv-stat:not(:nth-child(1)) { border-top: 1px solid var(--sv-border-light); }
   body.homepage .sv-caps { grid-template-columns: 1fr; }
   body.homepage .sv-cap { border-right: 0; min-height: 0; }
-  body.homepage .sv-footer__nav { grid-template-columns: 1fr; }
+  body.homepage .sv-footer__nav { grid-template-columns: 1fr; gap: 0; }
   /* Enlarge footer tap targets to ~44px on mobile. */
-  body.homepage .sv-footer__nav a { padding: 13px 0; }
+  body.homepage .sv-footer__nav a,
+  body.homepage .sv-footer__access a { padding: 13px 0; }
   body.homepage .sv-footer__links { gap: 2px 22px; }
   body.homepage .sv-footer__links a { padding: 13px 0; display: inline-block; }
 }
@@ -1322,28 +1438,8 @@ body.homepage .sv-hero__panel-row dt {
   }
 }
 
-/* ==========================================================================
-   Footer "Access" group — Investor Portal + Employee Portal entry points.
-   The Employee Portal is the private ShoreVest Operations application and
-   opens in a new tab; the public site is only the entry point.
-   ========================================================================== */
-body.homepage .sv-footer__access {
-  grid-column: 1 / -1;
-  display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px 26px;
-  margin-top: 16px; padding-top: 14px;
-  border-top: 1px solid var(--sv-border-dark);
-}
-body.homepage .sv-footer__access-label {
-  margin: 0;
-  font: 700 10px/1 var(--sv-font);
-  letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--sv-faint-on-dark);
-}
-body.homepage .sv-footer__access a {
-  font: 500 13px/1 var(--sv-font); letter-spacing: 0.04em;
-  color: var(--sv-meta-on-dark); text-decoration: none; padding: 5px 0; display: inline-block;
-}
-body.homepage .sv-footer__access a:hover { color: var(--sv-qing-light, #7AAFAF); }
+/* Footer "Access" group (Investor Portal) is now folded into the footer nav
+   grid — see the .sv-footer__access rules in the FOOTER / LEGAL block above. */
 
 /* ==========================================================================
    B2 · HERO — layered editorial composition (approved 2026-07-08)
