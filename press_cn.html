@@ -544,7 +544,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
       badge.parentNode.removeChild(badge);
     }
   }
-  var INITIAL_UPCOMING_VISIBLE = 4; // 默认展示的即将举行活动数量，其余通过“查看更多”展开
+  var INITIAL_UPCOMING_VISIBLE = 3; // 默认展示的即将举行活动数量，其余通过“查看更多”展开
   function applyEventFilter(today){
     var table = document.querySelector('.pr-events__table');
     var rows = document.querySelectorAll('.pr-event-row[data-end-date]');
