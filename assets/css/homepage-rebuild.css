@@ -1472,6 +1472,7 @@ body.homepage .sv-hero__field::before {
   left: clamp(36px, 3.5vw, 56px);
   width: auto;
   background: var(--sv-cinnabar);
+  border-radius: 14px;
   z-index: 0;
 }
 body.homepage .sv-hero__image {
@@ -1479,6 +1480,7 @@ body.homepage .sv-hero__image {
   width: 100%;
   aspect-ratio: 1 / 1;
   border: 1px solid rgba(82, 71, 54, 0.18);
+  border-radius: 14px;
   background: var(--sv-stone);
   overflow: hidden;
 }
@@ -1501,6 +1503,7 @@ body.homepage .sv-hero__panel {
   background: #FFFFFF;
   border: 1px solid rgba(82, 71, 54, 0.18);
   border-top: 1px solid rgba(82, 71, 54, 0.18);
+  border-radius: 12px;
   box-shadow: 0 18px 42px rgba(23, 28, 28, 0.10);
 }
 @media (max-width: 1023px) and (min-width: 768px) {

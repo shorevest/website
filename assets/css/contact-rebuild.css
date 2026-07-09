@@ -88,6 +88,7 @@ body.contact-page .cp-route {
      panel, so their structure takes the secondary accent; only the row
      number stays cinnabar. */
   background: #FFFFFF; border-left: 3px solid var(--sv-qing, #3D7070);
+  border-radius: 10px;
   box-shadow: 0 12px 30px rgba(23, 28, 28, 0.09);
   text-decoration: none; transition: box-shadow .15s ease, transform .15s ease;
 }
