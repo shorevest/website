@@ -23,7 +23,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <script>document.write('<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260708-layered-hero-b&t='+window.__SVT+'">');</script>
-<script>document.write('<link rel="stylesheet" href="assets/css/insights-rebuild.css?v=20260709-hero-square&t='+window.__SVT+'">');</script>
+<script>document.write('<link rel="stylesheet" href="assets/css/insights-rebuild.css?v=20260709-subscribe-polish&t='+window.__SVT+'">');</script>
 <script>(function(){var T=window.__SVT;function tk(u){return u+(u.indexOf('?')>-1?'&':'?')+'t='+T;}var s=document.createElement('script');s.src=tk('assets/js/image-slot.js');document.head.appendChild(s);})();</script>
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="shortcut icon" href="/favicon.ico">
@@ -459,13 +459,17 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   <!-- 7 · SUBSCRIPTION STRIP -->
   <section class="research-sub" id="subscribe">
     <div class="research-sub__container">
-      <p class="research-sub__notice">Important notice: China Debt Dynamics is provided for informational purposes only and does not constitute investment advice, an offer to invest, or a recommendation regarding any security, fund, or transaction.</p>
+      <div class="research-sub__notice" role="note" aria-label="Important notice">
+        <span class="research-sub__notice-label">Important notice</span>
+        <p>China Debt Dynamics is provided for informational purposes only and does not constitute investment advice, an offer to invest, or a recommendation regarding any security, fund, or transaction.</p>
+      </div>
       <div class="research-sub__inner">
         <div class="research-sub__copy">
+          <span class="research-sub__eyebrow">Subscriber updates</span>
           <h3>Receive China Debt Dynamics directly</h3>
           <p>Quarterly publication updates on China's private credit markets for subscribers.</p>
         </div>
-        <form class="research-sub__form" action="index.html#signup" method="get">
+        <form class="research-sub__form" action="index.html#signup" method="get" aria-label="Subscribe to China Debt Dynamics updates">
           <label class="research-sub__field" for="subscribe-name">
             <input id="subscribe-name" name="name" type="text" autocomplete="name" placeholder="Full name" required>
           </label>
