@@ -145,16 +145,6 @@ body.firm-page .fm-close__inner .svb-card {
   border-top: 4px solid var(--sv-cinnabar);
   box-shadow: 0 18px 48px rgba(23, 28, 28, 0.10);
 }
-body.firm-page .fm-close__inner .svb-card::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: clamp(20px, 2vw, 28px);
-  width: clamp(46px, 5vw, 72px);
-  height: 2px;
-  transform: translateX(-50%);
-  background: var(--sv-qing-light, #7AAFAF);
-}
 body.firm-page .fm-close__inner .svb-label {
   margin-bottom: clamp(18px, 2vw, 26px);
   text-align: center;
