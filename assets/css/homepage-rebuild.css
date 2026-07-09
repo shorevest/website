@@ -836,19 +836,16 @@ body.homepage .sv-footer__nav a {
   transition: color .18s ease;
 }
 body.homepage .sv-footer__nav a:hover { color: var(--sv-ivory); }
-/* Investor Portal — dissolve the wrapper into the nav grid and hide its label. */
+/* Investor Portal — dissolve the wrapper into the nav grid and hide its label so it matches the other footer links. */
 body.homepage .sv-footer__access { display: contents; }
 body.homepage .sv-footer__access-label { display: none; }
 body.homepage .sv-footer__access a {
   font: 500 13px/1 var(--sv-font); letter-spacing: 0.02em;
-  color: var(--sv-ivory); text-decoration: none; padding: 4px 0; display: inline-flex; align-items: center; gap: 6px;
+  color: var(--sv-meta-on-dark); text-decoration: none; padding: 4px 0; display: inline-block;
   transition: color .18s ease;
 }
-body.homepage .sv-footer__access a::after {
-  content: "→"; font-size: 11px; opacity: .55; transition: transform .18s ease, opacity .18s ease;
-}
+body.homepage .sv-footer__access a::after { content: none; }
 body.homepage .sv-footer__access a:hover { color: var(--sv-ivory); }
-body.homepage .sv-footer__access a:hover::after { transform: translateX(3px); opacity: 1; }
 
 body.homepage .sv-footer__legal {
   margin: clamp(28px,3.5vw,38px) 0 0; padding: 0;
