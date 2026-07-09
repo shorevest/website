@@ -974,16 +974,19 @@ body.strategy-page .sv-exec__head-r {
    ========================================================================== */
 
 /* --- Shared section-head rhythm ----------------------------------------- */
+/* Follow the site grammar (homepage sv-exec__head): the deck bottom-aligns to
+   the heading baseline. That shared baseline is what keeps the support copy
+   anchored to the H2 instead of floating in the top-right corner. */
 body.strategy-page .st-head,
 body.strategy-page .sv-exec__head {
-  align-items: start;
-  column-gap: clamp(32px, 5vw, 88px);
+  align-items: end;
+  column-gap: clamp(32px, 5vw, 80px);
   margin-bottom: clamp(40px, 4.6vw, 64px);
 }
 body.strategy-page .st-head__l,
-body.strategy-page .sv-exec__head-l { grid-column: 1 / 7; }
+body.strategy-page .sv-exec__head-l { grid-column: 1 / 8; }
 body.strategy-page .st-head__r,
-body.strategy-page .sv-exec__head-r { grid-column: 7 / 13; }
+body.strategy-page .sv-exec__head-r { grid-column: 8 / 13; }
 body.strategy-page .st-head__l .sv-h2,
 body.strategy-page .sv-exec__head-l .sv-h2 { margin-top: 14px; }
 
@@ -991,25 +994,24 @@ body.strategy-page .sv-exec__head-l .sv-h2 { margin-top: 14px; }
    This is the single biggest fix for the "amateurish" feel. */
 body.strategy-page .st-head__r,
 body.strategy-page .sv-exec__head-r {
-  align-self: start;
+  align-self: end;
   background: none;
   border: 0;
   border-radius: 0;
   box-shadow: none;
   padding: 0;
-  padding-top: 8px;
-  max-width: 46ch;
+  max-width: 42ch;
 }
 body.strategy-page .st-head__r p,
 body.strategy-page .sv-exec__head-r p,
 body.strategy-page .sv-exec__intro {
   margin: 0;
-  font: 400 clamp(16px, 1.15vw, 18px)/1.66 var(--sv-font);
+  font: 400 clamp(15.5px, 1.1vw, 17px)/1.64 var(--sv-font);
   color: var(--sv-ink-2);
   max-width: none;
 }
 body.strategy-page .st-head__r p + p,
-body.strategy-page .sv-exec__head-r p + p { margin-top: 16px; }
+body.strategy-page .sv-exec__head-r p + p { margin-top: 14px; }
 
 /* --- One card style, everywhere ----------------------------------------- */
 body.strategy-page .st-reason,
@@ -1055,7 +1057,6 @@ body.strategy-page .sv-exec__head {
   padding-bottom: 0;
   border-bottom: 0;
 }
-body.strategy-page .sv-exec__head-r { padding-top: 8px; }
 body.strategy-page .sv-flow__step { min-height: clamp(200px, 17vw, 240px); }
 body.strategy-page .sv-flow__title { max-width: 12ch; }
 body.strategy-page .sv-flow__body { max-width: none; }
