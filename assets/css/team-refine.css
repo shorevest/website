@@ -533,45 +533,55 @@ html body.team-page-v2 .group::before {
   background: var(--tr-cinnabar);
 }
 
+/* Section header: title stands free (NOT boxed); only the short summary is
+   boxed and small, sitting to the right. A thin rule sets the header off from
+   the portrait grid. */
 html body.team-page-v2 .group__head {
   position: relative !important;
   display: grid !important;
-  grid-template-columns: minmax(220px, 0.72fr) minmax(0, 1.28fr) !important;
-  column-gap: clamp(34px, 5vw, 78px) !important;
-  row-gap: clamp(18px, 2vw, 26px) !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 420px) !important;
+  column-gap: clamp(28px, 4vw, 64px) !important;
+  row-gap: clamp(16px, 2vw, 22px) !important;
   align-items: center !important;
-  margin: 0 0 clamp(34px, 4.2vw, 58px) !important;
-  padding: clamp(40px, 5vw, 72px) clamp(42px, 6vw, 90px) !important;
+  margin: 0 0 clamp(30px, 3.4vw, 48px) !important;
+  padding: 0 0 clamp(20px, 2.2vw, 28px) !important;
   border: 0 !important;
-  border-left: 5px solid var(--tr-cinnabar) !important;
-  background: #fff !important;
-  box-shadow: 0 24px 56px rgba(24, 32, 34, 0.10) !important;
+  border-bottom: 1px solid var(--tr-border) !important;
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
 html body.team-page-v2 .group__head-main {
   grid-column: auto;
   min-width: 0;
+  padding-left: 16px;
+  border-left: 4px solid var(--tr-cinnabar);
 }
 
 html body.team-page-v2 .sv-section-title {
   margin: 0 !important;
-  max-width: 13ch;
-  font: 500 clamp(28px, 3vw, 40px) / 1.12 var(--tr-font) !important;
-  letter-spacing: -0.018em !important;
+  max-width: none;
+  font: 500 clamp(25px, 2.5vw, 34px) / 1.1 var(--tr-font) !important;
+  letter-spacing: -0.02em !important;
   color: var(--tr-ink) !important;
   text-align: left !important;
 }
 
+/* The only boxed element in the header — small, quiet. */
 html body.team-page-v2 .group__summary {
   grid-column: auto;
-  justify-self: start;
+  justify-self: end;
   width: 100%;
   margin: 0 !important;
-  max-width: 64ch !important;
-  padding: 0 !important;
-  border: 0 !important;
-  font: 400 clamp(19px, 1.75vw, 27px) / 1.55 var(--tr-font) !important;
-  color: var(--tr-ink-2) !important;
+  max-width: 420px !important;
+  padding: clamp(13px, 1.3vw, 17px) clamp(15px, 1.5vw, 20px) !important;
+  border: 1px solid var(--tr-border) !important;
+  border-left: 3px solid var(--tr-cinnabar) !important;
+  border-radius: 2px !important;
+  background: #fff !important;
+  box-shadow: 0 4px 14px rgba(24, 32, 34, 0.05) !important;
+  font: 400 14px / 1.5 var(--tr-font) !important;
+  color: var(--tr-muted) !important;
   text-align: left !important;
 }
 
@@ -788,9 +798,8 @@ html body.team-page-v2 .team-bio-panel__body p + p {
 
 @media (max-width: 1180px) {
   html body.team-page-v2 .group__head {
-    grid-template-columns: minmax(190px, 0.65fr) minmax(0, 1.35fr) !important;
-    column-gap: clamp(28px, 4vw, 54px) !important;
-    padding-inline: clamp(34px, 5vw, 60px) !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 360px) !important;
+    column-gap: clamp(24px, 4vw, 44px) !important;
   }
 
   html body.team-page-v2 .team-bio-panel {
@@ -840,6 +849,11 @@ html body.team-page-v2 .team-bio-panel__body p + p {
   html body.team-page-v2 .team-bio-panel__meta,
   html body.team-page-v2 .team-bio-panel__body {
     grid-column: 1 / -1;
+  }
+
+  html body.team-page-v2 .group__summary {
+    justify-self: start !important;
+    max-width: none !important;
   }
 
   html body.team-page-v2 .sv-section-title {
