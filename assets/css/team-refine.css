@@ -962,3 +962,66 @@ html body.team-page-v2 .team-bio-panel::after {
 html body.team-page-v2 .team-bio-panel {
   border-top: 0 !important;
 }
+
+/* ==========================================================================
+   Team hero homepage-alignment pass — 2026-07-09
+   Match the homepage hero's desktop height, grid alignment, proportions and
+   type rhythm so the Team opening sits like the China Private Credit masthead.
+   ========================================================================== */
+html body.team-page-v2 .team-hero.hero--team .team-inner {
+  max-width: var(--page-max, var(--tr-max)) !important;
+  padding: clamp(56px, 6vw, 88px) var(--pad-x, clamp(24px, 5vw, 48px))
+    clamp(72px, 7vw, 104px) !important;
+}
+
+html body.team-page-v2 .team-hero.hero--team .team-hero__layout {
+  display: grid !important;
+  grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+  gap: clamp(28px, 3.2vw, 44px) !important;
+  align-items: center !important;
+}
+
+html body.team-page-v2 .team-hero.hero--team .pagehero__intro {
+  grid-column: 1 / 7 !important;
+  justify-content: center !important;
+  padding-block: 0 !important;
+  padding-right: clamp(24px, 3vw, 56px) !important;
+}
+
+html body.team-page-v2 .team-hero.hero--team .team-hero__proof {
+  grid-column: 7 / 13 !important;
+  align-self: center !important;
+  aspect-ratio: 1 / 1 !important;
+  min-height: 0 !important;
+  padding: clamp(34px, 4vw, 56px) !important;
+}
+
+html body.team-page-v2 .team-hero.hero--team .eyebrow {
+  margin: 0 0 18px !important;
+  padding-top: 0 !important;
+  color: var(--tr-oxblood) !important;
+}
+
+html body.team-page-v2 .team-hero.hero--team .team-hero__title {
+  margin: 0 0 24px !important;
+  font-size: clamp(40px, 4.4vw, 60px) !important;
+  line-height: 1.06 !important;
+  max-width: 620px !important;
+}
+
+html body.team-page-v2 .team-hero.hero--team .pagehero__lede {
+  max-width: min(48ch, calc((var(--page-max, 1280px) - (2 * var(--pad-x, 48px))) / 2)) !important;
+  font-size: 17px !important;
+  line-height: 1.68 !important;
+}
+
+@media (max-width: 900px) {
+  html body.team-page-v2 .team-hero.hero--team .team-hero__layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  html body.team-page-v2 .team-hero.hero--team .pagehero__intro,
+  html body.team-page-v2 .team-hero.hero--team .team-hero__proof {
+    grid-column: auto !important;
+  }
+}
