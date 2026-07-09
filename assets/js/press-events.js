@@ -216,28 +216,65 @@
     return row;
   }
 
+  // How many upcoming events to show before the "Show more" toggle takes over.
+  var INITIAL_UPCOMING_VISIBLE = 4;
+
+  function buildDivider() {
+    var divider = document.createElement('div');
+    divider.className = 'pr-events__divider';
+    divider.setAttribute('role', 'separator');
+    divider.setAttribute('aria-label', 'Past events');
+    divider.appendChild(createTextElement('span', 'pr-events__divider-label', 'Past events'));
+    divider.appendChild(createTextElement('span', 'pr-events__divider-note',
+      'Concluded appearances remain listed for ' + eventVisibility.DISPLAY_DAYS_AFTER_END + ' days'));
+    return divider;
+  }
+
   function applyEventFilter(now) {
     var table = document.querySelector('.pr-events__table');
     var emptyEl = document.getElementById('pr-events-empty');
     if (!table || !emptyEl) return;
 
     var visibleEvents = eventVisibility.sortVisibleEvents(EVENTS, now || new Date());
-    table.querySelectorAll('.pr-event-row, .pr-events__divider').forEach(function (row) { row.remove(); });
-    var dividerInserted = false;
-    visibleEvents.forEach(function (event) {
-      if (!dividerInserted && event.status === eventVisibility.STATUS.CONCLUDED) {
-        var divider = document.createElement('div');
-        divider.className = 'pr-events__divider';
-        divider.setAttribute('role', 'separator');
-        divider.setAttribute('aria-label', 'Past events');
-        divider.appendChild(createTextElement('span', 'pr-events__divider-label', 'Past events'));
-        divider.appendChild(createTextElement('span', 'pr-events__divider-note',
-          'Concluded appearances remain listed for ' + eventVisibility.DISPLAY_DAYS_AFTER_END + ' days'));
-        table.insertBefore(divider, emptyEl);
-        dividerInserted = true;
+    table.querySelectorAll('.pr-event-row, .pr-events__divider, .pr-events__more').forEach(function (row) { row.remove(); });
+
+    var upcoming = visibleEvents.filter(function (event) { return event.status !== eventVisibility.STATUS.CONCLUDED; });
+    var past = visibleEvents.filter(function (event) { return event.status === eventVisibility.STATUS.CONCLUDED; });
+
+    var collapsedRows = [];
+    upcoming.forEach(function (event, index) {
+      var row = renderEvent(event);
+      if (index >= INITIAL_UPCOMING_VISIBLE) {
+        row.hidden = true;
+        collapsedRows.push(row);
       }
-      table.insertBefore(renderEvent(event), emptyEl);
+      table.insertBefore(row, emptyEl);
     });
+
+    if (collapsedRows.length) {
+      var wrap = document.createElement('div');
+      wrap.className = 'pr-events__more';
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'pr-events__more-btn';
+      btn.setAttribute('aria-expanded', 'false');
+      var moreLabel = 'Show ' + collapsedRows.length + ' more';
+      btn.textContent = moreLabel;
+      btn.addEventListener('click', function () {
+        var expanded = btn.getAttribute('aria-expanded') === 'true';
+        collapsedRows.forEach(function (row) { row.hidden = expanded; });
+        btn.setAttribute('aria-expanded', String(!expanded));
+        btn.textContent = expanded ? moreLabel : 'Show fewer';
+      });
+      wrap.appendChild(btn);
+      table.insertBefore(wrap, emptyEl);
+    }
+
+    if (past.length) {
+      table.insertBefore(buildDivider(), emptyEl);
+      past.forEach(function (event) { table.insertBefore(renderEvent(event), emptyEl); });
+    }
+
     emptyEl.hidden = visibleEvents.length > 0;
   }
 

@@ -544,15 +544,50 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
       badge.parentNode.removeChild(badge);
     }
   }
+  var INITIAL_UPCOMING_VISIBLE = 4; // 默认展示的即将举行活动数量，其余通过“查看更多”展开
   function applyEventFilter(today){
+    var table = document.querySelector('.pr-events__table');
     var rows = document.querySelectorAll('.pr-event-row[data-end-date]');
     var emptyEl = document.getElementById('pr-events-empty');
+    var oldMore = table ? table.querySelector('.pr-events__more') : null;
+    if (oldMore) oldMore.parentNode.removeChild(oldMore);
     var visible = 0;
+    var upcomingRows = [];
+    var firstPastRow = null;
     for (var i = 0; i < rows.length; i++){
       var end = rows[i].getAttribute('data-end-date');
       var shown = isShownEvent(end, today);
       rows[i].hidden = !shown;
-      if (shown){ visible++; markPast(rows[i], isEndedEvent(end, today)); }
+      if (shown){
+        visible++;
+        var ended = isEndedEvent(end, today);
+        markPast(rows[i], ended);
+        if (ended){ if (!firstPastRow) firstPastRow = rows[i]; }
+        else { upcomingRows.push(rows[i]); }
+      }
+    }
+    var collapsed = [];
+    for (var j = INITIAL_UPCOMING_VISIBLE; j < upcomingRows.length; j++){
+      upcomingRows[j].hidden = true;
+      collapsed.push(upcomingRows[j]);
+    }
+    if (collapsed.length && table){
+      var wrap = document.createElement('div');
+      wrap.className = 'pr-events__more';
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'pr-events__more-btn';
+      btn.setAttribute('aria-expanded', 'false');
+      var moreLabel = '查看更多（' + collapsed.length + '）';
+      btn.textContent = moreLabel;
+      btn.addEventListener('click', function(){
+        var expanded = btn.getAttribute('aria-expanded') === 'true';
+        for (var k = 0; k < collapsed.length; k++){ collapsed[k].hidden = expanded; }
+        btn.setAttribute('aria-expanded', String(!expanded));
+        btn.textContent = expanded ? moreLabel : '收起';
+      });
+      wrap.appendChild(btn);
+      table.insertBefore(wrap, firstPastRow || emptyEl);
     }
     if (emptyEl) emptyEl.hidden = visible > 0;
   }
