@@ -316,7 +316,7 @@ body.homepage .sv-mobile-menu .sv-mobile-utils .sv-util-btn--cta {
    ========================================================================== */
 body.homepage .sv-hero {
   position: relative;
-  background: var(--sv-xuan-paper, #F2ECD8);
+  background: #FAF6EE;
   color: var(--sv-ink);
   overflow: hidden;
   isolation: isolate;
