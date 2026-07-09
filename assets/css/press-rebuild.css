@@ -178,7 +178,7 @@ body.press-page .pr-event-row--with-media {
   grid-template-columns: 132px 110px minmax(0, 1fr) 150px minmax(120px, 160px) 80px;
 }
 body.press-page .pr-event-media {
-  margin: 0; aspect-ratio: 16 / 9; border: 1px solid var(--sv-border-light-strong);
+  margin: 0; aspect-ratio: 16 / 9; border: 0;
   background: var(--sv-stone, #EFEADD); overflow: hidden; align-self: center;
 }
 body.press-page .pr-event-media img {

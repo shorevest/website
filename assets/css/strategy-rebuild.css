@@ -651,7 +651,7 @@ body.strategy-page .sx-hero__image {
   position: relative; z-index: 1;
   margin: 0; width: 100%;
   aspect-ratio: 1 / 1;
-  border: 1px solid rgba(82, 71, 54, 0.18);
+  border: 0;
   border-radius: 14px;
   background: var(--sv-stone, #F1EBDD);
   overflow: hidden;
