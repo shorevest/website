@@ -85,7 +85,7 @@ body.homepage {
   margin: 0;
   padding-top: var(--header-h);            /* reserve fixed-header space */
   color: var(--sv-ink);
-  background: var(--sv-ivory);
+  background: #FFFFFF;
   font-family: var(--sv-font);
   font-size: 16px;
   line-height: 1.62;
@@ -316,7 +316,7 @@ body.homepage .sv-mobile-menu .sv-mobile-utils .sv-util-btn--cta {
    ========================================================================== */
 body.homepage .sv-hero {
   position: relative;
-  background: #FCF8EE;
+  background: #FFFFFF;
   color: var(--sv-ink);
   overflow: hidden;
   isolation: isolate;
