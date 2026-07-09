@@ -643,7 +643,7 @@ body.strategy-page .sx-hero__media::before {
   right: clamp(-36px, -2.2vw, -20px);
   bottom: -26px;
   left: clamp(36px, 3.5vw, 56px);
-  background: var(--sv-cinnabar);
+  background: var(--sv-qing, #3D7070);
   border-radius: 14px;
   z-index: 0;
 }
