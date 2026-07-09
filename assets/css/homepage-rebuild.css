@@ -817,48 +817,82 @@ body.homepage .sv-cdd { border-bottom: 3px solid var(--sv-cinnabar); }
    I · FOOTER / LEGAL (dark teal)
    ========================================================================== */
 body.homepage .sv-footer { background: var(--sv-dark-footer); color: var(--sv-meta-on-dark); }
-body.homepage .sv-footer__inner { padding: 64px var(--pad-x) 30px; max-width: var(--page-max); margin-inline: auto; }
+body.homepage .sv-footer__inner { padding: clamp(52px,6vw,76px) var(--pad-x) 30px; max-width: var(--page-max); margin-inline: auto; }
 body.homepage .sv-footer__top {
-  display: grid; grid-template-columns: minmax(0,1fr) auto; gap: clamp(32px,5vw,72px);
-  align-items: start; padding-bottom: 36px; border-bottom: 1px solid var(--sv-border-dark);
+  display: grid; grid-template-columns: minmax(0,1fr) auto; gap: clamp(40px,6vw,104px);
+  align-items: start; padding-bottom: clamp(34px,4vw,44px); border-bottom: 1px solid var(--sv-border-dark);
 }
-body.homepage .sv-footer__logo img { width: 200px; height: auto; }
-body.homepage .sv-footer__offices { margin: 22px 0 0; font: 400 13.5px/1.7 var(--sv-font); color: var(--sv-meta-on-dark); }
-body.homepage .sv-footer__offices a { color: var(--sv-ivory); text-decoration: none; border-bottom: 1px solid rgba(252,249,241,0.3); }
-body.homepage .sv-footer__nav { display: grid; grid-template-columns: repeat(2, auto); gap: 10px 56px; }
+body.homepage .sv-footer__logo img { width: 190px; height: auto; display: block; }
+body.homepage .sv-footer__offices { margin: 20px 0 0; font: 400 13.5px/1.75 var(--sv-font); color: var(--sv-meta-on-dark); }
+body.homepage .sv-footer__offices a {
+  display: inline-block; margin-top: 6px;
+  color: var(--sv-ivory); text-decoration: none; border-bottom: 1px solid rgba(252,249,241,0.28);
+  transition: border-color .2s ease;
+}
+body.homepage .sv-footer__offices a:hover { border-color: var(--sv-ivory); }
+
+/* Nav: one tidy 2-column set of links; the Investor Portal "access" link is
+   folded in as the final grid item so both columns run to an even height and
+   the left brand column no longer strands a tall empty gap beside it. */
+body.homepage .sv-footer__nav {
+  display: grid; grid-template-columns: repeat(2, minmax(0, max-content));
+  gap: 12px clamp(48px, 5vw, 80px);
+}
 body.homepage .sv-footer__nav a {
-  font: 500 13px/1 var(--sv-font); letter-spacing: 0.04em;
-  color: var(--sv-meta-on-dark); text-decoration: none; padding: 5px 0; display: inline-block;
+  font: 500 13px/1 var(--sv-font); letter-spacing: 0.02em;
+  color: var(--sv-meta-on-dark); text-decoration: none; padding: 4px 0; display: inline-block;
+  transition: color .18s ease;
 }
-body.homepage .sv-footer__nav a:hover { color: var(--sv-qing-light, #7AAFAF); }
+body.homepage .sv-footer__nav a:hover { color: var(--sv-ivory); }
+/* Investor Portal — dissolve the wrapper into the nav grid and hide its label. */
+body.homepage .sv-footer__access { display: contents; }
+body.homepage .sv-footer__access-label { display: none; }
+body.homepage .sv-footer__access a {
+  font: 500 13px/1 var(--sv-font); letter-spacing: 0.02em;
+  color: var(--sv-ivory); text-decoration: none; padding: 4px 0; display: inline-flex; align-items: center; gap: 6px;
+  transition: color .18s ease;
+}
+body.homepage .sv-footer__access a::after {
+  content: "→"; font-size: 11px; opacity: .55; transition: transform .18s ease, opacity .18s ease;
+}
+body.homepage .sv-footer__access a:hover { color: var(--sv-ivory); }
+body.homepage .sv-footer__access a:hover::after { transform: translateX(3px); opacity: 1; }
+
 body.homepage .sv-footer__legal {
-  margin: 30px 0 0; padding: 24px 0 0;
-  border-top: 1px solid var(--sv-border-dark);
-  font: 400 12px/1.6 var(--sv-font); color: var(--sv-faint-on-dark);
+  margin: clamp(28px,3.5vw,38px) 0 0; padding: 0;
+  max-width: 84ch;
+  font: 400 12px/1.7 var(--sv-font); color: var(--sv-faint-on-dark);
 }
 body.homepage .sv-footer__legal p { margin: 0 0 10px; }
 body.homepage .sv-footer__legal p:last-child { margin-bottom: 0; }
 body.homepage .sv-footer__bottom {
   display: flex; flex-wrap: wrap; gap: 14px 28px; justify-content: space-between; align-items: center;
-  padding-top: 22px;
+  margin-top: clamp(28px,3.5vw,38px); padding-top: 22px;
+  border-top: 1px solid var(--sv-border-dark);
 }
 body.homepage .sv-footer__links { display: flex; flex-wrap: wrap; gap: 8px 22px; }
-body.homepage .sv-footer__links a { font: 400 12px/1 var(--sv-font); color: var(--sv-meta-on-dark); text-decoration: none; }
-body.homepage .sv-footer__links a:hover { color: var(--sv-qing-light, #7AAFAF); }
+body.homepage .sv-footer__links a {
+  font: 400 12px/1 var(--sv-font); color: var(--sv-meta-on-dark); text-decoration: none;
+  transition: color .18s ease;
+}
+body.homepage .sv-footer__links a:hover { color: var(--sv-ivory); }
 body.homepage .sv-footer__copy { font: 400 12px/1 var(--sv-font); color: var(--sv-faint-on-dark); }
 
 /* ==========================================================================
    Scroll-to-top
    ========================================================================== */
 body.homepage .sv-totop {
-  position: fixed; width: 44px; height: 44px;
-  right: max(24px, calc((100vw - var(--page-max)) / 2)); bottom: 24px;
+  position: fixed; width: 46px; height: 46px; border-radius: 999px;
+  right: max(24px, calc((100vw - var(--page-max)) / 2)); bottom: 28px;
   display: flex; align-items: center; justify-content: center;
-  background: var(--sv-ivory); border: 1px solid var(--sv-border-light-strong);
+  background: rgba(252,249,241,0.94); border: 1px solid var(--sv-border-light-strong);
   color: var(--sv-ink); cursor: pointer; z-index: 900;
-  opacity: 0; visibility: hidden; transition: opacity .2s ease, visibility .2s ease;
+  box-shadow: 0 6px 20px rgba(24,37,36,0.16);
+  opacity: 0; visibility: hidden; transform: translateY(8px);
+  transition: opacity .2s ease, visibility .2s ease, transform .2s ease, background .2s ease, color .2s ease, border-color .2s ease;
 }
-body.homepage .sv-totop.is-visible { opacity: 1; visibility: visible; }
+body.homepage .sv-totop.is-visible { opacity: 1; visibility: visible; transform: translateY(0); }
+body.homepage .sv-totop:hover { background: var(--sv-dark-footer); border-color: var(--sv-dark-footer); color: var(--sv-ivory); }
 body.homepage .sv-totop svg { width: 16px; height: 16px; }
 
 /* ==========================================================================
@@ -956,9 +990,10 @@ body.homepage .sv-totop svg { width: 16px; height: 16px; }
   body.homepage .sv-stat:not(:nth-child(1)) { border-top: 1px solid var(--sv-border-light); }
   body.homepage .sv-caps { grid-template-columns: 1fr; }
   body.homepage .sv-cap { border-right: 0; min-height: 0; }
-  body.homepage .sv-footer__nav { grid-template-columns: 1fr; }
+  body.homepage .sv-footer__nav { grid-template-columns: 1fr; gap: 0; }
   /* Enlarge footer tap targets to ~44px on mobile. */
-  body.homepage .sv-footer__nav a { padding: 13px 0; }
+  body.homepage .sv-footer__nav a,
+  body.homepage .sv-footer__access a { padding: 13px 0; }
   body.homepage .sv-footer__links { gap: 2px 22px; }
   body.homepage .sv-footer__links a { padding: 13px 0; display: inline-block; }
 }
@@ -1403,28 +1438,8 @@ body.homepage .sv-hero__panel-row dt {
   }
 }
 
-/* ==========================================================================
-   Footer "Access" group — Investor Portal + Employee Portal entry points.
-   The Employee Portal is the private ShoreVest Operations application and
-   opens in a new tab; the public site is only the entry point.
-   ========================================================================== */
-body.homepage .sv-footer__access {
-  grid-column: 1 / -1;
-  display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px 26px;
-  margin-top: 16px; padding-top: 14px;
-  border-top: 1px solid var(--sv-border-dark);
-}
-body.homepage .sv-footer__access-label {
-  margin: 0;
-  font: 700 10px/1 var(--sv-font);
-  letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--sv-faint-on-dark);
-}
-body.homepage .sv-footer__access a {
-  font: 500 13px/1 var(--sv-font); letter-spacing: 0.04em;
-  color: var(--sv-meta-on-dark); text-decoration: none; padding: 5px 0; display: inline-block;
-}
-body.homepage .sv-footer__access a:hover { color: var(--sv-qing-light, #7AAFAF); }
+/* Footer "Access" group (Investor Portal) is now folded into the footer nav
+   grid — see the .sv-footer__access rules in the FOOTER / LEGAL block above. */
 
 /* ==========================================================================
    B2 · HERO — layered editorial composition (approved 2026-07-08)
