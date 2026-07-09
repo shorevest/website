@@ -644,6 +644,7 @@ body.strategy-page .sx-hero__media::before {
   bottom: -26px;
   left: clamp(36px, 3.5vw, 56px);
   background: var(--sv-cinnabar);
+  border-radius: 14px;
   z-index: 0;
 }
 body.strategy-page .sx-hero__image {
@@ -651,6 +652,7 @@ body.strategy-page .sx-hero__image {
   margin: 0; width: 100%;
   aspect-ratio: 1 / 1;
   border: 1px solid rgba(82, 71, 54, 0.18);
+  border-radius: 14px;
   background: var(--sv-stone, #F1EBDD);
   overflow: hidden;
 }
