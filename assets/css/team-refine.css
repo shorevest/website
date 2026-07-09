@@ -528,7 +528,7 @@ html body.team-page-v2 .group::before {
 html body.team-page-v2 .group__head {
   display: grid !important;
   grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
-  column-gap: var(--tr-gutter-fixed) !important;
+  column-gap: clamp(32px, 4vw, 64px) !important;
   row-gap: clamp(14px, 2vw, 24px) !important;
   align-items: start !important;
   margin: 0 0 clamp(30px, 4vw, 48px) !important;
@@ -550,12 +550,16 @@ html body.team-page-v2 .sv-section-title {
 }
 
 html body.team-page-v2 .group__summary {
-  grid-column: 5 / -1;
+  grid-column: 6 / -1;
+  justify-self: start;
   margin: 0 !important;
-  max-width: none !important;
-  padding: 0 !important;
+  max-width: 54ch !important;
+  padding: clamp(14px, 1.5vw, 20px) clamp(18px, 2vw, 26px) !important;
   border: 0 !important;
-  font: 400 clamp(15px, 1.05vw, 17px) / 1.62 var(--tr-font) !important;
+  border-left: 3px solid var(--tr-cinnabar) !important;
+  background: #fff !important;
+  box-shadow: 0 14px 34px rgba(24, 32, 34, 0.08) !important;
+  font: 400 clamp(14px, 0.98vw, 16px) / 1.58 var(--tr-font) !important;
   color: var(--tr-ink-2) !important;
   text-align: left !important;
 }
