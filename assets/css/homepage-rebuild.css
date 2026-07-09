@@ -852,7 +852,8 @@ body.homepage .sv-footer__access a:hover::after { transform: translateX(3px); op
 
 body.homepage .sv-footer__legal {
   margin: clamp(28px,3.5vw,38px) 0 0; padding: 0;
-  max-width: 84ch;
+  width: 100%;
+  max-width: none;
   font: 400 12px/1.7 var(--sv-font); color: var(--sv-faint-on-dark);
 }
 body.homepage .sv-footer__legal p { margin: 0 0 10px; }
