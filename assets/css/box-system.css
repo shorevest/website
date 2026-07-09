@@ -99,11 +99,13 @@ body.firm-page .fm-statcard.svb--band {
   position: relative; isolation: isolate;
 }
 body.firm-page .fm-statcard.svb--band::after {
-  content: ""; position: absolute; z-index: 0; left: 0; right: 0; bottom: 0;
+  content: ""; position: absolute; z-index: 0;
+  left: clamp(-34px, -2.4vw, -18px); right: clamp(18px, 2.4vw, 34px); bottom: 0;
   height: clamp(72px, 8vw, 110px); background: var(--sv-qing-dark, #1E4040);
 }
 body.firm-page .fm-statcard.svb--band .svb-band {
-  background: var(--sv-qing-light, #7AAFAF); margin: 0;
+  background: var(--sv-qing-light, #7AAFAF);
+  margin: 0 clamp(-34px, -2.4vw, -18px) 0 clamp(18px, 2.4vw, 34px);
   padding: clamp(16px, 1.8vw, 22px) clamp(28px, 3vw, 44px) clamp(42px, 4.4vw, 58px);
   border-bottom: 0;
 }
