@@ -340,7 +340,68 @@ SVOps.views.meetings=function(c){ var pg=page('Meetings','Meeting workspace','Co
   SVOps.views.investorIntelligence=function(c){ var pg=page('Investor Intelligence','Investor Intelligence','Live weekly digest workstream plus market, intermediary and institution context.'); pg.appendChild(el('div',{class:'ops-grid ops-grid--3'},[card('Weekly investor digest','Live/Production workstream.','Validated'),card('Intermediary assessment','Person / firm, claimed region/relationships, tested institutions, evidence, proposal, retainer, success fee, recommendation and next step.','Designed'),card('Regional coverage gaps','Coverage gaps and local decision-maker context.','Preview'),card('Market intelligence','Source, owner and freshness visible.','Connected')])); c.appendChild(pg); };
   SVOps.views.reporting=function(c){ var pg=page('Reporting','Reporting','Weekly Outreach & Coverage Snapshot and live reporting exceptions.'); pg.appendChild(el('div',{class:'ops-grid ops-grid--3'},[card('Weekly Outreach & Coverage Snapshot','Live weekly digest workstream with stage movement and activity summary.','Validated'),card('Stale records and missing next steps','Data-quality exceptions with owner and source.','Connected'),card('No automatic stage movement','Reports show exceptions; they do not write Salesforce by themselves.','Preview')])); c.appendChild(pg); };
   SVOps.views.approvals=function(c,user){ var pg=page('Approvals','Shared approval queue','One cross-workflow queue for outreach, diligence, materials and reporting packages. No duplicate workflow-specific approvals.'); pg.appendChild(U.table([{key:'item',label:'Item',html:function(r){return esc(r.item)}},{key:'state',label:'State',html:function(r){return U.statusHtml(r.state)}},{key:'owner',label:'Owner',html:function(r){return esc(r.owner)}},{key:'permission',label:'Permission',html:function(r){return esc(r.permission)}}],[{item:'ATP outreach frozen package',state:'Suggested',owner:defaultSender(user),permission:persona(user).permissions&&persona(user).permissions.canApproveSender?'Can approve sender review':'Can prepare / cannot approve'},{item:'GreenVale DDQ commercial disclosure',state:'On hold',owner:'John Jones',permission:'Shared queue'},{item:'Weekly Outreach Snapshot',state:'Complete',owner:'Celestra Gallagher',permission:'Production reporting workstream'}])); c.appendChild(pg); };
-  SVOps.views.firm=function(c){ var pg=page('Firm','Firm configuration','Team, process configuration, templates and Technology & Vendors / AI control register.'); pg.appendChild(U.table(['vendor','purpose','source systems','data types accessed','hosting/data residency','model provider','subprocessors','retention/deletion','audit logging','responsible owner','evidence status'].map(function(k){return{key:k,label:k,html:function(r){return esc(r[k]);}}}),[{vendor:'MergePoint',purpose:'Ingestion, notes, enrichment and secondary checks','source systems':'Outlook, SharePoint, Salesforce exports','data types accessed':'Mocked contact/activity fields','hosting/data residency':'Vendor assertion required','model provider':'Configured per control register','subprocessors':'Vendor assertion','retention/deletion':'Internal policy','audit logging':'Proposed control','responsible owner':'Celestra Gallagher','evidence status':'vendor assertion'}])); c.appendChild(pg); };
+  var firmSections=[
+    {title:'Team and access',desc:'Manage users, roles, permissions and workspace access.',href:'#/firm/team'},
+    {title:'Templates and signatures',desc:'Manage approved templates, signatures and translated variants.',href:'#/firm/templates'},
+    {title:'Workflow rules',desc:'Manage approvals, routing, restrictions and task rules.',href:'#/firm/workflow'},
+    {title:'Systems and vendors',desc:'See official systems, connected vendors and operating status.',href:'#/firm/systems'},
+    {title:'AI and controls',desc:'Review permitted AI use, evidence gaps and control requirements.',href:'#/firm/ai'},
+    {title:'Audit log',desc:'See recent changes to templates, permissions, rules and overrides.',href:'#/firm/audit'}
+  ];
+  function firmCard(item){ return el('article',{class:'firm-card'},[el('h2',{class:'firm-card__title',text:item.title}),el('p',{class:'firm-card__desc',text:item.desc}),el('a',{class:'btn btn--quiet btn--sm',href:item.href,text:'Open'})]); }
+  function systemCard(name,purpose,status){ return el('article',{class:'firm-record-card'},[el('p',{class:'firm-record-card__name',text:name}),el('p',{class:'firm-record-card__purpose',text:purpose}),el('p',{class:'firm-record-card__status',html:'Status: '+U.statusHtml(status,'st--ok')} )]); }
+  SVOps.views.firm=function(c,user,params){
+    var sub=params&&params[0];
+    if(sub==='systems') return firmSystems(c);
+    if(sub==='vendors'&&params[1]==='mergepoint') return firmMergePoint(c);
+    if(sub) return firmPlaceholder(c,sub);
+    var pg=page('Firm','Firm configuration','Manage team access, approved templates, workflow rules, connected systems and operating controls.');
+    pg.appendChild(el('div',{class:'firm-overview-grid'},firmSections.map(firmCard)));
+    pg.appendChild(U.notice('info','Salesforce remains the official commercial record. ShoreVest One applies workflow, review and control layers across connected systems.'));
+    c.appendChild(pg);
+  };
+  function firmSystems(c){
+    var pg=page('Firm / Systems and vendors','Systems and vendors','Official systems of record and connected vendors used in ShoreVest One.');
+    pg.appendChild(el('section',{class:'firm-section'},[el('div',{class:'ops-panel__head'},[el('h2',{class:'ops-panel__title',text:'Official systems'})]),el('div',{class:'firm-record-grid'},[
+      systemCard('Salesforce','Official commercial record','Official'),
+      systemCard('Outlook','Official mail system','Official'),
+      systemCard('SharePoint','Document storage','Official'),
+      systemCard('Power Automate','Workflow orchestration','Official')
+    ])]));
+    pg.appendChild(el('section',{class:'firm-section'},[el('div',{class:'ops-panel__head'},[el('h2',{class:'ops-panel__title',text:'Connected vendors'})]),el('div',{class:'firm-vendor-grid'},[
+      el('article',{class:'firm-vendor-card'},[
+        el('div',{class:'firm-vendor-card__head'},[el('h3',{text:'MergePoint'}),el('span',{html:U.statusHtml('Connected with review controls','st--warn')})]),
+        el('p',{text:'Ingestion, notes, enrichment and secondary checks'}),
+        el('dl',{class:'firm-detail-list'},[el('dt',{text:'Key risk'}),el('dd',{text:'Governance evidence incomplete'}),el('dt',{text:'Current rule'}),el('dd',{text:'Not authoritative for ownership, official tasks, opportunity creation or stage movement'})]),
+        el('a',{class:'btn btn--primary btn--sm',href:'#/firm/vendors/mergepoint',text:'Open vendor record'})
+      ])
+    ])]));
+    pg.appendChild(el('a',{class:'btn btn--quiet',href:'#/firm',text:'Back to Firm'}));
+    c.appendChild(pg);
+  }
+  function detailBlock(title,body){return el('section',{class:'firm-detail-block'},[el('h2',{class:'ops-panel__title',text:title}),Array.isArray(body)?el('ul',{class:'firm-clean-list'},body.map(function(x){return el('li',{text:x});})):el('p',{text:body})]);}
+  function firmMergePoint(c){
+    var pg=page('Firm / Systems and vendors / MergePoint','MergePoint','Connected with review controls. Used for ingestion, notes, enrichment and secondary checks.');
+    pg.appendChild(el('div',{class:'firm-detail-layout'},[
+      detailBlock('Status','Connected with review controls'),
+      detailBlock('Purpose','Ingestion, notes, enrichment and secondary checks'),
+      detailBlock('Data touched',['Outlook mail metadata and reviewed message content','SharePoint notes and supporting documents','Salesforce exports used for matching and comparison','Mocked contact and activity fields in this preview']),
+      detailBlock('What is confirmed',['MergePoint suggestions do not update Salesforce by themselves.','Human review is required before proposed contacts, tasks or rankings become official work.','ShoreVest One keeps Salesforce as the commercial system of record.']),
+      detailBlock('What is missing',['Hosting confirmation missing','Subprocessor list not yet recorded','Retention terms not yet recorded','Complete audit logging evidence not yet recorded']),
+      detailBlock('Current ShoreVest rule','MergePoint is not authoritative for ownership, official tasks, opportunity creation or stage movement.'),
+      detailBlock('Owner','Celestra Gallagher'),
+      detailBlock('Last review','2026-07-10'),
+      detailBlock('Open issues',['Review required for hosting evidence.','Review required for subprocessors.','Review required for retention and deletion terms.','Internal policy exists for human approval before Salesforce changes.'])
+    ]));
+    pg.appendChild(el('div',{class:'ops-actions'},[el('a',{class:'btn btn--quiet',href:'#/firm/systems',text:'Back to Systems and vendors'}),el('a',{class:'btn btn--quiet',href:'#/firm',text:'Back to Firm'})]));
+    c.appendChild(pg);
+  }
+  function firmPlaceholder(c,sub){
+    var match=firmSections.filter(function(x){return x.href==='#/firm/'+sub;})[0];
+    var pg=page('Firm',match?match.title:'Firm section',match?match.desc:'This Firm configuration section is not part of the current preview scope.');
+    pg.appendChild(el('div',{class:'ops-panel'},[el('h2',{class:'ops-panel__title',text:'Preview section'}),el('p',{text:'This area will use the same card-first administrative layout. No external system changes happen from this preview.'}),el('a',{class:'btn btn--quiet',href:'#/firm',text:'Back to Firm'})]));
+    c.appendChild(pg);
+  }
 
   SVOps.views.outreach=function(c,user,params){ var sub=params&&params[0]; if(sub==='find') return outreachFind(c,user); if(sub==='draft') return draft(c,user); if(sub==='sent') return sent(c); var pg=page('Outreach','Outreach overview','Finding people is not the same as deciding to contact them. Build an audience, review Included / On hold / Blocked, then choose what to do next.'); pg.appendChild(el('div',{class:'ops-grid ops-grid--3'},[card('Find or add people','Search ShoreVest records, upload/paste names, saved searches or recent lists.','Preview','#/outreach/find'),card('Draft messages','Only after Prepare messages. Shows exact recipients, sender and managed signature.','Preview','#/outreach/draft'),card('Sent & responses','Preview status only. Nothing is sent from this screen.','Designed','#/outreach/sent')])); pg.appendChild(doctrine()); c.appendChild(pg); };
   function outreachFind(c,user){ var pg=page('Outreach / Find or add people','Find or add people','Four entry routes: search ShoreVest records, upload or paste names, saved searches and recent lists.'); var input=el('textarea',{class:'ops-input',rows:'3',text:'all people in Denmark we haven’t contacted in 2 months'}); pg.appendChild(el('div',{class:'ops-panel'},[el('h2',{class:'ops-panel__title',text:'Search ShoreVest records'}),input,el('p',{class:'ops-meta',text:'Examples: “everyone at ATP” · “find Sarah Chen” · “European pension contacts with no next action”'}),el('div',{class:'ops-grid ops-grid--2'},[card('Search type','filtered group; can also be one person / one institution / pipeline gap','Suggested'),card('Location meaning','person location / institution HQ / either','Suggested'),card('Not contacted meaning','outbound email only / any activity / by me / by anyone at ShoreVest','Suggested'),card('Time period','2 months','Suggested')]),el('p',{class:'ops-meta',text:'Hard exclusions: opt-outs, hard bounces, restricted contacts, recent declines, scheduled meetings, active diligence, pending outreach batch.'}),el('button',{class:'btn btn--primary',text:'Run search',onclick:function(){var r=mockedRows(); saveRows(r); location.hash='#/outreach/find/results';}})])); pg.appendChild(el('div',{class:'ops-grid ops-grid--3'},[card('Upload or paste names','Preserves original source row and previews Salesforce matching.','Preview','#/outreach/find/upload'),card('Saved searches','Denmark pensions; Europe no next action; Asia family offices.','Designed'),card('Recent lists','Last ATP review and Nordic pension scan.','Designed')])); if(location.hash.indexOf('results')>-1) renderResults(pg,user); if(location.hash.indexOf('upload')>-1) renderUpload(pg); pg.appendChild(actions('#/outreach')); c.appendChild(pg); }

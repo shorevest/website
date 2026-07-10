@@ -203,17 +203,14 @@
 
       ]),
       el('input', { class: 'ops-global-search', type: 'search', placeholder: 'Search people, firms, opportunities, requests, reports or tools', onkeydown: function (ev) { if (ev.key === 'Enter') U.toast('Preview search only. No external systems queried.'); } }),
-      el('div', { class: 'ops-topbar__right' }, [
-        el('span', { text: S.RULES_VERSION }),
-        el('span', { text: S.TEMPLATE_VERSION }),
-        el('span', { html: U.statusHtml(I.demoMode() ? 'Suggested' : 'Ready') }),
-        el('span', { class: 'ops-role-pill', text: 'Current role: ' + (user.displayRole || user.role) }),
-        roleSwitcher(user)
+      el('div', { class: 'ops-topbar__right ops-topbar__right--compact' }, [
+        el('span', { text: I.demoMode() ? 'Internal Preview' : 'Connected' }),
+        el('span', { text: I.demoMode() ? 'Mock data' : 'Connected data' }),
+        el('span', { text: S.RULES_VERSION })
       ])
     ]);
     main.appendChild(topbar);
 
-    main.appendChild(environmentBar(user));
 
     var content = el('div', { style: 'flex:1' });
     main.appendChild(content);
