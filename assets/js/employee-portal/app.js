@@ -1,7 +1,7 @@
 /* ==========================================================================
    ShoreVest Operations — Application shell
    Authentication gate (Microsoft Entra ID via MSAL in production; a clearly
-   labelled demonstration identity chooser in demo mode), primary navigation
+   labelled role preview chooser in preview mode), primary navigation
    with role-based visibility, hash router, and the Dashboard.
    ========================================================================== */
 (function (root) {
@@ -20,10 +20,8 @@
   /* Dark-on-light lockup — the shell and login now sit on light surfaces. */
   var LOGO = '../assets/brand/sv-lockup-fc-dark.png';
 
-  /* Demonstration identities — three named ShoreVest people, one per role
-     profile. Each carries a persona id (its Home and navigation) and a shared
-     underlying capability role that keeps the legacy Tools prototype working.
-     Everything external in the demonstration is synthetic. */
+  /* Role preview identities. Each carries a persona id (Home and navigation)
+     and a shared underlying capability role for the preserved Tools area. */
   var DEMO_USERS = P.list.map(function (p) {
     return { personaId: p.id, name: p.name, displayRole: p.displayRole,
       username: p.username, role: p.role };
@@ -129,9 +127,9 @@
   }
 
   function roleSwitcher(user) {
-    var wrap = el('label', { class: 'ops-role-switch' }, [el('span', { text: 'View as' })]);
-    var sel = el('select', { 'aria-label': 'View as role' });
-    DEMO_USERS.forEach(function (u) { sel.appendChild(el('option', { value: u.personaId, text: u.name + ' — ' + u.displayRole, selected: u.personaId === user.personaId })); });
+    var wrap = el('label', { class: 'ops-role-switch' }, [el('span', { text: 'Role preview' })]);
+    var sel = el('select', { 'aria-label': 'Role preview selector' });
+    DEMO_USERS.forEach(function (u) { sel.appendChild(el('option', { value: u.personaId, text: u.displayRole, selected: u.personaId === user.personaId })); });
     sel.onchange = function () {
       var next = DEMO_USERS.filter(function (u) { return u.personaId === sel.value; })[0];
       if (next) signInDemo(next);
@@ -154,7 +152,7 @@
     sidebar.appendChild(el('div', { class: 'ops-sidebar__brand' }, [
       el('img', { src: LOGO, alt: 'ShoreVest', width: '148', height: '36' }),
       el('p', { class: 'ops-sidebar__title', html: '<span class="rule"></span>ShoreVest One' }),
-      el('p', { class: 'ops-sidebar__env', text: I.demoMode() ? 'Demonstration environment' : 'Production' })
+      el('p', { class: 'ops-sidebar__env', text: I.demoMode() ? 'Internal Preview' : 'Connected' })
     ]));
 
     var nav = el('nav', { class: 'ops-nav', 'aria-label': 'Primary' });
@@ -204,27 +202,34 @@
         el('span', { class: 'ops-topbar__crumb', html: 'ShoreVest One / <strong>' + esc(navItem ? navItem.label : titleFor(viewId)) + '</strong>' })
 
       ]),
-      el('input', { class: 'ops-global-search', type: 'search', placeholder: 'Search people, firms, opportunities, requests, reports or tools', onkeydown: function (ev) { if (ev.key === 'Enter') U.toast('Demo search only. No external systems queried.'); } }),
+      el('input', { class: 'ops-global-search', type: 'search', placeholder: 'Search people, firms, opportunities, requests, reports or tools', onkeydown: function (ev) { if (ev.key === 'Enter') U.toast('Preview search only. No external systems queried.'); } }),
       el('div', { class: 'ops-topbar__right' }, [
         el('span', { text: S.RULES_VERSION }),
         el('span', { text: S.TEMPLATE_VERSION }),
-        el('span', { html: I.demoMode() ? U.statusHtml('Demo', 'st--warn') : U.statusHtml('Live', 'st--ok') }),
-        el('span', { class: 'ops-role-pill', text: user.name }),
+        el('span', { html: U.statusHtml(I.demoMode() ? 'Suggested' : 'Ready') }),
+        el('span', { class: 'ops-role-pill', text: 'Current role: ' + (user.displayRole || user.role) }),
         roleSwitcher(user)
       ])
     ]);
     main.appendChild(topbar);
 
-    if (I.demoMode()) {
-      main.appendChild(el('div', { class: 'ops-demo-banner', html:
-        '<strong>Demonstration</strong> Synthetic data, stored only in this browser. No external actions occur.' }));
-    }
+    main.appendChild(environmentBar(user));
 
     var content = el('div', { style: 'flex:1' });
     main.appendChild(content);
     routeInto(content, user, viewId, params);
     shell.appendChild(main);
     return shell;
+  }
+
+  function environmentBar(user) {
+    var status = I.demoMode() ? 'Mocked data' : 'Connected data';
+    return el('div', { class: 'ops-demo-banner ops-envbar' }, [
+      el('span', { html: '<strong>Environment:</strong> ' + (I.demoMode() ? 'Internal Preview' : 'Production') }),
+      el('span', { html: '<strong>Data status:</strong> ' + status }),
+      el('span', { html: '<strong>Release:</strong> R-2026.07' }),
+      el('span', { html: '<strong>User role:</strong> ' + esc(user.displayRole || user.role) })
+    ]);
   }
 
   var TITLES = {
@@ -270,10 +275,10 @@
       function hideErr() { err.hidden = true; err.textContent = ''; }
       function showErr(m) { err.textContent = m; err.hidden = false; }
 
-      var sel = el('select', { class: 'gate__select', id: 'gate-role', 'aria-label': 'Select demonstration profile' });
+      var sel = el('select', { class: 'gate__select', id: 'gate-role', 'aria-label': 'Select role preview' });
       sel.appendChild(el('option', { value: '', text: 'Select a person' }));
       DEMO_USERS.forEach(function (u, i) {
-        sel.appendChild(el('option', { value: String(i), text: u.name + ' — ' + u.displayRole }));
+        sel.appendChild(el('option', { value: String(i), text: u.displayRole }));
       });
       sel.addEventListener('change', hideErr);
 
@@ -312,7 +317,7 @@
     card.appendChild(form);
 
     card.appendChild(el('p', { class: 'gate__note', text: 'Authorised access only.' }));
-    if (demo) card.appendChild(el('p', { class: 'gate__preview', text: 'Preview — sign-in simulated.' }));
+    if (demo) card.appendChild(el('p', { class: 'gate__preview', text: 'Internal Preview — role permissions and home state.' }));
 
     gate.appendChild(card);
     return gate;
