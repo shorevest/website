@@ -114,7 +114,7 @@ body.press-page .pr-events__empty[hidden] { display: none; }
    on its own rule so it reads as a control, not another event row. */
 body.press-page .pr-events__more {
   display: flex; justify-content: center;
-  padding: 22px 0 4px; border-bottom: 1px solid var(--sv-border-light);
+  padding: 22px 0 4px;
 }
 body.press-page .pr-events__more-btn {
   appearance: none; background: none; cursor: pointer;
