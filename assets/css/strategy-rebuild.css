@@ -1349,3 +1349,78 @@ body.strategy-page .st-disc { background: var(--sv-stone); }
   body.strategy-page .sv-flow__step,
   body.strategy-page .st-sleeve__no { transition: none; }
 }
+
+/* ==========================================================================
+   2026-07-10 · SIGNATURE REFINEMENT (definitive, last-in-file)
+   Takes the page past "clean and institutional" to a considered, best-in-class
+   finish. Three moves, all flat:
+     1. Replace the flat cinnabar slab under the hero with a deep-ink briefing
+        ledger — the single biggest lift; it reads as a premium data band and
+        returns cinnabar to being a true accent rather than ambient chrome.
+     2. Larger, tighter display headings for real typographic confidence.
+     3. Big, quiet editorial numerals anchoring the three sub-strategies, with
+        the index warming to cinnabar on hover.
+   ========================================================================== */
+
+/* 1 · Strategy-at-a-glance → deep-ink briefing ledger --------------------- */
+body.strategy-page .sx-glance {
+  padding: clamp(46px, 4.8vw, 70px) 0 clamp(48px, 5vw, 72px);
+}
+body.strategy-page .sx-glance::before {
+  background: var(--sv-ink, #182524);
+}
+body.strategy-page .sx-glance > div {
+  padding: 0 clamp(30px, 3.2vw, 48px);
+  border-left-color: rgba(252, 249, 241, 0.14);
+}
+body.strategy-page .sx-glance > div:first-child { padding-left: 0; }
+body.strategy-page .sx-glance dt {
+  margin: 0 0 16px;
+  font: 600 11px/1.3 var(--sv-font);
+  letter-spacing: 0.2em;
+  color: rgba(252, 249, 241, 0.5);
+}
+body.strategy-page .sx-glance dd {
+  font: 400 clamp(16px, 1.25vw, 18.5px)/1.52 var(--sv-font);
+  color: var(--sv-ivory);
+  letter-spacing: -0.005em;
+}
+@media (max-width: 880px) {
+  body.strategy-page .sx-glance > div {
+    padding: 22px 0;
+    border-left: 0;
+    border-top: 1px solid rgba(252, 249, 241, 0.14);
+  }
+  body.strategy-page .sx-glance > div:first-child { border-top: 0; padding-top: 0; }
+}
+
+/* 2 · Display headings: larger and tighter for confidence ---------------- */
+body.strategy-page .st-head__l .sv-h2,
+body.strategy-page .sv-exec__head-l .sv-h2 {
+  font-size: clamp(33px, 3.9vw, 52px);
+  line-height: 1.07;
+  letter-spacing: -0.026em;
+}
+
+/* 3 · Three strategies: large editorial index numerals ------------------- */
+/* The core "three strategies" set now carries big, light, quiet numerals that
+   anchor each row like chapter numbers — presence without another red mark. */
+body.strategy-page .st-sleeve__lead { gap: clamp(14px, 1.4vw, 22px); }
+body.strategy-page .st-sleeve__no {
+  font: 300 clamp(30px, 3.1vw, 44px)/1 var(--sv-font);
+  letter-spacing: -0.01em;
+  color: rgba(24, 37, 36, 0.20);
+  transition: color 300ms var(--st-ease);
+}
+body.strategy-page .st-sleeve:hover .st-sleeve__no,
+body.strategy-page .st-sleeve:focus-within .st-sleeve__no {
+  color: var(--sv-cinnabar);
+  transform: none;
+  letter-spacing: -0.01em;
+}
+body.strategy-page .st-sleeve__title { font-size: clamp(22px, 1.9vw, 25px); }
+
+/* Recovery-risk panel: a deeper, richer oxblood grade ---------------------- */
+body.strategy-page #risk .st-risk__panel {
+  background: linear-gradient(160deg, #BE3627 0%, #892A1E 100%);
+}
