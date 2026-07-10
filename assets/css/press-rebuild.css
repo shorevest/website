@@ -202,21 +202,6 @@ body.press-page .pr-events__empty {
 }
 body.press-page .pr-events__empty[hidden] { display: none; }
 
-/* "Show more" toggle for the upcoming ledger — only a slice of upcoming events
-   shows by default; this reveals the rest in place. Quiet, text-forward, sits
-   on its own rule so it reads as a control, not another event row. */
-body.press-page .pr-events__more {
-  display: flex; justify-content: center;
-  padding: 22px 0 4px; border-bottom: 1px solid var(--sv-border-light);
-}
-body.press-page .pr-events__more-btn {
-  appearance: none; background: none; cursor: pointer;
-  font: 600 12px/1 var(--sv-font); letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--sv-cinnabar);
-  padding: 10px 22px; border: 1px solid var(--sv-border-light-strong);
-  transition: border-color .15s ease, color .15s ease;
-}
-body.press-page .pr-events__more-btn:hover { border-color: var(--sv-cinnabar); }
 
 @media (max-width: 880px) {
   body.press-page .pr-section-head__l,
