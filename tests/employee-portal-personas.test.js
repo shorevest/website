@@ -25,7 +25,7 @@ const cardIds = (persona) => persona.home.needsYou.map((c) => c.id);
 test('at least four canonical demonstration people are offered', () => {
   assert.ok(P.list.length >= 4);
   assert.deepStrictEqual(P.list.map((p) => p.name).sort(),
-    ['Celestra Gallagher', 'John Jones', 'Kelvin Chan', 'Nico Jacques']);
+    ['Ben Fanger', 'Celestra Gallagher', 'Emily Oestericher', 'John Jones', 'Kelvin Chan', 'Nico Jacques']);
 });
 
 test('the generic Execution Approver identity is gone', () => {
@@ -38,6 +38,8 @@ test('each person has the expected display role', () => {
   assert.strictEqual(P.byId('kelvin').displayRole, 'Director of Client Solutions, Asia');
   assert.strictEqual(P.byId('celestra').displayRole, 'Investor Relations Associate / IR Operations');
   assert.strictEqual(P.byId('nico').displayRole, 'Outreach Owner / Outreach Operator');
+  assert.strictEqual(P.byId('ben').displayRole, 'Managing Partner');
+  assert.strictEqual(P.byId('emily').displayRole, 'Operations / Process Design');
 });
 
 test('byId returns null for an unknown persona', () => {
@@ -68,7 +70,7 @@ test('every persona ends on Tools and begins on Home', () => {
 
 test('Tools is top-level and not hidden under Workspace', () => {
   P.list.forEach((p) => {
-    assert.ok(p.nav.every((n) => !n.sep), p.name + ' should not have Workspace separators');
+    assert.deepStrictEqual(p.nav.filter((n) => n.sep).map((n) => n.sep), ['Core', 'Investor Relations', 'Controls']);
     assert.ok(navLabels(p).includes('Investor Intelligence'));
     assert.ok(navLabels(p).includes('Reporting'));
     assert.ok(navLabels(p).includes('Approvals'));
