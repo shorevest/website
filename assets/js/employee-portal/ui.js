@@ -159,9 +159,10 @@
 
   function drawer(title, bodyNode, opts) {
     var o = opts || {};
+    var returnFocus = document.activeElement && document.activeElement.focus ? document.activeElement : null;
     var scrim = el('div', { class: 'drawer-scrim' });
-    var d = el('div', { class: 'drawer', role: 'dialog', 'aria-modal': 'true', 'aria-label': title });
-    function close() { scrim.remove(); d.remove(); document.removeEventListener('keydown', onKey); if (o.onClose) o.onClose(); }
+    var d = el('div', { class: 'drawer', role: 'dialog', 'aria-modal': 'true', 'aria-label': title, tabindex: '-1' });
+    function close() { scrim.remove(); d.remove(); document.removeEventListener('keydown', onKey); if (o.onClose) o.onClose(); if (returnFocus && document.body.contains(returnFocus)) returnFocus.focus(); }
     function onKey(e) { if (e.key === 'Escape') close(); }
     scrim.addEventListener('click', close);
     document.addEventListener('keydown', onKey);
@@ -170,6 +171,7 @@
     d.appendChild(bodyNode);
     document.body.appendChild(scrim);
     document.body.appendChild(d);
+    setTimeout(function(){ d.focus(); }, 0);
     return { close: close, node: d };
   }
 
