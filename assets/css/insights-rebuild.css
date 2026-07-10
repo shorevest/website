@@ -690,3 +690,8 @@ body.insights-page .cdd-arc__empty-reset:focus-visible { outline: 2px solid var(
   /* On touch, the title nudge reads as jitter — disable it. */
   body.insights-page .cdd-arc__row:hover .cdd-arc__row-title { transform: none; }
 }
+
+/* 2026-07-10 · Match interior hero height to the homepage masthead. */
+@media (min-width: 881px) {
+  body.insights-page .cdd-hero__inner { min-height: 650px; }
+}
