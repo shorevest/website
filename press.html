@@ -23,7 +23,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <script>document.write('<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260708-layered-hero-b&t='+window.__SVT+'">');</script>
-<script>document.write('<link rel="stylesheet" href="assets/css/press-rebuild.css?v=20260710-media-hero-split&t='+window.__SVT+'">');</script>
+<script>document.write('<link rel="stylesheet" href="assets/css/press-rebuild.css?v=20260710-media-masthead&t='+window.__SVT+'">');</script>
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="shortcut icon" href="/favicon.ico">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
@@ -79,29 +79,31 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 
 <main id="content">
 
-  <!-- 1 · AUTHORITY OPENING — same layered hero system as the homepage -->
+  <!-- 1 · AUTHORITY OPENING — institutional masthead (text + credentials ledger) -->
   <section class="sv-hero media-hero" id="media" data-screen-label="Media" aria-labelledby="pr-h1">
     <div class="sv-hero__inner">
-      <figure class="media-hero__figure">
-        <img class="media-hero__img" src="assets/img/media-hero-overlay.jpeg" alt="ShoreVest principal speaking on a conference panel" width="1280" height="1920" loading="eager" decoding="async">
-        <span class="media-hero__scrim" aria-hidden="true"></span>
-      </figure>
-      <div class="media-hero__box">
+      <div class="media-hero__text">
         <p class="sv-hero__label">Third-party coverage</p>
         <h1 class="sv-hero__headline" id="pr-h1">Media</h1>
         <p class="sv-hero__body">International outlets and industry forums have followed ShoreVest&rsquo;s work across China&rsquo;s credit cycles.</p>
         <p class="sv-hero__body">The archive covers China private credit, distressed debt, restructuring and related market developments.</p>
       </div>
-    </div>
-  </section>
-
-  <section class="pr-open" id="media-proof" aria-label="Media coverage summary">
-    <div class="sv-shell pr-proof-band">
-      <dl class="pr-proof">
-        <div class="pr-proof__item"><dt class="pr-proof__k">Coverage</dt><dd class="pr-proof__v">2008 &ndash; present</dd></div>
-        <div class="pr-proof__item"><dt class="pr-proof__k">Featured in</dt><dd class="pr-proof__v">Bloomberg · Reuters · The Economist · Nikkei Asia · South China Morning Post</dd></div>
-        <div class="pr-proof__item"><dt class="pr-proof__k">Formats</dt><dd class="pr-proof__v">Interviews · Panels · Podcasts · Opinion &amp; commentary</dd></div>
-      </dl>
+      <aside class="media-hero__field" aria-label="Media coverage summary">
+        <dl class="media-hero__ledger">
+          <div class="media-hero__row">
+            <dt class="media-hero__k">Coverage</dt>
+            <dd class="media-hero__v">2008 &ndash; present</dd>
+          </div>
+          <div class="media-hero__row">
+            <dt class="media-hero__k">Featured in</dt>
+            <dd class="media-hero__v">Bloomberg · Reuters · The Economist · Nikkei Asia · South China Morning Post</dd>
+          </div>
+          <div class="media-hero__row">
+            <dt class="media-hero__k">Formats</dt>
+            <dd class="media-hero__v">Interviews · Panels · Podcasts · Opinion &amp; commentary</dd>
+          </div>
+        </dl>
+      </aside>
     </div>
   </section>
 
