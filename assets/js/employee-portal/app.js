@@ -221,7 +221,10 @@
 
   function environmentBar(user) {
     return el('div', { class: 'ops-demo-banner ops-envbar' }, [
-      el('span', { text: 'Salesforce stays the official record. ShoreVest One helps review, approve and track work before writeback.' })
+      el('span', { html: '<strong>Environment:</strong> ' + (I.demoMode() ? 'Internal Preview' : 'Production') }),
+      el('span', { html: '<strong>Data:</strong> ' + (I.demoMode() ? 'Mock' : 'Connected') }),
+      el('span', { html: '<strong>External actions:</strong> ' + (I.demoMode() ? 'Off' : 'On') }),
+      el('span', { html: '<strong>Role:</strong> ' + esc(user.displayRole || user.role) })
     ]);
   }
 
