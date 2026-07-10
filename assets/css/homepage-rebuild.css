@@ -581,7 +581,7 @@ body.homepage .sv-strategy__lead p:not(.sv-label) { margin: 0 0 26px; max-width:
 body.homepage .sv-strategy__rows { grid-column: 7 / 13; }
 body.homepage .sv-strategy__rows { display: flex; flex-direction: column; gap: 0; border-top: 2px solid var(--sv-cinnabar); box-shadow: 0 1px 0 var(--sv-border-light-strong); }
 body.homepage .sv-srow {
-  display: grid; grid-template-columns: 52px minmax(0, 1fr) auto; align-items: center; gap: 22px;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 22px;
   min-height: 112px;
   padding: clamp(22px, 2.2vw, 30px) clamp(20px, 2vw, 28px);
   border-bottom: 1px solid var(--sv-border-light-strong);

@@ -139,7 +139,7 @@ body.investor-portal-page .ip-access__head h2 {
 }
 body.investor-portal-page .ip-access { margin-top: clamp(34px, 3.6vw, 52px); border-top: 1px solid var(--sv-ink); }
 body.investor-portal-page .ip-access__row {
-  display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: clamp(16px, 2.4vw, 40px);
+  display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(16px, 2.4vw, 40px);
   padding: clamp(26px, 2.8vw, 38px) 0; border-bottom: 1px solid var(--sv-border-light); align-items: start;
 }
 body.investor-portal-page .ip-access__num { font: 600 15px/1.2 var(--sv-font); color: var(--sv-cinnabar); font-variant-numeric: tabular-nums; }
@@ -179,7 +179,7 @@ body.investor-portal-page .ip-assure__v { margin: 0; font: 400 13.5px/1.55 var(-
 }
 @media (max-width: 600px) {
   body.investor-portal-page .ip-assure__grid { grid-template-columns: 1fr; }
-  body.investor-portal-page .ip-access__row { grid-template-columns: 40px minmax(0, 1fr); gap: 14px; }
+  body.investor-portal-page .ip-access__row { grid-template-columns: minmax(0, 1fr); gap: 14px; }
   body.investor-portal-page #investor-portal-title { max-width: none; }
   body.investor-portal-page .investor-portal-hero__inner {
     padding-top: 40px;
