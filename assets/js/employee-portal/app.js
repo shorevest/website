@@ -128,6 +128,24 @@
     mount.appendChild(renderShell(user, viewId, route.params, navItem, activeKey));
   }
 
+  function roleSwitcher(user) {
+    var wrap = el('label', { class: 'ops-role-switch' }, [el('span', { text: 'View as' })]);
+    var sel = el('select', { 'aria-label': 'View as role' });
+    DEMO_USERS.forEach(function (u) { sel.appendChild(el('option', { value: u.personaId, text: u.name + ' — ' + u.displayRole, selected: u.personaId === user.personaId })); });
+    sel.onchange = function () {
+      var next = DEMO_USERS.filter(function (u) { return u.personaId === sel.value; })[0];
+      if (next) signInDemo(next);
+    };
+    wrap.appendChild(sel);
+    return wrap;
+  }
+
+  function badge(count) {
+    if (!count) return null;
+    var cls = count >= 5 ? ' ops-badge--red' : count >= 2 ? ' ops-badge--amber' : ' ops-badge--neutral';
+    return el('span', { class: 'ops-badge' + cls, text: String(count) });
+  }
+
   function renderShell(user, viewId, params, navItem, activeKey) {
     var shell = el('div', { class: 'ops-shell' });
 
@@ -145,8 +163,8 @@
       var itemKey = navKeyFor(item);
       var isActive = itemKey === activeKey || (item.key === 'outreach' && activeKey.indexOf('outreach') === 0);
       var row = el('div', { class: 'ops-nav__row' + (isActive ? ' is-active' : '') });
-      var label = item.label + (item.count ? ' ' + item.count : '');
-      var a = el('a', { href: item.hash, text: label, class: isActive ? 'is-active' : '' });
+      var a = el('a', { href: item.hash, class: isActive ? 'is-active' : '' }, [el('span', { text: item.label })]);
+      var b = badge(item.count); if (b) a.appendChild(b);
       if (isActive && !item.children) a.setAttribute('aria-current', 'page');
       a.addEventListener('click', function () { SVOps.state.menuOpen = false; });
       row.appendChild(a);
@@ -186,9 +204,13 @@
         el('span', { class: 'ops-topbar__crumb', html: 'ShoreVest One / <strong>' + esc(navItem ? navItem.label : titleFor(viewId)) + '</strong>' })
 
       ]),
+      el('input', { class: 'ops-global-search', type: 'search', placeholder: 'Search people, firms, opportunities, requests, reports or tools', onkeydown: function (ev) { if (ev.key === 'Enter') U.toast('Demo search only. No external systems queried.'); } }),
       el('div', { class: 'ops-topbar__right' }, [
-        el('span', { text: S.RULES_VERSION + ' · ' + S.TEMPLATE_VERSION }),
-        el('span', { html: I.demoMode() ? U.statusHtml('Demo', 'st--warn') : U.statusHtml('Live', 'st--ok') })
+        el('span', { text: S.RULES_VERSION }),
+        el('span', { text: S.TEMPLATE_VERSION }),
+        el('span', { html: I.demoMode() ? U.statusHtml('Demo', 'st--warn') : U.statusHtml('Live', 'st--ok') }),
+        el('span', { class: 'ops-role-pill', text: user.name }),
+        roleSwitcher(user)
       ])
     ]);
     main.appendChild(topbar);

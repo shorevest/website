@@ -36,9 +36,11 @@
       return Object.assign({ key: key, label: label, hash: hash, count: count || 0 }, opts || {});
     }
     return [
+      { sep: 'Core' },
       item('home', 'Home', '#/home'),
       item('my-work', 'My Work', '#/my-work', counts.myWork),
       item('relationships', 'Relationships', '#/relationships', counts.relationships),
+      { sep: 'Investor Relations' },
       item('outreach', 'Outreach', '#/outreach', counts.outreach, { children: [
         item('outreach-find', 'Find or add people', '#/outreach/find'),
         item('outreach-draft', 'Draft messages', '#/outreach/draft'),
@@ -48,6 +50,7 @@
       item('diligence', 'Diligence & Requests', '#/diligence', counts.diligence),
       item('investor-intelligence', 'Investor Intelligence', '#/investor-intelligence', counts.intel),
       item('reporting', 'Reporting', '#/reporting', counts.reporting),
+      { sep: 'Controls' },
       item('approvals', 'Approvals', '#/approvals', counts.approvals),
       item('firm', 'Firm', '#/firm'),
       item('tools', 'Tools', '#/tools')
@@ -170,51 +173,51 @@
   var CELESTRA_HOME = {
     needsYou: [
       {
-        id: 'celestra-greenvale-ddq',
-        title: 'GreenVale DDQ',
-        context: ['All substantive approvals are complete.', 'The final package needs assembly.'],
+        id: 'celestra-mergepoint-contact-review',
+        title: 'MergePoint contact review',
+        context: ['12 proposed contacts need review before Salesforce writeback.'],
+        recLabel: 'Held',
+        recommendation: 'Held for ownership or account match.',
+        actions: [
+          { label: 'Review proposed records', intent: 'primary', done: 'Proposed records opened' },
+          { label: 'Why am I seeing this?', intent: 'secondary', done: 'Explanation opened' }
+        ],
+        detail: 'MergePoint is useful for notes, enrichment and secondary checks, but it is not an authoritative operating list. Ownership and account matches must be accepted before Salesforce changes.'
+      },
+      {
+        id: 'celestra-task-cleanup',
+        title: 'Automated task cleanup',
+        context: ['7 old MergePoint-created tasks may be duplicate or low-value.'],
+        recLabel: 'Suggested',
+        recommendation: 'Suggested cleanup, not automatic deletion.',
+        actions: [
+          { label: 'Review suggestions', intent: 'primary', done: 'Task cleanup suggestions opened' },
+          { label: 'Hold', intent: 'secondary', done: 'Cleanup held' }
+        ],
+        detail: 'AI suggestions are not official tasks until accepted. ShoreVest One never silently deletes, merges or changes ownership.'
+      },
+      {
+        id: 'celestra-dataroom-package',
+        title: 'Data-room access package',
+        context: ['Meridian request is ready, but recipient eligibility and approval version must be frozen.'],
         recLabel: 'Current state',
         recommendation: 'Ready to assemble.',
         actions: [
-          { label: 'Prepare package', intent: 'primary', done: 'Package prepared' },
+          { label: 'Prepare access package', intent: 'primary', done: 'Access package prepared' },
           { label: 'Need review', intent: 'secondary', done: 'Sent for review' }
         ],
-        detail: 'Each section has an approval recorded against it. Assembly gathers the approved answers into a single document for a final check before delivery.'
-      },
-      {
-        id: 'celestra-meridian-dataroom',
-        title: 'Meridian data-room access',
-        context: ['Relationship-owner approval and recipient eligibility are confirmed.'],
-        recLabel: 'Current state',
-        recommendation: 'Ready to prepare access.',
-        actions: [
-          { label: 'Prepare access', intent: 'primary', done: 'Access prepared' },
-          { label: 'Need review', intent: 'secondary', done: 'Sent for review' }
-        ],
-        detail: 'The relationship owner has approved access and the recipient has passed the eligibility check. Preparing access sets up the named recipient without granting anything beyond the approved scope.'
-      },
-      {
-        id: 'celestra-summit-materials',
-        title: 'Summit meeting materials',
-        context: ['An approved master exists.', 'A recipient-specific derivative has not been prepared.'],
-        recLabel: 'Current state',
-        recommendation: 'Ready to prepare the recipient version.',
-        actions: [
-          { label: 'Prepare material', intent: 'primary', done: 'Material prepared' },
-          { label: 'Need review', intent: 'secondary', done: 'Sent for review' }
-        ],
-        detail: 'The approved master is the source. The recipient version applies the agreed adjustments for this audience without changing any approved content.'
+        detail: 'The approved master and recipient-specific derivative are controlled inside Diligence & Requests before any data-room access is prepared.'
       }
     ],
     today: [
-      { time: '11:00', title: 'GreenVale DDQ package', note: 'Due today', tone: 'attention' },
-      { time: '14:00', title: 'Meridian data-room', note: 'Access requested', tone: 'ready' },
-      { time: '16:30', title: 'Summit meeting prep', note: 'Supporting John', tone: 'calm' }
+      { time: '11:00', title: 'MergePoint review', note: '12 proposed contacts', tone: 'attention' },
+      { time: '14:00', title: 'Meridian data-room', note: 'Ready to assemble', tone: 'ready' },
+      { time: '16:30', title: 'Suggested task cleanup', note: 'Not official tasks yet', tone: 'calm' }
     ],
     waiting: [
-      { title: 'Finance confirmation', note: 'Due tomorrow · No action needed yet' },
-      { title: 'Legal review', note: 'Expected Wednesday · No action needed yet' },
-      { title: 'John commercial decision', note: 'Pending · No action needed yet' }
+      { title: 'Ownership confirmation', note: 'Waiting on John' },
+      { title: 'Asia account match', note: 'Waiting on Kelvin' },
+      { title: 'Approval version', note: 'Waiting on Ben' }
     ]
   };
 
@@ -236,11 +239,37 @@
     ]
   };
 
+
+  var BEN_HOME = {
+    needsYou: [
+      { id:'ben-stage4-plan', title:'Stage 4 LPs without strategic action plan', context:['Four advanced relationships have no current owner plan.'], recLabel:'Current state', recommendation:'Decide whether to assign owner plans or downgrade priority.', actions:[{label:'Review exceptions',intent:'primary',done:'Exceptions opened'},{label:'Ask owners',intent:'secondary',done:'Owner request recorded'}], detail:'Ben sees strategic gaps, approval items and exceptions where owner judgement is required.' },
+      { id:'ben-priority-mismatch', title:'Priority mismatch: owner judgement vs automated signal', context:['Automated signal is high while owner priority is low for two LPs.'], recLabel:'Held', recommendation:'Challenge the stale inputs before changing plan.', actions:[{label:'Open relationship review',intent:'primary',done:'Relationship review opened'}], detail:'Automated ranks are a challenge signal only and cannot override owner judgement silently.' },
+      { id:'ben-brief-approval', title:'Upcoming LP meetings missing concise brief', context:['Three meetings in the next seven days lack a current brief.'], recLabel:'Blocked', recommendation:'Ask owners to prepare concise briefs before the meeting window.', actions:[{label:'Assign brief owners',intent:'primary',done:'Brief owners assigned'}], detail:'Briefs are cumulative: permanent relationship brief, meeting-specific brief, then post-meeting update.' }
+    ],
+    today:[{time:'09:30',title:'Approval decisions',note:'Two frozen packages',tone:'attention'},{time:'13:00',title:'Stage 4 review',note:'Action plans missing',tone:'ready'},{time:'16:00',title:'Weekly coverage review',note:'Exceptions only',tone:'calm'}],
+    waiting:[{title:'Europe owner plans',note:'Waiting on John'},{title:'Asia priority update',note:'Waiting on Kelvin'},{title:'DDQ disclosure boundary',note:'Waiting on Legal'}]
+  };
+  var EMILY_HOME = {
+    needsYou: [
+      { id:'emily-template', title:'Briefing-note standardisation', context:['Two meeting brief templates diverge from current process.'], recLabel:'Suggested', recommendation:'Approve one standard template and retire the old draft.', actions:[{label:'Review template',intent:'primary',done:'Template review opened'}], detail:'Emily sees process, template, reporting and Salesforce structure fixes.' },
+      { id:'emily-fields', title:'Salesforce structure fixes', context:['Subjective priority and action category ownership are unclear.'], recLabel:'Held', recommendation:'Confirm field ownership before migration notes are accepted.', actions:[{label:'Confirm field owners',intent:'primary',done:'Field owner review opened'}], detail:'No silent ownership changes or stage movement happen from ShoreVest One.' },
+      { id:'emily-reporting', title:'Weekly reporting configuration', context:['Snapshot is live but three data-quality exceptions need taxonomy.'], recLabel:'Current state', recommendation:'Classify stale-record and missing-next-step exception types.', actions:[{label:'Open reporting config',intent:'primary',done:'Reporting config opened'}], detail:'Reporting is treated as a live workstream with source, owner and freshness visible.' }
+    ],
+    today:[{time:'10:00',title:'Process configuration',note:'Action category design',tone:'attention'},{time:'14:30',title:'Template library',note:'One standard needed',tone:'ready'}],
+    waiting:[{title:'Salesforce field list',note:'Waiting on Celestra'},{title:'AI control register evidence',note:'Waiting on vendors'}]
+  };
+
   /* ── People ─────────────────────────────────────────────────────────────
      `role` carries the shared capability role so the legacy Tools prototype
      keeps working; `displayRole` is what the person actually sees. */
 
   var PERSONAS = [
+    {
+      id: 'ben', name: 'Ben Fanger', displayRole: 'Managing Partner',
+      username: 'ben.fanger@shorevest.example', role: TOOLS_ROLE, region: 'Firm', defaultSender: 'John Jones',
+      nav: canonicalNav({ myWork: 6, relationships: 4, outreach: 0, meetings: 3, diligence: 1, intel: 2, reporting: 2, approvals: 5 }), home: BEN_HOME,
+      permissions: { canApproveSender: true, canApproveAsia: true, canApproveExAsia: true, canPrepare: true }
+    },
     {
       id: 'john', name: 'John Jones', displayRole: 'Director of Client Solutions, Ex-Asia',
       username: 'john.jones@shorevest.example', role: TOOLS_ROLE, region: 'Ex-Asia', defaultSender: 'John Jones',
@@ -258,6 +287,12 @@
       username: 'celestra.gallagher@shorevest.example', role: TOOLS_ROLE, region: 'Operations', defaultSender: 'John Jones',
       nav: canonicalNav({ myWork: 6, relationships: 5, outreach: 1, meetings: 3, diligence: 4, intel: 1, reporting: 3, approvals: 5 }), home: CELESTRA_HOME,
       permissions: { canApproveSender: false, canMaintainRecords: true, canCoordinateMergePoint: true }
+    },
+    {
+      id: 'emily', name: 'Emily Oestericher', displayRole: 'Operations / Process Design',
+      username: 'emily.oestericher@shorevest.example', role: TOOLS_ROLE, region: 'Operations', defaultSender: 'John Jones',
+      nav: canonicalNav({ myWork: 5, relationships: 2, outreach: 0, meetings: 1, diligence: 2, intel: 1, reporting: 4, approvals: 2 }), home: EMILY_HOME,
+      permissions: { canApproveSender: false, canMaintainRecords: true, canConfigureProcess: true }
     },
     {
       id: 'nico', name: 'Nico Jacques', displayRole: 'Outreach Owner / Outreach Operator',
