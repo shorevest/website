@@ -51,7 +51,7 @@ body.insights-page .cdd-hero__panel-cover {
   object-fit: cover; object-position: center;
   margin: 0 0 24px;
   border: 1px solid var(--sv-border-dark);
-  border-radius: 10px;
+  border-radius: 0;
   background: rgba(252, 249, 241, 0.06);
 }
 body.insights-page .cdd-hero__panel-label {
@@ -404,7 +404,7 @@ body.insights-page .cdd-hero__image {
   margin: 0; width: 100%;
   aspect-ratio: 1 / 1;
   border: 0;
-  border-radius: 14px;
+  border-radius: 0;
   background: rgba(252, 249, 241, 0.06);
   overflow: hidden;
 }
@@ -427,7 +427,7 @@ body.insights-page .cdd-hero__field::before {
   bottom: -26px;
   left: clamp(36px, 3.5vw, 56px);
   background: var(--sv-cinnabar-d, #9F2F24);
-  border-radius: 14px;
+  border-radius: 0;
   z-index: 0;
 }
 /* Featured-report panel becomes a paper card floating over the photo edge */
@@ -441,7 +441,7 @@ body.insights-page .cdd-hero__panel {
   background: #FFFFFF;
   border: 1px solid rgba(82, 71, 54, 0.18);
   border-top: 1px solid rgba(82, 71, 54, 0.18);
-  border-radius: 12px;
+  border-radius: 0;
   padding: clamp(24px, 2.4vw, 34px);
   box-shadow: 0 18px 42px rgba(0, 0, 0, 0.28);
 }
@@ -608,4 +608,90 @@ main > section + section {
   width: 0 !important;
   height: 0 !important;
   background: transparent !important;
+}
+
+/* ==========================================================================
+   UI REFINEMENTS (2026-07-10) — archive search, row affordance, empty state
+   Additive polish on the existing ledger. Placed last so it wins over the
+   no-rules override blocks above. Palette stays cinnabar + 青; no cards,
+   no rounded ledger corners, no decorative horizontal rules.
+   ========================================================================== */
+
+/* --- Controls: chips on the left, search + count grouped on the right --- */
+body.insights-page .cdd-arc__controls { align-items: flex-end; gap: 20px 28px; }
+body.insights-page .cdd-arc__tools {
+  display: flex; align-items: center; gap: 18px 22px; flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* Square search field, matching the filter-button language */
+body.insights-page .cdd-arc__search {
+  position: relative; display: flex; align-items: center;
+  width: clamp(220px, 26vw, 300px);
+  border: 1px solid var(--sv-border-light-strong);
+  background: #FFFFFF;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+body.insights-page .cdd-arc__search:focus-within {
+  border-color: var(--sv-qing-dark, #1E4040);
+  box-shadow: 0 0 0 3px rgba(122, 175, 175, 0.22);
+}
+body.insights-page .cdd-arc__search-icon {
+  flex: none; width: 15px; height: 15px; margin-left: 14px;
+  color: var(--sv-muted, #6E7169);
+}
+body.insights-page .cdd-arc__search-input {
+  flex: 1; min-width: 0; height: 44px; padding: 0 14px 0 10px;
+  border: 0; background: transparent; border-radius: 0;
+  font: 400 13.5px/1 var(--sv-font); letter-spacing: 0.01em; color: var(--sv-ink);
+  appearance: none;
+}
+body.insights-page .cdd-arc__search-input::placeholder { color: var(--sv-muted, #6E7169); }
+body.insights-page .cdd-arc__search-input:focus-visible { outline: none; }
+body.insights-page .cdd-arc__search-input::-webkit-search-cancel-button { cursor: pointer; }
+
+/* --- Row affordance: title nudges + Read arrow slides on hover/focus --- */
+body.insights-page .cdd-arc__row-title { transition: color .15s ease, transform .18s ease; }
+body.insights-page .cdd-arc__row:hover .cdd-arc__row-title,
+body.insights-page .cdd-arc__row:focus-visible .cdd-arc__row-title { transform: translateX(3px); }
+body.insights-page .cdd-arc__read span { transition: transform .18s ease; }
+body.insights-page .cdd-arc__row:hover .cdd-arc__read span,
+body.insights-page .cdd-arc__read:hover span,
+body.insights-page .cdd-arc__read:focus-visible span { transform: translateX(3px); }
+
+/* Featured 'Latest' row: keep the tag from crowding the title */
+body.insights-page .cdd-arc__row--featured { padding-top: 34px; }
+
+/* --- Empty state --- */
+body.insights-page .cdd-arc__empty {
+  padding: clamp(48px, 6vw, 76px) 4px; text-align: center;
+}
+body.insights-page .cdd-arc__empty[hidden] { display: none; }
+body.insights-page .cdd-arc__empty-title {
+  margin: 0; font: 500 20px/1.2 var(--sv-font); letter-spacing: -0.01em; color: var(--sv-ink);
+}
+body.insights-page .cdd-arc__empty-body {
+  margin: 12px 0 0; font: 400 14.5px/1.6 var(--sv-font); color: var(--sv-ink-2);
+}
+body.insights-page .cdd-arc__empty-reset {
+  margin-top: 24px; cursor: pointer; appearance: none;
+  padding: 11px 22px; border-radius: 0;
+  font: 600 11.5px/1 var(--sv-font); letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--sv-ivory); background: var(--sv-qing-dark, #1E4040);
+  border: 1px solid var(--sv-qing-dark, #1E4040);
+  transition: background .15s ease, border-color .15s ease;
+}
+body.insights-page .cdd-arc__empty-reset:hover { background: var(--sv-ink, #182524); border-color: var(--sv-ink, #182524); }
+body.insights-page .cdd-arc__empty-reset:focus-visible { outline: 2px solid var(--sv-cinnabar); outline-offset: 2px; }
+
+@media (max-width: 760px) {
+  body.insights-page .cdd-arc__tools { width: 100%; justify-content: space-between; }
+  body.insights-page .cdd-arc__search { width: 100%; order: -1; }
+  /* On touch, the title nudge reads as jitter — disable it. */
+  body.insights-page .cdd-arc__row:hover .cdd-arc__row-title { transform: none; }
+}
+
+/* 2026-07-10 · Match interior hero height to the homepage masthead. */
+@media (min-width: 881px) {
+  body.insights-page .cdd-hero__inner { min-height: 650px; }
 }

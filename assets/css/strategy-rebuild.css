@@ -644,7 +644,7 @@ body.strategy-page .sx-hero__media::before {
   bottom: -26px;
   left: clamp(36px, 3.5vw, 56px);
   background: var(--sv-qing, #3D7070);
-  border-radius: 14px;
+  border-radius: 0;
   z-index: 0;
 }
 body.strategy-page .sx-hero__image {
@@ -652,7 +652,7 @@ body.strategy-page .sx-hero__image {
   margin: 0; width: 100%;
   aspect-ratio: 1 / 1;
   border: 0;
-  border-radius: 14px;
+  border-radius: 0;
   background: var(--sv-stone, #F1EBDD);
   overflow: hidden;
 }
@@ -881,7 +881,7 @@ body.strategy-page .sv-exec__head-r {
   background: rgba(252, 249, 241, 0.92);
   border: 1px solid rgba(183, 164, 116, 0.58);
   border-left: 4px solid var(--sv-cinnabar);
-  border-radius: 3px;
+  border-radius: 0;
   padding: clamp(28px, 3vw, 42px) clamp(30px, 3.3vw, 46px);
   box-shadow: 0 10px 28px rgba(24, 32, 34, 0.035);
 }
@@ -1203,4 +1203,229 @@ body.strategy-page #risk .st-risk__panel-body + .st-risk__panel-body { margin-to
     border-right: 0;
     border-bottom: 1px solid var(--sv-border-light);
   }
+}
+
+/* ==========================================================================
+   2026-07-10 · INSTITUTIONAL FLAT PASS (definitive, last-in-file)
+   Course-correction. The prior pass leaned on drop shadows and hover lift,
+   which made the cards and panels read as boxes floating off the page — a
+   consumer/SaaS look, not an institutional one. And the section support copy
+   sat orphaned in the top-right of each head, floating in empty space with
+   nothing anchoring it.
+
+   This pass resets to the grammar credit institutions actually use: flat
+   surfaces, hairline structure, one disciplined accent, and copy that is
+   locked to the grid. No shadows, no lift, no floating. Scoped to
+   body.strategy-page and last in the file so it wins the cascade.
+   ========================================================================== */
+
+body.strategy-page { --st-ease: cubic-bezier(.2, .8, .2, 1); }
+
+/* --- Section rhythm: generous, even air --------------------------------- */
+body.strategy-page .st-section,
+body.strategy-page .sv-exec { padding-block: clamp(76px, 8vw, 120px); }
+
+/* Headline: tighten optical tracking on the large display cut. */
+body.strategy-page .st-head__l .sv-h2,
+body.strategy-page .sv-exec__head-l .sv-h2 {
+  letter-spacing: -0.022em;
+  text-wrap: balance;
+}
+body.strategy-page .st-head__l .sv-label,
+body.strategy-page .sv-exec__head-l .sv-label { color: var(--sv-oxide); }
+
+/* --- De-float the section support copy ---------------------------------- */
+/* The single biggest "floating text box" fix: anchor the right-hand deck to
+   the headline's baseline instead of letting a short sentence drift in the
+   top-right void. Heading and deck now share a bottom edge and read as one
+   locked editorial unit — the standard institutional head. */
+body.strategy-page .st-head,
+body.strategy-page .sv-exec__head {
+  align-items: end;
+}
+body.strategy-page .st-head__r,
+body.strategy-page .sv-exec__head-r {
+  align-self: end;
+  padding-top: 0;
+}
+@media (max-width: 900px) {
+  body.strategy-page .st-head,
+  body.strategy-page .sv-exec__head { align-items: start; }
+  body.strategy-page .st-head__r,
+  body.strategy-page .sv-exec__head-r { align-self: start; }
+}
+
+/* --- One flat card surface: reasons + origination flow ------------------ */
+/* Flat: white surface, hairline frame, a single qing top accent. No shadow,
+   no movement. Hover is a quiet warm wash + the accent stepping to cinnabar —
+   presence without the box lifting off the page. */
+body.strategy-page .st-reason,
+body.strategy-page .st-reason:first-child,
+body.strategy-page .st-reason:last-child,
+body.strategy-page .sv-flow__step {
+  position: relative;
+  background: #fff;
+  border: 1px solid var(--sv-border-light);
+  border-top: 2px solid var(--sv-qing, #3D7070);
+  box-shadow: none;
+  transition: background-color .28s ease, border-color .28s ease;
+}
+body.strategy-page .st-reason:hover,
+body.strategy-page .sv-flow__step:hover {
+  background: var(--sv-ivory);
+  border-top-color: var(--sv-cinnabar);
+}
+
+/* Reasons: indexed micro-label so the three structural reasons scan as a set. */
+body.strategy-page .st-reasons { counter-reset: st-reason; }
+body.strategy-page .st-reason { counter-increment: st-reason; }
+body.strategy-page .st-reason__k {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+body.strategy-page .st-reason__k::after {
+  content: counter(st-reason, decimal-leading-zero);
+  order: -1;
+  font: 600 11px/1 var(--sv-font);
+  letter-spacing: 0.08em;
+  color: var(--sv-cinnabar);
+  font-variant-numeric: tabular-nums;
+}
+body.strategy-page .st-reason__title { font-size: 21px; }
+
+/* Origination flow: a semantic <ol>, so number it — same cadence as the
+   numbered sub-strategy sleeves. */
+body.strategy-page .sv-flow { counter-reset: st-flow; }
+body.strategy-page .sv-flow__step { counter-increment: st-flow; }
+body.strategy-page .sv-flow__title::before {
+  content: counter(st-flow, decimal-leading-zero);
+  display: block;
+  margin-bottom: clamp(14px, 1.6vw, 20px);
+  font: 600 12px/1 var(--sv-font);
+  letter-spacing: 0.16em;
+  color: var(--sv-cinnabar);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Flat bands & panels — no lift, no gloss ---------------------------- */
+/* Sub-strategies band: flat stone. */
+body.strategy-page #sub-strategies { background: var(--sv-stone); }
+
+/* Underwriting-considerations panel: a flat, clearly framed grouping — a
+   panel, not a floating card. */
+body.strategy-page .st-thresholds {
+  background: #fff;
+  border: 1px solid var(--sv-border-light-strong);
+  border-top: 2px solid var(--sv-qing, #3D7070);
+  box-shadow: none;
+}
+
+/* Risk block: one crisp hairline frame, sitting flat on the page. */
+body.strategy-page #risk .st-risk {
+  box-shadow: inset 0 0 0 1px var(--sv-border-light-strong);
+}
+/* Recovery-risk panel: a single flat cinnabar field, gently graded for weight
+   — no glossy highlight. */
+body.strategy-page #risk .st-risk__panel {
+  background: linear-gradient(158deg, #C4382A 0%, #9E2E22 100%);
+}
+
+/* --- Sub-strategy sleeves: keep the quiet index nudge on hover ---------- */
+body.strategy-page .st-sleeve__no {
+  transition: transform 300ms var(--st-ease), letter-spacing 300ms var(--st-ease);
+}
+body.strategy-page .st-sleeve:hover .st-sleeve__no,
+body.strategy-page .st-sleeve:focus-within .st-sleeve__no {
+  transform: translateX(8px);
+  letter-spacing: 0.24em;
+}
+
+/* --- Disclosures: quiet closing band ------------------------------------ */
+body.strategy-page .st-disc { background: var(--sv-stone); }
+
+@media (prefers-reduced-motion: reduce) {
+  body.strategy-page .st-reason,
+  body.strategy-page .sv-flow__step,
+  body.strategy-page .st-sleeve__no { transition: none; }
+}
+
+/* ==========================================================================
+   2026-07-10 · SIGNATURE REFINEMENT (definitive, last-in-file)
+   Takes the page past "clean and institutional" to a considered, best-in-class
+   finish. Three moves, all flat:
+     1. Replace the flat cinnabar slab under the hero with a deep-ink briefing
+        ledger — the single biggest lift; it reads as a premium data band and
+        returns cinnabar to being a true accent rather than ambient chrome.
+     2. Larger, tighter display headings for real typographic confidence.
+     3. Big, quiet editorial numerals anchoring the three sub-strategies, with
+        the index warming to cinnabar on hover.
+   ========================================================================== */
+
+/* 1 · Strategy-at-a-glance → deep-ink briefing ledger --------------------- */
+body.strategy-page .sx-glance {
+  padding: clamp(46px, 4.8vw, 70px) 0 clamp(48px, 5vw, 72px);
+}
+body.strategy-page .sx-glance::before {
+  background: var(--sv-ink, #182524);
+}
+body.strategy-page .sx-glance > div {
+  padding: 0 clamp(30px, 3.2vw, 48px);
+  border-left-color: rgba(252, 249, 241, 0.14);
+}
+body.strategy-page .sx-glance > div:first-child { padding-left: 0; }
+body.strategy-page .sx-glance dt {
+  margin: 0 0 16px;
+  font: 600 11px/1.3 var(--sv-font);
+  letter-spacing: 0.2em;
+  color: rgba(252, 249, 241, 0.5);
+}
+body.strategy-page .sx-glance dd {
+  font: 400 clamp(16px, 1.25vw, 18.5px)/1.52 var(--sv-font);
+  color: var(--sv-ivory);
+  letter-spacing: -0.005em;
+}
+@media (max-width: 880px) {
+  body.strategy-page .sx-glance > div {
+    padding: 22px 0;
+    border-left: 0;
+    border-top: 1px solid rgba(252, 249, 241, 0.14);
+  }
+  body.strategy-page .sx-glance > div:first-child { border-top: 0; padding-top: 0; }
+}
+
+/* 2 · Display headings: larger and tighter for confidence ---------------- */
+body.strategy-page .st-head__l .sv-h2,
+body.strategy-page .sv-exec__head-l .sv-h2 {
+  font-size: clamp(33px, 3.9vw, 52px);
+  line-height: 1.07;
+  letter-spacing: -0.026em;
+}
+
+/* 3 · Three strategies: large editorial index numerals ------------------- */
+/* The core "three strategies" set now carries big, light, quiet numerals that
+   anchor each row like chapter numbers — presence without another red mark. */
+body.strategy-page .st-sleeve__lead { gap: clamp(14px, 1.4vw, 22px); }
+body.strategy-page .st-sleeve__no {
+  font: 300 clamp(30px, 3.1vw, 44px)/1 var(--sv-font);
+  letter-spacing: -0.01em;
+  color: rgba(24, 37, 36, 0.20);
+  transition: color 300ms var(--st-ease);
+}
+body.strategy-page .st-sleeve:hover .st-sleeve__no,
+body.strategy-page .st-sleeve:focus-within .st-sleeve__no {
+  color: var(--sv-cinnabar);
+  transform: none;
+  letter-spacing: -0.01em;
+}
+body.strategy-page .st-sleeve__title { font-size: clamp(22px, 1.9vw, 25px); }
+
+/* Recovery-risk panel: a deeper, richer oxblood grade ---------------------- */
+body.strategy-page #risk .st-risk__panel {
+  background: linear-gradient(160deg, #BE3627 0%, #892A1E 100%);
+}
+
+/* 2026-07-10 · Match interior hero height to the homepage masthead. */
+@media (min-width: 881px) {
+  body.strategy-page .sx-hero__top { min-height: 650px; }
 }

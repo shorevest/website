@@ -202,21 +202,6 @@ body.press-page .pr-events__empty {
 }
 body.press-page .pr-events__empty[hidden] { display: none; }
 
-/* "Show more" toggle for the upcoming ledger — only a slice of upcoming events
-   shows by default; this reveals the rest in place. Quiet, text-forward, sits
-   on its own rule so it reads as a control, not another event row. */
-body.press-page .pr-events__more {
-  display: flex; justify-content: center;
-  padding: 22px 0 4px; border-bottom: 1px solid var(--sv-border-light);
-}
-body.press-page .pr-events__more-btn {
-  appearance: none; background: none; cursor: pointer;
-  font: 600 12px/1 var(--sv-font); letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--sv-cinnabar);
-  padding: 10px 22px; border: 1px solid var(--sv-border-light-strong);
-  transition: border-color .15s ease, color .15s ease;
-}
-body.press-page .pr-events__more-btn:hover { border-color: var(--sv-cinnabar); }
 
 @media (max-width: 880px) {
   body.press-page .pr-section-head__l,
@@ -397,21 +382,11 @@ body.press-page .pr-disclosures__body {
 }
 
 
-/* Media hero */
-body.press-page .pr-hero-media {
-  margin: 0; width: 100%; aspect-ratio: 16 / 9; height: auto;
-  border: 1px solid var(--sv-border-light-strong);
-  background: var(--sv-stone, #EFEADD);
-  overflow: hidden;
-}
-body.press-page .pr-hero-media img {
-  display: block; width: 100%; height: 100%; object-fit: cover;
-  -webkit-filter: none; filter: none;
-}
-
 /* ==========================================================================
-   Media hero (2026-07-09) — square paper card matched to the homepage hero
-   image proportions. The media page intentionally uses no side accent bar.
+   Media hero — reuses the shared homepage layered hero system (grayscale
+   square image + white reference panel + offset cinnabar block). press.html
+   carries body.homepage, so the body.homepage .sv-hero__* rules apply here
+   unchanged; only the panel copy and the plate's tonal lift differ.
    ========================================================================== */
 body.press-page .media-hero {
   position: relative;
@@ -457,7 +432,7 @@ body.press-page .media-hero__box {
   padding: clamp(34px, 4vw, 58px);
   background: rgba(250, 246, 238, 0.97);
   border: 1px solid rgba(27, 31, 30, 0.14);
-  border-radius: 14px;
+  border-radius: 0;
   box-shadow: 0 26px 60px rgba(8, 16, 18, 0.34);
 }
 body.press-page .media-hero__box .sv-hero__label {
@@ -494,9 +469,6 @@ body.press-page .media-hero__box .sv-hero__body { max-width: none; }
     padding: 28px 24px;
   }
 }
-
-body.press-page .pr-open { padding-block: 0; }
-body.press-page .pr-proof-band { margin-top: 0; }
 
 /* Client directive: no decorative horizontal rules/bars. */
 :where(hr, [role="separator"], [class*="__rule"], [class*="-rule"], [class*="__divider"], [class*="-divider"], [class*="topline"], [class*="separator"]):not(svg):not(path):not(img) {
@@ -621,4 +593,9 @@ main > section + section {
   width: 0 !important;
   height: 0 !important;
   background: transparent !important;
+}
+
+/* 2026-07-10 · Match interior hero height to the homepage masthead. */
+@media (min-width: 981px) {
+  body.press-page .media-hero .sv-hero__inner { min-height: 650px; }
 }

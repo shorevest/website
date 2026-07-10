@@ -7,6 +7,17 @@
   const chips = Array.from(root.querySelectorAll('.cdd-arc__chip'));
   const yearMarkers = Array.from(root.querySelectorAll('.cdd-arc__year'));
   const counter = root.querySelector('[data-cdd-arc-count]');
+  const search = root.querySelector('[data-cdd-arc-search]');
+  const empty = root.querySelector('[data-cdd-arc-empty]');
+  const reset = root.querySelector('[data-cdd-arc-reset]');
+
+  // Cache each row's searchable text once (title + excerpt + category).
+  rows.forEach((row) => {
+    row.dataset.cddArcText = (row.textContent || '').toLowerCase().replace(/\s+/g, ' ').trim();
+  });
+
+  let activeTopic = 'all';
+  let activeQuery = '';
 
   /* --- Whole-row navigation + keyboard (Enter opens article) --- */
   rows.forEach((row) => {
@@ -27,12 +38,14 @@
     });
   });
 
-  /* --- Filter chips --- */
-  const applyFilter = (topic) => {
+  /* --- Combined topic + search filter --- */
+  const applyFilter = () => {
     let visible = 0;
 
     rows.forEach((row) => {
-      const match = topic === 'all' || row.getAttribute('data-topic') === topic;
+      const topicMatch = activeTopic === 'all' || row.getAttribute('data-topic') === activeTopic;
+      const textMatch = !activeQuery || (row.dataset.cddArcText || '').indexOf(activeQuery) !== -1;
+      const match = topicMatch && textMatch;
       row.hidden = !match;
       // Request-only placeholders (no readable article) are shown under "All"
       // but never counted as readable articles.
@@ -56,6 +69,9 @@
     if (counter) {
       counter.textContent = String(visible);
     }
+    if (empty) {
+      empty.hidden = visible !== 0;
+    }
   };
 
   chips.forEach((chip) => {
@@ -64,7 +80,31 @@
         c.classList.toggle('is-active', c === chip);
         c.setAttribute('aria-selected', c === chip ? 'true' : 'false');
       });
-      applyFilter(chip.getAttribute('data-topic') || 'all');
+      activeTopic = chip.getAttribute('data-topic') || 'all';
+      applyFilter();
     });
   });
+
+  if (search) {
+    search.addEventListener('input', () => {
+      activeQuery = search.value.toLowerCase().trim();
+      applyFilter();
+    });
+  }
+
+  /* --- Clear-filters button in the empty state --- */
+  if (reset) {
+    reset.addEventListener('click', () => {
+      activeQuery = '';
+      activeTopic = 'all';
+      if (search) search.value = '';
+      chips.forEach((c) => {
+        const isAll = c.getAttribute('data-topic') === 'all';
+        c.classList.toggle('is-active', isAll);
+        c.setAttribute('aria-selected', isAll ? 'true' : 'false');
+      });
+      applyFilter();
+      if (search) search.focus();
+    });
+  }
 })();
