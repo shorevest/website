@@ -23,7 +23,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <script>document.write('<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260701-mobile-audit-430&t='+window.__SVT+'">');</script>
-<script>document.write('<link rel="stylesheet" href="assets/css/firm-rebuild.css?v=20260710-institutional3&t='+window.__SVT+'">');</script>
+<script>document.write('<link rel="stylesheet" href="assets/css/firm-rebuild.css?v=20260710-institutional4&t='+window.__SVT+'">');</script>
 <script>(function(){var T=window.__SVT;function tk(u){return u+(u.indexOf('?')>-1?'&':'?')+'t='+T;}var s=document.createElement('script');s.src=tk('assets/js/image-slot.js');document.head.appendChild(s);})();</script>
 <style>
   body.homepage {
@@ -119,39 +119,55 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   </div>
 </section>
 
-<!-- 2 · WHO WE ARE — editorial narrative + investor ledger -->
+<!-- 2 · WHO WE ARE — annual-report spread: portrait left, narrative right -->
 <section class="fm-who" id="who-we-are" data-screen-label="关于我们" aria-labelledby="fm-who-title">
   <div class="sv-shell fm-who__inner">
-    <div class="fm-who__head">
-      <h2 id="fm-who-title" class="fm-who__title">关于我们</h2>
-      <figure class="fm-who__figure" aria-hidden="true">
-        <img src="pexels-miyou_-77-696995602-23533364.jpg" alt="" width="3456" height="5184" loading="lazy" decoding="async">
-      </figure>
-    </div>
+    <figure class="fm-who__figure" aria-hidden="true">
+      <img src="pexels-miyou_-77-696995602-23533364.jpg" alt="" width="3456" height="5184" loading="lazy" decoding="async">
+    </figure>
     <div class="fm-who__main">
-      <p class="fm-who__narr">新岸资本团队代表全球机构投资者，在中国管理逾 20 亿美元的私募信贷与私募债务投资。</p>
+      <p class="fm-kicker">关于我们</p>
+      <h2 id="fm-who-title" class="fm-who__title">专注中国的私募信贷平台</h2>
+      <p class="fm-who__lead">新岸资本团队代表全球机构投资者，在中国管理逾 20 亿美元的私募信贷与私募债务投资。</p>
       <p class="fm-who__narr">凭借专注中国的信贷平台，新岸资本提供量身定制的中国信贷解决方案，并选择性地把握不良债务机会，同时在亚洲私募信贷市场拥有更广泛的经验。</p>
-      <div class="fm-investors" aria-label="机构投资者基础">
-        <p class="fm-investors__label">机构投资者基础</p>
-        <ul class="fm-investors__list">
-          <li>主权财富基金</li>
-          <li>养老基金</li>
-          <li>保险公司</li>
-          <li>基金会</li>
-          <li>捐赠基金</li>
-          <li>家族办公室</li>
-        </ul>
-      </div>
     </div>
   </div>
 </section>
 
-<!-- 3 · CORE COMPETENCIES — capability ledger on stone -->
+<!-- 3 · INSTITUTIONAL INVESTOR BASE — standalone register on stone -->
+<section class="fm-inv-sec" id="investor-base" data-screen-label="投资者基础" aria-labelledby="fm-inv-title">
+  <div class="sv-shell">
+    <div class="fm-sechead">
+      <div class="fm-sechead__l">
+        <p class="fm-kicker">资本合作伙伴</p>
+        <h2 id="fm-inv-title" class="fm-sechead__title">机构投资者基础</h2>
+      </div>
+      <div class="fm-sechead__r">
+        <p>新岸资本代表机构投资者管理长期限委托资金，合作关系跨越多个市场周期、历久弥深。</p>
+      </div>
+    </div>
+    <ul class="fm-inv" aria-label="投资者类型">
+      <li class="fm-inv__cell"><span class="fm-inv__num" aria-hidden="true">01</span><span class="fm-inv__name">主权财富基金</span></li>
+      <li class="fm-inv__cell"><span class="fm-inv__num" aria-hidden="true">02</span><span class="fm-inv__name">养老基金</span></li>
+      <li class="fm-inv__cell"><span class="fm-inv__num" aria-hidden="true">03</span><span class="fm-inv__name">保险公司</span></li>
+      <li class="fm-inv__cell"><span class="fm-inv__num" aria-hidden="true">04</span><span class="fm-inv__name">基金会</span></li>
+      <li class="fm-inv__cell"><span class="fm-inv__num" aria-hidden="true">05</span><span class="fm-inv__name">捐赠基金</span></li>
+      <li class="fm-inv__cell"><span class="fm-inv__num" aria-hidden="true">06</span><span class="fm-inv__name">家族办公室</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- 4 · CORE COMPETENCIES — capability ledger -->
 <section class="fm-comp-sec" id="core-competencies" data-screen-label="核心能力" aria-labelledby="fm-comp-title">
   <div class="sv-shell">
-    <div class="fm-comp-head">
-      <p class="fm-kicker">核心能力</p>
-      <h2 id="fm-comp-title" class="fm-comp-title">定义公司的三项能力</h2>
+    <div class="fm-sechead">
+      <div class="fm-sechead__l">
+        <p class="fm-kicker">核心能力</p>
+        <h2 id="fm-comp-title" class="fm-sechead__title">定义公司的三项能力</h2>
+      </div>
+      <div class="fm-sechead__r">
+        <p>三项能力贯穿每笔投资的全生命周期——从项目获取、承销到结构设计、资产服务与处置。</p>
+      </div>
     </div>
     <ol class="fm-comp">
       <li class="fm-comp__item">
@@ -173,7 +189,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   </div>
 </section>
 
-<!-- 4 · CLOSING — dark statement band -->
+<!-- 5 · CLOSING — dark statement band -->
 <section class="fm-close" id="trust" data-screen-label="以人为本" aria-label="以人为本的业务">
   <div class="sv-shell fm-close__inner">
     <p class="fm-close__label">以人为本的业务</p>
