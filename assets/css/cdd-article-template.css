@@ -452,3 +452,8 @@ body.cdd-article-page .cdd-dek.sv-hero__body {
   height: 0 !important;
   background: transparent !important;
 }
+
+/* 2026-07-10 · Match China Debt Dynamics article heroes to the homepage masthead. */
+@media (min-width: 881px) {
+  body.cdd-article-page .cdd-intro__grid.sv-hero__inner { min-height: 650px; }
+}

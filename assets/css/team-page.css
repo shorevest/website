@@ -310,3 +310,8 @@
     margin-top: 0 !important;
   }
 }
+
+/* 2026-07-10 · Match interior hero height to the homepage masthead. */
+@media (min-width: 881px) {
+  body.team-page .pagehero.team-hero > .team-inner { min-height: 650px; }
+}

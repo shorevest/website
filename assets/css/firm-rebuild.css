@@ -445,3 +445,8 @@ main > section + section {
   height: 0 !important;
   background: transparent !important;
 }
+
+/* 2026-07-10 · Match interior hero height to the homepage masthead. */
+@media (min-width: 881px) {
+  body.firm-page .fm-open__inner { min-height: 650px; }
+}

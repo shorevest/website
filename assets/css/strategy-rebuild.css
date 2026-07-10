@@ -1424,3 +1424,8 @@ body.strategy-page .st-sleeve__title { font-size: clamp(22px, 1.9vw, 25px); }
 body.strategy-page #risk .st-risk__panel {
   background: linear-gradient(160deg, #BE3627 0%, #892A1E 100%);
 }
+
+/* 2026-07-10 · Match interior hero height to the homepage masthead. */
+@media (min-width: 881px) {
+  body.strategy-page .sx-hero__top { min-height: 650px; }
+}

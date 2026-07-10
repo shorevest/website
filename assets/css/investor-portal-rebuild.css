@@ -265,3 +265,8 @@ body.investor-portal-page .ip-assure__v { margin: 0; font: 400 13.5px/1.55 var(-
   height: 0 !important;
   background: transparent !important;
 }
+
+/* 2026-07-10 · Match interior hero height to the homepage masthead. */
+@media (min-width: 881px) {
+  body.investor-portal-page .investor-portal-hero__inner { min-height: 650px; }
+}

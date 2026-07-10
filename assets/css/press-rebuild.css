@@ -594,3 +594,8 @@ main > section + section {
   height: 0 !important;
   background: transparent !important;
 }
+
+/* 2026-07-10 · Match interior hero height to the homepage masthead. */
+@media (min-width: 981px) {
+  body.press-page .media-hero .sv-hero__inner { min-height: 650px; }
+}
