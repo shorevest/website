@@ -1726,3 +1726,16 @@ main > section + section {
   height: 0 !important;
   background: transparent !important;
 }
+
+/* ==========================================================================
+   GLOBAL IMAGE DEPTH
+   Gives site imagery a consistent elevated treatment while preserving the
+   flat rendering of brand lockups and small UI icons.
+   ========================================================================== */
+:root {
+  --sv-image-shadow: 0 18px 42px rgba(13, 35, 43, 0.18), 0 6px 18px rgba(13, 35, 43, 0.12);
+}
+
+body :where(img):not(.sv-header img):not(.sv-footer img):not([src*="/brand/"]):not([src*="assets/brand/"]):not([src*="favicon"]):not([src*="apple-touch-icon"]) {
+  box-shadow: var(--sv-image-shadow) !important;
+}
