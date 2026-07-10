@@ -71,15 +71,17 @@
 
   /* Legacy Tools routes — reached via the Tools hub, and kept highlighted
      under Tools while the user is inside one of them. */
-  var TOOLS_ROUTES = ['tools', 'process', 'weekly', 'dataquality', 'outreach',
+  var TOOLS_ROUTES = ['tools', 'process', 'weekly', 'dataquality',
     'exceptions', 'runs', 'admin', 'monitoring', 'batch'];
 
   /* ── Router ────────────────────────────────────────────────────────────── */
 
   var ROUTES = {
     home: 'home', preview: 'preview', tools: 'tools',
-    process: 'process', weekly: 'weekly',
-    dataquality: 'dataquality', outreach: 'outreach', exceptions: 'exceptions',
+    'my-work': 'myWork', relationships: 'relationships', outreach: 'outreach', meetings: 'meetings',
+    diligence: 'diligence', 'investor-intelligence': 'investorIntelligence', reporting: 'reporting',
+    approvals: 'approvals', firm: 'firm',
+    process: 'process', weekly: 'weekly', dataquality: 'dataquality', exceptions: 'exceptions',
     runs: 'runs', admin: 'admin', monitoring: 'monitoring', batch: 'batch'
   };
 
@@ -93,6 +95,7 @@
   function activeNavKey(route) {
     if (route.view === 'preview') return 'preview:' + (route.params[0] || '');
     if (TOOLS_ROUTES.indexOf(route.view) !== -1) return 'tools';
+    if (route.view === 'outreach' && route.params[0]) return 'outreach-' + route.params[0];
     return route.view;
   }
 
@@ -139,11 +142,29 @@
     var nav = el('nav', { class: 'ops-nav', 'aria-label': 'Primary' });
     personaNav(user).forEach(function (item) {
       if (item.sep) { nav.appendChild(el('p', { class: 'ops-nav__sep', text: item.sep })); return; }
-      var isActive = navKeyFor(item) === activeKey;
-      var a = el('a', { href: item.hash, text: item.label, class: isActive ? 'is-active' : '' });
-      if (isActive) a.setAttribute('aria-current', 'page');
+      var itemKey = navKeyFor(item);
+      var isActive = itemKey === activeKey || (item.key === 'outreach' && activeKey.indexOf('outreach') === 0);
+      var row = el('div', { class: 'ops-nav__row' + (isActive ? ' is-active' : '') });
+      var label = item.label + (item.count ? ' ' + item.count : '');
+      var a = el('a', { href: item.hash, text: label, class: isActive ? 'is-active' : '' });
+      if (isActive && !item.children) a.setAttribute('aria-current', 'page');
       a.addEventListener('click', function () { SVOps.state.menuOpen = false; });
-      nav.appendChild(a);
+      row.appendChild(a);
+      if (item.children) {
+        SVOps.state.outreachOpen = SVOps.state.outreachOpen !== false || activeKey.indexOf('outreach') === 0;
+        row.appendChild(el('button', { type: 'button', class: 'ops-nav__chev', text: SVOps.state.outreachOpen ? '▾' : '▸', 'aria-label': 'Expand Outreach submenu', onclick: function (ev) { ev.preventDefault(); SVOps.state.outreachOpen = !SVOps.state.outreachOpen; render(); } }));
+      }
+      nav.appendChild(row);
+      if (item.children && (SVOps.state.outreachOpen || activeKey.indexOf('outreach') === 0)) {
+        var sub = el('div', { class: 'ops-nav__sub' });
+        item.children.forEach(function (child) {
+          var childActive = navKeyFor(child) === activeKey;
+          var ca = el('a', { href: child.hash, text: child.label, class: childActive ? 'is-active' : '' });
+          if (childActive) ca.setAttribute('aria-current', 'page');
+          sub.appendChild(ca);
+        });
+        nav.appendChild(sub);
+      }
     });
     sidebar.appendChild(nav);
 
@@ -186,8 +207,10 @@
 
   var TITLES = {
     home: 'Home', preview: 'ShoreVest One', tools: 'Tools',
+    myWork: 'My Work', relationships: 'Relationships', outreach: 'Outreach', meetings: 'Meetings',
+    diligence: 'Diligence & Requests', investorIntelligence: 'Investor Intelligence', reporting: 'Reporting', approvals: 'Approvals', firm: 'Firm',
     process: 'Process a List', weekly: 'Weekly Reporting',
-    dataquality: 'Salesforce Data Quality', outreach: 'Outreach Preparation',
+    dataquality: 'Salesforce Data Quality',
     exceptions: 'Review Exceptions', runs: 'Previous Runs',
     admin: 'Administration', monitoring: 'Monitoring', batch: 'Batch'
   };

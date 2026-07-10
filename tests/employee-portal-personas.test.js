@@ -22,10 +22,10 @@ const cardIds = (persona) => persona.home.needsYou.map((c) => c.id);
 
 /* ── Role selection ─────────────────────────────────────────────────────── */
 
-test('exactly three demonstration people are offered', () => {
-  assert.strictEqual(P.list.length, 3);
+test('at least four canonical demonstration people are offered', () => {
+  assert.ok(P.list.length >= 4);
   assert.deepStrictEqual(P.list.map((p) => p.name).sort(),
-    ['Celestra Gallagher', 'John Jones', 'Kelvin Chan']);
+    ['Celestra Gallagher', 'John Jones', 'Kelvin Chan', 'Nico Jacques']);
 });
 
 test('the generic Execution Approver identity is gone', () => {
@@ -34,9 +34,10 @@ test('the generic Execution Approver identity is gone', () => {
 });
 
 test('each person has the expected display role', () => {
-  assert.strictEqual(P.byId('john').displayRole, 'Director of Client Solutions — Ex-Asia');
-  assert.strictEqual(P.byId('kelvin').displayRole, 'Director of Client Solutions — Asia');
-  assert.strictEqual(P.byId('celestra').displayRole, 'Investor Relations Associate');
+  assert.strictEqual(P.byId('john').displayRole, 'Director of Client Solutions, Ex-Asia');
+  assert.strictEqual(P.byId('kelvin').displayRole, 'Director of Client Solutions, Asia');
+  assert.strictEqual(P.byId('celestra').displayRole, 'Investor Relations Associate / IR Operations');
+  assert.strictEqual(P.byId('nico').displayRole, 'Outreach Owner / Outreach Operator');
 });
 
 test('byId returns null for an unknown persona', () => {
@@ -45,15 +46,16 @@ test('byId returns null for an unknown persona', () => {
 
 /* ── Navigation by role ─────────────────────────────────────────────────── */
 
-test('John and Kelvin share the RM navigation structure', () => {
-  const rm = ['Home', 'Outreach', 'Relationships', 'Meetings', 'Weekly Review', 'Tools'];
-  assert.deepStrictEqual(navLabels(P.byId('john')), rm);
-  assert.deepStrictEqual(navLabels(P.byId('kelvin')), rm);
+test('all personas share the canonical navigation structure', () => {
+  const canonical = ['Home', 'My Work', 'Relationships', 'Outreach', 'Meetings', 'Diligence & Requests', 'Investor Intelligence', 'Reporting', 'Approvals', 'Firm', 'Tools'];
+  P.list.forEach((p) => assert.deepStrictEqual(navLabels(p), canonical));
 });
 
-test('Celestra has the coordination navigation structure', () => {
-  assert.deepStrictEqual(navLabels(P.byId('celestra')),
-    ['Home', 'My Work', 'Materials & Delivery', 'Diligence & Requests', 'Meeting Support', 'Tools']);
+test('Outreach parent has the three canonical submenu entries', () => {
+  P.list.forEach((p) => {
+    const outreach = p.nav.find((n) => n.key === 'outreach');
+    assert.deepStrictEqual(outreach.children.map((n) => n.label), ['Find or add people', 'Draft messages', 'Sent & responses']);
+  });
 });
 
 test('every persona ends on Tools and begins on Home', () => {
@@ -64,10 +66,12 @@ test('every persona ends on Tools and begins on Home', () => {
   });
 });
 
-test('Celestra does not see the RM commercial navigation', () => {
-  const ir = navLabels(P.byId('celestra'));
-  ['Outreach', 'Relationships', 'Meetings', 'Weekly Review'].forEach((rmItem) => {
-    assert.ok(ir.indexOf(rmItem) === -1, 'Celestra should not have ' + rmItem);
+test('Tools is top-level and not hidden under Workspace', () => {
+  P.list.forEach((p) => {
+    assert.ok(p.nav.every((n) => !n.sep), p.name + ' should not have Workspace separators');
+    assert.ok(navLabels(p).includes('Investor Intelligence'));
+    assert.ok(navLabels(p).includes('Reporting'));
+    assert.ok(navLabels(p).includes('Approvals'));
   });
 });
 
@@ -140,13 +144,9 @@ test('each card id is namespaced to its owner', () => {
 
 /* ── Preview shells ─────────────────────────────────────────────────────── */
 
-test('every future-facing nav item has a restrained preview', () => {
+test('canonical navigation routes directly to product areas, not preview-only labels', () => {
   P.list.forEach((p) => {
-    p.nav.filter((n) => !n.sep && n.hash.indexOf('#/preview/') === 0).forEach((n) => {
-      const key = n.hash.slice('#/preview/'.length);
-      const info = P.preview(key);
-      assert.ok(info && info.title && info.points.length, 'missing preview for ' + key);
-    });
+    p.nav.filter((n) => !n.sep).forEach((n) => assert.ok(n.hash.indexOf('#/preview/') !== 0, n.label));
   });
 });
 

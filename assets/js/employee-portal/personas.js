@@ -26,30 +26,33 @@
   var TOOLS_ROLE = R ? R.ROLES.ADMINISTRATOR : 'Administrator';
 
   /* ── Navigation ─────────────────────────────────────────────────────────
-     Relationship Managers (John, Kelvin) share one navigation structure and
-     interaction design. Celestra has a coordination-oriented structure. Every
-     persona ends on Tools, which holds the preserved operational prototype.
-     Future-facing items route to a single restrained preview shell. */
+     Canonical ShoreVest One navigation. Outreach is the only disclosed
+     submenu; Tools remains a top-level area for legacy prototypes and status
+     reference, not the product concept. */
 
-  var RM_NAV = [
-    { key: 'home', label: 'Home', hash: '#/home' },
-    { key: 'outreach', label: 'Outreach', hash: '#/preview/outreach' },
-    { key: 'relationships', label: 'Relationships', hash: '#/preview/relationships' },
-    { key: 'meetings', label: 'Meetings', hash: '#/preview/meetings' },
-    { key: 'weekly-review', label: 'Weekly Review', hash: '#/preview/weekly-review' },
-    { sep: 'Workspace' },
-    { key: 'tools', label: 'Tools', hash: '#/tools' }
-  ];
-
-  var IR_NAV = [
-    { key: 'home', label: 'Home', hash: '#/home' },
-    { key: 'my-work', label: 'My Work', hash: '#/preview/my-work' },
-    { key: 'materials', label: 'Materials & Delivery', hash: '#/preview/materials' },
-    { key: 'diligence', label: 'Diligence & Requests', hash: '#/preview/diligence' },
-    { key: 'meeting-support', label: 'Meeting Support', hash: '#/preview/meeting-support' },
-    { sep: 'Workspace' },
-    { key: 'tools', label: 'Tools', hash: '#/tools' }
-  ];
+  function canonicalNav(counts) {
+    counts = counts || {};
+    function item(key, label, hash, count, opts) {
+      return Object.assign({ key: key, label: label, hash: hash, count: count || 0 }, opts || {});
+    }
+    return [
+      item('home', 'Home', '#/home'),
+      item('my-work', 'My Work', '#/my-work', counts.myWork),
+      item('relationships', 'Relationships', '#/relationships', counts.relationships),
+      item('outreach', 'Outreach', '#/outreach', counts.outreach, { children: [
+        item('outreach-find', 'Find or add people', '#/outreach/find'),
+        item('outreach-draft', 'Draft messages', '#/outreach/draft'),
+        item('outreach-sent', 'Sent & responses', '#/outreach/sent')
+      ] }),
+      item('meetings', 'Meetings', '#/meetings', counts.meetings),
+      item('diligence', 'Diligence & Requests', '#/diligence', counts.diligence),
+      item('investor-intelligence', 'Investor Intelligence', '#/investor-intelligence', counts.intel),
+      item('reporting', 'Reporting', '#/reporting', counts.reporting),
+      item('approvals', 'Approvals', '#/approvals', counts.approvals),
+      item('firm', 'Firm', '#/firm'),
+      item('tools', 'Tools', '#/tools')
+    ];
+  }
 
   /* ── Home data ──────────────────────────────────────────────────────────
      Three sections only: Needs you, Today, Waiting elsewhere.
@@ -215,37 +218,52 @@
     ]
   };
 
+
+  var NICO_HOME = {
+    needsYou: [
+      { id: 'nico-denmark-research', title: 'Denmark pension search', context: ['Six ATP contacts found; two can be included, four require institution concentration review.'], recLabel: 'Suggested', recommendation: 'Review evidence and prepare a handoff batch for John before drafting.', actions: [{ label: 'Open Outreach', intent: 'primary', done: 'Outreach opened' }, { label: 'Assign review', intent: 'secondary', done: 'Review assigned' }], detail: 'Nico handles broad lead generation, Salesforce cross-checking, initial research and outreach preparation before John or Kelvin sender review.' },
+      { id: 'nico-sf-crosscheck', title: 'Salesforce cross-check', context: ['Three uploaded names match existing Contacts and two need duplicate review.'], recLabel: 'Current state', recommendation: 'Resolve matching before any message preparation. Do not create Opportunities automatically.', actions: [{ label: 'Review matches', intent: 'primary', done: 'Match review opened' }, { label: 'Save for later', intent: 'secondary', done: 'Saved' }], detail: 'AI suggestions and upload matches are not official tasks or CRM changes until accepted by a human.' }
+    ],
+    today: [
+      { time: '09:45', title: 'European pension research', note: 'Evidence needed', tone: 'attention' },
+      { time: '12:00', title: 'Salesforce duplicate queue', note: 'Cross-check only', tone: 'ready' },
+      { time: '16:00', title: 'John/Kelvin handoff notes', note: 'Prepare context', tone: 'calm' }
+    ],
+    waiting: [
+      { title: 'ATP concentration decision', note: 'Waiting on John' },
+      { title: 'Hong Kong family office ownership', note: 'Waiting on Kelvin' },
+      { title: 'MergePoint secondary check', note: 'Waiting on Celestra' }
+    ]
+  };
+
   /* ── People ─────────────────────────────────────────────────────────────
      `role` carries the shared capability role so the legacy Tools prototype
      keeps working; `displayRole` is what the person actually sees. */
 
   var PERSONAS = [
     {
-      id: 'john',
-      name: 'John Jones',
-      displayRole: 'Director of Client Solutions — Ex-Asia',
-      username: 'john.jones@shorevest.example',
-      role: TOOLS_ROLE,
-      nav: RM_NAV,
-      home: JOHN_HOME
+      id: 'john', name: 'John Jones', displayRole: 'Director of Client Solutions, Ex-Asia',
+      username: 'john.jones@shorevest.example', role: TOOLS_ROLE, region: 'Ex-Asia', defaultSender: 'John Jones',
+      nav: canonicalNav({ myWork: 5, relationships: 8, outreach: 3, meetings: 2, diligence: 1, intel: 2, reporting: 1, approvals: 4 }), home: JOHN_HOME,
+      permissions: { canApproveSender: true, canApproveAsia: false, canApproveExAsia: true, canPrepare: true }
     },
     {
-      id: 'kelvin',
-      name: 'Kelvin Chan',
-      displayRole: 'Director of Client Solutions — Asia',
-      username: 'kelvin.chan@shorevest.example',
-      role: TOOLS_ROLE,
-      nav: RM_NAV,
-      home: KELVIN_HOME
+      id: 'kelvin', name: 'Kelvin Chan', displayRole: 'Director of Client Solutions, Asia',
+      username: 'kelvin.chan@shorevest.example', role: TOOLS_ROLE, region: 'Asia', defaultSender: 'Kelvin Chan',
+      nav: canonicalNav({ myWork: 4, relationships: 7, outreach: 2, meetings: 2, diligence: 1, intel: 2, reporting: 1, approvals: 3 }), home: KELVIN_HOME,
+      permissions: { canApproveSender: true, canApproveAsia: true, canApproveExAsia: false, canPrepare: true }
     },
     {
-      id: 'celestra',
-      name: 'Celestra Gallagher',
-      displayRole: 'Investor Relations Associate',
-      username: 'celestra.gallagher@shorevest.example',
-      role: TOOLS_ROLE,
-      nav: IR_NAV,
-      home: CELESTRA_HOME
+      id: 'celestra', name: 'Celestra Gallagher', displayRole: 'Investor Relations Associate / IR Operations',
+      username: 'celestra.gallagher@shorevest.example', role: TOOLS_ROLE, region: 'Operations', defaultSender: 'John Jones',
+      nav: canonicalNav({ myWork: 6, relationships: 5, outreach: 1, meetings: 3, diligence: 4, intel: 1, reporting: 3, approvals: 5 }), home: CELESTRA_HOME,
+      permissions: { canApproveSender: false, canMaintainRecords: true, canCoordinateMergePoint: true }
+    },
+    {
+      id: 'nico', name: 'Nico Jacques', displayRole: 'Outreach Owner / Outreach Operator',
+      username: 'nico.jacques@shorevest.example', role: TOOLS_ROLE, region: 'Operator', defaultSender: 'Nico Jacques',
+      nav: canonicalNav({ myWork: 7, relationships: 4, outreach: 9, meetings: 1, diligence: 0, intel: 2, reporting: 2, approvals: 1 }), home: NICO_HOME,
+      permissions: { canApproveSender: false, canPrepare: true, operatorSendPermitted: true }
     }
   ];
 
