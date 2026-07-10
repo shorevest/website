@@ -23,7 +23,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <script>document.write('<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260708-layered-hero-b&t='+window.__SVT+'">');</script>
-<script>document.write('<link rel="stylesheet" href="assets/css/press-rebuild.css?v=20260709-media-hero-greyscale&t='+window.__SVT+'">');</script>
+<script>document.write('<link rel="stylesheet" href="assets/css/press-rebuild.css?v=20260710-media-hero-split&t='+window.__SVT+'">');</script>
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="shortcut icon" href="/favicon.ico">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
@@ -81,8 +81,11 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 
   <!-- 1 · AUTHORITY OPENING — same layered hero system as the homepage -->
   <section class="sv-hero media-hero" id="media" data-screen-label="Media" aria-labelledby="pr-h1">
-    <img class="media-hero__bg" src="assets/img/media-hero-overlay.jpeg" alt="ShoreVest principal speaking on a conference panel" width="1280" height="1920" loading="eager" decoding="async">
     <div class="sv-hero__inner">
+      <figure class="media-hero__figure">
+        <img class="media-hero__img" src="assets/img/media-hero-overlay.jpeg" alt="ShoreVest principal speaking on a conference panel" width="1280" height="1920" loading="eager" decoding="async">
+        <span class="media-hero__scrim" aria-hidden="true"></span>
+      </figure>
       <div class="media-hero__box">
         <p class="sv-hero__label">Third-party coverage</p>
         <h1 class="sv-hero__headline" id="pr-h1">Media</h1>
