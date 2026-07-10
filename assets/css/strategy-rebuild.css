@@ -1280,22 +1280,7 @@ body.strategy-page .sv-flow__step:hover {
   border-top-color: var(--sv-cinnabar);
 }
 
-/* Reasons: indexed micro-label so the three structural reasons scan as a set. */
-body.strategy-page .st-reasons { counter-reset: st-reason; }
-body.strategy-page .st-reason { counter-increment: st-reason; }
-body.strategy-page .st-reason__k {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-body.strategy-page .st-reason__k::after {
-  content: counter(st-reason);
-  order: -1;
-  font: 600 11px/1 var(--sv-font);
-  letter-spacing: 0.08em;
-  color: var(--sv-cinnabar);
-  font-variant-numeric: tabular-nums;
-}
+/* Reasons: keep the eyebrow label unnumbered for a cleaner editorial scan. */
 body.strategy-page .st-reason__title { font-size: 21px; }
 
 /* Origination flow: a semantic <ol>, so number it — same cadence as the
