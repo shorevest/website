@@ -1,12 +1,13 @@
 /* ==========================================================================
    ShoreVest — Firm page (2026-07-10, institutional pass)
    One coherent design argument, sibling to the homepage and Strategy page:
-     1 · Masthead — editorial lead (kicker / headline / lede) beside a square
-         grayscale grove photograph lifted on a cinnabar offset field, anchored
-         by a full-bleed qing-dark proof ledger ("Platform at a glance").
-     2 · Who We Are — annual-report split: heading rail on the left, large
-         narrative measure on the right, closed by the institutional investor
-         base set as a ruled two-column ledger.
+     1 · Authority opening — the approved cinnabar-field masthead (square
+         gradient block bleeding off the left edge, headline inside, lede on
+         ivory beside it), anchored by a full-bleed qing-dark proof ledger
+         ("Platform at a glance").
+     2 · Who We Are — annual-report split: heading rail with a grayscale
+         grove portrait on the left, large narrative measure on the right,
+         closed by the institutional investor base as a ruled ledger.
      3 · Firm capabilities — numbered three-column discipline ledger on stone.
      4 · Closing — full-bleed ink statement band above the footer.
    Inherits header/footer/tokens/.sv-shell/.sv-reveal from homepage-rebuild.css.
@@ -22,75 +23,66 @@ body.firm-page .fm-kicker {
 }
 
 /* ==========================================================================
-   1 · MASTHEAD
+   1 · AUTHORITY OPENING — cinnabar masthead (approved hero, unchanged design)
+   The square cinnabar gradient field bleeds off the left viewport edge, the
+   headline sits inside it, and the lede reads beside it on ivory.
    ========================================================================== */
-body.firm-page .fm-hero {
+body.firm-page .fm-open {
   position: relative; overflow: hidden;
   background: var(--sv-ivory); color: var(--sv-ink-2);
-  padding-block: 0;
+  padding-block: clamp(50px, 6vw, 90px) 0;
 }
-body.firm-page .fm-hero__top {
-  display: grid; grid-template-columns: repeat(12, 1fr);
-  gap: clamp(28px, 3.2vw, 44px);
-  align-items: center;
-  padding-block: clamp(56px, 6vw, 88px) 0;
-}
-body.firm-page .fm-hero__lead {
-  grid-column: 1 / 7; min-width: 0;
-  padding-right: clamp(24px, 3vw, 56px);
-}
-body.firm-page .fm-hero__eyebrow {
-  margin: 0 0 18px;
-  font: 600 12px/1.4 var(--sv-font);
-  letter-spacing: 0.16em; text-transform: uppercase;
-  color: var(--sv-oxide, #9F2F24);
-}
-body.firm-page .fm-hero__title {
-  margin: 0;
-  font: 500 clamp(40px, 4.4vw, 60px)/1.06 var(--sv-font);
-  letter-spacing: -0.03em; color: var(--sv-ink);
-  max-width: 620px; text-wrap: balance;
-}
-body.firm-page .fm-hero__body {
-  margin-top: 24px;
-  max-width: min(48ch, calc((var(--page-max) - (2 * var(--pad-x))) / 2));
-}
-body.firm-page .fm-hero__body p { margin: 0; font: 400 17px/1.68 var(--sv-font); color: var(--sv-ink-2); }
-body.firm-page .fm-hero__body p + p { margin-top: 16px; }
-
-/* Square grayscale photograph on a cinnabar offset field — the homepage /
-   Strategy hero grammar, with cinnabar (the lead brand color) carrying the
-   Firm page while Strategy keeps qing. */
-body.firm-page .fm-hero__media {
-  grid-column: 7 / 13; position: relative; min-width: 0; align-self: center;
-}
-body.firm-page .fm-hero__media::before {
-  content: "";
-  position: absolute; z-index: 0;
-  top: clamp(44px, 4.5vw, 68px);
-  right: clamp(-36px, -2.2vw, -20px);
-  bottom: -26px;
-  left: clamp(36px, 3.5vw, 56px);
-  background: var(--sv-cinnabar);
-  border-radius: 14px;
-}
-body.firm-page .fm-hero__image {
+body.firm-page .fm-open__inner {
   position: relative; z-index: 1;
-  margin: 0; width: 100%;
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(28px, 3.2vw, 44px);
+  align-items: start;
+}
+body.firm-page .fm-eyebrow {
+  margin: 0 0 22px;
+  font: 600 12px/1.4 var(--sv-font); letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--sv-ink);
+}
+body.firm-page .fm-open__h1 {
+  margin: 0; font: 500 clamp(38px, 4.6vw, 62px)/1.04 var(--sv-font);
+  letter-spacing: -0.03em; color: var(--sv-ink); text-wrap: balance;
+}
+body.firm-page .fm-open__body {
+  align-self: center; grid-column: 2; grid-row: 1;
+}
+/* Cinnabar gradient field — two-tone block matching the homepage / team field:
+   the bright→oxblood gradient plus a solid oxblood band bleeding off the edge.
+   Gradient is mirrored (208deg) so the dark edge sits on the left bleed side,
+   keeping the bright cinnabar toward the text. Copy starts on the same content
+   rail as .sv-header__logo and the global .sv-shell system. */
+body.firm-page .fm-hero__frame {
+  position: relative; align-self: start; justify-self: start; grid-column: 1; grid-row: 1;
+  display: flex; flex-direction: column; justify-content: center;
   aspect-ratio: 1 / 1;
-  border-radius: 14px;
-  background: var(--sv-stone, #F1EBDD);
-  overflow: hidden;
+  width: 100%;
+  max-width: 570px;
+  min-height: 0;
+  padding: clamp(44px, 4.6vw, 70px) clamp(34px, 3.2vw, 52px);
+  margin-left: calc(var(--pad-x) * -1);
+  padding-left: var(--pad-x);
+  background: linear-gradient(208deg, #CF3A2B 0%, #C93B2A 52%, #8F2A20 100%);
+  border-radius: 0 14px 14px 0;
 }
-body.firm-page .fm-hero__image img {
-  display: block; width: 100%; height: 100%;
-  object-fit: cover; object-position: center 62%;
-  filter: grayscale(1);
-  transition: filter 320ms ease;
+body.firm-page .fm-hero__frame > * { position: relative; z-index: 1; }
+body.firm-page .fm-hero__frame::before {
+  content: ""; position: absolute; z-index: 0;
+  top: 0; bottom: 0; right: 100%; width: 50vw;
+  background: #8F2A20;
 }
-body.firm-page .fm-hero__media:hover .fm-hero__image img { filter: grayscale(0); }
-@media (prefers-reduced-motion: reduce) {
-  body.firm-page .fm-hero__image img { transition: none; }
+body.firm-page .fm-hero__frame .fm-eyebrow { color: rgba(252, 249, 241, 0.82); }
+body.firm-page .fm-hero__frame .fm-open__h1 { color: var(--sv-ivory); }
+body.firm-page .fm-open__body p {
+  margin: 0; font: 400 17px/1.66 var(--sv-font); color: var(--sv-ink-2);
+}
+body.firm-page .fm-open__body p + p { margin-top: 18px; }
+@media (max-width: 880px) {
+  body.firm-page .fm-open__inner { grid-template-columns: 1fr; }
+  body.firm-page .fm-hero__frame { grid-column: auto; grid-row: auto; }
+  body.firm-page .fm-open__body { grid-column: auto; grid-row: auto; align-self: start; margin-top: 22px; }
 }
 
 /* ---- Proof ledger — full-bleed deep-water 青 band. Sibling of the Strategy
@@ -134,12 +126,6 @@ body.firm-page .fm-glance__k {
   color: rgba(252, 249, 241, 0.78); max-width: 30ch; text-wrap: pretty;
 }
 
-@media (max-width: 1023px) {
-  body.firm-page .fm-hero__top { grid-template-columns: 1fr; gap: 36px; align-items: start; }
-  body.firm-page .fm-hero__lead { grid-column: auto; padding-right: 0; }
-  body.firm-page .fm-hero__media { grid-column: auto; max-width: 560px; }
-  body.firm-page .fm-hero__body { max-width: 56ch; }
-}
 @media (max-width: 700px) {
   body.firm-page .fm-glance__grid { grid-template-columns: 1fr; }
   body.firm-page .fm-glance__item {
@@ -148,7 +134,6 @@ body.firm-page .fm-glance__k {
   }
   body.firm-page .fm-glance__item:first-child { padding-top: 0; border-top: 0; }
   body.firm-page .fm-glance__item:last-child { padding-bottom: 0; }
-  body.firm-page .fm-hero__media::before { right: calc(var(--pad-x) * -1); }
 }
 
 /* ==========================================================================
@@ -164,6 +149,25 @@ body.firm-page .fm-who__title {
   margin: 0;
   font: 500 clamp(28px, 2.9vw, 40px)/1.1 var(--sv-font);
   letter-spacing: -0.02em; color: var(--sv-ink);
+}
+/* Grove photograph in the heading rail — grayscale portrait on the brand's
+   dawn-redwood motif, quiet counterpart to the narrative column. */
+body.firm-page .fm-who__figure {
+  margin: clamp(30px, 3.4vw, 52px) 0 0;
+  border-radius: 14px;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  background: var(--sv-stone, #F1EBDD);
+}
+body.firm-page .fm-who__figure img {
+  display: block; width: 100%; height: 100%;
+  object-fit: cover; object-position: center 62%;
+  filter: grayscale(1);
+  transition: filter 320ms ease;
+}
+body.firm-page .fm-who__figure:hover img { filter: grayscale(0); }
+@media (prefers-reduced-motion: reduce) {
+  body.firm-page .fm-who__figure img { transition: none; }
 }
 body.firm-page .fm-who__main { grid-column: 5 / 13; min-width: 0; }
 body.firm-page .fm-who__narr {
@@ -200,6 +204,16 @@ body.firm-page .fm-investors__list li {
 @media (max-width: 880px) {
   body.firm-page .fm-who__head { grid-column: 1 / 13; }
   body.firm-page .fm-who__main { grid-column: 1 / 13; margin-top: 4px; }
+  /* On small screens the portrait reads better after the narrative, sized
+     as an inset rather than a full-bleed block between heading and copy. */
+  body.firm-page .fm-who__head { display: contents; }
+  body.firm-page .fm-who__figure {
+    order: 2; width: min(100%, 420px);
+    margin: clamp(28px, 5vw, 40px) 0 0;
+  }
+  body.firm-page .fm-who__inner { display: flex; flex-direction: column; }
+  body.firm-page .fm-who__title { order: 0; margin-bottom: 18px; }
+  body.firm-page .fm-who__main { order: 1; margin-top: 0; }
 }
 @media (max-width: 560px) {
   body.firm-page .fm-investors__list { grid-template-columns: 1fr; }

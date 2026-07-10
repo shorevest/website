@@ -23,7 +23,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <script>document.write('<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260701-mobile-audit-430&t='+window.__SVT+'">');</script>
-<script>document.write('<link rel="stylesheet" href="assets/css/firm-rebuild.css?v=20260710-institutional&t='+window.__SVT+'">');</script>
+<script>document.write('<link rel="stylesheet" href="assets/css/firm-rebuild.css?v=20260710-institutional2&t='+window.__SVT+'">');</script>
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="shortcut icon" href="/favicon.ico">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
@@ -80,19 +80,16 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 
 <main id="content">
 
-<!-- 1 · MASTHEAD — editorial hero + full-bleed proof ledger -->
-<section class="fm-hero" id="firm" data-screen-label="The firm" aria-labelledby="fm-h1">
-  <div class="sv-shell fm-hero__top">
-    <div class="fm-hero__lead">
-      <p class="fm-hero__eyebrow">The Firm</p>
-      <h1 class="fm-hero__title" id="fm-h1">Local capabilities. Institutional experience.</h1>
-      <div class="fm-hero__body">
-        <p>ShoreVest is a China-focused private credit investment manager with a team active in the market since 2004.</p>
-        <p>The platform covers sourcing, underwriting, legal structuring, asset servicing and portfolio management.</p>
-      </div>
+<!-- 1 · AUTHORITY OPENING — cinnabar masthead + full-bleed proof ledger -->
+<section class="fm-open" id="firm" data-screen-label="The firm" aria-labelledby="fm-h1">
+  <div class="sv-shell fm-open__inner">
+    <div class="fm-hero__frame">
+      <p class="fm-eyebrow">The firm</p>
+      <h1 class="fm-open__h1" id="fm-h1">Local capabilities. Institutional experience.</h1>
     </div>
-    <div class="fm-hero__media" aria-hidden="true">
-      <figure class="fm-hero__image"><img src="pexels-miyou_-77-696995602-23533364.jpg" alt="" width="3456" height="5184" loading="eager" decoding="async"></figure>
+    <div class="fm-open__body">
+      <p>ShoreVest is a China-focused private credit investment manager with a team active in the market since 2004.</p>
+      <p>The platform covers sourcing, underwriting, legal structuring, asset servicing and portfolio management.</p>
     </div>
   </div>
   <div class="sv-shell">
@@ -121,6 +118,9 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   <div class="sv-shell fm-who__inner">
     <div class="fm-who__head">
       <h2 id="fm-who-title" class="fm-who__title">Who We Are</h2>
+      <figure class="fm-who__figure" aria-hidden="true">
+        <img src="pexels-miyou_-77-696995602-23533364.jpg" alt="" width="3456" height="5184" loading="lazy" decoding="async">
+      </figure>
     </div>
     <div class="fm-who__main">
       <p class="fm-who__narr">Since 2004, the ShoreVest team has managed more than US$2 billion in private credit investments in China on behalf of institutional investors.</p>
