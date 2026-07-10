@@ -223,12 +223,11 @@
   }
 
   function environmentBar(user) {
-    var status = I.demoMode() ? 'Mocked data' : 'Connected data';
     return el('div', { class: 'ops-demo-banner ops-envbar' }, [
       el('span', { html: '<strong>Environment:</strong> ' + (I.demoMode() ? 'Internal Preview' : 'Production') }),
-      el('span', { html: '<strong>Data status:</strong> ' + status }),
-      el('span', { html: '<strong>Release:</strong> R-2026.07' }),
-      el('span', { html: '<strong>User role:</strong> ' + esc(user.displayRole || user.role) })
+      el('span', { html: '<strong>Data:</strong> ' + (I.demoMode() ? 'Mock' : 'Connected') }),
+      el('span', { html: '<strong>External actions:</strong> ' + (I.demoMode() ? 'Off' : 'On') }),
+      el('span', { html: '<strong>Role:</strong> ' + esc(user.displayRole || user.role) })
     ]);
   }
 
