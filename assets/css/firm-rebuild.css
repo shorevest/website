@@ -5,11 +5,15 @@
          gradient block bleeding off the left edge, headline inside, lede on
          ivory beside it), anchored by a full-bleed qing-dark proof ledger
          ("Platform at a glance").
-     2 · Who We Are — annual-report split: heading rail with a grayscale
-         grove portrait on the left, large narrative measure on the right,
-         closed by the institutional investor base as a ruled ledger.
-     3 · Firm capabilities — numbered three-column discipline ledger on stone.
-     4 · Closing — full-bleed ink statement band above the footer.
+     2 · Who We Are — annual-report spread: grayscale grove portrait on the
+         left, kicker + display title + lead/support narrative on the right.
+     3 · Institutional investor base — standalone stone band: shared section
+         head plus a ruled, indexed 3×2 register of investor types.
+     4 · Firm capabilities — numbered three-column discipline ledger on white.
+     5 · Closing — full-bleed ink statement band above the footer.
+   Sections 2–4 share one head grammar (.fm-sechead: kicker + title left,
+   editorial deck right) and one register grammar (ink top rule + hairline
+   working dividers), matching the Strategy page's institutional rhythm.
    Inherits header/footer/tokens/.sv-shell/.sv-reveal from homepage-rebuild.css.
    Client directive holds: no freestanding decorative rules; every hairline is
    a working border on a ledger row or column.
@@ -137,24 +141,52 @@ body.firm-page .fm-glance__k {
 }
 
 /* ==========================================================================
-   2 · WHO WE ARE — heading rail + narrative measure + investor ledger
+   SHARED SECTION HEAD — kicker + display title (left) · editorial deck
+   (right), baselines locked. One head grammar for every below-hero section,
+   mirroring the Strategy page's institutional rhythm.
    ========================================================================== */
-body.firm-page .fm-who { background: #FFFFFF; padding-block: clamp(64px, 7vw, 110px); }
+body.firm-page .fm-sechead {
+  display: grid; grid-template-columns: repeat(12, 1fr);
+  column-gap: clamp(32px, 5vw, 88px);
+  align-items: end;
+  margin-bottom: clamp(38px, 4.4vw, 60px);
+}
+body.firm-page .fm-sechead__l { grid-column: 1 / 7; min-width: 0; }
+body.firm-page .fm-sechead__r {
+  grid-column: 7 / 13; min-width: 0;
+  align-self: end; max-width: 46ch;
+}
+body.firm-page .fm-sechead__title {
+  margin: 0;
+  font: 500 clamp(30px, 3.2vw, 44px)/1.08 var(--sv-font);
+  letter-spacing: -0.022em; color: var(--sv-ink);
+  max-width: 22ch; text-wrap: balance;
+}
+body.firm-page .fm-sechead__r p {
+  margin: 0;
+  font: 400 clamp(16px, 1.15vw, 18px)/1.66 var(--sv-font);
+  color: var(--sv-ink-2);
+}
+body.firm-page .fm-sechead__r p + p { margin-top: 14px; }
+@media (max-width: 900px) {
+  body.firm-page .fm-sechead { align-items: start; }
+  body.firm-page .fm-sechead__l,
+  body.firm-page .fm-sechead__r { grid-column: 1 / 13; }
+  body.firm-page .fm-sechead__r { align-self: start; margin-top: 18px; max-width: none; }
+}
+
+/* ==========================================================================
+   2 · WHO WE ARE — annual-report spread: grayscale portrait on the left,
+   kicker + display title + lead/support narrative hierarchy on the right.
+   ========================================================================== */
+body.firm-page .fm-who { background: #FFFFFF; padding-block: clamp(72px, 8vw, 118px); }
 body.firm-page .fm-who__inner {
   display: grid; grid-template-columns: repeat(12, 1fr);
-  gap: clamp(28px, 4vw, 64px); align-items: start;
+  column-gap: clamp(32px, 5vw, 88px); align-items: center;
 }
-body.firm-page .fm-who__head { grid-column: 1 / 5; min-width: 0; }
-body.firm-page .fm-who__title {
-  margin: 0;
-  font: 500 clamp(28px, 2.9vw, 40px)/1.1 var(--sv-font);
-  letter-spacing: -0.02em; color: var(--sv-ink);
-}
-/* Grove photograph in the heading rail — grayscale portrait on the brand's
-   dawn-redwood motif, quiet counterpart to the narrative column. */
 body.firm-page .fm-who__figure {
-  margin: clamp(30px, 3.4vw, 52px) 0 0;
-  overflow: hidden;
+  grid-column: 1 / 5; min-width: 0;
+  margin: 0; overflow: hidden;
   aspect-ratio: 4 / 5;
   background: var(--sv-stone, #F1EBDD);
 }
@@ -169,66 +201,87 @@ body.firm-page .fm-who__figure:hover img { filter: grayscale(0); }
   body.firm-page .fm-who__figure img { transition: none; }
 }
 body.firm-page .fm-who__main { grid-column: 5 / 13; min-width: 0; }
-body.firm-page .fm-who__narr {
+body.firm-page .fm-who__title {
+  margin: 0 0 clamp(24px, 2.6vw, 36px);
+  font: 500 clamp(30px, 3.2vw, 44px)/1.08 var(--sv-font);
+  letter-spacing: -0.022em; color: var(--sv-ink);
+  max-width: 20ch; text-wrap: balance;
+}
+body.firm-page .fm-who__lead {
   margin: 0;
-  font: 400 clamp(19px, 1.6vw, 22px)/1.6 var(--sv-font);
+  font: 400 clamp(20px, 1.8vw, 25px)/1.5 var(--sv-font);
+  letter-spacing: -0.008em; color: var(--sv-ink);
+  max-width: 50ch; text-wrap: pretty;
+}
+body.firm-page .fm-who__narr {
+  margin: clamp(18px, 2vw, 26px) 0 0;
+  font: 400 clamp(16px, 1.25vw, 18px)/1.66 var(--sv-font);
   color: var(--sv-ink-2); max-width: 58ch; text-wrap: pretty;
 }
-body.firm-page .fm-who__narr:first-child { color: var(--sv-ink); }
-body.firm-page .fm-who__narr + .fm-who__narr { margin-top: 22px; }
-
-/* Institutional investor base — ruled two-column ledger. */
-body.firm-page .fm-investors { margin-top: clamp(44px, 4.6vw, 68px); }
-body.firm-page .fm-investors__label {
-  margin: 0 0 8px;
-  font: 600 11px/1.4 var(--sv-font);
-  letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--sv-oxide, #9F2F24);
-}
-body.firm-page .fm-investors__intro {
-  margin: 0 0 10px;
-  font: 400 15px/1.55 var(--sv-font); color: var(--sv-muted, #6E7169); max-width: 52ch;
-}
-body.firm-page .fm-investors__list {
-  margin: 18px 0 0; padding: 0; list-style: none;
-  display: grid; grid-template-columns: repeat(2, 1fr);
-  column-gap: clamp(28px, 3vw, 48px); row-gap: 0;
-}
-body.firm-page .fm-investors__list li {
-  padding: 14px 0;
-  border-top: 1px solid var(--sv-border-light-strong);
-  font: 400 17px/1.35 var(--sv-font); color: var(--sv-ink);
-}
-
 @media (max-width: 880px) {
-  body.firm-page .fm-who__head { grid-column: 1 / 13; }
-  body.firm-page .fm-who__main { grid-column: 1 / 13; margin-top: 4px; }
-  /* On small screens the portrait reads better after the narrative, sized
-     as an inset rather than a full-bleed block between heading and copy. */
-  body.firm-page .fm-who__head { display: contents; }
+  body.firm-page .fm-who__inner { display: flex; flex-direction: column; align-items: stretch; }
+  body.firm-page .fm-who__main { order: 0; }
+  /* Portrait follows the narrative as an inset on small screens. */
   body.firm-page .fm-who__figure {
-    order: 2; width: min(100%, 420px);
+    order: 1; width: min(100%, 420px);
     margin: clamp(28px, 5vw, 40px) 0 0;
   }
-  body.firm-page .fm-who__inner { display: flex; flex-direction: column; }
-  body.firm-page .fm-who__title { order: 0; margin-bottom: 18px; }
-  body.firm-page .fm-who__main { order: 1; margin-top: 0; }
-}
-@media (max-width: 560px) {
-  body.firm-page .fm-investors__list { grid-template-columns: 1fr; }
 }
 
 /* ==========================================================================
-   3 · FIRM CAPABILITIES — numbered discipline ledger on stone
+   3 · INSTITUTIONAL INVESTOR BASE — standalone register on stone.
+   A ruled 3×2 register: ink top rule, hairline row/column dividers, indexed
+   entries. Every hairline is a working border on the register grid.
    ========================================================================== */
-body.firm-page .fm-comp-sec { background: var(--sv-stone); padding-block: clamp(64px, 7vw, 110px); }
-body.firm-page .fm-comp-head { margin-bottom: clamp(36px, 4vw, 56px); }
-body.firm-page .fm-comp-title {
-  margin: 0;
-  font: 500 clamp(28px, 2.9vw, 40px)/1.1 var(--sv-font);
-  letter-spacing: -0.02em; color: var(--sv-ink);
-  max-width: 22ch; text-wrap: balance;
+body.firm-page .fm-inv-sec { background: var(--sv-stone); padding-block: clamp(72px, 8vw, 118px); }
+body.firm-page .fm-inv {
+  margin: 0; padding: 0; list-style: none;
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--sv-ink);
 }
+body.firm-page .fm-inv__cell {
+  min-width: 0;
+  display: flex; align-items: baseline; gap: 16px;
+  padding: clamp(22px, 2.3vw, 32px) clamp(24px, 2.6vw, 40px) clamp(24px, 2.5vw, 36px);
+  border-bottom: 1px solid var(--sv-border-light-strong);
+  border-left: 1px solid var(--sv-border-light-strong);
+}
+body.firm-page .fm-inv__cell:nth-child(3n + 1) { border-left: 0; padding-left: 0; }
+body.firm-page .fm-inv__cell:nth-child(3n) { padding-right: 0; }
+body.firm-page .fm-inv__num {
+  flex: none;
+  font: 600 12px/1 var(--sv-font); letter-spacing: 0.08em;
+  color: var(--sv-oxide, #9F2F24);
+  font-variant-numeric: tabular-nums;
+}
+body.firm-page .fm-inv__name {
+  font: 500 clamp(18px, 1.5vw, 21px)/1.3 var(--sv-font);
+  letter-spacing: -0.01em; color: var(--sv-ink); text-wrap: balance;
+}
+@media (max-width: 880px) {
+  body.firm-page .fm-inv { grid-template-columns: 1fr 1fr; }
+  body.firm-page .fm-inv__cell,
+  body.firm-page .fm-inv__cell:nth-child(3n),
+  body.firm-page .fm-inv__cell:nth-child(3n + 1) {
+    padding: 18px clamp(18px, 4vw, 28px) 20px;
+    border-left: 1px solid var(--sv-border-light-strong);
+  }
+  body.firm-page .fm-inv__cell:nth-child(2n + 1) { border-left: 0; padding-left: 0; }
+  body.firm-page .fm-inv__cell:nth-child(2n) { padding-right: 0; }
+}
+@media (max-width: 560px) {
+  body.firm-page .fm-inv { grid-template-columns: 1fr; }
+  body.firm-page .fm-inv__cell,
+  body.firm-page .fm-inv__cell:nth-child(n) {
+    padding: 16px 0 18px; border-left: 0;
+  }
+}
+
+/* ==========================================================================
+   4 · FIRM CAPABILITIES — numbered discipline ledger on white; shares the
+   register grammar (ink top rule, hairline dividers) with the investor base.
+   ========================================================================== */
+body.firm-page .fm-comp-sec { background: #FFFFFF; padding-block: clamp(72px, 8vw, 118px); }
 body.firm-page .fm-comp {
   margin: 0; padding: 0; list-style: none;
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
@@ -267,7 +320,7 @@ body.firm-page .fm-comp__desc {
 }
 
 /* ==========================================================================
-   4 · CLOSING — full-bleed ink statement band
+   5 · CLOSING — full-bleed ink statement band
    ========================================================================== */
 body.firm-page .fm-close { background: var(--sv-dark, #1A1B18); }
 body.firm-page .fm-close__inner { padding-block: clamp(72px, 8vw, 128px); }
@@ -312,8 +365,11 @@ html[lang="zh"] body.firm-page .fm-open__body p { line-height: 1.9; }
 html[lang="zh"] body.firm-page .fm-glance__v { letter-spacing: 0; }
 html[lang="zh"] body.firm-page .fm-glance__k { line-height: 1.7; }
 html[lang="zh"] body.firm-page .fm-who__title,
-html[lang="zh"] body.firm-page .fm-comp-title { letter-spacing: 0.01em; line-height: 1.3; }
-html[lang="zh"] body.firm-page .fm-who__narr { line-height: 1.9; letter-spacing: 0.01em; }
+html[lang="zh"] body.firm-page .fm-sechead__title { letter-spacing: 0.01em; line-height: 1.3; }
+html[lang="zh"] body.firm-page .fm-who__lead { line-height: 1.75; letter-spacing: 0.01em; }
+html[lang="zh"] body.firm-page .fm-who__narr,
+html[lang="zh"] body.firm-page .fm-sechead__r p { line-height: 1.9; letter-spacing: 0.01em; }
+html[lang="zh"] body.firm-page .fm-inv__name { letter-spacing: 0.02em; }
 html[lang="zh"] body.firm-page .fm-comp__name { letter-spacing: 0.01em; }
 html[lang="zh"] body.firm-page .fm-comp__desc { line-height: 1.85; }
 html[lang="zh"] body.firm-page .fm-close__text {
