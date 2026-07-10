@@ -1044,9 +1044,13 @@ body.strategy-page .st-reasons__kicker {
 }
 
 /* --- Origination: strip the panel wrapper; flat like every other section - */
+/* This element is also the .sv-shell, so keep the page gutter (padding-inline)
+   and only zero the vertical/panel padding — otherwise the section bleeds to
+   the viewport edges between the mobile and max-width breakpoints. */
 body.strategy-page .sv-exec { background: var(--sv-ivory); }
 body.strategy-page .sv-exec__inner {
-  padding: 0;
+  padding-block: 0;
+  padding-inline: var(--pad-x);
   background: none;
   border: 0;
   border-left: 0;
