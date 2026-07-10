@@ -8,7 +8,7 @@
   // the rest behind a toggle); everything concluded renders permanently in
   // the "Previous events" section (newest first).
   //
-  // `post` links a past appearance to its related coverage (a video, article
+  // `post` links a past event to its related coverage (a video, article
   // or write-up). When present it becomes the row's primary link; otherwise
   // the row falls back to the event page (`href`).
   var EVENTS = [
@@ -46,7 +46,7 @@
       type: 'Conference',
       title: 'SuperReturn Asia 2026',
       location: 'Singapore',
-      description: 'ShoreVest will be represented by Benjamin Fanger and Kelvin Chan.',
+      description: 'A leading private capital conference focused on Asia-Pacific markets.',
       ctaLabel: 'View →',
       href: 'https://informaconnect.com/superreturnasia/',
       ariaLabel: 'View SuperReturn Asia 2026 event page',
@@ -60,7 +60,7 @@
       type: 'Forum',
       title: 'World Family Office Forum | Asia 2026',
       location: 'Hong Kong',
-      description: 'ShoreVest will be represented by Kelvin Chan.',
+      description: 'A regional forum for family offices and investment professionals.',
       ctaLabel: 'View →',
       href: 'https://asia.worldfamilyofficeforum.com/',
       ariaLabel: 'View World Family Office Forum Asia 2026 event page',
@@ -127,7 +127,7 @@
       type: 'Panel',
       title: 'PDI APAC Forum',
       location: 'Singapore',
-      description: 'Benjamin Fanger joined a panel on Asian distressed debt and special situations.',
+      description: 'A forum panel on Asian distressed debt and special situations.',
       ctaLabel: 'View →',
       href: 'https://www.peievents.com/en/event/pdi-apac-forum/',
       ariaLabel: 'View PDI APAC Forum event page',
@@ -146,10 +146,10 @@
       type: 'Conference',
       title: 'SuperReturn Emerging Markets',
       location: 'Amsterdam',
-      description: 'Benjamin Fanger participated as a speaker.',
+      description: 'An emerging-markets conference covering private capital and credit themes.',
       ctaLabel: 'View →',
-      href: 'https://informaconnect.com/superreturn-emerging-markets/speakers/benjamin-fanger/',
-      ariaLabel: 'View Benjamin Fanger’s SuperReturn speaker profile',
+      href: 'https://informaconnect.com/superreturn-emerging-markets/',
+      ariaLabel: 'View SuperReturn Emerging Markets event page',
       isClickable: true,
       post: {
         href: 'https://www.linkedin.com/posts/shorevest-partners_emergingmarkets-privatecredit-uncorrelated-activity-7473668678174154754-BwaO',
@@ -166,7 +166,7 @@
       type: 'Conference',
       title: 'Bloomberg Invest Hong Kong',
       location: 'Hong Kong',
-      description: 'ShoreVest participated in Bloomberg’s investment conference in Hong Kong.',
+      description: 'Bloomberg’s investment conference in Hong Kong.',
       ctaLabel: 'View →',
       href: 'https://events.bloomberglive.com/event/InvestHK_2026/summary?RefId=blive_tile',
       ariaLabel: 'View Bloomberg Invest Hong Kong event page',
