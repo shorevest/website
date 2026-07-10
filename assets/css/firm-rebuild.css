@@ -179,13 +179,13 @@ body.firm-page .fm-sechead__r p + p { margin-top: 14px; }
    2 · WHO WE ARE — annual-report spread: narrative hierarchy on the left,
    square grayscale image on the right.
    ========================================================================== */
-body.firm-page .fm-who { background: #FFFFFF; padding-block: clamp(72px, 8vw, 118px); }
+body.firm-page .fm-who { background: #FFFFFF; padding-block: clamp(48px, 6vw, 86px); }
 body.firm-page .fm-who__inner {
   display: grid; grid-template-columns: repeat(12, 1fr);
-  column-gap: clamp(32px, 5vw, 88px); align-items: center;
+  column-gap: clamp(24px, 3.6vw, 56px); align-items: center;
 }
 body.firm-page .fm-who__figure {
-  grid-column: 9 / 13; min-width: 0;
+  grid-column: 8 / 13; min-width: 0;
   margin: 0; overflow: hidden;
   aspect-ratio: 1 / 1;
   background: var(--sv-stone, #F1EBDD);
@@ -200,7 +200,7 @@ body.firm-page .fm-who__figure:hover img { filter: grayscale(0); }
 @media (prefers-reduced-motion: reduce) {
   body.firm-page .fm-who__figure img { transition: none; }
 }
-body.firm-page .fm-who__main { grid-column: 1 / 9; min-width: 0; }
+body.firm-page .fm-who__main { grid-column: 1 / 8; min-width: 0; }
 body.firm-page .fm-who__title {
   margin: 0 0 clamp(24px, 2.6vw, 36px);
   font: 500 clamp(30px, 3.2vw, 44px)/1.08 var(--sv-font);
