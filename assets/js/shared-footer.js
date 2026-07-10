@@ -2,7 +2,21 @@
   const currentScriptUrl = new URL(document.currentScript?.src || 'assets/js/shared-footer.js', window.location.href);
   const siteRootUrl = new URL('../../', currentScriptUrl);
   const __svt = () => { const t = new URLSearchParams(window.location.search).get('t'); return t ? ('?t=' + encodeURIComponent(t)) : ''; };
-  const siteHref = (path) => new URL(path, siteRootUrl).pathname + __svt();
+  const relativeSiteHref = (path) => {
+    const target = new URL(path, siteRootUrl);
+    const fromDir = window.location.pathname.endsWith('/')
+      ? window.location.pathname
+      : window.location.pathname.replace(/[^/]*$/, '');
+    const fromParts = fromDir.split('/').filter(Boolean);
+    const toParts = target.pathname.split('/').filter(Boolean);
+    while (fromParts.length && toParts.length && fromParts[0] === toParts[0]) {
+      fromParts.shift();
+      toParts.shift();
+    }
+    const rel = `${'../'.repeat(fromParts.length)}${toParts.join('/')}`;
+    return (rel || './') + __svt();
+  };
+  const siteHref = relativeSiteHref;
 
   const path = window.location.pathname.split('/').pop() || 'index.html';
   const localeSuffix = /_cn\.html$/i.test(path) ? 'cn' : 'en';

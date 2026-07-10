@@ -10,8 +10,22 @@
   const currentScriptUrl = new URL(document.currentScript?.src || 'assets/js/shared-header.js', window.location.href);
   const siteRootUrl = new URL('../../', currentScriptUrl);
   const __svt = () => { const t = new URLSearchParams(window.location.search).get('t'); return t ? ('?t=' + encodeURIComponent(t)) : ''; };
-  const assetHref = (path) => new URL(path, siteRootUrl).pathname + __svt();
-  const pageHref = (path) => new URL(path, siteRootUrl).pathname + __svt();
+  const relativeSiteHref = (path) => {
+    const target = new URL(path, siteRootUrl);
+    const fromDir = window.location.pathname.endsWith('/')
+      ? window.location.pathname
+      : window.location.pathname.replace(/[^/]*$/, '');
+    const fromParts = fromDir.split('/').filter(Boolean);
+    const toParts = target.pathname.split('/').filter(Boolean);
+    while (fromParts.length && toParts.length && fromParts[0] === toParts[0]) {
+      fromParts.shift();
+      toParts.shift();
+    }
+    const rel = `${'../'.repeat(fromParts.length)}${toParts.join('/')}`;
+    return (rel || './') + __svt();
+  };
+  const assetHref = relativeSiteHref;
+  const pageHref = relativeSiteHref;
 
   const LOADER_BRAND_PNG_PATH = assetHref('assets/brand/shorevest-lockup.png');
   const LOADER_BRAND_LIGHT_PNG_PATH = assetHref('assets/brand/shorevest-lockup-light.png');
