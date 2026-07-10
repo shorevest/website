@@ -127,9 +127,9 @@
   }
 
   function roleSwitcher(user) {
-    var wrap = el('label', { class: 'ops-role-switch' }, [el('span', { text: 'Role preview' })]);
+    var wrap = el('label', { class: 'ops-role-switch' }, [el('span', { text: 'Role preview:' })]);
     var sel = el('select', { 'aria-label': 'Role preview selector' });
-    DEMO_USERS.forEach(function (u) { sel.appendChild(el('option', { value: u.personaId, text: u.displayRole, selected: u.personaId === user.personaId })); });
+    DEMO_USERS.forEach(function (u) { sel.appendChild(el('option', { value: u.personaId, text: (u.name || u.displayRole || '').split(' ')[0], selected: u.personaId === user.personaId })); });
     sel.onchange = function () {
       var next = DEMO_USERS.filter(function (u) { return u.personaId === sel.value; })[0];
       if (next) signInDemo(next);
@@ -204,10 +204,7 @@
       ]),
       el('input', { class: 'ops-global-search', type: 'search', placeholder: 'Search people, firms, opportunities, requests, reports or tools', onkeydown: function (ev) { if (ev.key === 'Enter') U.toast('Preview search only. No external systems queried.'); } }),
       el('div', { class: 'ops-topbar__right' }, [
-        el('span', { text: S.RULES_VERSION }),
-        el('span', { text: S.TEMPLATE_VERSION }),
-        el('span', { html: U.statusHtml(I.demoMode() ? 'Suggested' : 'Ready') }),
-        el('span', { class: 'ops-role-pill', text: 'Current role: ' + (user.displayRole || user.role) }),
+        el('span', { class: 'ops-env-compact', text: (I.demoMode() ? 'Internal Preview · Mock data' : 'Production · Connected data') + ' · R-2026.07' }),
         roleSwitcher(user)
       ])
     ]);
@@ -223,12 +220,8 @@
   }
 
   function environmentBar(user) {
-    var status = I.demoMode() ? 'Mocked data' : 'Connected data';
     return el('div', { class: 'ops-demo-banner ops-envbar' }, [
-      el('span', { html: '<strong>Environment:</strong> ' + (I.demoMode() ? 'Internal Preview' : 'Production') }),
-      el('span', { html: '<strong>Data status:</strong> ' + status }),
-      el('span', { html: '<strong>Release:</strong> R-2026.07' }),
-      el('span', { html: '<strong>User role:</strong> ' + esc(user.displayRole || user.role) })
+      el('span', { text: 'Salesforce stays the official record. ShoreVest One helps review, approve and track work before writeback.' })
     ]);
   }
 
