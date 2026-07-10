@@ -644,7 +644,7 @@ body.strategy-page .sx-hero__media::before {
   bottom: -26px;
   left: clamp(36px, 3.5vw, 56px);
   background: var(--sv-qing, #3D7070);
-  border-radius: 14px;
+  border-radius: 0;
   z-index: 0;
 }
 body.strategy-page .sx-hero__image {
@@ -652,7 +652,7 @@ body.strategy-page .sx-hero__image {
   margin: 0; width: 100%;
   aspect-ratio: 1 / 1;
   border: 0;
-  border-radius: 14px;
+  border-radius: 0;
   background: var(--sv-stone, #F1EBDD);
   overflow: hidden;
 }
@@ -881,7 +881,7 @@ body.strategy-page .sv-exec__head-r {
   background: rgba(252, 249, 241, 0.92);
   border: 1px solid rgba(183, 164, 116, 0.58);
   border-left: 4px solid var(--sv-cinnabar);
-  border-radius: 3px;
+  border-radius: 0;
   padding: clamp(28px, 3vw, 42px) clamp(30px, 3.3vw, 46px);
   box-shadow: 0 10px 28px rgba(24, 32, 34, 0.035);
 }

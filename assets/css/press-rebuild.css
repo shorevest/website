@@ -432,7 +432,7 @@ body.press-page .media-hero__box {
   padding: clamp(34px, 4vw, 58px);
   background: rgba(250, 246, 238, 0.97);
   border: 1px solid rgba(27, 31, 30, 0.14);
-  border-radius: 14px;
+  border-radius: 0;
   box-shadow: 0 26px 60px rgba(8, 16, 18, 0.34);
 }
 body.press-page .media-hero__box .sv-hero__label {
