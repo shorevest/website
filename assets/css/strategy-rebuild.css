@@ -1289,7 +1289,7 @@ body.strategy-page .st-reason__k {
   gap: 10px;
 }
 body.strategy-page .st-reason__k::after {
-  content: counter(st-reason, decimal-leading-zero);
+  content: counter(st-reason);
   order: -1;
   font: 600 11px/1 var(--sv-font);
   letter-spacing: 0.08em;
@@ -1303,7 +1303,7 @@ body.strategy-page .st-reason__title { font-size: 21px; }
 body.strategy-page .sv-flow { counter-reset: st-flow; }
 body.strategy-page .sv-flow__step { counter-increment: st-flow; }
 body.strategy-page .sv-flow__title::before {
-  content: counter(st-flow, decimal-leading-zero);
+  content: counter(st-flow);
   display: block;
   margin-bottom: clamp(14px, 1.6vw, 20px);
   font: 600 12px/1 var(--sv-font);
