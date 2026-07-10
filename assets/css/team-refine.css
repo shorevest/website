@@ -361,13 +361,18 @@ html body.team-page-v2 .team-profile__photo--placeholder {
 }
 html body.team-page-v2 .team-profile__photo--placeholder::before {
   content: "";
-  position: relative;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 1;
   display: block;
-  width: clamp(138px, 13vw, 186px);
-  aspect-ratio: 172 / 58;
-  background: url("../brand/logo-master.svg") center / contain no-repeat;
-  filter: drop-shadow(0 16px 24px rgba(30, 64, 64, 0.12));
+  width: 62%;
+  aspect-ratio: 1 / 1;
+  border: 0;
+  border-radius: 0;
+  background: url("../brand/logo-master.svg") center center / contain no-repeat;
+  filter: drop-shadow(0 14px 22px rgba(30, 64, 64, 0.12));
 }
 html body.team-page-v2 .team-profile__photo--placeholder::after {
   border-color: rgba(61, 112, 112, 0.18);
