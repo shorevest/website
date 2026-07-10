@@ -23,7 +23,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <script>document.write('<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260708-layered-hero-b&t='+window.__SVT+'">');</script>
-<script>document.write('<link rel="stylesheet" href="assets/css/press-rebuild.css?v=20260710-media-hero-photo&t='+window.__SVT+'">');</script>
+<script>document.write('<link rel="stylesheet" href="assets/css/press-rebuild.css?v=20260710-media-restructure&t='+window.__SVT+'">');</script>
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="shortcut icon" href="/favicon.ico">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
@@ -81,20 +81,19 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 
   <!-- 1 · AUTHORITY OPENING — same layered hero system as the homepage -->
   <section class="sv-hero media-hero" id="media" data-screen-label="Media" aria-labelledby="pr-h1">
-    <img class="media-hero__bg" src="assets/img/media-hero-fii-priority.svg" alt="ShoreVest on a conference panel before an audience at FII Priority Asia" width="2000" height="1334" loading="eager" decoding="async">
     <div class="sv-hero__inner">
       <div class="sv-hero__main">
-        <span class="sv-hero__rule" aria-hidden="true"></span>
         <p class="sv-hero__label">Third-party coverage</p>
         <h1 class="sv-hero__headline" id="pr-h1">Media</h1>
         <p class="sv-hero__body">International outlets and industry forums have followed ShoreVest&rsquo;s work across China&rsquo;s credit cycles.</p>
         <p class="sv-hero__body">The archive covers China private credit, distressed debt, restructuring and related market developments.</p>
         <div class="sv-hero__cta">
+          <a href="#upcoming" class="sv-textlink">Upcoming events<span aria-hidden="true">→</span></a>
           <a href="#archive" class="sv-textlink">Browse the archive<span aria-hidden="true">→</span></a>
         </div>
       </div>
       <div class="sv-hero__field">
-        <div class="sv-hero__image" aria-hidden="true"><img src="assets/img/trees/kelsey-he-YlsNl4dVkaA-unsplash.jpg" alt="" width="1600" height="1600" loading="eager" decoding="async"></div>
+        <div class="sv-hero__image"><img src="assets/img/media-hero-fii-priority.svg" alt="ShoreVest on a conference panel before an audience at FII Priority Asia" width="2000" height="1334" loading="eager" decoding="async"></div>
         <aside class="sv-hero__panel" aria-label="Media coverage summary">
           <p class="sv-hero__panel-label">Coverage at a glance</p>
           <dl>
@@ -117,11 +116,12 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   </section>
 
   <!-- 2 · UPCOMING EVENTS -->
-  <section class="pr-events" id="upcoming" data-screen-label="Recent & upcoming events" aria-labelledby="pr-upcoming-title">
+  <section class="pr-events" id="upcoming" data-screen-label="Upcoming events" aria-labelledby="pr-upcoming-title">
     <div class="sv-shell">
       <div class="pr-section-head">
         <div class="pr-section-head__l">
-          <h2 class="pr-section-title" id="pr-upcoming-title">Recent &amp; upcoming events</h2>
+          <h2 class="pr-section-title" id="pr-upcoming-title">Upcoming events</h2>
+          <p class="pr-section-sub">Conferences, panels and investor events where ShoreVest is scheduled to appear.</p>
         </div>
         <div class="pr-section-head__r">
           <div class="pr-inquiry">
@@ -130,7 +130,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
           </div>
         </div>
       </div>
-      <div class="pr-events__table" role="table" aria-label="Recent and upcoming public appearances">
+      <div class="pr-events__table" role="table" aria-label="Upcoming public appearances" data-events-list="upcoming">
         <article class="pr-event-row" role="row" data-start-date="2026-09-08" data-end-date="2026-09-09" data-time-zone="Asia/Shanghai">
           <time class="pr-event-date" datetime="2026-09-08">8–9 Sep 2026</time>
           <span class="pr-event-type">Summit</span>
@@ -164,48 +164,125 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
           <span class="pr-event-location">Singapore</span>
           <a class="pr-event-link" href="https://informaconnect.com/superreturnasia/" target="_blank" rel="noopener noreferrer" aria-label="View SuperReturn Asia 2026 event page">View <span aria-hidden="true">→</span></a>
         </article>
-        <div class="pr-events__divider" role="separator" aria-label="Past events"><span class="pr-events__divider-label">Past events</span><span class="pr-events__divider-note">Concluded appearances remain listed for 30 days</span></div>
-        <article class="pr-event-row pr-event-row--past pr-event-row--with-media" role="row" data-start-date="2026-06-24" data-end-date="2026-06-25" data-time-zone="Asia/Singapore">
+        <article class="pr-event-row" role="row" data-start-date="2026-10-15" data-end-date="2026-10-16" data-time-zone="Asia/Hong_Kong">
+          <time class="pr-event-date" datetime="2026-10-15">15–16 Oct 2026</time>
+          <span class="pr-event-type">Forum</span>
+          <span class="pr-event-title">
+            <span>World Family Office Forum | Asia 2026</span>
+            <small>ShoreVest will be represented by Kelvin Chan.</small>
+          </span>
+          <span class="pr-event-location">Hong Kong</span>
+          <a class="pr-event-link" href="https://asia.worldfamilyofficeforum.com/" target="_blank" rel="noopener noreferrer" aria-label="View World Family Office Forum Asia 2026 event page">View <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="pr-event-row" role="row" data-start-date="2026-10-15" data-end-date="2026-10-15" data-time-zone="Asia/Hong_Kong">
+          <time class="pr-event-date" datetime="2026-10-15">15 Oct 2026</time>
+          <span class="pr-event-type">Summit</span>
+          <span class="pr-event-title">
+            <span>Caproasia Family Office Summit Hong Kong 2026</span>
+            <small>A regional summit for family-office principals, investment professionals and wealth-management leaders.</small>
+          </span>
+          <span class="pr-event-location">Hong Kong</span>
+          <a class="pr-event-link" href="https://my.caproasia.com/the-2026-family-office-summit/" target="_blank" rel="noopener noreferrer" aria-label="View Caproasia Family Office Summit Hong Kong 2026 event page">View <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="pr-event-row" role="row" data-start-date="2026-10-26" data-end-date="2026-10-29" data-time-zone="Asia/Riyadh">
+          <time class="pr-event-date" datetime="2026-10-26">26–29 Oct 2026</time>
+          <span class="pr-event-type">Conference</span>
+          <span class="pr-event-title">
+            <span>FII 10th Edition 2026</span>
+            <small>The tenth edition of the Future Investment Initiative’s global investment conference.</small>
+          </span>
+          <span class="pr-event-location">Riyadh</span>
+          <a class="pr-event-link" href="https://fii-institute.org/conference/fii-10th-edition/" target="_blank" rel="noopener noreferrer" aria-label="View FII 10th Edition 2026 event page">View <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="pr-event-row" role="row" data-start-date="2026-11-05" data-end-date="2026-11-05" data-time-zone="Asia/Singapore">
+          <time class="pr-event-date" datetime="2026-11-05">5 Nov 2026</time>
+          <span class="pr-event-type">Summit</span>
+          <span class="pr-event-title">
+            <span>Caproasia Family Office Summit Singapore 2026</span>
+            <small>A regional summit for family-office principals, investment professionals and wealth-management leaders.</small>
+          </span>
+          <span class="pr-event-location">Singapore</span>
+          <a class="pr-event-link" href="https://my.caproasia.com/the-2026-family-office-summit/" target="_blank" rel="noopener noreferrer" aria-label="View Caproasia Family Office Summit Singapore 2026 event page">View <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="pr-event-row" role="row" data-start-date="2026-11-10" data-end-date="2026-11-11" data-time-zone="Europe/London">
+          <time class="pr-event-date" datetime="2026-11-10">10–11 Nov 2026</time>
+          <span class="pr-event-type">Summit</span>
+          <span class="pr-event-title">
+            <span>Alea Global Family Office Summit 2026</span>
+            <small>A global summit for family-office principals, investors and advisers.</small>
+          </span>
+          <span class="pr-event-location">London</span>
+        </article>
+        <p class="pr-events__empty" id="pr-events-empty" hidden>No upcoming events are currently scheduled.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 · PREVIOUS EVENTS -->
+  <section class="pr-events pr-events--past" id="past" data-screen-label="Previous events" aria-labelledby="pr-past-title">
+    <div class="sv-shell">
+      <div class="pr-section-head">
+        <div class="pr-section-head__l">
+          <h2 class="pr-section-title" id="pr-past-title">Previous events</h2>
+          <p class="pr-section-sub">Past appearances remain on record. Where an appearance produced coverage, the row links to the related post.</p>
+        </div>
+      </div>
+      <div class="pr-events__table" role="table" aria-label="Previous public appearances" data-events-list="past">
+        <article class="pr-event-row pr-event-row--past" role="row" data-start-date="2026-06-24" data-end-date="2026-06-25" data-time-zone="Asia/Singapore">
           <time class="pr-event-date" datetime="2026-06-24">24–25 Jun 2026</time>
           <span class="pr-event-type">Panel</span>
           <span class="pr-event-title">
-            <span class="pr-event-status">Concluded</span>
             <span>PDI APAC Forum</span>
-            <small>A panel discussion on Asian distressed debt and special situations.</small>
+            <small>Benjamin Fanger joined a panel on Asian distressed debt and special situations.</small>
           </span>
           <span class="pr-event-location">Singapore</span>
-          <figure class="pr-event-media"><img src="assets/img/media-hero-fii-priority.svg" alt="Audience at a ShoreVest event panel" loading="lazy" decoding="async"></figure>
           <a class="pr-event-link" href="https://www.peievents.com/en/event/pdi-apac-forum/" target="_blank" rel="noopener noreferrer" aria-label="View PDI APAC Forum event page">View <span aria-hidden="true">→</span></a>
         </article>
-        <article class="pr-event-row pr-event-row--past pr-event-row--with-media" role="row" data-start-date="2026-06-15" data-end-date="2026-06-17" data-time-zone="Europe/Amsterdam">
+        <article class="pr-event-row pr-event-row--past" role="row" data-start-date="2026-06-15" data-end-date="2026-06-17" data-time-zone="Europe/Amsterdam">
           <time class="pr-event-date" datetime="2026-06-15">15–17 Jun 2026</time>
           <span class="pr-event-type">Conference</span>
           <span class="pr-event-title">
-            <span class="pr-event-status">Concluded</span>
             <span>SuperReturn Emerging Markets</span>
-            <small>ShoreVest participated as a speaker.</small>
+            <small>Benjamin Fanger participated as a speaker.</small>
           </span>
           <span class="pr-event-location">Amsterdam</span>
-          <figure class="pr-event-media"><img src="assets/img/media-hero-fii-priority.svg" alt="Conference audience listening to a ShoreVest panel" loading="lazy" decoding="async"></figure>
-          <a class="pr-event-link" href="https://informaconnect.com/superreturn-emerging-markets/" target="_blank" rel="noopener noreferrer" aria-label="View SuperReturn Emerging Markets event page">View <span aria-hidden="true">→</span></a>
+          <a class="pr-event-link" href="https://informaconnect.com/superreturn-emerging-markets/speakers/benjamin-fanger/" target="_blank" rel="noopener noreferrer" aria-label="View Benjamin Fanger’s SuperReturn speaker profile">View <span aria-hidden="true">→</span></a>
         </article>
         <article class="pr-event-row pr-event-row--past" role="row" data-start-date="2026-06-10" data-end-date="2026-06-10" data-time-zone="Asia/Hong_Kong">
           <time class="pr-event-date" datetime="2026-06-10">10 Jun 2026</time>
           <span class="pr-event-type">Conference</span>
           <span class="pr-event-title">
-            <span class="pr-event-status">Concluded</span>
             <span>Bloomberg Invest Hong Kong</span>
             <small>ShoreVest participated in Bloomberg’s investment conference in Hong Kong.</small>
           </span>
           <span class="pr-event-location">Hong Kong</span>
           <a class="pr-event-link" href="https://events.bloomberglive.com/event/InvestHK_2026/summary?RefId=blive_tile" target="_blank" rel="noopener noreferrer" aria-label="View Bloomberg Invest Hong Kong event page">View <span aria-hidden="true">→</span></a>
         </article>
-        <p class="pr-events__empty" id="pr-events-empty" hidden>No recent or upcoming events are currently scheduled.</p>
+        <article class="pr-event-row pr-event-row--past" role="row" data-start-date="2025-11-06" data-end-date="2025-11-06" data-time-zone="Asia/Hong_Kong">
+          <time class="pr-event-date" datetime="2025-11-06">6 Nov 2025</time>
+          <span class="pr-event-type">Panel</span>
+          <span class="pr-event-title">
+            <span>FII Institute Priority panel on private credit</span>
+            <small>A panel discussion covering credit-cycle risk and how global investors are assessing China’s market structure.</small>
+          </span>
+          <span class="pr-event-location"></span>
+          <a class="pr-event-link pr-event-link--post" href="https://www.youtube.com/watch?v=t9BHji_UQlA" target="_blank" rel="noopener noreferrer" aria-label="Watch the FII Institute Priority panel on YouTube">Watch <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="pr-event-row pr-event-row--past" role="row" data-start-date="2019-10-30" data-end-date="2019-10-30" data-time-zone="America/Los_Angeles" hidden>
+          <time class="pr-event-date" datetime="2019-10-30">30 Oct 2019</time>
+          <span class="pr-event-type">Roundtable</span>
+          <span class="pr-event-title">
+            <span>Asia Society Executive Roundtable on China debt markets</span>
+            <small>A private Executive Roundtable on trade-policy trends affecting China’s debt situation and the non-performing loan market.</small>
+          </span>
+          <span class="pr-event-location"></span>
+          <a class="pr-event-link pr-event-link--post" href="https://asiasociety.org/northern-california/executive-roundtable-benjamin-fanger-and-howard-chao" target="_blank" rel="noopener noreferrer" aria-label="View the Asia Society roundtable post">View <span aria-hidden="true">→</span></a>
+        </article>
       </div>
     </div>
   </section>
 
-  <!-- 3 · MEDIA ARCHIVE -->
+  <!-- 4 · MEDIA ARCHIVE -->
   <section class="pr-archive" id="archive" data-screen-label="Media archive" aria-labelledby="pr-archive-title">
     <div class="sv-shell">
       <div class="pr-section-head">
@@ -493,7 +570,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
     </div>
   </section>
 
-  <!-- 4 · DISCLOSURES -->
+  <!-- 5 · DISCLOSURES -->
   <section class="pr-disclosures" aria-labelledby="pr-disclosures-heading">
     <div class="pr-disclosures__inner">
       <p class="pr-disclosures__label" id="pr-disclosures-heading">Disclosures</p>
