@@ -397,21 +397,11 @@ body.press-page .pr-disclosures__body {
 }
 
 
-/* Media hero */
-body.press-page .pr-hero-media {
-  margin: 0; width: 100%; aspect-ratio: 16 / 9; height: auto;
-  border: 1px solid var(--sv-border-light-strong);
-  background: var(--sv-stone, #EFEADD);
-  overflow: hidden;
-}
-body.press-page .pr-hero-media img {
-  display: block; width: 100%; height: 100%; object-fit: cover;
-  -webkit-filter: none; filter: none;
-}
-
 /* ==========================================================================
-   Media hero (2026-07-09) — square paper card matched to the homepage hero
-   image proportions. The media page intentionally uses no side accent bar.
+   Media hero — reuses the shared homepage layered hero system (grayscale
+   square image + white reference panel + offset cinnabar block). press.html
+   carries body.homepage, so the body.homepage .sv-hero__* rules apply here
+   unchanged; only the panel copy and the plate's tonal lift differ.
    ========================================================================== */
 body.press-page .media-hero {
   position: relative;
@@ -494,9 +484,6 @@ body.press-page .media-hero__box .sv-hero__body { max-width: none; }
     padding: 28px 24px;
   }
 }
-
-body.press-page .pr-open { padding-block: 0; }
-body.press-page .pr-proof-band { margin-top: 0; }
 
 /* Client directive: no decorative horizontal rules/bars. */
 :where(hr, [role="separator"], [class*="__rule"], [class*="-rule"], [class*="__divider"], [class*="-divider"], [class*="topline"], [class*="separator"]):not(svg):not(path):not(img) {
