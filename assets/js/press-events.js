@@ -2,6 +2,15 @@
   var eventVisibility = window.ShoreVestEventVisibility;
   if (!eventVisibility) return;
 
+  // Single source of truth for the events ledgers. The visibility module only
+  // decides which ledger an event belongs to: upcoming / in-progress events
+  // render in the "Upcoming events" section (soonest first, three visible,
+  // the rest behind a toggle); everything concluded renders permanently in
+  // the "Previous events" section (newest first).
+  //
+  // `post` links a past appearance to its related coverage (a video, article
+  // or write-up). When present it becomes the row's primary link; otherwise
+  // the row falls back to the event page (`href`).
   var EVENTS = [
     {
       startDate: '2026-09-08',
@@ -122,9 +131,7 @@
       ctaLabel: 'View →',
       href: 'https://www.peievents.com/en/event/pdi-apac-forum/',
       ariaLabel: 'View PDI APAC Forum event page',
-      isClickable: true,
-      imageSrc: 'assets/img/media-hero-fii-priority.svg',
-      imageAlt: 'Audience at a ShoreVest event panel'
+      isClickable: true
     },
     {
       startDate: '2026-06-15',
@@ -138,9 +145,7 @@
       ctaLabel: 'View →',
       href: 'https://informaconnect.com/superreturn-emerging-markets/speakers/benjamin-fanger/',
       ariaLabel: 'View Benjamin Fanger’s SuperReturn speaker profile',
-      isClickable: true,
-      imageSrc: 'assets/img/media-hero-fii-priority.svg',
-      imageAlt: 'Conference audience listening to a ShoreVest panel'
+      isClickable: true
     },
     {
       startDate: '2026-06-10',
@@ -155,8 +160,42 @@
       href: 'https://events.bloomberglive.com/event/InvestHK_2026/summary?RefId=blive_tile',
       ariaLabel: 'View Bloomberg Invest Hong Kong event page',
       isClickable: true
+    },
+    {
+      startDate: '2025-11-06',
+      endDate: '2025-11-06',
+      timeZone: 'Asia/Hong_Kong',
+      displayDate: '6 Nov 2025',
+      type: 'Panel',
+      title: 'FII Institute Priority panel on private credit',
+      description: 'A panel discussion covering credit-cycle risk and how global investors are assessing China’s market structure.',
+      isClickable: true,
+      post: {
+        href: 'https://www.youtube.com/watch?v=t9BHji_UQlA',
+        label: 'Watch →',
+        ariaLabel: 'Watch the FII Institute Priority panel on YouTube'
+      }
+    },
+    {
+      startDate: '2019-10-30',
+      endDate: '2019-10-30',
+      timeZone: 'America/Los_Angeles',
+      displayDate: '30 Oct 2019',
+      type: 'Roundtable',
+      title: 'Asia Society Executive Roundtable on China debt markets',
+      description: 'A private Executive Roundtable on trade-policy trends affecting China’s debt situation and the non-performing loan market.',
+      isClickable: true,
+      post: {
+        href: 'https://asiasociety.org/northern-california/executive-roundtable-benjamin-fanger-and-howard-chao',
+        label: 'View →',
+        ariaLabel: 'View the Asia Society roundtable post'
+      }
     }
   ];
+
+  // Visible-by-default row counts before the "Show more" toggle takes over.
+  var UPCOMING_VISIBLE = 3;
+  var PAST_VISIBLE = 4;
 
   function createTextElement(tagName, className, text) {
     var element = document.createElement(tagName);
@@ -165,11 +204,10 @@
     return element;
   }
 
-  function renderEvent(event) {
+  function renderEvent(event, isPast) {
     var row = document.createElement('article');
     row.className = 'pr-event-row';
-    if (event.status === eventVisibility.STATUS.CONCLUDED) row.classList.add('pr-event-row--past');
-    if (event.imageSrc) row.classList.add('pr-event-row--with-media');
+    if (isPast) row.classList.add('pr-event-row--past');
     row.setAttribute('role', 'row');
     row.setAttribute('data-start-date', event.startDate);
     row.setAttribute('data-end-date', event.endDate);
@@ -182,28 +220,25 @@
 
     var title = document.createElement('span');
     title.className = 'pr-event-title';
-    var statusLabel = event.status === eventVisibility.STATUS.CONCLUDED ? 'Concluded' : 'Upcoming';
-    title.appendChild(createTextElement('span', 'pr-event-status', statusLabel));
+    if (event.status === eventVisibility.STATUS.IN_PROGRESS) {
+      title.appendChild(createTextElement('span', 'pr-event-status', 'In progress'));
+    }
     title.appendChild(createTextElement('span', '', event.title));
     title.appendChild(createTextElement('small', '', event.description));
     row.appendChild(title);
 
-    row.appendChild(createTextElement('span', 'pr-event-location', event.location));
+    row.appendChild(createTextElement('span', 'pr-event-location', event.location || ''));
 
-    if (event.imageSrc) {
-      var media = document.createElement('figure');
-      media.className = 'pr-event-media';
-      var img = document.createElement('img');
-      img.src = event.imageSrc;
-      img.alt = event.imageAlt || '';
-      img.loading = 'lazy';
-      img.decoding = 'async';
-      media.appendChild(img);
-      row.appendChild(media);
-    }
-
-    if (event.isClickable) {
-      var link = createTextElement('a', 'pr-event-link', event.ctaLabel);
+    var post = isPast ? event.post : null;
+    if (post && post.href) {
+      var postLink = createTextElement('a', 'pr-event-link pr-event-link--post', post.label || 'View →');
+      postLink.href = post.href;
+      postLink.target = '_blank';
+      postLink.rel = 'noopener noreferrer';
+      if (post.ariaLabel) postLink.setAttribute('aria-label', post.ariaLabel);
+      row.appendChild(postLink);
+    } else if (event.isClickable && event.href) {
+      var link = createTextElement('a', 'pr-event-link', event.ctaLabel || 'View →');
       link.href = event.href;
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
@@ -216,41 +251,78 @@
     return row;
   }
 
-  // Keep the media page focused on the three nearest upcoming events.
-  var UPCOMING_VISIBLE_LIMIT = 3;
+  // Renders a ledger with the first `visibleLimit` rows shown and the rest
+  // collapsed behind an accessible "Show more" toggle.
+  function renderList(table, events, visibleLimit, isPast) {
+    if (!table) return;
 
-  function buildDivider() {
-    var divider = document.createElement('div');
-    divider.className = 'pr-events__divider';
-    divider.setAttribute('role', 'separator');
-    divider.setAttribute('aria-label', 'Past events');
-    divider.appendChild(createTextElement('span', 'pr-events__divider-label', 'Past events'));
-    divider.appendChild(createTextElement('span', 'pr-events__divider-note',
-      'Concluded appearances remain listed for ' + eventVisibility.DISPLAY_DAYS_AFTER_END + ' days'));
-    return divider;
+    table.querySelectorAll('.pr-event-row, .pr-events__more').forEach(function (node) { node.remove(); });
+    var anchor = table.querySelector('.pr-events__empty');
+
+    var collapsedRows = [];
+    events.forEach(function (event, index) {
+      var row = renderEvent(event, isPast);
+      if (index >= visibleLimit) {
+        row.hidden = true;
+        collapsedRows.push(row);
+      }
+      table.insertBefore(row, anchor);
+    });
+
+    if (collapsedRows.length) {
+      var wrap = document.createElement('div');
+      wrap.className = 'pr-events__more';
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'pr-events__more-btn';
+      btn.setAttribute('aria-expanded', 'false');
+      var moreLabel = 'Show ' + collapsedRows.length + ' more';
+      btn.textContent = moreLabel;
+      btn.addEventListener('click', function () {
+        var expanded = btn.getAttribute('aria-expanded') === 'true';
+        collapsedRows.forEach(function (row) { row.hidden = expanded; });
+        btn.setAttribute('aria-expanded', String(!expanded));
+        btn.textContent = expanded ? moreLabel : 'Show fewer';
+      });
+      wrap.appendChild(btn);
+      table.insertBefore(wrap, anchor);
+    }
   }
 
   function applyEventFilter(now) {
-    var table = document.querySelector('.pr-events__table');
+    var upcomingTable = document.querySelector('[data-events-list="upcoming"]');
+    var pastTable = document.querySelector('[data-events-list="past"]');
     var emptyEl = document.getElementById('pr-events-empty');
-    if (!table || !emptyEl) return;
+    if (!upcomingTable && !pastTable) return;
 
-    var visibleEvents = eventVisibility.sortVisibleEvents(EVENTS, now || new Date());
-    table.querySelectorAll('.pr-event-row, .pr-events__divider').forEach(function (row) { row.remove(); });
-
-    var upcoming = visibleEvents.filter(function (event) { return event.status !== eventVisibility.STATUS.CONCLUDED; });
-    var past = visibleEvents.filter(function (event) { return event.status === eventVisibility.STATUS.CONCLUDED; });
-
-    upcoming.slice(0, UPCOMING_VISIBLE_LIMIT).forEach(function (event) {
-      table.insertBefore(renderEvent(event), emptyEl);
+    var moment = now || new Date();
+    var withStatus = EVENTS.map(function (event) {
+      return Object.assign({}, event, { status: eventVisibility.getEventStatus(event, moment) });
     });
 
-    if (past.length) {
-      table.insertBefore(buildDivider(), emptyEl);
-      past.forEach(function (event) { table.insertBefore(renderEvent(event), emptyEl); });
-    }
+    var upcoming = withStatus
+      .filter(function (event) {
+        return event.status === eventVisibility.STATUS.UPCOMING ||
+          event.status === eventVisibility.STATUS.IN_PROGRESS;
+      })
+      .sort(function (a, b) {
+        if (a.status !== b.status) return a.status === eventVisibility.STATUS.IN_PROGRESS ? -1 : 1;
+        return a.startDate.localeCompare(b.startDate);
+      });
 
-    emptyEl.hidden = visibleEvents.length > 0;
+    // Previous events are a permanent record: concluded events stay listed
+    // (newest first) instead of retiring after the grace window.
+    var past = withStatus
+      .filter(function (event) {
+        return event.status === eventVisibility.STATUS.CONCLUDED ||
+          event.status === eventVisibility.STATUS.HIDDEN;
+      })
+      .sort(function (a, b) { return b.endDate.localeCompare(a.endDate); });
+
+    renderList(upcomingTable, upcoming, UPCOMING_VISIBLE, false);
+    renderList(pastTable, past, PAST_VISIBLE, true);
+
+    if (emptyEl) emptyEl.hidden = upcoming.length > 0;
   }
 
   window.__svMediaEvents = EVENTS;

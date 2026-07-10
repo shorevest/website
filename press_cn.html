@@ -24,7 +24,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <script>document.write('<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260708-layered-hero-b&t='+window.__SVT+'">');</script>
-<script>document.write('<link rel="stylesheet" href="assets/css/press-rebuild.css?v=20260710-media-hero-photo&t='+window.__SVT+'">');</script>
+<script>document.write('<link rel="stylesheet" href="assets/css/press-rebuild.css?v=20260710-media-restructure&t='+window.__SVT+'">');</script>
 <style>
   body.homepage {
     --sv-font: "DIN 2014", "Barlow", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
@@ -91,33 +91,47 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 
   <!-- 1 · AUTHORITY OPENING — same layered hero system as the homepage -->
   <section class="sv-hero media-hero" id="media" data-screen-label="媒体" aria-labelledby="pr-h1">
-    <img class="media-hero__bg" src="assets/img/media-hero-fii-priority.svg" alt="新岸资本在 FII Priority Asia 会议专题讨论现场" width="2000" height="1334" loading="eager" decoding="async">
     <div class="sv-hero__inner">
-      <div class="media-hero__box">
-        <p class="sv-hero__label">2008 年至今</p>
+      <div class="sv-hero__main">
+        <p class="sv-hero__label">第三方报道</p>
         <h1 class="sv-hero__headline" id="pr-h1">媒体</h1>
-        <p class="sv-hero__body">第三方报道、访谈及评论，记录新岸资本近二十年来跨越中国信贷周期的观点与实践 &mdash; 从早期不良信贷市场，到恒大错位，再到当前的重组环境。</p>
-        <p class="sv-hero__body">报道更新至 2026 年 1 月。</p>
+        <p class="sv-hero__body">第三方报道、访谈及评论，记录新岸资本近二十年来跨越中国信贷周期的观点与实践。</p>
+        <p class="sv-hero__body">档案涵盖中国私募信贷、不良债权、重组及相关市场动态。</p>
+        <div class="sv-hero__cta">
+          <a href="#upcoming" class="sv-textlink">即将出席活动<span aria-hidden="true">→</span></a>
+          <a href="#archive" class="sv-textlink">浏览媒体档案<span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+      <div class="sv-hero__field">
+        <div class="sv-hero__image"><img src="assets/img/media-hero-fii-priority.svg" alt="新岸资本在会议专题讨论现场" width="2000" height="1334" loading="eager" decoding="async"></div>
+        <aside class="sv-hero__panel" aria-label="媒体报道摘要">
+          <p class="sv-hero__panel-label">报道概览</p>
+          <dl>
+            <div class="sv-hero__panel-row">
+              <dt>报道</dt>
+              <dd>2008 年至今</dd>
+            </div>
+            <div class="sv-hero__panel-row">
+              <dt>见诸</dt>
+              <dd lang="en">Bloomberg · Reuters · The Economist · Nikkei Asia · SCMP</dd>
+            </div>
+            <div class="sv-hero__panel-row">
+              <dt>形式</dt>
+              <dd>访谈 · 专题讨论 · 播客 · 评论</dd>
+            </div>
+          </dl>
+        </aside>
       </div>
     </div>
   </section>
 
-  <section class="pr-open" id="media-proof" aria-label="媒体报道摘要">
-    <div class="sv-shell pr-proof-band">
-      <dl class="pr-proof">
-        <div class="pr-proof__item"><dt class="pr-proof__k">报道</dt><dd class="pr-proof__v">2008 年至今</dd></div>
-        <div class="pr-proof__item"><dt class="pr-proof__k">见诸</dt><dd class="pr-proof__v" lang="en">Bloomberg · Reuters · The Economist · Nikkei Asia · South China Morning Post</dd></div>
-        <div class="pr-proof__item"><dt class="pr-proof__k">形式</dt><dd class="pr-proof__v">访谈 · 专题讨论 · 播客 · 评论</dd></div>
-      </dl>
-    </div>
-  </section>
-
   <!-- 2 · UPCOMING EVENTS -->
-  <section class="pr-events" id="upcoming" data-screen-label="近期及即将" aria-labelledby="pr-upcoming-title">
+  <section class="pr-events" id="upcoming" data-screen-label="即将出席" aria-labelledby="pr-upcoming-title">
     <div class="sv-shell">
       <div class="pr-section-head">
         <div class="pr-section-head__l">
-          <h2 class="pr-section-title" id="pr-upcoming-title">近期及即将出席活动</h2>
+          <h2 class="pr-section-title" id="pr-upcoming-title">即将出席活动</h2>
+          <p class="pr-section-sub">新岸资本计划出席的会议、专题讨论及投资者活动。</p>
         </div>
         <div class="pr-section-head__r">
           <div class="pr-inquiry">
@@ -126,7 +140,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
           </div>
         </div>
       </div>
-      <div class="pr-events__table" role="table" aria-label="即将出席的公开活动">
+      <div class="pr-events__table" role="table" aria-label="即将出席的公开活动" data-events-list="upcoming">
         <article class="pr-event-row" role="row" data-start-date="2026-09-08" data-end-date="2026-09-09">
           <time class="pr-event-date" datetime="2026-09-08">2026 年 9 月 8–9 日</time>
           <span class="pr-event-type">峰会</span>
@@ -206,7 +220,22 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
           </span>
           <span class="pr-event-location">伦敦</span>
         </article>
-        <article class="pr-event-row" role="row" data-start-date="2026-06-24" data-end-date="2026-06-25">
+        <p class="pr-events__empty" id="pr-events-empty" hidden>目前暂无即将举行的公开活动。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 · PREVIOUS EVENTS -->
+  <section class="pr-events pr-events--past" id="past" data-screen-label="往期活动" aria-labelledby="pr-past-title">
+    <div class="sv-shell">
+      <div class="pr-section-head">
+        <div class="pr-section-head__l">
+          <h2 class="pr-section-title" id="pr-past-title">往期活动</h2>
+          <p class="pr-section-sub">往期出席活动长期保留于此。如活动产生了相关报道，条目将链接至对应内容。</p>
+        </div>
+      </div>
+      <div class="pr-events__table" role="table" aria-label="往期公开活动" data-events-list="past">
+        <article class="pr-event-row pr-event-row--past" role="row" data-start-date="2026-06-24" data-end-date="2026-06-25">
           <time class="pr-event-date" datetime="2026-06-24">2026 年 6 月 24–25 日</time>
           <span class="pr-event-type">专题讨论</span>
           <span class="pr-event-title">
@@ -216,7 +245,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
           <span class="pr-event-location">新加坡</span>
           <a class="pr-event-link" href="https://www.peievents.com/en/event/pdi-apac-forum/" target="_blank" rel="noopener noreferrer">查看 <span aria-hidden="true">→</span></a>
         </article>
-        <article class="pr-event-row" role="row" data-start-date="2026-06-15" data-end-date="2026-06-17">
+        <article class="pr-event-row pr-event-row--past" role="row" data-start-date="2026-06-15" data-end-date="2026-06-17">
           <time class="pr-event-date" datetime="2026-06-15">2026 年 6 月 15–17 日</time>
           <span class="pr-event-type">会议</span>
           <span class="pr-event-title">
@@ -226,7 +255,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
           <span class="pr-event-location">阿姆斯特丹</span>
           <a class="pr-event-link" href="https://informaconnect.com/superreturn-emerging-markets/" target="_blank" rel="noopener noreferrer">查看 <span aria-hidden="true">→</span></a>
         </article>
-        <article class="pr-event-row" role="row" data-start-date="2026-06-10" data-end-date="2026-06-10">
+        <article class="pr-event-row pr-event-row--past" role="row" data-start-date="2026-06-10" data-end-date="2026-06-10">
           <time class="pr-event-date" datetime="2026-06-10">2026 年 6 月 10 日</time>
           <span class="pr-event-type">会议</span>
           <span class="pr-event-title">
@@ -236,12 +265,32 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
           <span class="pr-event-location">香港</span>
           <a class="pr-event-link" href="https://events.bloomberglive.com/event/InvestHK_2026/summary?RefId=blive_tile" target="_blank" rel="noopener noreferrer">查看 <span aria-hidden="true">→</span></a>
         </article>
-        <p class="pr-events__empty" id="pr-events-empty" hidden>目前暂无近期或即将举行的公开活动。</p>
+        <article class="pr-event-row pr-event-row--past" role="row" data-start-date="2025-11-06" data-end-date="2025-11-06">
+          <time class="pr-event-date" datetime="2025-11-06">2025 年 11 月 6 日</time>
+          <span class="pr-event-type">专题讨论</span>
+          <span class="pr-event-title">
+            <span><span lang="en">FII Institute Priority</span> 私募信贷专题讨论</span>
+            <small>探讨信贷周期风险，以及全球投资者如何评估中国市场结构。</small>
+          </span>
+          <span class="pr-event-location"></span>
+          <a class="pr-event-link pr-event-link--post" href="https://www.youtube.com/watch?v=t9BHji_UQlA" target="_blank" rel="noopener noreferrer">观看 <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="pr-event-row pr-event-row--past" role="row" data-start-date="2019-10-30" data-end-date="2019-10-30" hidden>
+          <time class="pr-event-date" datetime="2019-10-30">2019 年 10 月 30 日</time>
+          <span class="pr-event-type">圆桌会议</span>
+          <span class="pr-event-title">
+            <span><span lang="en">Asia Society</span> 中国债务市场高层圆桌会议</span>
+            <small>关于贸易政策趋势对中国债务状况及不良贷款市场影响的闭门高层圆桌会议。</small>
+          </span>
+          <span class="pr-event-location"></span>
+          <a class="pr-event-link pr-event-link--post" href="https://asiasociety.org/northern-california/executive-roundtable-benjamin-fanger-and-howard-chao" target="_blank" rel="noopener noreferrer">查看 <span aria-hidden="true">→</span></a>
+        </article>
+        <div class="pr-events__more"><button class="pr-events__more-btn" type="button" aria-expanded="false" data-more-label="查看更多（1）" data-fewer-label="收起">查看更多（1）</button></div>
       </div>
     </div>
   </section>
 
-  <!-- 3 · MEDIA ARCHIVE -->
+  <!-- 4 · MEDIA ARCHIVE -->
   <section class="pr-archive" id="archive" data-screen-label="媒体档案" aria-labelledby="pr-archive-title">
     <div class="sv-shell">
       <div class="pr-section-head">
@@ -391,7 +440,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
             <span class="press-headline">Unique post-COVID-19 dynamics in private credit (Europe &amp; Asia)</span>
             <span class="press-row__summary">Compares dislocation and deployment conditions across the two regions in 2020.</span></span>
             <span class="press-row__meta">
-              <time class="press-date" datetime="2020-07-08">08 Jul 2020</time>
+              <time class="press-date" datetime="2020-07-08">8 Jul 2020</time>
             </span></a>
         </article>
         <article class="press-row" data-type-label="WEBINAR">
@@ -409,7 +458,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
             <span class="press-headline">The new global NPL markets</span>
             <span class="press-row__summary">Provides context for how China NPLs were discussed alongside other distressed credit markets during a period of broad credit stress.</span></span>
             <span class="press-row__meta">
-              <time class="press-date" datetime="2020-06-04">04 Jun 2020</time>
+              <time class="press-date" datetime="2020-06-04">4 Jun 2020</time>
             </span></a>
         </article>
         <article class="press-row" data-type-label="PODCAST">
@@ -427,7 +476,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
             <span class="press-headline">China's credit environment in the wake of COVID-19</span>
             <span class="press-row__summary">An investor briefing recorded during the first months of the pandemic.</span></span>
             <span class="press-row__meta">
-              <time class="press-date" datetime="2020-05-07">07 May 2020</time>
+              <time class="press-date" datetime="2020-05-07">7 May 2020</time>
             </span></a>
         </article>
         <article class="press-row" data-type-label="PRESS COVERAGE">
@@ -545,7 +594,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
     </div>
   </section>
 
-  <!-- 4 · DISCLOSURES -->
+  <!-- 5 · DISCLOSURES -->
   <section class="pr-disclosures" aria-labelledby="pr-disclosures-heading">
     <div class="pr-disclosures__inner">
       <p class="pr-disclosures__label" id="pr-disclosures-heading">披露事项</p>
@@ -614,61 +663,34 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 </script>
 <script>
 (function(){
-  var GRACE_DAYS = 30; // 活动结束后仍作为"近期"显示的天数
-  function isShownEvent(endDate, today){
-    today = today || new Date();
-    var todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    var dropOff = new Date(endDate + "T23:59:59");
-    dropOff.setDate(dropOff.getDate() + GRACE_DAYS);
-    return dropOff >= todayDate;
-  }
-  function isEndedEvent(endDate, today){
+  // 即将出席：结束后的活动自动隐藏（应移入下方“往期活动”），默认展示前 3
+  // 项，其余通过“查看更多”展开。往期活动为静态长期记录，仅接管其展开按钮。
+  var INITIAL_UPCOMING_VISIBLE = 3;
+  function hasEnded(endDate, today){
     today = today || new Date();
     var todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     var end = new Date(endDate + "T23:59:59");
     return end < todayDate;
   }
-  function markPast(row, ended){
-    row.classList.toggle('pr-event-row--past', ended);
-    var titleCell = row.querySelector('.pr-event-title');
-    var badge = row.querySelector('.pr-event-status');
-    if (ended && titleCell && !badge){
-      badge = document.createElement('span');
-      badge.className = 'pr-event-status';
-      badge.textContent = '已结束';
-      titleCell.insertBefore(badge, titleCell.firstChild);
-    } else if (!ended && badge){
-      badge.parentNode.removeChild(badge);
-    }
-  }
-  var INITIAL_UPCOMING_VISIBLE = 3; // 默认展示的即将举行活动数量，其余通过“查看更多”展开
   function applyEventFilter(today){
-    var table = document.querySelector('.pr-events__table');
-    var rows = document.querySelectorAll('.pr-event-row[data-end-date]');
+    var table = document.querySelector('.pr-events__table[data-events-list="upcoming"]');
     var emptyEl = document.getElementById('pr-events-empty');
-    var oldMore = table ? table.querySelector('.pr-events__more') : null;
+    if (!table) return;
+    var rows = table.querySelectorAll('.pr-event-row[data-end-date]');
+    var oldMore = table.querySelector('.pr-events__more');
     if (oldMore) oldMore.parentNode.removeChild(oldMore);
-    var visible = 0;
     var upcomingRows = [];
-    var firstPastRow = null;
     for (var i = 0; i < rows.length; i++){
-      var end = rows[i].getAttribute('data-end-date');
-      var shown = isShownEvent(end, today);
-      rows[i].hidden = !shown;
-      if (shown){
-        visible++;
-        var ended = isEndedEvent(end, today);
-        markPast(rows[i], ended);
-        if (ended){ if (!firstPastRow) firstPastRow = rows[i]; }
-        else { upcomingRows.push(rows[i]); }
-      }
+      var ended = hasEnded(rows[i].getAttribute('data-end-date'), today);
+      rows[i].hidden = ended;
+      if (!ended) upcomingRows.push(rows[i]);
     }
     var collapsed = [];
     for (var j = INITIAL_UPCOMING_VISIBLE; j < upcomingRows.length; j++){
       upcomingRows[j].hidden = true;
       collapsed.push(upcomingRows[j]);
     }
-    if (collapsed.length && table){
+    if (collapsed.length){
       var wrap = document.createElement('div');
       wrap.className = 'pr-events__more';
       var btn = document.createElement('button');
@@ -684,13 +706,28 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
         btn.textContent = expanded ? moreLabel : '收起';
       });
       wrap.appendChild(btn);
-      table.insertBefore(wrap, firstPastRow || emptyEl);
+      table.insertBefore(wrap, emptyEl);
     }
-    if (emptyEl) emptyEl.hidden = visible > 0;
+    if (emptyEl) emptyEl.hidden = upcomingRows.length > 0;
+  }
+  function initPastToggle(){
+    var table = document.querySelector('.pr-events__table[data-events-list="past"]');
+    if (!table) return;
+    var btn = table.querySelector('.pr-events__more-btn');
+    if (!btn) return;
+    var hiddenRows = table.querySelectorAll('.pr-event-row[hidden]');
+    if (!hiddenRows.length){ btn.parentNode.hidden = true; return; }
+    btn.addEventListener('click', function(){
+      var expanded = btn.getAttribute('aria-expanded') === 'true';
+      for (var i = 0; i < hiddenRows.length; i++){ hiddenRows[i].hidden = expanded; }
+      btn.setAttribute('aria-expanded', String(!expanded));
+      btn.textContent = expanded ? btn.getAttribute('data-more-label') : btn.getAttribute('data-fewer-label');
+    });
   }
   window.__svApplyEventFilter = applyEventFilter;
-  if (document.readyState !== 'loading') applyEventFilter();
-  else document.addEventListener('DOMContentLoaded', function(){ applyEventFilter(); });
+  function init(){ applyEventFilter(); initPastToggle(); }
+  if (document.readyState !== 'loading') init();
+  else document.addEventListener('DOMContentLoaded', init);
 })();
 </script>
 </body>
