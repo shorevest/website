@@ -127,9 +127,9 @@
   }
 
   function roleSwitcher(user) {
-    var wrap = el('label', { class: 'ops-role-switch' }, [el('span', { text: 'Role preview' })]);
+    var wrap = el('label', { class: 'ops-role-switch' }, [el('span', { text: 'Role preview:' })]);
     var sel = el('select', { 'aria-label': 'Role preview selector' });
-    DEMO_USERS.forEach(function (u) { sel.appendChild(el('option', { value: u.personaId, text: u.displayRole, selected: u.personaId === user.personaId })); });
+    DEMO_USERS.forEach(function (u) { sel.appendChild(el('option', { value: u.personaId, text: (u.name || u.displayRole || '').split(' ')[0], selected: u.personaId === user.personaId })); });
     sel.onchange = function () {
       var next = DEMO_USERS.filter(function (u) { return u.personaId === sel.value; })[0];
       if (next) signInDemo(next);
@@ -203,10 +203,9 @@
 
       ]),
       el('input', { class: 'ops-global-search', type: 'search', placeholder: 'Search people, firms, opportunities, requests, reports or tools', onkeydown: function (ev) { if (ev.key === 'Enter') U.toast('Preview search only. No external systems queried.'); } }),
-      el('div', { class: 'ops-topbar__right ops-topbar__right--compact' }, [
-        el('span', { text: I.demoMode() ? 'Internal Preview' : 'Connected' }),
-        el('span', { text: I.demoMode() ? 'Mock data' : 'Connected data' }),
-        el('span', { text: S.RULES_VERSION })
+      el('div', { class: 'ops-topbar__right' }, [
+        el('span', { class: 'ops-env-compact', text: (I.demoMode() ? 'Internal Preview · Mock data' : 'Production · Connected data') + ' · R-2026.07' }),
+        roleSwitcher(user)
       ])
     ]);
     main.appendChild(topbar);
