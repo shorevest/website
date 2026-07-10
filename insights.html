@@ -23,7 +23,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <script>document.write('<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260708-layered-hero-b&t='+window.__SVT+'">');</script>
-<script>document.write('<link rel="stylesheet" href="assets/css/insights-rebuild.css?v=20260709-featured-report-white&t='+window.__SVT+'">');</script>
+<script>document.write('<link rel="stylesheet" href="assets/css/insights-rebuild.css?v=20260710-search-hover&t='+window.__SVT+'">');</script>
 <script>(function(){var T=window.__SVT;function tk(u){return u+(u.indexOf('?')>-1?'&':'?')+'t='+T;}var s=document.createElement('script');s.src=tk('assets/js/image-slot.js');document.head.appendChild(s);})();</script>
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="shortcut icon" href="/favicon.ico">
@@ -113,7 +113,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
         <div class="cdd-stat"><span class="cdd-stat__num">English</span><span class="cdd-stat__label">Publication language</span></div>
       </div>
 
-      <!-- 4 · Square filter buttons -->
+      <!-- 4 · Square filter buttons + search -->
       <div class="cdd-arc__controls">
         <div class="cdd-arc__chips" role="tablist" aria-label="Filter articles by topic">
           <button type="button" class="cdd-arc__chip is-active" data-topic="all" role="tab" aria-selected="true">All</button>
@@ -121,7 +121,13 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
           <button type="button" class="cdd-arc__chip" data-topic="policy" role="tab" aria-selected="false">Policy</button>
           <button type="button" class="cdd-arc__chip" data-topic="structural" role="tab" aria-selected="false">Structural</button>
         </div>
-        <p class="cdd-arc__count"><span data-cdd-arc-count>20</span> articles</p>
+        <div class="cdd-arc__tools">
+          <div class="cdd-arc__search" role="search">
+            <svg class="cdd-arc__search-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <input type="search" class="cdd-arc__search-input" data-cdd-arc-search placeholder="Search the archive" aria-label="Search articles by title or topic" autocomplete="off">
+          </div>
+          <p class="cdd-arc__count"><span data-cdd-arc-count>20</span> articles</p>
+        </div>
       </div>
 
       <!-- 5 · Research archive ledger, grouped by year -->
@@ -445,6 +451,13 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
                 <a class="cdd-arc__pdf" href="china-debt-dynamics-print.html?source=assets/data/china-debt-dynamics-v2i4.json&pdf=1" target="_blank" rel="noopener">PDF</a>
               </div>
             </article>
+      </div>
+
+      <!-- 5b · Empty state (shown when a search/filter returns nothing) -->
+      <div class="cdd-arc__empty" data-cdd-arc-empty hidden>
+        <p class="cdd-arc__empty-title">No matching issues</p>
+        <p class="cdd-arc__empty-body">Try a different keyword or clear the filters to see the full archive.</p>
+        <button type="button" class="cdd-arc__empty-reset" data-cdd-arc-reset>Clear filters</button>
       </div>
 
       <!-- 6 · End of archive -->
