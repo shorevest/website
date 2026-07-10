@@ -420,25 +420,22 @@ body.press-page .media-hero {
   background: #0c1a1e;
 }
 /* The conference photograph fills the whole hero; the vertical crop favours
-   the speaker's face and upper body. */
+   the stage and panelists. */
 body.press-page .media-hero__bg {
   position: absolute; inset: 0; z-index: 0;
   display: block; width: 100%; height: 100%;
-  object-fit: cover; object-position: center 16%;
-  -webkit-filter: grayscale(100%); filter: grayscale(100%);
+  object-fit: cover; object-position: center 38%;
 }
 
 /* Warm scrim, heavier on the left so the paper card sits over quiet tone
-   while the speaker stays visible on the right. */
+   while the panel stays visible on the right. */
 body.press-page .media-hero::after {
   content: ""; position: absolute; inset: 0; z-index: 1;
   background: linear-gradient(90deg,
-    rgba(10, 22, 26, 0.66) 0%,
-    rgba(10, 22, 26, 0.36) 46%,
-    rgba(10, 22, 26, 0.00) 74%);
+    rgba(10, 22, 26, 0.74) 0%,
+    rgba(10, 22, 26, 0.42) 48%,
+    rgba(10, 22, 26, 0.00) 76%);
 }
-body.press-page .media-hero__bg { display: none; }
-body.press-page .media-hero::after { content: none; }
 body.press-page .media-hero .sv-hero__inner {
   position: relative;
   z-index: 1;
@@ -450,7 +447,7 @@ body.press-page .media-hero .sv-hero__inner {
   padding-block: clamp(72px, 9vw, 116px);
 }
 body.press-page .media-hero__box {
-  grid-column: 7 / 13;
+  grid-column: 1 / 7;
   align-self: center;
   display: flex;
   flex-direction: column;
@@ -458,10 +455,10 @@ body.press-page .media-hero__box {
   width: 100%;
   aspect-ratio: 1 / 1;
   padding: clamp(34px, 4vw, 58px);
-  background: rgba(250, 246, 238, 0.98);
+  background: rgba(250, 246, 238, 0.97);
   border: 1px solid rgba(27, 31, 30, 0.14);
   border-radius: 14px;
-  box-shadow: 0 24px 58px rgba(20, 28, 27, 0.10);
+  box-shadow: 0 26px 60px rgba(8, 16, 18, 0.34);
 }
 body.press-page .media-hero__box .sv-hero__label {
   margin: 0 0 14px;
@@ -480,6 +477,13 @@ body.press-page .media-hero__box .sv-hero__body { max-width: none; }
     grid-column: 1;
     max-width: min(100%, 560px);
     margin-inline: auto;
+  }
+  /* On a single centred column the horizontal scrim leaves the card edge
+     over bright photo — switch to an even vertical wash instead. */
+  body.press-page .media-hero::after {
+    background: linear-gradient(180deg,
+      rgba(10, 22, 26, 0.30) 0%,
+      rgba(10, 22, 26, 0.55) 100%);
   }
 }
 
