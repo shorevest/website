@@ -72,7 +72,7 @@ body.firm-page .fm-hero__frame {
   min-height: 0;
   padding: clamp(44px, 4.6vw, 70px) clamp(34px, 3.2vw, 52px);
   background: linear-gradient(208deg, #CF3A2B 0%, #C93B2A 52%, #8F2A20 100%);
-  border-radius: 0 14px 14px 0;
+  border-radius: 0;
 }
 body.firm-page .fm-hero__frame > * { position: relative; z-index: 1; }
 body.firm-page .fm-hero__frame::before {
