@@ -5,8 +5,8 @@
          gradient block bleeding off the left edge, headline inside, lede on
          ivory beside it), anchored by a full-bleed qing-dark proof ledger
          ("Platform at a glance").
-     2 · Who We Are — annual-report spread: grayscale grove portrait on the
-         left, kicker + display title + lead/support narrative on the right.
+     2 · Who We Are — annual-report spread: kicker + display title +
+         lead/support narrative on the left, square grayscale image on the right.
      3 · Institutional investor base — standalone stone band: shared section
          head plus a ruled, indexed 3×2 register of investor types.
      4 · Firm capabilities — numbered three-column discipline ledger on white.
@@ -176,8 +176,8 @@ body.firm-page .fm-sechead__r p + p { margin-top: 14px; }
 }
 
 /* ==========================================================================
-   2 · WHO WE ARE — annual-report spread: grayscale portrait on the left,
-   kicker + display title + lead/support narrative hierarchy on the right.
+   2 · WHO WE ARE — annual-report spread: narrative hierarchy on the left,
+   square grayscale image on the right.
    ========================================================================== */
 body.firm-page .fm-who { background: #FFFFFF; padding-block: clamp(72px, 8vw, 118px); }
 body.firm-page .fm-who__inner {
@@ -185,14 +185,14 @@ body.firm-page .fm-who__inner {
   column-gap: clamp(32px, 5vw, 88px); align-items: center;
 }
 body.firm-page .fm-who__figure {
-  grid-column: 1 / 5; min-width: 0;
+  grid-column: 9 / 13; min-width: 0;
   margin: 0; overflow: hidden;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 1 / 1;
   background: var(--sv-stone, #F1EBDD);
 }
 body.firm-page .fm-who__figure img {
   display: block; width: 100%; height: 100%;
-  object-fit: cover; object-position: center 62%;
+  object-fit: cover; object-position: center;
   filter: grayscale(1);
   transition: filter 320ms ease;
 }
@@ -200,7 +200,7 @@ body.firm-page .fm-who__figure:hover img { filter: grayscale(0); }
 @media (prefers-reduced-motion: reduce) {
   body.firm-page .fm-who__figure img { transition: none; }
 }
-body.firm-page .fm-who__main { grid-column: 5 / 13; min-width: 0; }
+body.firm-page .fm-who__main { grid-column: 1 / 9; min-width: 0; }
 body.firm-page .fm-who__title {
   margin: 0 0 clamp(24px, 2.6vw, 36px);
   font: 500 clamp(30px, 3.2vw, 44px)/1.08 var(--sv-font);
@@ -221,7 +221,7 @@ body.firm-page .fm-who__narr {
 @media (max-width: 880px) {
   body.firm-page .fm-who__inner { display: flex; flex-direction: column; align-items: stretch; }
   body.firm-page .fm-who__main { order: 0; }
-  /* Portrait follows the narrative as an inset on small screens. */
+  /* Square image follows the narrative as an inset on small screens. */
   body.firm-page .fm-who__figure {
     order: 1; width: min(100%, 420px);
     margin: clamp(28px, 5vw, 40px) 0 0;
