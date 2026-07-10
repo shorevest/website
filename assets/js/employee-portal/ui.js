@@ -81,9 +81,26 @@
     'Executing Approved Actions': 'st--review'
   };
 
+  var CONTROLLED_STATUSES = ['Ready', 'Needs review', 'Waiting', 'On hold', 'Blocked', 'Suggested', 'Complete'];
+  var CONTROLLED_ACTIONS = ['Review', 'Prepare', 'Send', 'Confirm', 'Fix', 'Wait'];
+  var CONTROLLED_STATUS_CLASS = {
+    'Ready': 'st--ready',
+    'Needs review': 'st--review',
+    'Waiting': 'st--neutral',
+    'On hold': 'st--review',
+    'Blocked': 'st--blocked',
+    'Suggested': 'st--review',
+    'Complete': 'st--ready'
+  };
+
   function statusHtml(label, cls) {
-    var c = cls || STATUS_CLASS[label] || BATCH_STATUS_CLASS[label] || 'st--neutral';
+    var c = cls || CONTROLLED_STATUS_CLASS[label] || STATUS_CLASS[label] || BATCH_STATUS_CLASS[label] || 'st--neutral';
     return '<span class="st ' + c + '">' + esc(label) + '</span>';
+  }
+
+  function actionChip(label) {
+    var safe = CONTROLLED_ACTIONS.indexOf(label) === -1 ? 'Review' : label;
+    return '<span class="action-chip action-chip--' + safe.toLowerCase() + '">' + esc(safe) + '</span>';
   }
 
   /* ── Table builder ─────────────────────────────────────────────────────── */
@@ -231,7 +248,9 @@
   SVOps.ui = {
     esc: esc, el: el, frag: frag,
     fmtInt: fmtInt, fmtDate: fmtDate, fmtDateTime: fmtDateTime,
-    statusHtml: statusHtml, table: table,
+    statusHtml: statusHtml, actionChip: actionChip,
+    controlledStatuses: CONTROLLED_STATUSES, controlledActions: CONTROLLED_ACTIONS,
+    table: table,
     notice: notice, toast: toast, drawer: drawer,
     stateScreen: stateScreen, permissionDenied: permissionDenied,
     fieldSelect: fieldSelect, fieldText: fieldText, toggleRow: toggleRow,

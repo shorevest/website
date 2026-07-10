@@ -1,12 +1,12 @@
 /* ==========================================================================
    ShoreVest One — role (persona) configuration
-   A single small configuration layer describing the three demonstration
+   A single small configuration layer describing the three preview
    people: their identity, permanent navigation, Home information, and the
    restrained previews behind future-facing navigation.
 
-   Everything here is synthetic. External institutions, contacts, and account
+   Everything here is mocked. External institutions, contacts, and account
    details are entirely fictional. Only the internal ShoreVest names are real,
-   used solely to identify the selected demonstration role. No real emails,
+   used solely to identify the selected preview role. No real emails,
    contact data, or confidential information appears.
 
    The Home page absorbs complexity: each person sees only the work that needs
@@ -21,7 +21,7 @@
   var R = root.SVPortalRules;
 
   /* Underlying capability role used only to keep the legacy Tools prototype
-     fully accessible for every demonstration persona. This is not the person's
+     fully accessible for every preview persona. This is not the person's
      display role — see `displayRole` on each persona. */
   var TOOLS_ROLE = R ? R.ROLES.ADMINISTRATOR : 'Administrator';
 
@@ -176,8 +176,8 @@
         id: 'celestra-mergepoint-contact-review',
         title: 'MergePoint contact review',
         context: ['12 proposed contacts need review before Salesforce writeback.'],
-        recLabel: 'Held',
-        recommendation: 'Held for ownership or account match.',
+        recLabel: 'On hold',
+        recommendation: 'On hold for ownership or account match.',
         actions: [
           { label: 'Review proposed records', intent: 'primary', done: 'Proposed records opened' },
           { label: 'Why am I seeing this?', intent: 'secondary', done: 'Explanation opened' }
@@ -243,7 +243,7 @@
   var BEN_HOME = {
     needsYou: [
       { id:'ben-stage4-plan', title:'Stage 4 LPs without strategic action plan', context:['Four advanced relationships have no current owner plan.'], recLabel:'Current state', recommendation:'Decide whether to assign owner plans or downgrade priority.', actions:[{label:'Review exceptions',intent:'primary',done:'Exceptions opened'},{label:'Ask owners',intent:'secondary',done:'Owner request recorded'}], detail:'Ben sees strategic gaps, approval items and exceptions where owner judgement is required.' },
-      { id:'ben-priority-mismatch', title:'Priority mismatch: owner judgement vs automated signal', context:['Automated signal is high while owner priority is low for two LPs.'], recLabel:'Held', recommendation:'Challenge the stale inputs before changing plan.', actions:[{label:'Open relationship review',intent:'primary',done:'Relationship review opened'}], detail:'Automated ranks are a challenge signal only and cannot override owner judgement silently.' },
+      { id:'ben-priority-mismatch', title:'Priority mismatch: owner judgement vs system signal', context:['System signal is high while owner priority is low for two LPs.'], recLabel:'On hold', recommendation:'Challenge the stale inputs before changing plan.', actions:[{label:'Open relationship review',intent:'primary',done:'Relationship review opened'}], detail:'Automated ranks are a challenge signal only and cannot override owner judgement silently.' },
       { id:'ben-brief-approval', title:'Upcoming LP meetings missing concise brief', context:['Three meetings in the next seven days lack a current brief.'], recLabel:'Blocked', recommendation:'Ask owners to prepare concise briefs before the meeting window.', actions:[{label:'Assign brief owners',intent:'primary',done:'Brief owners assigned'}], detail:'Briefs are cumulative: permanent relationship brief, meeting-specific brief, then post-meeting update.' }
     ],
     today:[{time:'09:30',title:'Approval decisions',note:'Two frozen packages',tone:'attention'},{time:'13:00',title:'Stage 4 review',note:'Action plans missing',tone:'ready'},{time:'16:00',title:'Weekly coverage review',note:'Exceptions only',tone:'calm'}],
@@ -252,7 +252,7 @@
   var EMILY_HOME = {
     needsYou: [
       { id:'emily-template', title:'Briefing-note standardisation', context:['Two meeting brief templates diverge from current process.'], recLabel:'Suggested', recommendation:'Approve one standard template and retire the old draft.', actions:[{label:'Review template',intent:'primary',done:'Template review opened'}], detail:'Emily sees process, template, reporting and Salesforce structure fixes.' },
-      { id:'emily-fields', title:'Salesforce structure fixes', context:['Subjective priority and action category ownership are unclear.'], recLabel:'Held', recommendation:'Confirm field ownership before migration notes are accepted.', actions:[{label:'Confirm field owners',intent:'primary',done:'Field owner review opened'}], detail:'No silent ownership changes or stage movement happen from ShoreVest One.' },
+      { id:'emily-fields', title:'Salesforce structure fixes', context:['Subjective priority and action category ownership are unclear.'], recLabel:'On hold', recommendation:'Confirm field ownership before migration notes are accepted.', actions:[{label:'Confirm field owners',intent:'primary',done:'Field owner review opened'}], detail:'No silent ownership changes or stage movement happen from ShoreVest One.' },
       { id:'emily-reporting', title:'Weekly reporting configuration', context:['Snapshot is live but three data-quality exceptions need taxonomy.'], recLabel:'Current state', recommendation:'Classify stale-record and missing-next-step exception types.', actions:[{label:'Open reporting config',intent:'primary',done:'Reporting config opened'}], detail:'Reporting is treated as a live workstream with source, owner and freshness visible.' }
     ],
     today:[{time:'10:00',title:'Process configuration',note:'Action category design',tone:'attention'},{time:'14:30',title:'Template library',note:'One standard needed',tone:'ready'}],
@@ -306,7 +306,7 @@
   PERSONAS.forEach(function (p) { BY_ID[p.id] = p; });
 
   /* ── Previews behind future-facing navigation ───────────────────────────
-     Restrained overviews, clearly marked as demonstration content. No claim of
+     Restrained overviews, clearly marked as preview content. No claim of
      real integration or execution. */
 
   var PREVIEW = {
