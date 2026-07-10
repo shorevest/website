@@ -1174,3 +1174,19 @@ html body.team-page-v2 .team-profile__actions {
     max-width: 46rem !important;
   }
 }
+
+/* Client directive: remove dividers from the Team page. */
+html body.team-page-v2 .team-hero.hero--team,
+html body.team-page-v2 .group__head,
+html body.team-page-v2 .group + .group,
+html body.team-page-v2 .team-hero__proof article,
+html body.team-page-v2 .team-profile__name,
+html body.team-page-v2 .team-bio-panel,
+html body.team-page-v2 .team-bio-panel__meta {
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+}
+
+html body.team-page-v2 .team-profile__name {
+  padding-top: 0 !important;
+}
