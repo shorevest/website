@@ -1,447 +1,287 @@
 /* ==========================================================================
-   ShoreVest — Firm page (2026-06-19 r4, institutional rebuild)
-   Same approved ShoreVest.com copy & content separation, rebuilt with a real
-   institutional design argument:
-     · DIN (sans) for structure, labels, and data.
-     · Spectral (serif) for the firm's qualitative statements — competency
-       names, principle names, and the closing — an editorial register that
-       sets the Firm page apart from the homepage.
-   Architecture: authority opening → firm-profile proof band → institutional
-   capital proof (narrative + investor rail) → core-competency platform thesis
-   → vision & principles discipline ledger → human-business closing.
-   Inherits header/footer/tokens from homepage-rebuild.css.
+   ShoreVest — Firm page (2026-07-10, institutional pass)
+   One coherent design argument, sibling to the homepage and Strategy page:
+     1 · Masthead — editorial lead (kicker / headline / lede) beside a square
+         grayscale grove photograph lifted on a cinnabar offset field, anchored
+         by a full-bleed qing-dark proof ledger ("Platform at a glance").
+     2 · Who We Are — annual-report split: heading rail on the left, large
+         narrative measure on the right, closed by the institutional investor
+         base set as a ruled two-column ledger.
+     3 · Firm capabilities — numbered three-column discipline ledger on stone.
+     4 · Closing — full-bleed ink statement band above the footer.
+   Inherits header/footer/tokens/.sv-shell/.sv-reveal from homepage-rebuild.css.
+   Client directive holds: no freestanding decorative rules; every hairline is
+   a working border on a ledger row or column.
    ========================================================================== */
 
-body.firm-page .fm-band { background: var(--sv-stone); }
-body.firm-page .fm-serif { font-family: var(--sv-serif); }
-
-/* Eyebrow — used sparingly (max 2–3 red marks per page). */
-body.firm-page .fm-eyebrow {
-  margin: 0 0 22px; padding-top: 0;
-  font: 600 12px/1.4 var(--sv-font); letter-spacing: 0.16em; text-transform: uppercase;
-  color: var(--sv-ink); position: relative;
-}
-body.firm-page .fm-eyebrow::before {
-  content: none; display: none;
-}
-/* Quiet label — no red mark, for sections that don't need another accent. */
 body.firm-page .fm-kicker {
-  margin: 0 0 16px;
-  font: 600 11px/1.3 var(--sv-font); letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--sv-muted, #6E7169);
+  margin: 0 0 18px;
+  font: 600 12px/1.4 var(--sv-font);
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--sv-oxide, #9F2F24);
 }
 
 /* ==========================================================================
-   1 · AUTHORITY OPENING — dark institutional hero + integrated proof ledger
+   1 · MASTHEAD
    ========================================================================== */
-body.firm-page .fm-open {
+body.firm-page .fm-hero {
   position: relative; overflow: hidden;
   background: var(--sv-ivory); color: var(--sv-ink-2);
-  padding-block: clamp(50px, 6vw, 90px) clamp(60px, 6.4vw, 96px);
+  padding-block: 0;
 }
-/* (Dark split-field removed: hero now reads ivory, consistent with Strategy/Press.) */
-body.firm-page .fm-open::after {
-  content: none;
+body.firm-page .fm-hero__top {
+  display: grid; grid-template-columns: repeat(12, 1fr);
+  gap: clamp(28px, 3.2vw, 44px);
+  align-items: center;
+  padding-block: clamp(56px, 6vw, 88px) 0;
 }
-body.firm-page .fm-open__inner {
+body.firm-page .fm-hero__lead {
+  grid-column: 1 / 7; min-width: 0;
+  padding-right: clamp(24px, 3vw, 56px);
+}
+body.firm-page .fm-hero__eyebrow {
+  margin: 0 0 18px;
+  font: 600 12px/1.4 var(--sv-font);
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--sv-oxide, #9F2F24);
+}
+body.firm-page .fm-hero__title {
+  margin: 0;
+  font: 500 clamp(40px, 4.4vw, 60px)/1.06 var(--sv-font);
+  letter-spacing: -0.03em; color: var(--sv-ink);
+  max-width: 620px; text-wrap: balance;
+}
+body.firm-page .fm-hero__body {
+  margin-top: 24px;
+  max-width: min(48ch, calc((var(--page-max) - (2 * var(--pad-x))) / 2));
+}
+body.firm-page .fm-hero__body p { margin: 0; font: 400 17px/1.68 var(--sv-font); color: var(--sv-ink-2); }
+body.firm-page .fm-hero__body p + p { margin-top: 16px; }
+
+/* Square grayscale photograph on a cinnabar offset field — the homepage /
+   Strategy hero grammar, with cinnabar (the lead brand color) carrying the
+   Firm page while Strategy keeps qing. */
+body.firm-page .fm-hero__media {
+  grid-column: 7 / 13; position: relative; min-width: 0; align-self: center;
+}
+body.firm-page .fm-hero__media::before {
+  content: "";
+  position: absolute; z-index: 0;
+  top: clamp(44px, 4.5vw, 68px);
+  right: clamp(-36px, -2.2vw, -20px);
+  bottom: -26px;
+  left: clamp(36px, 3.5vw, 56px);
+  background: var(--sv-cinnabar);
+  border-radius: 14px;
+}
+body.firm-page .fm-hero__image {
   position: relative; z-index: 1;
-  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(28px, 3.2vw, 44px);
-  align-items: start;
-}
-body.firm-page .fm-open__lead { }
-body.firm-page .fm-open .fm-eyebrow { color: var(--sv-ink); padding-top: 0; }
-body.firm-page .fm-open__h1 {
-  margin: 0; font: 500 clamp(38px, 4.6vw, 62px)/1.04 var(--sv-font);
-  letter-spacing: -0.03em; color: var(--sv-ink); max-width: 18ch; text-wrap: balance;
-}
-body.firm-page .fm-open__body {
-  align-self: center; grid-column: 2; grid-row: 1;
-}
-/* Cinnabar gradient field — two-tone block matching the homepage / team field:
-   the bright→oxblood gradient plus a solid oxblood band bleeding off the edge.
-   Gradient is mirrored (208deg) so the dark edge sits on the left bleed side,
-   keeping the bright cinnabar toward the text. */
-body.firm-page .fm-hero__frame {
-  position: relative; align-self: start; justify-self: start; grid-column: 1; grid-row: 1;
-  display: flex; flex-direction: column; justify-content: center;
-  /* Square field matching the homepage hero image square: 1:1, capped to the
-     same rendered size (~570px on wide screens). */
+  margin: 0; width: 100%;
   aspect-ratio: 1 / 1;
-  width: 100%;
-  max-width: 570px;
-  min-height: 0;
-  padding: clamp(44px, 4.6vw, 70px) clamp(34px, 3.2vw, 52px);
-  background: linear-gradient(208deg, #CF3A2B 0%, #C93B2A 52%, #8F2A20 100%);
-  border-radius: 0 14px 14px 0;
+  border-radius: 14px;
+  background: var(--sv-stone, #F1EBDD);
+  overflow: hidden;
 }
-body.firm-page .fm-hero__frame > * { position: relative; z-index: 1; }
-body.firm-page .fm-hero__frame::before {
-  content: ""; position: absolute; z-index: 0;
-  top: 0; bottom: 0; right: 100%; width: 50vw;
-  background: #8F2A20;
+body.firm-page .fm-hero__image img {
+  display: block; width: 100%; height: 100%;
+  object-fit: cover; object-position: center 62%;
+  filter: grayscale(1);
+  transition: filter 320ms ease;
 }
-body.firm-page .fm-hero__frame .fm-eyebrow { color: rgba(252, 249, 241, 0.82); }
-body.firm-page .fm-hero__frame .fm-open__h1 { color: var(--sv-ivory); max-width: none; }
-body.firm-page .fm-open__body p {
-  margin: 0; font: 400 17px/1.66 var(--sv-font); color: var(--sv-ink-2); max-width: none;
-}
-body.firm-page .fm-open__body p + p { margin-top: 18px; }
-@media (max-width: 880px) {
-  body.firm-page .fm-open__inner { grid-template-columns: 1fr; }
-  body.firm-page .fm-open__h1 { max-width: none; }
-  body.firm-page .fm-hero__frame { grid-column: auto; grid-row: auto; }
-  body.firm-page .fm-open__body { grid-column: auto; grid-row: auto; align-self: start; margin-top: 22px; }
+body.firm-page .fm-hero__media:hover .fm-hero__image img { filter: grayscale(0); }
+@media (prefers-reduced-motion: reduce) {
+  body.firm-page .fm-hero__image img { transition: none; }
 }
 
-/* ---- Firm-profile PROOF LEDGER — full-bleed deep-water 青 band. Same
-   silhouette as the Strategy hero's "at a glance" ledger, but qing-dark
-   instead of cinnabar so the two interior heroes read as siblings rather
-   than copies; qing-light carries the labels. ------------------------------ */
-body.firm-page .fm-proof-band {
-  position: relative; z-index: 1; background: var(--sv-qing-dark, #1E4040);
-  margin-top: clamp(46px, 5vw, 78px);
-  padding-block: clamp(34px, 3.6vw, 52px) clamp(38px, 4vw, 58px);
+/* ---- Proof ledger — full-bleed deep-water 青 band. Sibling of the Strategy
+   hero's cinnabar glance band; qing-dark so the two interior heroes read as
+   siblings rather than copies. --------------------------------------------- */
+body.firm-page .fm-glance {
+  position: relative; isolation: isolate;
+  margin: clamp(46px, 5vw, 78px) 0 0;
+  padding: clamp(34px, 3.6vw, 52px) 0 clamp(38px, 4vw, 58px);
 }
-body.firm-page .fm-proof {
-  margin: 0; display: grid; grid-template-columns: repeat(3, 1fr);
+body.firm-page .fm-glance::before {
+  content: ""; position: absolute; z-index: -1; top: 0; bottom: 0;
+  left: 50%; transform: translateX(-50%); width: 100vw;
+  background: var(--sv-qing-dark, #1E4040);
 }
-body.firm-page .fm-proof__item {
-  padding: 0 clamp(20px, 2.4vw, 32px); border-left: 1px solid rgba(252, 249, 241, 0.28); min-width: 0;
+body.firm-page .fm-glance__label {
+  margin: 0 0 clamp(26px, 2.8vw, 38px);
+  font: 600 11px/1.4 var(--sv-font);
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--sv-qing-light, #7AAFAF);
 }
-body.firm-page .fm-proof__item:first-child { border-left: 0; padding-left: 0; }
-body.firm-page .fm-proof__k {
-  margin: 0 0 14px; font: 600 11px/1.2 var(--sv-font);
-  letter-spacing: 0.15em; text-transform: uppercase; color: var(--sv-qing-light, #7AAFAF);
+body.firm-page .fm-glance__grid {
+  margin: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
 }
-body.firm-page .fm-proof__v {
-  margin: 0; font: 400 16.5px/1.5 var(--sv-font); color: var(--sv-ivory); text-wrap: pretty;
+body.firm-page .fm-glance__item {
+  min-width: 0;
+  padding: 0 clamp(24px, 3vw, 48px);
+  border-left: 1px solid rgba(252, 249, 241, 0.22);
+  display: flex; flex-direction: column; gap: 12px;
 }
-@media (max-width: 880px) {
-  body.firm-page .fm-proof { grid-template-columns: 1fr; gap: 0; }
-  body.firm-page .fm-proof__item { padding: 20px 0; border-left: 0; border-top: 1px solid rgba(252, 249, 241, 0.28); }
-  body.firm-page .fm-proof__item:first-child { border-top: 0; padding-top: 0; }
+body.firm-page .fm-glance__item:first-child { padding-left: 0; border-left: 0; }
+body.firm-page .fm-glance__item:last-child { padding-right: 0; }
+body.firm-page .fm-glance__v {
+  margin: 0; order: 1;
+  font: 500 clamp(30px, 2.9vw, 42px)/1 var(--sv-font);
+  letter-spacing: -0.02em; color: var(--sv-ivory); white-space: nowrap;
+}
+body.firm-page .fm-glance__k {
+  margin: 0; order: 2;
+  font: 400 14px/1.5 var(--sv-font);
+  color: rgba(252, 249, 241, 0.78); max-width: 30ch; text-wrap: pretty;
 }
 
-/* ==========================================================================
-   2 · INSTITUTIONAL CAPITAL PROOF — narrative + investor rail
-   ========================================================================== */
-body.firm-page .fm-cap { padding-block: clamp(36px, 4vw, 60px) clamp(48px, 5.4vw, 80px); }
-body.firm-page .fm-cap__inner {
-  display: grid; grid-template-columns: repeat(12, 1fr); gap: clamp(32px, 4.5vw, 72px);
-  border-top: 1px solid var(--sv-border-light-strong); padding-top: clamp(30px, 3.2vw, 46px);
-  align-items: start;
-}
-body.firm-page .fm-cap__lead { grid-column: 1 / 7; }
-body.firm-page .fm-cap__lead h2 {
-  margin: 0 0 24px; font: 500 clamp(26px, 2.6vw, 34px)/1.12 var(--sv-font);
-  letter-spacing: -0.02em; color: var(--sv-ink);
-}
-body.firm-page .fm-cap__narr {
-  margin: 0; font: 400 19px/1.62 var(--sv-font); color: var(--sv-ink-2); max-width: 52ch;
-}
-body.firm-page .fm-cap__narr + .fm-cap__narr { margin-top: 20px; }
-body.firm-page .fm-cap__narr strong { color: var(--sv-ink); font-weight: 500; }
-
-/* Full-width cinnabar stat strip — surfaces facts already stated above. */
-body.firm-page .fm-statcard {
-  grid-column: 1 / -1; margin: clamp(8px, 1.4vw, 18px) 0 0;
-  background: var(--sv-cinnabar); color: rgba(252, 249, 241, 0.92);
-  padding: clamp(26px, 2.6vw, 36px) clamp(28px, 3vw, 44px) clamp(28px, 3vw, 40px);
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
-  align-items: stretch;
-}
-body.firm-page .fm-statcard__label {
-  grid-column: 1 / -1; margin: 0 0 clamp(22px, 2.4vw, 32px); padding-bottom: 20px;
-  border-bottom: 1px solid rgba(252, 249, 241, 0.28);
-  font: 600 11px/1.4 var(--sv-font); letter-spacing: 0.15em; text-transform: uppercase;
-  color: rgba(252, 249, 241, 0.78);
-}
-body.firm-page .fm-statcard__row {
-  display: flex; flex-direction: column; gap: 10px;
-  padding: 0 clamp(24px, 3vw, 44px); border: 0;
-  border-left: 1px solid rgba(252, 249, 241, 0.28);
-}
-body.firm-page .fm-statcard__row:first-of-type { padding-left: 0; border-left: 0; }
-body.firm-page .fm-statcard__row:last-of-type { padding-right: 0; }
-body.firm-page .fm-statcard__row dd {
-  margin: 0; font: 500 clamp(30px, 3.2vw, 44px)/1 var(--sv-font);
-  letter-spacing: -0.02em; color: var(--sv-ivory);
-}
-body.firm-page .fm-statcard__row dt {
-  font: 400 14px/1.45 var(--sv-font); color: rgba(252, 249, 241, 0.82); max-width: 24ch;
+@media (max-width: 1023px) {
+  body.firm-page .fm-hero__top { grid-template-columns: 1fr; gap: 36px; align-items: start; }
+  body.firm-page .fm-hero__lead { grid-column: auto; padding-right: 0; }
+  body.firm-page .fm-hero__media { grid-column: auto; max-width: 560px; }
+  body.firm-page .fm-hero__body { max-width: 56ch; }
 }
 @media (max-width: 700px) {
-  body.firm-page .fm-statcard { grid-template-columns: 1fr; }
-  body.firm-page .fm-statcard__row {
-    padding: 22px 0 0; border-left: 0; border-top: 1px solid rgba(252, 249, 241, 0.28);
+  body.firm-page .fm-glance__grid { grid-template-columns: 1fr; }
+  body.firm-page .fm-glance__item {
+    padding: 20px 0; border-left: 0;
+    border-top: 1px solid rgba(252, 249, 241, 0.22);
   }
-  body.firm-page .fm-statcard__row:first-of-type { padding-top: 0; border-top: 0; }
-}
-
-body.firm-page .fm-cap__rail { grid-column: 7 / 13; }
-body.firm-page .fm-cap__rail-label {
-  margin: 0 0 4px; padding-top: 14px; padding-bottom: 14px;
-  border-top: 2px solid var(--sv-cinnabar);
-  border-bottom: 1px solid var(--sv-border-light-strong);
-  font: 600 11px/1.4 var(--sv-font); letter-spacing: 0.15em; text-transform: uppercase;
-  color: var(--sv-muted, #6E7169);
-}
-body.firm-page .fm-cap__list { margin: 0; padding: 0; list-style: none; }
-body.firm-page .fm-cap__list li {
-  padding: 15px 0; border-bottom: 1px solid var(--sv-border-light);
-  font: 400 17px/1.3 var(--sv-font); color: var(--sv-ink);
-}
-@media (max-width: 880px) {
-  body.firm-page .fm-cap__lead { grid-column: 1 / 13; }
-  body.firm-page .fm-cap__rail { grid-column: 1 / 13; margin-top: 8px; }
-  body.firm-page .fm-cap__narr { max-width: none; }
+  body.firm-page .fm-glance__item:first-child { padding-top: 0; border-top: 0; }
+  body.firm-page .fm-glance__item:last-child { padding-bottom: 0; }
+  body.firm-page .fm-hero__media::before { right: calc(var(--pad-x) * -1); }
 }
 
 /* ==========================================================================
-   3 · CORE COMPETENCIES — platform-thesis band (serif names)
+   2 · WHO WE ARE — heading rail + narrative measure + investor ledger
    ========================================================================== */
-body.firm-page .fm-comp-sec { padding-block: clamp(56px, 6vw, 90px); }
-body.firm-page .fm-comp-head {
-  display: grid; grid-template-columns: repeat(12, 1fr); gap: clamp(24px, 4vw, 64px);
-  align-items: end; margin-bottom: clamp(34px, 3.6vw, 52px);
+body.firm-page .fm-who { background: #FFFFFF; padding-block: clamp(64px, 7vw, 110px); }
+body.firm-page .fm-who__inner {
+  display: grid; grid-template-columns: repeat(12, 1fr);
+  gap: clamp(28px, 4vw, 64px); align-items: start;
 }
-body.firm-page .fm-comp-head__l { grid-column: 1 / 8; }
-body.firm-page .fm-comp-head__l h2 {
-  margin: 0; font: 500 clamp(27px, 2.9vw, 40px)/1.1 var(--sv-font);
-  letter-spacing: -0.02em; color: var(--sv-ink); max-width: 17ch; text-wrap: balance;
+body.firm-page .fm-who__head { grid-column: 1 / 5; min-width: 0; }
+body.firm-page .fm-who__title {
+  margin: 0;
+  font: 500 clamp(28px, 2.9vw, 40px)/1.1 var(--sv-font);
+  letter-spacing: -0.02em; color: var(--sv-ink);
 }
-body.firm-page .fm-comp-head__r { grid-column: 8 / 13; align-self: end; }
-body.firm-page .fm-comp-head__r p {
-  margin: 0; font: 400 16.5px/1.6 var(--sv-font); color: var(--sv-ink-2); max-width: none;
+body.firm-page .fm-who__main { grid-column: 5 / 13; min-width: 0; }
+body.firm-page .fm-who__narr {
+  margin: 0;
+  font: 400 clamp(19px, 1.6vw, 22px)/1.6 var(--sv-font);
+  color: var(--sv-ink-2); max-width: 58ch; text-wrap: pretty;
+}
+body.firm-page .fm-who__narr:first-child { color: var(--sv-ink); }
+body.firm-page .fm-who__narr + .fm-who__narr { margin-top: 22px; }
+
+/* Institutional investor base — ruled two-column ledger. */
+body.firm-page .fm-investors { margin-top: clamp(44px, 4.6vw, 68px); }
+body.firm-page .fm-investors__label {
+  margin: 0 0 8px;
+  font: 600 11px/1.4 var(--sv-font);
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--sv-oxide, #9F2F24);
+}
+body.firm-page .fm-investors__intro {
+  margin: 0 0 10px;
+  font: 400 15px/1.55 var(--sv-font); color: var(--sv-muted, #6E7169); max-width: 52ch;
+}
+body.firm-page .fm-investors__list {
+  margin: 18px 0 0; padding: 0; list-style: none;
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  column-gap: clamp(28px, 3vw, 48px); row-gap: 0;
+}
+body.firm-page .fm-investors__list li {
+  padding: 14px 0;
+  border-top: 1px solid var(--sv-border-light-strong);
+  font: 400 17px/1.35 var(--sv-font); color: var(--sv-ink);
+}
+
+@media (max-width: 880px) {
+  body.firm-page .fm-who__head { grid-column: 1 / 13; }
+  body.firm-page .fm-who__main { grid-column: 1 / 13; margin-top: 4px; }
+}
+@media (max-width: 560px) {
+  body.firm-page .fm-investors__list { grid-template-columns: 1fr; }
+}
+
+/* ==========================================================================
+   3 · FIRM CAPABILITIES — numbered discipline ledger on stone
+   ========================================================================== */
+body.firm-page .fm-comp-sec { background: var(--sv-stone); padding-block: clamp(64px, 7vw, 110px); }
+body.firm-page .fm-comp-head { margin-bottom: clamp(36px, 4vw, 56px); }
+body.firm-page .fm-comp-title {
+  margin: 0;
+  font: 500 clamp(28px, 2.9vw, 40px)/1.1 var(--sv-font);
+  letter-spacing: -0.02em; color: var(--sv-ink);
+  max-width: 22ch; text-wrap: balance;
 }
 body.firm-page .fm-comp {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 0;
-  border-top: 2px solid var(--sv-cinnabar);
+  margin: 0; padding: 0; list-style: none;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
 }
-/* Ruled capability panels — paper-led memo ledger, cinnabar top rule, thin
-   vertical dividers. No shadow, no fill, square. */
 body.firm-page .fm-comp__item {
-  padding: clamp(26px, 2.4vw, 34px) clamp(26px, 2.4vw, 34px) 0;
+  min-width: 0;
+  padding: clamp(24px, 2.4vw, 34px) clamp(26px, 2.6vw, 40px) 0;
+  border-top: 1px solid var(--sv-ink);
   border-left: 1px solid var(--sv-border-light-strong);
   display: flex; flex-direction: column;
 }
-body.firm-page .fm-comp__item:first-child { border-left: 0; padding-left: 0; }
+body.firm-page .fm-comp__item:first-child { padding-left: 0; border-left: 0; }
 body.firm-page .fm-comp__item:last-child { padding-right: 0; }
+body.firm-page .fm-comp__num {
+  margin: 0 0 clamp(30px, 3.4vw, 52px);
+  font: 600 12px/1 var(--sv-font); letter-spacing: 0.12em;
+  color: var(--sv-oxide, #9F2F24);
+  font-variant-numeric: tabular-nums;
+}
 body.firm-page .fm-comp__name {
-  margin: 0 0 14px; font: 500 19px/1.22 var(--sv-font);
-  letter-spacing: -0.008em; color: var(--sv-ink);
+  margin: 0 0 12px;
+  font: 500 clamp(19px, 1.7vw, 22px)/1.25 var(--sv-font);
+  letter-spacing: -0.01em; color: var(--sv-ink); text-wrap: balance;
 }
 body.firm-page .fm-comp__desc {
-  margin: 0; font: 400 16.5px/1.6 var(--sv-font); color: var(--sv-ink-2);
+  margin: 0;
+  font: 400 16px/1.62 var(--sv-font); color: var(--sv-ink-2); max-width: 38ch;
 }
 @media (max-width: 880px) {
-  body.firm-page .fm-comp-head__l, body.firm-page .fm-comp-head__r { grid-column: 1 / 13; }
-  body.firm-page .fm-comp-head__r { margin-top: 14px; }
   body.firm-page .fm-comp { grid-template-columns: 1fr; }
   body.firm-page .fm-comp__item {
-    border-left: 0; padding: 24px 0 0; border-top: 1px solid var(--sv-border-light-strong);
+    padding: 24px 0; border-left: 0;
   }
-  body.firm-page .fm-comp__item:first-child { border-top: 0; padding-top: 4px; }
+  body.firm-page .fm-comp__item:last-child { padding-bottom: 0; }
+  body.firm-page .fm-comp__num { margin-bottom: 16px; }
 }
 
 /* ==========================================================================
-   4 · HUMAN-BUSINESS CLOSING — ruled statement, cinnabar spine, clear footer boundary
+   4 · CLOSING — full-bleed ink statement band
    ========================================================================== */
-body.firm-page .fm-close { background: var(--sv-ivory); border-top: 1px solid var(--sv-border-light-strong); }
-body.firm-page .fm-close__inner {
-  display: grid; grid-template-columns: repeat(12, 1fr); gap: clamp(24px, 4vw, 64px);
-  padding-block: clamp(52px, 5.4vw, 78px); align-items: start;
-  border-left: 3px solid var(--sv-cinnabar);
-  padding-left: clamp(22px, 2.4vw, 36px);
-}
+body.firm-page .fm-close { background: var(--sv-dark, #1A1B18); }
+body.firm-page .fm-close__inner { padding-block: clamp(72px, 8vw, 128px); }
 body.firm-page .fm-close__label {
-  grid-column: 1 / 4; margin: 0; position: relative;
-  font: 600 11px/1.4 var(--sv-font); letter-spacing: 0.16em; text-transform: uppercase;
-  color: var(--sv-muted, #6E7169);
-}
-body.firm-page .fm-close__label::before {
-  content: none; display: none;
+  margin: 0 0 clamp(22px, 2.4vw, 32px);
+  font: 600 12px/1.4 var(--sv-font);
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--sv-cinnabar);
 }
 body.firm-page .fm-close__text {
-  grid-column: 4 / 12; margin: 0;
-  font: 400 clamp(20px, 2vw, 26px)/1.46 var(--sv-font);
-  letter-spacing: -0.01em; color: var(--sv-ink); max-width: 48ch; text-wrap: pretty;
+  margin: 0;
+  font: 400 clamp(25px, 2.7vw, 40px)/1.3 var(--sv-font);
+  letter-spacing: -0.02em; color: var(--sv-text-on-dark, #FCF9F1);
+  max-width: 34ch; text-wrap: pretty;
 }
-@media (max-width: 880px) {
-  body.firm-page .fm-close__label { grid-column: 1 / 13; }
-  body.firm-page .fm-close__text { grid-column: 1 / 13; margin-top: 18px; max-width: none; }
+body.firm-page .fm-close__text strong { font-weight: 500; color: #FFFFFF; }
+body.firm-page .fm-close__cta { margin: clamp(30px, 3.2vw, 44px) 0 0; }
+body.firm-page .fm-close__cta a {
+  display: inline-block;
+  font: 600 13px/1 var(--sv-font); letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--sv-meta-on-dark, rgba(252, 249, 241, 0.78));
+  text-decoration: none;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(252, 249, 241, 0.32);
+  transition: color 180ms ease, border-color 180ms ease;
 }
-
-/* Align the Firm hero headline with the left edge of the navigation logo.
-   The frame still bleeds to the viewport edge, but its copy starts on the
-   same content rail as .sv-header__logo and the global .sv-shell system. */
-body.firm-page .fm-hero__frame {
-  margin-left: calc(var(--pad-x) * -1);
-  padding-left: var(--pad-x);
-}
-
-/* ==========================================================================
-   2026-07-08 · Firm/About layout differentiation pass
-   Adds an editorial inset + relationship ledger treatment distinct from the
-   Strategy briefing and Team portrait page while preserving shared tokens.
-   ========================================================================== */
-body.firm-page .fm-cap__inner {
-  border-top: 0;
-  padding-top: 0;
-}
-body.firm-page .fm-cap__lead {
-  padding: clamp(34px, 3.4vw, 52px);
-  background: #fff;
-  border-left: 3px solid var(--sv-cinnabar);
-  box-shadow: 0 14px 34px rgba(23, 28, 28, 0.08);
-}
-body.firm-page .fm-cap__rail {
-  align-self: stretch;
-  padding: clamp(30px, 3vw, 46px) 0 0 clamp(26px, 3vw, 46px);
-  border-left: 1px solid var(--sv-border-light-strong);
-}
-body.firm-page .fm-comp-sec {
-  position: relative;
-  overflow: hidden;
-}
-body.firm-page .fm-comp-sec::before {
-  content: "";
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: min(28vw, 360px);
-  background: rgba(122, 175, 175, 0.12);
-  pointer-events: none;
-}
-body.firm-page .fm-comp-sec > .sv-shell { position: relative; }
-body.firm-page .fm-close .svb-card {
-  border-top: 3px solid var(--sv-cinnabar);
-}
-@media (max-width: 880px) {
-  body.firm-page .fm-cap__rail { padding-left: 0; border-left: 0; }
-}
-
-/* Client directive: no decorative horizontal rules/bars. */
-:where(hr, [role="separator"], [class*="__rule"], [class*="-rule"], [class*="__divider"], [class*="-divider"], [class*="topline"], [class*="separator"]):not(svg):not(path):not(img) {
-  display: none !important;
-  border-top: 0 !important;
-  border-bottom: 0 !important;
-  background-image: none !important;
-}
-:where([class*="eyebrow"], [class*="kicker"], [class*="label"])::before,
-:where([class*="eyebrow"], [class*="kicker"], [class*="label"])::after {
-  content: none !important;
-  display: none !important;
-  width: 0 !important;
-  height: 0 !important;
-  border: 0 !important;
-  background: transparent !important;
-}
-
-/* ==========================================================================
-   Page divider standard — warm xuan hairline
-   Matches the supplied reference: one full-width, 1px warm paper rule.
-   ========================================================================== */
-:root {
-  --sv-page-divider-color: rgba(216, 206, 176, 0.82);
-  --sv-page-divider-thickness: 1px;
-  --sv-page-divider-max: var(--page-max, 1684px);
-  --sv-page-divider-pad: var(--pad-x, clamp(24px, 8.9vw, 182px));
-}
-
-:where(
-  hr,
-  [role="separator"],
-  .section-divider,
-  .principles-rule,
-  .home-cdd__rule,
-  .strategy-section-intro__divider,
-  .strategy-section-intro__rule,
-  .strategy-rotation__divider,
-  .strategy-rotation__rule,
-  .opp-lead__rule,
-  .tss-row__bar,
-  .ip__seal,
-  .tss-closer__seal,
-  .cdd-arc__closer-seal,
-  .cdd-arc__seal-rule,
-  .cp-hero__title-rule,
-  .cp-hero__divider,
-  .cp-routing-card__rule,
-  .cp-section-head__rule,
-  .ogeo__divider
-):not(svg):not(path):not(img) {
-  display: block !important;
-  width: min(calc(100% - (2 * var(--sv-page-divider-pad))), var(--sv-page-divider-max)) !important;
-  height: 0 !important;
-  min-height: 0 !important;
-  margin: clamp(56px, 6.3vw, 129px) auto !important;
-  padding: 0 !important;
-  border: 0 !important;
-  border-top: var(--sv-page-divider-thickness) solid var(--sv-page-divider-color) !important;
-  background: transparent !important;
-  background-image: none !important;
-  box-shadow: none !important;
-  color: transparent !important;
-  overflow: hidden !important;
-}
-
-main > section + section {
-  border-top-color: var(--sv-page-divider-color) !important;
-  border-top-width: var(--sv-page-divider-thickness) !important;
-}
-
-/* ==========================================================================
-   FINAL NO HORIZONTAL RULES / BARS — client directive
-   Suppresses decorative horizontal rule elements and section hairlines.
-   ========================================================================== */
-:where(
-  hr,
-  [role="separator"],
-  [class*="__rule"],
-  [class*="-rule"],
-  [class*="rule-"],
-  [class*="__divider"],
-  [class*="-divider"],
-  [class*="divider-"],
-  [class*="topline"],
-  [class*="separator"]
-):not(svg):not(path):not(img):not(input):not(textarea):not(select) {
-  display: none !important;
-  width: 0 !important;
-  height: 0 !important;
-  min-width: 0 !important;
-  min-height: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  border: 0 !important;
-  background: transparent !important;
-  background-image: none !important;
-  box-shadow: none !important;
-  color: transparent !important;
-  overflow: hidden !important;
-}
-
-:where(main > section + section, .sv-hero__right, .cdd-intro__bar, .cdd-arc__list, .cdd-arc__row, .cdd-stat, .research-sub) {
-  border-top: 0 !important;
-  border-bottom: 0 !important;
-  background-image: none !important;
-  box-shadow: none !important;
-}
-
-:where([class*="eyebrow"], [class*="kicker"], [class*="label"], [class*="heading"], [class*="title"], [class*="intro"], [class*="hero"], [class*="section"])::before,
-:where([class*="eyebrow"], [class*="kicker"], [class*="label"], [class*="heading"], [class*="title"], [class*="intro"], [class*="hero"], [class*="section"])::after {
-  border-top: 0 !important;
-  border-bottom: 0 !important;
-  background-image: none !important;
-  box-shadow: none !important;
-}
-
-:where([class*="eyebrow"], [class*="kicker"], [class*="label"])::before,
-:where([class*="eyebrow"], [class*="kicker"], [class*="label"])::after {
-  content: none !important;
-  display: none !important;
-  width: 0 !important;
-  height: 0 !important;
-  background: transparent !important;
+body.firm-page .fm-close__cta a:hover,
+body.firm-page .fm-close__cta a:focus-visible {
+  color: var(--sv-ivory); border-bottom-color: var(--sv-cinnabar);
 }
