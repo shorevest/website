@@ -23,8 +23,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <script>document.write('<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260701-mobile-audit-430&t='+window.__SVT+'">');</script>
-<script>document.write('<link rel="stylesheet" href="assets/css/firm-rebuild.css?v=20260709-investor-base-ui&t='+window.__SVT+'">');</script>
-<script>document.write('<link rel="stylesheet" href="assets/css/box-system.css?v=20260709-relationship-center&t='+window.__SVT+'">');</script>
+<script>document.write('<link rel="stylesheet" href="assets/css/firm-rebuild.css?v=20260710-institutional3&t='+window.__SVT+'">');</script>
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="shortcut icon" href="/favicon.ico">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
@@ -81,7 +80,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 
 <main id="content">
 
-<!-- 1 · AUTHORITY OPENING — split masthead + firm-profile proof band -->
+<!-- 1 · AUTHORITY OPENING — cinnabar masthead + full-bleed proof ledger -->
 <section class="fm-open" id="firm" data-screen-label="The firm" aria-labelledby="fm-h1">
   <div class="sv-shell fm-open__inner">
     <div class="fm-hero__frame">
@@ -93,80 +92,88 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
       <p>The platform covers sourcing, underwriting, legal structuring, asset servicing and portfolio management.</p>
     </div>
   </div>
+  <div class="sv-shell">
+    <div class="fm-glance" role="group" aria-label="Platform at a glance">
+      <p class="fm-glance__label">Platform at a glance</p>
+      <dl class="fm-glance__grid">
+        <div class="fm-glance__item">
+          <dt class="fm-glance__k">Private credit investments managed on behalf of institutional investors</dt>
+          <dd class="fm-glance__v">US$2B+</dd>
+        </div>
+        <div class="fm-glance__item">
+          <dt class="fm-glance__k">Team active in China credit across market cycles</dt>
+          <dd class="fm-glance__v">Since 2004</dd>
+        </div>
+        <div class="fm-glance__item">
+          <dt class="fm-glance__k">Guangzhou&ensp;&middot;&ensp;Shanghai&ensp;&middot;&ensp;Beijing&ensp;&middot;&ensp;Hong Kong</dt>
+          <dd class="fm-glance__v">4 offices</dd>
+        </div>
+      </dl>
+    </div>
+  </div>
 </section>
 
-<!-- 2 · INSTITUTIONAL CAPITAL PROOF — narrative + investor rail -->
-<section class="fm-cap" id="who-we-are" data-screen-label="Who we are" aria-labelledby="fm-who-title">
-  <div class="sv-shell fm-cap__inner">
-    <div class="fm-cap__lead">
-      <h2 id="fm-who-title">Who We Are</h2>
-      <p class="fm-cap__narr">Since 2004, the ShoreVest team has managed more than US$2 billion in private credit investments in China on behalf of institutional investors.</p>
-      <p class="fm-cap__narr">The platform has developed through relationships with borrowers, financial institutions, service providers and institutional capital partners, supported by local teams and institutional investment-management processes.</p>
+<!-- 2 · WHO WE ARE — editorial narrative + investor ledger -->
+<section class="fm-who" id="who-we-are" data-screen-label="Who we are" aria-labelledby="fm-who-title">
+  <div class="sv-shell fm-who__inner">
+    <div class="fm-who__head">
+      <h2 id="fm-who-title" class="fm-who__title">Who We Are</h2>
+      <figure class="fm-who__figure" aria-hidden="true">
+        <img src="pexels-miyou_-77-696995602-23533364.jpg" alt="" width="3456" height="5184" loading="lazy" decoding="async">
+      </figure>
     </div>
-    <aside class="fm-cap__rail" aria-label="Institutional investor base">
-      <div class="fm-cap__rail-card">
-        <p class="fm-cap__rail-label">Institutional investor base</p>
-        <p class="fm-cap__rail-intro">Capital partners across long-duration institutional mandates.</p>
-        <ul class="fm-cap__list">
-          <li><span>Sovereign wealth funds</span></li>
-          <li><span>Pension funds</span></li>
-          <li><span>Insurance companies</span></li>
-          <li><span>Foundations</span></li>
-          <li><span>Endowments</span></li>
-          <li><span>Family offices</span></li>
+    <div class="fm-who__main">
+      <p class="fm-who__narr">Since 2004, the ShoreVest team has managed more than US$2 billion in private credit investments in China on behalf of institutional investors.</p>
+      <p class="fm-who__narr">The platform has developed through relationships with borrowers, financial institutions, service providers and institutional capital partners, supported by local teams and institutional investment-management processes.</p>
+      <div class="fm-investors" aria-label="Institutional investor base">
+        <p class="fm-investors__label">Institutional investor base</p>
+        <p class="fm-investors__intro">Capital partners across long-duration institutional mandates.</p>
+        <ul class="fm-investors__list">
+          <li>Sovereign wealth funds</li>
+          <li>Pension funds</li>
+          <li>Insurance companies</li>
+          <li>Foundations</li>
+          <li>Endowments</li>
+          <li>Family offices</li>
         </ul>
       </div>
-    </aside>
-    <div class="fm-statcard svb svb--band" aria-label="Platform at a glance">
-      <div class="svb-band"><p class="svb-label" style="margin:0">Platform at a glance</p></div>
-      <div class="svb-panel">
-        <div class="svb-stats svb-stats--row">
-          <div class="svb-stat"><span class="svb-stat__v">US$2B+</span><span class="svb-stat__c">Private credit investments managed</span></div>
-          <div class="svb-stat"><span class="svb-stat__v">Since 2004</span><span class="svb-stat__c">Active in China credit</span></div>
-          <div class="svb-stat"><span class="svb-stat__v">Four</span><span class="svb-stat__c">Offices across Greater China</span></div>
-        </div>
-      </div>
     </div>
   </div>
 </section>
 
-<!-- 3 · CORE COMPETENCIES — platform-thesis band -->
-<section class="fm-comp-sec fm-band" id="core-competencies" data-screen-label="Firm capabilities" aria-labelledby="fm-comp-title">
+<!-- 3 · CORE COMPETENCIES — capability ledger on stone -->
+<section class="fm-comp-sec" id="core-competencies" data-screen-label="Firm capabilities" aria-labelledby="fm-comp-title">
   <div class="sv-shell">
     <div class="fm-comp-head">
-      <div class="fm-comp-head__l">
-        <p class="fm-kicker">Firm capabilities</p>
-        <h2 id="fm-comp-title">Three disciplines behind the platform</h2>
-      </div>
-      <div class="fm-comp-head__r">
-      </div>
+      <p class="fm-kicker">Firm Capabilities</p>
+      <h2 id="fm-comp-title" class="fm-comp-title">Three disciplines behind the platform</h2>
     </div>
-    <div class="fm-comp">
-      <div class="fm-comp__item">
+    <ol class="fm-comp">
+      <li class="fm-comp__item">
+        <p class="fm-comp__num" aria-hidden="true">01</p>
         <h3 class="fm-comp__name">Experience Since 2004</h3>
         <p class="fm-comp__desc">More than two decades of China credit experience inform ShoreVest&rsquo;s underwriting, portfolio management and institutional governance.</p>
-      </div>
-      <div class="fm-comp__item">
+      </li>
+      <li class="fm-comp__item">
+        <p class="fm-comp__num" aria-hidden="true">02</p>
         <h3 class="fm-comp__name">Credit Solutions</h3>
         <p class="fm-comp__desc">ShoreVest works with borrowers and financial institutions to structure asset-backed credit for complex financing, restructuring and resolution situations.</p>
-      </div>
-      <div class="fm-comp__item">
+      </li>
+      <li class="fm-comp__item">
+        <p class="fm-comp__num" aria-hidden="true">03</p>
         <h3 class="fm-comp__name">Local Execution</h3>
         <p class="fm-comp__desc">Local teams support sourcing, due diligence, legal structuring, asset servicing and resolution across China, coordinated through ShoreVest&rsquo;s institutional investment-management platform.</p>
-      </div>
-    </div>
+      </li>
+    </ol>
   </div>
 </section>
 
-<!-- 4 · HUMAN-BUSINESS CLOSING -->
-<section class="fm-close" id="trust" data-screen-label="Built on relationships of trust" aria-label="Built on relationships of trust">
-  <div class="sv-shell fm-close__inner svb">
-    <div class="svb svb--offset">
-      <div class="svb-card">
-        <p class="svb-label" style="color:var(--sv-cinnabar)">A relationship business</p>
-        <p class="svb-statement">ShoreVest&rsquo;s work depends on trust developed over time with borrowers, financial institutions, counterparties and institutional investors.</p>
-      </div>
-    </div>
+<!-- 4 · CLOSING — dark statement band -->
+<section class="fm-close" id="trust" data-screen-label="A relationship business" aria-label="A relationship business">
+  <div class="sv-shell fm-close__inner">
+    <p class="fm-close__label">A relationship business</p>
+    <p class="fm-close__text">ShoreVest&rsquo;s work depends on trust developed over time with borrowers, financial institutions, counterparties and institutional investors.</p>
+    <p class="fm-close__cta"><a href="team.html">Meet the team<span aria-hidden="true">&ensp;&rarr;</span></a></p>
   </div>
 </section>
 
