@@ -85,7 +85,7 @@ body.contact-page .cp-routes { margin-top: 6px; display: block; border-top: 1px 
 
 body.contact-page .cp-route {
   position: relative;
-  display: grid; grid-template-columns: 52px minmax(0, 1fr) 24px;
+  display: grid; grid-template-columns: minmax(0, 1fr) 24px;
   gap: clamp(16px, 2vw, 30px); align-items: start;
   padding: clamp(24px, 2.4vw, 30px) 6px clamp(24px, 2.4vw, 30px) 4px;
   border-bottom: 1px solid var(--sv-border-light);
@@ -258,7 +258,7 @@ body.contact-page .cp-pref__v { margin: 0; font: 400 14px/1.6 var(--sv-font); co
 @media (max-width: 600px) {
   body.contact-page .cp-form__row { grid-template-columns: 1fr; }
   body.contact-page .cp-prefs__grid { grid-template-columns: 1fr; }
-  body.contact-page .cp-route { grid-template-columns: 32px minmax(0, 1fr) auto; gap: 14px; }
+  body.contact-page .cp-route { grid-template-columns: minmax(0, 1fr) auto; gap: 14px; }
   body.contact-page .cp-hero__title { max-width: none; }
 }
 
