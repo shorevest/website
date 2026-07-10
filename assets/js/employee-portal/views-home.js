@@ -40,10 +40,11 @@
     var persona = personaFor(user);
     var page = el('div', { class: 'ops-content home' });
 
-    page.appendChild(el('div', { class: 'ops-pagehead' }, [
+    page.appendChild(el('div', { class: 'ops-pagehead home-pagehead' }, [
       el('p', { class: 'ops-label', text: 'Home' }),
       el('h1', { class: 'ops-h1', text: greeting() + ', ' + firstName(user) }),
-      el('p', { class: 'ops-lede', text: 'Your home page only answers three questions: what needs a decision, what needs action, and what is waiting on someone else.' })
+      el('p', { class: 'ops-lede', text: 'Your decisions, actions and blocked items in one place.' }),
+      el('p', { class: 'home-doctrine', text: 'Salesforce remains the official commercial record. ShoreVest One controls review, approvals and next actions.' })
     ]));
 
     if (!persona) {
@@ -55,154 +56,135 @@
     }
 
     var home = persona.home;
-    var resolved = SVOps.state.homeResolved[persona.id] || (SVOps.state.homeResolved[persona.id] = {});
-    page.appendChild(el('div', { class: 'ops-next-action' }, [
-      el('strong', { text: 'Primary next action: ' }),
-      el('span', { text: 'Start with Needs your decision. Accept, change, or send the item for review.' })
+    var decide = home.needsYou || [];
+    var doItems = home.today || [];
+    var waiting = home.waiting || [];
+    var first = decide[0] || doItems[0] || waiting[0];
+
+    page.appendChild(el('section', { class: 'home-command', 'aria-label': 'Today summary' }, [
+      el('div', { class: 'home-command__main' }, [
+        el('p', { class: 'home-command__count', text: 'Today: ' + decide.length + ' decisions · ' + doItems.length + ' actions · ' + waiting.length + ' waiting · 1 warning' }),
+        el('p', { class: 'home-command__start', html: '<strong>Start here:</strong> ' + esc(first ? first.explanation : 'Nothing needs you right now.') }),
+        el('button', { type: 'button', class: 'btn btn--primary', text: 'Start first item', onclick: function () { if (first) openItemDrawer(first); } })
+      ]),
+      el('aside', { class: 'home-warning', role: 'status' }, [
+        el('p', { class: 'home-warning__title', text: 'Warning' }),
+        el('p', { class: 'home-warning__text', text: home.warning || 'Suggested work is not official until accepted.' }),
+        el('button', { type: 'button', class: 'btn btn--sm btn--quiet', text: 'Review warnings', onclick: function () { openWarning(home.warning, persona.name); } })
+      ])
     ]));
 
-    var open = (home.needsYou || []).filter(function (c) { return !resolved[c.id]; });
-    page.appendChild(renderHomeSection('Needs your decision', open, function (card) {
-      return renderCard(persona, card, resolved, function () { SVOps.views.home(replace(container), user); });
-    }, 'No decisions need you right now.'));
+    page.appendChild(el('div', { class: 'home-workgrid' }, [
+      renderHomeSection('Decide', 'Requires your judgement before work can move.', decide, true),
+      renderHomeSection('Do', 'Ready for you to complete.', doItems, false),
+      renderHomeSection('Waiting', 'No action until someone else responds.', waiting, false)
+    ]));
 
-    page.appendChild(renderHomeSection('Needs your action', home.today || [], function (item) {
-      return renderSimpleCard({ title: item.title, reason: item.note, state: item.time || 'Today', next: item.note, action: 'Open item', status: 'Ready' });
-    }, 'No actions need you right now.'));
-
-    page.appendChild(renderHomeSection('Waiting on others', home.waiting || [], function (item) {
-      return renderSimpleCard({ title: item.title, reason: item.note, state: 'Waiting', next: item.note, action: 'Open item', status: 'Waiting' });
-    }, 'Nothing is waiting on other people.'));
-
+    page.appendChild(renderRecent(home.recent || []));
     container.appendChild(page);
   };
 
-  function renderHomeSection(title, items, itemFn, emptyText) {
+  function renderHomeSection(title, subtitle, items, highlightFirst) {
     var section = el('section', { class: 'home-section', 'aria-label': title });
     section.appendChild(el('div', { class: 'home-section__head' }, [
-      el('h2', { class: 'home-section__title', text: title }),
-      el('span', { class: 'home-section__count', title: 'Actionable queue count', text: items && items.length ? String(items.length) : '' })
+      el('div', {}, [el('h2', { class: 'home-section__title', text: title }), el('p', { class: 'home-section__sub', text: subtitle })]),
+      el('span', { class: 'home-section__count', title: 'Queue count', text: items && items.length ? String(items.length) : '' })
     ]));
     if (!items || !items.length) {
-      section.appendChild(el('div', { class: 'home-empty' }, [el('p', { class: 'home-empty__title', text: emptyText })]));
+      section.appendChild(el('div', { class: 'home-empty' }, [el('p', { class: 'home-empty__title', text: 'Nothing here right now.' })]));
       return section;
     }
     var cards = el('div', { class: 'home-cards' });
-    items.slice(0, 4).forEach(function (item) { cards.appendChild(itemFn(item)); });
+    items.forEach(function (item, idx) { cards.appendChild(renderWorkCard(item, highlightFirst && idx === 0)); });
     section.appendChild(cards);
     return section;
   }
 
-  function renderSimpleCard(item) {
-    var node = el('article', { class: 'home-card' });
-    node.appendChild(el('div', { class: 'ops-panel__head' }, [el('h3', { class: 'home-card__title', text: item.title }), el('span', { html: U.statusHtml(item.status) })]));
-    node.appendChild(el('div', { class: 'home-card__context' }, [
-      el('p', { text: 'Reason: ' + item.reason }),
-      el('p', { text: 'Current state: ' + item.state }),
-      el('p', { text: 'Next step: ' + item.next })
+  function renderWorkCard(item, recommended) {
+    var node = el('article', { class: 'home-card' + (recommended ? ' home-card--recommended' : ''), tabindex: '0', role: 'button' });
+    node.addEventListener('click', function () { openItemDrawer(item); });
+    node.addEventListener('keydown', function (ev) { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); openItemDrawer(item); } });
+    if (recommended) node.appendChild(el('span', { class: 'home-card__flag', text: 'Recommended first' }));
+    node.appendChild(el('h3', { class: 'home-card__title', text: item.title }));
+    node.appendChild(el('p', { class: 'home-card__explain', text: item.explanation }));
+    node.appendChild(el('div', { class: 'home-card__meta', html: '<span>Status: ' + U.statusHtml(item.status || 'Ready') + '</span><span><strong>Next step:</strong> ' + esc(item.next || 'Open the item.') + '</span>' }));
+    node.appendChild(el('div', { class: 'home-card__actions' }, [
+      el('button', { type: 'button', class: 'btn btn--sm btn--primary', text: item.cta || 'Open item', onclick: function (ev) { ev.stopPropagation(); openItemDrawer(item); } })
     ]));
-    node.appendChild(el('div', { class: 'home-card__actions' }, [el('a', { class: 'btn btn--sm btn--primary', href: '#/my-work', text: item.action })]));
-    node.appendChild(el('button', { type: 'button', class: 'home-card__why', text: 'Why am I seeing this?', onclick: function () { U.drawer(item.title, el('p', { class: 'drawer-copy', text: item.reason })); } }));
+    node.appendChild(el('button', { type: 'button', class: 'home-card__why', text: 'Why am I seeing this?', onclick: function (ev) { ev.stopPropagation(); openWhy(item); } }));
     return node;
+  }
+
+  function renderRecent(items) {
+    var section = el('section', { class: 'home-recent', 'aria-label': 'Recent Work' });
+    section.appendChild(el('h2', { class: 'home-section__title', text: 'Recent Work' }));
+    var list = el('div', { class: 'home-recent__list' });
+    (items || []).slice(0, 3).forEach(function (item) {
+      list.appendChild(el('button', { type: 'button', class: 'home-recent__row', onclick: function () { openItemDrawer({ title: item.title, explanation: item.note, status: 'Complete', next: 'No action needed.', owner: 'ShoreVest One', source: 'Activity history', rule: 'Recent work is shown for context', why: item.note, ignored: 'Nothing happens; this is informational.', systems: 'ShoreVest One activity log', history: [item.note] }); } }, [
+        el('strong', { text: item.title }), el('span', { text: item.note })
+      ]));
+    });
+    section.appendChild(list);
+    return section;
+  }
+
+  function openWhy(item) {
+    var body = el('div', { class: 'home-drawer-copy' }, [
+      detailRow('Source', item.source),
+      detailRow('Rule', item.rule),
+      detailRow('Owner', item.owner),
+      detailRow('Why it matters', item.why),
+      detailRow('What happens if ignored', item.ignored)
+    ]);
+    U.drawer('Why am I seeing this?', body);
+  }
+
+  function openItemDrawer(item) {
+    var allowed = actionList(item.section === 'Waiting' ? ['Wait', 'Open My Work item'] : [item.cta || 'Open item', 'Open My Work item', 'Mark for review']);
+    var history = el('ul', { class: 'home-history' });
+    (item.history || []).forEach(function (h) { history.appendChild(el('li', { text: h })); });
+    var body = el('div', { class: 'home-drawer-copy' }, [
+      detailRow('What this is', item.explanation),
+      detailRow('Current state', item.status || 'Ready'),
+      detailRow('Why it appeared', item.why),
+      detailRow('Source systems', item.systems || item.source),
+      detailRow('Owner', item.owner),
+      detailRow('Next action', item.next),
+      detailNode('Allowed actions', allowed),
+      detailNode('Activity history', history),
+      el('div', { class: 'home-drawer-actions' }, [
+        el('a', { class: 'btn btn--primary', href: item.href || '#/my-work', text: 'Open My Work item' }),
+        el('button', { type: 'button', class: 'btn btn--quiet', text: 'Copy link', onclick: function () { U.toast('Link copied for preview.'); } })
+      ])
+    ]);
+    U.drawer(item.title, body);
+  }
+
+  function openWarning(text, owner) {
+    var body = el('div', { class: 'home-drawer-copy' }, [
+      detailRow('Source', 'ShoreVest One controls + MergePoint inputs'),
+      detailRow('Rule', 'Suggested work and stale rankings require human review before they affect official records.'),
+      detailRow('Owner', owner),
+      detailRow('Why it matters', text || 'Suggested work is not official until accepted.'),
+      detailRow('What happens if ignored', 'Suggested items stay held and official Salesforce records remain unchanged.')
+    ]);
+    U.drawer('Review warnings', body);
+  }
+
+  function detailRow(label, value) {
+    return el('div', { class: 'home-detail-row' }, [el('strong', { text: label }), el('span', { text: value || '—' })]);
+  }
+  function detailNode(label, node) {
+    return el('div', { class: 'home-detail-row home-detail-row--stack' }, [el('strong', { text: label }), node]);
+  }
+  function actionList(items) {
+    var ul = el('ul', { class: 'home-history' });
+    items.forEach(function (item) { ul.appendChild(el('li', { text: item })); });
+    return ul;
   }
 
   /* Clear a container and hand it back — used to re-render Home in place. */
   function replace(container) { container.innerHTML = ''; return container; }
-
-  function renderList(title, items, rowFn, emptyText) {
-    var panel = el('section', { class: 'home-list', 'aria-label': title });
-    panel.appendChild(el('h2', { class: 'home-list__title', text: title }));
-    if (!items || !items.length) {
-      panel.appendChild(el('p', { class: 'home-list__empty', text: emptyText }));
-      return panel;
-    }
-    var body = el('div', { class: 'home-list__items' });
-    items.slice(0, 3).forEach(function (item) { body.appendChild(rowFn(item)); });
-    panel.appendChild(body);
-    return panel;
-  }
-
-  /* ── One decision card ──────────────────────────────────────────────────── */
-
-  function renderCard(persona, card, resolved, rerender) {
-    var state = resolved[card.id];
-    var node = el('article', {
-      class: 'home-card' + (card.tone === 'urgent' ? ' home-card--urgent' : '') + (state ? ' is-resolved' : '')
-    });
-
-    if (state) {
-      /* Resolved: brief confirmation with undo. */
-      node.appendChild(el('div', { class: 'home-card__resolved' }, [
-        el('div', {}, [
-          el('p', { class: 'home-card__resolved-title', text: card.title }),
-          el('p', { class: 'home-card__resolved-note', text: state.done + '.' })
-        ]),
-        el('button', {
-          class: 'home-card__undo', type: 'button', text: 'Undo',
-          onclick: function () { delete resolved[card.id]; rerender(); }
-        })
-      ]));
-      return node;
-    }
-
-    node.appendChild(el('div', { class: 'ops-panel__head' }, [el('h3', { class: 'home-card__title', text: card.title }), el('span', { class: 'st st--review', text: card.recLabel || 'Suggested' })]));
-
-    var ctx = el('div', { class: 'home-card__context' });
-    (card.context || []).forEach(function (line) { ctx.appendChild(el('p', { text: line })); });
-    node.appendChild(ctx);
-
-    node.appendChild(el('div', { class: 'home-card__rec' }, [
-      el('span', { class: 'home-card__rec-label', text: card.recLabel || 'ShoreVest One suggests' }),
-      el('p', { class: 'home-card__rec-text', text: card.recommendation })
-    ]));
-
-    var actions = el('div', { class: 'home-card__actions' });
-    (card.actions || []).slice(0, 3).forEach(function (action) {
-      actions.appendChild(el('button', {
-        type: 'button',
-        class: 'btn btn--sm' + (action.intent === 'primary' ? ' btn--primary' : ' btn--quiet'),
-        text: action.label,
-        onclick: function () {
-          resolved[card.id] = { action: action.label, done: action.done || (action.label + ' recorded') };
-          U.toast(card.title + ' — ' + (action.done || action.label));
-          rerender();
-        }
-      }));
-    });
-    node.appendChild(actions);
-
-    if (card.detail) {
-      node.appendChild(el('button', {
-        type: 'button', class: 'home-card__why', text: 'Why am I seeing this?',
-        onclick: function () { openDetail(card); }
-      }));
-    }
-
-    return node;
-  }
-
-  function openDetail(card) {
-    var body = el('div', {});
-    body.appendChild(el('section', {}, [
-      el('h4', { text: 'Context' }),
-      (function () {
-        var wrap = el('div', { class: 'drawer-copy' });
-        (card.context || []).forEach(function (line) { wrap.appendChild(el('p', { text: line })); });
-        return wrap;
-      })()
-    ]));
-    body.appendChild(el('section', {}, [
-      el('h4', { text: card.recLabel || 'ShoreVest One suggests' }),
-      el('p', { class: 'drawer-copy', text: card.recommendation })
-    ]));
-    body.appendChild(el('section', {}, [
-      el('h4', { text: 'Why this is here' }),
-      el('p', { class: 'drawer-copy', text: card.detail })
-    ]));
-    body.appendChild(U.notice('info',
-      '<strong>Internal preview</strong> This explanation uses mocked data. No live systems are consulted.'));
-    U.drawer(card.title, body);
-  }
 
   /* ── Preview shells for future-facing navigation ────────────────────────── */
 
