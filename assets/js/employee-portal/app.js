@@ -29,6 +29,12 @@
 
   var SESSION_KEY = 'svops.session.v2';
 
+  var ACTION_REGISTRY = {
+    routes: { home: '#/home', myWork: '#/my-work', relationships: '#/relationships', relationshipDetail: '#/relationships', outreachOverview: '#/outreach', findPeople: '#/outreach/find', reviewAudience: '#/outreach/review', chooseAudienceAction: '#/outreach/review', draftMessages: '#/outreach/draft', deliveryControls: '#/outreach/package', reviewPackage: '#/outreach/package', sentResponses: '#/outreach/sent', meetings: '#/meetings', diligenceRequests: '#/diligence', investorIntelligence: '#/investor-intelligence', reporting: '#/reporting', approvals: '#/approvals', firm: '#/firm', firmSystemsVendors: '#/firm/systems', firmVendorDetail: '#/firm/vendors/mergepoint', tools: '#/tools' },
+    actions: ['openDrawer','closeDrawer','startWorkflow','saveAudience','saveSearch','exportCsv','assignReview','createResearchTasks','markLooksRight','markNeedsChanges','submitApproval','invalidateApproval','resetPreviewData']
+  };
+  SVOps.actionRegistry = ACTION_REGISTRY;
+
   function currentUser() {
     if (SVOps.state.user) return SVOps.state.user;
     if (I.demoMode()) {
@@ -132,7 +138,7 @@
     DEMO_USERS.forEach(function (u) { sel.appendChild(el('option', { value: u.personaId, text: (u.name || u.displayRole || '').split(' ')[0], selected: u.personaId === user.personaId })); });
     sel.onchange = function () {
       var next = DEMO_USERS.filter(function (u) { return u.personaId === sel.value; })[0];
-      if (next) signInDemo(next);
+      if (next) { if (parseHash().view !== 'home') U.toast('This item is not assigned to this role. Showing role Home instead.'); signInDemo(next); }
     };
     wrap.appendChild(sel);
     return wrap;
@@ -202,7 +208,7 @@
         el('span', { class: 'ops-topbar__crumb', html: 'ShoreVest One / <strong>' + esc(navItem ? navItem.label : titleFor(viewId)) + '</strong>' })
 
       ]),
-      el('input', { class: 'ops-global-search', type: 'search', placeholder: 'Search people, firms, opportunities, requests, reports or tools', onkeydown: function (ev) { if (ev.key === 'Enter') U.toast('Preview search only. No external systems queried.'); } }),
+      el('input', { class: 'ops-global-search', type: 'search', placeholder: 'Search people, firms, opportunities, requests, reports or tools', onkeydown: function (ev) { if (ev.key === 'Enter') runGlobalSearch(ev.target.value); } }),
       el('div', { class: 'ops-topbar__right' }, [
         el('span', { class: 'ops-env-compact', text: (I.demoMode() ? 'Internal Preview · Mock data' : 'Production · Connected data') + ' · R-2026.07' }),
         roleSwitcher(user)
@@ -216,6 +222,21 @@
     routeInto(content, user, viewId, params);
     shell.appendChild(main);
     return shell;
+  }
+
+  function runGlobalSearch(q) {
+    q = String(q || '').trim().toLowerCase();
+    if (!q) return U.toast('Type a search term first.');
+    var pages = [
+      ['Home','Page','Open Home',ACTION_REGISTRY.routes.home], ['My Work','Page','Open My Work',ACTION_REGISTRY.routes.myWork], ['Relationships','Page','Open Relationships',ACTION_REGISTRY.routes.relationships], ['Outreach audience review','Audience','Review current audience',ACTION_REGISTRY.routes.reviewAudience], ['ATP audience','Audience','Review ATP audience',ACTION_REGISTRY.routes.reviewAudience], ['Approvals','Approval packages','Open approval queue',ACTION_REGISTRY.routes.approvals], ['MergePoint','Vendor','Open vendor record',ACTION_REGISTRY.routes.firmVendorDetail], ['Tools','Page','Open Tools',ACTION_REGISTRY.routes.tools], ['NorthBridge Pension','Relationship','Open relationship drawer',ACTION_REGISTRY.routes.relationships], ['Sarah Chen at ATP','Person','Open audience row',ACTION_REGISTRY.routes.reviewAudience]
+    ];
+    var results = pages.filter(function (r) { return r.join(' ').toLowerCase().indexOf(q) > -1; });
+    var body = el('div', { class: 'search-results' });
+    if (!results.length) body.appendChild(el('p', { text: 'No results found in preview data.' }));
+    results.forEach(function (r) {
+      body.appendChild(el('button', { type: 'button', class: 'search-result', onclick: function () { location.hash = r[3]; document.querySelector('.drawer-scrim') && document.querySelector('.drawer-scrim').click(); } }, [el('strong', { text: r[0] }), el('span', { text: r[1] + ' · ' + r[2] })]));
+    });
+    U.drawer('Search results for “' + q + '”', body);
   }
 
   function environmentBar(user) {
