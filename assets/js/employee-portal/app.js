@@ -210,7 +210,6 @@
     ]);
     main.appendChild(topbar);
 
-    main.appendChild(environmentBar(user));
 
     var content = el('div', { style: 'flex:1' });
     main.appendChild(content);
