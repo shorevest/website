@@ -131,7 +131,12 @@
       ctaLabel: 'View →',
       href: 'https://www.peievents.com/en/event/pdi-apac-forum/',
       ariaLabel: 'View PDI APAC Forum event page',
-      isClickable: true
+      isClickable: true,
+      post: {
+        href: 'https://www.linkedin.com/posts/shorevest-partners_pdi-asian-privatecredit-activity-7477857736379031552-1dRs',
+        label: 'LinkedIn →',
+        ariaLabel: 'View ShoreVest LinkedIn post for PDI APAC Forum'
+      }
     },
     {
       startDate: '2026-06-15',
@@ -145,7 +150,13 @@
       ctaLabel: 'View →',
       href: 'https://informaconnect.com/superreturn-emerging-markets/speakers/benjamin-fanger/',
       ariaLabel: 'View Benjamin Fanger’s SuperReturn speaker profile',
-      isClickable: true
+      isClickable: true,
+      post: {
+        href: 'https://www.linkedin.com/posts/shorevest-partners_emergingmarkets-privatecredit-uncorrelated-activity-7473668678174154754-BwaO',
+        embedHref: 'https://www.linkedin.com/embed/feed/update/urn:li:share:7473668676995469312?collapsed=1',
+        label: 'LinkedIn →',
+        ariaLabel: 'View ShoreVest LinkedIn post for SuperReturn Emerging Markets'
+      }
     },
     {
       startDate: '2026-06-10',
@@ -159,7 +170,12 @@
       ctaLabel: 'View →',
       href: 'https://events.bloomberglive.com/event/InvestHK_2026/summary?RefId=blive_tile',
       ariaLabel: 'View Bloomberg Invest Hong Kong event page',
-      isClickable: true
+      isClickable: true,
+      post: {
+        href: 'https://www.linkedin.com/posts/shorevest-partners_privatecredit-asiaprivatecredit-chinaprivatecredit-activity-7443141209809862659-14J4',
+        label: 'LinkedIn →',
+        ariaLabel: 'View ShoreVest LinkedIn post for Bloomberg Invest Hong Kong'
+      }
     },
     {
       startDate: '2025-11-06',
@@ -233,6 +249,7 @@
     if (post && post.href) {
       var postLink = createTextElement('a', 'pr-event-link pr-event-link--post', post.label || 'View →');
       postLink.href = post.href;
+      if (post.embedHref) postLink.setAttribute('data-linkedin-embed', post.embedHref);
       postLink.target = '_blank';
       postLink.rel = 'noopener noreferrer';
       if (post.ariaLabel) postLink.setAttribute('aria-label', post.ariaLabel);
