@@ -1195,3 +1195,66 @@ html body.team-page-v2 .team-bio-panel__meta {
 html body.team-page-v2 .team-profile__name {
   padding-top: 0 !important;
 }
+
+/* Mobile hero repair — keep the Team intro readable and prevent the stats
+   block from squeezing the paragraph into a narrow column on phones. */
+@media (max-width: 767px) {
+  html body.team-page-v2 .team-hero.hero--team {
+    overflow: hidden !important;
+  }
+
+  html body.team-page-v2 .team-hero.hero--team .team-inner {
+    width: 100% !important;
+    max-width: none !important;
+    padding: clamp(58px, 15vw, 72px) var(--tr-gutter)
+      clamp(56px, 13vw, 72px) !important;
+  }
+
+  html body.team-page-v2 .team-hero.hero--team .team-hero__layout {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: clamp(34px, 9vw, 44px) !important;
+    align-items: stretch !important;
+  }
+
+  html body.team-page-v2 .team-hero.hero--team .pagehero__intro {
+    width: 100% !important;
+    max-width: none !important;
+    padding: 0 !important;
+  }
+
+  html body.team-page-v2 .team-hero.hero--team .team-hero__title {
+    max-width: 9.5ch !important;
+    margin-bottom: clamp(24px, 7vw, 32px) !important;
+    font-size: clamp(46px, 15vw, 58px) !important;
+    line-height: 1.02 !important;
+  }
+
+  html body.team-page-v2 .team-hero.hero--team .pagehero__lede {
+    width: 100% !important;
+    max-width: none !important;
+    font-size: clamp(18px, 5.6vw, 22px) !important;
+    line-height: 1.48 !important;
+    overflow-wrap: normal !important;
+    word-break: normal !important;
+    hyphens: manual !important;
+  }
+
+  html body.team-page-v2 .team-hero.hero--team .team-hero__proof {
+    width: calc(100% + (var(--tr-gutter) * 2)) !important;
+    margin: clamp(12px, 3vw, 18px) calc(var(--tr-gutter) * -1) 0 !important;
+    padding: clamp(42px, 11vw, 54px) var(--tr-gutter) !important;
+    aspect-ratio: auto !important;
+  }
+
+  html body.team-page-v2 .team-hero.hero--team .team-hero__proof::after {
+    content: none !important;
+  }
+
+  html body.team-page-v2 .team-hero.hero--team .team-hero__statcard {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: clamp(26px, 7vw, 34px) !important;
+  }
+}
