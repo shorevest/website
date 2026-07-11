@@ -380,6 +380,19 @@ html body.team-page-v2 .team-profile__photo--placeholder::after {
     inset 0 0 0 10px rgba(250, 246, 238, 0.32),
     inset 0 -72px 120px rgba(30, 64, 64, 0.06);
 }
+
+html body.team-page-v2 .team-profile__photo--plain-placeholder {
+  background: var(--tr-stone) !important;
+}
+
+html body.team-page-v2 .team-profile__photo--plain-placeholder::before {
+  display: none !important;
+}
+
+html body.team-page-v2 .team-profile__photo--plain-placeholder::after {
+  border-color: var(--tr-border-soft);
+  box-shadow: none;
+}
 /* Profiles with a delivered portrait: drop the placeholder monogram. */
 html body.team-page-v2 .team-profile__photo:has(img) {
   display: block;
@@ -680,6 +693,21 @@ html body.team-page-v2 .team-profile__photo::after {
   inset: 0;
   border: 1px solid var(--tr-border-soft);
   pointer-events: none;
+}
+
+html body.team-page-v2 .team-profile__photo--plain-placeholder {
+  background: var(--tr-stone) !important;
+}
+
+html body.team-page-v2 .team-profile__photo--plain-placeholder::before {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+}
+
+html body.team-page-v2 .team-profile__photo--plain-placeholder::after {
+  border-color: var(--tr-border-soft) !important;
+  box-shadow: none !important;
 }
 
 html body.team-page-v2 .team-profile__photo img {

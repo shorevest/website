@@ -183,7 +183,13 @@
     <!-- team-page.css: bio expand + profile base behavior only. -->
     <link rel="stylesheet" href="assets/css/team-page.css?v=20260711-mobile-cache" />
     <!-- Team refine: team hero + portrait grid + sections, on homepage tokens — MUST load LAST. -->
-    <link rel="stylesheet" href="assets/css/team-refine.css?v=20260711-mobile-polish" />
+    <script>
+      document.write(
+        '<link rel="stylesheet" href="assets/css/team-refine.css?v=20260711-plain-placeholders&t=' +
+          window.__SVT +
+          '">',
+      );
+    </script>
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="shortcut icon" href="/favicon.ico">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
@@ -881,10 +887,10 @@
             </article>
             <article class="team-profile" data-team-profile>
               <div
-                class="team-profile__photo team-profile__photo--placeholder"
+                class="team-profile__photo team-profile__photo--placeholder team-profile__photo--plain-placeholder"
                 data-team-photo="bio-louisa-ho"
                 role="img"
-                aria-label="ShoreVest logo placeholder for Louisa Ho."
+                aria-label="Plain placeholder for Louisa Ho."
               ></div>
               <div class="team-profile__name">Louisa Ho</div>
               <div class="team-profile__role">Senior Accountant</div>
@@ -915,10 +921,10 @@
             </article>
             <article class="team-profile" data-team-profile>
               <div
-                class="team-profile__photo team-profile__photo--placeholder"
+                class="team-profile__photo team-profile__photo--placeholder team-profile__photo--plain-placeholder"
                 data-team-photo="bio-charlotte-lan"
                 role="img"
-                aria-label="ShoreVest logo placeholder for Charlotte Lan."
+                aria-label="Plain placeholder for Charlotte Lan."
               ></div>
               <div class="team-profile__name">Charlotte Lan</div>
               <div class="team-profile__role">Human Resources Manager</div>
