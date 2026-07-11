@@ -180,10 +180,11 @@
     {
       startDate: '2025-11-06',
       endDate: '2025-11-06',
-      timeZone: 'Asia/Hong_Kong',
+      timeZone: 'Asia/Riyadh',
       displayDate: '6 Nov 2025',
       type: 'Panel',
       title: 'FII Institute Priority panel on private credit',
+      location: 'Riyadh',
       description: 'A panel discussion covering credit-cycle risk and how global investors are assessing China’s market structure.',
       isClickable: true,
       post: {
