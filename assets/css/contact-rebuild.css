@@ -406,3 +406,23 @@ main > section + section {
 @media (min-width: 881px) {
   body.contact-page .cp-hero__inner { min-height: 650px; }
 }
+
+/* 2026-07-11 · Align the contact hero statement with the homepage hero copy.
+   The copy stack now shares the homepage masthead's vertical rhythm: label,
+   title, body, and confidential note read as one centered group rather than
+   being pushed toward the lower edge of the panel. */
+body.contact-page .cp-hero__red {
+  justify-content: center;
+}
+body.contact-page .cp-hero__eyebrow {
+  margin: 0 0 18px;
+}
+body.contact-page .cp-hero__title {
+  margin-bottom: 24px;
+}
+body.contact-page .cp-hero__desc {
+  margin-top: 0;
+}
+body.contact-page .cp-hero__confidential {
+  margin-top: 28px;
+}
