@@ -671,8 +671,8 @@ body.strategy-page .sx-hero__media:focus-within .sx-hero__image img {
 }
 @media (max-width: 880px) {
   body.strategy-page .sx-hero__top { grid-template-columns: 1fr; gap: 36px; }
-  body.strategy-page .sx-hero__lead { grid-column: auto; padding-right: 0; }
-  body.strategy-page .sx-hero__body { margin-top: 22px; }
+  body.strategy-page .sx-hero__lead { grid-column: auto; padding-right: 0; width: 100%; }
+  body.strategy-page .sx-hero__body { margin-top: 22px; max-width: none; width: 100%; }
   body.strategy-page .sx-hero__media { grid-column: auto; padding: 0; max-width: 560px; }
   body.strategy-page .sx-hero__media::before { top: 40px; right: calc(var(--pad-x) * -1); bottom: -22px; left: 28px; }
   body.strategy-page .sx-hero__image { aspect-ratio: 1 / 1; }
