@@ -685,6 +685,15 @@ body.insights-page .cdd-arc__empty-reset:hover { background: var(--sv-ink, #1825
 body.insights-page .cdd-arc__empty-reset:focus-visible { outline: 2px solid var(--sv-cinnabar); outline-offset: 2px; }
 
 @media (max-width: 760px) {
+  body.insights-page .cdd-hero__lead {
+    padding-right: 0;
+    width: 100%;
+  }
+  body.insights-page .cdd-hero__body {
+    max-width: none;
+    width: 100%;
+    text-wrap: pretty;
+  }
   body.insights-page .cdd-arc__tools { width: 100%; justify-content: space-between; }
   body.insights-page .cdd-arc__search { width: 100%; order: -1; }
   /* On touch, the title nudge reads as jitter — disable it. */
