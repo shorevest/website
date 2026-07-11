@@ -695,6 +695,21 @@ html body.team-page-v2 .team-profile__photo::after {
   pointer-events: none;
 }
 
+html body.team-page-v2 .team-profile__photo--plain-placeholder {
+  background: var(--tr-stone) !important;
+}
+
+html body.team-page-v2 .team-profile__photo--plain-placeholder::before {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+}
+
+html body.team-page-v2 .team-profile__photo--plain-placeholder::after {
+  border-color: var(--tr-border-soft) !important;
+  box-shadow: none !important;
+}
+
 html body.team-page-v2 .team-profile__photo img {
   display: block !important;
   width: 100% !important;
