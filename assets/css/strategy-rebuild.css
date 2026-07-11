@@ -1475,6 +1475,15 @@ body.strategy-page .sv-exec__intro {
   }
 }
 
+/* 2026-07-11 · Nudge the Opportunity section's supporting sentence lower so it
+   sits beneath the headline baseline instead of feeling pinned to the upper
+   right of the section head. */
+@media (min-width: 901px) {
+  body.strategy-page #opportunity .st-head__r {
+    transform: translateY(clamp(18px, 2vw, 30px));
+  }
+}
+
 /* 2026-07-11 · Mobile tightening for single-deck opportunity and sourcing sections. */
 @media (max-width: 900px) {
   body.strategy-page #opportunity .st-head,
