@@ -282,9 +282,9 @@ body.homepage .sv-mobile-menu {
   top: var(--header-h); left: 0; right: 0; bottom: 0;
   width: 100%; max-width: 100vw; box-sizing: border-box;
   background: var(--sv-ivory);
-  border-bottom: 1px solid var(--sv-border-light-strong);
+  border-bottom: 1px solid rgba(216, 206, 176, 0.62);
   z-index: 999;
-  padding: 12px var(--pad-x) 24px;
+  padding: clamp(18px, 4.8vw, 28px) var(--pad-x) calc(28px + env(safe-area-inset-bottom));
   overflow-y: auto; overflow-x: hidden;
   overscroll-behavior: contain;
 }
@@ -292,19 +292,21 @@ body.homepage .sv-mobile-menu * { box-sizing: border-box; max-width: 100%; }
 body.homepage .sv-mobile-menu.is-open { display: block; }
 body.homepage .sv-mobile-menu ul { list-style: none; margin: 0; padding: 0; }
 body.homepage .sv-mobile-menu a {
-  display: block; padding: 14px 0;
-  font: 600 14px/1 var(--sv-font); letter-spacing: 0.06em; text-transform: uppercase;
+  display: block; padding: clamp(16px, 4.3vw, 20px) 0;
+  font: 600 clamp(15px, 4vw, 17px)/1 var(--sv-font);
+  letter-spacing: 0.075em; text-transform: uppercase;
   color: var(--sv-ink); text-decoration: none;
-  border-bottom: 1px solid var(--sv-border-light);
+  border-bottom: 1px solid rgba(216, 206, 176, 0.74);
 }
 body.homepage .sv-mobile-menu .sv-mobile-utils {
-  display: flex; flex-direction: column; gap: 10px; margin-top: 24px;
+  display: flex; flex-direction: column; gap: 12px; margin-top: clamp(26px, 7vw, 38px);
 }
 body.homepage .sv-mobile-menu .sv-mobile-utils .sv-util-btn {
   display: flex; align-items: center; justify-content: center; width: 100%;
-  min-height: 52px; padding: 14px 18px; box-sizing: border-box;
-  border: 1px solid var(--sv-ink); background: transparent;
-  font: 600 13px/1 var(--sv-font); letter-spacing: 0.1em; text-transform: uppercase;
+  min-height: 56px; padding: 15px 18px; box-sizing: border-box;
+  border: 1px solid rgba(30, 64, 64, 0.34); background: rgba(250, 246, 238, 0.42);
+  font: 600 clamp(13px, 3.5vw, 15px)/1 var(--sv-font);
+  letter-spacing: 0.105em; text-transform: uppercase;
   color: var(--sv-ink); text-decoration: none;
 }
 body.homepage .sv-mobile-menu .sv-mobile-utils .sv-util-btn--cta {
@@ -1026,6 +1028,11 @@ body.homepage .sv-totop svg { width: 16px; height: 16px; }
 
   body.homepage .sv-mobile-menu {
     padding-inline: var(--pad-x);
+    padding-top: 22px;
+  }
+
+  body.homepage .sv-mobile-menu .sv-mobile-utils .sv-util-btn {
+    min-height: 54px;
   }
 
   body.homepage .sv-hero__inner {
