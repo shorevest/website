@@ -1254,15 +1254,15 @@ html body.team-page-v2 .team-profile__name {
   html body.team-page-v2 .team-hero.hero--team .team-hero__title {
     max-width: 9.5ch !important;
     margin-bottom: clamp(24px, 7vw, 32px) !important;
-    font-size: clamp(46px, 15vw, 58px) !important;
-    line-height: 1.02 !important;
+    font-size: clamp(36px, 10.6vw, 43px) !important;
+    line-height: 1.04 !important;
   }
 
   html body.team-page-v2 .team-hero.hero--team .pagehero__lede {
     width: 100% !important;
     max-width: none !important;
-    font-size: clamp(18px, 5.6vw, 22px) !important;
-    line-height: 1.48 !important;
+    font-size: 15.5px !important;
+    line-height: 1.56 !important;
     overflow-wrap: normal !important;
     word-break: normal !important;
     hyphens: manual !important;
