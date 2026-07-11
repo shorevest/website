@@ -372,7 +372,11 @@ body.insights-page .research-sub__submit:hover { background: var(--sv-cinnabar-d
   body.insights-page .cdd-arc__row > .cdd-arc__topic,
   body.insights-page .cdd-arc__cat { grid-area: cat; }
   body.insights-page .cdd-arc__body { grid-area: title; }
-  body.insights-page .cdd-arc__actions { grid-area: actions; justify-self: start; }
+  body.insights-page .cdd-arc__actions {
+    grid-area: actions;
+    justify-self: start;
+    gap: 14px;
+  }
   body.insights-page .cdd-arc__pdf { padding: 11px 0; }
   body.insights-page .cdd-arc__tags { gap: 12px; }
   body.insights-page .cdd-arc__tags .cdd-arc__topic { display: inline-flex; }
