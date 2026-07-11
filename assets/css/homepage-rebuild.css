@@ -1762,3 +1762,51 @@ body.insights-page .cdd-hero__panel {
     box-shadow: 0 14px 30px rgba(23, 28, 28, 0.12) !important;
   }
 }
+
+/* ==========================================================================
+   GLOBAL BOX DEPTH  (2026-07-11)
+   Companion to GLOBAL IMAGE DEPTH above. Gives every content card / panel /
+   stat block / image frame across the site a consistent soft elevation so no
+   box reads as flat. Namespaced container classes only — inner text elements
+   (labels, values, titles) are never targeted. Loaded before the per-page
+   stylesheets, so !important keeps the treatment consistent everywhere.
+   Framed images (overflow:hidden wrappers) get the shadow on the frame, since
+   the inner <img>'s own shadow would be clipped.
+   ========================================================================== */
+:root {
+  --sv-box-shadow: 0 14px 34px rgba(23, 28, 28, 0.10), 0 3px 9px rgba(23, 28, 28, 0.05);
+}
+
+/* Homepage */
+body.homepage .sv-cdd__feature,
+/* Firm */
+body.firm-page .fm-glance__item,
+body.firm-page .fm-inv__cell,
+body.firm-page .fm-comp__item,
+/* Strategy */
+body.strategy-page .sx-glance,
+body.strategy-page .st-risk__panel,
+/* Team */
+body.team-page-v2 .team-hero__statcard,
+/* Insights */
+body.insights-page .cdd-arc__row--featured,
+body.insights-page .cdd-stat,
+body.insights-page .cdd-sidecard,
+/* CDD articles */
+body.cdd-article-page .cdd-sidecard,
+body.cdd-article-page .cdd-stat,
+/* Press */
+body.press-page .pr-featured,
+/* Investor portal */
+body.investor-portal-page .investor-portal-panel,
+body.investor-portal-page .ip-assure__cell {
+  box-shadow: var(--sv-box-shadow) !important;
+}
+
+/* Team portrait frames carry an intentional flat-frame reset in team-refine.css
+   (html body.team-page-v2 .team-profile__photo → none !important). Match that
+   depth with a higher-specificity override so every portrait sits on the same
+   soft elevation as the rest of the site's imagery. */
+html body.team-page-v2 .team-profile .team-profile__photo {
+  box-shadow: var(--sv-box-shadow) !important;
+}
