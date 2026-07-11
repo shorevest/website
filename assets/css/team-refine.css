@@ -1164,7 +1164,7 @@ html body.team-page-v2 .group__summary {
   box-shadow: none !important;
   font: 400 clamp(14px, 1.05vw, 15.5px) / 1.6 var(--tr-font) !important;
   color: var(--tr-muted) !important;
-  text-align: left !important;
+  text-align: right !important;
 }
 
 /* --- Portrait grid: uniform cards, tighter row rhythm, no ballooning --- */
