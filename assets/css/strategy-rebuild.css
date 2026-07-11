@@ -721,6 +721,35 @@ body.strategy-page .st-reason:last-child {
   body.strategy-page .st-reasons { grid-template-columns: 1fr; gap: 14px; }
 }
 
+
+/* 2026-07-11 · Mobile breathing room for ruled Opportunity content.
+   Keep labels and body copy from sitting too close to divider lines on narrow screens. */
+@media (max-width: 880px) {
+  body.strategy-page .st-oppfact {
+    padding: 24px 24px 22px;
+  }
+  body.strategy-page .st-oppfact:nth-child(odd) {
+    padding-left: 0;
+    padding-right: 24px;
+  }
+  body.strategy-page .st-oppfact:nth-child(even) {
+    padding-left: 24px;
+    padding-right: 0;
+  }
+  body.strategy-page .st-oppfact__label {
+    margin-top: 14px;
+    line-height: 1.6;
+  }
+  body.strategy-page .st-reason,
+  body.strategy-page .st-reason:first-child,
+  body.strategy-page .st-reason:last-child {
+    padding: 30px 28px 32px;
+  }
+  body.strategy-page .st-reason__body {
+    line-height: 1.72;
+  }
+}
+
 /* Client directive: no decorative horizontal rules/bars. */
 :where(hr, [role="separator"], [class*="__rule"], [class*="-rule"], [class*="__divider"], [class*="-divider"], [class*="topline"], [class*="separator"]):not(svg):not(path):not(img) {
   display: none !important;
