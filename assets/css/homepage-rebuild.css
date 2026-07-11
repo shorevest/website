@@ -995,7 +995,7 @@ body.homepage .sv-totop svg { width: 16px; height: 16px; }
    Motion
    ========================================================================== */
 @media (prefers-reduced-motion: no-preference) {
-  body.homepage .sv-reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; }
+  body.homepage .sv-reveal { opacity: 1; transform: none; transition: none; }
   body.homepage .sv-reveal.is-in { opacity: 1; transform: none; }
 }
 
