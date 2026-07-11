@@ -84,7 +84,6 @@ body.insights-page .cdd-arc__inner { padding-block: clamp(48px, 5vw, 76px); }
 body.insights-page .cdd-stats {
   display: grid; grid-template-columns: repeat(4, 1fr);
   background: #FFFFFF; border-left: 3px solid var(--sv-cinnabar);
-  box-shadow: 0 14px 34px rgba(23, 28, 28, 0.09);
   padding: clamp(24px, 2.2vw, 32px) clamp(8px, 1vw, 16px);
   margin-bottom: clamp(40px, 4vw, 60px);
 }
