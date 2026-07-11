@@ -29,6 +29,7 @@ html { scroll-behavior: smooth; }
 
 :root {
   --sv-cinnabar: #C93B2A;
+  --sv-cinnabar-light: #E8998F;
   --sv-cinnabar-d: #9F2F24;
   --sv-oxide: #9F2F24;
   --sv-teal-900: #1C4040;
