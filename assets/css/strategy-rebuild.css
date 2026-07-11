@@ -1458,3 +1458,19 @@ body.strategy-page .sv-exec__head-r p,
 body.strategy-page .sv-exec__intro {
   text-align: right;
 }
+
+/* The deck box is capped at max-width:46ch and, as a grid item, defaults to
+   the start (left) of its 6-column grid area — so right-aligned text lands
+   mid-page instead of at the margin. Anchor the box to the end of its grid
+   area (and let any max-width'd child hug it) so the copy sits flush to the
+   right page margin. Scoped to the desktop layout: below 900px the deck
+   already spans the full column width, so the box has nowhere left to shift. */
+@media (min-width: 901px) {
+  body.strategy-page .st-head__r,
+  body.strategy-page .sv-exec__head-r {
+    justify-self: end;
+  }
+  body.strategy-page .sv-exec__intro {
+    margin-left: auto;
+  }
+}
