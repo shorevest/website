@@ -1291,8 +1291,7 @@ html body.team-page-v2 .team-profile__name {
    Keep Team on the same narrow-screen rhythm as the homepage: identical
    gutters, calmer hero type, contained lede width, and cache-friendly layout. */
 html body.team-page-v2 .group {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 760px;
+  content-visibility: visible;
 }
 
 @media (max-width: 767px) {

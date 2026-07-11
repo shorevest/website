@@ -22,9 +22,9 @@ body.site-ready {
 }
 
 .sv-reveal {
-  opacity: 0;
-  transform: translate3d(0, 20px, 0);
-  transition: opacity var(--sv-dur-base) var(--sv-ease), transform var(--sv-dur-base) var(--sv-ease);
+  opacity: 1;
+  transform: none;
+  transition: none;
 }
 
 .sv-reveal.in {
@@ -34,7 +34,7 @@ body.site-ready {
 
 img,
 picture {
-  content-visibility: auto;
+  content-visibility: visible;
 }
 
 @media (prefers-reduced-motion: reduce) {
