@@ -119,12 +119,12 @@ body.strategy-page .st-oppfacts {
   display: grid; grid-template-columns: repeat(4, 1fr);
   border-top: 1px solid var(--sv-border-light-strong); margin: clamp(34px, 4vw, 52px) 0 0;
 }
-body.strategy-page .st-oppfact { padding: 22px 24px 0; border-left: 1px solid var(--sv-border-light); }
-body.strategy-page .st-oppfact:first-child { border-left: 0; padding-left: 0; }
+body.strategy-page .st-oppfact { padding: 22px 24px 0; border-left: 1px solid var(--sv-border-light); text-align: center; }
+body.strategy-page .st-oppfact:first-child { border-left: 0; }
 body.strategy-page .st-oppfact__num {
   display: block; font: 500 clamp(26px, 2.6vw, 34px)/1 var(--sv-font); letter-spacing: -0.02em; color: var(--sv-oxide);
 }
-body.strategy-page .st-oppfact__label { display: block; margin-top: 10px; font: 400 13.5px/1.45 var(--sv-font); color: var(--sv-ink-2); max-width: 22ch; }
+body.strategy-page .st-oppfact__label { display: block; margin: 10px auto 0; font: 400 13.5px/1.45 var(--sv-font); color: var(--sv-ink-2); max-width: 22ch; }
 body.strategy-page .st-oppfacts__note { grid-column: 1 / -1; margin: 22px 0 0; font: 400 12px/1.5 var(--sv-font); color: var(--sv-muted, #6E7169); }
 @media (max-width: 880px) {
   body.strategy-page .st-oppfacts { grid-template-columns: 1fr 1fr; }
