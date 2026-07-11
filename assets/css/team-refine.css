@@ -1354,3 +1354,8 @@ html body.team-page-v2 .group {
     padding-top: clamp(48px, 12vw, 64px) !important;
   }
 }
+
+/* 2026-07-11 · Hero cards/boxes: keep the team proof card visibly elevated. */
+html body.team-page-v2 .team-hero__statcard {
+  box-shadow: 0 18px 42px rgba(23, 28, 28, 0.14) !important;
+}

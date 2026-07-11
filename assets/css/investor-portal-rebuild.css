@@ -270,3 +270,8 @@ body.investor-portal-page .ip-assure__v { margin: 0; font: 400 13.5px/1.55 var(-
 @media (min-width: 881px) {
   body.investor-portal-page .investor-portal-hero__inner { min-height: 650px; }
 }
+
+/* 2026-07-11 · Hero cards/boxes: lift the secure sign-in card. */
+body.investor-portal-page .login-form-container {
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.18) !important;
+}
