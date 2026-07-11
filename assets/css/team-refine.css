@@ -1258,3 +1258,67 @@ html body.team-page-v2 .team-profile__name {
     padding: clamp(26px, 7vw, 34px) !important;
   }
 }
+
+/* 2026-07-11 · Mobile parity/performance pass.
+   Keep Team on the same narrow-screen rhythm as the homepage: identical
+   gutters, calmer hero type, contained lede width, and cache-friendly layout. */
+html body.team-page-v2 .group {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 760px;
+}
+
+@media (max-width: 767px) {
+  html body.team-page-v2 {
+    --pad-x: clamp(18px, 5.625vw, 22px);
+    --tr-gutter: var(--pad-x);
+  }
+
+  html body.team-page-v2 .team-hero .team-inner,
+  html body.team-page-v2 .team-groups .team-inner {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-inline: var(--pad-x) !important;
+  }
+
+  html body.team-page-v2 .team-hero .team-inner {
+    padding-top: clamp(42px, 11vw, 56px) !important;
+    padding-bottom: 0 !important;
+  }
+
+  html body.team-page-v2 .team-hero .sv-hero__eyebrow,
+  html body.team-page-v2 .team-hero .eyebrow {
+    margin-bottom: 18px !important;
+    padding-top: 0 !important;
+    letter-spacing: 0.105em !important;
+  }
+
+  html body.team-page-v2 .team-hero .team-hero__title,
+  html body.team-page-v2 .team-hero h1 {
+    max-width: 13.8ch !important;
+    font-size: clamp(34px, 10.6vw, 43px) !important;
+    line-height: 1.07 !important;
+    letter-spacing: -0.026em !important;
+  }
+
+  html body.team-page-v2 .team-hero .pagehero__lede,
+  html body.team-page-v2 .team-hero .sv-hero__body {
+    max-width: 31ch !important;
+    font-size: clamp(15.5px, 4.15vw, 17px) !important;
+    line-height: 1.62 !important;
+  }
+
+  html body.team-page-v2 .team-hero__proof {
+    margin: clamp(40px, 10vw, 52px) calc(var(--pad-x) * -1) 0 !important;
+    width: auto !important;
+    padding: 32px var(--pad-x) !important;
+  }
+
+  html body.team-page-v2 .team-hero__statcard {
+    max-width: none !important;
+    padding: 24px 20px !important;
+  }
+
+  html body.team-page-v2 .team-groups {
+    padding-top: clamp(48px, 12vw, 64px) !important;
+  }
+}

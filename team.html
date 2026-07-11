@@ -21,6 +21,7 @@
       window.__SVT = new URLSearchParams(location.search).get("t") || "";
       (function () {
         var T = window.__SVT;
+        if (!T) return;
         function tok(u) {
           try {
             var url = new URL(u, location.href);
@@ -178,29 +179,11 @@
        (shared-header/footer, shorevest-unify, shared-hero, typography-lockdown,
        burford-polish) is intentionally NOT loaded here — it was what made Team
        look like a different site. -->
-    <script>
-      document.write(
-        '<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260701-mobile-audit-430&t=' +
-          window.__SVT +
-          '">',
-      );
-    </script>
+    <link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260701-mobile-audit-430" />
     <!-- team-page.css: bio expand + profile base behavior only. -->
-    <script>
-      document.write(
-        '<link rel="stylesheet" href="assets/css/team-page.css?v=20260709-hero-square&t=' +
-          window.__SVT +
-          '">',
-      );
-    </script>
+    <link rel="stylesheet" href="assets/css/team-page.css?v=20260711-mobile-cache" />
     <!-- Team refine: team hero + portrait grid + sections, on homepage tokens — MUST load LAST. -->
-    <script>
-      document.write(
-        '<link rel="stylesheet" href="assets/css/team-refine.css?v=20260711-mobile-hero&t=' +
-          window.__SVT +
-          '">',
-      );
-    </script>
+    <link rel="stylesheet" href="assets/css/team-refine.css?v=20260711-mobile-polish" />
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="shortcut icon" href="/favicon.ico">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
@@ -1414,15 +1397,7 @@
       </svg>
     </button>
 
-    <script>
-      document.write(
-        "<scr" +
-          'ipt src="assets/js/team-page.js?t=' +
-          window.__SVT +
-          '" defer><\/scr' +
-          "ipt>",
-      );
-    </script>
+    <script src="assets/js/team-page.js?v=20260711-mobile-cache" defer></script>
     <script>
       (function () {
         var burger = document.querySelector(".sv-burger");
