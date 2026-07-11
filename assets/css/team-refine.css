@@ -1224,6 +1224,11 @@ html body.team-page-v2 .team-profile__name {
   padding-top: 0 !important;
 }
 
+/* 2026-07-11 · Align the Leadership section support copy to the right edge. */
+html body.team-page-v2 .group--leadership .group__summary {
+  text-align: right !important;
+}
+
 /* Mobile hero repair — keep the Team intro readable and prevent the stats
    block from squeezing the paragraph into a narrow column on phones. */
 @media (max-width: 767px) {
