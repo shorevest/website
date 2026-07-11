@@ -335,7 +335,7 @@ body.firm-page .fm-close__text {
   margin: 0;
   font: 400 clamp(25px, 2.7vw, 40px)/1.38 var(--sv-font);
   letter-spacing: -0.02em; color: var(--sv-text-on-dark, #FCF9F1);
-  max-width: 34ch; text-wrap: pretty;
+  max-width: none; width: 100%; text-wrap: pretty;
 }
 body.firm-page .fm-close__text strong { font-weight: 500; color: #FFFFFF; }
 body.firm-page .fm-close__cta { margin: clamp(30px, 3.2vw, 44px) 0 0; }
