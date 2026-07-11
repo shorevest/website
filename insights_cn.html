@@ -23,7 +23,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <script>document.write('<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260708-layered-hero-b&t='+window.__SVT+'">');</script>
-<script>document.write('<link rel="stylesheet" href="assets/css/insights-rebuild.css?v=20260709-featured-report-white&t='+window.__SVT+'">');</script>
+<script>document.write('<link rel="stylesheet" href="assets/css/insights-rebuild.css?v=20260711-mobile-hero-copy&t='+window.__SVT+'">');</script>
 <script>(function(){var T=window.__SVT;function tk(u){return u+(u.indexOf('?')>-1?'&':'?')+'t='+T;}var s=document.createElement('script');s.src=tk('assets/js/image-slot.js');document.head.appendChild(s);})();</script>
 <style>
   body.homepage {
@@ -92,7 +92,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
     <div class="sv-shell cdd-hero__inner">
       <div class="cdd-hero__lead">
         <span class="cdd-hero__rule" aria-hidden="true"></span>
-        <p class="cdd-hero__eyebrow">研究系列 · 始于 2018 年</p>
+        <p class="cdd-hero__eyebrow">研究系列</p>
         <h1 class="cdd-hero__title" id="cdd-hero-heading">中国债务动态</h1>
         <p class="cdd-hero__cn" lang="en">ShoreVest · China Debt Dynamics</p>
         <p class="cdd-hero__body">聚焦中国私募信贷市场、政策走向、法律框架及债权人回收的研究。</p>
@@ -129,7 +129,13 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
           <button type="button" class="cdd-arc__chip" data-topic="policy" role="tab" aria-selected="false">政策</button>
           <button type="button" class="cdd-arc__chip" data-topic="structural" role="tab" aria-selected="false">结构性</button>
         </div>
-        <p class="cdd-arc__count"><span data-cdd-arc-count>20</span> 篇文章</p>
+        <div class="cdd-arc__tools">
+          <div class="cdd-arc__search" role="search">
+            <svg class="cdd-arc__search-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <input type="search" class="cdd-arc__search-input" data-cdd-arc-search placeholder="搜索档案库" aria-label="按标题或主题搜索文章" autocomplete="off">
+          </div>
+          <p class="cdd-arc__count"><span data-cdd-arc-count>20</span> 篇文章</p>
+        </div>
       </div>
 
       <!-- Ledger -->
@@ -359,6 +365,13 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
             </article>
       </div>
 
+      <!-- Empty state (shown when a search/filter returns nothing) -->
+      <div class="cdd-arc__empty" data-cdd-arc-empty hidden>
+        <p class="cdd-arc__empty-title">没有匹配的期刊</p>
+        <p class="cdd-arc__empty-body">请尝试其他关键词，或清除筛选以查看完整档案库。</p>
+        <button type="button" class="cdd-arc__empty-reset" data-cdd-arc-reset>清除筛选</button>
+      </div>
+
       <!-- End of archive -->
       <div class="cdd-arc__closer">
         <span class="cdd-arc__closer-end">档案库结束</span>
@@ -371,13 +384,17 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   <!-- SUBSCRIPTION STRIP -->
   <section class="research-sub" id="subscribe">
     <div class="research-sub__container">
-      <p class="research-sub__notice">重要提示：《中国债务动态》仅供信息参考，不构成投资建议、投资要约，亦不构成对任何证券、基金或交易的推荐。</p>
+      <div class="research-sub__notice" role="note" aria-label="重要提示">
+        <span class="research-sub__notice-label">重要提示</span>
+        <p>《中国债务动态》仅供信息参考，不构成投资建议、投资要约，亦不构成对任何证券、基金或交易的推荐。</p>
+      </div>
       <div class="research-sub__inner">
         <div class="research-sub__copy">
+          <span class="research-sub__eyebrow">订阅者更新</span>
           <h3>直接订阅《中国债务动态》</h3>
           <p>面向订阅者的中国私募信贷市场季度刊物更新。</p>
         </div>
-        <form class="research-sub__form" action="index_cn.html#signup" method="get">
+        <form class="research-sub__form" action="index_cn.html#signup" method="get" aria-label="订阅《中国债务动态》更新">
           <label class="research-sub__field" for="subscribe-name">
             <input id="subscribe-name" name="name" type="text" autocomplete="name" placeholder="姓名" required>
           </label>
