@@ -1783,10 +1783,6 @@ body.insights-page .cdd-hero__panel {
 
 /* Homepage */
 body.homepage .sv-cdd__feature,
-/* Firm */
-body.firm-page .fm-glance__item,
-body.firm-page .fm-inv__cell,
-body.firm-page .fm-comp__item,
 /* Strategy */
 body.strategy-page .sx-glance,
 body.strategy-page .st-risk__panel,
@@ -1794,7 +1790,6 @@ body.strategy-page .st-risk__panel,
 body.team-page-v2 .team-hero__statcard,
 /* Insights */
 body.insights-page .cdd-arc__row--featured,
-body.insights-page .cdd-stat,
 body.insights-page .cdd-sidecard,
 /* CDD articles */
 body.cdd-article-page .cdd-sidecard,
