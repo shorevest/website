@@ -8,7 +8,7 @@
 (function () {
   "use strict";
 
-  var PAGE_SIZE = 8;
+  var PAGE_SIZE = 3;
 
   function ready(fn) {
     if (document.readyState !== "loading") {
