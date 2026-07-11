@@ -235,6 +235,8 @@ body.homepage .sv-nav a {
   transition: color .15s ease, border-color .15s ease;
 }
 body.homepage .sv-nav a:hover { color: var(--sv-cinnabar); border-color: var(--sv-cinnabar); }
+/* Active nav state — cinnabar text + underline on the current page, matching hover */
+body.homepage .sv-nav a[aria-current="page"] { color: var(--sv-cinnabar); border-color: var(--sv-cinnabar); }
 
 body.homepage .sv-utils { display: flex; align-items: center; gap: 14px; }
 body.homepage .sv-lang {
@@ -298,6 +300,8 @@ body.homepage .sv-mobile-menu a {
   color: var(--sv-ink); text-decoration: none;
   border-bottom: 1px solid rgba(216, 206, 176, 0.74);
 }
+/* Active nav state — cinnabar on the current page in the mobile menu */
+body.homepage .sv-mobile-menu a[aria-current="page"] { color: var(--sv-cinnabar); }
 body.homepage .sv-mobile-menu .sv-mobile-utils {
   display: flex; flex-direction: column; gap: 12px; margin-top: clamp(26px, 7vw, 38px);
 }
