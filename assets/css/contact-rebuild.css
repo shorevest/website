@@ -426,3 +426,8 @@ body.contact-page .cp-hero__desc {
 body.contact-page .cp-hero__confidential {
   margin-top: 28px;
 }
+
+/* 2026-07-11 · Hero cards/boxes: lift the routing box beside the statement panel. */
+body.contact-page .cp-hero__routes {
+  box-shadow: 0 18px 42px rgba(23, 28, 28, 0.12) !important;
+}
