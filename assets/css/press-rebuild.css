@@ -437,3 +437,8 @@ main > section + section {
 @media (min-width: 981px) {
   body.press-page .media-hero .sv-hero__inner { min-height: 650px; }
 }
+
+/* 2026-07-11 · Hero cards/boxes: restore depth on media hero support boxes. */
+body.press-page :is(.sv-hero__field, .sv-hero__panel) {
+  box-shadow: 0 18px 42px rgba(23, 28, 28, 0.14) !important;
+}

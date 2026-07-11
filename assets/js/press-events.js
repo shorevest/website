@@ -180,10 +180,11 @@
     {
       startDate: '2025-11-06',
       endDate: '2025-11-06',
-      timeZone: 'Asia/Hong_Kong',
+      timeZone: 'Asia/Riyadh',
       displayDate: '6 Nov 2025',
       type: 'Panel',
       title: 'FII Institute Priority panel on private credit',
+      location: 'Riyadh',
       description: 'A panel discussion covering credit-cycle risk and how global investors are assessing China’s market structure.',
       isClickable: true,
       post: {
@@ -269,7 +270,7 @@
   }
 
   // Renders a ledger with the first `visibleLimit` rows shown and the rest
-  // collapsed behind an accessible "Show more" toggle.
+  // collapsed behind an accessible "Load more" toggle.
   function renderList(table, events, visibleLimit, isPast) {
     if (!table) return;
 
@@ -293,13 +294,14 @@
       btn.type = 'button';
       btn.className = 'pr-events__more-btn';
       btn.setAttribute('aria-expanded', 'false');
-      var moreLabel = 'Show ' + collapsedRows.length + ' more';
-      btn.textContent = moreLabel;
+      var collapsedLabel = 'Load more';
+      var expandedLabel = 'Show less';
+      btn.textContent = collapsedLabel;
       btn.addEventListener('click', function () {
         var expanded = btn.getAttribute('aria-expanded') === 'true';
         collapsedRows.forEach(function (row) { row.hidden = expanded; });
         btn.setAttribute('aria-expanded', String(!expanded));
-        btn.textContent = expanded ? moreLabel : 'Show fewer';
+        btn.textContent = expanded ? collapsedLabel : expandedLabel;
       });
       wrap.appendChild(btn);
       table.insertBefore(wrap, anchor);

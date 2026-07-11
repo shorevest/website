@@ -28,6 +28,10 @@ function assertFaviconParity(homepage, pages) {
 }
 
 assertFaviconParity('index.html', [
+  'team.html',
+  'contact.html',
+  'investor-portal.html',
+  'investor-portal/index.html',
   'privacy-policy.html',
   'cookie-notice.html',
   'terms-of-use.html',
