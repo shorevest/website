@@ -1474,3 +1474,50 @@ body.strategy-page .sv-exec__intro {
     margin-left: auto;
   }
 }
+
+/* 2026-07-11 · Mobile tightening for single-deck opportunity and sourcing sections. */
+@media (max-width: 900px) {
+  body.strategy-page #opportunity .st-head,
+  body.strategy-page #origination .sv-exec__head {
+    margin-bottom: 24px;
+  }
+
+  body.strategy-page #opportunity .st-head__l .sv-h2,
+  body.strategy-page #origination .sv-exec__head-l .sv-h2 {
+    margin-top: 10px;
+  }
+
+  body.strategy-page #opportunity .st-head__r,
+  body.strategy-page #origination .sv-exec__head-r {
+    margin-top: 8px;
+  }
+
+  body.strategy-page #opportunity .st-oppfacts {
+    margin-top: 0;
+  }
+
+  body.strategy-page #origination .sv-flow {
+    padding-top: 20px;
+  }
+}
+
+@media (max-width: 600px) {
+  body.strategy-page #opportunity .st-head,
+  body.strategy-page #origination .sv-exec__head {
+    margin-bottom: 20px;
+  }
+
+  body.strategy-page #opportunity .st-head__l .sv-h2,
+  body.strategy-page #origination .sv-exec__head-l .sv-h2 {
+    margin-top: 8px;
+  }
+
+  body.strategy-page #opportunity .st-head__r,
+  body.strategy-page #origination .sv-exec__head-r {
+    margin-top: 6px;
+  }
+
+  body.strategy-page #origination .sv-flow {
+    padding-top: 18px;
+  }
+}
