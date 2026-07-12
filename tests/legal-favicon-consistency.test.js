@@ -27,6 +27,13 @@ function assertFaviconParity(homepage, pages) {
   });
 }
 
+function topLevelPagesMatching(pattern) {
+  return fs
+    .readdirSync(root)
+    .filter((file) => pattern.test(file))
+    .sort();
+}
+
 assertFaviconParity('index.html', [
   'team.html',
   'contact.html',
@@ -39,12 +46,9 @@ assertFaviconParity('index.html', [
   'legal-notices-disclaimers.html'
 ]);
 
-assertFaviconParity('index_cn.html', [
-  'privacy-policy_cn.html',
-  'cookie-notice_cn.html',
-  'terms-of-use_cn.html',
-  'important-information_cn.html',
-  'legal-notices-disclaimers_cn.html'
-]);
+assertFaviconParity(
+  'index_cn.html',
+  topLevelPagesMatching(/_cn\.html$/).filter((page) => page !== 'index_cn.html')
+);
 
 console.log('legal favicon consistency tests passed');
