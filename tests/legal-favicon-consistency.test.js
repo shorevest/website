@@ -51,4 +51,10 @@ assertFaviconParity(
   topLevelPagesMatching(/_cn\.html$/).filter((page) => page !== 'index_cn.html')
 );
 
+assert.deepStrictEqual(
+  faviconLinks('investor-portal/index_cn.html'),
+  faviconLinks('index_cn.html').map((link) => link.replace(/href="(?!\.\.\/)/, 'href="../')),
+  'investor-portal/index_cn.html should use the same Chinese favicon links with paths adjusted for its nested directory'
+);
+
 console.log('legal favicon consistency tests passed');
