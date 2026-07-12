@@ -20,7 +20,7 @@ function languageHrefs(file) {
 }
 
 const explicitMappings = new Map([
-  ['investor-portal/index.html', '../investor-access_cn.html'],
+  ['investor-portal/index.html', 'index_cn.html'],
 ]);
 
 const englishPages = fs.readdirSync(root)
