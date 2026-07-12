@@ -170,6 +170,7 @@ body.cdd-article-page .cdd-reading-grid {
 body.cdd-article-page .cdd-sidecard {
   position: sticky; top: var(--cdd-sticky-top);
   border-top: 1px solid var(--sv-ink); padding-top: 18px;
+  box-shadow: none !important;
 }
 body.cdd-article-page .cdd-sidecard[hidden] { display: none; }
 body.cdd-article-page .cdd-sidecard h3 {
