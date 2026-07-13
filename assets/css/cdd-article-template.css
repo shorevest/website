@@ -185,7 +185,7 @@ body.cdd-article-page .cdd-sidecard ul li {
 }
 body.cdd-article-page .cdd-sidecard ul li:first-child { border-top: 0; }
 body.cdd-article-page .cdd-sidecard ul li::before {
-  content: ""; position: absolute; left: 0; top: 21px; width: 5px; height: 1px; background: var(--sv-cinnabar);
+  content: ""; position: absolute; left: 0; top: 20px; width: 7px; height: 7px; background: var(--sv-cinnabar);
 }
 
 /* Contents TOC (built by JS when 2+ sections) */
