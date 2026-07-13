@@ -14,6 +14,14 @@ function faviconLinks(file) {
   return readPage(file).match(faviconSelector) || [];
 }
 
+function normalizedFaviconHrefs(file) {
+  return faviconLinks(file).map((link) => {
+    const href = link.match(/\shref="([^"]+)"/i);
+    assert(href, `${file} favicon link should include href: ${link}`);
+    return path.posix.normalize(path.posix.join('/', path.posix.dirname(file), href[1]));
+  });
+}
+
 function assertFaviconParity(homepage, pages) {
   const homepageLinks = faviconLinks(homepage);
   assert(homepageLinks.length > 0, `${homepage} should define favicon links`);
@@ -49,6 +57,18 @@ assertFaviconParity('index.html', [
 assertFaviconParity(
   'index_cn.html',
   topLevelPagesMatching(/_cn\.html$/).filter((page) => page !== 'index_cn.html')
+);
+
+assert.deepStrictEqual(
+  normalizedFaviconHrefs('index_cn.html'),
+  normalizedFaviconHrefs('index.html'),
+  'index_cn.html should resolve to the same favicon assets as the English homepage'
+);
+
+assert.deepStrictEqual(
+  faviconLinks('investor-portal/index_cn.html'),
+  faviconLinks('index_cn.html').map((link) => link.replace(/href="(?!\.\.\/)/, 'href="../')),
+  'investor-portal/index_cn.html should use the same Chinese favicon links with paths adjusted for its nested directory'
 );
 
 console.log('legal favicon consistency tests passed');
