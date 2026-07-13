@@ -742,9 +742,9 @@ html body.team-page-v2 .team-profile__photo img {
   transition: filter var(--tr-fast);
 }
 
-/* Lower Steve Poon's portrait slightly within its frame. */
+/* Crop Steve Poon's source-photo top edge so the original image line stays hidden. */
 html body.team-page-v2 .team-profile__photo[data-team-photo="bio-steve-poon"] img {
-  object-position: center -6% !important;
+  object-position: center 12% !important;
 }
 
 html body.team-page-v2 .team-profile:hover .team-profile__photo img,
