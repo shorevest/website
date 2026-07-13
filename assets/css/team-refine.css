@@ -1550,8 +1550,10 @@ html body.team-page-v2 .team-profile__photo img.team-profile__img--john-zoom {
   transform-origin: center top;
 }
 
-/* Zoom Esther Li's portrait out slightly to show more of the original image. */
+/* Esther Li: use the provided portrait at the maximum zoom-out that still fills
+   the square team frame, avoiding side bleed/letterboxing. */
 html body.team-page-v2 .team-profile__photo img.team-profile__img--esther-zoom-out {
-  object-fit: contain !important;
+  object-fit: cover !important;
   object-position: center top !important;
+  transform: none !important;
 }
