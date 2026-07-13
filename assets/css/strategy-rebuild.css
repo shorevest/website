@@ -317,7 +317,7 @@ body.strategy-page .st-risk__col li {
 }
 body.strategy-page .st-risk__col li:last-child { margin-bottom: 0; }
 body.strategy-page .st-risk__col li::before {
-  content: ""; position: absolute; left: 0; top: 10px; width: 8px; height: 1.5px; background: var(--sv-cinnabar);
+  content: ""; position: absolute; left: 0; top: 0.62em; width: 8px; height: 8px; background: var(--sv-cinnabar);
 }
 body.strategy-page .st-risk__panel {
   background: linear-gradient(152deg, #D65A4D 0%, #C93B2A 58%, #B73528 100%); color: var(--sv-ivory);
@@ -1192,9 +1192,9 @@ body.strategy-page #risk .st-risk__col li::before {
   content: "";
   position: absolute;
   left: 0;
-  top: 9px;
-  width: 9px;
-  height: 1.5px;
+  top: 0.62em;
+  width: 8px;
+  height: 8px;
   background: var(--sv-cinnabar);
 }
 
@@ -1636,7 +1636,7 @@ body.strategy-page #risk .st-risk__panel-body::before {
   width: 8px;
   height: 8px;
   border: 0;
-  border-radius: 50%;
+  border-radius: 0;
   background: var(--sv-cinnabar, #C4382A);
 }
 body.strategy-page #risk .st-risk__panel,
