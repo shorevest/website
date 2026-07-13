@@ -2,18 +2,163 @@
 <html lang="zh">
 <head>
 <script>
-try{window.addEventListener('error',function(e){if(e&&typeof e.message==='string'&&e.message.indexOf('ResizeObserver loop')!==-1){e.stopImmediatePropagation();e.preventDefault();}},true);}catch(_){}
-window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
-(function(){
-  var T=window.__SVT;
-  function tok(u){try{var url=new URL(u,location.href);if(url.origin===location.origin&&!url.searchParams.get('t')){url.searchParams.set('t',T);return url.href;}return u;}catch(e){return u;}}
-  window.__svTok=tok;
-  function fixEl(el){if(el.nodeType!==1)return;if(el.tagName==='IMG'){var s=el.getAttribute('src');if(s){var ts=tok(s);if(ts!==s)el.setAttribute('src',ts);}}}
-  function scan(root){if(!root||root.nodeType!==1)return;fixEl(root);if(root.querySelectorAll){var n=root.querySelectorAll('img');for(var i=0;i<n.length;i++)fixEl(n[i]);}}
-  new MutationObserver(function(ms){for(var j=0;j<ms.length;j++){var a=ms[j].addedNodes;for(var i=0;i<a.length;i++)scan(a[i]);}}).observe(document.documentElement,{childList:true,subtree:true});
-  if(document.readyState!=='loading')scan(document.body);else document.addEventListener('DOMContentLoaded',function(){scan(document.body);});
-  document.addEventListener('click',function(e){var t=e.target;var a=t&&t.closest?t.closest('a[href]'):null;if(!a)return;var h=a.getAttribute('href');if(!h||h.charAt(0)==='#'||/^(mailto:|tel:|javascript:|https?:|\/\/)/i.test(h))return;var url;try{url=new URL(h,location.href);}catch(_){return;}if(url.origin!==location.origin)return;e.preventDefault();if(!url.searchParams.get('t'))url.searchParams.set('t',T);window.location.href=url.href;},true);
-})();
+      try {
+        window.addEventListener(
+          "error",
+          function (e) {
+            if (
+              e &&
+              typeof e.message === "string" &&
+              e.message.indexOf("ResizeObserver loop") !== -1
+            ) {
+              e.stopImmediatePropagation();
+              e.preventDefault();
+            }
+          },
+          true,
+        );
+      } catch (_) {}
+      window.__SVT = new URLSearchParams(location.search).get("t") || "";
+      (function () {
+        var T = window.__SVT;
+        if (!T) return;
+        function tok(u) {
+          try {
+            var url = new URL(u, location.href);
+            if (url.origin === location.origin && !url.searchParams.get("t")) {
+              url.searchParams.set("t", T);
+              return url.href;
+            }
+            return u;
+          } catch (e) {
+            return u;
+          }
+        }
+        window.__svTok = tok;
+        (function () {
+          var _f = window.fetch;
+          if (_f) {
+            window.fetch = function (i, n) {
+              try {
+                var u;
+                if (typeof i === "string") {
+                  u = new URL(i, location.href);
+                  if (
+                    u.origin === location.origin &&
+                    !u.searchParams.get("t")
+                  ) {
+                    u.searchParams.set("t", T);
+                    i = u.href;
+                  }
+                } else if (i && i.url) {
+                  u = new URL(i.url, location.href);
+                  if (
+                    u.origin === location.origin &&
+                    !u.searchParams.get("t")
+                  ) {
+                    u.searchParams.set("t", T);
+                    i = new Request(u.href, i);
+                  }
+                }
+              } catch (e) {}
+              return _f.call(this, i, n);
+            };
+          }
+          var _o =
+            window.XMLHttpRequest && window.XMLHttpRequest.prototype.open;
+          if (_o) {
+            window.XMLHttpRequest.prototype.open = function (m, u) {
+              try {
+                var x = new URL(u, location.href);
+                if (x.origin === location.origin && !x.searchParams.get("t")) {
+                  x.searchParams.set("t", T);
+                  u = x.href;
+                }
+              } catch (e) {}
+              return _o.apply(this, [m, u].concat([].slice.call(arguments, 2)));
+            };
+          }
+        })();
+        function fixEl(el) {
+          if (el.nodeType !== 1) return;
+          if (el.hasAttribute("data-svsrc") && !el.__sd) {
+            el.__sd = 1;
+            el.setAttribute("src", tok(el.getAttribute("data-svsrc")));
+          }
+          if (el.hasAttribute("data-svsrcset") && !el.__ss) {
+            el.__ss = 1;
+            el.setAttribute(
+              "srcset",
+              el
+                .getAttribute("data-svsrcset")
+                .split(",")
+                .map(function (p) {
+                  var q = p.trim().split(/\s+/);
+                  if (q[0]) q[0] = tok(q[0]);
+                  return q.join(" ");
+                })
+                .join(", "),
+            );
+          }
+          if (el.tagName === "IMG") {
+            var s = el.getAttribute("src");
+            if (s) {
+              var ts = tok(s);
+              if (ts !== s) el.setAttribute("src", ts);
+            }
+          }
+        }
+        function scan(root) {
+          if (!root || root.nodeType !== 1) return;
+          fixEl(root);
+          if (root.querySelectorAll) {
+            var n = root.querySelectorAll(
+              "img,source,[data-svsrc],[data-svsrcset]",
+            );
+            for (var i = 0; i < n.length; i++) fixEl(n[i]);
+          }
+        }
+        new MutationObserver(function (ms) {
+          for (var j = 0; j < ms.length; j++) {
+            var a = ms[j].addedNodes;
+            for (var i = 0; i < a.length; i++) scan(a[i]);
+          }
+        }).observe(document.documentElement, {
+          childList: true,
+          subtree: true,
+        });
+        if (document.readyState !== "loading") scan(document.body);
+        else
+          document.addEventListener("DOMContentLoaded", function () {
+            scan(document.body);
+          });
+        document.addEventListener(
+          "click",
+          function (e) {
+            var t = e.target;
+            var a = t && t.closest ? t.closest("a[href]") : null;
+            if (!a) return;
+            var h = a.getAttribute("href");
+            if (
+              !h ||
+              h.charAt(0) === "#" ||
+              /^(mailto:|tel:|javascript:|https?:|\/\/)/i.test(h)
+            )
+              return;
+            var url;
+            try {
+              url = new URL(h, location.href);
+            } catch (_) {
+              return;
+            }
+            if (url.origin !== location.origin) return;
+            e.preventDefault();
+            if (!url.searchParams.get("t")) url.searchParams.set("t", T);
+            window.location.href = url.href;
+          },
+          true,
+        );
+      })();
 </script>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -21,10 +166,34 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 <meta name="description" content="认识新岸资本团队——涵盖中国私募信贷领域的领导层、投资、法律、资产服务、财务、客户解决方案及顾问职能。" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
-<script>document.write('<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260701-mobile-audit-430&t='+window.__SVT+'">');</script>
-<script>document.write('<link rel="stylesheet" href="assets/css/team-page.css?v=20260711-mobile-cache&t='+window.__SVT+'">');</script>
-<script>document.write('<link rel="stylesheet" href="assets/css/team-refine.css?v=20260711-mobile-type-homepage&t='+window.__SVT+'">');</script>
+<!-- TODO: ADD ADOBE FONTS KIT FOR DIN 2014 — replace [KIT_ID] below and uncomment. Until configured, pages use the canonical DIN 2014 stack with only a generic sans-serif emergency fallback. -->
+<!-- <link rel="stylesheet" href="https://use.typekit.net/[KIT_ID].css"> -->
+<link
+  href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;700&display=swap"
+  rel="stylesheet"
+/>
+<!-- Team now uses the HOMEPAGE self-contained shell as the single design authority
+   (same header, footer, tokens, type, container). The legacy shared stack
+   (shared-header/footer, shorevest-unify, shared-hero, typography-lockdown,
+   burford-polish) is intentionally NOT loaded here — it was what made Team
+   look like a different site. -->
+<link
+  rel="stylesheet"
+  href="assets/css/homepage-rebuild.css?v=20260701-mobile-audit-430"
+/>
+<!-- team-page.css: bio expand + profile base behavior only. -->
+<link
+  rel="stylesheet"
+  href="assets/css/team-page.css?v=20260711-mobile-cache"
+/>
+<!-- Team refine: team hero + portrait grid + sections, on homepage tokens — MUST load LAST. -->
+<script>
+  document.write(
+    '<link rel="stylesheet" href="assets/css/team-refine.css?v=20260711-mobile-type-homepage&t=' +
+      window.__SVT +
+      '">',
+  );
+</script>
 <style>
   body.homepage {
     --sv-font: "DIN 2014", "Barlow", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
@@ -630,7 +799,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 13V3M8 3L3.5 7.5M8 3l4.5 4.5" stroke="currentColor" stroke-width="1.5"/></svg>
 </button>
 
-<script>document.write('<scr'+'ipt src="assets/js/team-page.js?v=20260711-mobile-cache&t='+window.__SVT+'" defer><\/scr'+'ipt>');</script>
+<script src="assets/js/team-page.js?v=20260711-mobile-cache" defer></script>
 <script>
 (function(){
   var burger=document.querySelector('.sv-burger'); var menu=document.getElementById('sv-mobile-menu');
