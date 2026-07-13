@@ -42,17 +42,31 @@ function topLevelPagesMatching(pattern) {
     .sort();
 }
 
-assertFaviconParity('index.html', [
-  'team.html',
-  'contact.html',
-  'investor-portal.html',
-  'investor-portal/index.html',
-  'privacy-policy.html',
-  'cookie-notice.html',
-  'terms-of-use.html',
-  'important-information.html',
-  'legal-notices-disclaimers.html'
-]);
+function sitePages() {
+  const pages = [];
+
+  function walk(dir) {
+    fs.readdirSync(path.join(root, dir), { withFileTypes: true }).forEach((entry) => {
+      const relativePath = path.posix.join(dir, entry.name);
+
+      if (entry.isDirectory()) {
+        if (entry.name === '.git' || relativePath === 'assets/email') return;
+        walk(relativePath);
+        return;
+      }
+
+      if (entry.isFile() && entry.name.endsWith('.html')) pages.push(relativePath);
+    });
+  }
+
+  walk('.');
+  return pages.sort();
+}
+
+assertFaviconParity(
+  'index.html',
+  sitePages().filter((page) => page !== 'index.html' && !page.endsWith('_cn.html'))
+);
 
 assertFaviconParity(
   'index_cn.html',
