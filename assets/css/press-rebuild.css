@@ -252,7 +252,7 @@ body.press-page .press-row__summary {
 body.press-page .press-row__summary em { font-style: italic; }
 body.press-page .press-row__meta {
   display: flex; flex-direction: column; gap: 6px; align-items: flex-start;
-  justify-self: end; text-align: left; padding-top: 3px;
+  justify-self: start; text-align: left; padding-top: 3px;
 }
 body.press-page .press-attribution {
   font: 600 10.5px/1.2 var(--sv-font); letter-spacing: 0.1em; text-transform: uppercase;
