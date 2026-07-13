@@ -100,7 +100,7 @@ body.strategy-page .sx-glance {
 body.strategy-page .sx-glance::before {
   content: ""; position: absolute; z-index: -1; top: 0; bottom: 0;
   left: 50%; transform: translateX(-50%); width: 100vw;
-  background: var(--sv-cinnabar-light, #E8998F); border-top: none;
+  background: #F3C9C3; border-top: none;
 }
 body.strategy-page .sx-glance > div { padding: 0 32px; border-left: 1px solid rgba(24,37,36,0.18); min-width: 0; }
 body.strategy-page .sx-glance > div:first-child { border-left: 0; padding-left: 0; }
@@ -320,7 +320,7 @@ body.strategy-page .st-risk__col li::before {
   content: ""; position: absolute; left: 0; top: 10px; width: 8px; height: 1.5px; background: var(--sv-cinnabar);
 }
 body.strategy-page .st-risk__panel {
-  background: linear-gradient(152deg, #CF3A2B 0%, #C93B2A 52%, #8F2A20 100%); color: var(--sv-ivory);
+  background: linear-gradient(152deg, #D65A4D 0%, #C93B2A 58%, #B73528 100%); color: var(--sv-ivory);
   padding: 36px; display: flex; flex-direction: column; justify-content: center;
 }
 body.strategy-page .st-risk__panel-label {
@@ -643,7 +643,7 @@ body.strategy-page .sx-hero__media::before {
   right: clamp(-36px, -2.2vw, -20px);
   bottom: -26px;
   left: clamp(36px, 3.5vw, 56px);
-  background: var(--sv-cinnabar-light, #E8998F);
+  background: #F3C9C3;
   border-radius: 0;
   z-index: 0;
 }
