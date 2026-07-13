@@ -1463,3 +1463,77 @@ html body.team-page-v2 .team-bio-panel {
     grid-template-columns: minmax(0, 1fr) !important;
   }
 }
+
+/* 2026-07-13 · Team alignment: reuse the shared chrome/header container.
+   Keep every Team section on the same left/right rails as .sv-header__inner
+   instead of letting the grids expand toward the viewport edges. */
+html body.team-page-v2 .team-groups .team-inner {
+  width: 100% !important;
+  max-width: var(--sv-chrome-page-max, var(--page-max, 1280px)) !important;
+  margin-inline: auto !important;
+  padding-inline: var(--sv-chrome-pad-x, var(--pad-x, clamp(24px, 5vw, 48px))) !important;
+  box-sizing: border-box !important;
+}
+
+html body.team-page-v2 .group__head,
+html body.team-page-v2 .grid[data-team-grid],
+html body.team-page-v2 .grid[data-team-count],
+html body.team-page-v2 .group--leadership .grid[data-team-grid] {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+html body.team-page-v2 .grid[data-team-grid],
+html body.team-page-v2 .grid[data-team-count],
+html body.team-page-v2 .group--leadership .grid[data-team-grid] {
+  --team-grid-columns: 4;
+  --team-grid-width: 100%;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  column-gap: var(--team-grid-gap, 28px) !important;
+  justify-content: stretch !important;
+  margin-inline: 0 !important;
+}
+
+html body.team-page-v2 .team-profile,
+html body.team-page-v2 .team-profile__photo,
+html body.team-page-v2 .team-profile__photo img {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* Neutralize older mobile full-bleed/negative-margin hero proof rules so the
+   Team page never creates horizontal scroll or viewport-edge alignment. */
+@media (max-width: 767px) {
+  html body.team-page-v2 .team-hero .team-inner,
+  html body.team-page-v2 .team-groups .team-inner {
+    width: 100% !important;
+    max-width: var(--sv-chrome-page-max, var(--page-max, 100%)) !important;
+    padding-inline: var(--sv-chrome-pad-x-mobile, var(--pad-x, clamp(18px, 5.625vw, 22px))) !important;
+    box-sizing: border-box !important;
+  }
+
+  html body.team-page-v2 .team-hero__proof,
+  html body.team-page-v2 .team-hero.hero--team .team-hero__proof {
+    width: 100% !important;
+    margin-inline: 0 !important;
+    padding-inline: var(--sv-chrome-pad-x-mobile, var(--pad-x, clamp(18px, 5.625vw, 22px))) !important;
+  }
+}
+
+@media (max-width: 900px) {
+  html body.team-page-v2 .grid[data-team-grid],
+  html body.team-page-v2 .grid[data-team-count],
+  html body.team-page-v2 .group--leadership .grid[data-team-grid] {
+    --team-grid-columns: 2;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 560px) {
+  html body.team-page-v2 .grid[data-team-grid],
+  html body.team-page-v2 .grid[data-team-count],
+  html body.team-page-v2 .group--leadership .grid[data-team-grid] {
+    --team-grid-columns: 1;
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
