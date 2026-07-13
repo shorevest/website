@@ -1805,3 +1805,137 @@ body.investor-portal-page .ip-assure__cell {
 html body.team-page-v2 .team-profile .team-profile__photo {
   box-shadow: var(--sv-box-shadow) !important;
 }
+
+/* ==========================================================================
+   Site-wide mobile polish pass — 2026-07-13
+   Conservative guardrails for every static page that loads this stylesheet:
+   stronger viewport containment, safer fixed-header/mobile-menu geometry,
+   readable narrow-column typography, and comfortable touch targets.
+   ========================================================================== */
+@media (max-width: 767px) {
+  :root {
+    --header-h: calc(72px + env(safe-area-inset-top, 0px));
+    --header-height: var(--header-h);
+    --pad-x: clamp(20px, 5.8vw, 28px);
+  }
+
+  html,
+  body.homepage {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
+  body.homepage {
+    padding-top: var(--header-h);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body.homepage .sv-header {
+    height: var(--header-h);
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  body.homepage .sv-header__inner {
+    min-width: 0;
+    grid-template-columns: minmax(0, auto) minmax(56px, 1fr);
+    gap: 14px;
+  }
+
+  body.homepage .sv-header__logo,
+  body.homepage .sv-header__logo img {
+    min-width: 0;
+  }
+
+  body.homepage .sv-header__logo img {
+    width: clamp(146px, 42vw, 172px);
+  }
+
+  body.homepage .sv-burger {
+    width: 48px;
+    height: 48px;
+    margin-right: -10px;
+    touch-action: manipulation;
+  }
+
+  body.homepage .sv-mobile-menu {
+    position: fixed;
+    top: var(--header-h);
+    left: 0;
+    right: 0;
+    max-height: calc(100dvh - var(--header-h));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: max(24px, env(safe-area-inset-bottom, 0px));
+    z-index: 999;
+  }
+
+  body.homepage .sv-mobile-menu a,
+  body.homepage .sv-mobile-menu .sv-util-btn,
+  body.homepage .sv-btn,
+  body.homepage .sv-textlink,
+  body.homepage .sv-cdd__archive-btn,
+  body.homepage .sv-footer__nav a,
+  body.homepage .sv-footer__links a,
+  body.homepage .sv-footer__access a {
+    min-height: 44px;
+    touch-action: manipulation;
+  }
+
+  body.homepage main,
+  body.homepage section,
+  body.homepage article,
+  body.homepage aside,
+  body.homepage .sv-shell,
+  body.homepage .sv-grid12,
+  body.homepage [class*="__inner"],
+  body.homepage [class*="__grid"],
+  body.homepage [class*="__body"],
+  body.homepage [class*="__copy"] {
+    min-width: 0;
+  }
+
+  body.homepage :is(h1, h2, h3, h4, p, li, a, dt, dd, figcaption) {
+    overflow-wrap: anywhere;
+  }
+
+  body.homepage :is(h1, h2, h3, .sv-h2, .sv-hero__headline) {
+    overflow-wrap: normal;
+    text-wrap: balance;
+  }
+
+  body.homepage img,
+  body.homepage video,
+  body.homepage svg,
+  body.homepage canvas,
+  body.homepage iframe {
+    max-width: 100%;
+  }
+
+  body.homepage table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media (max-width: 390px) {
+  :root {
+    --pad-x: clamp(18px, 5.6vw, 22px);
+  }
+
+  body.homepage .sv-header__inner {
+    gap: 10px;
+  }
+
+  body.homepage .sv-header__logo img {
+    width: clamp(138px, 43vw, 158px);
+  }
+
+  body.homepage .sv-burger {
+    margin-right: -12px;
+  }
+}
