@@ -742,9 +742,9 @@ html body.team-page-v2 .team-profile__photo img {
   transition: filter var(--tr-fast);
 }
 
-/* Keep Steve Poon's portrait at the default top alignment. */
+/* Lower Steve Poon's portrait slightly within its frame. */
 html body.team-page-v2 .team-profile__photo[data-team-photo="bio-steve-poon"] img {
-  object-position: center top !important;
+  object-position: center -6% !important;
 }
 
 html body.team-page-v2 .team-profile:hover .team-profile__photo img,
@@ -1548,4 +1548,12 @@ html body.team-page-v2 .team-profile__photo img {
 html body.team-page-v2 .team-profile__photo img.team-profile__img--john-zoom {
   transform: scale(1.1);
   transform-origin: center top;
+}
+
+/* Esther Li: use the provided portrait at the maximum zoom-out that still fills
+   the square team frame, avoiding side bleed/letterboxing. */
+html body.team-page-v2 .team-profile__photo img.team-profile__img--esther-zoom-out {
+  object-fit: cover !important;
+  object-position: center top !important;
+  transform: none !important;
 }
