@@ -1538,12 +1538,6 @@ html body.team-page-v2 .team-profile__photo img {
   }
 }
 
-/* Give Esther Li's portrait more breathing room within the square team card. */
-html body.team-page-v2 .team-profile__photo img.team-profile__img--zoom-out {
-  object-fit: contain !important;
-  object-position: center center !important;
-  padding: clamp(8px, 1.2vw, 16px);
-}
 
 /* Zoom John Jones' portrait in slightly for tighter framing. */
 html body.team-page-v2 .team-profile__photo img.team-profile__img--john-zoom {
