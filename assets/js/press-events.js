@@ -212,7 +212,7 @@
 
   // Visible-by-default row counts before the "Show more" toggle takes over.
   var UPCOMING_VISIBLE = 3;
-  var PAST_VISIBLE = 4;
+  var PAST_VISIBLE = 3;
 
   function createTextElement(tagName, className, text) {
     var element = document.createElement(tagName);
