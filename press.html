@@ -31,6 +31,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
+<link rel="preload" as="image" href="assets/img/media-hero-fii-priority.svg" fetchpriority="high">
 </head>
 <body id="top" class="homepage press-page">
 
@@ -93,7 +94,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
         </div>
       </div>
       <div class="sv-hero__field">
-        <div class="sv-hero__image"><img src="assets/img/media-hero-fii-priority.svg" alt="ShoreVest on a conference panel before an audience at FII Priority Asia" width="2000" height="1334" loading="eager" decoding="sync"></div>
+        <div class="sv-hero__image"><img src="assets/img/media-hero-fii-priority.svg" alt="ShoreVest on a conference panel before an audience at FII Priority Asia" width="2000" height="1334" loading="eager" decoding="async" fetchpriority="high"></div>
         <aside class="sv-hero__panel" aria-label="Media coverage summary">
           <p class="sv-hero__panel-label">Coverage at a glance</p>
           <dl>

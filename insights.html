@@ -32,6 +32,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
+<link rel="preload" as="image" href="assets/img/trees/kelsey-he-YlsNl4dVkaA-unsplash.jpg" fetchpriority="high">
 </head>
 <body id="top" class="homepage insights-page">
 
@@ -90,7 +91,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
         <p class="cdd-hero__body">Coverage spans China's private credit markets, policy trajectory, legal frameworks, and creditor recoveries.</p>
       </div>
       <div class="cdd-hero__field">
-        <div class="cdd-hero__image" aria-hidden="true"><img src="assets/img/trees/kelsey-he-YlsNl4dVkaA-unsplash.jpg" alt="" width="3000" height="4000" loading="eager" decoding="sync"></div>
+        <div class="cdd-hero__image" aria-hidden="true"><img src="assets/img/trees/kelsey-he-YlsNl4dVkaA-unsplash.jpg" alt="" width="3000" height="4000" loading="eager" decoding="async" fetchpriority="high"></div>
         <div class="cdd-hero__panel">
           <p class="cdd-hero__panel-label">Featured report</p>
           <p class="cdd-hero__panel-issue">Issue 46 · Volume 10 Issue 1 · 25 January 2026</p>

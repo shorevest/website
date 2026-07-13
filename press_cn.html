@@ -41,6 +41,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
+<link rel="preload" as="image" href="assets/img/media-hero-fii-priority.svg" fetchpriority="high">
 </head>
 <body id="top" class="homepage press-page">
 
@@ -103,7 +104,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
         </div>
       </div>
       <div class="sv-hero__field">
-        <div class="sv-hero__image"><img src="assets/img/media-hero-fii-priority.svg" alt="新岸资本在会议专题讨论现场" width="2000" height="1334" loading="eager" decoding="sync"></div>
+        <div class="sv-hero__image"><img src="assets/img/media-hero-fii-priority.svg" alt="新岸资本在会议专题讨论现场" width="2000" height="1334" loading="eager" decoding="async" fetchpriority="high"></div>
         <aside class="sv-hero__panel" aria-label="媒体报道摘要">
           <p class="sv-hero__panel-label">报道概览</p>
           <dl>

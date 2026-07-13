@@ -42,6 +42,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
+<link rel="preload" as="image" href="assets/img/trees/home-hero-metasequoia-sq.jpg" fetchpriority="high">
 </head>
 <body id="top" class="homepage home-page">
 
@@ -105,7 +106,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
       </div>
     </div>
     <div class="sv-hero__field">
-      <div class="sv-hero__image" aria-hidden="true"><img src="assets/img/trees/home-hero-metasequoia-sq.jpg" alt="" width="1600" height="1600" loading="eager" decoding="sync"></div>
+      <div class="sv-hero__image" aria-hidden="true"><img src="assets/img/trees/home-hero-metasequoia-sq.jpg" alt="" width="1600" height="1600" loading="eager" decoding="async" fetchpriority="high"></div>
       <aside class="sv-hero__panel" aria-label="ShoreVest overview">
         <p class="sv-hero__panel-label">ShoreVest at a glance</p>
         <dl>
