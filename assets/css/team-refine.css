@@ -161,7 +161,7 @@ html body.team-page-v2 .team-hero__statcard {
   border: 1px solid rgba(82, 71, 54, 0.18);
   border-top: 1px solid rgba(82, 71, 54, 0.18);
   border-radius: 0;
-  box-shadow: 0 18px 42px rgba(23, 28, 28, 0.10);
+  box-shadow: 0 18px 42px rgba(23, 28, 28, 0.1);
 }
 html body.team-page-v2 .team-hero__statcard-label {
   margin: 0 0 20px;
@@ -354,9 +354,22 @@ html body.team-page-v2 .team-profile__photo::before {
 html body.team-page-v2 .team-profile__photo--placeholder {
   isolation: isolate;
   background:
-    radial-gradient(circle at 28% 22%, rgba(216, 206, 176, 0.52) 0 10%, transparent 34%),
-    radial-gradient(circle at 76% 74%, rgba(61, 112, 112, 0.16) 0 16%, transparent 42%),
-    linear-gradient(145deg, rgba(250, 246, 238, 0.98), rgba(232, 224, 202, 0.88) 52%, rgba(61, 112, 112, 0.16)),
+    radial-gradient(
+      circle at 28% 22%,
+      rgba(216, 206, 176, 0.52) 0 10%,
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 76% 74%,
+      rgba(61, 112, 112, 0.16) 0 16%,
+      transparent 42%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(250, 246, 238, 0.98),
+      rgba(232, 224, 202, 0.88) 52%,
+      rgba(61, 112, 112, 0.16)
+    ),
     var(--tr-parchment);
 }
 html body.team-page-v2 .team-profile__photo--placeholder::before {
@@ -587,7 +600,9 @@ html body.team-page-v2 .group:first-child {
 html body.team-page-v2 .group::before {
   content: "";
   display: block;
-  width: calc((100% - (11 * var(--tr-gutter-fixed))) / 12 * 2 + var(--tr-gutter-fixed));
+  width: calc(
+    (100% - (11 * var(--tr-gutter-fixed))) / 12 * 2 + var(--tr-gutter-fixed)
+  );
   height: 2px;
   margin-bottom: clamp(24px, 2.4vw, 34px);
   background: var(--tr-cinnabar);
@@ -658,7 +673,10 @@ html body.team-page-v2 .group--leadership .grid[data-team-grid] {
 }
 
 html body.team-page-v2 .team-profile,
-html body.team-page-v2 .grid[data-team-count="5"] .team-profile:nth-last-child(2) {
+html
+  body.team-page-v2
+  .grid[data-team-count="5"]
+  .team-profile:nth-last-child(2) {
   grid-column: auto !important;
   width: 100% !important;
   max-width: none !important;
@@ -780,7 +798,9 @@ html body.team-page-v2 .team-bio-panel__close {
   color: var(--tr-ink) !important;
   text-decoration: none !important;
   cursor: pointer;
-  transition: color var(--tr-fast), border-color var(--tr-fast);
+  transition:
+    color var(--tr-fast),
+    border-color var(--tr-fast);
 }
 
 html body.team-page-v2 .team-profile__bio-toggle::after,
@@ -953,24 +973,28 @@ html body.team-page-v2 .team-bio-panel__body p + p {
 }
 
 /* Client directive follow-up: no horizontal rules/bars may remain on Team. */
-html body.team-page-v2 :is(
-  .eyebrow,
-  .eyebrow--red,
-  .sv-hero__eyebrow,
-  .team-hero__statcard-label,
-  .group__head .eyebrow,
-  .team-profile__bio-toggle,
-  .team-profile__linkedin
-)::before,
-html body.team-page-v2 :is(
-  .eyebrow,
-  .eyebrow--red,
-  .sv-hero__eyebrow,
-  .team-hero__statcard-label,
-  .group__head .eyebrow,
-  .team-profile__bio-toggle,
-  .team-profile__linkedin
-)::after {
+html
+  body.team-page-v2
+  :is(
+    .eyebrow,
+    .eyebrow--red,
+    .sv-hero__eyebrow,
+    .team-hero__statcard-label,
+    .group__head .eyebrow,
+    .team-profile__bio-toggle,
+    .team-profile__linkedin
+  )::before,
+html
+  body.team-page-v2
+  :is(
+    .eyebrow,
+    .eyebrow--red,
+    .sv-hero__eyebrow,
+    .team-hero__statcard-label,
+    .group__head .eyebrow,
+    .team-profile__bio-toggle,
+    .team-profile__linkedin
+  )::after {
   content: none !important;
   display: none !important;
   width: 0 !important;
@@ -980,14 +1004,16 @@ html body.team-page-v2 :is(
   box-shadow: none !important;
 }
 
-html body.team-page-v2 :is(
-  .group__head,
-  .team-bio-panel,
-  .team-profile,
-  .team-profile__media,
-  .team-profile__body,
-  .team-profile__actions
-) {
+html
+  body.team-page-v2
+  :is(
+    .group__head,
+    .team-bio-panel,
+    .team-profile,
+    .team-profile__media,
+    .team-profile__body,
+    .team-profile__actions
+  ) {
   border-top: 0 !important;
   border-bottom: 0 !important;
   background-image: none !important;
@@ -1008,7 +1034,7 @@ html body.team-page-v2 .team-hero__proof {
 html body.team-page-v2 .team-hero__statcard {
   background: #ffffff !important;
   border: 1px solid rgba(82, 71, 54, 0.18) !important;
-  box-shadow: 0 18px 42px rgba(23, 28, 28, 0.10);
+  box-shadow: 0 18px 42px rgba(23, 28, 28, 0.1);
 }
 
 /* Follow-up: remove remaining horizontal cinnabar rules from Team content. */
@@ -1076,7 +1102,10 @@ html body.team-page-v2 .team-hero.hero--team .team-hero__title {
 }
 
 html body.team-page-v2 .team-hero.hero--team .pagehero__lede {
-  max-width: min(48ch, calc((var(--page-max, 1280px) - (2 * var(--pad-x, 48px))) / 2)) !important;
+  max-width: min(
+    48ch,
+    calc((var(--page-max, 1280px) - (2 * var(--pad-x, 48px))) / 2)
+  ) !important;
   font-size: 17px !important;
   line-height: 1.68 !important;
 }
@@ -1091,7 +1120,6 @@ html body.team-page-v2 .team-hero.hero--team .pagehero__lede {
     grid-column: auto !important;
   }
 }
-
 
 /* 2026-07-09 · Match leadership/support copy to the sitewide editorial callout box. */
 html body.team-page-v2 .group__summary {
@@ -1176,6 +1204,10 @@ html body.team-page-v2 .group__summary {
     justify-content: start !important;
     gap: clamp(28px, 2.6vw, 40px) clamp(22px, 1.8vw, 30px) !important;
   }
+
+  html body.team-page-v2 .grid[data-team-count="8"] {
+    grid-template-columns: repeat(4, minmax(0, 216px)) !important;
+  }
 }
 
 /* Tighten the card internals so name/role/actions read as one tight unit. */
@@ -1239,8 +1271,7 @@ html body.team-page-v2 .group--leadership .group__summary {
   html body.team-page-v2 .team-hero.hero--team .team-inner {
     width: 100% !important;
     max-width: none !important;
-    padding: clamp(58px, 15vw, 72px) var(--tr-gutter)
-      clamp(56px, 13vw, 72px) !important;
+    padding: clamp(58px, 15vw, 72px) var(--tr-gutter) clamp(56px, 13vw, 72px) !important;
   }
 
   html body.team-page-v2 .team-hero.hero--team .team-hero__layout {
