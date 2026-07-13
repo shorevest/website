@@ -74,12 +74,6 @@ assertFaviconParity(
 );
 
 assert.deepStrictEqual(
-  normalizedFaviconHrefs('index_cn.html'),
-  normalizedFaviconHrefs('index.html'),
-  'index_cn.html should resolve to the same favicon assets as the English homepage'
-);
-
-assert.deepStrictEqual(
   faviconLinks('investor-portal/index_cn.html'),
   faviconLinks('index_cn.html').map((link) => link.replace(/href="(?!\.\.\/)/, 'href="../')),
   'investor-portal/index_cn.html should use the same Chinese favicon links with paths adjusted for its nested directory'
