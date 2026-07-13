@@ -552,7 +552,9 @@ body.homepage .home-firm-preview .home-firm-preview__proof span {
   min-height: 72px;
   display: flex;
   align-items: center;
-  padding: 18px 18px 18px 0;
+  justify-content: center;
+  text-align: center;
+  padding: 18px;
   border-right: 1px solid var(--sv-border-light);
   font: 600 12px/1.35 var(--sv-font);
   letter-spacing: 0.11em;
@@ -579,7 +581,7 @@ body.homepage .home-firm-preview .home-firm-preview__link {
   body.homepage .home-firm-preview .home-firm-preview__statement { margin-top: 24px; }
   body.homepage .home-firm-preview .home-firm-preview__proof { grid-template-columns: 1fr; }
   body.homepage .home-firm-preview .home-firm-preview__proof span,
-  body.homepage .home-firm-preview .home-firm-preview__proof span:not(:first-child) { padding-left: 0; border-right: 0; border-bottom: 1px solid var(--sv-border-light); min-height: 58px; }
+  body.homepage .home-firm-preview .home-firm-preview__proof span:not(:first-child) { padding: 18px; border-right: 0; border-bottom: 1px solid var(--sv-border-light); min-height: 58px; }
   body.homepage .home-firm-preview .home-firm-preview__proof span:last-child { border-bottom: 0; }
 }
 
