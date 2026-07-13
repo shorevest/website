@@ -57,7 +57,7 @@ body.press-page .pr-events__table { border-top: 1px solid var(--sv-ink); }
 body.press-page .pr-event-row {
   display: grid; grid-template-columns: 132px 116px 1fr 150px 80px;
   gap: clamp(16px, 2.4vw, 36px); align-items: baseline;
-  padding: 30px 0; border-bottom: 1px solid var(--sv-border-light);
+  padding: 30px clamp(18px, 2vw, 28px); border-bottom: 1px solid var(--sv-border-light);
   transition: background .15s ease;
 }
 body.press-page .pr-event-row:hover { background: rgba(122, 175, 175, 0.08); }
@@ -220,7 +220,7 @@ body.press-page .press-row > a {
   display: grid;
   grid-template-columns: 200px minmax(0, 1fr) 150px;
   gap: clamp(20px, 3vw, 48px); align-items: baseline;
-  padding: 32px 0; border-bottom: 1px solid var(--sv-border-light);
+  padding: 32px clamp(18px, 2vw, 28px); border-bottom: 1px solid var(--sv-border-light);
   text-decoration: none; color: inherit;
   transition: background .15s ease;
 }
