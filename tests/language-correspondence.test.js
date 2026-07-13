@@ -48,4 +48,19 @@ explicitMappings.forEach((expected, file) => {
   });
 });
 
+fs.readdirSync(root)
+  .filter((file) => file.endsWith('_cn.html'))
+  .forEach((file) => {
+    const html = read(file);
+    const investorPortalLinks = [...html.matchAll(/href="([^"]*investor-portal\/index(?:_cn)?\.html)"/g)]
+      .map((match) => match[1]);
+
+    investorPortalLinks.forEach((href) => {
+      assert.ok(
+        href.endsWith('investor-portal/index_cn.html'),
+        `${file} investor portal link should point to the Chinese investor portal`
+      );
+    });
+  });
+
 console.log('language correspondence tests passed');

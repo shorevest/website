@@ -82,7 +82,7 @@
         <a href="${siteHref('insights_cn.html')}#archive">中国债务动态</a>
         <span class="sv-footer__access" role="group" aria-label="访问">
           <span class="sv-footer__access-label">访问</span>
-          <a href="${siteHref('investor-portal/index.html')}">投资者门户</a>
+          <a href="${siteHref('investor-portal/index_cn.html')}">投资者门户</a>
         </span>
       </nav>
     </div>
