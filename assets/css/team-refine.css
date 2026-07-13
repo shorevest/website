@@ -1544,3 +1544,9 @@ html body.team-page-v2 .team-profile__photo img.team-profile__img--john-zoom {
   transform: scale(1.1);
   transform-origin: center top;
 }
+
+/* Zoom Esther Li's portrait out slightly to show more of the original image. */
+html body.team-page-v2 .team-profile__photo img.team-profile__img--esther-zoom-out {
+  object-fit: contain !important;
+  object-position: center top !important;
+}
