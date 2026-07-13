@@ -163,5 +163,5 @@ body.firm-page .fm-close__inner .svb-statement {
 /* Strategy · risk "Collateral first" panel → 02 Split Field */
 body.strategy-page .st-risk__panel.svb--split {
   display: block; padding: clamp(30px, 3.6vw, 52px) clamp(24px, 3.2vw, 44px);
-  background: linear-gradient(152deg, #CF3A2B 0%, #C93B2A 52%, #8F2A20 100%);
+  background: linear-gradient(152deg, #D65A4D 0%, #C93B2A 58%, #B73528 100%);
 }
