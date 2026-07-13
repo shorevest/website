@@ -52,7 +52,7 @@
   const LOADER_MARK_SVG = `<span class="loader-mark-svg loader-mark-ink" aria-hidden="true"><span class="loader-mark-art loader-mark-art--out" style="-webkit-mask-image:url('${BRAND_MARK_PATH}');mask-image:url('${BRAND_MARK_PATH}')"></span><span class="loader-mark-art loader-mark-art--fill" style="-webkit-mask-image:url('${BRAND_MARK_FILLED_PATH}');mask-image:url('${BRAND_MARK_FILLED_PATH}')"></span></span>`;
 
   const pathname = window.location.pathname;
-  const isInvestorPortalPath = /\/investor-portal(?:\.html|\/|\/index\.html)?$/i.test(pathname);
+  const isInvestorPortalPath = /\/investor-portal(?:\.html|\/|\/index(?:_cn)?\.html)?$/i.test(pathname);
   const path = isInvestorPortalPath ? 'investor-portal' : (pathname.split('/').pop() || 'index.html');
   const localeSuffixMatch = path.match(/[-_](cn)\.html$/i);
   const localeSuffix = localeSuffixMatch ? localeSuffixMatch[1].toLowerCase() : 'en';
@@ -146,7 +146,7 @@
   })();
   const localeHrefs = {
     en: localeBase === 'investor-portal' ? pageHref('investor-portal/index.html') : localizedPageHref(localeBase, 'en'),
-    cn: localeBase === 'investor-portal' ? pageHref('index_cn.html') : localizedPageHref(localeBase, 'cn')
+    cn: localeBase === 'investor-portal' ? pageHref('investor-portal/index_cn.html') : localizedPageHref(localeBase, 'cn')
   };
 
   const renderLanguageSelector = (contextClass = '') => {
@@ -192,7 +192,7 @@
         { href: pageHref('press_cn.html'), label: '媒体' },
         { href: pageHref('team_cn.html'), label: '团队' }
       ],
-      investorPortalHref: pageHref('investor-portal/index.html'),
+      investorPortalHref: pageHref('investor-portal/index_cn.html'),
       investorPortalLabel: '投资者门户',
       headerCtaHref: pageHref('contact_cn.html'),
       headerCtaLabel: '联系',
