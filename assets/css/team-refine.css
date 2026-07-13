@@ -742,6 +742,11 @@ html body.team-page-v2 .team-profile__photo img {
   transition: filter var(--tr-fast);
 }
 
+/* Lower Steve Poon's portrait slightly within its frame. */
+html body.team-page-v2 .team-profile__photo[data-team-photo="bio-steve-poon"] img {
+  object-position: center -6% !important;
+}
+
 html body.team-page-v2 .team-profile:hover .team-profile__photo img,
 html body.team-page-v2 .team-profile.is-active .team-profile__photo img,
 html body.team-page-v2 .team-profile:focus-within .team-profile__photo img {
