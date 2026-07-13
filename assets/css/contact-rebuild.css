@@ -8,8 +8,8 @@
    No cards/shadows/rounded corners/green/serif. Scoped to body.contact-page.
    ========================================================================== */
 
-body.contact-page { background: var(--sv-ivory); }
-body.contact-page .cp-main { display: block; }
+body.contact-page { background: var(--sv-dark-footer); }
+body.contact-page .cp-main { display: block; background: var(--sv-ivory); }
 
 /* Shared inner container */
 body.contact-page .cp-shell {
