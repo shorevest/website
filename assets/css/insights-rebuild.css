@@ -242,6 +242,8 @@ body.insights-page .cdd-arc__read {
 }
 body.insights-page .cdd-arc__read:hover { background: var(--sv-cinnabar-d); border-color: var(--sv-cinnabar-d); }
 body.insights-page .cdd-arc__pdf {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 42px; padding: 0 14px;
   font: 500 11.5px/1 var(--sv-font); letter-spacing: 0.06em; text-transform: uppercase;
   color: var(--sv-muted, #6E7169); text-decoration: none; white-space: nowrap;
   transition: color .15s ease;
@@ -377,7 +379,7 @@ body.insights-page .research-sub__submit:hover { background: var(--sv-cinnabar-d
     justify-self: start;
     gap: 14px;
   }
-  body.insights-page .cdd-arc__pdf { padding: 11px 0; }
+  body.insights-page .cdd-arc__pdf { min-height: 0; padding: 11px 14px; }
   body.insights-page .cdd-arc__tags { gap: 12px; }
   body.insights-page .cdd-arc__tags .cdd-arc__topic { display: inline-flex; }
   body.insights-page .cdd-arc__date { display: inline-block; margin-top: 0; }
