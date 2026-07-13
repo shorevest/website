@@ -91,7 +91,10 @@ body.homepage {
   margin: 0;
   padding-top: var(--header-h);            /* reserve fixed-header space */
   color: var(--sv-ink);
-  background: #FFFFFF;
+  /* Match the body/canvas to the footer so bottom rubber-band overscroll
+     cannot expose a white strip beneath the footer. Page sections paint
+     their own ivory/stone/dark surfaces above it. */
+  background: var(--sv-dark-footer, #20211F);
   font-family: var(--sv-font);
   font-size: 16px;
   line-height: 1.62;
