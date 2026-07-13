@@ -558,6 +558,7 @@ body.homepage.team-page-v2 .sv-nav a[aria-current="page"] {
    restrained cinnabar ledges. Scoped to content beginning at .team-groups.
    ========================================================================== */
 body.team-page-v2 {
+  --tr-team-section-max: 1400px;
   --tr-ivory: var(--sv-ivory, #fcf9f1);
   --tr-stone: var(--sv-stone, #f1ebdd);
   --tr-ink: var(--sv-ink, #182524);
@@ -580,7 +581,7 @@ html body.team-page-v2 .team-groups {
 
 html body.team-page-v2 .team-groups .team-inner {
   width: auto !important;
-  max-width: var(--tr-max) !important;
+  max-width: var(--tr-team-section-max, var(--tr-max)) !important;
   margin-inline: auto !important;
   padding-inline: var(--tr-page-pad) !important;
 }
@@ -1393,7 +1394,7 @@ html body.team-page-v2 .team-hero__statcard {
 
 /* 2026-07-13 · Team grid: four equal desktop columns with centered short rows. */
 html body.team-page-v2 .grid[data-team-grid] {
-  --team-grid-gap: 30px;
+  --team-grid-gap: 28px;
   --team-grid-columns: 4;
   --team-grid-width: 100%;
   display: grid !important;
@@ -1408,12 +1409,12 @@ html body.team-page-v2 .grid[data-team-grid] {
 
 html body.team-page-v2 .grid[data-team-count="2"] {
   --team-grid-columns: 2;
-  --team-grid-width: calc(50% - 15px);
+  --team-grid-width: calc(50% - (var(--team-grid-gap) / 2));
 }
 
 html body.team-page-v2 .grid[data-team-count="3"] {
   --team-grid-columns: 3;
-  --team-grid-width: calc(75% - 7.5px);
+  --team-grid-width: calc(75% - (var(--team-grid-gap) / 4));
 }
 
 html body.team-page-v2 .grid[data-team-count="4"],
