@@ -14,14 +14,6 @@ function faviconLinks(file) {
   return readPage(file).match(faviconSelector) || [];
 }
 
-function normalizedFaviconHrefs(file) {
-  return faviconLinks(file).map((link) => {
-    const href = link.match(/\shref="([^"]+)"/i);
-    assert(href, `${file} favicon link should include href: ${link}`);
-    return path.posix.normalize(path.posix.join('/', path.posix.dirname(file), href[1]));
-  });
-}
-
 function assertFaviconParity(homepage, pages) {
   const homepageLinks = faviconLinks(homepage);
   assert(homepageLinks.length > 0, `${homepage} should define favicon links`);
@@ -33,13 +25,6 @@ function assertFaviconParity(homepage, pages) {
       `${page} should use the same favicon links as ${homepage}`
     );
   });
-}
-
-function topLevelPagesMatching(pattern) {
-  return fs
-    .readdirSync(root)
-    .filter((file) => pattern.test(file))
-    .sort();
 }
 
 function sitePages() {
@@ -65,18 +50,7 @@ function sitePages() {
 
 assertFaviconParity(
   'index.html',
-  sitePages().filter((page) => page !== 'index.html' && !page.endsWith('_cn.html'))
-);
-
-assertFaviconParity(
-  'index_cn.html',
-  topLevelPagesMatching(/_cn\.html$/).filter((page) => page !== 'index_cn.html')
-);
-
-assert.deepStrictEqual(
-  faviconLinks('investor-portal/index_cn.html'),
-  faviconLinks('index_cn.html').map((link) => link.replace(/href="(?!\.\.\/)/, 'href="../')),
-  'investor-portal/index_cn.html should use the same Chinese favicon links with paths adjusted for its nested directory'
+  sitePages().filter((page) => page !== 'index.html')
 );
 
 console.log('legal favicon consistency tests passed');
