@@ -1317,11 +1317,11 @@ body.strategy-page .st-reason__title { font-size: 21px; }
 body.strategy-page .sv-flow { counter-reset: st-flow; }
 body.strategy-page .sv-flow__step { counter-increment: st-flow; }
 body.strategy-page .sv-flow__title::before {
-  content: counter(st-flow);
+  content: counter(st-flow, decimal-leading-zero);
   display: block;
   margin-bottom: clamp(14px, 1.6vw, 20px);
-  font: 600 12px/1 var(--sv-font);
-  letter-spacing: 0.16em;
+  font: 600 clamp(44px, 5.2vw, 72px)/0.9 var(--sv-font);
+  letter-spacing: -0.04em;
   color: var(--sv-cinnabar);
   font-variant-numeric: tabular-nums;
 }
