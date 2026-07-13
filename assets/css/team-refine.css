@@ -1390,3 +1390,75 @@ html body.team-page-v2 .group {
 html body.team-page-v2 .team-hero__statcard {
   box-shadow: 0 18px 42px rgba(23, 28, 28, 0.14) !important;
 }
+
+/* 2026-07-13 · Team grid: four equal desktop columns with centered short rows. */
+html body.team-page-v2 .grid[data-team-grid] {
+  --team-grid-gap: 30px;
+  --team-grid-columns: 4;
+  --team-grid-width: 100%;
+  display: grid !important;
+  width: var(--team-grid-width) !important;
+  max-width: 100% !important;
+  margin-inline: auto !important;
+  grid-template-columns: repeat(var(--team-grid-columns), minmax(0, 1fr)) !important;
+  gap: clamp(28px, 2.6vw, 40px) var(--team-grid-gap) !important;
+  justify-content: center !important;
+  align-items: start !important;
+}
+
+html body.team-page-v2 .grid[data-team-count="2"] {
+  --team-grid-columns: 2;
+  --team-grid-width: calc(50% - 15px);
+}
+
+html body.team-page-v2 .grid[data-team-count="3"] {
+  --team-grid-columns: 3;
+  --team-grid-width: calc(75% - 7.5px);
+}
+
+html body.team-page-v2 .grid[data-team-count="4"],
+html body.team-page-v2 .grid[data-team-count="8"],
+html body.team-page-v2 .group--leadership .grid[data-team-grid] {
+  --team-grid-columns: 4;
+  --team-grid-width: 100%;
+}
+
+html body.team-page-v2 .team-profile {
+  min-width: 0 !important;
+  width: 100% !important;
+}
+
+html body.team-page-v2 .team-profile__photo {
+  width: 100% !important;
+  aspect-ratio: 1 / 1 !important;
+}
+
+html body.team-page-v2 .team-profile__photo img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+html body.team-page-v2 .team-bio-panel {
+  grid-column: 1 / -1 !important;
+}
+
+@media (max-width: 900px) {
+  html body.team-page-v2 .grid[data-team-grid],
+  html body.team-page-v2 .grid[data-team-count],
+  html body.team-page-v2 .group--leadership .grid[data-team-grid] {
+    --team-grid-columns: 2;
+    --team-grid-width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 560px) {
+  html body.team-page-v2 .grid[data-team-grid],
+  html body.team-page-v2 .grid[data-team-count],
+  html body.team-page-v2 .group--leadership .grid[data-team-grid] {
+    --team-grid-columns: 1;
+    --team-grid-width: 100%;
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
