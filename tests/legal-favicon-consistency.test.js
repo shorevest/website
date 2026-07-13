@@ -14,6 +14,14 @@ function faviconLinks(file) {
   return readPage(file).match(faviconSelector) || [];
 }
 
+function normalizedFaviconHrefs(file) {
+  return faviconLinks(file).map((link) => {
+    const href = link.match(/\shref="([^"]+)"/i);
+    assert(href, `${file} favicon link should include href: ${link}`);
+    return path.posix.normalize(path.posix.join('/', path.posix.dirname(file), href[1]));
+  });
+}
+
 function assertFaviconParity(homepage, pages) {
   const homepageLinks = faviconLinks(homepage);
   assert(homepageLinks.length > 0, `${homepage} should define favicon links`);
