@@ -1475,6 +1475,12 @@ body.strategy-page .sv-exec__intro {
   }
 }
 
+/* 2026-07-13 · Use a light canvas for the Opportunity section so the
+   market-scale facts and reason cards sit on a brighter strategy-page band. */
+body.strategy-page #opportunity {
+  background: var(--sv-ivory, #FCF9F1);
+}
+
 /* 2026-07-11 · Nudge the Opportunity section's supporting sentence lower so it
    sits beneath the headline baseline instead of feeling pinned to the upper
    right of the section head. */
