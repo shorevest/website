@@ -10,7 +10,10 @@
    restrained cinnabar, no cards / icons / imagery.
    ========================================================================== */
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  overscroll-behavior-y: none;
+}
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   body.homepage .sv-srow,
@@ -101,6 +104,7 @@ body.homepage {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
+  overscroll-behavior-y: none;
 }
 body.homepage img { max-width: 100%; display: block; }
 body.homepage a { color: inherit; }
