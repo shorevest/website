@@ -1564,3 +1564,95 @@ body.strategy-page #risk .st-risk__panel-label {
     border-top: 1px solid var(--sv-border-light, rgba(24, 37, 36, 0.14));
   }
 }
+
+/* 2026-07-13 · Risk controls color-box treatment
+   Present each risk-control statement and heading as a distinct color box. */
+body.strategy-page #risk .st-risk {
+  gap: clamp(14px, 1.4vw, 22px);
+  padding: clamp(14px, 1.6vw, 22px);
+  background: color-mix(in srgb, var(--sv-stone, #F1EBDD) 70%, #fff 30%);
+  box-shadow: none;
+}
+body.strategy-page #risk .st-risk__cols {
+  gap: clamp(14px, 1.4vw, 22px);
+}
+body.strategy-page #risk .st-risk__col,
+body.strategy-page #risk .st-risk__panel,
+body.strategy-page #risk .st-risk__panel.svb--split {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--sv-ink, #182524);
+}
+body.strategy-page #risk .st-risk__cell-head,
+body.strategy-page #risk .st-risk__panel .st-risk__cell-head {
+  min-height: 92px;
+  margin: 0 0 clamp(12px, 1.2vw, 18px);
+  padding: clamp(18px, 2vw, 26px);
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 0;
+  background: var(--sv-qing, #3D7070);
+  color: var(--sv-ivory, #FCF9F1);
+}
+body.strategy-page #risk .st-risk__col:nth-child(2) .st-risk__cell-head {
+  background: #8C6F48;
+}
+body.strategy-page #risk .st-risk__panel .st-risk__cell-head {
+  background: var(--sv-cinnabar, #C4382A);
+}
+body.strategy-page #risk .st-risk__cell-head h3,
+body.strategy-page #risk .st-risk__panel-title,
+body.strategy-page #risk .st-risk__panel-tag,
+body.strategy-page #risk .st-risk__panel-label {
+  color: var(--sv-ivory, #FCF9F1);
+  opacity: 1;
+}
+body.strategy-page #risk .st-risk__panel-tag,
+body.strategy-page #risk .st-risk__panel-label {
+  color: rgba(252, 249, 241, 0.78);
+}
+body.strategy-page #risk .st-risk__col ul,
+body.strategy-page #risk .st-risk__panel-body-wrap {
+  display: grid;
+  gap: clamp(10px, 1vw, 14px);
+}
+body.strategy-page #risk .st-risk__col li,
+body.strategy-page #risk .st-risk__panel-body {
+  margin: 0;
+  min-height: 112px;
+  padding: clamp(18px, 1.8vw, 24px);
+  display: flex;
+  align-items: flex-start;
+  max-width: none;
+  background: #fff;
+  box-shadow: inset 0 0 0 1px var(--sv-border-light, rgba(24, 37, 36, 0.14));
+  color: var(--sv-ink-2, #3F4A47);
+}
+body.strategy-page #risk .st-risk__col li {
+  padding-left: clamp(18px, 1.8vw, 24px);
+}
+body.strategy-page #risk .st-risk__col li::before {
+  content: none;
+}
+body.strategy-page #risk .st-risk__col li:nth-child(odd),
+body.strategy-page #risk .st-risk__panel-body:nth-child(odd) {
+  background: color-mix(in srgb, var(--sv-qing, #3D7070) 10%, #fff 90%);
+}
+body.strategy-page #risk .st-risk__col li:nth-child(even),
+body.strategy-page #risk .st-risk__panel-body:nth-child(even) {
+  background: color-mix(in srgb, var(--sv-oxide, #B46A3C) 12%, #fff 88%);
+}
+body.strategy-page #risk .st-risk__panel-body + .st-risk__panel-body {
+  margin-top: 0;
+}
+@media (max-width: 900px) {
+  body.strategy-page #risk .st-risk {
+    padding-top: clamp(14px, 1.6vw, 22px);
+  }
+  body.strategy-page #risk .st-risk__panel,
+  body.strategy-page #risk .st-risk__panel.svb--split {
+    border-top: 0;
+  }
+}
