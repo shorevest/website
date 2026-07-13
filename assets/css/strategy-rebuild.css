@@ -1586,13 +1586,8 @@ body.strategy-page #risk .st-risk__col {
 }
 body.strategy-page #risk .st-risk__col::before,
 body.strategy-page #risk .st-risk__panel::before {
-  content: "";
-  position: absolute;
-  left: clamp(34px, 3.5vw, 48px);
-  top: -1px;
-  width: 48px;
-  height: 2px;
-  background: var(--sv-cinnabar, #C4382A);
+  content: none;
+  display: none;
 }
 body.strategy-page #risk .st-risk__cell-head,
 body.strategy-page #risk .st-risk__panel .st-risk__cell-head {
