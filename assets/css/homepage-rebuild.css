@@ -1958,3 +1958,19 @@ html body.team-page-v2 .team-profile .team-profile__photo {
     margin-right: -12px;
   }
 }
+
+/* --------------------------------------------------------------------------
+   Perceived image-loading fix
+   --------------------------------------------------------------------------
+   Large hero/feature photos can take a moment on cold cache. Avoid showing
+   opaque stone-colored blocks while those files decode; keep the editorial
+   layout stable, but let the page background show through until the image is
+   ready. */
+body.homepage :is(.sv-hero__image, .fm-who__figure, .sx-hero__image, .cdd-hero__image, .media-hero .sv-hero__image, .team-profile__photo, .cp-office__photo) {
+  background: transparent !important;
+}
+
+body.homepage :is(.sv-hero__image, .fm-who__figure, .sx-hero__image, .cdd-hero__image, .media-hero .sv-hero__image, .team-profile__photo) img {
+  background: transparent !important;
+  opacity: 1;
+}
