@@ -14,6 +14,25 @@ function faviconLinks(file) {
   return readPage(file).match(faviconSelector) || [];
 }
 
+
+function assertTeamFaviconsAreEarly(page) {
+  const html = readPage(page);
+  const titleIndex = html.indexOf('<title>');
+  const firstFaviconIndex = html.indexOf('<link rel="icon" href="/favicon.ico" sizes="any">');
+  const firstStylesheetIndex = html.indexOf('rel="stylesheet"');
+
+  assert(titleIndex !== -1, `${page} should define a title`);
+  assert(firstFaviconIndex !== -1, `${page} should define the primary favicon link`);
+  assert(
+    firstFaviconIndex > titleIndex,
+    `${page} should keep favicon declarations immediately after the document title`
+  );
+  assert(
+    firstStylesheetIndex === -1 || firstFaviconIndex < firstStylesheetIndex,
+    `${page} should expose favicon declarations before stylesheet discovery`
+  );
+}
+
 function assertFaviconParity(homepage, pages) {
   const homepageLinks = faviconLinks(homepage);
   assert(homepageLinks.length > 0, `${homepage} should define favicon links`);
@@ -52,5 +71,8 @@ assertFaviconParity(
   'index.html',
   sitePages().filter((page) => page !== 'index.html')
 );
+
+assertTeamFaviconsAreEarly('team.html');
+assertTeamFaviconsAreEarly('team_cn.html');
 
 console.log('legal favicon consistency tests passed');
