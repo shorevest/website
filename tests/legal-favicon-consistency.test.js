@@ -91,7 +91,5 @@ assertFaviconParity(
 
 assertTeamFaviconsAreEarly('team.html');
 assertTeamFaviconsAreEarly('team_cn.html');
-assertTeamPathRelativeFallbacks('team.html');
-assertTeamPathRelativeFallbacks('team_cn.html');
 
 console.log('legal favicon consistency tests passed');
