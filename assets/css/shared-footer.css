@@ -729,6 +729,9 @@ html body footer.sv-footer .sv-footer__nav {
   grid-template-columns: repeat(2, auto) !important;
   gap: 10px 56px !important;
   align-content: start !important;
+  justify-content: end !important;
+  justify-items: end !important;
+  text-align: right !important;
 }
 html body footer.sv-footer .sv-footer__nav a {
   font: 500 13px/1 var(--font, "DIN 2014", system-ui, sans-serif) !important;
@@ -770,7 +773,7 @@ html body footer.sv-footer .sv-footer__copy {
 }
 @media (max-width: 767px) {
   html body footer.sv-footer .sv-footer__top { grid-template-columns: 1fr !important; }
-  html body footer.sv-footer .sv-footer__nav { grid-template-columns: 1fr !important; }
+  html body footer.sv-footer .sv-footer__nav { grid-template-columns: 1fr !important; justify-content: start !important; justify-items: start !important; text-align: left !important; }
   html body footer.sv-footer .sv-footer__bottom { flex-direction: column !important; align-items: flex-start !important; }
 }
 
