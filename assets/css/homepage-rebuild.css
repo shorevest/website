@@ -850,6 +850,9 @@ body.homepage .sv-footer__offices a:hover { border-color: var(--sv-ivory); }
 body.homepage .sv-footer__nav {
   display: grid; grid-template-columns: repeat(2, minmax(0, max-content));
   gap: 12px clamp(48px, 5vw, 80px);
+  justify-content: end;
+  justify-items: end;
+  text-align: right;
 }
 body.homepage .sv-footer__nav a {
   font: 500 13px/1 var(--sv-font); letter-spacing: 0.02em;
@@ -1001,7 +1004,7 @@ body.homepage .sv-totop svg { width: 16px; height: 16px; }
   body.homepage .sv-stat:not(:nth-child(1)) { border-top: 1px solid var(--sv-border-light); }
   body.homepage .sv-caps { grid-template-columns: 1fr; }
   body.homepage .sv-cap { border-right: 0; min-height: 0; }
-  body.homepage .sv-footer__nav { grid-template-columns: 1fr; gap: 0; }
+  body.homepage .sv-footer__nav { grid-template-columns: 1fr; gap: 0; justify-content: start; justify-items: start; text-align: left; }
   /* Enlarge footer tap targets to ~44px on mobile. */
   body.homepage .sv-footer__nav a,
   body.homepage .sv-footer__access a { padding: 13px 0; }
