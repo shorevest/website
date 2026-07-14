@@ -652,10 +652,15 @@ body.strategy-page .sx-hero__panel {
   margin: 0; width: 100%;
   aspect-ratio: 1 / 1;
   overflow: hidden;
+  filter: grayscale(1);
+  transition: filter 280ms ease;
   background:
     linear-gradient(180deg, rgba(24,37,36,0.08), rgba(24,37,36,0.18)),
     url("../../pexels-enginakyurt-10648591.jpg") center / cover no-repeat,
     linear-gradient(135deg, #F6E1DD 0%, #F3C9C3 58%, #E8B6AF 100%);
+}
+body.strategy-page .sx-hero__media:hover .sx-hero__panel {
+  filter: grayscale(0);
 }
 body.strategy-page .sx-hero__panel::before {
   content: ""; position: absolute; inset: 0;
