@@ -273,17 +273,21 @@ body.press-page .press-date {
   }
 }
 
-/* Load more */
-body.press-page .pr-more-wrap { margin-top: clamp(28px, 3vw, 44px); }
-body.press-page .pr-more {
-  display: inline-flex; align-items: center; gap: 10px; height: 52px; padding: 0 26px;
-  font: 600 12px/1 var(--sv-font); letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--sv-ink); background: transparent; cursor: pointer;
-  border: 1px solid var(--sv-border-light-strong); border-radius: 0;
-  transition: background .15s ease, border-color .15s ease;
+/* Load more — match the centered, quiet ledger controls used above. */
+body.press-page .pr-more-wrap {
+  display: flex; justify-content: center;
+  margin-top: 0; padding: 22px 0 4px;
 }
-body.press-page .pr-more:hover { border-color: var(--sv-ink); background: rgba(23,53,54,0.04); }
-body.press-page .pr-more[hidden] { display: none; }
+body.press-page .pr-more {
+  appearance: none; background: none; cursor: pointer;
+  font: 600 12px/1 var(--sv-font); letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--sv-cinnabar);
+  padding: 10px 22px; border: 1px solid var(--sv-border-light-strong); border-radius: 0;
+  transition: border-color .15s ease, color .15s ease;
+}
+body.press-page .pr-more:hover { border-color: var(--sv-cinnabar); }
+body.press-page .pr-more[hidden],
+body.press-page .pr-more-wrap:has(.pr-more[hidden]) { display: none; }
 
 /* ==========================================================================
    4 · DISCLOSURES
