@@ -570,7 +570,8 @@ body.homepage .home-firm-preview .home-firm-preview__proof span:not(:first-child
 body.homepage .home-firm-preview .home-firm-preview__proof span:last-child { border-right: 0; }
 body.homepage .home-firm-preview .home-firm-preview__link {
   margin-top: auto; padding-top: clamp(28px, 3vw, 44px);
-  align-self: flex-start;
+  align-self: flex-end;
+  text-align: right;
 }
 
 @media (max-width: 1023px) {
