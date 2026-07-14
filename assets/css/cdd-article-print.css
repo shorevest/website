@@ -34,7 +34,7 @@ body.cdd-print-layout {
   font-size: 16px; line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
-body.cdd-print-layout .wrap { max-width: 860px; margin-inline: auto; }
+body.cdd-print-layout .wrap { width: 860px; max-width: none; margin-inline: auto; }
 
 /* ---- Running header strip (publication nameplate + screen toolbar) ---- */
 .cdd-print-layout .cdd-topline { max-width: 860px; margin: 0 auto 14px; padding: 0 4px; }
@@ -184,7 +184,7 @@ body.cdd-print-layout .wrap { max-width: 860px; margin-inline: auto; }
   .cdd-print-layout .cdd-topline,
   .cdd-print-layout .cdd-print-hide,
   .cdd-print-layout .cdd-topline__tools { display: none !important; }
-  .cdd-print-layout .wrap { max-width: none; }
+  .cdd-print-layout .wrap { width: auto; max-width: none; }
   .cdd-print-layout .cdd-print-shell {
     box-shadow: none;
   }
@@ -192,7 +192,7 @@ body.cdd-print-layout .wrap { max-width: 860px; margin-inline: auto; }
   .cdd-print-layout .cdd-disclaimer { break-inside: avoid; }
 }
 
-@media (max-width: 640px) {
+@media screen and (max-width: 640px) {
   .cdd-print-layout .cdd-topline__inner { flex-direction: column; align-items: flex-start; gap: 14px; }
   .cdd-print-layout .cdd-topline__tools { align-items: flex-start; }
   .cdd-print-layout .cdd-print-note { text-align: left; }
