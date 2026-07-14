@@ -48,28 +48,18 @@ function assertFaviconParity(homepage, pages) {
   });
 }
 
-function assertFaviconGuard(page) {
-  const html = readPage(page);
-  assert(
-    html.includes('<script src="/assets/js/favicon-guard.js?v=20260714" defer></script>'),
-    `${page} should load the favicon guard`
-  );
-}
-
-function assertFaviconGuardSource() {
-  const source = readPage('assets/js/favicon-guard.js');
+function assertTeamPathRelativeFallbacks(page) {
+  const links = faviconLinks(page);
   [
-    '20260714',
-    '/favicon.ico?v=',
-    '/assets/favicon.svg?v=',
-    '/assets/favicon-32x32.png?v=',
-    '/assets/favicon-16x16.png?v=',
-    '/assets/apple-touch-icon.png?v=',
-    '/site.webmanifest?v=',
-    'pageshow',
-    'visibilitychange',
-  ].forEach((expected) => {
-    assert(source.includes(expected), `favicon guard should include ${expected}`);
+    '<link rel="icon" href="favicon.ico" sizes="any">',
+    '<link rel="shortcut icon" href="favicon.ico">',
+    '<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">',
+    '<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">',
+    '<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">',
+    '<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">',
+    '<link rel="manifest" href="site.webmanifest">',
+  ].forEach((link) => {
+    assert(links.includes(link), `${page} should include path-relative favicon fallback: ${link}`);
   });
 }
 
@@ -101,7 +91,5 @@ assertFaviconParity(
 
 assertTeamFaviconsAreEarly('team.html');
 assertTeamFaviconsAreEarly('team_cn.html');
-sitePages().forEach(assertFaviconGuard);
-assertFaviconGuardSource();
 
 console.log('legal favicon consistency tests passed');
