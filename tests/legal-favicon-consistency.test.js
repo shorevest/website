@@ -38,11 +38,28 @@ function assertFaviconParity(homepage, pages) {
   assert(homepageLinks.length > 0, `${homepage} should define favicon links`);
 
   pages.forEach((page) => {
-    assert.deepStrictEqual(
-      faviconLinks(page),
-      homepageLinks,
-      `${page} should use the same favicon links as ${homepage}`
-    );
+    const pageLinks = faviconLinks(page);
+    homepageLinks.forEach((link) => {
+      assert(
+        pageLinks.includes(link),
+        `${page} should include approved homepage favicon declaration: ${link}`
+      );
+    });
+  });
+}
+
+function assertTeamPathRelativeFallbacks(page) {
+  const links = faviconLinks(page);
+  [
+    '<link rel="icon" href="favicon.ico" sizes="any">',
+    '<link rel="shortcut icon" href="favicon.ico">',
+    '<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">',
+    '<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">',
+    '<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">',
+    '<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">',
+    '<link rel="manifest" href="site.webmanifest">',
+  ].forEach((link) => {
+    assert(links.includes(link), `${page} should include path-relative favicon fallback: ${link}`);
   });
 }
 
