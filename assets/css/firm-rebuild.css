@@ -52,6 +52,7 @@ body.firm-page .fm-open__h1 {
 }
 body.firm-page .fm-open__body {
   align-self: center; grid-column: 2; grid-row: 1;
+  text-align: right;
 }
 /* Cinnabar gradient field — two-tone block matching the homepage / team field:
    the bright→oxblood gradient plus a solid oxblood band bleeding off the edge.
@@ -86,7 +87,7 @@ body.firm-page .fm-open__body p + p { margin-top: 18px; }
 @media (max-width: 880px) {
   body.firm-page .fm-open__inner { grid-template-columns: 1fr; }
   body.firm-page .fm-hero__frame { grid-column: auto; grid-row: auto; }
-  body.firm-page .fm-open__body { grid-column: auto; grid-row: auto; align-self: start; margin-top: 22px; }
+  body.firm-page .fm-open__body { grid-column: auto; grid-row: auto; align-self: start; margin-top: 22px; text-align: right; }
 }
 
 /* ---- Proof ledger — full-bleed deep-water 青 band. Sibling of the Strategy
