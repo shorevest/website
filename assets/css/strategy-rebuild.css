@@ -1706,3 +1706,6 @@ body.strategy-page #risk .st-risk__panel-body:nth-child(even) {
     gap: 16px;
   }
 }
+
+/* Avoid an empty stone hero block while the large strategy image is still decoding. */
+body.strategy-page .sx-hero__image { background: transparent !important; }
