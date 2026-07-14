@@ -647,27 +647,25 @@ body.strategy-page .sx-hero__media::before {
   border-radius: 0;
   z-index: 0;
 }
-body.strategy-page .sx-hero__image {
+body.strategy-page .sx-hero__panel {
   position: relative; z-index: 1;
   margin: 0; width: 100%;
   aspect-ratio: 1 / 1;
-  border: 0;
-  border-radius: 0;
-  background: var(--sv-stone, #F1EBDD);
   overflow: hidden;
+  background:
+    linear-gradient(135deg, rgba(24,37,36,0.10) 0 1px, transparent 1px 22px),
+    linear-gradient(45deg, rgba(201,59,42,0.10) 0 1px, transparent 1px 26px),
+    linear-gradient(135deg, #F6E1DD 0%, #F3C9C3 58%, #E8B6AF 100%);
 }
-body.strategy-page .sx-hero__image img {
-  display: block; width: 100%; height: 100%;
-  object-fit: cover; object-position: center;
-  filter: grayscale(1);
-  transition: filter 320ms ease;
+body.strategy-page .sx-hero__panel::before {
+  content: ""; position: absolute; inset: clamp(30px, 4vw, 54px);
+  border: 1px solid rgba(24,37,36,0.20);
 }
-body.strategy-page .sx-hero__media:hover .sx-hero__image img,
-body.strategy-page .sx-hero__media:focus-within .sx-hero__image img {
-  filter: grayscale(0);
-}
-@media (prefers-reduced-motion: reduce) {
-  body.strategy-page .sx-hero__image img { transition: none; }
+body.strategy-page .sx-hero__panel::after {
+  content: ""; position: absolute; left: 0; bottom: 0; width: 42%; height: 42%;
+  background: rgba(252,249,241,0.28);
+  border-top: 1px solid rgba(24,37,36,0.14);
+  border-right: 1px solid rgba(24,37,36,0.14);
 }
 @media (max-width: 880px) {
   body.strategy-page .sx-hero__top { grid-template-columns: 1fr; gap: 36px; }
@@ -675,7 +673,7 @@ body.strategy-page .sx-hero__media:focus-within .sx-hero__image img {
   body.strategy-page .sx-hero__body { margin-top: 22px; max-width: none; width: 100%; }
   body.strategy-page .sx-hero__media { grid-column: auto; padding: 0; max-width: 560px; }
   body.strategy-page .sx-hero__media::before { top: 40px; right: calc(var(--pad-x) * -1); bottom: -22px; left: 28px; }
-  body.strategy-page .sx-hero__image { aspect-ratio: 1 / 1; }
+  body.strategy-page .sx-hero__panel { aspect-ratio: 1 / 1; }
 }
 
 /* ==========================================================================
@@ -1709,3 +1707,6 @@ body.strategy-page #risk .st-risk__panel-body:nth-child(even) {
 
 /* Avoid an empty stone hero block while the large strategy image is still decoding. */
 body.strategy-page .sx-hero__image { background: transparent !important; }
+
+/* 2026-07-14 · Strategy speed pass: keep the hero visual CSS-only so first paint is not blocked by multi-megabyte photographs. */
+body.strategy-page .sx-hero__image { display: none !important; }
