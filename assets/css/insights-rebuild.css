@@ -303,7 +303,12 @@ body.insights-page .research-sub__notice-label {
   color: var(--sv-cinnabar); white-space: nowrap;
 }
 body.insights-page .research-sub__notice p {
-  margin: 0; max-width: 92ch; font: 400 12.5px/1.65 var(--sv-font); color: var(--sv-faint-on-dark);
+  grid-column: 1 / -1;
+  width: 100%;
+  margin: 0;
+  max-width: none;
+  font: 400 12.5px/1.65 var(--sv-font);
+  color: var(--sv-faint-on-dark);
 }
 body.insights-page .research-sub__inner {
   display: grid; grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1.1fr);
