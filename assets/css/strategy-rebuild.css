@@ -102,8 +102,8 @@ body.strategy-page .sx-glance::before {
   left: 50%; transform: translateX(-50%); width: 100vw;
   background: #F3C9C3; border-top: none;
 }
-body.strategy-page .sx-glance > div { padding: 0 32px; border-left: 1px solid rgba(24,37,36,0.18); min-width: 0; }
-body.strategy-page .sx-glance > div:first-child { border-left: 0; padding-left: 0; }
+body.strategy-page .sx-glance > div { padding: 0 32px; border-left: 1px solid rgba(24,37,36,0.18); min-width: 0; text-align: center; }
+body.strategy-page .sx-glance > div:first-child { border-left: 0; }
 body.strategy-page .sx-glance dt {
   margin: 0 0 14px; font: 600 11px/1.2 var(--sv-font); letter-spacing: 0.15em; text-transform: uppercase; color: rgba(24,37,36,0.72);
 }
