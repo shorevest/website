@@ -1,5 +1,5 @@
 (function () {
-  var VERSION = "20260715-cinnabar";
+  var VERSION = "20260716-cinnabar";
 
   // Resolve the site base from this script's own URL so favicons work
   // whether the site is served from the domain root or a subpath
