@@ -98,6 +98,39 @@ body.privacy-page, body.cookie-page, body.terms-page, body.legal-page, body.disc
   transition: background .15s ease, color .15s ease, border-color .15s ease; white-space: nowrap;
 }
 .sv-util-btn:hover { border-color: var(--sv-chrome-ink); }
+.sv-util-btn[href*="investor-portal"] {
+  position: relative;
+  overflow: hidden;
+  transition: background .18s ease, color .18s ease, border-color .18s ease;
+}
+.sv-util-btn[href*="investor-portal"]::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 7px;
+  height: 1px;
+  background: var(--sv-chrome-cinnabar);
+  opacity: 0;
+  transform: scaleX(.6);
+  transform-origin: center;
+  transition: opacity .18s ease, transform .18s ease;
+}
+.sv-util-btn[href*="investor-portal"]:hover,
+.sv-util-btn[href*="investor-portal"]:focus-visible {
+  color: var(--sv-chrome-cinnabar);
+  border-color: rgba(130, 31, 29, .34);
+  background: rgba(130, 31, 29, .04);
+}
+.sv-util-btn[href*="investor-portal"]:hover::after,
+.sv-util-btn[href*="investor-portal"]:focus-visible::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .sv-util-btn[href*="investor-portal"],
+  .sv-util-btn[href*="investor-portal"]::after { transition: none; }
+}
 .sv-util-btn--cta { background: var(--sv-chrome-cinnabar); color: var(--sv-chrome-ivory); border-color: var(--sv-chrome-cinnabar); }
 .sv-util-btn--cta:hover { background: var(--sv-chrome-cinnabar-d); border-color: var(--sv-chrome-cinnabar-d); }
 
