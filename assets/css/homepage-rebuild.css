@@ -565,9 +565,21 @@ body.homepage .home-firm-preview .home-firm-preview__proof span {
   letter-spacing: 0.11em;
   text-transform: uppercase;
   color: var(--sv-ink);
+  cursor: default;
+  transition: background-color 180ms ease, box-shadow 180ms ease, color 180ms ease;
+}
+body.homepage .home-firm-preview .home-firm-preview__proof span:hover {
+  background: rgba(241, 235, 221, 0.72);
+  box-shadow:
+    inset 0 0 0 1px rgba(201, 59, 42, 0.26),
+    inset 0 -3px 0 rgba(201, 59, 42, 0.52);
+  color: var(--sv-oxide);
 }
 body.homepage .home-firm-preview .home-firm-preview__proof span:not(:first-child) { padding-left: 18px; }
 body.homepage .home-firm-preview .home-firm-preview__proof span:last-child { border-right: 0; }
+@media (prefers-reduced-motion: reduce) {
+  body.homepage .home-firm-preview .home-firm-preview__proof span { transition: none; }
+}
 body.homepage .home-firm-preview .home-firm-preview__link {
   margin-top: auto; padding-top: clamp(28px, 3vw, 44px);
   align-self: flex-end;
