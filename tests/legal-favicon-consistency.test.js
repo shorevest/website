@@ -40,7 +40,7 @@ function faviconLinks(file) {
 function assertTeamFaviconsAreEarly(page) {
   const html = readPage(page);
   const titleIndex = html.indexOf('<title>');
-  const firstFaviconIndex = html.indexOf('<link rel="icon" href="favicon.ico?v=');
+  const firstFaviconIndex = html.indexOf('<link rel="icon" href="assets/favicon-cinnabar.ico?v=');
   const firstStylesheetIndex = html.indexOf('rel="stylesheet"');
 
   assert(titleIndex !== -1, `${page} should define a title`);
@@ -78,11 +78,11 @@ function assertFaviconParity(homepage, pages) {
 function assertTeamPathRelativeFallbacks(page) {
   const targets = faviconLinks(page).map((link) => link.target);
   [
-    'favicon.ico',
-    'assets/favicon.svg',
-    'assets/favicon-32x32.png',
-    'assets/favicon-16x16.png',
-    'assets/apple-touch-icon.png',
+    'assets/favicon-cinnabar.ico',
+    'assets/favicon-cinnabar.svg',
+    'assets/favicon-cinnabar-32x32.png',
+    'assets/favicon-cinnabar-16x16.png',
+    'assets/apple-touch-icon-cinnabar.png',
     'site.webmanifest',
   ].forEach((target) => {
     assert(targets.includes(target), `${page} should include path-relative favicon fallback: ${target}`);
