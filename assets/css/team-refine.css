@@ -747,14 +747,14 @@ html body.team-page-v2 .team-profile__photo[data-team-photo="bio-steve-poon"] im
   object-position: center top !important;
 }
 
-/* Michael Chang: crop the source portrait full-bleed so it matches the adjacent adviser cards. */
+/* Michael Chang: pin the portrait as low as the source image allows without exposing empty edges. */
 html body.team-page-v2 .team-profile__photo[data-team-photo="bio-michael-chang"] img {
   width: 100% !important;
   height: 100% !important;
   object-fit: cover !important;
-  object-position: 50% 20% !important;
+  object-position: center top !important;
   transform: scale(1.18);
-  transform-origin: 50% 20%;
+  transform-origin: center top;
 }
 
 /* Philip Young: nudge the portrait upward inside the square image frame. */
