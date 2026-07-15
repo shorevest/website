@@ -536,14 +536,17 @@ html body.team-page-v2 .team-profile__linkedin:hover::after {
 }
 
 /* ==========================================================================
-   4 · FOOTER — dark ink, matching the homepage footer
+   4 · FOOTER — use the shared homepage footer without Team-only offsets
    ========================================================================== */
 body.team-page-v2 .sv-footer {
-  /* Footer governed by homepage-rebuild.css (body.homepage). Match the page
-     canvas to the footer ink so viewport rounding never exposes a white seam. */
-  background: var(--tr-dark-footer, #20211f) !important;
-  margin-bottom: -1px;
-  padding-bottom: 1px;
+  background: var(--sv-dark-footer, #20211f) !important;
+}
+
+body.team-page-v2 .sv-footer__copy {
+  position: static !important;
+  inset: auto !important;
+  transform: none !important;
+  margin: 0 !important;
 }
 
 /* Active nav state — subtle cinnabar, matching the homepage hover treatment */
