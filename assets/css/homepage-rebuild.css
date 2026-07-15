@@ -266,6 +266,37 @@ body.homepage .sv-util-btn {
   white-space: nowrap;
 }
 body.homepage .sv-util-btn:hover { border-color: var(--sv-ink); }
+body.homepage .sv-util-btn[href*="investor-portal"] {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  transition: color .22s ease, border-color .22s ease, box-shadow .22s ease, transform .22s ease;
+}
+body.homepage .sv-util-btn[href*="investor-portal"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(110deg, var(--sv-cinnabar) 0%, var(--sv-cinnabar-d) 100%);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform .32s cubic-bezier(.2, .7, .2, 1);
+}
+body.homepage .sv-util-btn[href*="investor-portal"]:hover,
+body.homepage .sv-util-btn[href*="investor-portal"]:focus-visible {
+  color: var(--sv-ivory);
+  border-color: var(--sv-cinnabar);
+  box-shadow: 0 8px 22px rgba(130, 31, 29, .16);
+  transform: translateY(-1px);
+}
+body.homepage .sv-util-btn[href*="investor-portal"]:hover::before,
+body.homepage .sv-util-btn[href*="investor-portal"]:focus-visible::before { transform: scaleX(1); }
+@media (prefers-reduced-motion: reduce) {
+  body.homepage .sv-util-btn[href*="investor-portal"],
+  body.homepage .sv-util-btn[href*="investor-portal"]::before { transition: none; }
+  body.homepage .sv-util-btn[href*="investor-portal"]:hover,
+  body.homepage .sv-util-btn[href*="investor-portal"]:focus-visible { transform: none; }
+}
 body.homepage .sv-util-btn--cta { background: var(--sv-cinnabar); color: var(--sv-ivory); border-color: var(--sv-cinnabar); }
 body.homepage .sv-util-btn--cta:hover { background: var(--sv-cinnabar-d); border-color: var(--sv-cinnabar-d); }
 
