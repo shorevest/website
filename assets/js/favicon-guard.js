@@ -1,13 +1,23 @@
 (function () {
-  var VERSION = "20260714";
+  var VERSION = "20260715";
+
+  // Resolve the site base from this script's own URL so favicons work
+  // whether the site is served from the domain root or a subpath
+  // (e.g. GitHub Pages project sites).
+  var script = document.currentScript;
+  var base = "";
+  if (script && script.src) {
+    base = script.src.replace(/assets\/js\/favicon-guard\.js.*$/, "");
+  }
+
   var ICONS = [
-    { rel: "icon", href: "/favicon.ico?v=" + VERSION, sizes: "any" },
-    { rel: "shortcut icon", href: "/favicon.ico?v=" + VERSION },
-    { rel: "icon", href: "/assets/favicon.svg?v=" + VERSION, type: "image/svg+xml" },
-    { rel: "icon", href: "/assets/favicon-32x32.png?v=" + VERSION, type: "image/png", sizes: "32x32" },
-    { rel: "icon", href: "/assets/favicon-16x16.png?v=" + VERSION, type: "image/png", sizes: "16x16" },
-    { rel: "apple-touch-icon", href: "/assets/apple-touch-icon.png?v=" + VERSION, sizes: "180x180" },
-    { rel: "manifest", href: "/site.webmanifest?v=" + VERSION },
+    { rel: "icon", href: base + "favicon.ico?v=" + VERSION, sizes: "any" },
+    { rel: "shortcut icon", href: base + "favicon.ico?v=" + VERSION },
+    { rel: "icon", href: base + "assets/favicon.svg?v=" + VERSION, type: "image/svg+xml" },
+    { rel: "icon", href: base + "assets/favicon-32x32.png?v=" + VERSION, type: "image/png", sizes: "32x32" },
+    { rel: "icon", href: base + "assets/favicon-16x16.png?v=" + VERSION, type: "image/png", sizes: "16x16" },
+    { rel: "apple-touch-icon", href: base + "assets/apple-touch-icon.png?v=" + VERSION, sizes: "180x180" },
+    { rel: "manifest", href: base + "site.webmanifest?v=" + VERSION },
   ];
 
   function setAttr(el, key, value) {
