@@ -787,3 +787,45 @@ html body footer.sv-footer .sv-footer__access-label {
 html body footer.sv-footer .sv-footer__access a::after {
   content: none !important;
 }
+
+/* Footer LinkedIn social link */
+html body footer.sv-footer .sv-footer__social {
+  grid-column: 2 !important;
+  justify-self: end !important;
+  margin-top: 20px !important;
+}
+html body footer.sv-footer .sv-footer__social-link {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  min-height: 36px !important;
+  padding: 8px 0 !important;
+  font: 500 14px/1 var(--font, "DIN 2014", system-ui, sans-serif) !important;
+  letter-spacing: 0.03em !important;
+  color: rgba(252, 249, 241, 0.78) !important;
+  text-decoration: none !important;
+  text-underline-offset: 4px !important;
+  transition: color .18s ease !important;
+}
+html body footer.sv-footer .sv-footer__social-link:hover,
+html body footer.sv-footer .sv-footer__social-link:focus-visible {
+  color: #FCF9F1 !important;
+  text-decoration: underline !important;
+}
+html body footer.sv-footer .sv-footer__social-link:focus-visible {
+  outline: 2px solid rgba(252, 249, 241, 0.72) !important;
+  outline-offset: 4px !important;
+}
+html body footer.sv-footer .sv-footer__social-icon {
+  width: 17px !important;
+  height: 17px !important;
+  flex: 0 0 17px !important;
+  fill: currentColor !important;
+}
+@media (max-width: 767px) {
+  html body footer.sv-footer .sv-footer__social {
+    grid-column: 1 !important;
+    justify-self: start !important;
+    margin-top: 18px !important;
+  }
+}
