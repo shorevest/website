@@ -197,8 +197,10 @@ body.strategy-page .st-threshold__l {
   display: block; font: 400 14.5px/1.5 var(--sv-font); color: var(--sv-ink-2);
 }
 body.strategy-page .st-thresholds__note {
-  grid-column: 1 / -1; margin: 26px 0 0;
-  font: 400 12px/1.5 var(--sv-font); color: var(--sv-muted, #6E7169);
+  grid-column: 1 / -1; margin: 26px auto 0;
+  max-width: 56rem;
+  text-align: center;
+  font: 500 15px/1.55 var(--sv-font); color: var(--sv-ink-2);
 }
 
 /* Three sleeves — homepage-standard animated strategy rows */
