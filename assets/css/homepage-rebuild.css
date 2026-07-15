@@ -565,9 +565,43 @@ body.homepage .home-firm-preview .home-firm-preview__proof span {
   letter-spacing: 0.11em;
   text-transform: uppercase;
   color: var(--sv-ink);
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+  transition: background-color 180ms ease, color 180ms ease, transform 180ms ease;
+}
+body.homepage .home-firm-preview .home-firm-preview__proof span::before {
+  content: "";
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 14px;
+  height: 2px;
+  background: var(--sv-cinnabar);
+  opacity: 0;
+  transform: scaleX(.36);
+  transform-origin: center;
+  transition: opacity 180ms ease, transform 220ms ease;
+  pointer-events: none;
+}
+body.homepage .home-firm-preview .home-firm-preview__proof span:hover {
+  background: rgba(122, 175, 175, 0.10);
+  color: var(--sv-qing-dark);
+  transform: translateY(-2px);
+}
+body.homepage .home-firm-preview .home-firm-preview__proof span:hover::before {
+  opacity: 1;
+  transform: scaleX(1);
 }
 body.homepage .home-firm-preview .home-firm-preview__proof span:not(:first-child) { padding-left: 18px; }
 body.homepage .home-firm-preview .home-firm-preview__proof span:last-child { border-right: 0; }
+@media (prefers-reduced-motion: reduce) {
+  body.homepage .home-firm-preview .home-firm-preview__proof span,
+  body.homepage .home-firm-preview .home-firm-preview__proof span::before {
+    transition: none;
+  }
+  body.homepage .home-firm-preview .home-firm-preview__proof span:hover { transform: none; }
+}
 body.homepage .home-firm-preview .home-firm-preview__link {
   margin-top: auto; padding-top: clamp(28px, 3vw, 44px);
   align-self: flex-end;
