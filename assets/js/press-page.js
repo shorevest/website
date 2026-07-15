@@ -36,11 +36,15 @@
     var art = document.createElement("article");
     art.className = "press-row";
     art.setAttribute("data-type-label", String(item.type || "").toUpperCase());
-    var rowLink = item.url ? document.createElement("a") : document.createElement("div");
-    if (item.url) {
-      rowLink.href = item.url;
+    var linkType = item.linkType || (item.url ? "external" : "none");
+    var href = linkType === "pdf" ? item.pdfPath : item.url;
+    var rowLink = href ? document.createElement("a") : document.createElement("div");
+    if (href) {
+      rowLink.href = href;
       rowLink.target = "_blank";
-      rowLink.rel = "noopener noreferrer";
+      rowLink.rel = linkType === "pdf" ? "noopener" : "noopener noreferrer";
+      rowLink.setAttribute("data-link-type", linkType);
+      if (linkType === "pdf") rowLink.type = "application/pdf";
     } else {
       rowLink.className = "press-row__item press-row__item--archived";
     }
@@ -50,7 +54,9 @@
       '<span class="press-headline">' + esc(item.headline) + "</span>" +
       '<span class="press-row__summary">' + esc(item.summary) + "</span></span>" +
       '<span class="press-row__meta">' +
-      '<time class="press-date" datetime="' + esc(item.date) + '">' + esc(item.dateDisplay || item.date) + "</time></span>";
+      '<time class="press-date" datetime="' + esc(item.date) + '">' + esc(item.dateDisplay || item.date) + "</time>" +
+      (href && item.buttonLabel ? '<span class="press-row__cta">' + esc(item.buttonLabel) + '</span>' : '') +
+      "</span>";
     art.appendChild(rowLink);
     return art;
   }
