@@ -10,15 +10,37 @@ function readPage(file) {
   return fs.readFileSync(path.join(root, file), 'utf8');
 }
 
-function faviconLinks(file) {
-  return readPage(file).match(faviconSelector) || [];
+function attr(tag, name) {
+  const match = tag.match(new RegExp(`${name}="([^"]*)"`, 'i'));
+  return match ? match[1] : undefined;
 }
 
+// Favicon hrefs must be page-relative so the site works from the domain
+// root and from a subpath (e.g. GitHub Pages project sites) alike. Each
+// href is resolved against its page's directory so pages at different
+// depths are compared by the file they actually point to.
+function faviconLinks(file) {
+  const pageDir = path.posix.dirname(file);
+  return (readPage(file).match(faviconSelector) || []).map((tag) => {
+    const href = attr(tag, 'href');
+    assert(href, `${file}: favicon link is missing an href: ${tag}`);
+    assert(
+      !/^(\/|https?:)/i.test(href),
+      `${file}: favicon href must be page-relative, got "${href}"`
+    );
+    return {
+      rel: attr(tag, 'rel'),
+      target: path.posix.normalize(path.posix.join(pageDir, href.split(/[?#]/)[0])),
+      type: attr(tag, 'type'),
+      sizes: attr(tag, 'sizes'),
+    };
+  });
+}
 
 function assertTeamFaviconsAreEarly(page) {
   const html = readPage(page);
   const titleIndex = html.indexOf('<title>');
-  const firstFaviconIndex = html.indexOf('<link rel="icon" href="/favicon.ico" sizes="any">');
+  const firstFaviconIndex = html.indexOf('<link rel="icon" href="favicon.ico" sizes="any">');
   const firstStylesheetIndex = html.indexOf('rel="stylesheet"');
 
   assert(titleIndex !== -1, `${page} should define a title`);
@@ -37,19 +59,24 @@ function assertFaviconParity(homepage, pages) {
   const homepageLinks = faviconLinks(homepage);
   assert(homepageLinks.length > 0, `${homepage} should define favicon links`);
 
+  homepageLinks.forEach((link) => {
+    assert(
+      fs.existsSync(path.join(root, link.target)),
+      `${homepage}: favicon target does not exist: ${link.target}`
+    );
+  });
+
   pages.forEach((page) => {
-    const pageLinks = faviconLinks(page);
-    homepageLinks.forEach((link) => {
-      assert(
-        pageLinks.includes(link),
-        `${page} should include approved homepage favicon declaration: ${link}`
-      );
-    });
+    assert.deepStrictEqual(
+      faviconLinks(page),
+      homepageLinks,
+      `${page} should reference the same favicon files as ${homepage}`
+    );
   });
 }
 
 function assertTeamPathRelativeFallbacks(page) {
-  const links = faviconLinks(page);
+  const links = readPage(page).match(faviconSelector) || [];
   [
     '<link rel="icon" href="favicon.ico" sizes="any">',
     '<link rel="shortcut icon" href="favicon.ico">',
@@ -91,5 +118,8 @@ assertFaviconParity(
 
 assertTeamFaviconsAreEarly('team.html');
 assertTeamFaviconsAreEarly('team_cn.html');
+
+assertTeamPathRelativeFallbacks('team.html');
+assertTeamPathRelativeFallbacks('team_cn.html');
 
 console.log('legal favicon consistency tests passed');

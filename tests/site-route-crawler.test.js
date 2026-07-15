@@ -5,14 +5,17 @@ const path = require('path');
 const root = path.resolve(__dirname, '..');
 const skipDirs = new Set(['.git', 'node_modules']);
 const externalSchemes = /^(?:https?:|mailto:|tel:|javascript:|data:|#)/i;
-const faviconLinks = [
-  '<link rel="icon" href="/favicon.ico" sizes="any">',
-  '<link rel="shortcut icon" href="/favicon.ico">',
-  '<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">',
-  '<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">',
-  '<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">',
-  '<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">',
-  '<link rel="manifest" href="/site.webmanifest">',
+// Favicon hrefs are page-relative (prefixed with ../ per directory level)
+// so they resolve whether the site is served from the domain root or a
+// subpath such as a GitHub Pages project site.
+const faviconLinks = (prefix) => [
+  `<link rel="icon" href="${prefix}favicon.ico" sizes="any">`,
+  `<link rel="shortcut icon" href="${prefix}favicon.ico">`,
+  `<link rel="icon" href="${prefix}assets/favicon.svg" type="image/svg+xml">`,
+  `<link rel="icon" type="image/png" sizes="32x32" href="${prefix}assets/favicon-32x32.png">`,
+  `<link rel="icon" type="image/png" sizes="16x16" href="${prefix}assets/favicon-16x16.png">`,
+  `<link rel="apple-touch-icon" sizes="180x180" href="${prefix}assets/apple-touch-icon.png">`,
+  `<link rel="manifest" href="${prefix}site.webmanifest">`,
 ];
 const iconMimeByExt = new Map([
   ['.ico', /image\/x-icon|image\/vnd\.microsoft\.icon|application\/octet-stream/],
@@ -60,10 +63,11 @@ for (const page of pages) {
   const html = read(page);
   assert.match(html, /<!doctype html>/i, `${page} should be an HTML document`);
   assert.match(html, /<html\s+[^>]*lang="(?:en|zh-CN)"/i, `${page} should declare en or zh-CN language`);
-  for (const line of faviconLinks) assert(html.includes(line), `${page} should include approved homepage favicon declaration: ${line}`);
+  const expectedFavicons = faviconLinks('../'.repeat(page.split('/').length - 1));
+  for (const line of expectedFavicons) assert(html.includes(line), `${page} should include approved homepage favicon declaration: ${line}`);
 
-  for (const href of faviconLinks.map((line) => attrs(line).href)) {
-    const rel = href.slice(1);
+  for (const href of expectedFavicons.map((line) => attrs(line).href)) {
+    const rel = resolveInternal(page, href);
     assert(fs.existsSync(path.join(root, rel)), `${page} favicon asset should exist: ${href}`);
     assert(iconMimeByExt.has(path.extname(rel)), `${href} should have an expected icon/manifest extension`);
   }
