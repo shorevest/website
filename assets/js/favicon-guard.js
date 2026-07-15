@@ -1,5 +1,5 @@
 (function () {
-  var VERSION = "20260716-cinnabar";
+  var VERSION = "20260717";
 
   // Resolve the site base from this script's own URL so favicons work
   // whether the site is served from the domain root or a subpath
@@ -11,12 +11,12 @@
   }
 
   var ICONS = [
-    { rel: "icon", href: base + "favicon.ico?v=" + VERSION, sizes: "any" },
-    { rel: "shortcut icon", href: base + "favicon.ico?v=" + VERSION },
-    { rel: "icon", href: base + "assets/favicon.svg?v=" + VERSION, type: "image/svg+xml" },
-    { rel: "icon", href: base + "assets/favicon-32x32.png?v=" + VERSION, type: "image/png", sizes: "32x32" },
-    { rel: "icon", href: base + "assets/favicon-16x16.png?v=" + VERSION, type: "image/png", sizes: "16x16" },
-    { rel: "apple-touch-icon", href: base + "assets/apple-touch-icon.png?v=" + VERSION, sizes: "180x180" },
+    { rel: "icon", href: base + "assets/favicon-cinnabar.ico?v=" + VERSION, sizes: "any" },
+    { rel: "shortcut icon", href: base + "assets/favicon-cinnabar.ico?v=" + VERSION },
+    { rel: "icon", href: base + "assets/favicon-cinnabar.svg?v=" + VERSION, type: "image/svg+xml" },
+    { rel: "icon", href: base + "assets/favicon-cinnabar-32x32.png?v=" + VERSION, type: "image/png", sizes: "32x32" },
+    { rel: "icon", href: base + "assets/favicon-cinnabar-16x16.png?v=" + VERSION, type: "image/png", sizes: "16x16" },
+    { rel: "apple-touch-icon", href: base + "assets/apple-touch-icon-cinnabar.png?v=" + VERSION, sizes: "180x180" },
     { rel: "manifest", href: base + "site.webmanifest?v=" + VERSION },
   ];
 
