@@ -168,11 +168,7 @@ body.privacy-page, body.cookie-page, body.terms-page, body.legal-page, body.disc
 .sv-footer__links { display: flex; flex-wrap: wrap; gap: 8px 22px; }
 .sv-footer__links a { font: 400 var(--sv-chrome-footer-small-size)/1 var(--sv-chrome-font); color: var(--sv-chrome-on-dark); text-decoration: none; }
 .sv-footer__links a:hover { color: var(--sv-chrome-ivory); }
-.sv-footer__copy { display: inline-flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; margin: 0; font: 400 var(--sv-chrome-footer-small-size)/1 var(--sv-chrome-font); color: var(--sv-chrome-faint-on-dark); }
-.sv-footer__linkedin { color: var(--sv-chrome-faint-on-dark); text-decoration: none; text-underline-offset: 3px; }
-.sv-footer__linkedin:hover,
-.sv-footer__linkedin:focus-visible { color: var(--sv-chrome-ivory); text-decoration: underline; }
-.sv-footer__linkedin:focus-visible { outline: 2px solid rgba(252, 249, 241, 0.65); outline-offset: 3px; }
+.sv-footer__copy { margin: 0; font: 400 var(--sv-chrome-footer-small-size)/1 var(--sv-chrome-font); color: var(--sv-chrome-faint-on-dark); }
 
 /* ---------- BACK TO TOP -------------------------------------------------- */
 .sv-totop {
@@ -229,9 +225,6 @@ html body footer.sv-footer .sv-footer__legal p { color: var(--sv-chrome-faint-on
 html body footer.sv-footer .sv-footer__links a { color: var(--sv-chrome-on-dark) !important; }
 html body footer.sv-footer .sv-footer__links a:hover { color: var(--sv-chrome-ivory) !important; }
 html body footer.sv-footer .sv-footer__copy { color: var(--sv-chrome-faint-on-dark) !important; }
-html body footer.sv-footer .sv-footer__linkedin { color: var(--sv-chrome-faint-on-dark) !important; }
-html body footer.sv-footer .sv-footer__linkedin:hover,
-html body footer.sv-footer .sv-footer__linkedin:focus-visible { color: var(--sv-chrome-ivory) !important; }
 html body footer.sv-footer .sv-footer__logo img { width: 200px !important; }
 
 /* Footer text SIZES — match homepage exactly. The legacy typography stack on
@@ -326,4 +319,46 @@ html body footer.sv-footer .sv-footer__access-label {
 }
 html body footer.sv-footer .sv-footer__access a::after {
   content: none;
+}
+
+/* Footer LinkedIn social link */
+.sv-footer__social {
+  grid-column: 2;
+  justify-self: end;
+  margin-top: 20px;
+}
+.sv-footer__social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 8px 0;
+  font: 500 14px/1 var(--sv-chrome-font);
+  letter-spacing: 0.03em;
+  color: var(--sv-chrome-on-dark);
+  text-decoration: none;
+  text-underline-offset: 4px;
+  transition: color .18s ease;
+}
+.sv-footer__social-link:hover,
+.sv-footer__social-link:focus-visible {
+  color: var(--sv-chrome-ivory);
+  text-decoration: underline;
+}
+.sv-footer__social-link:focus-visible {
+  outline: 2px solid rgba(252, 249, 241, 0.72);
+  outline-offset: 4px;
+}
+.sv-footer__social-icon {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 17px;
+  fill: currentColor;
+}
+@media (max-width: 767px) {
+  .sv-footer__social {
+    grid-column: 1;
+    justify-self: start;
+    margin-top: 18px;
+  }
 }
