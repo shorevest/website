@@ -95,8 +95,8 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 
         <div class="ip-hero__signin">
           <p class="ip-signin__kicker">Secure sign in</p>
-          <h2 class="ip-signin__title">Enter your email to continue.</h2>
-          <p class="ip-signin__note">You will be redirected to the iDeals data room once your email is validated.</p>
+          <h2 class="ip-signin__title">Enter your email to open the data room.</h2>
+          <p class="ip-signin__note">Authorized investors are sent directly into the ShoreVest iDeals data room.</p>
 <section class="login-form-container">
   <form name="login" id="vdr-login-form" class="login-form" method="POST">
     <h3>
@@ -120,7 +120,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
       <small class="error"></small>
     </div>
 
-    <button type="submit" class="btn btn-primary" name="submit">Sign in</button>
+    <button type="submit" class="btn btn-primary" name="submit">Open data room</button>
   </form>
   <p class="ip-signin__secure">Encrypted connection · iDeals secure VDR</p>
 </section>
@@ -143,6 +143,8 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
   (function () {
+    var SHOREVEST_DATA_ROOM_URL = 'https://app.idealsvdr.com/projects/all/documents';
+
     var ERROR_MESSAGES = {
       INVALID_EMAIL: 'Enter a valid email',
       REQUIRED_FIELD: 'Fill in to continue'
@@ -176,7 +178,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 
           if (this.validateForm()) {
             var email = encodeURIComponent(_this.emailField.value);
-            window.location.href = "https://app.idealsvdr.com/projects/all?email=".concat(email);
+            window.location.href = SHOREVEST_DATA_ROOM_URL + '?email=' + email;
           }
         }
       }, {
