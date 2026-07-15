@@ -27,10 +27,10 @@
       isClickable: true
     },
     {
-      startDate: '2026-09-24',
-      endDate: '2026-09-25',
+      startDate: '2026-09-18',
+      endDate: '2026-09-18',
       timeZone: 'Asia/Hong_Kong',
-      displayDate: '24–25 Sep 2026',
+      displayDate: '18 Sep 2026',
       type: 'Investor Event',
       title: 'ShoreVest Annual General Meeting 2026',
       location: 'Guangzhou',
