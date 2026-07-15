@@ -35,8 +35,8 @@
       </div>
       <nav class="sv-footer__nav" aria-label="Footer">
         <a href="${siteHref('firm.html')}">Firm</a>
-        <a href="${siteHref('insights.html')}">Insights</a>
         <a href="${siteHref('strategy.html')}">Strategy</a>
+        <a href="${siteHref('insights.html')}">Insights</a>
         <a href="${siteHref('press.html')}">Media</a>
         <a href="${siteHref('team.html')}">Team</a>
         <a href="${siteHref('contact.html')}">Contact</a>
