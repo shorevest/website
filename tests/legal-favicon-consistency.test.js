@@ -40,7 +40,7 @@ function faviconLinks(file) {
 function assertTeamFaviconsAreEarly(page) {
   const html = readPage(page);
   const titleIndex = html.indexOf('<title>');
-  const firstFaviconIndex = html.indexOf('<link rel="icon" href="favicon.ico" sizes="any">');
+  const firstFaviconIndex = html.indexOf('<link rel="icon" href="favicon.ico?v=');
   const firstStylesheetIndex = html.indexOf('rel="stylesheet"');
 
   assert(titleIndex !== -1, `${page} should define a title`);
@@ -76,17 +76,16 @@ function assertFaviconParity(homepage, pages) {
 }
 
 function assertTeamPathRelativeFallbacks(page) {
-  const links = readPage(page).match(faviconSelector) || [];
+  const targets = faviconLinks(page).map((link) => link.target);
   [
-    '<link rel="icon" href="favicon.ico" sizes="any">',
-    '<link rel="shortcut icon" href="favicon.ico">',
-    '<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">',
-    '<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">',
-    '<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">',
-    '<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">',
-    '<link rel="manifest" href="site.webmanifest">',
-  ].forEach((link) => {
-    assert(links.includes(link), `${page} should include path-relative favicon fallback: ${link}`);
+    'favicon.ico',
+    'assets/favicon.svg',
+    'assets/favicon-32x32.png',
+    'assets/favicon-16x16.png',
+    'assets/apple-touch-icon.png',
+    'site.webmanifest',
+  ].forEach((target) => {
+    assert(targets.includes(target), `${page} should include path-relative favicon fallback: ${target}`);
   });
 }
 

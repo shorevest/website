@@ -7,15 +7,17 @@ const skipDirs = new Set(['.git', 'node_modules']);
 const externalSchemes = /^(?:https?:|mailto:|tel:|javascript:|data:|#)/i;
 // Favicon hrefs are page-relative (prefixed with ../ per directory level)
 // so they resolve whether the site is served from the domain root or a
-// subpath such as a GitHub Pages project site.
+// subpath such as a GitHub Pages project site. The ?v= query forces
+// browsers to drop previously cached icon art when the assets change.
+const faviconVersion = '20260716-cinnabar';
 const faviconLinks = (prefix) => [
-  `<link rel="icon" href="${prefix}favicon.ico" sizes="any">`,
-  `<link rel="shortcut icon" href="${prefix}favicon.ico">`,
-  `<link rel="icon" href="${prefix}assets/favicon.svg" type="image/svg+xml">`,
-  `<link rel="icon" type="image/png" sizes="32x32" href="${prefix}assets/favicon-32x32.png">`,
-  `<link rel="icon" type="image/png" sizes="16x16" href="${prefix}assets/favicon-16x16.png">`,
-  `<link rel="apple-touch-icon" sizes="180x180" href="${prefix}assets/apple-touch-icon.png">`,
-  `<link rel="manifest" href="${prefix}site.webmanifest">`,
+  `<link rel="icon" href="${prefix}favicon.ico?v=${faviconVersion}" sizes="any">`,
+  `<link rel="shortcut icon" href="${prefix}favicon.ico?v=${faviconVersion}">`,
+  `<link rel="icon" href="${prefix}assets/favicon.svg?v=${faviconVersion}" type="image/svg+xml">`,
+  `<link rel="icon" type="image/png" sizes="32x32" href="${prefix}assets/favicon-32x32.png?v=${faviconVersion}">`,
+  `<link rel="icon" type="image/png" sizes="16x16" href="${prefix}assets/favicon-16x16.png?v=${faviconVersion}">`,
+  `<link rel="apple-touch-icon" sizes="180x180" href="${prefix}assets/apple-touch-icon.png?v=${faviconVersion}">`,
+  `<link rel="manifest" href="${prefix}site.webmanifest?v=${faviconVersion}">`,
 ];
 const iconMimeByExt = new Map([
   ['.ico', /image\/x-icon|image\/vnd\.microsoft\.icon|application\/octet-stream/],
