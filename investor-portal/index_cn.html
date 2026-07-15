@@ -96,7 +96,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
         <div class="ip-hero__signin">
           <p class="ip-signin__kicker">安全登录</p>
           <h2 class="ip-signin__title">请输入您的电子邮件以继续。</h2>
-          <p class="ip-signin__note">电子邮件验证通过后，您将被重定向至 iDeals 数据室。</p>
+          <p class="ip-signin__note">获授权投资者将直接进入 ShoreVest iDeals 数据室。</p>
 <section class="login-form-container">
   <form name="login" id="vdr-login-form" class="login-form" method="POST">
     <h3>
@@ -120,7 +120,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
       <small class="error"></small>
     </div>
 
-    <button type="submit" class="btn btn-primary" name="submit">登录</button>
+    <button type="submit" class="btn btn-primary" name="submit">进入数据室</button>
   </form>
   <p class="ip-signin__secure">加密连接 · iDeals 安全虚拟数据室</p>
 </section>
@@ -143,6 +143,8 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
   (function () {
+    var SHOREVEST_DATA_ROOM_URL = 'https://app.idealsvdr.com/projects/all/documents';
+
     var ERROR_MESSAGES = {
       INVALID_EMAIL: '请输入有效的电子邮件',
       REQUIRED_FIELD: '请填写后继续'
@@ -176,7 +178,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 
           if (this.validateForm()) {
             var email = encodeURIComponent(_this.emailField.value);
-            window.location.href = "https://app.idealsvdr.com/projects/all?email=".concat(email);
+            window.location.href = SHOREVEST_DATA_ROOM_URL + '?email=' + email;
           }
         }
       }, {
