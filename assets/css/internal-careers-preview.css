@@ -35,7 +35,8 @@ body.careers-preview-page .careers-hero__media {
   justify-self: end;
   align-self: center;
   aspect-ratio: 1 / 1;
-  overflow: hidden;
+  overflow: visible;
+  isolation: isolate;
 }
 body.careers-preview-page .careers-eyebrow {
   margin: 0 0 20px;
@@ -90,6 +91,7 @@ body.careers-preview-page .careers-hero__image {
   border: 0;
   filter: grayscale(1);
   transition: filter 420ms ease, transform 420ms ease;
+  clip-path: inset(0);
 }
 body.careers-preview-page .careers-hero__media:is(:hover, :focus-within) .careers-hero__image {
   filter: grayscale(0);
