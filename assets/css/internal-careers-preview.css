@@ -76,7 +76,7 @@ body.careers-preview-page .careers-ledger p {
   color: var(--sv-meta-on-dark, rgba(252,249,241,.78));
 }
 body.careers-preview-page .careers-copy p,
-body.careers-preview-page .careers-block p { max-width: 62ch; }
+body.careers-preview-page .careers-block p { max-width: none; }
 body.careers-preview-page .careers-lede + .careers-lede,
 body.careers-preview-page .careers-copy p + p,
 body.careers-preview-page .careers-block p + p { margin-top: 15px; }
@@ -439,7 +439,7 @@ body.careers-preview-page .careers-development__head > :last-child {
 body.careers-preview-page .careers-development__intro {
   align-self: start;
   justify-self: start;
-  max-width: 650px;
+  max-width: none;
   text-align: left;
 }
 body.careers-preview-page .careers-development__ledger {
@@ -471,10 +471,15 @@ body.careers-preview-page .careers-development__list .careers-list {
 body.careers-preview-page .careers-development__list li {
   position: relative;
   padding-left: 18px;
-  max-width: 38ch;
+  max-width: none;
   font: 500 clamp(15.5px, 1.08vw, 17px)/1.45 var(--sv-font);
   letter-spacing: -0.004em;
   text-align: left;
+}
+
+/* Below the hero, careers copy should use the full available grid width. */
+body.careers-preview-page :is(.careers-section, .careers-open-roles, .careers-notices) :is(p, li) {
+  max-width: none;
 }
 body.careers-preview-page .careers-development__list li::before {
   content: "";
