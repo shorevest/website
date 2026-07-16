@@ -8,7 +8,6 @@ body.careers-preview-page main {
 body.careers-preview-page .careers-hero {
   background: var(--sv-dark-footer, #20211F);
   color: var(--sv-text-on-dark, #FCF9F1);
-  padding-block: clamp(72px, 7.4vw, 112px) 0;
   overflow: hidden;
 }
 body.careers-preview-page .careers-hero__grid,
@@ -18,13 +17,21 @@ body.careers-preview-page .careers-two-col {
   gap: clamp(28px, 4.6vw, 72px);
   align-items: start;
 }
-body.careers-preview-page .careers-hero__lead { grid-column: 1 / 7; min-width: 0; }
+body.careers-preview-page .careers-hero__grid {
+  min-height: 650px;
+  padding-block: clamp(56px, 6vw, 88px) clamp(72px, 7vw, 104px);
+  align-items: center;
+}
+body.careers-preview-page .careers-hero__lead {
+  grid-column: 1 / 7;
+  min-width: 0;
+  padding-right: clamp(24px, 3vw, 56px);
+}
 body.careers-preview-page .careers-hero__media {
   grid-column: 7 / 13;
   position: relative;
   min-width: 0;
   align-self: center;
-  padding: 0;
 }
 body.careers-preview-page .careers-eyebrow {
   margin: 0 0 20px;
@@ -60,7 +67,6 @@ body.careers-preview-page .careers-copy p + p,
 body.careers-preview-page .careers-block p + p { margin-top: 15px; }
 body.careers-preview-page .careers-hero__media::before {
   content: "";
-  display: block;
   position: absolute;
   top: clamp(44px, 4.5vw, 68px);
   right: clamp(-36px, -2.2vw, -20px);
@@ -77,9 +83,8 @@ body.careers-preview-page .careers-image-placeholder {
   display: grid;
   place-items: center;
   border: 0;
-  background: var(--sv-stone, #F1EBDD);
-  color: rgba(24,37,36,.58);
-  overflow: hidden;
+  background: rgba(252, 249, 241, 0.055);
+  color: var(--sv-faint-on-dark, rgba(252,249,241,.58));
   font: 600 11px/1.3 var(--sv-font);
   letter-spacing: .16em;
   text-transform: uppercase;
@@ -174,6 +179,8 @@ body.careers-preview-page .careers-copy--cn li { line-height: 1.86; }
   body.careers-preview-page .careers-two-col > :first-child,
   body.careers-preview-page .careers-two-col > :last-child { grid-column: 1 / 13; }
   body.careers-preview-page .careers-hero__body { border-left: 0; padding-left: 0; }
+  body.careers-preview-page .careers-hero__grid { min-height: 0; padding-block: 72px 64px; }
+  body.careers-preview-page .careers-hero__lead { padding-right: 0; }
   body.careers-preview-page .careers-hero__media { max-width: 560px; }
   body.careers-preview-page .careers-hero__media::before { display: none; }
   body.careers-preview-page .careers-block { grid-template-columns: 1fr; }

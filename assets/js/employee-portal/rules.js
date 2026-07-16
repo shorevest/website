@@ -236,7 +236,7 @@
   function describeError(code) {
     var def = ERROR_CODES[code];
     return def ? { code: code, category: def.category, message: def.message, resolution: def.resolution }
-               : { code: code, category: CLASSIFICATION.REVIEW_REQUIRED, message: 'Unrecognised exception code.', resolution: 'Route to review.' };
+               : { code: code, category: CLASSIFICATION.REVIEW_REQUIRED, message: 'Unrecognized exception code.', resolution: 'Route to review.' };
   }
 
   /* ────────────────────────────────────────────────────────────────────────
@@ -249,8 +249,7 @@
     firstName: ['first name', 'firstname', 'given name', 'forename', 'first'],
     lastName: ['last name', 'lastname', 'surname', 'family name', 'last'],
     fullName: ['name', 'full name', 'contact name', 'contact'],
-    company: ['company', 'company name', 'firm', 'firm name', 'organisation',
-              'organization', 'account', 'account name'],
+    company: ['company', 'company name', 'firm', 'firm name', 'organization', 'account', 'account name'],
     email: ['email', 'email address', 'e-mail', 'e-mail address',
             'business email', 'work email'],
     country: ['country', 'country/region', 'nation'],
@@ -850,7 +849,7 @@
         ownerAssignments.push({
           region: knownRegion || regionRaw,
           owner: knownOwner.name || knownOwner,
-          regionRecognised: !!knownRegion,
+          regionRecognized: !!knownRegion,
           confirmed: false
         });
         hit('assign ' + regionRaw + ' to ' + ownerRaw);

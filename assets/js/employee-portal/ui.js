@@ -61,7 +61,7 @@
     return isNaN(d) ? String(iso) : d.toISOString().slice(0, 10);
   }
 
-  /* ── Status indicator (dot + label — never colour alone) ──────────────── */
+  /* ── Status indicator (dot + label — never color alone) ──────────────── */
 
   var STATUS_CLASS = {};
   if (R) {
