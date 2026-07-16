@@ -481,11 +481,11 @@ body.careers-preview-page .careers-development__list .careers-list {
 }
 body.careers-preview-page .careers-development__list li {
   position: relative;
-  padding-left: 0;
+  padding-left: 17px;
   max-width: none;
   font: 500 clamp(15.5px, 1.08vw, 17px)/1.45 var(--sv-font);
   letter-spacing: -0.004em;
-  text-align: center;
+  text-align: left;
 }
 
 /* Below the hero, careers copy should use the full available grid width. */
@@ -494,11 +494,12 @@ body.careers-preview-page :is(.careers-section, .careers-open-roles, .careers-no
 }
 body.careers-preview-page .careers-development__list li::before {
   content: "";
-  display: inline-block;
+  position: absolute;
+  left: 0;
+  top: 0.72em;
   width: 7px;
   height: 7px;
-  margin-right: 10px;
-  transform: translateY(-1px);
+  transform: translateY(-50%);
   background: var(--sv-cinnabar, #C93B2A);
 }
 @media (max-width: 980px) {
