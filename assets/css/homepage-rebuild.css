@@ -439,6 +439,10 @@ body.homepage .sv-hero__since {
   white-space: nowrap;
 }
 body.homepage .sv-hero__headline-accent {
+  /* Override the broad "no horizontal rules" suppression: the class name
+     contains the substring "line-" (headline-accent), so [class*="line-"]
+     was hiding the founding year with display:none !important. */
+  display: inline !important;
   color: var(--sv-cinnabar, #C93B2A);
 }
 body.homepage .sv-hero__body {
