@@ -440,7 +440,7 @@ body.careers-preview-page .careers-development__head > :last-child {
 body.careers-preview-page .careers-development__intro {
   align-self: start;
   justify-self: start;
-  max-width: 650px;
+  max-width: none;
   text-align: left;
 }
 body.careers-preview-page .careers-development__ledger {
