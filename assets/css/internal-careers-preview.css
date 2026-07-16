@@ -1,14 +1,15 @@
 /* Careers internal preview — aligned to ShoreVest internal page system. */
 body.careers-preview-page {
-  background: var(--sv-ivory);
-  color: var(--sv-ink);
+  background: #FCF9F1;
+  color: #182524;
   font-family: var(--sv-font);
 }
-body.careers-preview-page main { background: var(--sv-ivory); }
+body.careers-preview-page main { background: #FCF9F1; color: #182524; }
 body.careers-preview-page .careers-hero {
   position: relative;
   overflow: hidden;
-  background: var(--sv-ivory);
+  background: #FCF9F1;
+  color: #182524;
   padding-block: clamp(64px, 7vw, 104px) clamp(40px, 5vw, 72px);
   border-bottom: 1px solid var(--sv-border-light-strong);
 }
@@ -24,14 +25,14 @@ body.careers-preview-page .careers-kicker {
   font: 600 12px/1.3 var(--sv-font);
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--sv-ink);
+  color: #182524;
 }
 body.careers-preview-page .careers-title {
   margin: 0;
   max-width: 19ch;
   font: 500 clamp(38px, 4.6vw, 62px)/1.04 var(--sv-font);
   letter-spacing: -.03em;
-  color: var(--sv-ink);
+  color: #182524;
   text-wrap: balance;
 }
 body.careers-preview-page .careers-hero__body {
@@ -41,7 +42,7 @@ body.careers-preview-page .careers-hero__body {
 body.careers-preview-page .careers-lede {
   margin: 0;
   font: 400 17px/1.66 var(--sv-font);
-  color: var(--sv-ink-2);
+  color: #2A302E;
 }
 body.careers-preview-page .careers-lede + .careers-lede { margin-top: 16px; }
 body.careers-preview-page .careers-review-note {
@@ -49,17 +50,14 @@ body.careers-preview-page .careers-review-note {
   padding-top: 18px;
   border-top: 1px solid var(--sv-border-light-strong);
   font: 400 13px/1.55 var(--sv-font);
-  color: var(--sv-muted, #6E7169);
+  color: #5F665F;
 }
 body.careers-preview-page .careers-section {
   padding-block: var(--section-y);
-  background: var(--sv-ivory);
+  background: #FCF9F1;
+  color: #182524;
 }
-body.careers-preview-page .careers-shell {
-  width: 100%;
-  max-width: min(1120px, var(--page-max));
-}
-body.careers-preview-page .careers-section--band { background: var(--sv-stone); }
+body.careers-preview-page .careers-section--band { background: #F2EEE4; color: #182524; }
 body.careers-preview-page .careers-head {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
@@ -73,8 +71,8 @@ body.careers-preview-page .careers-head__r p,
 body.careers-preview-page .careers-copy p {
   margin: 0;
   font: 400 16px/1.66 var(--sv-font);
-  color: var(--sv-ink-2);
-  max-width: 78ch;
+  color: #2A302E;
+  max-width: 62rem;
 }
 body.careers-preview-page .careers-head__r p + p,
 body.careers-preview-page .careers-copy p + p { margin-top: 16px; }
@@ -82,7 +80,7 @@ body.careers-preview-page .careers-h2 {
   margin: 0;
   font: 500 clamp(30px, 3.4vw, 46px)/1.12 var(--sv-font);
   letter-spacing: -.018em;
-  color: var(--sv-ink);
+  color: #182524;
   text-wrap: balance;
 }
 body.careers-preview-page .careers-blocks {
@@ -99,7 +97,7 @@ body.careers-preview-page .careers-block h3 {
   margin: 0;
   font: 500 20px/1.22 var(--sv-font);
   letter-spacing: -.01em;
-  color: var(--sv-ink);
+  color: #182524;
 }
 body.careers-preview-page .careers-block__body > * + * { margin-top: 16px; }
 body.careers-preview-page .careers-list {
@@ -110,8 +108,7 @@ body.careers-preview-page .careers-list {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px 28px;
   font: 400 15.5px/1.6 var(--sv-font);
-  color: var(--sv-ink-2);
-  max-width: 980px;
+  color: #2A302E;
 }
 body.careers-preview-page .careers-list li::marker { color: var(--sv-cinnabar); }
 body.careers-preview-page .careers-values {
@@ -129,7 +126,7 @@ body.careers-preview-page .careers-value h3 {
   font: 600 12px/1.3 var(--sv-font);
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--sv-ink);
+  color: #182524;
 }
 body.careers-preview-page .careers-action {
   display: inline-flex;
@@ -137,7 +134,7 @@ body.careers-preview-page .careers-action {
   height: 44px;
   padding: 0 18px;
   border: 1px solid var(--sv-border-light-strong);
-  color: var(--sv-muted, #6E7169);
+  color: #5F665F;
   background: transparent;
   font: 600 12px/1 var(--sv-font);
   letter-spacing: .08em;
@@ -172,13 +169,13 @@ body.careers-preview-page .careers-copy h2 {
   border-top: 1px solid var(--sv-border-light-strong);
   font: 500 clamp(28px, 3vw, 40px)/1.14 var(--sv-font);
   letter-spacing: -.018em;
-  color: var(--sv-ink);
+  color: #182524;
   text-wrap: balance;
 }
 body.careers-preview-page .careers-copy h2:first-of-type { margin-top: 0; padding-top: 0; border-top: 0; }
 body.careers-preview-page .careers-copy .careers-kicker {
   margin: 26px 0 8px;
-  color: var(--sv-ink);
+  color: #182524;
 }
 body.careers-preview-page .careers-content { border-bottom: 1px solid rgba(23,53,54,.14); }
 
