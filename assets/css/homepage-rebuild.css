@@ -408,7 +408,7 @@ body.homepage .sv-hero__headline {
   word-break: normal;
 }
 body.homepage .sv-hero__headline-accent {
-  color: var(--sv-cinnabar);
+  color: var(--sv-cinnabar, #C93B2A);
 }
 body.homepage .sv-hero__body {
   margin: 24px 0 0;
