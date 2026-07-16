@@ -191,4 +191,20 @@ body.careers-preview-page .careers-copy--cn li { line-height: 1.86; }
 @media (max-width: 760px) {
   body.careers-preview-page .careers-ledger,
   body.careers-preview-page .careers-list { grid-template-columns: 1fr; }
+  body.careers-preview-page .careers-hero__media {
+    padding: 0 0 22px;
+    max-width: none;
+    width: 100%;
+  }
+  body.careers-preview-page .careers-hero__media::before {
+    display: block;
+    top: 40px;
+    right: calc(var(--pad-x) * -1);
+    bottom: 0;
+    left: 28px;
+  }
+  body.careers-preview-page .careers-image-placeholder {
+    margin-right: 14px;
+    width: auto;
+  }
 }
