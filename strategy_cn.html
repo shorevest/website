@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
 <script>
 try{window.addEventListener('error',function(e){if(e&&typeof e.message==='string'&&e.message.indexOf('ResizeObserver loop')!==-1){e.stopImmediatePropagation();e.preventDefault();}},true);}catch(_){}
@@ -22,8 +22,10 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
-<script>document.write('<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260708-layered-hero-b&t='+window.__SVT+'">');</script>
-<script>document.write('<link rel="stylesheet" href="assets/css/strategy-rebuild.css?v=20260713-opportunity-light&t='+window.__SVT+'">');</script>
+<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260714-strategy-hero-grayscale-hover">
+<link rel="stylesheet" href="assets/css/strategy-rebuild.css?v=20260714-strategy-hero-grayscale-hover">
+<link rel="stylesheet" href="assets/css/box-system.css?v=20260714-strategy-hero-grayscale-hover">
+<link rel="stylesheet" href="assets/css/chinese-latin-typography.css?v=20260714-strategy-hero-grayscale-hover">
 <style>
   body.homepage {
     --sv-font: "DIN 2014", "Barlow", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
@@ -31,14 +33,21 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
     --sv-cn: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
   }
 </style>
-<link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="shortcut icon" href="/favicon.ico">
-<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
-<link rel="manifest" href="/site.webmanifest">
-<link rel="preload" as="image" href="li-zim-5fqdeo5R4N8-unsplash.jpg" fetchpriority="high">
+<link rel="icon" href="assets/favicon-cinnabar.ico?v=20260717" sizes="any">
+<link rel="shortcut icon" href="assets/favicon-cinnabar.ico?v=20260717">
+<link rel="icon" href="assets/favicon-cinnabar.svg?v=20260717" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-cinnabar-32x32.png?v=20260717">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-cinnabar-16x16.png?v=20260717">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon-cinnabar.png?v=20260717">
+<link rel="manifest" href="site.webmanifest?v=20260717">
+<link rel="canonical" href="https://shorevest.com/strategy_cn.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://shorevest.com/strategy_cn.html">
+<link rel="alternate" hreflang="en" href="https://shorevest.com/strategy.html">
+<meta property="og:title" content="新岸资本 | 策略">
+<meta property="og:description" content="新岸资本在中国提供涵盖贷款、重组与债务处置的资产支持信贷解决方案，承销聚焦入场安全边际、可执行性与可回收性。">
+<meta property="og:url" content="https://shorevest.com/strategy_cn.html">
+<meta property="og:locale" content="zh_CN">
+<script src="assets/js/favicon-guard.js?v=20260717" defer></script>
 </head>
 <body id="top" class="homepage strategy-page">
 
@@ -59,7 +68,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
     </nav>
     <div class="sv-utils">
       <a class="sv-lang" href="strategy.html">EN<span class="sep">|</span><span class="on">中文</span></a>
-      <a class="sv-util-btn" href="investor-portal/index.html">投资者门户</a>
+      <a class="sv-util-btn" href="investor-portal/index_cn.html">投资者门户</a>
       <a class="sv-util-btn sv-util-btn--cta" href="contact_cn.html">联系</a>
     </div>
     <button class="sv-burger" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="sv-mobile-menu">
@@ -79,7 +88,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
     </ul>
     <div class="sv-mobile-utils">
       <a class="sv-util-btn" href="strategy.html">EN</a>
-      <a class="sv-util-btn" href="investor-portal/index.html">投资者门户</a>
+      <a class="sv-util-btn" href="investor-portal/index_cn.html">投资者门户</a>
       <a class="sv-util-btn sv-util-btn--cta" href="contact_cn.html">联系</a>
     </div>
   </nav>
@@ -100,7 +109,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
         </div>
       </div>
       <div class="sx-hero__media" aria-hidden="true">
-        <figure class="sx-hero__image"><img src="li-zim-5fqdeo5R4N8-unsplash.jpg" alt="" width="1200" height="1500" loading="eager" decoding="async" fetchpriority="high"></figure>
+        <div class="sx-hero__panel" role="presentation"></div>
       </div>
     </div>
     <dl class="sx-glance">
@@ -331,9 +340,17 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
         <a href="insights_cn.html#archive">中国债务动态</a>
         <span class="sv-footer__access" role="group" aria-label="访问">
           <span class="sv-footer__access-label">入口</span>
-          <a href="investor-portal/index.html">投资者门户</a>
+          <a href="investor-portal/index_cn.html">投资者门户</a>
         </span>
       </nav>
+      <div class="sv-footer__social" aria-label="Follow ShoreVest">
+        <a class="sv-footer__social-link" href="https://www.linkedin.com/company/shorevest-partners/" target="_blank" rel="noopener noreferrer" aria-label="Follow ShoreVest Partners on LinkedIn">
+          <svg class="sv-footer__social-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+            <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V8.98h3.42v1.57h.05c.48-.9 1.64-1.85 3.37-1.85 3.61 0 4.27 2.37 4.27 5.46v6.29ZM5.32 7.42a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12Zm1.78 13.03H3.54V8.98H7.1v11.47ZM22.23 0H1.76C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.76 24h20.47c.97 0 1.77-.77 1.77-1.72V1.72C24 .77 23.2 0 22.23 0Z"/>
+          </svg>
+          <span>LinkedIn</span>
+        </a>
+      </div>
     </div>
 
     <div class="sv-footer__legal">
@@ -349,7 +366,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
         <a href="important-information_cn.html">重要信息</a>
         <a href="legal-notices-disclaimers_cn.html">法律声明与免责声明</a>
       </div>
-      <p class="sv-footer__copy">© 2026 新岸资本（ShoreVest Partners）。保留所有权利。</p>
+      <p class="sv-footer__copy">© 2026 ShoreVest Partners. All rights reserved.</p>
     </div>
   </div>
 </footer>

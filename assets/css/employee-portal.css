@@ -2,7 +2,7 @@
    ShoreVest One — application stylesheet (legacy employee-portal path)
    Private internal platform. Light, quiet, disciplined, restrained.
    Typeface: DIN 2014 only (Barlow / system-ui sans-serif fallback). No serif.
-   Palette: warm off-white surfaces, charcoal/ink text, subtle grey lines,
+   Palette: warm off-white surfaces, charcoal/ink text, subtle gray lines,
    restrained ShoreVest cinnabar accent. No gradients, no glow, no playful
    elements; soft corners and minimal borders over heavy boxes.
    ========================================================================== */
@@ -14,7 +14,7 @@
   --ops-white: #FFFFFF;
   --ops-paper: #F6F4EF;      /* warm off-white — app background */
   --ops-panel: #FCFBF8;      /* soft light surface for sidebar / quiet fills */
-  --ops-hairline: #EAE7E0;   /* subtle grey line */
+  --ops-hairline: #EAE7E0;   /* subtle gray line */
   --ops-rule: #DBD6CD;
   --ops-black: #1C1A16;
   --ops-charcoal: #2B2822;
@@ -25,7 +25,7 @@
   --ops-red: #C93B2A;        /* ShoreVest cinnabar — primary accent */
   --ops-red-dark: #8A1F12;
 
-  /* Status palette — always paired with a text label, never colour alone. */
+  /* Status palette — always paired with a text label, never color alone. */
   --st-ready: #4A7A40;
   --st-review: #C89A2E;
   --st-duplicate: #6B6258;
@@ -177,14 +177,14 @@ button { font-family: var(--ops-font); }
 .ops-module__name { font: 700 15px/1.3 var(--ops-font); color: var(--ops-black); margin: 9px 0 6px; }
 .ops-module__desc { font: 400 12.5px/1.55 var(--ops-font); color: var(--ops-muted); margin: 0; }
 
-/* Stat tiles — quiet, value in ink, never in series colour. */
+/* Stat tiles — quiet, value in ink, never in series color. */
 .ops-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; }
 .ops-stat { background: var(--ops-white); border: 1px solid var(--ops-hairline); border-radius: 6px; padding: 15px 17px; }
 .ops-stat__k { font: 700 10px/1.3 var(--ops-font); letter-spacing: 0.1em; text-transform: uppercase; color: var(--ops-faint); margin: 0 0 8px; display: flex; align-items: center; gap: 6px; }
 .ops-stat__v { font: 300 27px/1 var(--ops-font); color: var(--ops-black); margin: 0; font-variant-numeric: tabular-nums; }
 .ops-stat__v small { font-size: 13px; color: var(--ops-faint); font-weight: 400; }
 
-/* ── Status indicators (dot + label, never colour alone) ─────────────────── */
+/* ── Status indicators (dot + label, never color alone) ─────────────────── */
 .st { display: inline-flex; align-items: center; gap: 7px; font: 500 12px/1 var(--ops-font); letter-spacing: 0.03em; color: var(--ops-body); white-space: nowrap; }
 .st::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--ops-faint); flex: 0 0 auto; }
 .st--ready::before { background: var(--st-ready); }
@@ -354,9 +354,9 @@ table.tbl { border-collapse: collapse; width: 100%; font: 400 13px/1.45 var(--op
 .drawer section h4 { font: 700 11px/1.3 var(--ops-font); letter-spacing: 0.09em; text-transform: uppercase; color: var(--ops-muted); margin: 0 0 10px; }
 
 /* ── Sign-in gate ────────────────────────────────────────────────────────── */
-/* Minimal, discreet, light. A single compact card centred on a warm off-white
+/* Minimal, discreet, light. A single compact card centered on a warm off-white
    field — no product description, so a casual visitor learns almost nothing.
-   DIN only, subtle grey lines, restrained cinnabar accent. */
+   DIN only, subtle gray lines, restrained cinnabar accent. */
 .gate {
   min-height: 100vh; display: flex; align-items: center; justify-content: center;
   padding: 32px 20px; background: var(--ops-paper);
@@ -369,7 +369,7 @@ table.tbl { border-collapse: collapse; width: 100%; font: 400 13px/1.45 var(--op
   box-shadow: 0 1px 2px rgba(28, 26, 22, 0.035);
 }
 
-/* Brand — mark, wordmark, product name. Centred and quiet. */
+/* Brand — mark, wordmark, product name. Centered and quiet. */
 .gate__brand { text-align: center; margin-bottom: 28px; }
 .gate__brand img { width: 168px; height: auto; display: block; margin: 0 auto; }
 .gate__product {
@@ -758,7 +758,7 @@ table.tbl { border-collapse: collapse; width: 100%; font: 400 13px/1.45 var(--op
 .action-chip--wait { background: #f2f0ec; color: #5c5142; }
 .ops-role-switch span { font-weight: 700; }
 
-/* Home command centre refinement */
+/* Home command center refinement */
 .home { max-width: 1240px; }
 .home-pagehead { margin-bottom: 14px; }
 .home-doctrine { margin: 6px 0 0; color: var(--ops-muted); font: 400 13px/1.45 var(--ops-font); }

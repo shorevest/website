@@ -26,7 +26,8 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <!-- Self-contained homepage: this stylesheet is the single authority (same as EN). -->
-<script>document.write('<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260709-platform-continuity-white&t='+window.__SVT+'">');</script>
+<script>document.write('<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260715-proof-hover-chic&t='+window.__SVT+'">');</script>
+<script>document.write('<link rel="stylesheet" href="assets/css/chinese-latin-typography.css?t='+window.__SVT+'">');</script>
 <!-- CN font override: keep the DIN/Barlow stack but add a sans CJK fallback so
      Chinese glyphs render in a sans face (not serif) after the legacy sheets are dropped. -->
 <style>
@@ -36,14 +37,23 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
     --sv-cn: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
   }
 </style>
-<link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="shortcut icon" href="/favicon.ico">
-<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
-<link rel="manifest" href="/site.webmanifest">
+<link rel="icon" href="assets/favicon-cinnabar.ico?v=20260717" sizes="any">
+<link rel="shortcut icon" href="assets/favicon-cinnabar.ico?v=20260717">
+<link rel="icon" href="assets/favicon-cinnabar.svg?v=20260717" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-cinnabar-32x32.png?v=20260717">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-cinnabar-16x16.png?v=20260717">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon-cinnabar.png?v=20260717">
+<link rel="manifest" href="site.webmanifest?v=20260717">
 <link rel="preload" as="image" href="assets/img/trees/home-hero-metasequoia-sq.jpg" fetchpriority="high">
+
+<link rel="canonical" href="https://shorevest.com/index_cn.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://shorevest.com/index_cn.html">
+<link rel="alternate" hreflang="en" href="https://shorevest.com/index.html">
+<meta property="og:title" content="新岸资本 | 中国资产支持私募信贷">
+<meta property="og:description" content="新岸资本（ShoreVest）是一家私募信贷公司，为中国各地的借款人与金融机构提供资产支持信贷解决方案。">
+<meta property="og:url" content="https://shorevest.com/index_cn.html">
+<meta property="og:locale" content="zh_CN">
+<script src="assets/js/favicon-guard.js?v=20260717" defer></script>
 </head>
 <body id="top" class="homepage home-page">
 
@@ -64,7 +74,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
     </nav>
     <div class="sv-utils">
       <a class="sv-lang" href="index.html">EN<span class="sep">|</span><span class="on">中文</span></a>
-      <a class="sv-util-btn" href="investor-portal/index.html">投资者门户</a>
+      <a class="sv-util-btn" href="investor-portal/index_cn.html">投资者门户</a>
       <a class="sv-util-btn sv-util-btn--cta" href="contact_cn.html">联系</a>
     </div>
     <button class="sv-burger" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="sv-mobile-menu">
@@ -84,7 +94,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
     </ul>
     <div class="sv-mobile-utils">
       <a class="sv-util-btn" href="index.html">EN</a>
-      <a class="sv-util-btn" href="investor-portal/index.html">投资者门户</a>
+      <a class="sv-util-btn" href="investor-portal/index_cn.html">投资者门户</a>
       <a class="sv-util-btn sv-util-btn--cta" href="contact_cn.html">联系</a>
     </div>
   </nav>
@@ -98,7 +108,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
     <div class="sv-hero__main">
       <span class="sv-hero__rule" aria-hidden="true"></span>
       <p class="sv-hero__label">信贷解决方案</p>
-      <h1 class="sv-hero__headline">中国资产支持<br class="sv-hero__br">私募信贷</h1>
+      <h1 class="sv-hero__headline">始于 2004 年的中国资产支持<br class="sv-hero__br">私募信贷</h1>
       <p class="sv-hero__body">新岸资本是一家私募信贷公司，为中国各地的借款人与金融机构提供服务。</p>
       <p class="sv-hero__body">新岸资本的平台将本地执行与机构化承销、法律结构设计及资产服务相结合。</p>
       <div class="sv-hero__cta">
@@ -107,23 +117,6 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
     </div>
     <div class="sv-hero__field">
       <div class="sv-hero__image" aria-hidden="true"><img src="assets/img/trees/home-hero-metasequoia-sq.jpg" alt="" width="1600" height="1600" loading="eager" decoding="async" fetchpriority="high"></div>
-      <aside class="sv-hero__panel" aria-label="新岸资本概览">
-        <p class="sv-hero__panel-label">新岸资本概览</p>
-        <dl>
-          <div class="sv-hero__panel-row">
-            <dt>中国信贷经验</dt>
-            <dd>始于 2004 年</dd>
-          </div>
-          <div class="sv-hero__panel-row">
-            <dt>大中华区办公室</dt>
-            <dd>4</dd>
-          </div>
-          <div class="sv-hero__panel-row">
-            <dt>投资委员会成员</dt>
-            <dd>4</dd>
-          </div>
-        </dl>
-      </aside>
     </div>
   </div>
 </section>
@@ -237,9 +230,17 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
         <a href="insights_cn.html#archive">中国债务动态</a>
         <span class="sv-footer__access" role="group" aria-label="访问">
           <span class="sv-footer__access-label">入口</span>
-          <a href="investor-portal/index.html">投资者门户</a>
+          <a href="investor-portal/index_cn.html">投资者门户</a>
         </span>
       </nav>
+      <div class="sv-footer__social" aria-label="Follow ShoreVest">
+        <a class="sv-footer__social-link" href="https://www.linkedin.com/company/shorevest-partners/" target="_blank" rel="noopener noreferrer" aria-label="Follow ShoreVest Partners on LinkedIn">
+          <svg class="sv-footer__social-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+            <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V8.98h3.42v1.57h.05c.48-.9 1.64-1.85 3.37-1.85 3.61 0 4.27 2.37 4.27 5.46v6.29ZM5.32 7.42a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12Zm1.78 13.03H3.54V8.98H7.1v11.47ZM22.23 0H1.76C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.76 24h20.47c.97 0 1.77-.77 1.77-1.72V1.72C24 .77 23.2 0 22.23 0Z"/>
+          </svg>
+          <span>LinkedIn</span>
+        </a>
+      </div>
     </div>
 
     <div class="sv-footer__legal">
@@ -255,7 +256,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
         <a href="important-information_cn.html">重要信息</a>
         <a href="legal-notices-disclaimers_cn.html">法律声明与免责声明</a>
       </div>
-      <p class="sv-footer__copy">© 2026 新岸资本（ShoreVest Partners）。保留所有权利。</p>
+      <p class="sv-footer__copy">© 2026 ShoreVest Partners. All rights reserved.</p>
     </div>
   </div>
 </footer>

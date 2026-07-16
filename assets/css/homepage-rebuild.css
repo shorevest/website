@@ -10,7 +10,10 @@
    restrained cinnabar, no cards / icons / imagery.
    ========================================================================== */
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  overscroll-behavior-y: none;
+}
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   body.homepage .sv-srow,
@@ -83,7 +86,7 @@ body.homepage * { box-sizing: border-box; }
 html {
   scroll-padding-top: calc(var(--header-height) + 32px);
   /* Match the browser canvas to the dark footer so bottom rubber-band /
-     overscroll reveals only the footer colour instead of a white page edge. */
+     overscroll reveals only the footer color instead of a white page edge. */
   background: #20211F;
 }
 
@@ -101,6 +104,7 @@ body.homepage {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
+  overscroll-behavior-y: none;
 }
 body.homepage img { max-width: 100%; display: block; }
 body.homepage a { color: inherit; }
@@ -262,6 +266,37 @@ body.homepage .sv-util-btn {
   white-space: nowrap;
 }
 body.homepage .sv-util-btn:hover { border-color: var(--sv-ink); }
+body.homepage .sv-util-btn[href*="investor-portal"] {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  transition: color .22s ease, border-color .22s ease, box-shadow .22s ease, transform .22s ease;
+}
+body.homepage .sv-util-btn[href*="investor-portal"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(110deg, var(--sv-cinnabar) 0%, var(--sv-cinnabar-d) 100%);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform .32s cubic-bezier(.2, .7, .2, 1);
+}
+body.homepage .sv-util-btn[href*="investor-portal"]:hover,
+body.homepage .sv-util-btn[href*="investor-portal"]:focus-visible {
+  color: var(--sv-ivory);
+  border-color: var(--sv-cinnabar);
+  box-shadow: 0 8px 22px rgba(130, 31, 29, .16);
+  transform: translateY(-1px);
+}
+body.homepage .sv-util-btn[href*="investor-portal"]:hover::before,
+body.homepage .sv-util-btn[href*="investor-portal"]:focus-visible::before { transform: scaleX(1); }
+@media (prefers-reduced-motion: reduce) {
+  body.homepage .sv-util-btn[href*="investor-portal"],
+  body.homepage .sv-util-btn[href*="investor-portal"]::before { transition: none; }
+  body.homepage .sv-util-btn[href*="investor-portal"]:hover,
+  body.homepage .sv-util-btn[href*="investor-portal"]:focus-visible { transform: none; }
+}
 body.homepage .sv-util-btn--cta { background: var(--sv-cinnabar); color: var(--sv-ivory); border-color: var(--sv-cinnabar); }
 body.homepage .sv-util-btn--cta:hover { background: var(--sv-cinnabar-d); border-color: var(--sv-cinnabar-d); }
 
@@ -538,6 +573,7 @@ body.homepage .home-firm-preview .home-firm-preview__statement p {
   margin: 0;
   max-width: none;
   width: 100%;
+  text-align: right;
   font: 400 clamp(18px, 1.5vw, 21px)/1.62 var(--sv-font); color: var(--sv-ink-2);
 }
 body.homepage .home-firm-preview .home-firm-preview__proof {
@@ -552,18 +588,72 @@ body.homepage .home-firm-preview .home-firm-preview__proof span {
   min-height: 72px;
   display: flex;
   align-items: center;
-  padding: 18px 18px 18px 0;
+  justify-content: center;
+  text-align: center;
+  padding: 18px;
   border-right: 1px solid var(--sv-border-light);
   font: 600 12px/1.35 var(--sv-font);
   letter-spacing: 0.11em;
   text-transform: uppercase;
   color: var(--sv-ink);
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  cursor: default;
+  transition:
+    color 220ms ease,
+    background-color 260ms ease,
+    border-color 260ms ease,
+    transform 260ms cubic-bezier(.2, .8, .2, 1);
 }
+body.homepage .home-firm-preview .home-firm-preview__proof span::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--sv-cinnabar);
+  transform: scaleY(0);
+  transform-origin: 50% 50%;
+  transition: transform 280ms cubic-bezier(.2, .8, .2, 1);
+}
+body.homepage .home-firm-preview .home-firm-preview__proof span::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background: rgba(201, 59, 42, 0.05);
+  opacity: 0;
+  transform: translateX(-12px);
+  transition:
+    opacity 260ms ease,
+    transform 320ms cubic-bezier(.2, .8, .2, 1);
+}
+body.homepage .home-firm-preview .home-firm-preview__proof span:hover {
+  color: var(--sv-cinnabar-d);
+  background-color: rgba(252, 249, 241, 0.58);
+  transform: translateX(4px);
+}
+body.homepage .home-firm-preview .home-firm-preview__proof span:hover::before { transform: scaleY(1); }
+body.homepage .home-firm-preview .home-firm-preview__proof span:hover::after { opacity: 1; transform: translateX(0); }
 body.homepage .home-firm-preview .home-firm-preview__proof span:not(:first-child) { padding-left: 18px; }
 body.homepage .home-firm-preview .home-firm-preview__proof span:last-child { border-right: 0; }
+@media (prefers-reduced-motion: reduce) {
+  body.homepage .home-firm-preview .home-firm-preview__proof span,
+  body.homepage .home-firm-preview .home-firm-preview__proof span::before,
+  body.homepage .home-firm-preview .home-firm-preview__proof span::after {
+    transition: none;
+  }
+  body.homepage .home-firm-preview .home-firm-preview__proof span:hover { transform: none; }
+}
 body.homepage .home-firm-preview .home-firm-preview__link {
   margin-top: auto; padding-top: clamp(28px, 3vw, 44px);
-  align-self: flex-start;
+  align-self: flex-end;
+  text-align: right;
 }
 
 @media (max-width: 1023px) {
@@ -579,7 +669,7 @@ body.homepage .home-firm-preview .home-firm-preview__link {
   body.homepage .home-firm-preview .home-firm-preview__statement { margin-top: 24px; }
   body.homepage .home-firm-preview .home-firm-preview__proof { grid-template-columns: 1fr; }
   body.homepage .home-firm-preview .home-firm-preview__proof span,
-  body.homepage .home-firm-preview .home-firm-preview__proof span:not(:first-child) { padding-left: 0; border-right: 0; border-bottom: 1px solid var(--sv-border-light); min-height: 58px; }
+  body.homepage .home-firm-preview .home-firm-preview__proof span:not(:first-child) { padding: 18px; border-right: 0; border-bottom: 1px solid var(--sv-border-light); min-height: 58px; }
   body.homepage .home-firm-preview .home-firm-preview__proof span:last-child { border-bottom: 0; }
 }
 
@@ -844,6 +934,9 @@ body.homepage .sv-footer__offices a:hover { border-color: var(--sv-ivory); }
 body.homepage .sv-footer__nav {
   display: grid; grid-template-columns: repeat(2, minmax(0, max-content));
   gap: 12px clamp(48px, 5vw, 80px);
+  justify-content: end;
+  justify-items: end;
+  text-align: right;
 }
 body.homepage .sv-footer__nav a {
   font: 500 13px/1 var(--sv-font); letter-spacing: 0.02em;
@@ -995,7 +1088,7 @@ body.homepage .sv-totop svg { width: 16px; height: 16px; }
   body.homepage .sv-stat:not(:nth-child(1)) { border-top: 1px solid var(--sv-border-light); }
   body.homepage .sv-caps { grid-template-columns: 1fr; }
   body.homepage .sv-cap { border-right: 0; min-height: 0; }
-  body.homepage .sv-footer__nav { grid-template-columns: 1fr; gap: 0; }
+  body.homepage .sv-footer__nav { grid-template-columns: 1fr; gap: 0; justify-content: start; justify-items: start; text-align: left; }
   /* Enlarge footer tap targets to ~44px on mobile. */
   body.homepage .sv-footer__nav a,
   body.homepage .sv-footer__access a { padding: 13px 0; }
@@ -1945,5 +2038,63 @@ html body.team-page-v2 .team-profile .team-profile__photo {
 
   body.homepage .sv-burger {
     margin-right: -12px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Perceived image-loading fix
+   --------------------------------------------------------------------------
+   Large hero/feature photos can take a moment on cold cache. Avoid showing
+   opaque stone-colored blocks while those files decode; keep the editorial
+   layout stable, but let the page background show through until the image is
+   ready. */
+body.homepage :is(.sv-hero__image, .fm-who__figure, .sx-hero__image, .cdd-hero__image, .media-hero .sv-hero__image, .team-profile__photo, .cp-office__photo) {
+  background: transparent !important;
+}
+
+body.homepage :is(.sv-hero__image, .fm-who__figure, .sx-hero__image, .cdd-hero__image, .media-hero .sv-hero__image, .team-profile__photo) img {
+  background: transparent !important;
+  opacity: 1;
+}
+
+/* Footer LinkedIn social link */
+body.homepage .sv-footer__social {
+  grid-column: 2;
+  justify-self: end;
+  margin-top: 20px;
+}
+body.homepage .sv-footer__social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 8px 0;
+  font: 500 14px/1 var(--sv-font);
+  letter-spacing: 0.03em;
+  color: var(--sv-meta-on-dark);
+  text-decoration: none;
+  text-underline-offset: 4px;
+  transition: color .18s ease;
+}
+body.homepage .sv-footer__social-link:hover,
+body.homepage .sv-footer__social-link:focus-visible {
+  color: var(--sv-ivory);
+  text-decoration: underline;
+}
+body.homepage .sv-footer__social-link:focus-visible {
+  outline: 2px solid rgba(252,249,241,0.72);
+  outline-offset: 4px;
+}
+body.homepage .sv-footer__social-icon {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 17px;
+  fill: currentColor;
+}
+@media (max-width: 767px) {
+  body.homepage .sv-footer__social {
+    grid-column: 1;
+    justify-self: start;
+    margin-top: 18px;
   }
 }

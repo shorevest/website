@@ -29,13 +29,14 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   <script>document.write('<link rel="stylesheet" href="../assets/css/homepage-rebuild.css?v=20260622-r12-warm1&t='+window.__SVT+'">');</script>
   <script>document.write('<link rel="stylesheet" href="../assets/css/investor-portal-rebuild.css?v=20260710-ipr4&t='+window.__SVT+'">');</script>
   <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="shortcut icon" href="/favicon.ico">
-<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
-<link rel="manifest" href="/site.webmanifest">
+<link rel="icon" href="../assets/favicon-cinnabar.ico?v=20260717" sizes="any">
+<link rel="shortcut icon" href="../assets/favicon-cinnabar.ico?v=20260717">
+<link rel="icon" href="../assets/favicon-cinnabar.svg?v=20260717" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-cinnabar-32x32.png?v=20260717">
+<link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-cinnabar-16x16.png?v=20260717">
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon-cinnabar.png?v=20260717">
+<link rel="manifest" href="../site.webmanifest?v=20260717">
+<script src="../assets/js/favicon-guard.js?v=20260717" defer></script>
 </head>
   <body class="homepage investor-portal-page">
 
@@ -86,7 +87,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
       <div class="investor-portal-hero__inner">
         <div class="ip-hero__red">
           <p class="investor-portal-hero__eyebrow">投资者门户</p>
-          <h1 id="investor-portal-title">安全数据室访问。</h1>
+          <h1 id="investor-portal-title">数据室。</h1>
           <span class="ip-hero__rule" aria-hidden="true"></span>
           <p class="ip-hero__desc">基金文件和报告托管于 iDeals 虚拟数据室。</p>
           <p class="ip-hero__confidential">仅限授权用户</p>
@@ -95,7 +96,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
         <div class="ip-hero__signin">
           <p class="ip-signin__kicker">安全登录</p>
           <h2 class="ip-signin__title">请输入您的电子邮件以继续。</h2>
-          <p class="ip-signin__note">电子邮件验证通过后，您将被重定向至 iDeals 数据室。</p>
+          <p class="ip-signin__note">获授权投资者将直接进入 ShoreVest iDeals 数据室。</p>
 <section class="login-form-container">
   <form name="login" id="vdr-login-form" class="login-form" method="POST">
     <h3>
@@ -119,7 +120,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
       <small class="error"></small>
     </div>
 
-    <button type="submit" class="btn btn-primary" name="submit">登录</button>
+    <button type="submit" class="btn btn-primary" name="submit">进入数据室</button>
   </form>
   <p class="ip-signin__secure">加密连接 · iDeals 安全虚拟数据室</p>
 </section>
@@ -142,6 +143,8 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
   (function () {
+    var SHOREVEST_DATA_ROOM_URL = 'https://app.idealsvdr.com/projects/all/documents';
+
     var ERROR_MESSAGES = {
       INVALID_EMAIL: '请输入有效的电子邮件',
       REQUIRED_FIELD: '请填写后继续'
@@ -175,7 +178,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 
           if (this.validateForm()) {
             var email = encodeURIComponent(_this.emailField.value);
-            window.location.href = "https://app.idealsvdr.com/projects/all?email=".concat(email);
+            window.location.href = SHOREVEST_DATA_ROOM_URL + '?email=' + email;
           }
         }
       }, {
@@ -325,11 +328,21 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
           <a href="index_cn.html">投资者门户</a>
         </span>
       </nav>
+      <div class="sv-footer__social" aria-label="Follow ShoreVest">
+        <a class="sv-footer__social-link" href="https://www.linkedin.com/company/shorevest-partners/" target="_blank" rel="noopener noreferrer" aria-label="Follow ShoreVest Partners on LinkedIn">
+          <svg class="sv-footer__social-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+            <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V8.98h3.42v1.57h.05c.48-.9 1.64-1.85 3.37-1.85 3.61 0 4.27 2.37 4.27 5.46v6.29ZM5.32 7.42a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12Zm1.78 13.03H3.54V8.98H7.1v11.47ZM22.23 0H1.76C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.76 24h20.47c.97 0 1.77-.77 1.77-1.72V1.72C24 .77 23.2 0 22.23 0Z"/>
+          </svg>
+          <span>LinkedIn</span>
+        </a>
+      </div>
     </div>
+
     <div class="sv-footer__legal">
       <p>新岸资本（ShoreVest Partners）及其关联机构向机构投资者提供投资管理服务。本网站仅供信息参考，不构成出售任何证券或投资产品的要约，或购买任何证券或投资产品的要约邀请，亦不构成投资、法律或税务建议。</p>
       <p>过往表现并不预示未来结果。私募信贷与私募债务投资涉及风险，包括可能损失本金。所示数据均为近似值，可能发生变动。</p>
     </div>
+
     <div class="sv-footer__bottom">
       <div class="sv-footer__links">
         <a href="../privacy-policy_cn.html">隐私政策</a>
@@ -338,7 +351,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
         <a href="../important-information_cn.html">重要信息</a>
         <a href="../legal-notices-disclaimers_cn.html">法律声明与免责声明</a>
       </div>
-      <p class="sv-footer__copy">© 2026 新岸资本（ShoreVest Partners）。保留所有权利。</p>
+      <p class="sv-footer__copy">© 2026 ShoreVest Partners. All rights reserved.</p>
     </div>
   </div>
 </footer>

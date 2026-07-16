@@ -28,21 +28,21 @@ assert.strictEqual(visibility.getEventStatus(bloomberg, atLocalNoon('2026-07-10'
 assert.strictEqual(visibility.isVisibleEvent(bloomberg, atLocalNoon('2026-07-10', '+08:00')), true);
 assert.strictEqual(visibility.getEventStatus(bloomberg, atLocalNoon('2026-07-11', '+08:00')), visibility.STATUS.HIDDEN);
 
-const agm = eventFixture({ startDate: '2026-09-24', endDate: '2026-09-25', timeZone: 'Asia/Hong_Kong' });
-assert.strictEqual(visibility.getEventStatus(agm, atLocalNoon('2026-09-23', '+08:00')), visibility.STATUS.UPCOMING);
-assert.strictEqual(visibility.getEventStatus(agm, atLocalNoon('2026-09-24', '+08:00')), visibility.STATUS.IN_PROGRESS);
-assert.strictEqual(visibility.getEventStatus(agm, atLocalNoon('2026-09-25', '+08:00')), visibility.STATUS.IN_PROGRESS);
-assert.strictEqual(visibility.getEventStatus(agm, atLocalNoon('2026-09-26', '+08:00')), visibility.STATUS.CONCLUDED);
-assert.strictEqual(visibility.getEventStatus(agm, atLocalNoon('2026-10-25', '+08:00')), visibility.STATUS.CONCLUDED);
-assert.strictEqual(visibility.isVisibleEvent(agm, atLocalNoon('2026-10-25', '+08:00')), true);
-assert.strictEqual(visibility.getEventStatus(agm, atLocalNoon('2026-10-26', '+08:00')), visibility.STATUS.HIDDEN);
+const agm = eventFixture({ startDate: '2026-09-18', endDate: '2026-09-18', timeZone: 'Asia/Hong_Kong' });
+assert.strictEqual(visibility.getEventStatus(agm, atLocalNoon('2026-09-17', '+08:00')), visibility.STATUS.UPCOMING);
+assert.strictEqual(visibility.getEventStatus(agm, atLocalNoon('2026-09-18', '+08:00')), visibility.STATUS.IN_PROGRESS);
+assert.strictEqual(visibility.getEventStatus(agm, atLocalNoon('2026-09-19', '+08:00')), visibility.STATUS.CONCLUDED);
 
-const sameTimestamp = new Date('2026-09-23T22:30:00Z');
-assert.strictEqual(visibility.getLocalDateParts(sameTimestamp, 'Asia/Hong_Kong').iso, '2026-09-24');
-assert.strictEqual(visibility.getLocalDateParts(sameTimestamp, 'Europe/Amsterdam').iso, '2026-09-24');
-const splitTimestamp = new Date('2026-09-23T16:30:00Z');
-assert.strictEqual(visibility.getLocalDateParts(splitTimestamp, 'Asia/Hong_Kong').iso, '2026-09-24');
-assert.strictEqual(visibility.getLocalDateParts(splitTimestamp, 'Europe/Amsterdam').iso, '2026-09-23');
+assert.strictEqual(visibility.getEventStatus(agm, atLocalNoon('2026-10-18', '+08:00')), visibility.STATUS.CONCLUDED);
+assert.strictEqual(visibility.isVisibleEvent(agm, atLocalNoon('2026-10-18', '+08:00')), true);
+assert.strictEqual(visibility.getEventStatus(agm, atLocalNoon('2026-10-19', '+08:00')), visibility.STATUS.HIDDEN);
+
+const sameTimestamp = new Date('2026-09-17T22:30:00Z');
+assert.strictEqual(visibility.getLocalDateParts(sameTimestamp, 'Asia/Hong_Kong').iso, '2026-09-18');
+assert.strictEqual(visibility.getLocalDateParts(sameTimestamp, 'Europe/Amsterdam').iso, '2026-09-18');
+const splitTimestamp = new Date('2026-09-17T16:30:00Z');
+assert.strictEqual(visibility.getLocalDateParts(splitTimestamp, 'Asia/Hong_Kong').iso, '2026-09-18');
+assert.strictEqual(visibility.getLocalDateParts(splitTimestamp, 'Europe/Amsterdam').iso, '2026-09-17');
 assert.strictEqual(visibility.getEventStatus(agm, splitTimestamp), visibility.STATUS.IN_PROGRESS);
 assert.strictEqual(visibility.getEventStatus(superReturn, splitTimestamp), visibility.STATUS.HIDDEN);
 

@@ -1,3 +1,9 @@
 {
-  "items": []
+  "items": [],
+  "schema": {
+    "linkType": "external | video | podcast | linkedin | pdf | none",
+    "url": "External URL for non-PDF items",
+    "pdfPath": "Stable internal PDF path for ShoreVest-hosted PDFs",
+    "buttonLabel": "Display label such as VIEW PDF \u2192"
+  }
 }

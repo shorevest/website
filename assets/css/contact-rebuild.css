@@ -227,7 +227,7 @@ body.contact-page .cp-prefs__lead h2 {
 }
 body.contact-page .cp-prefs__lead .cp-eyebrow { color: var(--sv-ivory); }
 /* Numbered ledger — mirrors the hero routing rows: hairline-separated rows,
-   large cinnabar tabular numbers, a thin cinnabar marker that reveals on hover.
+   large cinnabar tabular numbers, a full-width cinnabar rule that reveals on hover.
    No cards, shadows, or rounded corners. */
 body.contact-page .cp-prefs__grid {
   list-style: none; margin: 0; padding: 0;
@@ -241,7 +241,7 @@ body.contact-page .cp-pref {
 }
 body.contact-page .cp-pref + .cp-pref { border-left: 1px solid rgba(252,249,241,0.14); }
 body.contact-page .cp-pref::before {
-  content: ""; position: absolute; left: 0; top: -1px; width: 40px; height: 2px;
+  content: ""; position: absolute; left: 0; top: -1px; width: 100%; height: 2px;
   background: var(--sv-cinnabar); transform: scaleX(0); transform-origin: left center;
   transition: transform .22s ease;
 }

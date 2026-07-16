@@ -536,14 +536,17 @@ html body.team-page-v2 .team-profile__linkedin:hover::after {
 }
 
 /* ==========================================================================
-   4 · FOOTER — dark ink, matching the homepage footer
+   4 · FOOTER — use the shared homepage footer without Team-only offsets
    ========================================================================== */
 body.team-page-v2 .sv-footer {
-  /* Footer governed by homepage-rebuild.css (body.homepage). Match the page
-     canvas to the footer ink so viewport rounding never exposes a white seam. */
-  background: var(--tr-dark-footer, #20211f) !important;
-  margin-bottom: -1px;
-  padding-bottom: 1px;
+  background: var(--sv-dark-footer, #20211f) !important;
+}
+
+body.team-page-v2 .sv-footer__copy {
+  position: static !important;
+  inset: auto !important;
+  transform: none !important;
+  margin: 0 !important;
 }
 
 /* Active nav state — subtle cinnabar, matching the homepage hover treatment */
@@ -740,6 +743,33 @@ html body.team-page-v2 .team-profile__photo img {
   box-shadow: none !important;
   filter: grayscale(100%) contrast(1.02);
   transition: filter var(--tr-fast);
+}
+
+/* Steve Poon: pin the portrait as low as the source image allows without exposing empty edges. */
+html body.team-page-v2 .team-profile__photo[data-team-photo="bio-steve-poon"] img {
+  object-position: center top !important;
+}
+
+/* Michael Chang: pin the portrait as low as the source image allows without exposing empty edges. */
+html body.team-page-v2 .team-profile__photo[data-team-photo="bio-michael-chang"] img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center top !important;
+  transform: scale(1.18);
+  transform-origin: center top;
+}
+
+/* Philip Young: nudge the portrait upward inside the square image frame. */
+html body.team-page-v2 .team-profile__photo[data-team-photo="bio-philip-young"] img {
+  transform: translateY(-4%) scale(1.04);
+  transform-origin: center top;
+}
+
+/* Dinny McMahon: move the portrait up so his head sits closer to the photo edge. */
+html body.team-page-v2 .team-profile__photo[data-team-photo="bio-dinny-mcmahon"] img {
+  transform: translateY(-5%) scale(1.05);
+  transform-origin: center top;
 }
 
 html body.team-page-v2 .team-profile:hover .team-profile__photo img,
@@ -1536,4 +1566,11 @@ html body.team-page-v2 .team-profile__photo img {
     --team-grid-columns: 1;
     grid-template-columns: minmax(0, 1fr) !important;
   }
+}
+
+
+/* Zoom John Jones' portrait in slightly for tighter framing. */
+html body.team-page-v2 .team-profile__photo img.team-profile__img--john-zoom {
+  transform: scale(1.1);
+  transform-origin: center top;
 }

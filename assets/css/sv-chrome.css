@@ -98,6 +98,37 @@ body.privacy-page, body.cookie-page, body.terms-page, body.legal-page, body.disc
   transition: background .15s ease, color .15s ease, border-color .15s ease; white-space: nowrap;
 }
 .sv-util-btn:hover { border-color: var(--sv-chrome-ink); }
+.sv-util-btn[href*="investor-portal"] {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  transition: color .22s ease, border-color .22s ease, box-shadow .22s ease, transform .22s ease;
+}
+.sv-util-btn[href*="investor-portal"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(110deg, var(--sv-chrome-cinnabar) 0%, var(--sv-chrome-cinnabar-d) 100%);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform .32s cubic-bezier(.2, .7, .2, 1);
+}
+.sv-util-btn[href*="investor-portal"]:hover,
+.sv-util-btn[href*="investor-portal"]:focus-visible {
+  color: var(--sv-chrome-ivory);
+  border-color: var(--sv-chrome-cinnabar);
+  box-shadow: 0 8px 22px rgba(130, 31, 29, .16);
+  transform: translateY(-1px);
+}
+.sv-util-btn[href*="investor-portal"]:hover::before,
+.sv-util-btn[href*="investor-portal"]:focus-visible::before { transform: scaleX(1); }
+@media (prefers-reduced-motion: reduce) {
+  .sv-util-btn[href*="investor-portal"],
+  .sv-util-btn[href*="investor-portal"]::before { transition: none; }
+  .sv-util-btn[href*="investor-portal"]:hover,
+  .sv-util-btn[href*="investor-portal"]:focus-visible { transform: none; }
+}
 .sv-util-btn--cta { background: var(--sv-chrome-cinnabar); color: var(--sv-chrome-ivory); border-color: var(--sv-chrome-cinnabar); }
 .sv-util-btn--cta:hover { background: var(--sv-chrome-cinnabar-d); border-color: var(--sv-chrome-cinnabar-d); }
 
@@ -152,7 +183,7 @@ body.privacy-page, body.cookie-page, body.terms-page, body.legal-page, body.disc
 .sv-footer__logo img { width: 200px; height: auto; display: block; }
 .sv-footer__offices { margin: 22px 0 0; font: 400 var(--sv-chrome-footer-office-size)/1.7 var(--sv-chrome-font); color: var(--sv-chrome-on-dark); }
 .sv-footer__offices a { color: var(--sv-chrome-ivory); text-decoration: none; border-bottom: 1px solid rgba(252, 249, 241, 0.3); }
-.sv-footer__nav { display: grid; grid-template-columns: repeat(2, auto); gap: 10px 56px; }
+.sv-footer__nav { display: grid; grid-template-columns: repeat(2, auto); gap: 10px 56px; justify-content: end; justify-items: end; text-align: right; }
 .sv-footer__nav a {
   font: 500 var(--sv-chrome-footer-link-size)/1 var(--sv-chrome-font); letter-spacing: 0.04em;
   color: var(--sv-chrome-on-dark); text-decoration: none; padding: 5px 0; display: inline-block;
@@ -203,7 +234,7 @@ body.privacy-page, body.cookie-page, body.terms-page, body.legal-page, body.disc
 }
 @media (max-width: 767px) {
   .sv-footer__top { grid-template-columns: 1fr; }
-  .sv-footer__nav { grid-template-columns: 1fr; }
+  .sv-footer__nav { grid-template-columns: 1fr; justify-content: start; justify-items: start; text-align: left; }
   .sv-footer__bottom { flex-direction: column; align-items: flex-start; }
   .sv-totop { display: none; }
 }
@@ -319,4 +350,46 @@ html body footer.sv-footer .sv-footer__access-label {
 }
 html body footer.sv-footer .sv-footer__access a::after {
   content: none;
+}
+
+/* Footer LinkedIn social link */
+.sv-footer__social {
+  grid-column: 2;
+  justify-self: end;
+  margin-top: 20px;
+}
+.sv-footer__social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 8px 0;
+  font: 500 14px/1 var(--sv-chrome-font);
+  letter-spacing: 0.03em;
+  color: var(--sv-chrome-on-dark);
+  text-decoration: none;
+  text-underline-offset: 4px;
+  transition: color .18s ease;
+}
+.sv-footer__social-link:hover,
+.sv-footer__social-link:focus-visible {
+  color: var(--sv-chrome-ivory);
+  text-decoration: underline;
+}
+.sv-footer__social-link:focus-visible {
+  outline: 2px solid rgba(252, 249, 241, 0.72);
+  outline-offset: 4px;
+}
+.sv-footer__social-icon {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 17px;
+  fill: currentColor;
+}
+@media (max-width: 767px) {
+  .sv-footer__social {
+    grid-column: 1;
+    justify-self: start;
+    margin-top: 18px;
+  }
 }

@@ -52,7 +52,7 @@
   const LOADER_MARK_SVG = `<span class="loader-mark-svg loader-mark-ink" aria-hidden="true"><span class="loader-mark-art loader-mark-art--out" style="-webkit-mask-image:url('${BRAND_MARK_PATH}');mask-image:url('${BRAND_MARK_PATH}')"></span><span class="loader-mark-art loader-mark-art--fill" style="-webkit-mask-image:url('${BRAND_MARK_FILLED_PATH}');mask-image:url('${BRAND_MARK_FILLED_PATH}')"></span></span>`;
 
   const pathname = window.location.pathname;
-  const isInvestorPortalPath = /\/investor-portal(?:\.html|\/|\/index\.html)?$/i.test(pathname);
+  const isInvestorPortalPath = /\/investor-portal(?:\.html|\/|\/index(?:_cn)?\.html)?$/i.test(pathname);
   const path = isInvestorPortalPath ? 'investor-portal' : (pathname.split('/').pop() || 'index.html');
   const localeSuffixMatch = path.match(/[-_](cn)\.html$/i);
   const localeSuffix = localeSuffixMatch ? localeSuffixMatch[1].toLowerCase() : 'en';
@@ -146,7 +146,7 @@
   })();
   const localeHrefs = {
     en: localeBase === 'investor-portal' ? pageHref('investor-portal/index.html') : localizedPageHref(localeBase, 'en'),
-    cn: localeBase === 'investor-portal' ? pageHref('index_cn.html') : localizedPageHref(localeBase, 'cn')
+    cn: localeBase === 'investor-portal' ? pageHref('investor-portal/index_cn.html') : localizedPageHref(localeBase, 'cn')
   };
 
   const renderLanguageSelector = (contextClass = '') => {
@@ -192,7 +192,7 @@
         { href: pageHref('press_cn.html'), label: '媒体' },
         { href: pageHref('team_cn.html'), label: '团队' }
       ],
-      investorPortalHref: pageHref('investor-portal/index.html'),
+      investorPortalHref: pageHref('investor-portal/index_cn.html'),
       investorPortalLabel: '投资者门户',
       headerCtaHref: pageHref('contact_cn.html'),
       headerCtaLabel: '联系',
@@ -225,21 +225,21 @@
 
   mount.innerHTML = `<header class="sv-header">
   <div class="sv-header__inner">
-    <a class="sv-header__logo" href="${locale.home}" aria-label="ShoreVest — home">
+    <a class="sv-header__logo" href="${locale.home}" aria-label="${localeSuffix === 'en' ? 'ShoreVest — home' : '新岸资本 — 首页'}">
       <img src="${assetHref('assets/brand/sv-lockup-fc-dark.png')}" alt="ShoreVest" width="172" height="41" />
     </a>
-    <nav class="sv-nav" aria-label="Primary">
+    <nav class="sv-nav" aria-label="${localeSuffix === 'en' ? 'Primary' : '主导航'}">
       <ul>${navItems.map((item, i) => `<li><a href="${item.href}"${navBases[i] === localeBase ? ' aria-current="page"' : ''}>${item.label}</a></li>`).join('')}</ul>
     </nav>
     <div class="sv-utils">${svLang}
       <a class="sv-util-btn" href="${investorPortalHref}">${investorPortalLabel}</a>
       <a class="sv-util-btn sv-util-btn--cta" href="${headerCtaHref}">${headerCtaLabel}</a>
     </div>
-    <button class="sv-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="sv-mobile-menu"><span></span></button>
+    <button class="sv-burger" type="button" aria-label="${localeSuffix === 'en' ? 'Open menu' : '打开菜单'}" aria-expanded="false" aria-controls="sv-mobile-menu"><span></span></button>
   </div>
 </header>
 <div class="sv-mobile-menu" id="sv-mobile-menu">
-  <nav aria-label="Mobile">
+  <nav aria-label="${localeSuffix === 'en' ? 'Mobile' : '移动导航'}">
     <ul>${navItems.map((item) => `<li><a href="${item.href}">${item.label}</a></li>`).join('')}</ul>
     <div class="sv-mobile-utils">
       <a class="sv-util-btn" href="${svLangOtherHref}">${svLangOtherLabel}</a>
@@ -265,7 +265,7 @@
     svBurger.addEventListener('click', () => {
       const open = svMenu.classList.toggle('is-open');
       svBurger.setAttribute('aria-expanded', open ? 'true' : 'false');
-      svBurger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      svBurger.setAttribute('aria-label', open ? (localeSuffix === 'en' ? 'Close menu' : '关闭菜单') : (localeSuffix === 'en' ? 'Open menu' : '打开菜单'));
     });
     svMenu.addEventListener('click', (e) => {
       if (e.target.closest('a')) { svMenu.classList.remove('is-open'); svBurger.setAttribute('aria-expanded', 'false'); }

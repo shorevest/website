@@ -1,0 +1,25 @@
+{
+  "publication": "Example Publication",
+  "title": "Placeholder third-party coverage item for template QA",
+  "date": "2026-07-15",
+  "author": "Example Author",
+  "format": "Article",
+  "summary": "This placeholder demonstrates the ShoreVest third-party coverage PDF workflow. It is not a real media article and should be replaced only with approved source material.",
+  "sourceUrl": "https://www.shorevest.com/",
+  "originalFile": "",
+  "permissionStatus": "placeholder",
+  "pdfSlug": "example-publication-2026-07-15-placeholder-third-party-coverage-item",
+  "copyrightNote": "Originally published by Example Publication on 2026-07-15. Placeholder content for workflow QA only; replace with approved source text before publishing a real archive PDF. Copyright remains with the original publisher and/or author.",
+  "body": [
+    { "type": "heading", "text": "Placeholder article section" },
+    { "type": "paragraph", "text": "This paragraph is placeholder text used to test the template layout, typography, attribution block, page numbers and PDF generation path. It must not be treated as an actual third-party article." },
+    { "type": "quote", "text": "Placeholder quotation styling is shown here for QA only.", "attribution": "Example Publication" },
+    { "type": "subheading", "text": "Supported body elements" },
+    { "type": "list", "items": ["Headings and subheadings", "Paragraphs and quotations", "Lists, captions, source URLs and attribution notes"] },
+    { "type": "paragraph", "text": "Additional placeholder paragraphs intentionally create a second page in the generated PDF so pagination can be checked without using unapproved media content." },
+    { "type": "paragraph", "text": "Only ShoreVest-supplied and approved content should be added to these structured files. Do not scrape paywalled articles or republish publicly viewable content without confirmed reproduction rights." },
+    { "type": "paragraph", "text": "This neutral archive format clearly separates the original publication from ShoreVest's role as host of an archival copy." },
+    { "type": "editorialNote", "text": "This is placeholder template QA content, not a live media archive document." }
+  ],
+  "images": []
+}
