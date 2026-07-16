@@ -4,8 +4,7 @@
   font-family:Barlow,Arial,sans-serif
 }
 .careers-shell {
-  width:min(calc(100% - (var(--sv-page-gutter,72px)*2)),1120px);
-  margin-inline:auto
+  box-sizing:border-box
 }
 .careers-hero {
   padding:clamp(112px,14vw,168px) 0 clamp(54px,8vw,88px);
@@ -53,7 +52,11 @@
   display:grid;
   grid-template-columns:minmax(0,1fr);
   gap:0;
-  max-width:900px
+  max-width:var(--page-max,1280px)
+}
+.careers-copy > :where(.careers-kicker,h1,h2,h3,p,ul) {
+  max-width:min(900px,100%);
+  overflow-wrap:anywhere
 }
 .careers-copy--cn {
   font-family:'Noto Serif SC',serif
@@ -136,9 +139,6 @@
   color:inherit
 }
 @media (max-width: 760px) {
-  .careers-shell {
-  width:min(calc(100% - 44px),1120px)
-}
 .careers-hero {
   padding-top:96px
 }
