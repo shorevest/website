@@ -235,6 +235,7 @@ html[lang="zh-CN"] body.careers-preview-page .careers-values h3,
 html[lang="zh-CN"] body.careers-preview-page .careers-values p { font-family: var(--sv-cn); }
 html[lang="zh-CN"] body.careers-preview-page .careers-values p { max-width: 22em; line-height: 1.86; }
 body.careers-preview-page .careers-final { border-bottom: 1px solid var(--sv-border-dark); }
+body.careers-preview-page .careers-final .careers-copy p { max-width: none; }
 
 body.careers-preview-page .careers-open-roles {
   position: relative;
