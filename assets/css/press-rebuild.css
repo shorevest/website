@@ -226,7 +226,7 @@ body.press-page .press-row > .press-row__item {
   transition: background .15s ease;
 }
 body.press-page .press-row > a:hover { background: rgba(122, 175, 175, 0.10); }
-body.press-page .press-row > .press-row__item--archived { cursor: default; } /* 青 wash */
+body.press-page .press-row > .press-row__item--archived { cursor: pointer; }
 body.press-page .press-row[hidden] { display: none; }
 
 body.press-page .press-publication {
