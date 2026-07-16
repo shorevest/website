@@ -8,7 +8,7 @@
 
 # Build a Career in Complex Credit
 
-ShoreVest is a specialist private credit firm focused on complex investment opportunities in China.
+ShoreVest is a specialist in private credit, providing solutions for both borrowers and financial institutions across China.
 
 Our people are central to the firm’s success. We recruit selectively, invest in long-term development, and seek professionals with the intellectual ability, judgment, and discipline required to perform at a high level.
 
@@ -24,7 +24,7 @@ This requires more than technical proficiency. Strong investors must be able to 
 
 Over time, investment professionals may gain experience across:
 
-- Private credit and special situations
+- Private credit and complex situations
 - Asset-backed lending
 - Financial and commercial due diligence
 - Collateral and recovery analysis
@@ -47,7 +47,7 @@ Responsibility is earned through consistent performance.
 
 ## Investment Professionals
 
-We look for professionals who want to develop deep expertise in private credit and complex investment situations.
+We look for professionals who want to develop deep expertise in private credit and complex situations.
 
 Successful candidates are typically able to combine financial analysis with commercial awareness and practical judgment. They should be comfortable working with incomplete information, testing competing interpretations, and reaching defensible conclusions.
 
@@ -77,7 +77,7 @@ We seek professionals who bring relevant expertise, sound judgment, attention to
 
 ShoreVest periodically recruits outstanding students and early-career professionals.
 
-These roles provide direct exposure to the work involved in private credit and special situations. Early-career professionals are expected to contribute to live matters, develop quickly, and meet the same standards of accuracy, preparation, and professionalism expected across the firm.
+These roles provide direct exposure to the work involved in private credit and complex situations. Early-career professionals are expected to contribute to live matters, develop quickly, and meet the same standards of accuracy, preparation, and professionalism expected across the firm.
 
 We look for candidates with strong analytical ability, intellectual curiosity, clear communication skills, and a genuine interest in credit and investing.
 
@@ -153,7 +153,7 @@ Candidates should not provide financial information, passwords, or sensitive ide
 
 # 在复杂信贷领域发展长期职业
 
-新岸资本是一家专注于中国复杂投资机会的私募信贷投资机构。
+新岸资本是一家私募信贷公司，为中国各地的借款人与金融机构提供服务。
 
 人才是公司长期发展的基础。我们坚持审慎招聘，重视人才的长期培养，并寻求具备出色思维能力、专业判断力和高度自律精神的优秀人才。
 
@@ -169,7 +169,7 @@ Candidates should not provide financial information, passwords, or sensitive ide
 
 随着经验的积累，投资人员可能接触以下领域：
 
-- 私募信贷与特殊机会投资
+- 私募信贷与复杂情境
 - 资产支持型贷款
 - 财务及商业尽职调查
 - 抵押物与资产回收分析
@@ -192,7 +192,7 @@ Candidates should not provide financial information, passwords, or sensitive ide
 
 ## 投资岗位
 
-我们寻找希望在私募信贷和复杂投资机会领域建立深厚专业能力的人才。
+我们寻找希望在私募信贷和复杂情境领域建立深厚专业能力的人才。
 
 优秀的候选人通常能够将财务分析、商业意识和务实判断相结合。他们应能够在信息不完整的情况下有效工作，检验不同观点，并形成有充分依据的结论。
 
@@ -222,7 +222,7 @@ Candidates should not provide financial information, passwords, or sensitive ide
 
 新岸资本会根据业务需要，择优招聘表现出色的学生和初级专业人才。
 
-这些岗位能够让候选人直接接触私募信贷和特殊机会投资的实际工作。初级团队成员需要参与真实项目，快速提升能力，并达到公司对准确性、充分准备和专业素养的一贯要求。
+这些岗位能够让候选人直接接触私募信贷和复杂情境的实际工作。初级团队成员需要参与真实项目，快速提升能力，并达到公司对准确性、充分准备和专业素养的一贯要求。
 
 我们重视具备优秀分析能力、强烈求知欲、清晰沟通能力，并对信贷和投资具有真正兴趣的候选人。
 
