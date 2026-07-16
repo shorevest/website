@@ -10,14 +10,15 @@
   "body": [
     {
       "type": "image",
-      "src": "assets/img/media-pensions-investments-shanghai-flag.svg",
+      "src": "assets/img/media/cambridge-associates-china-opportunity-hero.png",
       "alt": "Chinese flag being raised in front of the Lujiazui Financial District skyline in Shanghai at sunrise",
       "caption": "China Customs officers raise a Chinese flag during a rehearsal for a flag-raising ceremony in front of buildings in the Lujiazui Financial District at sunrise in Shanghai.",
-      "credit": "Bloomberg"
+      "credit": "Bloomberg",
+      "className": "media-pdf-image--hero"
     },
     {
       "type": "paragraph",
-      "text": "Cambridge Associates LLC, the Boston-based investment firm and adviser to some of the world's biggest endowment funds, is urging clients to consider what it's calling an unusually attractive tactical opportunity now — lending directly to embattled Chinese real estate developers."
+      "text": "Cambridge Associates LLC, the Boston-based investment firm and adviser to some of the world's biggest endowment funds, is urging clients to consider what it's calling an unusually attractive tactical opportunity now \u2014 lending directly to embattled Chinese real estate developers."
     },
     {
       "type": "paragraph",
@@ -33,21 +34,22 @@
     },
     {
       "type": "image",
-      "src": "assets/img/media-pensions-investments-johnny-adji.svg",
+      "src": "assets/img/media/johnny-adji-headshot.png",
       "alt": "Johnny Adji headshot",
-      "caption": "Johnny Adji said the investment window is about 18 to 24 months."
+      "caption": "Johnny Adji said the investment window is about 18 to 24 months.",
+      "className": "media-pdf-image--portrait"
     },
     {
       "type": "paragraph",
-      "text": "\"We're able to augment the risk and return profile\" by lending directly to the individuals — often multimillionaires or billionaires — who own these real estate development firms against property they own privately in creditor-friendly jurisdictions such as the U.S., Canada, Hong Kong or Singapore, Mr. Adji said."
+      "text": "\"We're able to augment the risk and return profile\" by lending directly to the individuals \u2014 often multimillionaires or billionaires \u2014 who own these real estate development firms against property they own privately in creditor-friendly jurisdictions such as the U.S., Canada, Hong Kong or Singapore, Mr. Adji said."
     },
     {
       "type": "paragraph",
-      "text": "The pitch? \"We're ready to help you solve your problem … but with a caveat. We don't want to take your listco share collateral. That can be suspended, and we've seen a number of the Hong Kong-listed shares be suspended. But we want to take collaterals of your luxury villas in Beverly Hills that your mother-in-law happens to live in,\" Mr. Adji said."
+      "text": "The pitch? \"We're ready to help you solve your problem \u2026 but with a caveat. We don't want to take your listco share collateral. That can be suspended, and we've seen a number of the Hong Kong-listed shares be suspended. But we want to take collaterals of your luxury villas in Beverly Hills that your mother-in-law happens to live in,\" Mr. Adji said."
     },
     {
       "type": "paragraph",
-      "text": "If the private corporation is basically founded by a single individual who is the 100% shareholder, there's little difference between lending to that shareholder personally or lending to his company — it's all \"intermingled and intertwined,\" he said."
+      "text": "If the private corporation is basically founded by a single individual who is the 100% shareholder, there's little difference between lending to that shareholder personally or lending to his company \u2014 it's all \"intermingled and intertwined,\" he said."
     },
     {
       "type": "paragraph",
@@ -75,15 +77,15 @@
     },
     {
       "type": "paragraph",
-      "text": "Against that backdrop, developers on the mainland who previously would have only offered up their office assets in Beijing or Shanghai as collateral are asking, \"What do I need to give you (in exchange for a loan) … and what we're telling them is we want your assets in America, in Canada, in Hong Kong and Singapore. Do you have any? That's what's happening on the ground\" now, he said."
+      "text": "Against that backdrop, developers on the mainland who previously would have only offered up their office assets in Beijing or Shanghai as collateral are asking, \"What do I need to give you (in exchange for a loan) \u2026 and what we're telling them is we want your assets in America, in Canada, in Hong Kong and Singapore. Do you have any? That's what's happening on the ground\" now, he said."
     },
     {
       "type": "paragraph",
-      "text": "And the clock, Mr. Adji contends, is running. \"We think that the opportunity is likely to significantly diminish in about 18 to 24 months … or at least the lowest of the (low) hanging fruits, so we're telling our clients that the time to act is now,\" he said."
+      "text": "And the clock, Mr. Adji contends, is running. \"We think that the opportunity is likely to significantly diminish in about 18 to 24 months \u2026 or at least the lowest of the (low) hanging fruits, so we're telling our clients that the time to act is now,\" he said."
     },
     {
       "type": "paragraph",
-      "text": "At present, demand still significantly outstrips supply and first movers should be rewarded, Mr. Adji said. \"When you see the wall of money coming\" in 12 or 18 months, \"We'll pull back. It's all about being tactical … this is not a multicycle opportunity,\" he said."
+      "text": "At present, demand still significantly outstrips supply and first movers should be rewarded, Mr. Adji said. \"When you see the wall of money coming\" in 12 or 18 months, \"We'll pull back. It's all about being tactical \u2026 this is not a multicycle opportunity,\" he said."
     },
     {
       "type": "paragraph",
@@ -91,7 +93,7 @@
     },
     {
       "type": "paragraph",
-      "text": "One quality those managers share is an ability to be nimble and make quick decisions. \"When you're talking about lending to these borrowers at … up to 15% interest, they typically need the money yesterday (and) you need to be able to disburse the capital in two weeks,\" Mr. Adji noted."
+      "text": "One quality those managers share is an ability to be nimble and make quick decisions. \"When you're talking about lending to these borrowers at \u2026 up to 15% interest, they typically need the money yesterday (and) you need to be able to disburse the capital in two weeks,\" Mr. Adji noted."
     },
     {
       "type": "paragraph",
@@ -107,7 +109,7 @@
     },
     {
       "type": "paragraph",
-      "text": "Those deals aren't served up on a silver platter, Mr. Simmons said. They're generally accessed through relationships with a company's founder or the chief financial officer and figuring out how the company's obligations are structured is where the complexity lies. Managers just getting off the sidelines now to enter that space will have a tough time competing with the incumbents, he predicted. But he agreed that Chinese real estate — and deals involving founders' overseas properties as collateral — present a significant opportunity set now."
+      "text": "Those deals aren't served up on a silver platter, Mr. Simmons said. They're generally accessed through relationships with a company's founder or the chief financial officer and figuring out how the company's obligations are structured is where the complexity lies. Managers just getting off the sidelines now to enter that space will have a tough time competing with the incumbents, he predicted. But he agreed that Chinese real estate \u2014 and deals involving founders' overseas properties as collateral \u2014 present a significant opportunity set now."
     },
     {
       "type": "paragraph",
