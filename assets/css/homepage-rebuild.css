@@ -407,6 +407,9 @@ body.homepage .sv-hero__headline {
   text-wrap: balance;
   word-break: normal;
 }
+body.homepage .sv-hero__headline-accent {
+  color: var(--sv-cinnabar);
+}
 body.homepage .sv-hero__body {
   margin: 24px 0 0;
   max-width: min(48ch, calc((var(--page-max) - (2 * var(--pad-x))) / 2));
