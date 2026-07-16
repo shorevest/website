@@ -460,7 +460,7 @@ body.careers-preview-page .careers-development__ledger > div {
 }
 body.careers-preview-page .careers-development__ledger h3 {
   margin-bottom: clamp(20px, 2.1vw, 28px);
-  text-align: center;
+  text-align: left;
 }
 body.careers-preview-page .careers-development__list {
   display: grid;
