@@ -23,11 +23,12 @@ body.careers-preview-page .careers-hero__grid {
   align-items: center;
 }
 body.careers-preview-page .careers-hero__lead {
-  grid-column: 1 / 7;
+  grid-column: 1 / 13;
   min-width: 0;
-  padding-right: clamp(24px, 3vw, 56px);
+  padding-right: 0;
 }
 body.careers-preview-page .careers-hero__media {
+  display: none;
   grid-column: 7 / 13;
   position: relative;
   min-width: 0;
@@ -47,7 +48,7 @@ body.careers-preview-page .careers-eyebrow {
 }
 body.careers-preview-page .careers-title {
   margin: 0;
-  max-width: 18ch;
+  max-width: none;
   font: 500 clamp(38px, 4.6vw, 62px)/1.04 var(--sv-font);
   letter-spacing: -0.03em;
   color: var(--sv-ivory, #FCF9F1);
@@ -57,6 +58,7 @@ body.careers-preview-page .careers-hero__body {
   margin-top: clamp(24px, 3vw, 36px);
   padding-left: clamp(22px, 2vw, 32px);
   border-left: 3px solid var(--sv-cinnabar, #C93B2A);
+  max-width: none;
 }
 body.careers-preview-page .careers-lede,
 body.careers-preview-page .careers-copy p,
