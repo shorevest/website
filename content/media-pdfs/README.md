@@ -13,17 +13,19 @@ Use this folder for structured content files that are approved for a ShoreVest-h
 
 ## Workflow
 
+The generator renders the branded print template in headless Chrome/Chromium, so the PDF matches `media-coverage-print.css` exactly (A4, Barlow, page-number footers). It needs Node and a local Chrome or Chromium install (auto-detected; override with `--chrome <path>` or `CHROME_PATH`).
+
 1. Copy `example-placeholder-coverage.json` to a new lowercase, hyphenated JSON file.
 2. Replace the placeholder metadata and `body` blocks with approved source material.
 3. Set `permissionStatus` and `copyrightNote` accurately. Do not claim permission unless it is confirmed.
-4. Run:
+4. While rights are still unconfirmed, generate QA copies only. `--preview` writes to the git-ignored folder `templates/media-coverage/preview/` and never into `public/`:
 
 ```bash
-node scripts/generate-media-coverage-pdf.mjs content/media-pdfs/<file>.json
+node scripts/generate-media-coverage-pdf.mjs content/media-pdfs/<file>.json --preview
 ```
 
-5. Confirm the generated file is in `public/media/archive-pdfs/` and opens in desktop and mobile browsers.
-6. Add the PDF to the relevant Media archive entry with:
+5. Once rights are established, set `permissionStatus` to `confirmed — <evidence, e.g. publisher email + date>` (or `shorevest-owned` for ShoreVest material) and run the same command without `--preview`. The generator refuses to write into `public/media/archive-pdfs/` for any other permission status.
+6. Confirm the generated file opens in desktop and mobile browsers, then commit it and add the PDF to the relevant Media archive entry with:
 
 ```json
 {
@@ -41,5 +43,7 @@ For external items that should remain off-site, use `linkType` values of `extern
 - Print/preview template: `templates/media-coverage/media-coverage-print.html`
 - Template styles: `templates/media-coverage/media-coverage-print.css`
 - Template renderer: `templates/media-coverage/media-coverage-print.js`
+- Template fonts (Barlow, bundled locally so rendering is deterministic offline): `assets/fonts/barlow/`
 - Generator: `scripts/generate-media-coverage-pdf.mjs`
-- Public output folder: `public/media/archive-pdfs/`
+- Public output folder (approved content only): `public/media/archive-pdfs/`
+- QA preview output folder (git-ignored): `templates/media-coverage/preview/`

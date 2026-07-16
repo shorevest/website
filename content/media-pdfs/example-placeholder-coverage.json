@@ -19,7 +19,7 @@
     { "type": "paragraph", "text": "Additional placeholder paragraphs intentionally create a second page in the generated PDF so pagination can be checked without using unapproved media content." },
     { "type": "paragraph", "text": "Only ShoreVest-supplied and approved content should be added to these structured files. Do not scrape paywalled articles or republish publicly viewable content without confirmed reproduction rights." },
     { "type": "paragraph", "text": "This neutral archive format clearly separates the original publication from ShoreVest's role as host of an archival copy." },
-    { "type": "editorialNote", "text": "ShoreVest editorial note: this is placeholder template QA content, not a live media archive document." }
+    { "type": "editorialNote", "text": "This is placeholder template QA content, not a live media archive document." }
   ],
   "images": []
 }

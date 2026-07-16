@@ -1,19 +1,5 @@
 {
-  "items": [
-    {
-      "status": "draft",
-      "publication": "Example Publication",
-      "type": "Article",
-      "headline": "Placeholder third-party coverage item for template QA",
-      "summary": "Draft example showing how an approved archive PDF can be linked without creating PDFs for every media item.",
-      "date": "2026-07-15",
-      "dateDisplay": "15 Jul 2026",
-      "linkType": "pdf",
-      "url": "",
-      "pdfPath": "public/media/archive-pdfs/shorevest-third-party-coverage-example-publication-2026-07-15-placeholder-third-party-coverage-item.pdf",
-      "buttonLabel": "VIEW PDF \u2192"
-    }
-  ],
+  "items": [],
   "schema": {
     "linkType": "external | video | podcast | linkedin | pdf | none",
     "url": "External URL for non-PDF items",
