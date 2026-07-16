@@ -185,12 +185,14 @@ body.careers-preview-page .careers-investment .careers-list {
   gap: clamp(14px, 1.8vw, 22px) clamp(28px, 4.2vw, 66px);
   align-items: start;
   justify-items: center;
-  padding-left: 0;
-  list-style-position: inside;
-  text-align: center;
+  padding-left: 1.15em;
+  text-align: left;
 }
 body.careers-preview-page .careers-investment .careers-list li {
+  justify-self: center;
+  width: min(100%, 28ch);
   max-width: 28ch;
+  text-align: left;
 }
 body.careers-preview-page .careers-investment .careers-list + p {
   margin-top: clamp(28px, 3.2vw, 42px);
