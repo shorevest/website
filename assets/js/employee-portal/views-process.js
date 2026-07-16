@@ -146,7 +146,7 @@
 
     function handleFile(file) {
       body.innerHTML = '';
-      body.appendChild(U.stateScreen('loading', 'Inspecting file', 'Reading, hashing, and analysing "' + file.name + '"…'));
+      body.appendChild(U.stateScreen('loading', 'Inspecting file', 'Reading, hashing, and analyzing "' + file.name + '"…'));
       W.inspectUpload(file).then(function (upload) {
         w.upload = upload;
         w.fileProblems = W.validateUpload(upload, w.savedProcess);
@@ -472,7 +472,7 @@
       p2.appendChild(U.table([
         { key: 'region', label: 'Region' },
         { key: 'owner', label: 'Proposed owner' },
-        { key: 'regionRecognised', label: 'Region recognised', html: function (r) { return r.regionRecognised ? U.statusHtml('Yes', 'st--ok') : U.statusHtml('Unrecognised — rows route to review', 'st--warn'); } }
+        { key: 'regionRecognized', label: 'Region recognized', html: function (r) { return r.regionRecognized ? U.statusHtml('Yes', 'st--ok') : U.statusHtml('Unrecognized — rows route to review', 'st--warn'); } }
       ], w.ownerAssignments));
       body.appendChild(p2);
     }

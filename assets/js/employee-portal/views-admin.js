@@ -307,7 +307,7 @@
     var rows = Object.keys(built).map(function (f) { return { field: f, aliases: built[f].join(', ') }; });
     panel.appendChild(U.table([
       { key: 'field', label: 'Canonical field' },
-      { key: 'aliases', label: 'Recognised aliases (built-in)' }
+      { key: 'aliases', label: 'Recognized aliases (built-in)' }
     ], rows));
     host.appendChild(panel);
   }

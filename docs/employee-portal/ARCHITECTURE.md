@@ -22,7 +22,7 @@ application.
 | Path | Purpose |
 | --- | --- |
 | `employee-portal/index.html` | Portal entry page. Loads the scripts and mounts the app. `noindex`. |
-| `assets/css/employee-portal.css` | Portal stylesheet — institutional design system (DIN 2014 / Spectral, ShoreVest red, charcoal/grey). |
+| `assets/css/employee-portal.css` | Portal stylesheet — institutional design system (DIN 2014 / Spectral, ShoreVest red, charcoal/gray). |
 | `assets/js/employee-portal/portal-config.js` | **Deployment configuration — placeholders only.** Tenant URLs, client IDs, flow URLs, script IDs. Every value is an `ENV:*` placeholder. |
 | `assets/js/employee-portal/rules.js` | Pure rules engine: error codes, column mapping, file/row validation, classification, reconciliation, execution keys, NL interpreter. No DOM, no network. |
 | `assets/js/employee-portal/files.js` | File sniffing (byte-level), CSV parser, dependency-free minimal `.xlsx` reader, SHA-256 hashing. |
@@ -142,7 +142,7 @@ keys and conditions (double-click / retry / version-mismatch), batch locking,
 the NL interpreter (proposals without enabling external actions, owner mapping,
 unknown-owner routing), CSV/`.xlsx` parsing, and the permission matrix.
 
-Browser end-to-end behaviour (upload → interpret → confirm → process →
+Browser end-to-end behavior (upload → interpret → confirm → process →
 reconcile → review → disabled execution) was verified with Chromium against a
 local static server. To reproduce locally:
 

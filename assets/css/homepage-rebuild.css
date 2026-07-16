@@ -86,7 +86,7 @@ body.homepage * { box-sizing: border-box; }
 html {
   scroll-padding-top: calc(var(--header-height) + 32px);
   /* Match the browser canvas to the dark footer so bottom rubber-band /
-     overscroll reveals only the footer colour instead of a white page edge. */
+     overscroll reveals only the footer color instead of a white page edge. */
   background: #20211F;
 }
 
