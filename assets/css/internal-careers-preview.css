@@ -63,9 +63,8 @@ body.careers-preview-page .careers-hero__body {
   padding-left: clamp(22px, 2vw, 32px);
   border-left: 3px solid var(--sv-cinnabar, #C93B2A);
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: clamp(32px, 4vw, 72px);
-  row-gap: clamp(20px, 2.4vw, 30px);
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: 15px;
   align-items: start;
 }
 body.careers-preview-page .careers-hero__body > :last-child {
@@ -87,6 +86,9 @@ body.careers-preview-page .careers-lede + .careers-lede,
 body.careers-preview-page .careers-copy p + p,
 body.careers-preview-page .careers-block p + p { margin-top: 15px; }
 body.careers-preview-page .careers-hero__body .careers-lede + .careers-lede { margin-top: 0; }
+body.careers-preview-page .careers-hero__body .careers-lede {
+  max-width: 78ch;
+}
 body.careers-preview-page .careers-hero__media::before {
   content: "";
   position: absolute;
