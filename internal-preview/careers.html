@@ -44,7 +44,7 @@
       <div class="careers-hero__body">
         <p class="careers-lede">ShoreVest is a specialist private credit firm focused on complex investment opportunities in China.</p>
         <p class="careers-lede">A career here means working on situations that sit beyond the scope of conventional lending: financial analysis, collateral assessment, legal rights, restructuring, and recovery strategy, all in service of identifying opportunities, managing risk, and protecting value.</p>
-        <p><span class="careers-action" aria-disabled="true">View Open Positions</span></p>
+        <p><a class="careers-action" href="#open-roles">View Open Roles</a></p>
       </div>
     </div>
     <div class="careers-hero__media" aria-hidden="true">
@@ -52,9 +52,22 @@
       <img class="careers-hero__image" src="../pexels-frank-cone-140140-21294939.jpg" alt="" width="2280" height="2851" loading="eager" decoding="async" fetchpriority="high">
     </div>
   </div>
-  <div class="sv-shell"><div class="careers-preview-note"><strong>Internal preview:</strong> Prepared for review by Emily, Ben, and Charlotte. This route is not linked from public pages and must only be deployed behind approved access protection. Application calls to action remain disabled; no résumé upload, recruitment inbox, personal email address, or external application link is active.</div></div>
+  <div class="sv-shell"><div class="careers-preview-note"><strong>Internal preview:</strong> Prepared for review by Emily, Ben, and Charlotte. This route is not linked from public pages and must only be deployed behind approved access protection. &ldquo;View Open Roles&rdquo; links only to the Open Roles list on this page; no résumé upload, recruitment inbox, personal email address, or external application link is active.</div></div>
 </section>
-<section class="careers-section careers-section--band careers-development" aria-labelledby="careers-development-title">
+<nav class="careers-pagenav" aria-label="On this page">
+  <div class="sv-shell careers-pagenav__inner">
+    <span class="careers-pagenav__label">On this page</span>
+    <ul class="careers-pagenav__links">
+      <li><a href="#development">Developing Investors</a></li>
+      <li><a href="#firm">The Firm</a></li>
+      <li><a href="#investment">Investment Careers</a></li>
+      <li><a href="#paths">Paths &amp; Development</a></li>
+      <li><a href="#values">What We Value</a></li>
+      <li><a href="#open-roles">Open Roles</a></li>
+    </ul>
+  </div>
+</nav>
+<section class="careers-section careers-section--band careers-development" id="development" aria-labelledby="careers-development-title">
   <div class="sv-shell">
     <div class="careers-two-col careers-development__head">
       <div>
@@ -119,6 +132,16 @@
     </div>
   </div>
 </section>
+<section class="careers-section careers-notices" id="recruitment-notices" aria-labelledby="careers-notices-title">
+  <div class="sv-shell">
+    <h2 id="careers-notices-title" class="careers-notices__title">Recruitment Notices</h2>
+    <div class="careers-notices__grid">
+      <div><h3>Equal Employment Opportunity</h3><p>ShoreVest is committed to providing equal employment opportunities in accordance with applicable laws and regulations. Employment decisions are based on qualifications, experience, performance, and role requirements, without regard to any characteristic protected by applicable law.</p></div>
+      <div><h3>Recruitment Agencies</h3><p>Recruitment agencies and search firms must obtain prior written approval from ShoreVest&apos;s Human Resources team and agree to applicable terms before submitting candidate information. ShoreVest does not accept responsibility for unsolicited submissions or related fees where no prior written agreement exists.</p></div>
+      <div><h3>Recruitment Fraud Notice</h3><p>Candidates should remain alert to fraudulent emails, messages, or social media communications claiming to represent ShoreVest. Official recruitment communications take place only through recognized ShoreVest channels, and ShoreVest will never request payment as part of the recruitment process. Candidates should not provide financial information, passwords, or sensitive identity documents in response to unverified communications, and should report suspicious messages through the contact information on ShoreVest&apos;s official website.</p></div>
+    </div>
+  </div>
+</section>
 </main>
 
 <footer class="sv-footer" aria-label="Site footer">
@@ -175,5 +198,6 @@
   </div>
 </footer>
 <script>document.querySelector('.sv-burger')?.addEventListener('click',function(){var open=this.getAttribute('aria-expanded')==='true';this.setAttribute('aria-expanded',String(!open));document.getElementById('sv-mobile-menu')?.classList.toggle('is-open',!open);});</script>
+<script>(function(){var links=document.querySelectorAll('.careers-pagenav a[href^="#"]');if(!links.length||!('IntersectionObserver' in window))return;var map=new Map();links.forEach(function(a){var s=document.querySelector(a.getAttribute('href'));if(s)map.set(s,a);});var current=null;var io=new IntersectionObserver(function(entries){entries.forEach(function(e){if(!e.isIntersecting)return;var link=map.get(e.target);if(!link||link===current)return;if(current)current.classList.remove('is-current');current=link;current.classList.add('is-current');});},{rootMargin:'-45% 0px -50% 0px'});map.forEach(function(_,s){io.observe(s);});})();</script>
 </body>
 </html>
