@@ -160,7 +160,7 @@ body.careers-preview-page .careers-copy--cn :where(.careers-eyebrow,.careers-kic
   body.careers-preview-page .careers-list { grid-template-columns: 1fr; }
 }
 body.careers-preview-page .careers-copy {
-  max-width: 920px;
+  max-width: min(1120px, var(--page-max));
 }
 body.careers-preview-page .careers-copy h1 { display: none; }
 body.careers-preview-page .careers-copy h2 {
@@ -178,3 +178,27 @@ body.careers-preview-page .careers-copy .careers-kicker {
   color: #182524;
 }
 body.careers-preview-page .careers-content { border-bottom: 1px solid rgba(23,53,54,.14); }
+
+@media (min-width: 901px) {
+  body.careers-preview-page .careers-content .careers-shell {
+    padding-inline: clamp(56px, 7vw, 96px);
+  }
+}
+
+@media (max-width: 900px) {
+  body.careers-preview-page .careers-content .careers-shell,
+  body.careers-preview-page .careers-hero .sv-shell {
+    padding-inline: clamp(28px, 6vw, 48px);
+  }
+  body.careers-preview-page .careers-copy p,
+  body.careers-preview-page .careers-list {
+    max-width: none;
+  }
+}
+
+@media (max-width: 430px) {
+  body.careers-preview-page .careers-content .careers-shell,
+  body.careers-preview-page .careers-hero .sv-shell {
+    padding-inline: clamp(24px, 7vw, 30px);
+  }
+}
