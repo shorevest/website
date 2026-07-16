@@ -408,11 +408,7 @@ body.homepage .sv-hero__headline {
   word-break: normal;
 }
 body.homepage .sv-hero__headline-accent {
-  display: inline;
-  color: var(--sv-cinnabar, #C93B2A) !important;
-  font: inherit;
-  letter-spacing: inherit;
-  white-space: nowrap;
+  color: var(--sv-cinnabar);
 }
 body.homepage .sv-hero__body {
   margin: 24px 0 0;
