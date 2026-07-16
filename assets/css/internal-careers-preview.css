@@ -18,7 +18,11 @@ body.careers-preview-page .careers-two-col {
   align-items: start;
 }
 body.careers-preview-page .careers-hero__grid {
-  min-height: 650px;
+  /* Match the homepage hero (.sv-hero__inner, 2026-07-08 layered composition):
+     content-driven height with the text column vertically centered against the
+     square image, so the "Careers" eyebrow lands at the same height as
+     "Credit solutions" on the homepage. */
+  min-height: 0;
   padding-block: clamp(56px, 6vw, 88px) clamp(72px, 7vw, 104px);
   align-items: center;
 }
@@ -42,7 +46,7 @@ body.careers-preview-page .careers-hero__media {
   isolation: isolate;
 }
 body.careers-preview-page .careers-eyebrow {
-  margin: 0 0 20px;
+  margin: 0 0 18px;
   font: 600 12px/1.4 var(--sv-font);
   letter-spacing: 0.16em;
   text-transform: uppercase;
