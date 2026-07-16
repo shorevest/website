@@ -199,6 +199,7 @@ body.careers-preview-page .careers-block {
   padding: clamp(30px, 3.2vw, 44px) 0;
   border-bottom: 1px solid var(--sv-border-dark, rgba(252,249,241,.14));
 }
+body.careers-preview-page .careers-block p { max-width: none; }
 body.careers-preview-page .careers-values-section {
   padding-block: clamp(64px, 7vw, 104px);
   background: var(--sv-teal-950, #102628);
@@ -439,7 +440,7 @@ body.careers-preview-page .careers-development__head > :last-child {
 body.careers-preview-page .careers-development__intro {
   align-self: start;
   justify-self: start;
-  max-width: 650px;
+  max-width: none;
   text-align: left;
 }
 body.careers-preview-page .careers-development__ledger {
