@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 790 444" role="img" aria-labelledby="title desc">
+  <title id="title">Chinese flags flying outside government buildings</title>
+  <desc id="desc">Illustrative archive image of Chinese flags flying against a blue sky outside government buildings.</desc>
+  <rect width="790" height="444" fill="#7ea4c2"/>
+  <rect y="340" width="790" height="104" fill="#d2cabc"/>
+  <g stroke="#50504b" stroke-width="3" fill="#b90e12">
+    <g transform="translate(20 0)"><line y1="180" y2="444"/><path d="M-34 185 36 205 28 278 -30 260Z"/></g>
+    <g transform="translate(210 0)"><line y1="180" y2="444"/><path d="M-34 185 36 205 28 278 -30 260Z"/></g>
+    <g transform="translate(390 0)"><line y1="180" y2="444"/><path d="M-34 185 36 205 28 278 -30 260Z"/></g>
+    <g transform="translate(565 0)"><line y1="180" y2="444"/><path d="M-34 185 36 205 28 278 -30 260Z"/></g>
+    <g transform="translate(745 0)"><line y1="180" y2="444"/><path d="M-34 185 36 205 28 278 -30 260Z"/></g>
+  </g>
+  <line x1="350" y1="30" x2="350" y2="444" stroke="#464646" stroke-width="4"/>
+  <path d="M352 45 560 85 520 205 352 170Z" fill="#be0c12"/>
+  <g fill="#fadc28">
+    <path d="M395 62 400 76 415 76 403 85 408 100 395 91 382 100 387 85 375 76 390 76Z"/>
+    <circle cx="430" cy="65" r="7"/><circle cx="450" cy="87" r="7"/><circle cx="450" cy="115" r="7"/><circle cx="425" cy="135" r="7"/>
+  </g>
+</svg>
