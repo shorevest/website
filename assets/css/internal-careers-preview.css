@@ -1,4 +1,4 @@
-/* Careers internal preview — dark institutional variant using ShoreVest page grammar. */
+/* Careers internal preview, dark institutional variant using ShoreVest page grammar. */
 body.careers-preview-page,
 body.careers-preview-page main {
   background: var(--sv-dark-footer, #20211F);
@@ -160,6 +160,7 @@ body.careers-preview-page .careers-copy h3 {
   color: var(--sv-qing-light, #7AAFAF);
 }
 body.careers-preview-page .careers-copy h3 { margin-top: 34px; padding-top: 24px; border-top: 1px solid var(--sv-border-dark); }
+body.careers-preview-page .careers-emphasis { color: var(--sv-qing-light, #7AAFAF) !important; font-weight: 500 !important; }
 body.careers-preview-page .careers-list {
   margin: 0;
   padding-left: 1.15em;
