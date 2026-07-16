@@ -178,7 +178,7 @@ body.careers-preview-page .careers-list {
 body.careers-preview-page .careers-list + p { margin-top: 18px; }
 body.careers-preview-page .careers-list li::marker { color: var(--sv-cinnabar, #C93B2A); }
 body.careers-preview-page .careers-investment .careers-ledger h3 {
-  text-align: center;
+  text-align: left;
 }
 body.careers-preview-page .careers-investment .careers-list {
   grid-template-columns: repeat(3, minmax(0, 1fr));
