@@ -86,6 +86,10 @@ body.homepage * { box-sizing: border-box; }
 
 html {
   scroll-padding-top: calc(var(--header-height) + 32px);
+  /* Keep the viewport gutter reserved between route loads so the fixed
+     navigation grid does not shift horizontally when moving between pages
+     with different document heights. */
+  scrollbar-gutter: stable;
   /* Match the browser canvas to the dark footer so bottom rubber-band /
      overscroll reveals only the footer color instead of a white page edge. */
   background: #20211F;
@@ -229,6 +233,8 @@ body.homepage .sv-header {
   background: #FCF9F1;
   border-bottom: 1px solid rgba(23, 53, 54, 0.12);
   z-index: 1000;
+  backface-visibility: hidden;
+  contain: layout paint;
 }
 body.homepage .sv-header__inner {
   max-width: var(--page-max);
