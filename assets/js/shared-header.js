@@ -173,7 +173,8 @@
         { href: pageHref('strategy.html'), label: 'Strategy' },
         { href: pageHref('insights.html'), label: 'Insights' },
         { href: pageHref('press.html'), label: 'Media' },
-        { href: pageHref('team.html'), label: 'Team' }
+        { href: pageHref('team.html'), label: 'Team' },
+        { href: 'https://www.pafg.com/', label: 'PAFG', external: true }
       ],
       investorPortalHref: pageHref('investor-portal/index.html'),
       investorPortalLabel: 'Investor portal',
@@ -190,7 +191,8 @@
         { href: pageHref('strategy_cn.html'), label: '策略' },
         { href: pageHref('insights_cn.html'), label: '洞察' },
         { href: pageHref('press_cn.html'), label: '媒体' },
-        { href: pageHref('team_cn.html'), label: '团队' }
+        { href: pageHref('team_cn.html'), label: '团队' },
+        { href: 'https://www.pafg.com/', label: 'PAFG', external: true }
       ],
       investorPortalHref: pageHref('investor-portal/index_cn.html'),
       investorPortalLabel: '投资者门户',
@@ -216,7 +218,7 @@
      rendering we return early, so every legacy nav/active/annotate routine
      further down is bypassed entirely.
      -------------------------------------------------------------------- */
-  const navBases = ['firm', 'strategy', 'insights', 'press', 'team'];
+  const navBases = ['firm', 'strategy', 'insights', 'press', 'team', 'pafg'];
   const svLang = localeSuffix === 'en'
     ? `<a class="sv-lang" href="${localeHrefs.cn}"><span class="on">EN</span><span class="sep">|</span>中文</a>`
     : `<a class="sv-lang" href="${localeHrefs.en}" lang="zh-Hans"><span>EN</span><span class="sep">|</span><span class="on">中文</span></a>`;
@@ -229,7 +231,7 @@
       <img src="${assetHref('assets/brand/sv-lockup-fc-dark.png')}" alt="ShoreVest" width="172" height="41" />
     </a>
     <nav class="sv-nav" aria-label="${localeSuffix === 'en' ? 'Primary' : '主导航'}">
-      <ul>${navItems.map((item, i) => `<li><a href="${item.href}"${navBases[i] === localeBase ? ' aria-current="page"' : ''}>${item.label}</a></li>`).join('')}</ul>
+      <ul>${navItems.map((item, i) => `<li><a href="${item.href}"${item.external ? ' target="_blank" rel="noopener noreferrer"' : ''}${navBases[i] === localeBase ? ' aria-current="page"' : ''}>${item.label}</a></li>`).join('')}</ul>
     </nav>
     <div class="sv-utils">${svLang}
       <a class="sv-util-btn" href="${investorPortalHref}">${investorPortalLabel}</a>
@@ -240,7 +242,7 @@
 </header>
 <div class="sv-mobile-menu" id="sv-mobile-menu">
   <nav aria-label="${localeSuffix === 'en' ? 'Mobile' : '移动导航'}">
-    <ul>${navItems.map((item) => `<li><a href="${item.href}">${item.label}</a></li>`).join('')}</ul>
+    <ul>${navItems.map((item) => `<li><a href="${item.href}"${item.external ? ' target="_blank" rel="noopener noreferrer"' : ''}>${item.label}</a></li>`).join('')}</ul>
     <div class="sv-mobile-utils">
       <a class="sv-util-btn" href="${svLangOtherHref}">${svLangOtherLabel}</a>
       <a class="sv-util-btn" href="${investorPortalHref}">${investorPortalLabel}</a>
