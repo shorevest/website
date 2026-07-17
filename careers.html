@@ -10,7 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260717-header-unify">
 <link rel="stylesheet" href="assets/css/din-2014.css?v=20260717">
-<link rel="stylesheet" href="assets/css/internal-careers-preview.css?v=20260717-values-din">
+<link rel="stylesheet" href="assets/css/internal-careers-preview.css?v=20260717-carousel-bold">
 <link rel="icon" href="assets/favicon-cinnabar.ico?v=20260717" sizes="any">
 <link rel="shortcut icon" href="assets/favicon-cinnabar.ico?v=20260717">
 <link rel="icon" href="assets/favicon-cinnabar.svg?v=20260717" type="image/svg+xml">
@@ -130,8 +130,8 @@
       <div class="careers-paths-carousel__controls">
         <p class="careers-paths-carousel__count" aria-hidden="true"><span data-carousel-current>01</span><span class="careers-paths-carousel__count-sep">/</span><span data-carousel-total>07</span></p>
         <div class="careers-paths-carousel__nav">
-          <button type="button" class="careers-paths-carousel__btn" data-carousel-prev aria-label="Previous team"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15.5 4.5 8 12l7.5 7.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
-          <button type="button" class="careers-paths-carousel__btn" data-carousel-next aria-label="Next team"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8.5 4.5 16 12l-7.5 7.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+          <button type="button" class="careers-paths-carousel__btn" data-carousel-prev aria-label="Previous team"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15.5 4.5 8 12l7.5 7.5" fill="none" stroke="currentColor" stroke-width="2"/></svg></button>
+          <button type="button" class="careers-paths-carousel__btn" data-carousel-next aria-label="Next team"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8.5 4.5 16 12l-7.5 7.5" fill="none" stroke="currentColor" stroke-width="2"/></svg></button>
         </div>
       </div>
       <div class="careers-paths">
@@ -296,6 +296,7 @@
 <script>(function(){var nav=document.querySelector('.careers-pagenav');var links=document.querySelectorAll('.careers-pagenav a[href^="#"]');if(!links.length||!('IntersectionObserver' in window))return;var map=new Map();links.forEach(function(a){var s=document.querySelector(a.getAttribute('href'));if(s)map.set(s,a);});var current=null;var io=new IntersectionObserver(function(entries){entries.forEach(function(e){if(!e.isIntersecting)return;var link=map.get(e.target);if(!link||link===current)return;if(current){current.classList.remove('is-current');current.removeAttribute('aria-current');}current=link;current.classList.add('is-current');current.setAttribute('aria-current','true');var bar=current.closest('.careers-pagenav__inner');if(bar&&bar.scrollWidth>bar.clientWidth){var r=current.getBoundingClientRect(),b=bar.getBoundingClientRect();bar.scrollTo({left:bar.scrollLeft+(r.left-b.left)-(b.width-r.width)/2,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});}});},{rootMargin:'-45% 0px -50% 0px'});map.forEach(function(_,s){io.observe(s);});if(nav){var footer=document.querySelector('.sv-footer');if(footer){new IntersectionObserver(function(entries){entries.forEach(function(e){nav.classList.toggle('is-footer-hidden',e.isIntersecting);});},{threshold:0,rootMargin:'0px 0px -65% 0px'}).observe(footer);}}})();</script>
 <script src="assets/js/insights-new-edition.js?v=20260717" defer></script>
 <script src="assets/js/recruitment-role-list.js?v=20260717" defer></script>
+<script src="assets/js/careers-paths-carousel.js?v=20260717" defer></script>
 <script src="assets/js/sv-navigation.js?v=20260717" defer></script>
 </body>
 </html>
