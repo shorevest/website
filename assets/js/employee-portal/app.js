@@ -1,8 +1,12 @@
 /* ==========================================================================
-   ShoreVest Operations — Application shell
-   Authentication gate (Microsoft Entra ID via MSAL in production; a clearly
-   labelled role preview chooser in preview mode), primary navigation
-   with role-based visibility, hash router, and the Dashboard.
+   ShoreVest One — Application shell and login
+
+   Login is a person-led demonstration profile chooser (not authentication).
+   The shell uses the compact ShoreVest mark plus SHOREVEST ONE — never the full
+   corporate lockup, which belongs to login and formal surfaces. Navigation and
+   Home come from the selected persona. Profile identity sits at the bottom of
+   the sidebar; Sign out lives inside the profile menu. Nothing here performs an
+   external action.
    ========================================================================== */
 (function (root) {
   'use strict';
@@ -20,8 +24,6 @@
   /* Compact ShoreVest mark — used inside the application shell. */
   var COMPACT_MARK = '../assets/brand/sv-circle-fullcolor.png';
 
-  /* Role preview identities. Each carries a persona id (Home and navigation)
-     and a shared underlying capability role for the preserved Tools area. */
   var DEMO_USERS = P.list.map(function (p) {
     return {
       personaId: p.id, name: p.name, firstName: p.firstName,
@@ -32,12 +34,6 @@
 
   var SESSION_KEY = 'svops.session.v2';
   var COLLAPSE_KEY = 'svops.sidebar.collapsed';
-
-  var ACTION_REGISTRY = {
-    routes: { home: '#/home', myWork: '#/my-work', relationships: '#/relationships', relationshipDetail: '#/relationships', outreachOverview: '#/outreach', findPeople: '#/outreach/find', reviewAudience: '#/outreach/review', chooseAudienceAction: '#/outreach/review', draftMessages: '#/outreach/draft', deliveryControls: '#/outreach/package', reviewPackage: '#/outreach/package', sentResponses: '#/outreach/sent', meetings: '#/meetings', diligenceRequests: '#/diligence', investorIntelligence: '#/investor-intelligence', reporting: '#/reporting', approvals: '#/approvals', firm: '#/firm', firmSystemsVendors: '#/firm/systems', firmVendorDetail: '#/firm/vendors/mergepoint', tools: '#/tools' },
-    actions: ['openDrawer','closeDrawer','startWorkflow','saveAudience','saveSearch','exportCsv','assignReview','createResearchTasks','markLooksRight','markNeedsChanges','submitApproval','invalidateApproval','resetPreviewData']
-  };
-  SVOps.actionRegistry = ACTION_REGISTRY;
 
   function currentUser() {
     if (SVOps.state.user) return SVOps.state.user;
@@ -83,17 +79,13 @@
     return (persona && persona.nav) || [];
   }
 
-  /* Legacy Tools routes — reached via the Tools hub, and kept highlighted
-     under Tools while the user is inside one of them. */
-  var TOOLS_ROUTES = ['tools', 'process', 'weekly', 'dataquality',
+  var TOOLS_ROUTES = ['tools', 'process', 'weekly', 'dataquality', 'outreach',
     'exceptions', 'runs', 'admin', 'monitoring', 'batch'];
 
   var ROUTES = {
-    home: 'home', preview: 'preview', tools: 'tools',
-    'my-work': 'myWork', relationships: 'relationships', outreach: 'outreach', meetings: 'meetings',
-    diligence: 'diligence', 'investor-intelligence': 'investorIntelligence', reporting: 'reporting',
-    approvals: 'approvals', firm: 'firm',
-    process: 'process', weekly: 'weekly', dataquality: 'dataquality', exceptions: 'exceptions',
+    home: 'home', 'my-work': 'myWork', workspace: 'workspace', preview: 'preview',
+    tools: 'tools', process: 'process', weekly: 'weekly',
+    dataquality: 'dataquality', outreach: 'outreach', exceptions: 'exceptions',
     runs: 'runs', admin: 'admin', monitoring: 'monitoring', batch: 'batch'
   };
 
@@ -108,7 +100,6 @@
     if (route.view === 'preview') return 'preview:' + (route.params[0] || '');
     if (route.view === 'my-work') return 'my-work';
     if (TOOLS_ROUTES.indexOf(route.view) !== -1) return 'tools';
-    if (route.view === 'outreach' && route.params[0]) return 'outreach-' + route.params[0];
     return route.view;
   }
 
@@ -152,61 +143,62 @@
     try { localStorage.setItem(COLLAPSE_KEY, v ? '1' : '0'); } catch (e) { /* ignore */ }
   }
 
-  function roleSwitcher(user) {
-    var wrap = el('label', { class: 'ops-role-switch' }, [el('span', { text: 'Role preview:' })]);
-    var sel = el('select', { 'aria-label': 'Role preview selector' });
-    DEMO_USERS.forEach(function (u) { sel.appendChild(el('option', { value: u.personaId, text: (u.name || u.displayRole || '').split(' ')[0], selected: u.personaId === user.personaId })); });
-    sel.onchange = function () {
-      var next = DEMO_USERS.filter(function (u) { return u.personaId === sel.value; })[0];
-      if (next) { if (parseHash().view !== 'home') U.toast('This item is not assigned to this role. Showing role Home instead.'); signInDemo(next); }
-    };
-    wrap.appendChild(sel);
-    return wrap;
-  }
-
-  function badge(count) {
-    if (!count) return null;
-    var cls = count >= 5 ? ' ops-badge--red' : count >= 2 ? ' ops-badge--amber' : ' ops-badge--neutral';
-    return el('span', { class: 'ops-badge' + cls, text: String(count) });
-  }
-
   function renderShell(user, viewId, params, navItem, activeKey) {
-    var shell = el('div', { class: 'ops-shell' });
+    var isCollapsed = collapsed();
+    var shell = el('div', { class: 'ops-shell' + (isCollapsed ? ' is-collapsed' : '') + (SVOps.state.menuOpen ? ' menu-open' : '') });
 
-    /* Sidebar */
-    var sidebar = el('aside', { class: 'ops-sidebar' + (SVOps.state.menuOpen ? ' is-open' : '') });
-    sidebar.appendChild(el('div', { class: 'ops-sidebar__brand' }, [
-      el('img', { src: LOGO, alt: 'ShoreVest', width: '148', height: '36' }),
-      el('p', { class: 'ops-sidebar__title', html: '<span class="rule"></span>ShoreVest One' }),
-      el('p', { class: 'ops-sidebar__env', text: I.demoMode() ? 'Internal Preview' : 'Connected' })
-    ]));
+    shell.appendChild(renderSidebar(user, activeKey, isCollapsed));
+
+    var main = el('div', { class: 'ops-main' });
+    main.appendChild(renderAppBar(user));   /* mobile */
+    main.appendChild(renderTopBar(user));    /* desktop */
+    main.appendChild(el('p', { class: 'ops-demo-note', role: 'note',
+      text: 'Demonstration — Synthetic data only. No external actions occur.' }));
+
+    var content = el('div', { class: 'ops-main__content' });
+    main.appendChild(content);
+    routeInto(content, user, viewId, params);
+
+    /* Scrim for the mobile drawer. */
+    var scrim = el('div', { class: 'ops-scrim', onclick: function () { SVOps.state.menuOpen = false; render(); } });
+    main.appendChild(scrim);
+
+    shell.appendChild(main);
+    return shell;
+  }
+
+  function renderSidebar(user, activeKey, isCollapsed) {
+    var sidebar = el('aside', { class: 'ops-sidebar' + (SVOps.state.menuOpen ? ' is-open' : ''), 'aria-label': 'Primary' });
+
+    /* Compact brand: mark + SHOREVEST ONE, plus the collapse chevron. */
+    var brand = el('div', { class: 'ops-sidebar__brand' }, [
+      el('span', { class: 'ops-brandmark' }, [
+        el('img', { src: COMPACT_MARK, alt: 'ShoreVest', width: '30', height: '30' })
+      ]),
+      el('span', { class: 'ops-brandword', text: 'SHOREVEST ONE' }),
+      el('button', {
+        type: 'button', class: 'ops-collapse', 'aria-label': isCollapsed ? 'Expand navigation' : 'Collapse navigation',
+        'aria-expanded': isCollapsed ? 'false' : 'true',
+        html: '<svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path d="M10 3.5 5.5 8 10 12.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+        onclick: function () { setCollapsed(!collapsed()); render(); }
+      })
+    ]);
+    sidebar.appendChild(brand);
 
     var nav = el('nav', { class: 'ops-nav', 'aria-label': 'Primary navigation' });
     personaNav(user).forEach(function (item) {
       if (item.sep) { nav.appendChild(el('p', { class: 'ops-nav__sep', text: item.sep })); return; }
-      var itemKey = navKeyFor(item);
-      var isActive = itemKey === activeKey || (item.key === 'outreach' && activeKey.indexOf('outreach') === 0);
-      var row = el('div', { class: 'ops-nav__row' + (isActive ? ' is-active' : '') });
-      var a = el('a', { href: item.hash, class: isActive ? 'is-active' : '' }, [el('span', { text: item.label })]);
-      var b = badge(item.count); if (b) a.appendChild(b);
-      if (isActive && !item.children) a.setAttribute('aria-current', 'page');
+      if (item.divider) { nav.appendChild(el('hr', { class: 'ops-nav__divider' })); return; }
+      var isActive = navKeyFor(item) === activeKey;
+      var a = el('a', {
+        href: item.hash, class: 'ops-navlink' + (isActive ? ' is-active' : '') + (item.collapsible ? ' ops-navlink--secondary' : ''),
+        title: item.label, 'data-abbr': abbr(item.label)
+      }, [
+        el('span', { class: 'ops-navlink__label', text: item.label })
+      ]);
+      if (isActive) a.setAttribute('aria-current', 'page');
       a.addEventListener('click', function () { SVOps.state.menuOpen = false; });
-      row.appendChild(a);
-      if (item.children) {
-        SVOps.state.outreachOpen = SVOps.state.outreachOpen !== false || activeKey.indexOf('outreach') === 0;
-        row.appendChild(el('button', { type: 'button', class: 'ops-nav__chev', text: SVOps.state.outreachOpen ? '▾' : '▸', 'aria-label': 'Expand Outreach submenu', onclick: function (ev) { ev.preventDefault(); SVOps.state.outreachOpen = !SVOps.state.outreachOpen; render(); } }));
-      }
-      nav.appendChild(row);
-      if (item.children && (SVOps.state.outreachOpen || activeKey.indexOf('outreach') === 0)) {
-        var sub = el('div', { class: 'ops-nav__sub' });
-        item.children.forEach(function (child) {
-          var childActive = navKeyFor(child) === activeKey;
-          var ca = el('a', { href: child.hash, text: child.label, class: childActive ? 'is-active' : '' });
-          if (childActive) ca.setAttribute('aria-current', 'page');
-          sub.appendChild(ca);
-        });
-        nav.appendChild(sub);
-      }
+      nav.appendChild(a);
     });
     sidebar.appendChild(nav);
 
@@ -289,15 +281,28 @@
   function renderTopBar(user) {
     var bar = el('div', { class: 'ops-topbar' });
 
-      ]),
-      el('input', { class: 'ops-global-search', type: 'search', placeholder: 'Search people, firms, opportunities, requests, reports or tools', onkeydown: function (ev) { if (ev.key === 'Enter') runGlobalSearch(ev.target.value); } }),
-      el('div', { class: 'ops-topbar__right' }, [
-        el('span', { class: 'ops-env-compact', text: (I.demoMode() ? 'Internal Preview · Mock data' : 'Production · Connected data') + ' · R-2026.07' }),
-        roleSwitcher(user)
-      ])
+    var search = el('button', { type: 'button', class: 'ops-search', 'aria-label': 'Search or ask ShoreVest One',
+      onclick: function () { openSearch(); } }, [
+      el('span', { class: 'ops-search__icon', 'aria-hidden': 'true',
+        html: '<svg viewBox="0 0 16 16" width="14" height="14"><circle cx="7" cy="7" r="4.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M10.5 10.5 14 14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>' }),
+      el('span', { class: 'ops-search__text', text: 'Search or ask ShoreVest One' })
     ]);
-    main.appendChild(topbar);
+    bar.appendChild(search);
 
+    var right = el('div', { class: 'ops-topbar__right' }, [
+      el('button', { type: 'button', class: 'ops-topbtn', text: 'Add', title: 'Add to ShoreVest One',
+        onclick: function () { openAdd(); } }),
+      el('button', { type: 'button', class: 'ops-topbtn ops-topbtn--quiet', text: 'Help', title: 'Help / Report issue',
+        onclick: function () { openHelp(); } }),
+      (function () {
+        var b = el('button', { type: 'button', class: 'ops-topprofile', 'aria-haspopup': 'menu', 'aria-label': 'Profile menu',
+          onclick: function (e) { e.stopPropagation(); toggleProfileMenu(b, user); } }, [avatar(user, 'ops-topprofile__avatar')]);
+        return b;
+      })()
+    ]);
+    bar.appendChild(right);
+    return bar;
+  }
 
   /* ── Mobile app bar ─────────────────────────────────────────────────────── */
   function renderAppBar(user) {
@@ -320,40 +325,31 @@
     return bar;
   }
 
-  function runGlobalSearch(q) {
-    q = String(q || '').trim().toLowerCase();
-    if (!q) return U.toast('Type a search term first.');
-    var pages = [
-      ['Home','Page','Open Home',ACTION_REGISTRY.routes.home], ['My Work','Page','Open My Work',ACTION_REGISTRY.routes.myWork], ['Relationships','Page','Open Relationships',ACTION_REGISTRY.routes.relationships], ['Outreach audience review','Audience','Review current audience',ACTION_REGISTRY.routes.reviewAudience], ['ATP audience','Audience','Review ATP audience',ACTION_REGISTRY.routes.reviewAudience], ['Approvals','Approval packages','Open approval queue',ACTION_REGISTRY.routes.approvals], ['MergePoint','Vendor','Open vendor record',ACTION_REGISTRY.routes.firmVendorDetail], ['Tools','Page','Open Tools',ACTION_REGISTRY.routes.tools], ['NorthBridge Pension','Relationship','Open relationship drawer',ACTION_REGISTRY.routes.relationships], ['Sarah Chen at ATP','Person','Open audience row',ACTION_REGISTRY.routes.reviewAudience]
-    ];
-    var results = pages.filter(function (r) { return r.join(' ').toLowerCase().indexOf(q) > -1; });
-    var body = el('div', { class: 'search-results' });
-    if (!results.length) body.appendChild(el('p', { text: 'No results found in preview data.' }));
-    results.forEach(function (r) {
-      body.appendChild(el('button', { type: 'button', class: 'search-result', onclick: function () { location.hash = r[3]; document.querySelector('.drawer-scrim') && document.querySelector('.drawer-scrim').click(); } }, [el('strong', { text: r[0] }), el('span', { text: r[1] + ' · ' + r[2] })]));
-    });
-    U.drawer('Search results for “' + q + '”', body);
+  function openSearch() {
+    var body = el('div', {});
+    body.appendChild(el('div', { class: 'fld' }, [
+      el('label', { text: 'Search or ask' }),
+      el('input', { type: 'search', placeholder: 'e.g. Red Panda Capital, or "what needs me today?"', 'aria-label': 'Search or ask ShoreVest One' })
+    ]));
+    body.appendChild(U.notice('info', '<strong>Demonstration</strong> Search and Ask are synthetic placeholders in this phase. No query is sent anywhere and no external action occurs.'));
+    U.drawer('Search or ask ShoreVest One', body);
   }
-
-  function environmentBar(user) {
-    return el('div', { class: 'ops-demo-banner ops-envbar' }, [
-      el('span', { html: '<strong>Environment:</strong> ' + (I.demoMode() ? 'Internal Preview' : 'Production') }),
-      el('span', { html: '<strong>Data:</strong> ' + (I.demoMode() ? 'Mock' : 'Connected') }),
-      el('span', { html: '<strong>External actions:</strong> ' + (I.demoMode() ? 'Off' : 'On') }),
-      el('span', { html: '<strong>Role:</strong> ' + esc(user.displayRole || user.role) })
-    ]);
+  function openAdd() {
+    var body = el('div', {});
+    body.appendChild(el('p', { class: 'drawer-copy', text: 'Capture a note, meeting, or follow-up into ShoreVest One.' }));
+    body.appendChild(el('div', { class: 'fld' }, [
+      el('label', { text: 'Add a note' }),
+      el('textarea', { placeholder: 'Type a synthetic capture…', 'aria-label': 'Add to ShoreVest One' })
+    ]));
+    body.appendChild(U.notice('info', '<strong>Demonstration</strong> Capture is a synthetic placeholder. Nothing is stored externally and no external action occurs.'));
+    U.drawer('Add to ShoreVest One', body);
   }
-
-  var TITLES = {
-    home: 'Home', preview: 'ShoreVest One', tools: 'Tools',
-    myWork: 'My Work', relationships: 'Relationships', outreach: 'Outreach', meetings: 'Meetings',
-    diligence: 'Diligence & Requests', investorIntelligence: 'Investor Intelligence', reporting: 'Reporting', approvals: 'Approvals', firm: 'Firm',
-    process: 'Process a List', weekly: 'Weekly Reporting',
-    dataquality: 'Salesforce Data Quality',
-    exceptions: 'Review Exceptions', runs: 'Previous Runs',
-    admin: 'Administration', monitoring: 'Monitoring', batch: 'Batch'
-  };
-  function titleFor(viewId) { return TITLES[viewId] || 'Home'; }
+  function openHelp() {
+    var body = el('div', {});
+    body.appendChild(el('p', { class: 'drawer-copy', text: 'Get help using ShoreVest One, or report an issue with this demonstration.' }));
+    body.appendChild(U.notice('info', '<strong>Demonstration</strong> Help and issue reporting are synthetic placeholders. No message is sent and no external action occurs.'));
+    U.drawer('Help / Report issue', body);
+  }
 
   /* ── Routing into views ─────────────────────────────────────────────────── */
   function routeInto(content, user, viewId, params) {
@@ -401,12 +397,8 @@
     });
     right.appendChild(el('div', { class: 'login__field' }, [sel]));
 
-      var sel = el('select', { class: 'gate__select', id: 'gate-role', 'aria-label': 'Select role preview' });
-      sel.appendChild(el('option', { value: '', text: 'Select a person' }));
-      DEMO_USERS.forEach(function (u, i) {
-        sel.appendChild(el('option', { value: String(i), text: u.displayRole }));
-      });
-      sel.addEventListener('change', hideErr);
+    var summary = el('div', { class: 'login__selected', 'aria-live': 'polite', hidden: true });
+    right.appendChild(summary);
 
     var btn = el('button', { class: 'login__submit', type: 'button', disabled: true }, [
       el('span', { class: 'login__submit-label', text: 'Continue' }),
@@ -425,8 +417,25 @@
       ]));
     }
 
-    card.appendChild(el('p', { class: 'gate__note', text: 'Authorised access only.' }));
-    if (demo) card.appendChild(el('p', { class: 'gate__preview', text: 'Internal Preview — role permissions and home state.' }));
+    sel.addEventListener('change', function () {
+      if (sel.value === '') {
+        renderSummary(null);
+        btn.disabled = true;
+        btn.querySelector('.login__submit-label').textContent = 'Continue';
+      } else {
+        var u = DEMO_USERS[Number(sel.value)];
+        renderSummary(u);
+        btn.disabled = false;
+        btn.querySelector('.login__submit-label').textContent = 'Continue as ' + u.firstName;
+      }
+    });
+
+    btn.addEventListener('click', function () {
+      if (sel.value === '' || btn.classList.contains('is-loading')) return;
+      btn.classList.add('is-loading'); btn.disabled = true; sel.disabled = true;
+      var u = DEMO_USERS[Number(sel.value)];
+      setTimeout(function () { signInDemo(u); }, 220);
+    });
 
     right.appendChild(btn);
     right.appendChild(el('p', { class: 'login__notice', text: 'Synthetic data only. No external actions occur.' }));

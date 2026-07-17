@@ -23,10 +23,10 @@ const navLabels = (persona) => persona.nav.filter((n) => !n.sep && !n.divider).m
 
 /* ── Exact identities ───────────────────────────────────────────────────── */
 
-test('at least four canonical demonstration people are offered', () => {
-  assert.ok(P.list.length >= 4);
+test('exactly three demonstration people are offered', () => {
+  assert.strictEqual(P.list.length, 3);
   assert.deepStrictEqual(P.list.map((p) => p.name).sort(),
-    ['Ben Fanger', 'Celestra Gallagher', 'Emily Oestericher', 'John Jones', 'Kelvin Chan', 'Nico Jacques']);
+    ['Celestra Gallagher', 'John Jones', 'Kelvin Chan']);
 });
 
 test('John has the exact approved title and coverage', () => {
@@ -36,13 +36,11 @@ test('John has the exact approved title and coverage', () => {
   assert.strictEqual(j.displayRole, 'Director of Client Solutions (Americas, Europe & Middle East)');
 });
 
-test('each person has the expected display role', () => {
-  assert.strictEqual(P.byId('john').displayRole, 'Director of Client Solutions, Ex-Asia');
-  assert.strictEqual(P.byId('kelvin').displayRole, 'Director of Client Solutions, Asia');
-  assert.strictEqual(P.byId('celestra').displayRole, 'Investor Relations Associate / IR Operations');
-  assert.strictEqual(P.byId('nico').displayRole, 'Outreach Owner / Outreach Operator');
-  assert.strictEqual(P.byId('ben').displayRole, 'Managing Partner');
-  assert.strictEqual(P.byId('emily').displayRole, 'Operations / Process Design');
+test('Kelvin has the exact approved title and coverage', () => {
+  const k = P.byId('kelvin');
+  assert.strictEqual(k.title, 'Director of Client Solutions');
+  assert.strictEqual(k.coverage, 'Asia-Pacific');
+  assert.strictEqual(k.displayRole, 'Director of Client Solutions (Asia-Pacific)');
 });
 
 test('Celestra has the exact approved title', () => {
@@ -60,16 +58,18 @@ test('no rejected identity strings are used', () => {
   });
 });
 
-test('all personas share the canonical navigation structure', () => {
-  const canonical = ['Home', 'My Work', 'Relationships', 'Outreach', 'Meetings', 'Diligence & Requests', 'Investor Intelligence', 'Reporting', 'Approvals', 'Firm', 'Tools'];
-  P.list.forEach((p) => assert.deepStrictEqual(navLabels(p), canonical));
+test('coverage descriptions always display with parentheses (via displayRole)', () => {
+  ['john', 'kelvin'].forEach((id) => {
+    const p = P.byId(id);
+    assert.ok(/\(.+\)$/.test(p.displayRole), p.name + ' displayRole should carry parentheses');
+  });
 });
 
-test('Outreach parent has the three canonical submenu entries', () => {
-  P.list.forEach((p) => {
-    const outreach = p.nav.find((n) => n.key === 'outreach');
-    assert.deepStrictEqual(outreach.children.map((n) => n.label), ['Find or add people', 'Draft messages', 'Sent & responses']);
-  });
+test('only real employee photos are used; Celestra has an initials avatar', () => {
+  assert.strictEqual(P.byId('john').photo, '../assets/img/team/john-jones.jpg');
+  assert.strictEqual(P.byId('kelvin').photo, '../assets/img/team/kelvin-chan.jpg');
+  assert.strictEqual(P.byId('celestra').photo, null);
+  assert.strictEqual(P.byId('celestra').initials, 'CG');
 });
 
 /* ── Frozen John & Kelvin navigation ────────────────────────────────────── */
@@ -93,12 +93,12 @@ test('Weekly Review (and other excluded items) are absent from John/Kelvin nav',
   });
 });
 
-test('Tools is top-level and not hidden under Workspace', () => {
-  P.list.forEach((p) => {
-    assert.deepStrictEqual(p.nav.filter((n) => n.sep).map((n) => n.sep), ['Core', 'Investor Relations', 'Controls']);
-    assert.ok(navLabels(p).includes('Investor Intelligence'));
-    assert.ok(navLabels(p).includes('Reporting'));
-    assert.ok(navLabels(p).includes('Approvals'));
+test('My Work, Diligence & Requests, Investor Intelligence, Firm and Tools are present', () => {
+  ['john', 'kelvin'].forEach((id) => {
+    const labels = navLabels(P.byId(id));
+    ['My Work', 'Diligence & Requests', 'Investor Intelligence', 'Firm', 'Tools'].forEach((l) => {
+      assert.ok(labels.indexOf(l) !== -1, id + ' missing ' + l);
+    });
   });
 });
 
@@ -200,9 +200,15 @@ test('no false-green language appears in Focus Now', () => {
 
 /* ── My Work ────────────────────────────────────────────────────────────── */
 
-test('canonical navigation routes directly to product areas, not preview-only labels', () => {
-  P.list.forEach((p) => {
-    p.nav.filter((n) => !n.sep).forEach((n) => assert.ok(n.hash.indexOf('#/preview/') !== 0, n.label));
+test('John and Kelvin have a My Work shell with Needs me / Waiting / Later', () => {
+  ['john', 'kelvin'].forEach((id) => {
+    const mw = P.byId(id).myWork;
+    assert.ok(mw, id + ' has myWork');
+    assert.deepStrictEqual(Object.keys(mw).sort(), ['later', 'needsMe', 'waiting']);
+    mw.waiting.forEach((w) => {
+      ['who', 'when', 'followUp', 'accountable'].forEach((k) =>
+        assert.ok(w[k], id + ' waiting item missing ' + k));
+    });
   });
 });
 
