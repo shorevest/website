@@ -12,6 +12,7 @@ Static website for ShoreVest Partners, including English and Chinese pages, the 
 | `assets/css/` | All site stylesheets. |
 | `assets/js/` | All site JavaScript. |
 | `assets/data/` | Structured article data (China Debt Dynamics issue JSON). |
+| `assets/data/recruitment/` | Phase 1 recruitment role manifest contract. `roles.v1.json` is shared by the static site and the future Azure Functions deployment; the API-bundled copy is authoritative for accepting applications. |
 | `assets/email/` | HubSpot welcome-email templates and previews (see `docs/integrations/HUBSPOT_SETUP.md`). |
 | `assets/img/` | Organized image assets. Place new reusable images here, never at the repository root. |
 | `investor-portal/` | Investor portal static entry point. |
@@ -29,6 +30,7 @@ For a more detailed organization guide, see [`docs/REPOSITORY_STRUCTURE.md`](doc
 3. **Preserve bilingual parity.** When changing public content, check the matching English and Chinese pages where applicable.
 4. **Keep generated clutter out of Git.** Local caches, logs, QA screenshots, and temporary exports should remain untracked; see `.gitignore`.
 5. **No symlinks.** Asset files under `assets/` must be real files — static hosts do not reliably follow symlinks.
+6. **Recruitment manifest is not a launch switch.** Adding a role to `assets/data/recruitment/roles.v1.json` does not enable application submission. Production application submission remains disabled until the Phase 1 backend, private storage, malware scanning, authorization, monitoring, and required HR/legal/IT approvals are complete.
 
 ## Local development
 
@@ -48,6 +50,8 @@ Run these before committing structural changes:
 git status --short
 find . -maxdepth 2 -type d | sort
 python3 -m compileall scripts
+node scripts/validate-recruitment-roles.js
+node tests/recruitment-roles.test.js
 ```
 
 If you move files, also search for stale references with `rg` and test the relevant pages in a browser.
