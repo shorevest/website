@@ -236,6 +236,17 @@ body.homepage .sv-header {
   backface-visibility: hidden;
   contain: layout;
 }
+/* Some pages load DIN 2014 for their own content (careers, role previews).
+   The shared chrome must render identically everywhere, so pin it to the
+   Barlow-led stack and re-assert the family: without this, the nav list's
+   layout strut inherits DIN metrics while the links resolve to Barlow, and
+   the labels sit ~3px off-center on any page where DIN is loaded. */
+body.homepage .sv-header,
+body.homepage .sv-mobile-menu,
+body.homepage .sv-footer {
+  --sv-font: "Barlow", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+  font-family: var(--sv-font);
+}
 body.homepage .sv-header__inner {
   max-width: var(--page-max);
   margin-inline: auto;
