@@ -6,6 +6,10 @@ on:
       - assets/data/recruitment/**
       - scripts/validate-recruitment-roles.js
       - tests/recruitment-roles.test.js
+      - tests/recruitment-role-list.test.js
+      - assets/js/recruitment-role-list.js
+      - careers.html
+      - careers_cn.html
       - package.json
       - package-lock.json
       - .github/workflows/recruitment-manifest-checks.yml
@@ -16,6 +20,10 @@ on:
       - assets/data/recruitment/**
       - scripts/validate-recruitment-roles.js
       - tests/recruitment-roles.test.js
+      - tests/recruitment-role-list.test.js
+      - assets/js/recruitment-role-list.js
+      - careers.html
+      - careers_cn.html
       - package.json
       - package-lock.json
       - .github/workflows/recruitment-manifest-checks.yml
