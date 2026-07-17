@@ -104,16 +104,14 @@ body.careers-preview-page .careers-hero__image {
   object-position: center 38%;
   border: 0;
   filter: grayscale(1);
-  transition: filter 420ms ease, transform 420ms ease;
+  transition: filter 420ms ease;
   clip-path: inset(0);
 }
 body.careers-preview-page .careers-hero__media:is(:hover, :focus-within) .careers-hero__image {
   filter: grayscale(0);
-  transform: scale(1.015);
 }
 @media (prefers-reduced-motion: reduce) {
   body.careers-preview-page .careers-hero__image { transition: none; }
-  body.careers-preview-page .careers-hero__media:is(:hover, :focus-within) .careers-hero__image { transform: none; }
 }
 body.careers-preview-page .careers-preview-note {
   position: relative;
