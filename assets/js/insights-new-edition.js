@@ -1,7 +1,7 @@
 /* Highlights the Insights nav link for seven days after a China Debt Dynamics release. */
 (function () {
   const latestIssue = {
-    published: '2026-01-25T00:00:00Z',
+    published: '2026-07-17T00:00:00Z',
     href: 'insights.html#archive',
     label: 'New edition',
     message: 'Check out the new China Debt Dynamics edition'
