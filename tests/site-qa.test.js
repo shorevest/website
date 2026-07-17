@@ -4,7 +4,9 @@ const path = require('path');
 const root = path.resolve(__dirname, '..');
 const exists = (p) => fs.existsSync(path.join(root, p));
 const read = (p) => fs.readFileSync(path.join(root, p), 'utf8');
-const pairedBases = ['index','firm','strategy','insights','press','team','contact','privacy-policy','cookie-notice','terms-of-use','important-information','legal-notices-disclaimers','investor-access','investor-access-portal-terms'];
+// 'home' replaced 'index' when the homepage route was renamed; index.html is
+// now a meta-refresh stub whose canonical intentionally points at home.html.
+const pairedBases = ['home','firm','strategy','insights','press','team','contact','privacy-policy','cookie-notice','terms-of-use','important-information','legal-notices-disclaimers','investor-access','investor-access-portal-terms'];
 function hrefs(html){return [...html.matchAll(/<a\s+[^>]*href="([^"]+)"/gi)].map(m=>m[1]);}
 function localTarget(from, href){if(!href || href.startsWith('#') || /^(https?:|mailto:|tel:|javascript:)/i.test(href)) return null; return path.normalize(path.join(path.dirname(from), href.split('#')[0].split('?')[0]));}
 for (const base of pairedBases) {

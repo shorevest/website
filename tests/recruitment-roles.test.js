@@ -62,7 +62,9 @@ detailPages.forEach((relativePath) => {
   assert.ok(html.includes('INTERNAL PREVIEW') || html.includes('内部预览'), `${relativePath} should contain the internal-preview notice`);
   assert.doesNotMatch(html, /<form\b/i, `${relativePath} must not contain a form`);
   assert.doesNotMatch(html, /<input\b[^>]*type=["']file["']/i, `${relativePath} must not contain file inputs`);
-  assert.doesNotMatch(html, /<button\b/i, `${relativePath} must not contain active submission buttons`);
+  // The shared header's mobile-menu toggle is the only permitted button.
+  const htmlWithoutNavToggle = html.replace(/<button class="sv-burger"[^>]*><span><\/span><\/button>/g, '');
+  assert.doesNotMatch(htmlWithoutNavToggle, /<button\b/i, `${relativePath} must not contain active submission buttons`);
 });
 
 const validRole = {
