@@ -1,30 +1,208 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
 <script>
-try{window.addEventListener('error',function(e){if(e&&typeof e.message==='string'&&e.message.indexOf('ResizeObserver loop')!==-1){e.stopImmediatePropagation();e.preventDefault();}},true);}catch(_){}
-window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
-(function(){
-  var T=window.__SVT;
-  function tok(u){try{var url=new URL(u,location.href);if(url.origin===location.origin&&!url.searchParams.get('t')){url.searchParams.set('t',T);return url.href;}return u;}catch(e){return u;}}
-  window.__svTok=tok;
-  function fixEl(el){if(el.nodeType!==1)return;if(el.tagName==='IMG'){var s=el.getAttribute('src');if(s){var ts=tok(s);if(ts!==s)el.setAttribute('src',ts);}}}
-  function scan(root){if(!root||root.nodeType!==1)return;fixEl(root);if(root.querySelectorAll){var n=root.querySelectorAll('img');for(var i=0;i<n.length;i++)fixEl(n[i]);}}
-  new MutationObserver(function(ms){for(var j=0;j<ms.length;j++){var a=ms[j].addedNodes;for(var i=0;i<a.length;i++)scan(a[i]);}}).observe(document.documentElement,{childList:true,subtree:true});
-  if(document.readyState!=='loading')scan(document.body);else document.addEventListener('DOMContentLoaded',function(){scan(document.body);});
-  document.addEventListener('click',function(e){var t=e.target;var a=t&&t.closest?t.closest('a[href]'):null;if(!a)return;var h=a.getAttribute('href');if(!h||h.charAt(0)==='#'||/^(mailto:|tel:|javascript:|https?:|\/\/)/i.test(h))return;var url;try{url=new URL(h,location.href);}catch(_){return;}if(url.origin!==location.origin)return;e.preventDefault();if(!url.searchParams.get('t'))url.searchParams.set('t',T);window.location.href=url.href;},true);
-})();
+      try {
+        window.addEventListener(
+          "error",
+          function (e) {
+            if (
+              e &&
+              typeof e.message === "string" &&
+              e.message.indexOf("ResizeObserver loop") !== -1
+            ) {
+              e.stopImmediatePropagation();
+              e.preventDefault();
+            }
+          },
+          true,
+        );
+      } catch (_) {}
+      window.__SVT = new URLSearchParams(location.search).get("t") || "";
+      (function () {
+        var T = window.__SVT;
+        if (!T) return;
+        function tok(u) {
+          try {
+            var url = new URL(u, location.href);
+            if (url.origin === location.origin && !url.searchParams.get("t")) {
+              url.searchParams.set("t", T);
+              return url.href;
+            }
+            return u;
+          } catch (e) {
+            return u;
+          }
+        }
+        window.__svTok = tok;
+        (function () {
+          var _f = window.fetch;
+          if (_f) {
+            window.fetch = function (i, n) {
+              try {
+                var u;
+                if (typeof i === "string") {
+                  u = new URL(i, location.href);
+                  if (
+                    u.origin === location.origin &&
+                    !u.searchParams.get("t")
+                  ) {
+                    u.searchParams.set("t", T);
+                    i = u.href;
+                  }
+                } else if (i && i.url) {
+                  u = new URL(i.url, location.href);
+                  if (
+                    u.origin === location.origin &&
+                    !u.searchParams.get("t")
+                  ) {
+                    u.searchParams.set("t", T);
+                    i = new Request(u.href, i);
+                  }
+                }
+              } catch (e) {}
+              return _f.call(this, i, n);
+            };
+          }
+          var _o =
+            window.XMLHttpRequest && window.XMLHttpRequest.prototype.open;
+          if (_o) {
+            window.XMLHttpRequest.prototype.open = function (m, u) {
+              try {
+                var x = new URL(u, location.href);
+                if (x.origin === location.origin && !x.searchParams.get("t")) {
+                  x.searchParams.set("t", T);
+                  u = x.href;
+                }
+              } catch (e) {}
+              return _o.apply(this, [m, u].concat([].slice.call(arguments, 2)));
+            };
+          }
+        })();
+        function fixEl(el) {
+          if (el.nodeType !== 1) return;
+          if (el.hasAttribute("data-svsrc") && !el.__sd) {
+            el.__sd = 1;
+            el.setAttribute("src", tok(el.getAttribute("data-svsrc")));
+          }
+          if (el.hasAttribute("data-svsrcset") && !el.__ss) {
+            el.__ss = 1;
+            el.setAttribute(
+              "srcset",
+              el
+                .getAttribute("data-svsrcset")
+                .split(",")
+                .map(function (p) {
+                  var q = p.trim().split(/\s+/);
+                  if (q[0]) q[0] = tok(q[0]);
+                  return q.join(" ");
+                })
+                .join(", "),
+            );
+          }
+          if (el.tagName === "IMG") {
+            var s = el.getAttribute("src");
+            if (s) {
+              var ts = tok(s);
+              if (ts !== s) el.setAttribute("src", ts);
+            }
+          }
+        }
+        function scan(root) {
+          if (!root || root.nodeType !== 1) return;
+          fixEl(root);
+          if (root.querySelectorAll) {
+            var n = root.querySelectorAll(
+              "img,source,[data-svsrc],[data-svsrcset]",
+            );
+            for (var i = 0; i < n.length; i++) fixEl(n[i]);
+          }
+        }
+        new MutationObserver(function (ms) {
+          for (var j = 0; j < ms.length; j++) {
+            var a = ms[j].addedNodes;
+            for (var i = 0; i < a.length; i++) scan(a[i]);
+          }
+        }).observe(document.documentElement, {
+          childList: true,
+          subtree: true,
+        });
+        if (document.readyState !== "loading") scan(document.body);
+        else
+          document.addEventListener("DOMContentLoaded", function () {
+            scan(document.body);
+          });
+        document.addEventListener(
+          "click",
+          function (e) {
+            var t = e.target;
+            var a = t && t.closest ? t.closest("a[href]") : null;
+            if (!a) return;
+            var h = a.getAttribute("href");
+            if (
+              !h ||
+              h.charAt(0) === "#" ||
+              /^(mailto:|tel:|javascript:|https?:|\/\/)/i.test(h)
+            )
+              return;
+            var url;
+            try {
+              url = new URL(h, location.href);
+            } catch (_) {
+              return;
+            }
+            if (url.origin !== location.origin) return;
+            e.preventDefault();
+            if (!url.searchParams.get("t")) url.searchParams.set("t", T);
+            window.location.href = url.href;
+          },
+          true,
+        );
+      })();
 </script>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>新岸资本 | 团队</title>
-<meta name="description" content="新岸资本（ShoreVest）的资深团队 — 中国私募信贷市场中经验最丰富的专业人士之一，涵盖领导层与投资、资产服务、客户解决方案及顾问合伙人。" />
+    <!-- Favicons mirror the homepage so the Team tab displays the ShoreVest mark consistently. -->
+    <link rel="icon" href="assets/favicon-cinnabar.ico?v=20260717" sizes="any">
+    <link rel="shortcut icon" href="assets/favicon-cinnabar.ico?v=20260717">
+    <link rel="icon" href="assets/favicon-cinnabar.svg?v=20260717" type="image/svg+xml">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-cinnabar-32x32.png?v=20260717">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-cinnabar-16x16.png?v=20260717">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon-cinnabar.png?v=20260717">
+    <link rel="manifest" href="site.webmanifest?v=20260717">
+<meta name="description" content="认识新岸资本团队——涵盖中国私募信贷领域的领导层、投资、法律、资产服务、财务、客户解决方案及顾问职能。" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
-<script>document.write('<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260701-mobile-audit-430&t='+window.__SVT+'">');</script>
-<script>document.write('<link rel="stylesheet" href="assets/css/team-page.css?v=20260501-hero-unify-2-h1&t='+window.__SVT+'">');</script>
-<script>document.write('<link rel="stylesheet" href="assets/css/team-refine.css?v=20260702-team-photos&t='+window.__SVT+'">');</script>
+<!-- TODO: ADD ADOBE FONTS KIT FOR DIN 2014 — replace [KIT_ID] below and uncomment. Until configured, pages use the canonical DIN 2014 stack with only a generic sans-serif emergency fallback. -->
+<!-- <link rel="stylesheet" href="https://use.typekit.net/[KIT_ID].css"> -->
+<link
+  href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;700&display=swap"
+  rel="stylesheet"
+/>
+<!-- Team now uses the HOMEPAGE self-contained shell as the single design authority
+   (same header, footer, tokens, type, container). The legacy shared stack
+   (shared-header/footer, shorevest-unify, shared-hero, typography-lockdown,
+   burford-polish) is intentionally NOT loaded here — it was what made Team
+   look like a different site. -->
+<link
+  rel="stylesheet"
+  href="assets/css/homepage-rebuild.css?v=20260701-mobile-audit-430"
+/>
+<!-- team-page.css: bio expand + profile base behavior only. -->
+<link
+  rel="stylesheet"
+  href="assets/css/team-page.css?v=20260711-mobile-cache"
+/>
+<!-- Team refine: team hero + portrait grid + sections, on homepage tokens — MUST load LAST. -->
+<script>
+  document.write(
+    '<link rel="stylesheet" href="assets/css/team-refine.css?v=20260713-steve-crop&t=' +
+      window.__SVT +
+      '">',
+  );
+</script>
+<script>document.write('<link rel="stylesheet" href="assets/css/chinese-latin-typography.css?t='+window.__SVT+'">');</script>
 <style>
   body.homepage {
     --sv-font: "DIN 2014", "Barlow", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
@@ -32,11 +210,16 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
     --sv-cn: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
   }
 </style>
-<link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<link rel="preload" as="image" href="assets/img/team/benjamin-fanger.jpg" fetchpriority="high">
+
+<link rel="canonical" href="https://shorevest.com/team_cn.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://shorevest.com/team_cn.html">
+<link rel="alternate" hreflang="en" href="https://shorevest.com/team.html">
+<meta property="og:title" content="新岸资本 | 团队">
+<meta property="og:description" content="认识新岸资本团队——涵盖中国私募信贷领域的领导层、投资、法律、资产服务、财务、客户解决方案及顾问职能。">
+<meta property="og:url" content="https://shorevest.com/team_cn.html">
+<meta property="og:locale" content="zh_CN">
+<script src="assets/js/favicon-guard.js?v=20260717" defer></script>
 </head>
 <body class="homepage team-page team-page-v2">
 
@@ -52,11 +235,12 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
         <li><a href="insights_cn.html">洞察</a></li>
         <li><a href="press_cn.html">媒体</a></li>
         <li><a href="team_cn.html" aria-current="page">团队</a></li>
+        <li><a href="careers_cn.html">人才招聘</a></li>
       </ul>
     </nav>
     <div class="sv-utils">
       <a class="sv-lang" href="team.html">EN<span class="sep">|</span><span class="on">中文</span></a>
-      <a class="sv-util-btn" href="investor-portal/index.html">投资者门户</a>
+      <a class="sv-util-btn" href="investor-portal/index_cn.html">投资者门户</a>
       <a class="sv-util-btn sv-util-btn--cta" href="contact_cn.html">联系</a>
     </div>
     <button class="sv-burger" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="sv-mobile-menu">
@@ -73,10 +257,11 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
       <li><a href="insights_cn.html">洞察</a></li>
       <li><a href="press_cn.html">媒体</a></li>
       <li><a href="team_cn.html" aria-current="page">团队</a></li>
+      <li><a href="careers_cn.html">人才招聘</a></li>
     </ul>
     <div class="sv-mobile-utils">
       <a class="sv-util-btn" href="team.html">EN</a>
-      <a class="sv-util-btn" href="investor-portal/index.html">投资者门户</a>
+      <a class="sv-util-btn" href="investor-portal/index_cn.html">投资者门户</a>
       <a class="sv-util-btn sv-util-btn--cta" href="contact_cn.html">联系</a>
     </div>
   </nav>
@@ -87,25 +272,29 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
         <div class="team-hero__layout">
           <div class="pagehero__intro">
             <div class="eyebrow eyebrow--red">团队</div>
-            <h1 class="team-hero__title">平台背后<br />的团队</h1>
+            <h1 class="team-hero__title">新岸资本背后的团队</h1>
             <p class="pagehero__lede">
-              新岸资本汇聚了众多中国私募信贷市场中经验最丰富的资深专业人士。公司建立并长期维系了一支背景互补、技能多元的团队，高层的延续性意味着创建平台的人至今仍在管理平台。
+              新岸资本汇聚投资、法律、资产服务、财务、人力资源及客户解决方案等领域的专业人士，并依托覆盖中国各地的本地执行能力。
             </p>
           </div>
           <div class="team-hero__proof" aria-label="团队平台亮点">
             <div class="team-hero__statcard">
               <p class="team-hero__statcard-label">平台延续性</p>
               <article>
-                <span>约 20 年</span>
-                <p>资深合伙人共事年期</p>
+                <p>中国信贷经验</p>
+                <span>始于 2004 年</span>
               </article>
               <article>
-                <span>14</span>
-                <p>平台资深专业人士</p>
+                <p>平台专业人士</p>
+                <span>约 30 人</span>
               </article>
               <article>
+                <p>大中华区办公室</p>
                 <span>4</span>
+              </article>
+              <article>
                 <p>投资委员会成员</p>
+                <span>4</span>
               </article>
             </div>
           </div>
@@ -117,33 +306,38 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
       <div class="team-inner">
 
         <!-- LEADERSHIP & INVESTMENT -->
-        <section class="group group--leadership" aria-labelledby="leadership-investment">
+        <section class="group group--leadership-investment" aria-labelledby="leadership-investment">
           <div class="group__head">
             <div class="group__head-main">
               <h2 id="leadership-investment" class="sv-section-title">领导层与投资</h2>
             </div>
             <p class="group__summary">
-              涵盖新岸资本中国私募信贷平台的寻源、承销、法律架构及投资组合执行。
+              汇集新岸资本的创始领导、投资委员会成员以及投资与资本解决方案专业人士。
             </p>
           </div>
-          <div class="grid" data-team-grid>
+          <div class="grid" data-team-grid data-team-count="8">
             <article class="team-profile" data-team-profile>
               <div class="team-profile__photo" data-team-photo="bio-benjamin-fanger">
                 <img
                   src="assets/img/team/benjamin-fanger.jpg"
                   alt="方杰明"
                   width="640" height="800"
-                  loading="lazy"
+                  loading="eager"
                   decoding="async"
                   draggable="false"
-                />
+                fetchpriority="high" />
               </div>
               <div class="team-profile__name">方杰明</div>
               <div class="team-profile__role">管理合伙人、创始人</div>
-              <button class="team-profile__bio-toggle" type="button" aria-expanded="false" aria-controls="bio-benjamin-fanger">简介</button>
-              <a class="team-profile__linkedin" href="https://www.linkedin.com/in/benjamin-fanger-540b1?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_ios" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              <div class="team-profile__actions">
+                <button class="team-profile__bio-toggle" type="button" aria-expanded="false" aria-controls="bio-benjamin-fanger">简介</button>
+                <a class="team-profile__linkedin" href="https://www.linkedin.com/in/benjamin-fanger-540b1?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_ios" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              </div>
               <div class="team-profile__bio" id="bio-benjamin-fanger" hidden>
-                <p>方杰明先生是新岸资本的管理合伙人兼创始人，也是中国私募信贷市场的早期开拓者之一。他在该领域管理资本逾20亿美元，投资者包括来自全球各地的机构投资者，并担任新岸资本投资委员会委员。方先生在中国私募信贷领域拥有二十余年经验，长期与中国境内众多资产出让方、借款人及金融机构合作，设计并推动资本解决方案。研究生期间，方先生曾在美国美迈斯律师事务所（O’Melveny &amp; Myers）工作，参与中国早期困境债务及私募股权交易，并参与2003年中国首个由外资收购的不良贷款资产包项目。方先生使用中文近三十年，听说读写流利。他持有芝加哥大学法学博士（JD）及工商管理硕士（MBA）学位，并拥有美国加利福尼亚州律师执业资格。</p>
+                <p>方杰明先生是新岸资本的管理合伙人兼创始人，也是中国私募信贷市场的先行者。在这一领域，他管理的资产规模已超过20亿美元，资金来自全球各地的机构投资者，并担任新岸资本投资委员会委员。</p>
+                <p>凭借逾20年的中国私募信贷经验，方先生曾与众多资产出让方、借款人及金融机构合作，为其设计以信贷为核心的解决方案。在创立新岸资本和海岸投资之前，方先生曾创办多家公司，其中两家后来出售给上市公司。</p>
+                <p>攻读研究生期间，方先生还曾就职于美迈斯律师事务所，参与中国早期的困境债务及私募股权交易，并参与了2003年中国首个由境外投资者收购的不良贷款资产包项目。</p>
+                <p>方先生精通中文口语及书面表达，使用中文已有30余年。他拥有芝加哥大学法学博士学位及工商管理硕士学位，并持有美国加利福尼亚州律师执业资格。</p>
               </div>
             </article>
             <article class="team-profile" data-team-profile>
@@ -159,8 +353,10 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
               </div>
               <div class="team-profile__name">梅翠</div>
               <div class="team-profile__role">合伙人</div>
-              <button class="team-profile__bio-toggle" type="button" aria-expanded="false" aria-controls="bio-mecy-mei">简介</button>
-              <a class="team-profile__linkedin" href="https://www.linkedin.com/in/翠-梅-599882102?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_ios" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              <div class="team-profile__actions">
+                <button class="team-profile__bio-toggle" type="button" aria-expanded="false" aria-controls="bio-mecy-mei">简介</button>
+                <a class="team-profile__linkedin" href="https://www.linkedin.com/in/翠-梅-599882102?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_ios" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              </div>
               <div class="team-profile__bio" id="bio-mecy-mei" hidden>
                 <p>梅翠女士是新岸资本合伙人，并担任投资委员会委员。加入新岸资本前，她曾在海岸投资（Shoreline Capital）担任合伙人八年。梅女士的投资经验覆盖中国私募信贷投资的全谱系。她曾主导完成众多交易，职责涵盖项目来源、尽职调查、交易结构设计、收购及谈判、投后监控和退出。加入新岸资本和海岸投资前，梅女士曾在晨星（Morningstar）担任基金分析师，专注于基金策略分析；在该职位上，她与外部客户密切合作，构建中国债权及股权投资组合。梅女士持有合肥工业大学经济学学士学位及南京大学经济学硕士学位，并于2018年获授特许金融分析师（CFA）资格。</p>
               </div>
@@ -178,10 +374,12 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
               </div>
               <div class="team-profile__name">郑慧</div>
               <div class="team-profile__role">合伙人</div>
-              <button class="team-profile__bio-toggle" type="button" aria-expanded="false" aria-controls="bio-hui-zheng">简介</button>
-              <a class="team-profile__linkedin" href="https://www.linkedin.com/in/hui-zheng-b82b5230?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_ios" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              <div class="team-profile__actions">
+                <button class="team-profile__bio-toggle" type="button" aria-expanded="false" aria-controls="bio-hui-zheng">简介</button>
+                <a class="team-profile__linkedin" href="https://www.linkedin.com/in/hui-zheng-b82b5230?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_ios" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              </div>
               <div class="team-profile__bio" id="bio-hui-zheng" hidden>
-                <p>郑慧女士是新岸资本合伙人，并担任投资委员会委员。加入新岸资本前，她曾在海岸投资（Shoreline Capital）担任合伙人八年。郑女士的投资经验覆盖中国私募信贷投资的全谱系。她曾主导完成众多交易，职责涵盖项目来源、尽职调查、交易结构设计、收购及谈判、投后监控和退出。加入新岸资本和海岸投资前，郑女士曾在广东一家律师事务所担任律师，参与不良贷款资产清算处置。郑女士持有南昌大学法学学位，并持有中山大学法学院涉外经济法法学硕士学位。</p>
+                <p>郑慧女士是新岸资本合伙人，并担任投资委员会委员。加入新岸资本前，她曾在海岸投资（Shoreline Capital）担任合伙人八年。郑女士的投资经验覆盖中国私募信贷投资的全谱系。她曾主导完成众多交易，职责涵盖项目来源、尽职调查、交易结构设计、收购及谈判、投后监控和退出。加入新岸资本和海岸投资前，郑女士曾在广东一家律师事务所担任律师，参与不良贷款资产清算处置。郑女士曾发表多篇论文，包括《新破产法对不良资产清算处置的负面影响》。她持有南昌大学法学学位，并持有中山大学法学院涉外经济法法学硕士学位。</p>
               </div>
             </article>
             <article class="team-profile" data-team-profile>
@@ -197,8 +395,10 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
               </div>
               <div class="team-profile__name">毕凤笙</div>
               <div class="team-profile__role">合伙人、首席财务官</div>
-              <button class="team-profile__bio-toggle" type="button" aria-expanded="false" aria-controls="bio-ada-bi">简介</button>
-              <a class="team-profile__linkedin" href="https://www.linkedin.com/in/ada-bi-cpa-cga-fcca-6185a218?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_ios" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              <div class="team-profile__actions">
+                <button class="team-profile__bio-toggle" type="button" aria-expanded="false" aria-controls="bio-ada-bi">简介</button>
+                <a class="team-profile__linkedin" href="https://www.linkedin.com/in/ada-bi-cpa-cga-fcca-6185a218?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_ios" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              </div>
               <div class="team-profile__bio" id="bio-ada-bi" hidden>
                 <p>毕凤笙女士是新岸资本合伙人兼首席财务官，并担任投资委员会委员。她负责公司的财务、税务、基金报告、现金管理及已投项目财务管控，并因此监督过众多交易中的关键运营结构安排。加入新岸资本前，毕女士于2008年至2016年担任海岸投资（Shoreline Capital）首席财务官。2008年以前，她曾任AIG中国财产及意外险业务财务负责人，负责财务报告、资金管理、税务及预算。此前，她还曾任职于中信保诚及加拿大皇家银行。毕女士为特许公认会计师公会（ACCA）资深会员，同时也是加拿大特许专业会计师协会会员，并持有广东外语外贸大学国际贸易学士学位。</p>
               </div>
@@ -216,10 +416,12 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
               </div>
               <div class="team-profile__name">蒋姗娟</div>
               <div class="team-profile__role">合伙人</div>
-              <button class="team-profile__bio-toggle" type="button" aria-expanded="false" aria-controls="bio-shanjuan-jiang">简介</button>
-              <a class="team-profile__linkedin" href="https://www.linkedin.com/in/shanjuan-jiang-381b713?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_ios" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              <div class="team-profile__actions">
+                <button class="team-profile__bio-toggle" type="button" aria-expanded="false" aria-controls="bio-shanjuan-jiang">简介</button>
+                <a class="team-profile__linkedin" href="https://www.linkedin.com/in/shanjuan-jiang-381b713?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_ios" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              </div>
               <div class="team-profile__bio" id="bio-shanjuan-jiang" hidden>
-                <p>蒋姗娟女士是新岸资本合伙人，并为投资委员会观察员。加入新岸资本前，她曾在中金公司、CalPERS及富兰克林邓普顿中国另类投资业务从事私募股权投资。蒋女士持有加州大学洛杉矶分校博士学位及加州大学戴维斯分校MBA学位，并持有清华大学理学学士学位。</p>
+                <p>蒋姗娟女士是新岸资本合伙人，并为投资委员会观察员。加入新岸资本前，她曾在中金公司、CalPERS及富兰克林邓普顿中国另类投资业务从事私募股权投资。蒋女士持有加州大学洛杉矶分校机械工程博士学位及加州大学戴维斯分校MBA学位，并持有清华大学理学学士学位。</p>
               </div>
             </article>
             <article class="team-profile" data-team-profile>
@@ -235,7 +437,10 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
               </div>
               <div class="team-profile__name">徐琳玲</div>
               <div class="team-profile__role">总法律顾问</div>
-              <button class="team-profile__bio-toggle" type="button" aria-expanded="false" aria-controls="bio-lillian-xu">简介</button>
+              <!-- TODO: Add approved LinkedIn URL for Lillian Xu; LinkedIn action hidden until available. -->
+              <div class="team-profile__actions">
+                <button class="team-profile__bio-toggle" type="button" aria-expanded="false" aria-controls="bio-lillian-xu">简介</button>
+              </div>
               <div class="team-profile__bio" id="bio-lillian-xu" hidden>
                 <p>徐琳玲女士担任新岸资本总法律顾问，负责公司投资活动及基金运营中的所有法律事务。她拥有十五年以上专业法律经验，业务重点为另类投资相关法律尽职调查；对于收购中国市场复杂、多层级困境信贷资产的机构而言，这一专业能力尤为关键。在投资流程中，她负责法律架构设计及交易文件，统筹监管与合规事项，并评估困境及特殊机会信贷承做中最核心的可执行性和交易对手风险。她的工作贯穿投资全生命周期，从尽职调查和收购，到处置及退出。加入新岸资本前，她曾在多家中国红圈律所执业并接受系统训练；红圈律所代表中国境内顶尖律师事务所，其交易经验及机构关系处于中国法律服务市场的高端水平。</p>
               </div>
@@ -253,8 +458,10 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
               </div>
               <div class="team-profile__name">李宪</div>
               <div class="team-profile__role">资本解决方案总监</div>
-              <button class="team-profile__bio-toggle" type="button" aria-expanded="false" aria-controls="bio-james-li">简介</button>
-              <a class="team-profile__linkedin" href="https://www.linkedin.com/in/james-li-9377a64a?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_ios" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              <div class="team-profile__actions">
+                <button class="team-profile__bio-toggle" type="button" aria-expanded="false" aria-controls="bio-james-li">简介</button>
+                <a class="team-profile__linkedin" href="https://www.linkedin.com/in/james-li-9377a64a?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_ios" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              </div>
               <div class="team-profile__bio" id="bio-james-li" hidden>
                 <p>李宪先生为新岸资本的资本解决方案业务带来十余年华尔街投资及顾问经验。此前，他曾在Perella Weinberg Partners担任投资银行家，为企业重组及特殊机会交易提供顾问服务；亦曾在花旗担任投资组合经理。他在复杂、高难度金融交易的结构设计和执行方面经验深厚，直接支持新岸中国私募信贷策略的落地实施。</p>
               </div>
@@ -262,7 +469,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
             <article class="team-profile" data-team-profile>
               <div class="team-profile__photo" data-team-photo="bio-yao-fu">
                 <img
-                  src="assets/img/team/yao-fu.jpg"
+                  src="assets/img/team/yao-fu.svg"
                   alt="傅尧"
                   width="640" height="800"
                   loading="lazy"
@@ -272,7 +479,10 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
               </div>
               <div class="team-profile__name">傅尧</div>
               <div class="team-profile__role">高级投资经理</div>
-              <button class="team-profile__bio-toggle" type="button" aria-expanded="false" aria-controls="bio-yao-fu">简介</button>
+              <!-- TODO: Add approved LinkedIn URL for Yao Fu; LinkedIn action hidden until available. -->
+              <div class="team-profile__actions">
+                <button class="team-profile__bio-toggle" type="button" aria-expanded="false" aria-controls="bio-yao-fu">简介</button>
+              </div>
               <div class="team-profile__bio" id="bio-yao-fu" hidden>
                 <p>傅尧先生是新岸资本高级投资经理，在公司任职逾八年，重点覆盖香港及中国西南地区的投资机会。加入新岸资本前，他曾在德勤广州分所担任高级审计师三年，积累了扎实的财务分析和风险评估基础。傅先生持有麦考瑞大学专业会计学学位，并为特许公认会计师公会（ACCA）资深会员。</p>
               </div>
@@ -280,17 +490,16 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
           </div>
         </section>
 
-        <!-- SHOREVEST ASSET SOLUTIONS -->
-        <section class="group group--sas" aria-labelledby="asset-solutions">
+        <section class="group group--shorevest-asset-solutions" aria-labelledby="shorevest-asset-solutions">
           <div class="group__head">
             <div class="group__head-main">
-              <h2 id="asset-solutions" class="sv-section-title">新岸资产管理（SAS）</h2>
+              <h2 id="shorevest-asset-solutions" class="sv-section-title">新岸资产管理（SAS）</h2>
             </div>
             <p class="group__summary">
-              新岸资本的自有债务服务平台 — 在中国各地进行一线寻源、资产服务及困境信贷处置。
+              新岸资本的境内资产服务及处置平台，支持中国各地的本地执行与信贷回收。
             </p>
           </div>
-          <div class="grid" data-team-grid>
+          <div class="grid" data-team-grid data-team-count="2">
             <article class="team-profile" data-team-profile>
               <div class="team-profile__photo" data-team-photo="bio-daoping-yang">
                 <img
@@ -304,8 +513,9 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
               </div>
               <div class="team-profile__name">杨道平</div>
               <div class="team-profile__role">常务董事，新岸资产管理（SAS）</div>
-              <button class="team-profile__bio-toggle" type="button" aria-expanded="false" aria-controls="bio-daoping-yang">简介</button>
-              <a class="team-profile__linkedin" href="https://www.linkedin.com/in/daoping-yang?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_ios" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              <div class="team-profile__actions">
+                <button class="team-profile__bio-toggle" type="button" aria-expanded="false" aria-controls="bio-daoping-yang">简介</button>
+              </div>
               <div class="team-profile__bio" id="bio-daoping-yang" hidden>
                 <p>杨道平先生是新岸资产管理（SAS）常务董事兼华东地区负责人。SAS是新岸资本旗下专属资产服务平台，负责新岸各基金在中国境内困境资产的服务与管理。杨先生是中国资深高级管理人员；自2015年以来，他一直从事以不良贷款、房地产和能源为重点的另类投资。2015年前，杨先生在中国石化任职二十年，作为高管负责全球及区域供应、定价和交易等多个方面。杨先生持有中国人民大学MBA学位，并曾在佐治亚理工学院学习。</p>
               </div>
@@ -323,10 +533,63 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
               </div>
               <div class="team-profile__name">魏洪宇</div>
               <div class="team-profile__role">常务董事，新岸资产管理（SAS）</div>
-              <button class="team-profile__bio-toggle" type="button" aria-expanded="false" aria-controls="bio-hongyu-wei">简介</button>
-              <a class="team-profile__linkedin" href="https://www.linkedin.com/in/hongyu-wei-a262127" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              <div class="team-profile__actions">
+                <button class="team-profile__bio-toggle" type="button" aria-expanded="false" aria-controls="bio-hongyu-wei">简介</button>
+              </div>
               <div class="team-profile__bio" id="bio-hongyu-wei" hidden>
                 <p>魏洪宇先生常驻北京，担任新岸资产管理（SAS）常务董事。SAS是新岸资本旗下专属资产服务平台，负责新岸各基金在中国境内困境资产的服务与管理。魏先生在中国困境资产管理、贷款清收及非流动性信贷领域拥有逾二十年经验，曾任职于野村国际香港、德意志银行全球市场特殊投资组、Lone Star Funds、CarVal Investors及Kaili Assets Management（由摩根士丹利设立、负责服务中国首个外资收购不良贷款资产包的中国本土不良贷款服务机构）。在新岸资本，魏先生重点负责项目来源、境内借款人沟通、抵押物层面的处置以及跨境执行机会。他持有对外经济贸易大学金融学硕士学位，并完成了由加州大学洛杉矶分校安德森管理学院与新加坡国立大学联合开设的高级管理人员工商管理硕士（EMBA）项目。</p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <!-- RISK, FINANCE & PEOPLE -->
+        <section class="group group--risk-finance-people" aria-labelledby="risk-finance-people">
+          <div class="group__head">
+            <div class="group__head-main">
+              <h2 id="risk-finance-people" class="sv-section-title">风险、财务与人才</h2>
+            </div>
+            <p class="group__summary">
+              负责风险控制、财务报告、基金运营、人力资源和组织连续性的专业团队。
+            </p>
+          </div>
+          <div class="grid" data-team-grid data-team-count="3">
+            <article class="team-profile" data-team-profile>
+              <div class="team-profile__photo team-profile__photo--placeholder team-profile__photo--plain-placeholder" data-team-photo="bio-louisa-ho" role="img" aria-label="Louisa Ho 的纯色占位图"></div>
+              <div class="team-profile__name"><span lang="en">Louisa Ho</span></div>
+              <div class="team-profile__role">高级会计师</div>
+              <div class="team-profile__actions">
+                <button class="team-profile__bio-toggle" type="button" aria-expanded="false" aria-controls="bio-louisa-ho">简介</button>
+                <a class="team-profile__linkedin" href="https://www.linkedin.com/in/louisa-ho-a4346114a?utm_source=chatgpt%2Ecom&amp;originalSubdomain=cn" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              </div>
+              <div class="team-profile__bio" id="bio-louisa-ho" hidden>
+                <p>Louisa Ho 是新岸资本的高级会计师，负责预算编制、财务报告、税务合规、基金报告及日常会计工作。她亦协助开展年度审计及投资者税务报告工作，并担任公司的估值委员会委员。</p>
+                <p>加入新岸资本之前，Louisa 曾在 Rock Mobile Corporation 工作八年，期间由会计师晋升为财务经理。她拥有暨南大学会计学学士学位，并已通过中国注册会计师全国统一考试专业阶段。</p>
+              </div>
+            </article>
+            <article class="team-profile" data-team-profile>
+              <div class="team-profile__photo team-profile__photo--placeholder team-profile__photo--plain-placeholder" data-team-photo="bio-esther-li" role="img" aria-label="Esther Li 的纯色占位图"></div>
+              <div class="team-profile__name">Esther Li</div>
+              <div class="team-profile__role">风险控制专员</div>
+              <div class="team-profile__actions">
+                <button class="team-profile__bio-toggle" type="button" aria-expanded="false" aria-controls="bio-esther-li">简介</button>
+              </div>
+              <div class="team-profile__bio" id="bio-esther-li" hidden>
+                <p>Esther Li 是新岸资本的风险控制专员。作为独立于投资团队的风险控制职能成员，Esther 负责协调所有拟提交投资委员会审议项目的风险尽职调查及质量控制工作。凭借财务与法律方面的综合专业背景，她审阅财务模型及投资备忘录，评估法律、市场及信用风险，并在投资委员会审议前协助制定适当的风险缓释措施。</p>
+                <p>加入新岸资本之前，Esther 曾任职于中国水电十五局，担任投资分析师及会计师，负责基础设施项目的尽职调查、财务建模及投资分析。她拥有中山大学金融学硕士学位及经济学学士学位，并具备会计、法律、税务及证券领域的专业资格。</p>
+              </div>
+            </article>
+            <article class="team-profile" data-team-profile>
+              <div class="team-profile__photo team-profile__photo--placeholder team-profile__photo--plain-placeholder" data-team-photo="bio-charlotte-lan" role="img" aria-label="Charlotte Lan 的纯色占位图"></div>
+              <div class="team-profile__name">兰玉芳</div>
+              <div class="team-profile__role">人力资源经理</div>
+              <!-- TODO: Add approved LinkedIn URL for Charlotte Lan; LinkedIn action hidden until available. -->
+              <div class="team-profile__actions">
+                <button class="team-profile__bio-toggle" type="button" aria-expanded="false" aria-controls="bio-charlotte-lan">简介</button>
+              </div>
+              <div class="team-profile__bio" id="bio-charlotte-lan" hidden>
+                <p>兰玉芳是新岸资本的人力资源经理，负责统筹公司的人力资源及行政管理工作。她的职责包括招聘、薪酬福利、绩效管理、培训、员工关系、组织规划及日常行政管理。</p>
+                <p>加入新岸资本之前，兰玉芳曾在广东用友软件、百度中国及广东丰乐集团从事人力资源及行政管理工作。她拥有西南民族大学金融学及英语语言文学双学士学位。</p>
               </div>
             </article>
           </div>
@@ -339,15 +602,16 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
               <h2 id="client-solutions" class="sv-section-title">客户解决方案</h2>
             </div>
             <p class="group__summary">
-              负责亚洲及国际市场的投资者沟通、委托讨论及资本拓展。
+              覆盖亚太、美洲、欧洲、中东及非洲地区的机构投资者关系。
             </p>
           </div>
-          <div class="grid" data-team-grid>
+          <div class="grid" data-team-grid data-team-count="2">
             <article class="team-profile" data-team-profile>
               <div class="team-profile__photo" data-team-photo="bio-john-jones">
                 <img
                   src="assets/img/team/john-jones.jpg"
                   alt="John Jones"
+                  class="team-profile__img--john-zoom"
                   width="640" height="800"
                   loading="lazy"
                   decoding="async"
@@ -355,11 +619,13 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
                 />
               </div>
               <div class="team-profile__name"><span lang="en">John Jones</span></div>
-              <div class="team-profile__role">客户解决方案总监（美洲、欧洲及中东）</div>
-              <button class="team-profile__bio-toggle" type="button" aria-expanded="false" aria-controls="bio-john-jones">简介</button>
-              <a class="team-profile__linkedin" href="https://www.linkedin.com/in/john-jones-a150aa2?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_ios" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              <div class="team-profile__role">客户解决方案总监（美洲、欧洲、中东及非洲）</div>
+              <div class="team-profile__actions">
+                <button class="team-profile__bio-toggle" type="button" aria-expanded="false" aria-controls="bio-john-jones">简介</button>
+                <a class="team-profile__linkedin" href="https://www.linkedin.com/in/john-jones-a150aa2?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_ios" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              </div>
               <div class="team-profile__bio" id="bio-john-jones" hidden>
-                <p>John Jones 先生担任客户解决方案总监（美洲、欧洲及中东），负责新岸资本在美洲、中东及欧洲的客户关系与覆盖。凭借逾十五年经验，他曾主导公募及私募信贷投资策略的业务发展工作。此前，他曾是PIMCO金融机构业务团队成员，为保险公司一般账户投资提供资产管理及咨询服务。他亦曾任职于两家新兴系统化另类资产管理机构，专注于企业战略及募资。Jones 先生持有南加州大学经济学学士学位及芝加哥大学MBA学位。</p>
+                <p>John Jones 先生担任客户解决方案总监（美洲、欧洲、中东及非洲），负责新岸资本在美洲、中东及欧洲的客户关系与覆盖。凭借逾十五年经验，他曾主导公募及私募信贷投资策略的业务发展工作。此前，他曾是PIMCO金融机构业务团队成员，为保险公司一般账户投资提供资产管理及咨询服务。他亦曾任职于两家新兴系统化另类资产管理机构，专注于企业战略及募资。Jones 先生持有南加州大学经济学学士学位及芝加哥大学MBA学位。本科就读期间，他曾为其教会参与为期两年的中文服务性志愿工作。</p>
               </div>
             </article>
             <article class="team-profile" data-team-profile>
@@ -375,8 +641,10 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
               </div>
               <div class="team-profile__name">陈金培</div>
               <div class="team-profile__role">客户解决方案总监（亚太区）</div>
-              <button class="team-profile__bio-toggle" type="button" aria-expanded="false" aria-controls="bio-kelvin-chan">简介</button>
-              <a class="team-profile__linkedin" href="https://www.linkedin.com/in/kkpchan?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_ios" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              <div class="team-profile__actions">
+                <button class="team-profile__bio-toggle" type="button" aria-expanded="false" aria-controls="bio-kelvin-chan">简介</button>
+                <a class="team-profile__linkedin" href="https://www.linkedin.com/in/kkpchan?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_ios" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              </div>
               <div class="team-profile__bio" id="bio-kelvin-chan" hidden>
                 <p>陈金培先生于2024年12月加入新岸资本，目前常驻香港，负责新岸资本在亚洲的客户关系与覆盖。他在大中华区及东南亚的私募股权、风险投资、战略投资和财务顾问领域拥有近二十年经验。他曾在香港平安资产管理搭建平安集团海外私募股权平台，曾任复星恒利证券战略发展执行董事，并曾任蚂蚁金服国际投资部投资总监，主导支付、金融科技及新兴技术领域的全球项目。加入新岸资本前，他最近曾任500 Global战略发展副总监，负责其东南亚成长基金的交易分析、投资者关系及退出策略。</p>
               </div>
@@ -384,23 +652,23 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
           </div>
         </section>
 
-        <!-- ADVISORY PARTNERS -->
-        <section class="group group--advisory" aria-labelledby="advisory-partners">
+        <!-- SENIOR ADVISERS -->
+        <section class="group group--senior-advisers" aria-labelledby="senior-advisers">
           <div class="group__head">
             <div class="group__head-main">
-              <h2 id="advisory-partners" class="sv-section-title">顾问合伙人</h2>
+              <h2 id="senior-advisers" class="sv-section-title">高级顾问</h2>
             </div>
             <p class="group__summary">
-              为公司及投资委员会提供策略、市场及政策洞察。
+              为公司提供战略、市场及政策视角的高级顾问。
             </p>
           </div>
-          <div class="grid" data-team-grid>
+          <div class="grid" data-team-grid data-team-count="4">
             <article class="team-profile" data-team-profile>
               <div class="team-profile__photo" data-team-photo="bio-michael-chang">
                 <img
-                  src="assets/img/team/michael-chang.jpg"
+                  src="assets/img/team/michael-chang.svg"
                   alt="张健恩"
-                  width="640" height="800"
+                  width="928" height="1152"
                   loading="lazy"
                   decoding="async"
                   draggable="false"
@@ -408,10 +676,11 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
               </div>
               <div class="team-profile__name">张健恩</div>
               <div class="team-profile__role">高级顾问合伙人</div>
-              <button class="team-profile__bio-toggle" type="button" aria-expanded="false" aria-controls="bio-michael-chang">简介</button>
-              <a class="team-profile__linkedin" href="https://www.linkedin.com/in/michael-chang-49b1887?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_ios" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              <div class="team-profile__actions">
+                <button class="team-profile__bio-toggle" type="button" aria-expanded="false" aria-controls="bio-michael-chang">简介</button>
+              </div>
               <div class="team-profile__bio" id="bio-michael-chang" hidden>
-                <p>张健恩先生是新岸资本资深顾问合伙人，就公司的人力资源、信息技术、财务及合规部门提供咨询。他在美国和亚洲投资管理领域拥有逾十年经验，曾任职于Stamos Capital Partners、Bridgewater Associates和Cambridge Associates。他持有麻省理工学院斯隆管理学院MBA学位及斯坦福大学文学士学位。</p>
+                <p>张健恩先生是新岸资本高级顾问合伙人，就公司的人力资源、信息技术、财务及合规部门提供咨询。他在美国和亚洲投资管理领域拥有逾十年经验，曾任职于Stamos Capital Partners、Bridgewater Associates和Cambridge Associates。他持有麻省理工学院斯隆管理学院MBA学位及斯坦福大学文学士学位。</p>
               </div>
             </article>
             <article class="team-profile" data-team-profile>
@@ -427,11 +696,34 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
               </div>
               <div class="team-profile__name">杨文斌</div>
               <div class="team-profile__role">高级顾问合伙人</div>
-              <button class="team-profile__bio-toggle" type="button" aria-expanded="false" aria-controls="bio-philip-young">简介</button>
+              <div class="team-profile__actions">
+                <button class="team-profile__bio-toggle" type="button" aria-expanded="false" aria-controls="bio-philip-young">简介</button>
+              </div>
               <div class="team-profile__bio" id="bio-philip-young" hidden>
-                <p>杨文斌先生是新岸资本资深顾问合伙人，协助公司就投资策略及业务发展提供建议。此前，杨先生曾担任台湾全球人寿保险公司独立董事，并曾在中国多家财富管理公司担任高级顾问。职业生涯早期，杨先生曾负责多家中国及日本保险公司的投资工作。他多年深耕大中华区及亚洲金融业，在业内高级管理层中拥有深厚人脉，并对亚洲资本市场有广泛理解；同时也熟悉亚洲以外市场的传统及另类资产投资。杨先生持有台湾大学理学学士学位及芝加哥大学MBA学位，并持有斯坦福大学国际投资文凭。他目前在台北台湾大学财务金融学系及香港大学中国商业学院任教。此外，他著有《财富管理的本质》，该书于2022年出版。</p>
+                <p>杨文斌先生是新岸资本高级顾问合伙人，协助公司就投资策略及业务发展提供建议。此前，杨先生曾担任台湾全球人寿保险公司独立董事，并曾在中国多家财富管理公司担任高级顾问。职业生涯早期，杨先生曾负责多家中国及日本保险公司的投资工作。他多年深耕大中华区及亚洲金融业，在业内高级管理层中拥有深厚人脉，并对亚洲资本市场有广泛理解；同时也熟悉亚洲以外市场的传统及另类资产投资。杨先生持有台湾大学理学学士学位及芝加哥大学MBA学位，并持有斯坦福大学国际投资文凭。他目前在台北台湾大学财务金融学系及香港大学中国商业学院任教。此外，他著有《财富管理的本质》，该书于2022年出版。</p>
               </div>
             </article>
+            <article class="team-profile" data-team-profile>
+              <div class="team-profile__photo" data-team-photo="bio-steve-poon">
+                <img
+                  src="assets/img/team/steve-poon.svg"
+                  alt="潘夏峯"
+                  width="927" height="1152"
+                  loading="lazy"
+                  decoding="async"
+                  draggable="false"
+                />
+              </div>
+              <div class="team-profile__name">潘夏峯</div>
+              <div class="team-profile__role">高级顾问合伙人</div>
+              <div class="team-profile__actions">
+                <button class="team-profile__bio-toggle" type="button" aria-expanded="false" aria-controls="bio-steve-poon">简介</button>
+              </div>
+              <div class="team-profile__bio" id="bio-steve-poon" hidden>
+                <p>潘夏峯先生在亚洲信贷投资平台建设和管理方面拥有逾二十年经验，其职业经历贯穿区域内机构化私募信贷发展的完整周期。他曾先后在渣打银行从事结构化解决方案业务，负责法国兴业银行中国特殊机会业务，在平安约十年搭建并领导机构私募信贷投资团队，并在香港担任凯雷集团亚洲信贷董事总经理。在凯雷任职期间，潘先生曾领导该公司聚焦大中华区的信贷平台，并于2022年底离任。他为新岸资本提供顾问支持所依托的是极为完整的经验积累，覆盖项目发起、结构设计、投资组合管理和信贷处置，贯穿中国信贷周期的各个主要阶段。职业生涯早期，他曾任职于BNP Paribas Peregrine和美国银行美林。他持有谢菲尔德大学MBA学位，并为英格兰及威尔士特许会计师协会（ACA, ICAEW）准会员。</p>
+              </div>
+            </article>
+
             <article class="team-profile" data-team-profile>
               <div class="team-profile__photo" data-team-photo="bio-dinny-mcmahon">
                 <img
@@ -445,29 +737,11 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
               </div>
               <div class="team-profile__name">马德宁</div>
               <div class="team-profile__role">经济顾问</div>
-              <button class="team-profile__bio-toggle" type="button" aria-expanded="false" aria-controls="bio-dinny-mcmahon">简介</button>
-              <a class="team-profile__linkedin" href="https://www.linkedin.com/in/dinnymcmahon?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_ios" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              <div class="team-profile__actions">
+                <button class="team-profile__bio-toggle" type="button" aria-expanded="false" aria-controls="bio-dinny-mcmahon">简介</button>
+              </div>
               <div class="team-profile__bio" id="bio-dinny-mcmahon" hidden>
                 <p>马德宁是新岸资本经济顾问，与公司合作分析中国信贷市场动态，并协助投资委员会制定战略方向。在该职位上，马德宁持续分析中国商业银行体系、银行不良贷款的规模和性质及其出清工作，以及其他影响新岸资本项目来源和执行的宏观经济事项。马德宁曾在中国担任财经记者十年，其中六年在北京任职于《华尔街日报》，四年在上海任职于道琼斯新闻社，并为《远东经济评论》撰稿。2015年，他离开中国和《华尔街日报》，前往位于华盛顿特区的智库伍德罗·威尔逊国际学者中心担任研究员，并在那里撰写了关于中国经济的著作《债务长城：中国影子银行、鬼城、巨额贷款与中国奇迹的终结》，该书于2018年出版。直到最近，他曾在保尔森研究所旗下智库MacroPolo担任研究员，撰写有关中国金融体系清理工作的研究。马德宁目前为金融服务机构开展中国金融体系研究。马德宁中文流利，曾在北京和昆明学习中文，随后又在约翰斯·霍普金斯大学高级国际研究学院南京校区用中文学习国际关系一年。</p>
-              </div>
-            </article>
-            <article class="team-profile" data-team-profile>
-              <div class="team-profile__photo" data-team-photo="bio-steve-poon">
-                <img
-                  src="assets/img/team/steve-poon.jpg"
-                  alt="潘夏峯"
-                  width="640" height="800"
-                  loading="lazy"
-                  decoding="async"
-                  draggable="false"
-                />
-              </div>
-              <div class="team-profile__name">潘夏峯</div>
-              <div class="team-profile__role">高级顾问合伙人</div>
-              <button class="team-profile__bio-toggle" type="button" aria-expanded="false" aria-controls="bio-steve-poon">简介</button>
-              <a class="team-profile__linkedin" href="https://www.linkedin.com/in/steve-poon-66671028?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_ios" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-              <div class="team-profile__bio" id="bio-steve-poon" hidden>
-                <p>潘夏峯先生在亚洲信贷投资平台建设和管理方面拥有逾二十年经验，其职业经历贯穿区域内机构化私募信贷发展的完整周期。他曾先后在渣打银行从事结构化解决方案业务，负责法国兴业银行中国特殊机会业务，在平安约十年搭建并领导机构私募信贷投资团队，并在香港担任凯雷集团亚洲信贷董事总经理。在凯雷任职期间，潘先生曾领导该公司聚焦大中华区的信贷平台，并于2022年底离任。他为新岸资本提供顾问支持所依托的是极为完整的经验积累，覆盖项目发起、结构设计、投资组合管理和信贷处置，贯穿中国信贷周期的各个主要阶段。职业生涯早期，他曾任职于BNP Paribas Peregrine和美国银行美林。他持有谢菲尔德大学MBA学位，并为英格兰及威尔士特许会计师协会（ACA, ICAEW）准会员。</p>
               </div>
             </article>
           </div>
@@ -481,31 +755,40 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
     <div class="sv-footer__top">
       <div>
         <a class="sv-footer__logo" href="index_cn.html" aria-label="新岸资本 — 首页">
-          <img src="assets/brand/sv-lockup-fc-light.png" alt="ShoreVest 新岸资本" width="200" height="48" />
+          <img src="assets/brand/sv-lockup-fc-light.png" alt="ShoreVest 新岸资本" width="200" height="48">
         </a>
         <p class="sv-footer__offices">
-          广州 · 上海 · 北京 · 香港<br />
-          <a href="contact_cn.html">一般查询</a>
+          广州 · 上海 · 北京 · 香港<br>
+          <a href="contact_cn.html">一般咨询</a>
         </p>
       </div>
       <nav class="sv-footer__nav" aria-label="页脚导航">
         <a href="firm_cn.html">公司</a>
-        <a href="insights_cn.html">洞察</a>
         <a href="strategy_cn.html">策略</a>
+        <a href="insights_cn.html">洞察</a>
         <a href="press_cn.html">媒体</a>
         <a href="team_cn.html">团队</a>
+        <a href="careers_cn.html">人才招聘</a>
         <a href="contact_cn.html">联系</a>
         <a href="insights_cn.html#archive">中国债务动态</a>
         <span class="sv-footer__access" role="group" aria-label="访问">
-          <span class="sv-footer__access-label">访问</span>
-          <a href="investor-portal/index.html">投资者门户</a>
+          <span class="sv-footer__access-label">入口</span>
+          <a href="investor-portal/index_cn.html">投资者门户</a>
         </span>
       </nav>
+      <div class="sv-footer__social" aria-label="Follow ShoreVest">
+        <a class="sv-footer__social-link" href="https://www.linkedin.com/company/shorevest-partners/" target="_blank" rel="noopener noreferrer" aria-label="Follow ShoreVest Partners on LinkedIn">
+          <svg class="sv-footer__social-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+            <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V8.98h3.42v1.57h.05c.48-.9 1.64-1.85 3.37-1.85 3.61 0 4.27 2.37 4.27 5.46v6.29ZM5.32 7.42a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12Zm1.78 13.03H3.54V8.98H7.1v11.47ZM22.23 0H1.76C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.76 24h20.47c.97 0 1.77-.77 1.77-1.72V1.72C24 .77 23.2 0 22.23 0Z"/>
+          </svg>
+          <span>LinkedIn</span>
+        </a>
+      </div>
     </div>
 
     <div class="sv-footer__legal">
-      <p>新岸资本（ShoreVest Partners）及其关联机构向机构投资者提供投资管理服务。本网站仅供参考，不构成出售要约或购买任何证券或投资产品的要约邀请，亦不构成投资、法律或税务建议。</p>
-      <p>过往表现并不代表未来结果。私募信贷与私募债务投资涉及风险，包括可能损失本金。所示数据为近似值，可能发生变动。</p>
+      <p>新岸资本（ShoreVest Partners）及其关联机构向机构投资者提供投资管理服务。本网站仅供信息参考，不构成出售任何证券或投资产品的要约，或购买任何证券或投资产品的要约邀请，亦不构成投资、法律或税务建议。</p>
+      <p>过往表现并不预示未来结果。私募信贷与私募债务投资涉及风险，包括可能损失本金。所示数据均为近似值，可能发生变动。</p>
     </div>
 
     <div class="sv-footer__bottom">
@@ -516,7 +799,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
         <a href="important-information_cn.html">重要信息</a>
         <a href="legal-notices-disclaimers_cn.html">法律声明与免责声明</a>
       </div>
-      <p class="sv-footer__copy">© 2026 新岸资本（ShoreVest Partners）。保留所有权利。</p>
+      <p class="sv-footer__copy">© 2026 ShoreVest Partners. All rights reserved.</p>
     </div>
   </div>
 </footer>
@@ -525,7 +808,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 13V3M8 3L3.5 7.5M8 3l4.5 4.5" stroke="currentColor" stroke-width="1.5"/></svg>
 </button>
 
-<script>document.write('<scr'+'ipt src="assets/js/team-page.js?t='+window.__SVT+'" defer><\/scr'+'ipt>');</script>
+<script src="assets/js/team-page.js?v=20260711-mobile-cache" defer></script>
 <script>
 (function(){
   var burger=document.querySelector('.sv-burger'); var menu=document.getElementById('sv-mobile-menu');

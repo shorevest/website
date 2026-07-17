@@ -170,6 +170,7 @@ body.cdd-article-page .cdd-reading-grid {
 body.cdd-article-page .cdd-sidecard {
   position: sticky; top: var(--cdd-sticky-top);
   border-top: 1px solid var(--sv-ink); padding-top: 18px;
+  box-shadow: none !important;
 }
 body.cdd-article-page .cdd-sidecard[hidden] { display: none; }
 body.cdd-article-page .cdd-sidecard h3 {
@@ -184,7 +185,7 @@ body.cdd-article-page .cdd-sidecard ul li {
 }
 body.cdd-article-page .cdd-sidecard ul li:first-child { border-top: 0; }
 body.cdd-article-page .cdd-sidecard ul li::before {
-  content: ""; position: absolute; left: 0; top: 21px; width: 5px; height: 1px; background: var(--sv-cinnabar);
+  content: ""; position: absolute; left: 0; top: 20px; width: 7px; height: 7px; background: var(--sv-cinnabar);
 }
 
 /* Contents TOC (built by JS when 2+ sections) */
@@ -379,4 +380,81 @@ body.cdd-article-page .cdd-intro__lede.sv-hero__left,
 body.cdd-article-page .cdd-dek.sv-hero__body {
   max-width: 100% !important;
   width: 100% !important;
+}
+
+/* Client directive: no decorative horizontal rules/bars. */
+:where(hr, [role="separator"], [class*="__rule"], [class*="-rule"], [class*="__divider"], [class*="-divider"], [class*="topline"], [class*="separator"]):not(svg):not(path):not(img) {
+  display: none !important;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  background-image: none !important;
+}
+:where([class*="eyebrow"], [class*="kicker"], [class*="label"])::before,
+:where([class*="eyebrow"], [class*="kicker"], [class*="label"])::after {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+/* ==========================================================================
+   FINAL NO HORIZONTAL RULES / BARS — client directive
+   Suppresses decorative horizontal rule elements and section hairlines.
+   ========================================================================== */
+:where(
+  hr,
+  [role="separator"],
+  [class*="__rule"],
+  [class*="-rule"],
+  [class*="rule-"],
+  [class*="__divider"],
+  [class*="-divider"],
+  [class*="divider-"],
+  [class*="topline"],
+  [class*="separator"]
+):not(svg):not(path):not(img):not(input):not(textarea):not(select) {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  color: transparent !important;
+  overflow: hidden !important;
+}
+
+:where(main > section + section, .sv-hero__right, .cdd-intro__bar, .cdd-arc__list, .cdd-arc__row, .cdd-stat, .research-sub) {
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+:where([class*="eyebrow"], [class*="kicker"], [class*="label"], [class*="heading"], [class*="title"], [class*="intro"], [class*="hero"], [class*="section"])::before,
+:where([class*="eyebrow"], [class*="kicker"], [class*="label"], [class*="heading"], [class*="title"], [class*="intro"], [class*="hero"], [class*="section"])::after {
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+:where([class*="eyebrow"], [class*="kicker"], [class*="label"])::before,
+:where([class*="eyebrow"], [class*="kicker"], [class*="label"])::after {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+/* 2026-07-10 · Match China Debt Dynamics article heroes to the homepage masthead. */
+@media (min-width: 881px) {
+  body.cdd-article-page .cdd-intro__grid.sv-hero__inner { min-height: 650px; }
 }

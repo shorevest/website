@@ -1,14 +1,13 @@
 /* ==========================================================================
    ShoreVest One — role (persona) configuration
-   A single small configuration layer describing the three demonstration
-   people: their exact identity, permanent navigation, Home schema, My Work,
-   and the restrained previews behind workspace navigation.
+   A single small configuration layer describing the three preview
+   people: their identity, permanent navigation, Home information, and the
+   restrained previews behind future-facing navigation.
 
-   Everything here is synthetic. External institutions and contacts are entirely
-   fictional and use professional animal-based names. Only internal ShoreVest
-   names are real, used solely to identify the selected demonstration profile or
-   to name a real internal colleague in a limited assignment context. No real
-   emails, LP names, contact data, or confidential information appears.
+   Everything here is mocked. External institutions, contacts, and account
+   details are entirely fictional. Only the internal ShoreVest names are real,
+   used solely to identify the selected preview role. No real emails,
+   contact data, or confidential information appears.
 
    ShoreVest One absorbs complexity rather than displaying it. For John and
    Kelvin, Home answers "What should I pay attention to right now?" with exactly
@@ -23,39 +22,41 @@
   var R = root.SVPortalRules;
 
   /* Underlying capability role used only to keep the legacy Tools prototype
-     fully accessible for every demonstration profile. This is not the person's
-     display role — see `title`/`coverage`/`displayRole` on each persona. */
+     fully accessible for every preview persona. This is not the person's
+     display role — see `displayRole` on each persona. */
   var TOOLS_ROLE = R ? R.ROLES.ADMINISTRATOR : 'Administrator';
 
   /* ── Navigation ─────────────────────────────────────────────────────────
-     John and Kelvin share one frozen structure. Firm and Tools sit below the
-     Workspaces group; Tools holds the preserved operational prototype and is
-     collapsible. Celestra keeps a coordination-oriented structure. */
+     Canonical ShoreVest One navigation. Outreach is the only disclosed
+     submenu; Tools remains a top-level area for legacy prototypes and status
+     reference, not the product concept. */
 
-  var RM_NAV = [
-    { key: 'home', label: 'Home', hash: '#/home' },
-    { key: 'my-work', label: 'My Work', hash: '#/my-work' },
-    { sep: 'Workspaces' },
-    { key: 'relationships', label: 'Relationships', hash: '#/workspace/relationships' },
-    { key: 'outreach', label: 'Outreach', hash: '#/workspace/outreach' },
-    { key: 'meetings', label: 'Meetings', hash: '#/workspace/meetings' },
-    { key: 'diligence', label: 'Diligence & Requests', hash: '#/workspace/diligence' },
-    { key: 'investor-intelligence', label: 'Investor Intelligence', hash: '#/workspace/investor-intelligence' },
-    { divider: true },
-    { key: 'firm', label: 'Firm', hash: '#/workspace/firm' },
-    { key: 'tools', label: 'Tools', hash: '#/tools', collapsible: true }
-  ];
-
-  var IR_NAV = [
-    { key: 'home', label: 'Home', hash: '#/home' },
-    { key: 'my-work', label: 'My Work', hash: '#/preview/my-work' },
-    { sep: 'Workspaces' },
-    { key: 'materials', label: 'Materials & Delivery', hash: '#/preview/materials' },
-    { key: 'diligence', label: 'Diligence & Requests', hash: '#/preview/diligence' },
-    { key: 'meeting-support', label: 'Meeting Support', hash: '#/preview/meeting-support' },
-    { divider: true },
-    { key: 'tools', label: 'Tools', hash: '#/tools', collapsible: true }
-  ];
+  function canonicalNav(counts) {
+    counts = counts || {};
+    function item(key, label, hash, count, opts) {
+      return Object.assign({ key: key, label: label, hash: hash, count: count || 0 }, opts || {});
+    }
+    return [
+      { sep: 'Core' },
+      item('home', 'Home', '#/home'),
+      item('my-work', 'My Work', '#/my-work', counts.myWork),
+      item('relationships', 'Relationships', '#/relationships', counts.relationships),
+      { sep: 'Investor Relations' },
+      item('outreach', 'Outreach', '#/outreach', counts.outreach, { children: [
+        item('outreach-find', 'Find or add people', '#/outreach/find'),
+        item('outreach-draft', 'Draft messages', '#/outreach/draft'),
+        item('outreach-sent', 'Sent & responses', '#/outreach/sent')
+      ] }),
+      item('meetings', 'Meetings', '#/meetings', counts.meetings),
+      item('diligence', 'Diligence & Requests', '#/diligence', counts.diligence),
+      item('investor-intelligence', 'Investor Intelligence', '#/investor-intelligence', counts.intel),
+      item('reporting', 'Reporting', '#/reporting', counts.reporting),
+      { sep: 'Controls' },
+      item('approvals', 'Approvals', '#/approvals', counts.approvals),
+      item('firm', 'Firm', '#/firm'),
+      item('tools', 'Tools', '#/tools')
+    ];
+  }
 
   /* ── Commercial Home schema (John & Kelvin) ─────────────────────────────
      One expanded Focus Now item that meets the ten-second standard; a short
@@ -63,178 +64,115 @@
      line; an optional quiet Around ShoreVest note. Meeting-attendance policy is
      explained inside the affected decision only, never as a standing warning. */
 
-  var JOHN_HOME = {
-    situational: 'One decision needs you before your next meeting.',
-    focus: {
-      id: 'john-red-panda-meeting',
-      institution: 'Red Panda Capital',
-      title: 'Red Panda Capital meeting — second attendee no longer available',
-      context: [
-        'Red Panda Capital confirmed the 10:30 ET meeting this morning.',
-        'The required second ShoreVest attendee is no longer available until 10:45 ET.'
-      ],
-      decision: 'Move the meeting start to 10:45 ET, or begin at 10:30 ET with one ShoreVest attendee.',
-      whyYou: 'You own the Red Panda Capital relationship. This is a substantive LP meeting, and ShoreVest policy requires at least two ShoreVest attendees for substantive LP discussions.',
-      due: 'Decide before 10:30 ET',
-      dueZone: 'ET',
-      recLabel: 'ShoreVest One recommends',
-      recommendation: 'Move the meeting start to 10:45 ET rather than begin the substantive discussion with one ShoreVest attendee.',
-      reasoning: 'The agenda is substantive throughout, so the two-attendee requirement applies from the start. A fifteen-minute shift keeps both required attendees present without splitting the agenda.',
-      verifiedAt: '07:42 ET',
-      evidenceLine: 'Relationship ownership and attendee availability checked at 07:42 ET. Red Panda Capital has confirmed; a revised start time has not yet been proposed or confirmed with them.',
-      evidence: [
-        { label: 'Investor confirmation', detail: 'Red Panda Capital confirmed 10:30 ET', state: 'system-verified' },
-        { label: 'Relationship ownership', detail: 'John Jones owns Red Panda Capital', state: 'system-verified' },
-        { label: 'Second-attendee availability', detail: 'Available from 10:45 ET', state: 'system-verified' },
-        { label: 'Meeting purpose', detail: 'Substantive LP discussion (two attendees required)', state: 'human-confirmed' },
-        { label: 'Revised start time', detail: 'Not yet proposed to Red Panda Capital', state: 'unavailable' }
-      ],
-      policy: 'Substantive LP meetings require at least two ShoreVest attendees. A genuinely casual coffee may be solo. Missing required attendance means the meeting is not ready; exceptions require explicit approval and a record.',
-      primary: 'Review revised meeting plan',
-      afterConfirm: 'Confirming would prepare a revised 10:45 ET plan for you to send. Nothing is proposed to Red Panda Capital until you confirm the exact package.',
-      owner: 'After you confirm, the revised time is yours to send to Red Panda Capital; the second attendee is notified only once you confirm.'
-    },
-    today: [
-      { time: '13:00', title: 'Narwhal Pension Fund', note: 'Investor confirmed', state: 'confirmed', zone: 'ET' },
-      { time: '15:30', title: 'Otter Pension Trust', note: 'Ready for meeting', state: 'ready', zone: 'ET' },
-      { time: '17:00', title: 'Internal Investment update', note: 'No preparation required', state: 'calm', zone: 'ET' }
-    ],
-    underControl: 'Other items are progressing with Finance, Legal and Investment. Nothing is overdue.',
-    around: [
-      { title: 'Firm dinner in Hong Kong on Thursday', note: 'Details in Firm', link: '#/workspace/firm' }
-    ]
-  };
+  function homeItem(id, title, explanation, status, next, cta, why, owner, source, rule, section, href, history) {
+    return {
+      id: id, title: title, explanation: explanation, status: status, next: next,
+      cta: cta || 'Open item', href: href || '#/my-work', owner: owner,
+      section: section, source: source, rule: rule,
+      why: why || 'This item is assigned to you because your role owns the next judgement or action.',
+      detail: why || 'This item is assigned to you because your role owns the next judgement or action.',
+      ignored: 'The item remains open and may block outreach, reporting, approvals or record quality.',
+      systems: source || 'ShoreVest One',
+      history: history || ['Created from current work queue.', 'Assigned to ' + owner + '.', 'Waiting for next action.'],
+      recommendation: next,
+      actions: [{ label: cta || 'Open item', intent: 'primary', done: 'Opened' }]
+    };
+  }
 
-  var KELVIN_HOME = {
-    situational: 'One meeting needs the right attendance before you propose times.',
-    focus: {
-      id: 'kelvin-koala-mainland',
-      institution: 'Koala Investment Board (Shanghai office)',
-      title: 'Koala Investment Board (Shanghai) — mainland attendee required',
-      context: [
-        'A substantive meeting is being arranged with the Shanghai office of Koala Investment Board, an international LP.',
-        'Current internal attendance does not include an eligible mainland-team participant.'
-      ],
-      decision: 'Add an eligible mainland-team attendee before the meeting is proposed or confirmed.',
-      whyYou: 'You own the Koala Investment Board relationship in Asia-Pacific. A substantive interaction with the PRC office of an international LP requires Ben or an eligible mainland-team attendee.',
-      due: 'Resolve before proposing times',
-      dueZone: 'HKT',
-      recLabel: 'ShoreVest One recommends',
-      recommendation: 'Add an eligible mainland-team attendee before proposing or confirming the meeting. No confirmed eligible named attendee is available for this slot yet.',
-      reasoning: 'The counterparty is the PRC office of an international LP, so the mainland-attendance rule applies. Confirming attendance first avoids proposing a time the meeting cannot yet satisfy.',
-      verifiedAt: '08:05 HKT',
-      evidenceLine: 'Relationship ownership and counterparty office checked at 08:05 HKT. Eligible mainland-team availability for this slot is not yet confirmed.',
-      evidence: [
-        { label: 'Relationship ownership', detail: 'Kelvin Chan owns Koala Investment Board (Asia-Pacific)', state: 'system-verified' },
-        { label: 'Counterparty office', detail: 'Shanghai (PRC) office of an international LP', state: 'system-verified' },
-        { label: 'Meeting purpose', detail: 'Substantive discussion', state: 'human-confirmed' },
-        { label: 'Mainland-team attendee', detail: 'Eligible mainland-team attendee required', state: 'unavailable' },
-        { label: 'Proposed times', detail: 'Not yet proposed to Koala Investment Board', state: 'unavailable' }
-      ],
-      policy: 'An interaction with the PRC office of an international LP, or any office of a PRC-headquartered LP, requires Ben or an eligible mainland-team attendee. Substantive LP meetings also require at least two ShoreVest attendees. Missing required attendance means the meeting is not ready; exceptions require explicit approval and a record.',
-      primary: 'Review attendance and meeting plan',
-      requiredAttendee: 'Eligible mainland-team attendee required',
-      afterConfirm: 'Confirming would prepare a meeting plan that includes the required mainland-team attendee for you to review. No times are proposed to Koala Investment Board until you confirm the exact package.',
-      owner: 'After you confirm attendance, proposing times to Koala Investment Board remains yours; the mainland-team attendee is contacted internally only once you confirm.'
-    },
-    today: [
-      { time: '11:00', title: 'Puffin Asset Management', note: 'Ready for meeting', state: 'ready', zone: 'HKT' },
-      { time: '14:00', title: 'Alpaca Foundation', note: 'Needs preparation', state: 'prep', zone: 'HKT' },
-      { time: '16:30', title: 'Internal Investment update', note: 'No preparation required', state: 'calm', zone: 'HKT' }
-    ],
-    underControl: 'Other items are progressing with Finance, Legal and Investment. Nothing is overdue.',
-    around: [
-      { title: 'Yao Fu marks five years at ShoreVest this week', note: 'Details in Firm', link: '#/workspace/firm' }
-    ]
-  };
+  function makeHome(owner, decide, today, waiting, warning) {
+    var home = { needsYou: decide, today: today, waiting: waiting };
+    Object.defineProperty(home, 'warning', { value: warning || 'Suggested work is not official until a person accepts it.', enumerable: false });
+    Object.defineProperty(home, 'recent', { value: [
+      { title: 'My Work queue refreshed', note: 'Home items now match your My Work list.' },
+      { title: 'Salesforce exceptions checked', note: 'No external writeback was run.' },
+      { title: 'ShoreVest One status reviewed', note: 'Internal Preview remains on mock data.' }
+    ], enumerable: false });
+    return home;
+  }
 
-  /* ── My Work (John & Kelvin) ────────────────────────────────────────────
-     A lightweight demonstration shell: what needs me, what is waiting on others
-     (with who, when, follow-up and accountability), and what is deliberately
-     later. No inbox, activity feed, or metric dashboard. */
+  var CELESTRA_HOME = makeHome('Celestra Gallagher', [
+    homeItem('celestra-mergepoint-contact-review', 'MergePoint contact review', '12 proposed contacts need review before Salesforce writeback.', 'On hold', 'Confirm owner and account match.', 'Review records', 'Prevents a contact from being attached to the wrong owner or account.', 'Celestra Gallagher', 'MergePoint proposal + Salesforce account match', 'Proposed Salesforce writes require human review', 'Decide', '#/my-work', ['MergePoint proposed 12 contacts.', 'Salesforce match confidence was incomplete.', 'Held for Celestra review.']),
+    homeItem('celestra-task-cleanup', 'Automated task cleanup', '7 suggested tasks may be duplicate or low-value.', 'Suggested', 'Decide which suggestions become official cleanup work.', 'Review suggestions', 'Suggested tasks are not official tasks until accepted by a person.', 'Celestra Gallagher', 'MergePoint task suggestions + Salesforce activity', 'Suggested task cleanup requires operations acceptance', 'Decide'),
+    homeItem('celestra-approval-version', 'Approval version issue', 'One approval package has a version mismatch before release.', 'Needs review', 'Confirm the approved version before anyone uses it.', 'Review version', 'Keeps people from using a stale approval package.', 'Celestra Gallagher', 'Approvals + document version log', 'Released packages must match the approved version', 'Decide')
+  ], [
+    homeItem('celestra-dataroom-package', 'Assemble data-room access package', 'Meridian request is ready for controlled access assembly.', 'Ready', 'Build the access package from the approved version.', 'Open workflow', 'The request has cleared initial checks and needs operations assembly.', 'Celestra Gallagher', 'Diligence request + approvals', 'Access packages require recipient and version checks', 'Do', '#/diligence'),
+    homeItem('celestra-held-records', 'Review held contact records', 'Held contact records need an owner decision before outreach.', 'Needs review', 'Clear records that have enough evidence.', 'Review records', 'Held records cannot be used in outreach until reviewed.', 'Celestra Gallagher', 'Salesforce contact exceptions', 'Held contact records require human review', 'Do'),
+    homeItem('celestra-account-match', 'Update Salesforce account match', 'One account match is ready for confirmation.', 'Ready', 'Accept or correct the proposed account match.', 'Update match', 'The matched account controls ownership and reporting.', 'Celestra Gallagher', 'Salesforce account match', 'Account matches require operations confirmation', 'Do')
+  ], [
+    homeItem('celestra-wait-john', 'Ownership confirmation from John', 'John needs to confirm ownership for Ex-Asia records.', 'Waiting', 'No action until John responds.', 'Open item', 'This blocks contact writeback but is owned by John.', 'John Jones', 'Salesforce owner field', 'Owner confirmation is required before writeback', 'Waiting'),
+    homeItem('celestra-wait-kelvin', 'Asia account match from Kelvin', 'Kelvin needs to confirm Asia account ownership.', 'Waiting', 'No action until Kelvin responds.', 'Open item', 'This blocks Asia records from moving forward.', 'Kelvin Chan', 'Salesforce account match', 'Regional owner must confirm ambiguous account matches', 'Waiting'),
+    homeItem('celestra-wait-ben', 'Approval version from Ben', 'Ben needs to confirm the approval package version.', 'Waiting', 'No action until Ben responds.', 'Open item', 'This blocks release of the package.', 'Ben Fanger', 'Approvals', 'Approval owner must freeze the version', 'Waiting')
+  ], '7 suggested tasks are not official tasks yet. MergePoint ranking relies on stale manual input.');
 
-  var JOHN_MYWORK = {
-    needsMe: [
-      { title: 'Red Panda Capital meeting time', note: 'Confirm the revised 10:45 ET plan.', due: 'Before 10:30 ET today' },
-      { title: 'Narwhal Pension Fund follow-up note', note: 'Approve the single follow-up before the relationship rests.', due: 'This week' }
-    ],
-    waiting: [
-      { title: 'Otter Pension Trust recovery material', who: 'Investment team', when: 'Expected tomorrow', followUp: 'Follow up Friday if not received', accountable: 'You remain accountable to Otter Pension Trust.' },
-      { title: 'Quokka Capital introduction', who: 'Ben (Benjamin Fanger)', when: 'Expected this week', followUp: 'No action needed yet', accountable: 'Ben owns the next step.' }
-    ],
-    later: [
-      { title: 'Walrus Holdings re-engagement', note: 'Dormant relationship; revisit next quarter.' }
-    ]
-  };
+  var JOHN_HOME = makeHome('John Jones', [
+    homeItem('john-ex-asia-priority', 'Ex-Asia priority mismatch', 'System signal is high but owner priority is low for one LP.', 'Needs review', 'Confirm whether the owner priority is still right.', 'Review priority', 'Keeps stale priority fields from driving the wrong follow-up.', 'John Jones', 'Salesforce priority + activity signals', 'Owner judgement controls priority changes', 'Decide'),
+    homeItem('john-placement-agent', 'Placement agent diligence', 'Placement-agent diligence needs a commercial judgement.', 'On hold', 'Decide whether the retainer question should move to Ben.', 'Review diligence', 'Prevents an outside-party question from moving without senior context.', 'John Jones', 'Diligence notes + relationship plan', 'Placement-agent topics require owner judgement', 'Decide'),
+    homeItem('john-stage4-no-plan', 'Stage 4 LP with no action plan', 'One advanced LP has no current next-action plan.', 'Blocked', 'Set a plan or lower the relationship stage.', 'Set action plan', 'Advanced relationships should not sit without a next step.', 'John Jones', 'Salesforce stage + My Work', 'Stage 4 relationships require an action plan', 'Decide')
+  ], [
+    homeItem('john-positive-responses', 'Review positive responses', 'Recent positive replies are ready for owner review.', 'Ready', 'Choose the next follow-up for each response.', 'Open workflow', 'A reply creates a relationship next step owned by you.', 'John Jones', 'Outlook response summary', 'Positive responses require owner follow-up', 'Do', '#/outreach/sent'),
+    homeItem('john-priority-tomorrow', 'Update priority for tomorrow’s LP review', 'Tomorrow’s LP review needs current priority fields.', 'Ready', 'Update priority before the review meeting.', 'Update priority', 'Priority fields drive the review agenda.', 'John Jones', 'Salesforce priority field', 'Review agendas use current owner priority', 'Do'),
+    homeItem('john-brief-examples', 'Send meeting brief examples to Emily', 'Emily needs examples to standardise the meeting brief.', 'Ready', 'Send two useful examples.', 'Open item', 'Good examples help make the template practical.', 'John Jones', 'Meeting notes + template request', 'Template design needs owner examples', 'Do')
+  ], [
+    homeItem('john-wait-ben', 'Ben decision on placement-agent retainer', 'Ben needs to decide the placement-agent retainer question.', 'Waiting', 'No action until Ben responds.', 'Open item', 'The diligence route depends on Ben’s decision.', 'Ben Fanger', 'Approvals', 'Senior decision required for retainer strategy', 'Waiting'),
+    homeItem('john-wait-nico', 'Nico research on missing contacts', 'Nico is researching missing current contacts.', 'Waiting', 'No action until Nico completes research.', 'Open item', 'Outreach should not use outdated contacts.', 'Nico Jacques', 'Research queue', 'Missing-contact research precedes outreach', 'Waiting'),
+    homeItem('john-wait-celestra', 'Celestra cleanup of old task records', 'Celestra is cleaning up old task records.', 'Waiting', 'No action until cleanup is complete.', 'Open item', 'Old tasks can obscure the current plan.', 'Celestra Gallagher', 'Salesforce tasks', 'Task cleanup must happen before final review', 'Waiting')
+  ], 'One Stage 4 relationship has no action plan.');
 
-  var KELVIN_MYWORK = {
-    needsMe: [
-      { title: 'Koala Investment Board attendance', note: 'Confirm an eligible mainland-team attendee before proposing times.', due: 'Before proposing times' },
-      { title: 'Puffin Asset Management pack', note: 'Approve the final meeting pack.', due: 'Today' }
-    ],
-    waiting: [
-      { title: 'Alpaca Foundation term summary', who: 'Investment team', when: 'Expected tomorrow', followUp: 'Follow up Thursday if not received', accountable: 'You remain accountable to Alpaca Foundation.' },
-      { title: 'Puffin Asset Management legal review', who: 'Legal team', when: 'Expected Wednesday', followUp: 'No action needed yet', accountable: 'Legal owns the next step.' }
-    ],
-    later: [
-      { title: 'Koala Investment Board (HK office) reconnection', note: 'Separate relationship; revisit after the Shanghai meeting.' }
-    ]
-  };
+  var KELVIN_HOME = makeHome('Kelvin Chan', [
+    homeItem('kelvin-asia-priority-stale', 'Asia priority field stale', 'Asia priority has not been refreshed after recent activity.', 'Needs review', 'Confirm current priority for top Asia accounts.', 'Review priority', 'Stale priority can hide active Asia relationships.', 'Kelvin Chan', 'Salesforce priority + meeting activity', 'Regional owner controls priority changes', 'Decide'),
+    homeItem('kelvin-mergepoint-ranking', 'MergePoint ranking mismatch', 'MergePoint ranking conflicts with your account view.', 'On hold', 'Accept the ranking or keep owner judgement.', 'Review ranking', 'Automated ranking should not override relationship judgement.', 'Kelvin Chan', 'MergePoint ranking + Salesforce owner priority', 'Ranking mismatches require owner review', 'Decide'),
+    homeItem('kelvin-insurer-route', 'Asia insurer contact route', 'An insurer contact has two possible relationship routes.', 'Needs review', 'Choose the right owner route.', 'Choose route', 'Wrong routing creates confusing outreach ownership.', 'Kelvin Chan', 'Salesforce account hierarchy', 'Ambiguous account routes require owner decision', 'Decide')
+  ], [
+    homeItem('kelvin-top-asia', 'Update top Asia accounts', 'Top Asia accounts need current priority and next steps.', 'Ready', 'Update account priorities and next actions.', 'Open workflow', 'Current fields keep the Asia review accurate.', 'Kelvin Chan', 'Salesforce account list', 'Owner priorities feed the review queue', 'Do'),
+    homeItem('kelvin-brief-format', 'Review briefing-note format', 'Emily’s note format needs Asia owner feedback.', 'Ready', 'Review the format and add comments.', 'Review format', 'The standard brief must work for Asia meetings.', 'Kelvin Chan', 'Template draft', 'Regional owners review briefing standards', 'Do'),
+    homeItem('kelvin-held-records', 'Confirm Asia held records', 'Asia held records are ready for owner confirmation.', 'Needs review', 'Confirm records that can move forward.', 'Confirm records', 'Held records cannot be used until confirmed.', 'Kelvin Chan', 'Salesforce contact exceptions', 'Regional owner confirms held Asia records', 'Do')
+  ], [
+    homeItem('kelvin-wait-emily', 'Emily template draft', 'Emily is drafting the briefing template.', 'Waiting', 'No action until the draft is ready.', 'Open item', 'Feedback depends on the draft.', 'Emily Oestericher', 'Template workstream', 'Template draft precedes regional review', 'Waiting'),
+    homeItem('kelvin-wait-celestra', 'Celestra account cleanup', 'Celestra is cleaning account records.', 'Waiting', 'No action until cleanup is complete.', 'Open item', 'Clean records reduce duplicate review.', 'Celestra Gallagher', 'Salesforce account cleanup', 'Operations cleanup precedes owner confirmation', 'Waiting'),
+    homeItem('kelvin-wait-francis', 'Francis / MergePoint algorithm variant', 'Francis and MergePoint are checking the ranking variant.', 'Waiting', 'No action until the variant is confirmed.', 'Open item', 'The ranking mismatch depends on the algorithm version.', 'Francis / MergePoint', 'MergePoint ranking logic', 'Algorithm variant must be identified before owner action', 'Waiting')
+  ], 'Asia priority fields are stale on high-activity accounts.');
 
-  /* ── Coordination Home (Celestra — preserved from the prior phase) ───────
-     Celestra keeps her existing demonstration Home and functionality. She is
-     not forced into the John/Kelvin commercial structure. */
+  var EMILY_HOME = makeHome('Emily Oestericher', [
+    homeItem('emily-next-step-category', 'Next-step category design', 'Next-step categories need a simpler operating design.', 'Needs review', 'Pick the categories that owners will actually use.', 'Review design', 'Clear categories make My Work understandable.', 'Emily Oestericher', 'Process design notes', 'Category changes require process owner approval', 'Decide'),
+    homeItem('emily-brief-standard', 'Briefing-note standard format', 'Two briefing-note formats are competing.', 'Suggested', 'Choose the standard format.', 'Choose format', 'One standard avoids inconsistent meeting preparation.', 'Emily Oestericher', 'Template library', 'Briefing-note standards require process approval', 'Decide'),
+    homeItem('emily-reporting-logic', 'Reporting logic change', 'A reporting logic change may alter exception counts.', 'On hold', 'Confirm the logic before it appears in reporting.', 'Review logic', 'Reporting should not change without a clear rule.', 'Emily Oestericher', 'Reporting configuration', 'Reporting logic changes require review', 'Decide')
+  ], [
+    homeItem('emily-draft-template', 'Draft briefing template', 'A standard briefing template is ready to draft.', 'Ready', 'Draft the template for owner review.', 'Open workflow', 'Owners need a practical template to provide feedback.', 'Emily Oestericher', 'Template workstream', 'Process owner drafts standard templates', 'Do'),
+    homeItem('emily-action-categories', 'Update action categories', 'Action categories need clearer labels.', 'Ready', 'Update labels and examples.', 'Update categories', 'Clear labels reduce confusion in My Work.', 'Emily Oestericher', 'Process configuration', 'Category updates require process owner edits', 'Do'),
+    homeItem('emily-sf-structure', 'Review Salesforce structure issue', 'A Salesforce field ownership issue needs review.', 'Needs review', 'Confirm who owns the field.', 'Review structure', 'Field ownership prevents silent process changes.', 'Emily Oestericher', 'Salesforce fields', 'Field changes require owner clarity', 'Do')
+  ], [
+    homeItem('emily-wait-john-kelvin', 'John and Kelvin note examples', 'John and Kelvin need to send note examples.', 'Waiting', 'No action until examples arrive.', 'Open item', 'The template should be based on real owner usage.', 'John Jones / Kelvin Chan', 'Meeting notes', 'Owner examples precede template finalisation', 'Waiting'),
+    homeItem('emily-wait-ben', 'Ben review of template', 'Ben needs to review the template.', 'Waiting', 'No action until Ben responds.', 'Open item', 'Senior review is needed before rollout.', 'Ben Fanger', 'Template approval', 'Template rollout requires senior review', 'Waiting'),
+    homeItem('emily-wait-celestra', 'Celestra field cleanup feedback', 'Celestra needs to give field cleanup feedback.', 'Waiting', 'No action until feedback arrives.', 'Open item', 'Operations feedback prevents impractical fields.', 'Celestra Gallagher', 'Salesforce field cleanup', 'Operations feedback precedes configuration changes', 'Waiting')
+  ], 'Reporting logic change is on hold until the rule is confirmed.');
 
-  var CELESTRA_HOME = {
-    needsYou: [
-      {
-        id: 'celestra-quokka-ddq',
-        title: 'Quokka Capital DDQ',
-        context: ['All substantive approvals are complete.', 'The final package needs assembly.'],
-        recLabel: 'Current state',
-        recommendation: 'Ready to assemble.',
-        actions: [
-          { label: 'Prepare package', intent: 'primary', done: 'Package prepared' },
-          { label: 'Need review', intent: 'secondary', done: 'Sent for review' }
-        ],
-        detail: 'Each section has an approval recorded against it. Assembly gathers the approved answers into a single document for a final check before delivery.'
-      },
-      {
-        id: 'celestra-narwhal-dataroom',
-        title: 'Narwhal Pension Fund data-room access',
-        context: ['Relationship-owner approval and recipient eligibility are confirmed.'],
-        recLabel: 'Current state',
-        recommendation: 'Ready to prepare access.',
-        actions: [
-          { label: 'Prepare access', intent: 'primary', done: 'Access prepared' },
-          { label: 'Need review', intent: 'secondary', done: 'Sent for review' }
-        ],
-        detail: 'The relationship owner has approved access and the recipient has passed the eligibility check. Preparing access sets up the named recipient without granting anything beyond the approved scope.'
-      },
-      {
-        id: 'celestra-otter-materials',
-        title: 'Otter Pension Trust meeting materials',
-        context: ['An approved master exists.', 'A recipient-specific derivative has not been prepared.'],
-        recLabel: 'Current state',
-        recommendation: 'Ready to prepare the recipient version.',
-        actions: [
-          { label: 'Prepare material', intent: 'primary', done: 'Material prepared' },
-          { label: 'Need review', intent: 'secondary', done: 'Sent for review' }
-        ],
-        detail: 'The approved master is the source. The recipient version applies the agreed adjustments for this audience without changing any approved content.'
-      }
-    ],
-    today: [
-      { time: '11:00', title: 'Quokka Capital DDQ package', note: 'Due today', tone: 'attention' },
-      { time: '14:00', title: 'Narwhal data-room', note: 'Access requested', tone: 'ready' },
-      { time: '16:30', title: 'Otter Pension Trust prep', note: 'Supporting John', tone: 'calm' }
-    ],
-    waiting: [
-      { title: 'Finance confirmation', note: 'Due tomorrow · No action needed yet' },
-      { title: 'Legal review', note: 'Expected Wednesday · No action needed yet' },
-      { title: 'John commercial decision', note: 'Pending · No action needed yet' }
-    ]
-  };
+  var NICO_HOME = makeHome('Nico Jacques', [
+    homeItem('nico-pitchbook-duplicate', 'PitchBook duplicate uncertainty', 'One PitchBook match may duplicate a Salesforce contact.', 'Needs review', 'Decide whether to hold or pass for owner review.', 'Review duplicate', 'Duplicate contacts create bad outreach history.', 'Nico Jacques', 'PitchBook + Salesforce match', 'Possible duplicates require review before outreach', 'Decide'),
+    homeItem('nico-audience-ready', 'Audience ready for review', 'A prepared audience is ready but needs quality judgement.', 'Suggested', 'Confirm whether it is ready for John or Kelvin.', 'Review audience', 'Prepared audiences should not move without evidence.', 'Nico Jacques', 'Research queue', 'Prepared audiences require operator quality review', 'Decide'),
+    homeItem('nico-missing-contact-priority', 'Missing-contact research priority', 'Missing-contact research needs priority order.', 'Ready', 'Choose which missing contacts to research first.', 'Set priority', 'Research time should go to highest-value gaps first.', 'Nico Jacques', 'Research queue + owner requests', 'Research priority is set by operator judgement', 'Decide')
+  ], [
+    homeItem('nico-pitchbook-cross-check', 'Continue PitchBook cross-check', 'PitchBook records need Salesforce cross-checking.', 'Ready', 'Continue the cross-check queue.', 'Open workflow', 'Cross-checking prevents duplicate records.', 'Nico Jacques', 'PitchBook + Salesforce', 'External research is checked before preparation', 'Do'),
+    homeItem('nico-current-contacts', 'Research missing current contacts', 'Several accounts are missing current contacts.', 'Ready', 'Find current contacts with evidence.', 'Research contacts', 'Outreach needs current contacts, not stale names.', 'Nico Jacques', 'Research queue', 'Missing contacts require evidence before handoff', 'Do'),
+    homeItem('nico-prepare-audience', 'Prepare outreach audience', 'A researched audience is ready to prepare.', 'Ready', 'Prepare the handoff audience.', 'Prepare audience', 'Owners need a clean audience before sender review.', 'Nico Jacques', 'Research queue + My Work', 'Prepared outreach requires evidence and owner handoff', 'Do')
+  ], [
+    homeItem('nico-wait-john', 'John handoff acceptance', 'John needs to accept the Ex-Asia handoff.', 'Waiting', 'No action until John accepts.', 'Open item', 'The audience cannot move to owner review without acceptance.', 'John Jones', 'My Work handoff', 'Owner acceptance is required for handoff', 'Waiting'),
+    homeItem('nico-wait-kelvin', 'Kelvin contact decision', 'Kelvin needs to decide an Asia contact route.', 'Waiting', 'No action until Kelvin decides.', 'Open item', 'The contact route controls preparation.', 'Kelvin Chan', 'Salesforce account route', 'Regional owner decides contact route', 'Waiting'),
+    homeItem('nico-wait-celestra', 'Celestra approval on record matching', 'Celestra needs to approve record matching.', 'Waiting', 'No action until Celestra approves.', 'Open item', 'Record matching blocks safe preparation.', 'Celestra Gallagher', 'Salesforce matching', 'Operations approval required for ambiguous matches', 'Waiting')
+  ], 'One possible duplicate must be reviewed before outreach preparation.');
+
+  var BEN_HOME = makeHome('Ben Fanger', [
+    homeItem('ben-stage4-no-plan', 'Stage 4 LP with no action plan', 'An advanced LP has no current action plan.', 'Blocked', 'Decide whether to assign a plan or downgrade.', 'Review exception', 'Advanced relationships should not sit without a plan.', 'Ben Fanger', 'Salesforce stage + owner plans', 'Stage 4 relationships require an action plan', 'Decide'),
+    homeItem('ben-priority-mismatch', 'Priority mismatch', 'Owner priority conflicts with system signal.', 'Needs review', 'Decide whether to ask owners for an update.', 'Review mismatch', 'Priority mismatches affect coverage decisions.', 'Ben Fanger', 'Salesforce priority + activity signals', 'Strategic priority mismatches require senior review', 'Decide'),
+    homeItem('ben-placement-strategy', 'Placement-agent strategy', 'Placement-agent strategy needs a senior decision.', 'On hold', 'Choose the strategy before diligence proceeds.', 'Review strategy', 'The route affects commercial and governance posture.', 'Ben Fanger', 'Diligence notes + approvals', 'Placement-agent strategy requires senior review', 'Decide')
+  ], [
+    homeItem('ben-approval-package', 'Review approval package', 'One approval package is ready for senior review.', 'Ready', 'Review and approve or return it.', 'Open workflow', 'The package cannot release until reviewed.', 'Ben Fanger', 'Approvals', 'Approval packages require senior review', 'Do', '#/approvals'),
+    homeItem('ben-regional-strategy', 'Confirm regional strategy question', 'A regional strategy question needs confirmation.', 'Ready', 'Confirm the strategic direction.', 'Confirm strategy', 'Owners need a clear direction before updating plans.', 'Ben Fanger', 'Strategy notes', 'Regional strategy changes require senior confirmation', 'Do'),
+    homeItem('ben-brief-standard', 'Review meeting brief standard', 'Emily’s brief standard is ready for review.', 'Ready', 'Review the standard and comment.', 'Review standard', 'The standard affects all meeting preparation.', 'Ben Fanger', 'Template draft', 'Firm-wide standards require senior review', 'Do')
+  ], [
+    homeItem('ben-wait-john', 'John placement-agent summary', 'John is preparing the placement-agent summary.', 'Waiting', 'No action until John sends it.', 'Open item', 'The strategy decision needs John’s summary.', 'John Jones', 'Diligence summary', 'Owner summary precedes senior decision', 'Waiting'),
+    homeItem('ben-wait-kelvin', 'Kelvin updated priority field', 'Kelvin is updating the priority field.', 'Waiting', 'No action until Kelvin updates it.', 'Open item', 'The priority mismatch depends on the updated field.', 'Kelvin Chan', 'Salesforce priority field', 'Regional update precedes senior review', 'Waiting'),
+    homeItem('ben-wait-emily', 'Emily template draft', 'Emily is drafting the meeting brief standard.', 'Waiting', 'No action until Emily sends it.', 'Open item', 'Review depends on the draft.', 'Emily Oestericher', 'Template workstream', 'Draft precedes senior review', 'Waiting')
+  ], 'One Stage 4 LP has no current action plan.');
 
   /* ── People ─────────────────────────────────────────────────────────────
      `role` carries the shared capability role so the legacy Tools prototype
@@ -245,60 +183,49 @@
 
   var PERSONAS = [
     {
-      id: 'john',
-      name: 'John Jones',
-      firstName: 'John',
-      title: 'Director of Client Solutions',
-      coverage: 'Americas, Europe & Middle East',
-      displayRole: 'Director of Client Solutions (Americas, Europe & Middle East)',
-      photo: '../assets/img/team/john-jones.jpg',
-      initials: 'JJ',
-      username: 'john.jones@shorevest.example',
-      role: TOOLS_ROLE,
-      nav: RM_NAV,
-      homeSchema: 'commercial',
-      home: JOHN_HOME,
-      myWork: JOHN_MYWORK
+      id: 'ben', name: 'Ben Fanger', displayRole: 'Managing Partner',
+      username: 'ben.fanger@shorevest.example', role: TOOLS_ROLE, region: 'Firm', defaultSender: 'John Jones',
+      nav: canonicalNav({ myWork: 6, relationships: 4, outreach: 0, meetings: 3, diligence: 1, intel: 2, reporting: 2, approvals: 5 }), home: BEN_HOME,
+      permissions: { canApproveSender: true, canApproveAsia: true, canApproveExAsia: true, canPrepare: true }
     },
     {
-      id: 'kelvin',
-      name: 'Kelvin Chan',
-      firstName: 'Kelvin',
-      title: 'Director of Client Solutions',
-      coverage: 'Asia-Pacific',
-      displayRole: 'Director of Client Solutions (Asia-Pacific)',
-      photo: '../assets/img/team/kelvin-chan.jpg',
-      initials: 'KC',
-      username: 'kelvin.chan@shorevest.example',
-      role: TOOLS_ROLE,
-      nav: RM_NAV,
-      homeSchema: 'commercial',
-      home: KELVIN_HOME,
-      myWork: KELVIN_MYWORK
+      id: 'john', name: 'John Jones', displayRole: 'Director of Client Solutions, Ex-Asia',
+      username: 'john.jones@shorevest.example', role: TOOLS_ROLE, region: 'Ex-Asia', defaultSender: 'John Jones',
+      nav: canonicalNav({ myWork: 5, relationships: 8, outreach: 3, meetings: 2, diligence: 1, intel: 2, reporting: 1, approvals: 4 }), home: JOHN_HOME,
+      permissions: { canApproveSender: true, canApproveAsia: false, canApproveExAsia: true, canPrepare: true }
     },
     {
-      id: 'celestra',
-      name: 'Celestra Gallagher',
-      firstName: 'Celestra',
-      title: 'Investor Relations Associate',
-      coverage: '',
-      displayRole: 'Investor Relations Associate',
-      photo: null,
-      initials: 'CG',
-      username: 'celestra.gallagher@shorevest.example',
-      role: TOOLS_ROLE,
-      nav: IR_NAV,
-      homeSchema: 'coordination',
-      home: CELESTRA_HOME
+      id: 'kelvin', name: 'Kelvin Chan', displayRole: 'Director of Client Solutions, Asia',
+      username: 'kelvin.chan@shorevest.example', role: TOOLS_ROLE, region: 'Asia', defaultSender: 'Kelvin Chan',
+      nav: canonicalNav({ myWork: 4, relationships: 7, outreach: 2, meetings: 2, diligence: 1, intel: 2, reporting: 1, approvals: 3 }), home: KELVIN_HOME,
+      permissions: { canApproveSender: true, canApproveAsia: true, canApproveExAsia: false, canPrepare: true }
+    },
+    {
+      id: 'celestra', name: 'Celestra Gallagher', displayRole: 'Investor Relations Associate / IR Operations',
+      username: 'celestra.gallagher@shorevest.example', role: TOOLS_ROLE, region: 'Operations', defaultSender: 'John Jones',
+      nav: canonicalNav({ myWork: 6, relationships: 5, outreach: 1, meetings: 3, diligence: 4, intel: 1, reporting: 3, approvals: 5 }), home: CELESTRA_HOME,
+      permissions: { canApproveSender: false, canMaintainRecords: true, canCoordinateMergePoint: true }
+    },
+    {
+      id: 'emily', name: 'Emily Oestericher', displayRole: 'Operations / Process Design',
+      username: 'emily.oestericher@shorevest.example', role: TOOLS_ROLE, region: 'Operations', defaultSender: 'John Jones',
+      nav: canonicalNav({ myWork: 5, relationships: 2, outreach: 0, meetings: 1, diligence: 2, intel: 1, reporting: 4, approvals: 2 }), home: EMILY_HOME,
+      permissions: { canApproveSender: false, canMaintainRecords: true, canConfigureProcess: true }
+    },
+    {
+      id: 'nico', name: 'Nico Jacques', displayRole: 'Outreach Owner / Outreach Operator',
+      username: 'nico.jacques@shorevest.example', role: TOOLS_ROLE, region: 'Operator', defaultSender: 'Nico Jacques',
+      nav: canonicalNav({ myWork: 7, relationships: 4, outreach: 9, meetings: 1, diligence: 0, intel: 2, reporting: 2, approvals: 1 }), home: NICO_HOME,
+      permissions: { canApproveSender: false, canPrepare: true, operatorSendPermitted: true }
     }
   ];
 
   var BY_ID = {};
   PERSONAS.forEach(function (p) { BY_ID[p.id] = p; });
 
-  /* ── Workspace and preview overviews ────────────────────────────────────
-     Restrained destinations, clearly marked as demonstration content. No claim
-     of real integration or execution, no metrics, no fake live data. */
+  /* ── Previews behind future-facing navigation ───────────────────────────
+     Restrained overviews, clearly marked as preview content. No claim of
+     real integration or execution. */
 
   var WORKSPACES = {
     relationships: {

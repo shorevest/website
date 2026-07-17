@@ -8,8 +8,8 @@
    No cards/shadows/rounded corners/green/serif. Scoped to body.contact-page.
    ========================================================================== */
 
-body.contact-page { background: var(--sv-ivory); }
-body.contact-page .cp-main { display: block; }
+body.contact-page { background: var(--sv-dark-footer); }
+body.contact-page .cp-main { display: block; background: var(--sv-ivory); }
 
 /* Shared inner container */
 body.contact-page .cp-shell {
@@ -47,13 +47,13 @@ body.contact-page .cp-hero__eyebrow {
   letter-spacing: 0.18em; text-transform: uppercase; color: rgba(252, 249, 241, 0.82);
 }
 body.contact-page .cp-hero__title {
-  margin: clamp(40px, 6vw, 80px) 0 0; max-width: 12ch;
-  font: 500 clamp(40px, 5vw, 68px)/1.02 var(--sv-font); letter-spacing: -0.025em; color: var(--sv-ivory);
+  margin: 0 0 22px; max-width: 13ch;
+  font: 500 clamp(38px, 4.6vw, 62px)/1.04 var(--sv-font); letter-spacing: -0.025em; color: var(--sv-ivory);
   text-wrap: balance;
 }
 body.contact-page .cp-hero__rule { display: none; }
 body.contact-page .cp-hero__desc {
-  margin: 0; max-width: 40ch; font: 400 16.5px/1.62 var(--sv-font); color: rgba(252, 249, 241, 0.9);
+  margin: 0; max-width: 42ch; font: 400 16.5px/1.62 var(--sv-font); color: rgba(252, 249, 241, 0.9);
 }
 body.contact-page .cp-hero__confidential {
   margin: 28px 0 0; display: inline-flex; align-items: center; gap: 9px;
@@ -78,30 +78,45 @@ body.contact-page .cp-routes__label {
   display: flex; align-items: center; gap: 12px;
 }
 body.contact-page .cp-routes__label::before { content: none; display: none; }
-body.contact-page .cp-routes { margin-top: 22px; display: grid; gap: clamp(12px, 1.4vw, 18px); }
+/* Flat numbered ledger — no cards, shadows, or rounded corners. Rows are
+   separated by hairlines; a thin cinnabar marker reveals on hover. This keeps
+   the routing list restrained and institutional beside the cinnabar panel. */
+body.contact-page .cp-routes { margin-top: 6px; display: block; border-top: 1px solid var(--sv-ink); }
 
 body.contact-page .cp-route {
-  display: grid; grid-template-columns: 48px minmax(0, 1fr) auto;
-  gap: clamp(16px, 2vw, 32px); align-items: center;
-  padding: clamp(22px, 2.2vw, 28px) clamp(22px, 2.2vw, 30px);
-  background: #FFFFFF; border-left: 3px solid var(--sv-cinnabar);
-  box-shadow: 0 12px 30px rgba(23, 28, 28, 0.09);
-  text-decoration: none; transition: box-shadow .15s ease, transform .15s ease;
+  position: relative;
+  display: grid; grid-template-columns: minmax(0, 1fr) 24px;
+  gap: clamp(16px, 2vw, 30px); align-items: start;
+  padding: clamp(24px, 2.4vw, 30px) 6px clamp(24px, 2.4vw, 30px) 4px;
+  border-bottom: 1px solid var(--sv-border-light);
+  text-decoration: none;
+  transition: background .18s ease, padding-left .18s ease;
 }
-body.contact-page a.cp-route:hover { box-shadow: 0 18px 40px rgba(23, 28, 28, 0.14); transform: translateY(-2px); }
+body.contact-page .cp-route::before {
+  content: ""; position: absolute; left: 0; top: -1px; bottom: -1px; width: 2px;
+  background: var(--sv-cinnabar); transform: scaleY(0); transform-origin: top center;
+  transition: transform .2s ease;
+}
+body.contact-page a.cp-route:hover { background: rgba(23, 37, 36, 0.025); padding-left: 20px; }
+body.contact-page a.cp-route:hover::before { transform: scaleY(1); }
 body.contact-page .cp-route__num {
-  font: 600 15px/1 var(--sv-font); color: var(--sv-cinnabar); font-variant-numeric: tabular-nums;
+  padding-top: 2px;
+  font: 500 20px/1 var(--sv-font); color: var(--sv-cinnabar); font-variant-numeric: tabular-nums; letter-spacing: 0.02em;
 }
 body.contact-page .cp-route__body { min-width: 0; }
 body.contact-page .cp-route__label {
-  display: block; margin: 0; font: 600 13px/1.3 var(--sv-font); letter-spacing: 0.04em; text-transform: uppercase; color: var(--sv-ink);
+  display: block; margin: 0; font: 600 13px/1.3 var(--sv-font); letter-spacing: 0.06em; text-transform: uppercase; color: var(--sv-ink);
 }
 body.contact-page .cp-route__copy {
-  margin: 14px 0 0; font: 400 14px/1.5 var(--sv-font); color: var(--sv-ink-2);
+  margin: 12px 0 0; font: 400 14px/1.55 var(--sv-font); color: var(--sv-ink-2);
 }
+body.contact-page .cp-route__copy span { color: var(--sv-ink); font-weight: 500; }
 body.contact-page .cp-route__copy a { color: var(--sv-cinnabar); text-decoration: none; border-bottom: 1px solid currentColor; }
-body.contact-page .cp-route__arrow { color: var(--sv-cinnabar); font-size: 18px; justify-self: end; transition: transform .15s ease; }
-body.contact-page a.cp-route:hover .cp-route__arrow { transform: translateX(4px); }
+body.contact-page .cp-route__arrow {
+  padding-top: 3px; color: var(--sv-ink-2); font-size: 16px; justify-self: end; opacity: 0.5;
+  transition: transform .18s ease, opacity .18s ease, color .18s ease;
+}
+body.contact-page a.cp-route:hover .cp-route__arrow { transform: translateX(4px); opacity: 1; color: var(--sv-cinnabar); }
 
 /* ==========================================================================
    2 · FORM + OFFICES
@@ -168,7 +183,7 @@ body.contact-page .cp-office {
 body.contact-page .cp-office__photo {
   display: block; width: 100%; height: 116px;
   object-fit: cover; filter: grayscale(1);
-  border: 1px solid var(--sv-border, rgba(31,29,26,0.14)); background: var(--sv-xuan, #F2ECD8);
+  border: 0; background: var(--sv-xuan, #F2ECD8);
 }
 body.contact-page .cp-office__city { font: 600 13px/1.3 var(--sv-font); letter-spacing: 0.08em; text-transform: uppercase; color: var(--sv-ink); }
 body.contact-page .cp-office__note { font: 400 12px/1.4 var(--sv-font); color: var(--sv-ink-2); }
@@ -211,12 +226,36 @@ body.contact-page .cp-prefs__lead h2 {
   margin: 0; font: 500 clamp(22px, 2.2vw, 30px)/1.18 var(--sv-font); letter-spacing: -0.015em; color: var(--sv-ivory); max-width: 16ch;
 }
 body.contact-page .cp-prefs__lead .cp-eyebrow { color: var(--sv-ivory); }
-body.contact-page .cp-prefs__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(252,249,241,0.28); border: 1px solid rgba(252,249,241,0.28); }
-body.contact-page .cp-pref { background: var(--sv-cinnabar); padding: 22px 24px; }
-body.contact-page .cp-pref__k {
-  margin: 0 0 10px; font: 600 11px/1.2 var(--sv-font); letter-spacing: 0.12em; text-transform: uppercase; color: var(--sv-ivory);
+/* Numbered ledger — mirrors the hero routing rows: hairline-separated rows,
+   large cinnabar tabular numbers, a full-width cinnabar rule that reveals on hover.
+   No cards, shadows, or rounded corners. */
+body.contact-page .cp-prefs__grid {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
+  border-top: 1px solid rgba(252,249,241,0.28);
 }
-body.contact-page .cp-pref__v { margin: 0; font: 400 13.5px/1.55 var(--sv-font); color: rgba(252,249,241,0.9); }
+body.contact-page .cp-pref {
+  position: relative; padding: clamp(26px, 2.4vw, 32px) clamp(22px, 2vw, 30px) clamp(28px, 2.6vw, 34px);
+  border-bottom: 1px solid rgba(252,249,241,0.14);
+  transition: background .2s ease;
+}
+body.contact-page .cp-pref + .cp-pref { border-left: 1px solid rgba(252,249,241,0.14); }
+body.contact-page .cp-pref::before {
+  content: ""; position: absolute; left: 0; top: -1px; width: 100%; height: 2px;
+  background: var(--sv-cinnabar); transform: scaleX(0); transform-origin: left center;
+  transition: transform .22s ease;
+}
+body.contact-page .cp-pref:hover { background: rgba(252,249,241,0.03); }
+body.contact-page .cp-pref:hover::before { transform: scaleX(1); }
+body.contact-page .cp-pref__num {
+  display: block; margin-bottom: 18px;
+  font: 500 26px/1 var(--sv-font); letter-spacing: 0.01em;
+  color: var(--sv-cinnabar); font-variant-numeric: tabular-nums;
+}
+body.contact-page .cp-pref__k {
+  margin: 0 0 10px; font: 600 11px/1.2 var(--sv-font); letter-spacing: 0.14em; text-transform: uppercase; color: var(--sv-ivory);
+}
+body.contact-page .cp-pref__v { margin: 0; font: 400 14px/1.62 var(--sv-font); color: rgba(252,249,241,0.82); max-width: 34ch; }
 
 /* ==========================================================================
    RESPONSIVE
@@ -232,6 +271,163 @@ body.contact-page .cp-pref__v { margin: 0; font: 400 13.5px/1.55 var(--sv-font);
 @media (max-width: 600px) {
   body.contact-page .cp-form__row { grid-template-columns: 1fr; }
   body.contact-page .cp-prefs__grid { grid-template-columns: 1fr; }
-  body.contact-page .cp-route { grid-template-columns: 32px minmax(0, 1fr) auto; gap: 14px; }
+  body.contact-page .cp-pref + .cp-pref { border-left: 0; }
+  body.contact-page .cp-pref__num { margin-bottom: 14px; }
+  body.contact-page .cp-route { grid-template-columns: minmax(0, 1fr) auto; gap: 14px; }
   body.contact-page .cp-hero__title { max-width: none; }
+}
+
+/* Client directive: no decorative horizontal rules/bars. */
+:where(hr, [role="separator"], [class*="__rule"], [class*="-rule"], [class*="__divider"], [class*="-divider"], [class*="topline"], [class*="separator"]):not(svg):not(path):not(img) {
+  display: none !important;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  background-image: none !important;
+}
+:where([class*="eyebrow"], [class*="kicker"], [class*="label"])::before,
+:where([class*="eyebrow"], [class*="kicker"], [class*="label"])::after {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+/* ==========================================================================
+   Page divider standard — warm xuan hairline
+   Matches the supplied reference: one full-width, 1px warm paper rule.
+   ========================================================================== */
+:root {
+  --sv-page-divider-color: rgba(216, 206, 176, 0.82);
+  --sv-page-divider-thickness: 1px;
+  --sv-page-divider-max: var(--page-max, 1684px);
+  --sv-page-divider-pad: var(--pad-x, clamp(24px, 8.9vw, 182px));
+}
+
+:where(
+  hr,
+  [role="separator"],
+  .section-divider,
+  .principles-rule,
+  .home-cdd__rule,
+  .strategy-section-intro__divider,
+  .strategy-section-intro__rule,
+  .strategy-rotation__divider,
+  .strategy-rotation__rule,
+  .opp-lead__rule,
+  .tss-row__bar,
+  .ip__seal,
+  .tss-closer__seal,
+  .cdd-arc__closer-seal,
+  .cdd-arc__seal-rule,
+  .cp-hero__title-rule,
+  .cp-hero__divider,
+  .cp-routing-card__rule,
+  .cp-section-head__rule,
+  .ogeo__divider
+):not(svg):not(path):not(img) {
+  display: block !important;
+  width: min(calc(100% - (2 * var(--sv-page-divider-pad))), var(--sv-page-divider-max)) !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  margin: clamp(56px, 6.3vw, 129px) auto !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-top: var(--sv-page-divider-thickness) solid var(--sv-page-divider-color) !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  color: transparent !important;
+  overflow: hidden !important;
+}
+
+main > section + section {
+  border-top-color: var(--sv-page-divider-color) !important;
+  border-top-width: var(--sv-page-divider-thickness) !important;
+}
+
+/* ==========================================================================
+   FINAL NO HORIZONTAL RULES / BARS — client directive
+   Suppresses decorative horizontal rule elements and section hairlines.
+   ========================================================================== */
+:where(
+  hr,
+  [role="separator"],
+  [class*="__rule"],
+  [class*="-rule"],
+  [class*="rule-"],
+  [class*="__divider"],
+  [class*="-divider"],
+  [class*="divider-"],
+  [class*="topline"],
+  [class*="separator"]
+):not(svg):not(path):not(img):not(input):not(textarea):not(select) {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  color: transparent !important;
+  overflow: hidden !important;
+}
+
+:where(main > section + section, .sv-hero__right, .cdd-intro__bar, .cdd-arc__list, .cdd-arc__row, .cdd-stat, .research-sub) {
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+:where([class*="eyebrow"], [class*="kicker"], [class*="label"], [class*="heading"], [class*="title"], [class*="intro"], [class*="hero"], [class*="section"])::before,
+:where([class*="eyebrow"], [class*="kicker"], [class*="label"], [class*="heading"], [class*="title"], [class*="intro"], [class*="hero"], [class*="section"])::after {
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+:where([class*="eyebrow"], [class*="kicker"], [class*="label"])::before,
+:where([class*="eyebrow"], [class*="kicker"], [class*="label"])::after {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+/* 2026-07-10 · Match interior hero height to the homepage masthead. */
+@media (min-width: 881px) {
+  body.contact-page .cp-hero__inner { min-height: 650px; }
+}
+
+/* 2026-07-11 · Align the contact hero statement with the homepage hero copy.
+   The copy stack now shares the homepage masthead's vertical rhythm: label,
+   title, body, and confidential note read as one centered group rather than
+   being pushed toward the lower edge of the panel. */
+body.contact-page .cp-hero__red {
+  justify-content: center;
+}
+body.contact-page .cp-hero__eyebrow {
+  margin: 0 0 18px;
+}
+body.contact-page .cp-hero__title {
+  margin-bottom: 24px;
+}
+body.contact-page .cp-hero__desc {
+  margin-top: 0;
+}
+body.contact-page .cp-hero__confidential {
+  margin-top: 28px;
+}
+
+/* 2026-07-11 · Hero cards/boxes: lift the routing box beside the statement panel. */
+body.contact-page .cp-hero__routes {
+  box-shadow: 0 18px 42px rgba(23, 28, 28, 0.12) !important;
 }

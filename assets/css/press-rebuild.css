@@ -25,69 +25,7 @@ body.press-page .pr-kicker {
 }
 
 /* ==========================================================================
-   1 · AUTHORITY OPENING — split masthead
-   ========================================================================== */
-body.press-page .pr-open { position: relative; overflow: hidden; padding-block: clamp(64px, 7vw, 104px) 0; }
-body.press-page .pr-open__inner {
-  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: clamp(40px, 5vw, 88px); align-items: start;
-}
-body.press-page .pr-open__lead { align-self: start; }
-body.press-page .pr-open__right {
-  align-self: center; display: flex; flex-direction: column; gap: clamp(18px, 1.8vw, 26px); min-width: 0;
-}
-body.press-page .pr-open__h1 {
-  margin: 0; font: 500 clamp(38px, 4.6vw, 62px)/1.04 var(--sv-font);
-  letter-spacing: -0.03em; color: var(--sv-ink);
-}
-body.press-page .pr-open__body {
-  margin-top: clamp(22px, 2.2vw, 30px); align-self: start; max-width: none;
-  border-left: 0; padding-left: 0;
-}
-body.press-page .pr-open__body p {
-  margin: 0; font: 400 17px/1.66 var(--sv-font); color: var(--sv-ink-2); max-width: none;
-}
-body.press-page .pr-open__body p + p {
-  margin-top: 16px; padding-top: 0; border-top: none;
-  font: 400 13px/1.5 var(--sv-font); letter-spacing: 0.02em; text-transform: none;
-  color: var(--sv-muted, #6E7169);
-}
-@media (max-width: 880px) {
-  body.press-page .pr-open__inner { grid-template-columns: 1fr; gap: 24px; }
-  body.press-page .pr-open__right { gap: 16px; }
-  body.press-page .pr-open__body { margin-top: 0; border-left: 0; padding-left: 0; max-width: none; }
-}
-
-/* ---- Proof band — contained IVORY ledger (cinnabar labels) — distinct from strategy's full-bleed cinnabar field -- */
-body.press-page .pr-proof-band { position: relative; isolation: isolate; margin-top: clamp(46px, 5vw, 78px); padding-block: clamp(32px, 3.4vw, 46px); border-top: 2px solid var(--sv-cinnabar); border-bottom: 1px solid var(--sv-border-light-strong); }
-body.press-page .pr-proof-band::before {
-  content: none;
-}
-body.press-page .pr-proof {
-  margin: 0; display: grid; grid-template-columns: 0.9fr 1.6fr 1.6fr;
-}
-body.press-page .pr-proof__item {
-  padding: 0 32px; border-left: 1px solid var(--sv-border-light); min-width: 0;
-}
-body.press-page .pr-proof__item:first-child { border-left: 0; padding-left: 0; }
-body.press-page .pr-proof__k {
-  margin: 0 0 14px; font: 600 11px/1.2 var(--sv-font);
-  letter-spacing: 0.15em; text-transform: uppercase; color: var(--sv-cinnabar);
-}
-body.press-page .pr-proof__v {
-  margin: 0; font: 400 17px/1.5 var(--sv-font); color: var(--sv-ink); text-wrap: pretty;
-}
-@media (max-width: 1040px) {
-  body.press-page .pr-proof { grid-template-columns: 1fr 1fr; row-gap: 24px; }
-  body.press-page .pr-proof__item { padding: 0 24px; }
-  body.press-page .pr-proof__item:nth-child(odd) { border-left: 0; padding-left: 0; }
-}@media (max-width: 560px) {
-  body.press-page .pr-proof { grid-template-columns: 1fr; row-gap: 22px; }
-  body.press-page .pr-proof__item { border-left: 0; padding: 0; }
-}
-
-/* ==========================================================================
-   2 · UPCOMING EVENTS — ledger + media-inquiry caption
+   2 · EVENTS LEDGERS — upcoming + previous, sharing one row system
    ========================================================================== */
 body.press-page .pr-events { padding-block: clamp(40px, 4.6vw, 64px); border-top: 1px solid var(--sv-border-light-strong); }
 body.press-page .pr-section-head {
@@ -99,6 +37,10 @@ body.press-page .pr-section-head__r { grid-column: 9 / 13; align-self: end; }
 body.press-page .pr-section-title {
   margin: 0; font: 500 clamp(26px, 2.7vw, 36px)/1.1 var(--sv-font);
   letter-spacing: -0.02em; color: var(--sv-ink);
+}
+body.press-page .pr-section-sub {
+  margin: 12px 0 0; max-width: 62ch;
+  font: 400 15px/1.6 var(--sv-font); color: var(--sv-ink-2);
 }
 body.press-page .pr-inquiry { text-align: right; }
 body.press-page .pr-inquiry__label {
@@ -113,17 +55,20 @@ body.press-page .pr-inquiry a:hover { border-color: var(--sv-cinnabar); }
 
 body.press-page .pr-events__table { border-top: 1px solid var(--sv-ink); }
 body.press-page .pr-event-row {
-  display: grid; grid-template-columns: 132px 110px 1fr 150px 80px;
+  display: grid; grid-template-columns: 132px 116px 1fr 150px 80px;
   gap: clamp(16px, 2.4vw, 36px); align-items: baseline;
-  padding: 24px 0; border-bottom: 1px solid var(--sv-border-light);
+  padding: 30px clamp(18px, 2vw, 28px); border-bottom: 1px solid var(--sv-border-light);
+  transition: background .15s ease;
 }
+body.press-page .pr-event-row:hover { background: rgba(122, 175, 175, 0.08); }
+body.press-page .pr-event-row[hidden] { display: none; }
 body.press-page .pr-event-date {
   font: 600 13px/1.3 var(--sv-font); letter-spacing: 0.04em; color: var(--sv-ink);
   font-variant-numeric: tabular-nums; white-space: nowrap;
 }
 body.press-page .pr-event-type {
   font: 600 11px/1.2 var(--sv-font); letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--sv-cinnabar);
+  color: var(--sv-muted, #6E7169);
 }
 body.press-page .pr-event-title {
   font: 500 18px/1.3 var(--sv-font); color: var(--sv-ink);
@@ -138,19 +83,19 @@ body.press-page .pr-event-location {
 body.press-page .pr-event-link {
   justify-self: end; white-space: nowrap;
   font: 600 12px/1 var(--sv-font); letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--sv-cinnabar); text-decoration: none;
-  border-bottom: 1px solid transparent; padding-bottom: 3px; transition: border-color .15s ease;
+  color: var(--sv-ink-2); text-decoration: none;
+  border-bottom: 1px solid transparent; padding-bottom: 3px;
+  transition: color .15s ease, border-color .15s ease;
 }
-body.press-page .pr-event-link:hover { border-color: var(--sv-cinnabar); }
+body.press-page .pr-event-link:hover { color: var(--sv-cinnabar); border-color: var(--sv-cinnabar); }
+body.press-page .pr-event-row:hover .pr-event-link { color: var(--sv-cinnabar); }
 body.press-page .pr-event-link--plain:hover { border-color: transparent; }
+/* A past appearance with a linked post: the link leads with cinnabar so the
+   coverage reads as the row's payoff, not an afterthought. */
+body.press-page .pr-event-link--post { color: var(--sv-cinnabar); }
 
-/* Concluded (recent-but-past) events: grayed back, with a quiet status badge.
-   Applied by the inline date filter while the event is still inside its
-   recent-window grace period, before it retires entirely. */
-body.press-page .pr-event-row--past { opacity: 0.5; }
-body.press-page .pr-event-row--past:hover { opacity: 0.72; transition: opacity .15s ease; }
 body.press-page .pr-event-status {
-  display: inline-block; margin: 0 9px 9px 0;
+  display: inline-block; margin: 0 9px 10px 0;
   font: 600 10px/1 var(--sv-font); letter-spacing: 0.14em; text-transform: uppercase;
   color: var(--sv-muted, #6E7169);
   padding: 4px 9px; border: 1px solid var(--sv-border-light-strong);
@@ -163,6 +108,23 @@ body.press-page .pr-events__empty {
   font: 400 16px/1.5 var(--sv-font); color: var(--sv-muted, #6E7169);
 }
 body.press-page .pr-events__empty[hidden] { display: none; }
+
+/* "Show more" toggle shared by both event ledgers — only a slice of each list
+   shows by default; this reveals the rest in place. Quiet, text-forward, sits
+   on its own rule so it reads as a control, not another event row. */
+body.press-page .pr-events__more {
+  display: flex; justify-content: center;
+  padding: 22px 0 4px;
+}
+body.press-page .pr-events__more-btn {
+  appearance: none; background: none; cursor: pointer;
+  font: 600 12px/1 var(--sv-font); letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--sv-cinnabar);
+  padding: 10px 22px; border: 1px solid var(--sv-border-light-strong);
+  transition: border-color .15s ease, color .15s ease;
+}
+body.press-page .pr-events__more-btn:hover { border-color: var(--sv-cinnabar); }
+
 @media (max-width: 880px) {
   body.press-page .pr-section-head__l,
   body.press-page .pr-section-head__r { grid-column: 1 / 13; }
@@ -184,10 +146,12 @@ body.press-page .pr-events__empty[hidden] { display: none; }
    ========================================================================== */
 body.press-page .pr-archive { padding-block: clamp(48px, 5.2vw, 78px); border-top: 1px solid var(--sv-border-light-strong); }
 
-/* Featured lead — the most recent / notable appearance, text-forward */
+/* Featured lead — the most recent / notable appearance, text-forward.
+   Gold ledge + tag: the archive's one ceremonial callout (gold-dark for the
+   11px tag so it clears AA on ivory). */
 body.press-page .pr-featured {
   display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: clamp(20px, 3vw, 56px);
-  padding: clamp(28px, 3vw, 40px) 0; margin-bottom: clamp(36px, 4vw, 56px);
+  padding: clamp(32px, 3.4vw, 44px) 0; margin-bottom: clamp(40px, 4.4vw, 60px);
   border-top: 2px solid var(--sv-cinnabar); border-bottom: 1px solid var(--sv-border-light-strong);
   text-decoration: none; color: inherit;
 }
@@ -252,15 +216,17 @@ body.press-page .pr-filter-select:focus-visible { outline: 2px solid var(--sv-ci
 /* The archive ledger — restyle of the existing .press-row markup */
 body.press-page .press-list { display: block; }
 body.press-page .press-row { display: block; }
-body.press-page .press-row > a {
+body.press-page .press-row > a,
+body.press-page .press-row > .press-row__item {
   display: grid;
   grid-template-columns: 200px minmax(0, 1fr) 150px;
   gap: clamp(20px, 3vw, 48px); align-items: baseline;
-  padding: 26px 0; border-bottom: 1px solid var(--sv-border-light);
+  padding: 32px clamp(18px, 2vw, 28px); border-bottom: 1px solid var(--sv-border-light);
   text-decoration: none; color: inherit;
   transition: background .15s ease;
 }
-body.press-page .press-row > a:hover { background: rgba(23,53,54,0.025); }
+body.press-page .press-row > a:hover { background: rgba(122, 175, 175, 0.10); }
+body.press-page .press-row > .press-row__item--archived { cursor: pointer; }
 body.press-page .press-row[hidden] { display: none; }
 
 body.press-page .press-publication {
@@ -272,8 +238,9 @@ body.press-page .press-type-line { display: block; margin-bottom: 10px; }
 body.press-page .press-tag {
   display: inline-block;
   font: 600 10.5px/1 var(--sv-font); letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--sv-cinnabar);
+  color: var(--sv-muted, #6E7169);
 }
+body.press-page .press-row > a:hover .press-tag { color: var(--sv-cinnabar); }
 body.press-page .press-headline {
   display: block; margin-bottom: 8px;
   font: 500 19px/1.28 var(--sv-font); letter-spacing: -0.01em; color: var(--sv-ink);
@@ -287,7 +254,7 @@ body.press-page .press-row__summary {
 body.press-page .press-row__summary em { font-style: italic; }
 body.press-page .press-row__meta {
   display: flex; flex-direction: column; gap: 6px; align-items: flex-start;
-  justify-self: end; text-align: left; padding-top: 3px;
+  justify-self: start; text-align: left; padding-top: 3px;
 }
 body.press-page .press-attribution {
   font: 600 10.5px/1.2 var(--sv-font); letter-spacing: 0.1em; text-transform: uppercase;
@@ -298,7 +265,8 @@ body.press-page .press-date {
   white-space: nowrap;
 }
 @media (max-width: 880px) {
-  body.press-page .press-row > a {
+  body.press-page .press-row > a,
+  body.press-page .press-row > .press-row__item {
     grid-template-columns: 1fr;
     gap: 10px; padding: 24px 0;
   }
@@ -308,17 +276,21 @@ body.press-page .press-date {
   }
 }
 
-/* Load more */
-body.press-page .pr-more-wrap { margin-top: clamp(28px, 3vw, 44px); }
-body.press-page .pr-more {
-  display: inline-flex; align-items: center; gap: 10px; height: 52px; padding: 0 26px;
-  font: 600 12px/1 var(--sv-font); letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--sv-ink); background: transparent; cursor: pointer;
-  border: 1px solid var(--sv-border-light-strong); border-radius: 0;
-  transition: background .15s ease, border-color .15s ease;
+/* Load more — match the centered, quiet ledger controls used above. */
+body.press-page .pr-more-wrap {
+  display: flex; justify-content: center;
+  margin-top: 0; padding: 22px 0 4px;
 }
-body.press-page .pr-more:hover { border-color: var(--sv-ink); background: rgba(23,53,54,0.04); }
-body.press-page .pr-more[hidden] { display: none; }
+body.press-page .pr-more {
+  appearance: none; background: none; cursor: pointer;
+  font: 600 12px/1 var(--sv-font); letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--sv-cinnabar);
+  padding: 10px 22px; border: 1px solid var(--sv-border-light-strong); border-radius: 0;
+  transition: border-color .15s ease, color .15s ease;
+}
+body.press-page .pr-more:hover { border-color: var(--sv-cinnabar); }
+body.press-page .pr-more[hidden],
+body.press-page .pr-more-wrap:has(.pr-more[hidden]) { display: none; }
 
 /* ==========================================================================
    4 · DISCLOSURES
@@ -334,14 +306,157 @@ body.press-page .pr-disclosures__body {
 }
 
 
-/* Media hero */
-body.press-page .pr-hero-media {
-  margin: 0; width: 100%; aspect-ratio: 16 / 9; height: auto;
-  border: 1px solid var(--sv-border-light-strong);
-  background: var(--sv-stone, #EFEADD);
-  overflow: hidden;
+/* ==========================================================================
+   Media hero — reuses the shared homepage layered hero system (grayscale
+   square image + white reference panel + offset cinnabar block). press.html
+   carries body.homepage, so the body.homepage .sv-hero__* rules apply here
+   unchanged; the square carries the FII conference photograph, cropped
+   toward the stage and panelists.
+   ========================================================================== */
+body.press-page .media-hero .sv-hero__image img { object-position: center 38%; }
+
+/* Client directive: no decorative horizontal rules/bars. */
+:where(hr, [role="separator"], [class*="__rule"], [class*="-rule"], [class*="__divider"], [class*="-divider"], [class*="topline"], [class*="separator"]):not(svg):not(path):not(img) {
+  display: none !important;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  background-image: none !important;
 }
-body.press-page .pr-hero-media img {
-  display: block; width: 100%; height: 100%; object-fit: cover;
-  -webkit-filter: grayscale(100%); filter: grayscale(100%);
+:where([class*="eyebrow"], [class*="kicker"], [class*="label"])::before,
+:where([class*="eyebrow"], [class*="kicker"], [class*="label"])::after {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+/* ==========================================================================
+   Page divider standard — warm xuan hairline
+   Matches the supplied reference: one full-width, 1px warm paper rule.
+   ========================================================================== */
+:root {
+  --sv-page-divider-color: rgba(216, 206, 176, 0.82);
+  --sv-page-divider-thickness: 1px;
+  --sv-page-divider-max: var(--page-max, 1684px);
+  --sv-page-divider-pad: var(--pad-x, clamp(24px, 8.9vw, 182px));
+}
+
+:where(
+  hr,
+  [role="separator"],
+  .section-divider,
+  .principles-rule,
+  .home-cdd__rule,
+  .strategy-section-intro__divider,
+  .strategy-section-intro__rule,
+  .strategy-rotation__divider,
+  .strategy-rotation__rule,
+  .opp-lead__rule,
+  .tss-row__bar,
+  .ip__seal,
+  .tss-closer__seal,
+  .cdd-arc__closer-seal,
+  .cdd-arc__seal-rule,
+  .cp-hero__title-rule,
+  .cp-hero__divider,
+  .cp-routing-card__rule,
+  .cp-section-head__rule,
+  .ogeo__divider
+):not(svg):not(path):not(img) {
+  display: block !important;
+  width: min(calc(100% - (2 * var(--sv-page-divider-pad))), var(--sv-page-divider-max)) !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  margin: clamp(56px, 6.3vw, 129px) auto !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-top: var(--sv-page-divider-thickness) solid var(--sv-page-divider-color) !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  color: transparent !important;
+  overflow: hidden !important;
+}
+
+main > section + section {
+  border-top-color: var(--sv-page-divider-color) !important;
+  border-top-width: var(--sv-page-divider-thickness) !important;
+}
+
+/* ==========================================================================
+   FINAL NO HORIZONTAL RULES / BARS — client directive
+   Suppresses decorative horizontal rule elements and section hairlines.
+   ========================================================================== */
+:where(
+  hr,
+  [role="separator"],
+  [class*="__rule"],
+  [class*="-rule"],
+  [class*="rule-"],
+  [class*="__divider"],
+  [class*="-divider"],
+  [class*="divider-"],
+  [class*="topline"],
+  [class*="separator"]
+):not(svg):not(path):not(img):not(input):not(textarea):not(select) {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  color: transparent !important;
+  overflow: hidden !important;
+}
+
+:where(main > section + section, .sv-hero__right, .cdd-intro__bar, .cdd-arc__list, .cdd-arc__row, .cdd-stat, .research-sub) {
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+:where([class*="eyebrow"], [class*="kicker"], [class*="label"], [class*="heading"], [class*="title"], [class*="intro"], [class*="hero"], [class*="section"])::before,
+:where([class*="eyebrow"], [class*="kicker"], [class*="label"], [class*="heading"], [class*="title"], [class*="intro"], [class*="hero"], [class*="section"])::after {
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+:where([class*="eyebrow"], [class*="kicker"], [class*="label"])::before,
+:where([class*="eyebrow"], [class*="kicker"], [class*="label"])::after {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+/* 2026-07-10 · Match interior hero height to the homepage masthead. */
+@media (min-width: 981px) {
+  body.press-page .media-hero .sv-hero__inner { min-height: 650px; }
+}
+
+/* 2026-07-11 · Hero cards/boxes: restore depth on media hero support boxes. */
+body.press-page :is(.sv-hero__field, .sv-hero__panel) {
+  box-shadow: 0 18px 42px rgba(23, 28, 28, 0.14) !important;
+}
+
+.press-row__cta {
+  display: inline-flex;
+  margin-left: 12px;
+  color: var(--sv-cinnabar, #C93B2A);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
 }

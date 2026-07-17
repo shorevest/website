@@ -10,8 +10,22 @@
   const currentScriptUrl = new URL(document.currentScript?.src || 'assets/js/shared-header.js', window.location.href);
   const siteRootUrl = new URL('../../', currentScriptUrl);
   const __svt = () => { const t = new URLSearchParams(window.location.search).get('t'); return t ? ('?t=' + encodeURIComponent(t)) : ''; };
-  const assetHref = (path) => new URL(path, siteRootUrl).pathname + __svt();
-  const pageHref = (path) => new URL(path, siteRootUrl).pathname + __svt();
+  const relativeSiteHref = (path) => {
+    const target = new URL(path, siteRootUrl);
+    const fromDir = window.location.pathname.endsWith('/')
+      ? window.location.pathname
+      : window.location.pathname.replace(/[^/]*$/, '');
+    const fromParts = fromDir.split('/').filter(Boolean);
+    const toParts = target.pathname.split('/').filter(Boolean);
+    while (fromParts.length && toParts.length && fromParts[0] === toParts[0]) {
+      fromParts.shift();
+      toParts.shift();
+    }
+    const rel = `${'../'.repeat(fromParts.length)}${toParts.join('/')}`;
+    return (rel || './') + __svt();
+  };
+  const assetHref = relativeSiteHref;
+  const pageHref = relativeSiteHref;
 
   const LOADER_BRAND_PNG_PATH = assetHref('assets/brand/shorevest-lockup.png');
   const LOADER_BRAND_LIGHT_PNG_PATH = assetHref('assets/brand/shorevest-lockup-light.png');
@@ -38,7 +52,7 @@
   const LOADER_MARK_SVG = `<span class="loader-mark-svg loader-mark-ink" aria-hidden="true"><span class="loader-mark-art loader-mark-art--out" style="-webkit-mask-image:url('${BRAND_MARK_PATH}');mask-image:url('${BRAND_MARK_PATH}')"></span><span class="loader-mark-art loader-mark-art--fill" style="-webkit-mask-image:url('${BRAND_MARK_FILLED_PATH}');mask-image:url('${BRAND_MARK_FILLED_PATH}')"></span></span>`;
 
   const pathname = window.location.pathname;
-  const isInvestorPortalPath = /\/investor-portal(?:\.html|\/|\/index\.html)?$/i.test(pathname);
+  const isInvestorPortalPath = /\/investor-portal(?:\.html|\/|\/index(?:_cn)?\.html)?$/i.test(pathname);
   const path = isInvestorPortalPath ? 'investor-portal' : (pathname.split('/').pop() || 'index.html');
   const localeSuffixMatch = path.match(/[-_](cn)\.html$/i);
   const localeSuffix = localeSuffixMatch ? localeSuffixMatch[1].toLowerCase() : 'en';
@@ -132,7 +146,7 @@
   })();
   const localeHrefs = {
     en: localeBase === 'investor-portal' ? pageHref('investor-portal/index.html') : localizedPageHref(localeBase, 'en'),
-    cn: localeBase === 'investor-portal' ? pageHref('index_cn.html') : localizedPageHref(localeBase, 'cn')
+    cn: localeBase === 'investor-portal' ? pageHref('investor-portal/index_cn.html') : localizedPageHref(localeBase, 'cn')
   };
 
   const renderLanguageSelector = (contextClass = '') => {
@@ -159,7 +173,8 @@
         { href: pageHref('strategy.html'), label: 'Strategy' },
         { href: pageHref('insights.html'), label: 'Insights' },
         { href: pageHref('press.html'), label: 'Media' },
-        { href: pageHref('team.html'), label: 'Team' }
+        { href: pageHref('team.html'), label: 'Team' },
+        { href: pageHref('internal-preview/careers.html'), label: 'Careers' }
       ],
       investorPortalHref: pageHref('investor-portal/index.html'),
       investorPortalLabel: 'Investor portal',
@@ -176,9 +191,10 @@
         { href: pageHref('strategy_cn.html'), label: '策略' },
         { href: pageHref('insights_cn.html'), label: '洞察' },
         { href: pageHref('press_cn.html'), label: '媒体' },
-        { href: pageHref('team_cn.html'), label: '团队' }
+        { href: pageHref('team_cn.html'), label: '团队' },
+        { href: pageHref('internal-preview/careers_cn.html'), label: '人才招聘' }
       ],
-      investorPortalHref: pageHref('investor-portal/index.html'),
+      investorPortalHref: pageHref('investor-portal/index_cn.html'),
       investorPortalLabel: '投资者门户',
       headerCtaHref: pageHref('contact_cn.html'),
       headerCtaLabel: '联系',
@@ -202,7 +218,7 @@
      rendering we return early, so every legacy nav/active/annotate routine
      further down is bypassed entirely.
      -------------------------------------------------------------------- */
-  const navBases = ['firm', 'strategy', 'insights', 'press', 'team'];
+  const navBases = ['firm', 'strategy', 'insights', 'press', 'team', 'careers'];
   const svLang = localeSuffix === 'en'
     ? `<a class="sv-lang" href="${localeHrefs.cn}"><span class="on">EN</span><span class="sep">|</span>中文</a>`
     : `<a class="sv-lang" href="${localeHrefs.en}" lang="zh-Hans"><span>EN</span><span class="sep">|</span><span class="on">中文</span></a>`;
@@ -211,22 +227,22 @@
 
   mount.innerHTML = `<header class="sv-header">
   <div class="sv-header__inner">
-    <a class="sv-header__logo" href="${locale.home}" aria-label="ShoreVest — home">
+    <a class="sv-header__logo" href="${locale.home}" aria-label="${localeSuffix === 'en' ? 'ShoreVest — home' : '新岸资本 — 首页'}">
       <img src="${assetHref('assets/brand/sv-lockup-fc-dark.png')}" alt="ShoreVest" width="172" height="41" />
     </a>
-    <nav class="sv-nav" aria-label="Primary">
-      <ul>${navItems.map((item, i) => `<li><a href="${item.href}"${navBases[i] === localeBase ? ' aria-current="page"' : ''}>${item.label}</a></li>`).join('')}</ul>
+    <nav class="sv-nav" aria-label="${localeSuffix === 'en' ? 'Primary' : '主导航'}">
+      <ul>${navItems.map((item, i) => `<li><a href="${item.href}"${item.external ? ' target="_blank" rel="noopener noreferrer"' : ''}${navBases[i] === localeBase ? ' aria-current="page"' : ''}>${item.label}</a></li>`).join('')}</ul>
     </nav>
     <div class="sv-utils">${svLang}
       <a class="sv-util-btn" href="${investorPortalHref}">${investorPortalLabel}</a>
       <a class="sv-util-btn sv-util-btn--cta" href="${headerCtaHref}">${headerCtaLabel}</a>
     </div>
-    <button class="sv-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="sv-mobile-menu"><span></span></button>
+    <button class="sv-burger" type="button" aria-label="${localeSuffix === 'en' ? 'Open menu' : '打开菜单'}" aria-expanded="false" aria-controls="sv-mobile-menu"><span></span></button>
   </div>
 </header>
 <div class="sv-mobile-menu" id="sv-mobile-menu">
-  <nav aria-label="Mobile">
-    <ul>${navItems.map((item) => `<li><a href="${item.href}">${item.label}</a></li>`).join('')}</ul>
+  <nav aria-label="${localeSuffix === 'en' ? 'Mobile' : '移动导航'}">
+    <ul>${navItems.map((item) => `<li><a href="${item.href}"${item.external ? ' target="_blank" rel="noopener noreferrer"' : ''}>${item.label}</a></li>`).join('')}</ul>
     <div class="sv-mobile-utils">
       <a class="sv-util-btn" href="${svLangOtherHref}">${svLangOtherLabel}</a>
       <a class="sv-util-btn" href="${investorPortalHref}">${investorPortalLabel}</a>
@@ -251,7 +267,7 @@
     svBurger.addEventListener('click', () => {
       const open = svMenu.classList.toggle('is-open');
       svBurger.setAttribute('aria-expanded', open ? 'true' : 'false');
-      svBurger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      svBurger.setAttribute('aria-label', open ? (localeSuffix === 'en' ? 'Close menu' : '关闭菜单') : (localeSuffix === 'en' ? 'Open menu' : '打开菜单'));
     });
     svMenu.addEventListener('click', (e) => {
       if (e.target.closest('a')) { svMenu.classList.remove('is-open'); svBurger.setAttribute('aria-expanded', 'false'); }

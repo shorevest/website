@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
 <script>
 try{window.addEventListener('error',function(e){if(e&&typeof e.message==='string'&&e.message.indexOf('ResizeObserver loop')!==-1){e.stopImmediatePropagation();e.preventDefault();}},true);}catch(_){}
@@ -21,12 +21,13 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>新岸资本 | 中国资产支持私募信贷</title>
-<meta name="description" content="新岸资本（ShoreVest Partners）是一家专注于中国资产支持私募信贷的私募信贷与私募债务投资管理机构，强调专有寻源，以及聚焦抵押品覆盖、法律保障与下行情景的承销。">
+<meta name="description" content="新岸资本（ShoreVest）是一家私募信贷公司，为中国各地的借款人与金融机构提供资产支持信贷解决方案。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <!-- Self-contained homepage: this stylesheet is the single authority (same as EN). -->
-<script>document.write('<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260701-mobile-audit-430&t='+window.__SVT+'">');</script>
+<script>document.write('<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260716-hero-2004-accent&t='+window.__SVT+'">');</script>
+<script>document.write('<link rel="stylesheet" href="assets/css/chinese-latin-typography.css?t='+window.__SVT+'">');</script>
 <!-- CN font override: keep the DIN/Barlow stack but add a sans CJK fallback so
      Chinese glyphs render in a sans face (not serif) after the legacy sheets are dropped. -->
 <style>
@@ -36,11 +37,23 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
     --sv-cn: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
   }
 </style>
-<link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<link rel="icon" href="assets/favicon-cinnabar.ico?v=20260717" sizes="any">
+<link rel="shortcut icon" href="assets/favicon-cinnabar.ico?v=20260717">
+<link rel="icon" href="assets/favicon-cinnabar.svg?v=20260717" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-cinnabar-32x32.png?v=20260717">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-cinnabar-16x16.png?v=20260717">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon-cinnabar.png?v=20260717">
+<link rel="manifest" href="site.webmanifest?v=20260717">
+<link rel="preload" as="image" href="assets/img/trees/home-hero-metasequoia-sq.jpg" fetchpriority="high">
+
+<link rel="canonical" href="https://shorevest.com/index_cn.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://shorevest.com/index_cn.html">
+<link rel="alternate" hreflang="en" href="https://shorevest.com/index.html">
+<meta property="og:title" content="新岸资本 | 中国资产支持私募信贷">
+<meta property="og:description" content="新岸资本（ShoreVest）是一家私募信贷公司，为中国各地的借款人与金融机构提供资产支持信贷解决方案。">
+<meta property="og:url" content="https://shorevest.com/index_cn.html">
+<meta property="og:locale" content="zh_CN">
+<script src="assets/js/favicon-guard.js?v=20260717" defer></script>
 </head>
 <body id="top" class="homepage home-page">
 
@@ -57,11 +70,12 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
         <li><a href="insights_cn.html">洞察</a></li>
         <li><a href="press_cn.html">媒体</a></li>
         <li><a href="team_cn.html">团队</a></li>
+        <li><a href="careers_cn.html">人才招聘</a></li>
       </ul>
     </nav>
     <div class="sv-utils">
       <a class="sv-lang" href="index.html">EN<span class="sep">|</span><span class="on">中文</span></a>
-      <a class="sv-util-btn" href="investor-portal/index.html">投资者门户</a>
+      <a class="sv-util-btn" href="investor-portal/index_cn.html">投资者门户</a>
       <a class="sv-util-btn sv-util-btn--cta" href="contact_cn.html">联系</a>
     </div>
     <button class="sv-burger" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="sv-mobile-menu">
@@ -78,10 +92,11 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
       <li><a href="insights_cn.html">洞察</a></li>
       <li><a href="press_cn.html">媒体</a></li>
       <li><a href="team_cn.html">团队</a></li>
+        <li><a href="careers_cn.html">人才招聘</a></li>
     </ul>
     <div class="sv-mobile-utils">
       <a class="sv-util-btn" href="index.html">EN</a>
-      <a class="sv-util-btn" href="investor-portal/index.html">投资者门户</a>
+      <a class="sv-util-btn" href="investor-portal/index_cn.html">投资者门户</a>
       <a class="sv-util-btn sv-util-btn--cta" href="contact_cn.html">联系</a>
     </div>
   </nav>
@@ -94,35 +109,16 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   <div class="sv-hero__inner">
     <div class="sv-hero__main">
       <span class="sv-hero__rule" aria-hidden="true"></span>
-      <p class="sv-hero__label">中国信贷专家</p>
-      <h1 class="sv-hero__headline">中国资产支持<br class="sv-hero__br">私募信贷</h1>
-      <p class="sv-hero__body">新岸资本投资于中国资产支持信贷机会，以专有寻源、抵押品质量及可回收性作为承销核心。</p>
+      <p class="sv-hero__label">信贷解决方案</p>
+      <h1 class="sv-hero__headline">中国资产支持私募信贷 <span class="sv-hero__since">始于 <span class="sv-hero__headline-accent">2004</span> 年</span></h1>
+      <p class="sv-hero__body">新岸资本是一家私募信贷公司，为中国各地的借款人与金融机构提供解决方案。</p>
+      <p class="sv-hero__body">作为该领域二十余年来的先行者，新岸资本的平台将无可比拟的本地执行能力与国际机构化风险管理相结合。</p>
       <div class="sv-hero__cta">
-        <a href="insights_cn.html" class="sv-textlink">中国债务动态<span aria-hidden="true">→</span></a>
+        <a href="strategy_cn.html" class="sv-textlink">了解我们的策略<span aria-hidden="true">→</span></a>
       </div>
     </div>
     <div class="sv-hero__field">
-      <aside class="sv-hero__panel" aria-label="新岸资本概览">
-        <p class="sv-hero__panel-label">新岸资本概览</p>
-        <dl>
-          <div class="sv-hero__panel-row">
-            <dt>重点</dt>
-            <dd>资产支持私募信贷</dd>
-          </div>
-          <div class="sv-hero__panel-row">
-            <dt>成立</dt>
-            <dd>2004 年</dd>
-          </div>
-          <div class="sv-hero__panel-row">
-            <dt>策略</dt>
-            <dd>资产支持贷款 · 资产重组 · 债务处置</dd>
-          </div>
-          <div class="sv-hero__panel-row">
-            <dt>办公室</dt>
-            <dd>广州 · 上海 · 北京 · 香港</dd>
-          </div>
-        </dl>
-      </aside>
+      <div class="sv-hero__image" aria-hidden="true"><img src="assets/img/trees/home-hero-metasequoia-sq.jpg" alt="" width="1600" height="1600" loading="eager" decoding="async" fetchpriority="high"></div>
     </div>
   </div>
 </section>
@@ -132,10 +128,15 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   <div class="sv-shell sv-grid12 sv-bridge__inner home-firm-preview__grid">
     <div class="sv-bridge__head home-firm-preview__copy">
       <p class="sv-label">公司</p>
-      <h2 class="sv-h2" id="sv-bridge-title">历经二十余年发展的中国信贷平台。</h2>
+      <h2 class="sv-h2" id="sv-bridge-title">历经二十余年积淀而成。</h2>
     </div>
     <div class="sv-bridge__body home-firm-preview__statement">
-      <p>新岸资本在中国信贷与不良债务领域拥有二十年经验，所管理的机构资本历经多个市场周期。</p>
+      <p>新岸资本将本地市场关系与机构化投资管理能力相结合，覆盖项目寻源、承销、法律结构设计、资产服务及处置。</p>
+      <div class="home-firm-preview__proof" aria-label="公司能力">
+        <span>本地寻源</span>
+        <span>法律结构设计</span>
+        <span>资产服务</span>
+      </div>
       <a class="sv-textlink home-firm-preview__link" href="firm_cn.html">了解公司 <span aria-hidden="true">&rarr;</span></a>
     </div>
   </div>
@@ -146,19 +147,32 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   <div class="sv-shell sv-grid12 sv-strategy__inner">
     <div class="sv-strategy__lead">
       <p class="sv-label">策略</p>
-      <h2 class="sv-h2" id="sv-strategy-title">明确的回收路径。</h2>
-      <p>新岸资本围绕债权优先级、可执行性及退出路径对担保机会进行承销。</p>
+      <h2 class="sv-h2" id="sv-strategy-title">应对复杂情境的信贷解决方案</h2>
+      <p>新岸资本与借款人及金融机构合作，围绕下行保护、可执行性及可行的回收路径来构建资产支持信贷。</p>
+      <a href="strategy_cn.html" class="sv-textlink">了解我们的策略<span aria-hidden="true">→</span></a>
     </div>
     <div class="sv-strategy__rows">
-      <div class="sv-srow">
-        <h3 class="sv-srow__title">资产支持贷款</h3>
-      </div>
-      <div class="sv-srow">
-        <h3 class="sv-srow__title">资产重组</h3>
-      </div>
-      <div class="sv-srow">
-        <h3 class="sv-srow__title">债务处置</h3>
-      </div>
+      <a class="sv-srow" href="strategy_cn.html">
+        <span class="sv-srow__content">
+          <h3 class="sv-srow__title">资产支持贷款</h3>
+          <span class="sv-srow__body">围绕抵押品、法律文件及可执行回收路径设计的信贷。</span>
+        </span>
+        <span class="sv-srow__arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="sv-srow" href="strategy_cn.html">
+        <span class="sv-srow__content">
+          <h3 class="sv-srow__title">资产重组</h3>
+          <span class="sv-srow__body">通过运营与法律工作稳定资产，并为处置创造可选方案。</span>
+        </span>
+        <span class="sv-srow__arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="sv-srow" href="strategy_cn.html">
+        <span class="sv-srow__content">
+          <h3 class="sv-srow__title">债务处置</h3>
+          <span class="sv-srow__body">与机构化承销标准一致的严谨债务重组、资产服务及退出。</span>
+        </span>
+        <span class="sv-srow__arrow" aria-hidden="true">→</span>
+      </a>
     </div>
   </div>
 </section>
@@ -170,9 +184,8 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
       <div>
         <p class="sv-cdd__label">研究系列 · 始于 2018 年</p>
         <h2 class="sv-cdd__title" id="sv-cdd-title">中国债务动态</h2>
-        <p class="sv-cdd__cn" lang="en">ShoreVest · China Debt Dynamics</p>
       </div>
-      <p class="sv-cdd__desc">聚焦中国私募信贷市场、政策走向、法律框架及债权人回收的研究。</p>
+      <p class="sv-cdd__desc">关于中国私募信贷市场、政策发展、法律框架及债权人回收的研究。</p>
     </div>
 
     <article>
@@ -189,8 +202,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
     </article>
 
     <div class="sv-cdd__foot sv-cdd__foot--compact">
-      <p class="sv-cdd__archive-note">首页保留最新精选报告；完整中国债务动态文章已集中整理至洞察页面。</p>
-      <a class="sv-cdd__archive-btn" href="insights_cn.html#archive">查看完整档案库<span aria-hidden="true">→</span></a>
+      <a class="sv-cdd__archive-btn" href="insights_cn.html#archive">查看完整归档<span aria-hidden="true">→</span></a>
     </div>
   </div>
 </section>
@@ -207,27 +219,36 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
         </a>
         <p class="sv-footer__offices">
           广州 · 上海 · 北京 · 香港<br>
-          <a href="contact_cn.html">一般查询</a>
+          <a href="contact_cn.html">一般咨询</a>
         </p>
       </div>
       <nav class="sv-footer__nav" aria-label="页脚导航">
         <a href="firm_cn.html">公司</a>
-        <a href="insights_cn.html">洞察</a>
         <a href="strategy_cn.html">策略</a>
+        <a href="insights_cn.html">洞察</a>
         <a href="press_cn.html">媒体</a>
         <a href="team_cn.html">团队</a>
+        <a href="careers_cn.html">人才招聘</a>
         <a href="contact_cn.html">联系</a>
         <a href="insights_cn.html#archive">中国债务动态</a>
         <span class="sv-footer__access" role="group" aria-label="访问">
-          <span class="sv-footer__access-label">访问</span>
-          <a href="investor-portal/index.html">投资者门户</a>
+          <span class="sv-footer__access-label">入口</span>
+          <a href="investor-portal/index_cn.html">投资者门户</a>
         </span>
       </nav>
+      <div class="sv-footer__social" aria-label="Follow ShoreVest">
+        <a class="sv-footer__social-link" href="https://www.linkedin.com/company/shorevest-partners/" target="_blank" rel="noopener noreferrer" aria-label="Follow ShoreVest Partners on LinkedIn">
+          <svg class="sv-footer__social-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+            <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V8.98h3.42v1.57h.05c.48-.9 1.64-1.85 3.37-1.85 3.61 0 4.27 2.37 4.27 5.46v6.29ZM5.32 7.42a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12Zm1.78 13.03H3.54V8.98H7.1v11.47ZM22.23 0H1.76C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.76 24h20.47c.97 0 1.77-.77 1.77-1.72V1.72C24 .77 23.2 0 22.23 0Z"/>
+          </svg>
+          <span>LinkedIn</span>
+        </a>
+      </div>
     </div>
 
     <div class="sv-footer__legal">
-      <p>新岸资本（ShoreVest Partners）及其关联机构向机构投资者提供投资管理服务。本网站仅供参考，不构成出售要约或购买任何证券或投资产品的要约邀请，亦不构成投资、法律或税务建议。</p>
-      <p>过往表现并不代表未来结果。私募信贷与私募债务投资涉及风险，包括可能损失本金。所示数据为近似值，可能发生变动。</p>
+      <p>新岸资本（ShoreVest Partners）及其关联机构向机构投资者提供投资管理服务。本网站仅供信息参考，不构成出售任何证券或投资产品的要约，或购买任何证券或投资产品的要约邀请，亦不构成投资、法律或税务建议。</p>
+      <p>过往表现并不预示未来结果。私募信贷与私募债务投资涉及风险，包括可能损失本金。所示数据均为近似值，可能发生变动。</p>
     </div>
 
     <div class="sv-footer__bottom">
@@ -238,7 +259,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
         <a href="important-information_cn.html">重要信息</a>
         <a href="legal-notices-disclaimers_cn.html">法律声明与免责声明</a>
       </div>
-      <p class="sv-footer__copy">© 2026 新岸资本（ShoreVest Partners）。保留所有权利。</p>
+      <p class="sv-footer__copy">© 2026 ShoreVest Partners. All rights reserved.</p>
     </div>
   </div>
 </footer>

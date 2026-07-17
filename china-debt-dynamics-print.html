@@ -29,12 +29,15 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   <!-- TODO: ADD ADOBE FONTS KIT FOR DIN 2014 — replace [KIT_ID] below and uncomment. Until configured, pages use the canonical DIN 2014 stack with only a generic sans-serif emergency fallback. -->
   <!-- <link rel="stylesheet" href="https://use.typekit.net/[KIT_ID].css"> -->
   <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
-  <script>document.write('<link rel="stylesheet" href="assets/css/cdd-article-print.css?v=20260622-p7&t='+window.__SVT+'">');</script>
-<link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+  <script>document.write('<link rel="stylesheet" href="assets/css/cdd-article-print.css?v=20260714-consistent-pdf&t='+window.__SVT+'">');</script>
+<link rel="icon" href="assets/favicon-cinnabar.ico?v=20260717" sizes="any">
+<link rel="shortcut icon" href="assets/favicon-cinnabar.ico?v=20260717">
+<link rel="icon" href="assets/favicon-cinnabar.svg?v=20260717" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-cinnabar-32x32.png?v=20260717">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-cinnabar-16x16.png?v=20260717">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon-cinnabar.png?v=20260717">
+<link rel="manifest" href="site.webmanifest?v=20260717">
+<script src="assets/js/favicon-guard.js?v=20260717" defer></script>
 </head>
 <body class="cdd-print-layout" data-default-article-source="assets/data/china-debt-dynamics-v10i1.json">
   <div class="cdd-topline">
@@ -46,6 +49,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
       </div>
       <div class="cdd-topline__tools cdd-print-hide">
         <div class="cdd-actions">
+          <a class="cdd-btn cdd-btn--secondary" href="china-debt-dynamics-v10i1.html" data-cdd-back-to-issue>Back to Issue</a>
           <button class="cdd-btn cdd-btn--solid" data-print-action="print">Print / Save as PDF</button>
         </div>
         <p class="cdd-print-note">Tip: choose “Save as PDF” in the print dialog for a styled PDF.</p>

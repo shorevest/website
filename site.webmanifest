@@ -1,0 +1,25 @@
+{
+  "name": "ShoreVest",
+  "short_name": "ShoreVest",
+  "icons": [
+    {
+      "src": "assets/favicon-cinnabar-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/favicon-cinnabar-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/apple-touch-icon-cinnabar.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "display": "standalone"
+}

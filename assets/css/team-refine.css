@@ -8,23 +8,23 @@
    ========================================================================== */
 
 html:has(body.team-page-v2) {
-  background: #20211F;
+  background: #20211f;
 }
 
 body.team-page-v2 {
-  --tr-ink: #1A1B17;
+  --tr-ink: #1a1b17;
   --tr-ink-2: #202118;
-  --tr-ivory: #F7F1E6;
-  --tr-parchment: #EFE6D5;
-  --tr-cinnabar: #C93B2A;
-  --tr-cinnabar-lt: #CF3A2B;
-  --tr-oxblood: #8F2A20;
-  --tr-muted: #6E7169;
+  --tr-ivory: #f7f1e6;
+  --tr-parchment: #efe6d5;
+  --tr-cinnabar: #c93b2a;
+  --tr-cinnabar-lt: #cf3a2b;
+  --tr-oxblood: #8f2a20;
+  --tr-muted: #6e7169;
   --tr-border: rgba(30, 30, 26, 0.14);
   --tr-gutter: clamp(24px, 5vw, 72px);
   --tr-max: 1280px;
   --tr-font: var(--font-en, "DIN 2014", system-ui, sans-serif);
-  --tr-dark-footer: #20211F;
+  --tr-dark-footer: #20211f;
   --tr-on-dark: rgba(252, 249, 241, 0.78);
   --tr-faint-on-dark: rgba(252, 249, 241, 0.58);
   --tr-border-dark: rgba(252, 249, 241, 0.14);
@@ -41,7 +41,7 @@ html body.team-page-v2 .team-hero.hero--team {
   min-height: 0 !important;
   padding: 0 !important;
   position: relative !important;
-  overflow: hidden !important;            /* clips the cinnabar bleed — no page scroll */
+  overflow: hidden !important; /* clips the cinnabar bleed — no page scroll */
   border-bottom: 1px solid var(--tr-border) !important;
 }
 html body.team-page-v2 .team-hero.hero--team::before,
@@ -56,14 +56,17 @@ html body.team-page-v2 .team-hero .team-inner {
   z-index: 1;
   max-width: var(--tr-max);
   margin-inline: auto;
-  padding: clamp(64px, 7vw, 104px) var(--tr-gutter) clamp(64px, 7vw, 104px);
+  padding: clamp(50px, 6vw, 90px) var(--pad-x, clamp(24px, 5vw, 48px))
+    clamp(64px, 7vw, 104px);
 }
 
 html body.team-page-v2 .team-hero__layout {
   display: grid !important;
-  grid-template-columns: 1.05fr 0.95fr !important;
+  /* Right column fixed to the homepage hero square width so the cinnabar box
+     reads as the same 1:1 square, in the same position, as the homepage. */
+  grid-template-columns: minmax(0, 1fr) min(570px, 48vw) !important;
   gap: clamp(32px, 5vw, 80px) !important;
-  align-items: stretch !important;
+  align-items: start !important;
 }
 
 /* ---- left: editorial intro (sans, ink) ------------------------------- */
@@ -120,60 +123,93 @@ html body.team-page-v2 .team-hero__proof {
   align-items: center;
   justify-content: flex-start;
   gap: 0 !important;
-  padding: clamp(36px, 4vw, 60px) 0 clamp(36px, 4vw, 60px) clamp(32px, 3.6vw, 60px) !important;
-  background: linear-gradient(152deg, var(--tr-cinnabar-lt) 0%, var(--tr-cinnabar) 52%, var(--tr-oxblood) 100%) !important;
+  /* 1:1 square matching the homepage hero image square. Vertical padding is
+     kept modest so the stat card fits inside the square without forcing it
+     taller than 1:1. */
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  padding: clamp(22px, 2.4vw, 34px) 0 clamp(22px, 2.4vw, 34px)
+    clamp(32px, 3.6vw, 60px) !important;
+  background: linear-gradient(
+    152deg,
+    var(--tr-cinnabar-lt) 0%,
+    var(--tr-cinnabar) 52%,
+    var(--tr-oxblood) 100%
+  ) !important;
   border: 0 !important;
 }
 html body.team-page-v2 .team-hero__proof::after {
   content: "";
-  position: absolute; top: 0; bottom: 0; left: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 100%;
   width: 50vw;
   background: var(--tr-oxblood);
 }
 
-/* ---- the ivory stats card sitting on the cinnabar block --------------- */
+/* ---- stats card mirrors the homepage Platform continuity panel ------- */
 html body.team-page-v2 .team-hero__statcard {
   position: relative;
   z-index: 1;
+  box-sizing: border-box;
   width: 100%;
-  max-width: 360px;
-  margin: clamp(24px, 3vw, 44px) 0;
-  padding: clamp(24px, 2.6vw, 34px) clamp(24px, 2.6vw, 32px) clamp(10px, 1.4vw, 16px);
-  background: #FCFAF4;
-  border: 1px solid rgba(30, 30, 26, 0.16);
-  border-radius: 2px;
+  max-width: 440px;
+  margin: clamp(12px, 1.6vw, 22px) 0;
+  padding: clamp(26px, 2.8vw, 38px);
+  background: #ffffff;
+  border: 1px solid rgba(82, 71, 54, 0.18);
+  border-top: 1px solid rgba(82, 71, 54, 0.18);
+  border-radius: 0;
+  box-shadow: 0 18px 42px rgba(23, 28, 28, 0.1);
 }
 html body.team-page-v2 .team-hero__statcard-label {
-  margin: 0 0 6px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid var(--tr-border);
-  font: 600 11px/1.3 var(--tr-font);
-  letter-spacing: 0.18em;
+  margin: 0 0 20px;
+  padding-bottom: 0;
+  border-bottom: 0;
+  font: 600 11px/1.2 var(--tr-font);
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--tr-muted);
+  color: var(--tr-oxblood);
+  hyphens: none;
+  overflow-wrap: normal;
+  text-wrap: balance;
+  word-break: normal;
 }
 html body.team-page-v2 .team-hero__proof article {
-  display: block !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: 7px !important;
+  align-items: start !important;
   margin: 0 !important;
-  padding: 16px 0 !important;
+  padding: 18px 0 !important;
   border: 0 !important;
-  border-bottom: 1px solid var(--tr-border) !important;
+  border-top: 1px solid rgba(27, 31, 30, 0.12) !important;
   background: none !important;
 }
-html body.team-page-v2 .team-hero__proof article:last-child {
-  border-bottom: 0 !important;
+html body.team-page-v2 .team-hero__proof article:first-of-type {
+  border-top: 0 !important;
 }
 html body.team-page-v2 .team-hero__proof article span {
   display: block !important;
-  margin-bottom: 5px !important;
-  font: 500 27px/1.0 var(--tr-font) !important;
-  letter-spacing: -0.02em !important;
+  min-width: 0;
+  margin: 0 !important;
+  font: 500 16px/1.45 var(--tr-font) !important;
+  letter-spacing: 0 !important;
   color: var(--tr-ink) !important;
+  overflow-wrap: anywhere;
+  word-break: normal;
 }
 html body.team-page-v2 .team-hero__proof article p {
+  min-width: 0;
+  max-width: 100%;
   margin: 0 !important;
-  font: 400 13.5px/1.45 var(--tr-font) !important;
-  color: var(--tr-muted) !important;
+  font: 600 11px/1.3 var(--tr-font) !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  color: rgba(27, 31, 30, 0.52) !important;
+  overflow-wrap: anywhere;
+  word-break: normal;
 }
 
 /* ==========================================================================
@@ -196,14 +232,16 @@ html body.team-page-v2 .group + .group {
 /* ---- section header: heading left, description right, thin rule ------- */
 html body.team-page-v2 .group__head {
   display: grid !important;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  grid-template-columns: max-content minmax(0, 1fr) !important;
   gap: clamp(20px, 4vw, 56px) !important;
   align-items: end !important;
   margin-bottom: clamp(28px, 3vw, 40px) !important;
   padding-bottom: clamp(18px, 2vw, 26px) !important;
   border-bottom: 1px solid var(--tr-border) !important;
 }
-html body.team-page-v2 .group__head-main { margin: 0 !important; }
+html body.team-page-v2 .group__head-main {
+  margin: 0 !important;
+}
 html body.team-page-v2 .sv-section-title {
   margin: 0 !important;
   font-family: var(--tr-font) !important;
@@ -212,6 +250,11 @@ html body.team-page-v2 .sv-section-title {
   line-height: 1.1 !important;
   letter-spacing: -0.02em !important;
   color: var(--tr-ink) !important;
+}
+@media (min-width: 761px) {
+  html body.team-page-v2 .sv-section-title {
+    white-space: nowrap;
+  }
 }
 html body.team-page-v2 .group__summary {
   margin: 0 !important;
@@ -223,38 +266,71 @@ html body.team-page-v2 .group__summary {
   padding-left: clamp(16px, 1.4vw, 22px) !important;
 }
 @media (max-width: 760px) {
-  html body.team-page-v2 .group__summary { border-left: 0 !important; padding-left: 0 !important; }
+  html body.team-page-v2 .group__summary {
+    border-left: 0 !important;
+    padding-left: 0 !important;
+  }
 }
 @media (max-width: 760px) {
-  html body.team-page-v2 .group__head { grid-template-columns: 1fr !important; align-items: start !important; }
+  html body.team-page-v2 .group__head {
+    grid-template-columns: 1fr !important;
+    align-items: start !important;
+  }
 }
 
 /* ==========================================================================
    3 · PORTRAIT GRID — consistent 4-col editorial grid, faces protected
    ========================================================================== */
 html body.team-page-v2 .grid[data-team-grid] {
+  --team-card-width: 232px;
+  --team-cols: min(var(--team-count, 4), 4);
   display: grid !important;
-  grid-template-columns: repeat(4, 1fr) !important;
+  grid-template-columns: repeat(
+    var(--team-cols),
+    minmax(0, var(--team-card-width))
+  ) !important;
+  justify-content: start !important;
   gap: clamp(24px, 2.4vw, 36px) clamp(20px, 2vw, 30px) !important;
+}
+html body.team-page-v2 .grid[data-team-count="2"] {
+  --team-count: 2;
+}
+html body.team-page-v2 .grid[data-team-count="3"] {
+  --team-count: 3;
+}
+html body.team-page-v2 .grid[data-team-count="5"] {
+  --team-count: 5;
+}
+html body.team-page-v2 .group--leadership .grid[data-team-grid] {
+  --team-cols: 5;
+}
+html body.team-page-v2 .team-profile {
+  text-align: left;
 }
 html body.team-page-v2 .team-profile__photo {
   display: grid;
   place-items: center;
-  aspect-ratio: 4 / 5;
+  width: 100%;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
   background:
-    linear-gradient(135deg, rgba(216, 206, 176, 0.45), rgba(250, 246, 238, 0.78)),
+    linear-gradient(
+      135deg,
+      rgba(216, 206, 176, 0.45),
+      rgba(250, 246, 238, 0.78)
+    ),
     var(--tr-parchment);
   border: 1px solid var(--tr-border);
   max-height: none !important;
+  margin: 0 !important;
 }
 html body.team-page-v2 .team-profile__photo img {
   width: 100% !important;
   height: 100% !important;
   object-fit: cover !important;
-  object-position: 50% 0 !important;    /* keep the top of each head visible */
+  object-position: center top !important;
   display: block;
-  filter: grayscale(1) contrast(1.02);   /* consistent normalized set */
+  filter: grayscale(1) contrast(1.02); /* consistent normalized set */
   transition: filter 0.3s ease;
 }
 html body.team-page-v2 .team-profile__photo::before {
@@ -264,8 +340,71 @@ html body.team-page-v2 .team-profile__photo::before {
   border: 1px solid rgba(61, 112, 112, 0.35);
   border-radius: 50%;
   background:
-    radial-gradient(circle at 50% 34%, rgba(61, 112, 112, 0.18) 0 18%, transparent 19%),
-    radial-gradient(ellipse at 50% 82%, rgba(61, 112, 112, 0.18) 0 38%, transparent 39%);
+    radial-gradient(
+      circle at 50% 34%,
+      rgba(61, 112, 112, 0.18) 0 18%,
+      transparent 19%
+    ),
+    radial-gradient(
+      ellipse at 50% 82%,
+      rgba(61, 112, 112, 0.18) 0 38%,
+      transparent 39%
+    );
+}
+html body.team-page-v2 .team-profile__photo--placeholder {
+  isolation: isolate;
+  background:
+    radial-gradient(
+      circle at 28% 22%,
+      rgba(216, 206, 176, 0.52) 0 10%,
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 76% 74%,
+      rgba(61, 112, 112, 0.16) 0 16%,
+      transparent 42%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(250, 246, 238, 0.98),
+      rgba(232, 224, 202, 0.88) 52%,
+      rgba(61, 112, 112, 0.16)
+    ),
+    var(--tr-parchment);
+}
+html body.team-page-v2 .team-profile__photo--placeholder::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  display: block;
+  width: 62%;
+  aspect-ratio: 1 / 1;
+  border: 0;
+  border-radius: 0;
+  background: url("../brand/logo-master.svg") center center / contain no-repeat;
+  filter: drop-shadow(0 14px 22px rgba(30, 64, 64, 0.12));
+}
+html body.team-page-v2 .team-profile__photo--placeholder::after {
+  border-color: rgba(61, 112, 112, 0.18);
+  box-shadow:
+    inset 0 0 0 10px rgba(250, 246, 238, 0.32),
+    inset 0 -72px 120px rgba(30, 64, 64, 0.06);
+}
+
+html body.team-page-v2 .team-profile__photo--plain-placeholder {
+  background: var(--tr-stone) !important;
+}
+
+html body.team-page-v2 .team-profile__photo--plain-placeholder::before {
+  display: none !important;
+}
+
+html body.team-page-v2 .team-profile__photo--plain-placeholder::after {
+  border-color: var(--tr-border-soft);
+  box-shadow: none;
 }
 /* Profiles with a delivered portrait: drop the placeholder monogram. */
 html body.team-page-v2 .team-profile__photo:has(img) {
@@ -284,10 +423,19 @@ html body.team-page-v2 .team-profile__name {
   letter-spacing: -0.01em !important;
   color: var(--tr-ink) !important;
 }
-html body.team-page-v2 .team-profile__role {
+html body.team-page-v2 .team-profile__role,
+html body.team-page-v2 .team-profile__secondary {
   margin-top: 5px !important;
   font: 400 13.5px/1.4 var(--tr-font) !important;
   color: var(--tr-muted) !important;
+}
+html body.team-page-v2 .team-profile__secondary {
+  margin-top: 2px !important;
+  font-size: 12.5px !important;
+  color: rgba(110, 113, 105, 0.82) !important;
+}
+html body.team-page-v2 .team-profile__actions {
+  justify-content: flex-start;
 }
 html body.team-page-v2 .team-profile__bio-toggle,
 html body.team-page-v2 .team-profile__linkedin {
@@ -307,57 +455,1122 @@ html body.team-page-v2 .team-profile__linkedin {
 html body.team-page-v2 .team-profile__bio-toggle::after,
 html body.team-page-v2 .team-profile__linkedin::after {
   content: "";
-  position: absolute; left: 0; right: 0; bottom: -4px;
-  height: 1px; background: var(--tr-cinnabar);
-  transform: scaleX(0); transform-origin: left;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 1px;
+  background: var(--tr-cinnabar);
+  transform: scaleX(0);
+  transform-origin: left;
   transition: transform 0.2s ease;
 }
 html body.team-page-v2 .team-profile__bio-toggle:hover::after,
 html body.team-page-v2 .team-profile__linkedin:hover::after {
   transform: scaleX(1);
 }
-@media (max-width: 1000px) {
-  html body.team-page-v2 .grid[data-team-grid] { grid-template-columns: repeat(2, 1fr) !important; }
+@media (max-width: 1180px) and (min-width: 901px) {
+  html body.team-page-v2 .group--leadership .grid[data-team-grid] {
+    --team-cols: 3;
+  }
+  html
+    body.team-page-v2
+    .grid[data-team-count="5"]
+    .team-profile:nth-last-child(2) {
+    grid-column: 1 / 2;
+  }
+}
+@media (max-width: 900px) {
+  html body.team-page-v2 .grid[data-team-grid] {
+    --team-cols: min(var(--team-count, 2), 2);
+    --team-card-width: min(100%, 320px);
+  }
+  html body.team-page-v2 .group--leadership .grid[data-team-grid] {
+    --team-cols: 2;
+  }
 }
 @media (max-width: 560px) {
-  html body.team-page-v2 .grid[data-team-grid] { grid-template-columns: 1fr !important; }
-  html body.team-page-v2 .team-hero__layout { grid-template-columns: 1fr !important; }
-  html body.team-page-v2 .team-hero__statcard { max-width: none; margin-inline: auto; }
+  html body.team-page-v2 .grid[data-team-grid] {
+    --team-cols: 1;
+    --team-card-width: 100%;
+  }
+  html body.team-page-v2 .team-hero__layout {
+    grid-template-columns: 1fr !important;
+  }
+  html body.team-page-v2 .team-hero__statcard {
+    max-width: none;
+    margin-inline: auto;
+  }
 }
 @media (max-width: 767px) {
   /* Match the global mobile gutter (--pad-x: 20px) so team margins align with every other page. */
-  html body.team-page-v2 { --tr-gutter: 20px; }
+  html body.team-page-v2 {
+    --tr-gutter: 20px;
+  }
   /* Enlarge Bio / LinkedIn tap targets to ~44px tall, underline kept under the text. */
   html body.team-page-v2 .team-profile__bio-toggle,
   html body.team-page-v2 .team-profile__linkedin {
-    padding-block: 11px !important; display: inline-flex !important; align-items: center !important;
+    padding-block: 11px !important;
+    display: inline-flex !important;
+    align-items: center !important;
   }
   html body.team-page-v2 .team-profile__bio-toggle::after,
-  html body.team-page-v2 .team-profile__linkedin::after { bottom: 7px !important; }
+  html body.team-page-v2 .team-profile__linkedin::after {
+    bottom: 7px !important;
+  }
 }
 
 @media (max-width: 900px) {
-  html body.team-page-v2 .team-hero__layout { grid-template-columns: 1fr !important; }
+  html body.team-page-v2 .team-hero__layout {
+    grid-template-columns: 1fr !important;
+  }
   html body.team-page-v2 .team-hero__proof {
+    aspect-ratio: auto;
     padding: clamp(28px, 6vw, 44px) var(--tr-gutter) !important;
     margin-top: clamp(28px, 5vw, 44px);
   }
-  html body.team-page-v2 .team-hero__statcard { max-width: 460px; margin-inline: auto; }
+  html body.team-page-v2 .team-hero__statcard {
+    max-width: 460px;
+    margin-inline: auto;
+  }
 }
 
 /* ==========================================================================
-   4 · FOOTER — dark ink, matching the homepage footer
+   4 · FOOTER — use the shared homepage footer without Team-only offsets
    ========================================================================== */
 body.team-page-v2 .sv-footer {
-  /* Footer governed by homepage-rebuild.css (body.homepage). Match the page
-     canvas to the footer ink so viewport rounding never exposes a white seam. */
-  background: var(--tr-dark-footer, #20211F) !important;
-  margin-bottom: -1px;
-  padding-bottom: 1px;
+  background: var(--sv-dark-footer, #20211f) !important;
+}
+
+body.team-page-v2 .sv-footer__copy {
+  position: static !important;
+  inset: auto !important;
+  transform: none !important;
+  margin: 0 !important;
 }
 
 /* Active nav state — subtle cinnabar, matching the homepage hover treatment */
 body.homepage.team-page-v2 .sv-nav a[aria-current="page"] {
-  color: var(--sv-cinnabar, #C93B2A);
-  border-color: var(--sv-cinnabar, #C93B2A);
+  color: var(--sv-cinnabar, #c93b2a);
+  border-color: var(--sv-cinnabar, #c93b2a);
+}
+
+/* ==========================================================================
+   5 · TEAM DIRECTORY — institutional document grid below the hero
+   Uses the homepage shell, 12-column rhythm, square portrait records and
+   restrained cinnabar ledges. Scoped to content beginning at .team-groups.
+   ========================================================================== */
+body.team-page-v2 {
+  --tr-team-section-max: 1400px;
+  --tr-ivory: var(--sv-ivory, #fcf9f1);
+  --tr-stone: var(--sv-stone, #f1ebdd);
+  --tr-ink: var(--sv-ink, #182524);
+  --tr-ink-2: var(--sv-ink-2, #2a302e);
+  --tr-muted: var(--text-muted, #6b6258);
+  --tr-cinnabar: var(--sv-cinnabar, var(--cinnabar, #c93b2a));
+  --tr-border: var(--sv-border-light-strong, rgba(216, 206, 176, 0.9));
+  --tr-border-soft: var(--sv-border-light, rgba(216, 206, 176, 0.55));
+  --tr-max: var(--page-max, 1280px);
+  --tr-page-pad: var(--pad-x, clamp(24px, 5vw, 48px));
+  --tr-gutter-fixed: var(--gutter, 24px);
+  --tr-section-y: var(--section-y, clamp(44px, 4.8vw, 64px));
+  --tr-fast: 0.16s ease;
+}
+
+html body.team-page-v2 .team-groups {
+  background: var(--tr-ivory) !important;
+  padding-block: 0 clamp(48px, 5vw, 72px) !important;
+}
+
+html body.team-page-v2 .team-groups .team-inner {
+  width: auto !important;
+  max-width: var(--tr-team-section-max, var(--tr-max)) !important;
+  margin-inline: auto !important;
+  padding-inline: var(--tr-page-pad) !important;
+}
+
+html body.team-page-v2 .group,
+html body.team-page-v2 .group:first-child {
+  margin: 0 !important;
+  padding-block: clamp(34px, 5vw, 70px) !important;
+  border-top: 0 !important;
+  background: transparent !important;
+}
+
+html body.team-page-v2 .group:first-child {
+  border-top: 0 !important;
+}
+
+html body.team-page-v2 .group::before {
+  content: "";
+  display: block;
+  width: calc(
+    (100% - (11 * var(--tr-gutter-fixed))) / 12 * 2 + var(--tr-gutter-fixed)
+  );
+  height: 2px;
+  margin-bottom: clamp(24px, 2.4vw, 34px);
+  background: var(--tr-cinnabar);
+}
+
+/* Section header: title stands free (NOT boxed); only the short summary is
+   boxed and small, sitting to the right. A thin rule sets the header off from
+   the portrait grid. */
+html body.team-page-v2 .group__head {
+  position: relative !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 420px) !important;
+  column-gap: clamp(28px, 4vw, 64px) !important;
+  row-gap: clamp(16px, 2vw, 22px) !important;
+  align-items: center !important;
+  margin: 0 0 clamp(30px, 3.4vw, 48px) !important;
+  padding: 0 0 clamp(20px, 2.2vw, 28px) !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--tr-border) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html body.team-page-v2 .group__head-main {
+  grid-column: auto;
+  min-width: 0;
+  padding-left: 16px;
+  border-left: 4px solid var(--tr-cinnabar);
+}
+
+html body.team-page-v2 .sv-section-title {
+  margin: 0 !important;
+  max-width: none;
+  font: 500 clamp(25px, 2.5vw, 34px) / 1.1 var(--tr-font) !important;
+  letter-spacing: -0.02em !important;
+  color: var(--tr-ink) !important;
+  text-align: left !important;
+}
+
+/* The only boxed element in the header — small, quiet. */
+html body.team-page-v2 .group__summary {
+  grid-column: auto;
+  justify-self: end;
+  width: 100%;
+  margin: 0 !important;
+  max-width: 420px !important;
+  padding: clamp(11px, 1.1vw, 14px) clamp(13px, 1.3vw, 18px) !important;
+  border: 1px solid var(--tr-border) !important;
+  border-left: 3px solid var(--tr-cinnabar) !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  box-shadow: 0 4px 14px rgba(24, 32, 34, 0.05) !important;
+  font: 400 12.5px / 1.45 var(--tr-font) !important;
+  color: var(--tr-muted) !important;
+  text-align: left !important;
+}
+
+html body.team-page-v2 .grid[data-team-grid],
+html body.team-page-v2 .grid[data-team-count],
+html body.team-page-v2 .group--leadership .grid[data-team-grid] {
+  --team-cols: 5;
+  display: grid !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap: clamp(36px, 4vw, 56px) var(--tr-gutter-fixed) !important;
+  justify-content: stretch !important;
+  place-content: start !important;
+  align-items: start !important;
+}
+
+html body.team-page-v2 .team-profile,
+html
+  body.team-page-v2
+  .grid[data-team-count="5"]
+  .team-profile:nth-last-child(2) {
+  grid-column: auto !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  text-align: left !important;
+}
+
+html body.team-page-v2 .team-profile__photo {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  max-width: none !important;
+  max-height: none !important;
+  margin: 0 !important;
+  aspect-ratio: 1 / 1 !important;
+  overflow: hidden !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: var(--tr-stone) !important;
+  cursor: pointer;
+}
+
+html body.team-page-v2 .team-profile__photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--tr-border-soft);
+  pointer-events: none;
+}
+
+html body.team-page-v2 .team-profile__photo--plain-placeholder {
+  background: var(--tr-stone) !important;
+}
+
+html body.team-page-v2 .team-profile__photo--plain-placeholder::before {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+}
+
+html body.team-page-v2 .team-profile__photo--plain-placeholder::after {
+  border-color: var(--tr-border-soft) !important;
+  box-shadow: none !important;
+}
+
+html body.team-page-v2 .team-profile__photo img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  aspect-ratio: 1 / 1 !important;
+  object-fit: cover !important;
+  object-position: center top !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  filter: grayscale(100%) contrast(1.02);
+  transition: filter var(--tr-fast);
+}
+
+/* Steve Poon: pin the portrait as low as the source image allows without exposing empty edges. */
+html body.team-page-v2 .team-profile__photo[data-team-photo="bio-steve-poon"] img {
+  object-position: center top !important;
+}
+
+/* Michael Chang: pin the portrait as low as the source image allows without exposing empty edges. */
+html body.team-page-v2 .team-profile__photo[data-team-photo="bio-michael-chang"] img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center top !important;
+  transform: scale(1.18);
+  transform-origin: center top;
+}
+
+/* Philip Young: nudge the portrait upward inside the square image frame. */
+html body.team-page-v2 .team-profile__photo[data-team-photo="bio-philip-young"] img {
+  transform: translateY(-4%) scale(1.04);
+  transform-origin: center top;
+}
+
+/* Dinny McMahon: move the portrait up so his head sits closer to the photo edge. */
+html body.team-page-v2 .team-profile__photo[data-team-photo="bio-dinny-mcmahon"] img {
+  transform: translateY(-5%) scale(1.05);
+  transform-origin: center top;
+}
+
+html body.team-page-v2 .team-profile:hover .team-profile__photo img,
+html body.team-page-v2 .team-profile.is-active .team-profile__photo img,
+html body.team-page-v2 .team-profile:focus-within .team-profile__photo img {
+  filter: grayscale(0) contrast(1);
+}
+
+html body.team-page-v2 .team-profile__name {
+  margin-top: clamp(16px, 1.6vw, 22px) !important;
+  padding-top: 14px;
+  border-top: 1px solid var(--tr-border-soft);
+  font: 500 clamp(17px, 1.35vw, 21px) / 1.2 var(--tr-font) !important;
+  letter-spacing: -0.01em !important;
+  color: var(--tr-ink) !important;
+  text-align: left !important;
+  transition: color var(--tr-fast);
+}
+
+html body.team-page-v2 .team-profile:hover .team-profile__name,
+html body.team-page-v2 .team-profile:focus-within .team-profile__name {
+  color: var(--tr-cinnabar) !important;
+}
+
+html body.team-page-v2 .team-profile__role,
+html body.team-page-v2 .team-profile__secondary {
+  min-height: 2.8em;
+  margin-top: 6px !important;
+  font: 400 14px / 1.42 var(--tr-font) !important;
+  color: var(--tr-muted) !important;
+  text-align: left !important;
+}
+
+html body.team-page-v2 .team-profile__actions {
+  display: flex !important;
+  flex-wrap: wrap;
+  justify-content: flex-start !important;
+  align-items: baseline;
+  gap: 10px 18px !important;
+  min-height: 28px;
+  margin-top: 14px !important;
+}
+
+html body.team-page-v2 .team-profile__bio-toggle,
+html body.team-page-v2 .team-profile__linkedin,
+html body.team-page-v2 .team-bio-panel__close {
+  appearance: none;
+  margin: 0 !important;
+  padding: 0 0 4px !important;
+  border: 0 !important;
+  border-bottom: 1px solid transparent !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  font: 600 11px / 1.2 var(--tr-font) !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  color: var(--tr-ink) !important;
+  text-decoration: none !important;
+  cursor: pointer;
+  transition:
+    color var(--tr-fast),
+    border-color var(--tr-fast);
+}
+
+html body.team-page-v2 .team-profile__bio-toggle::after,
+html body.team-page-v2 .team-profile__linkedin::after {
+  content: none !important;
+}
+
+html body.team-page-v2 .team-profile__bio-toggle:hover,
+html body.team-page-v2 .team-profile__bio-toggle:focus-visible,
+html body.team-page-v2 .team-profile__linkedin:hover,
+html body.team-page-v2 .team-profile__linkedin:focus-visible,
+html body.team-page-v2 .team-bio-panel__close:hover,
+html body.team-page-v2 .team-bio-panel__close:focus-visible {
+  color: var(--tr-cinnabar) !important;
+  border-bottom-color: var(--tr-cinnabar) !important;
+}
+
+html body.team-page-v2 .team-profile__bio-toggle:focus-visible,
+html body.team-page-v2 .team-profile__linkedin:focus-visible,
+html body.team-page-v2 .team-bio-panel__close:focus-visible {
+  outline: 2px solid var(--tr-cinnabar) !important;
+  outline-offset: 3px !important;
+}
+
+html body.team-page-v2 .team-bio-panel {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--tr-gutter-fixed);
+  margin-top: clamp(8px, 1.8vw, 18px) !important;
+  padding: clamp(28px, 3.4vw, 46px) 0 0 !important;
+  border: 0 !important;
+  border-top: 2px solid var(--tr-cinnabar) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html body.team-page-v2 .team-bio-panel__meta {
+  grid-column: 1 / span 4;
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 0 clamp(18px, 2vw, 24px) !important;
+  border-bottom: 1px solid var(--tr-border) !important;
+}
+
+html body.team-page-v2 .team-bio-panel__meta h3 {
+  margin: 0 !important;
+  font: 500 clamp(24px, 2.4vw, 34px) / 1.12 var(--tr-font) !important;
+  letter-spacing: -0.018em !important;
+  color: var(--tr-ink) !important;
+}
+
+html body.team-page-v2 .team-bio-panel__meta p {
+  margin: 8px 0 18px !important;
+  font: 400 14px / 1.45 var(--tr-font) !important;
+  color: var(--tr-muted) !important;
+}
+
+html body.team-page-v2 .team-bio-panel__close {
+  display: inline-block !important;
+}
+
+html body.team-page-v2 .team-bio-panel__body {
+  grid-column: 5 / -1;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 0 clamp(12px, 1.8vw, 22px) !important;
+}
+
+html body.team-page-v2 .team-bio-panel__body p {
+  margin: 0 !important;
+  font: 400 clamp(15px, 1.05vw, 17px) / 1.68 var(--tr-font) !important;
+  color: var(--tr-ink-2) !important;
+}
+
+html body.team-page-v2 .team-bio-panel__body p + p {
+  margin-top: 16px !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body.team-page-v2 .team-profile__photo img,
+  html body.team-page-v2 .team-profile__name,
+  html body.team-page-v2 .team-profile__bio-toggle,
+  html body.team-page-v2 .team-profile__linkedin,
+  html body.team-page-v2 .team-bio-panel__close {
+    transition: none !important;
+  }
+}
+
+@media (max-width: 1180px) {
+  html body.team-page-v2 .group__head {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 360px) !important;
+    column-gap: clamp(24px, 4vw, 44px) !important;
+  }
+
+  html body.team-page-v2 .team-bio-panel {
+    grid-template-columns: repeat(8, minmax(0, 1fr)) !important;
+  }
+
+  html body.team-page-v2 .team-bio-panel__meta {
+    grid-column: 1 / span 3;
+  }
+
+  html body.team-page-v2 .team-bio-panel__body {
+    grid-column: 4 / -1;
+  }
+
+  html body.team-page-v2 .grid[data-team-grid],
+  html body.team-page-v2 .grid[data-team-count],
+  html body.team-page-v2 .group--leadership .grid[data-team-grid] {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 767px) {
+  html body.team-page-v2 .team-groups .team-inner {
+    padding-inline: 20px !important;
+  }
+
+  html body.team-page-v2 .group,
+  html body.team-page-v2 .group:first-child {
+    padding-block: clamp(40px, 8vw, 56px) !important;
+  }
+
+  html body.team-page-v2 .group::before {
+    width: 72px;
+  }
+
+  html body.team-page-v2 .group__head,
+  html body.team-page-v2 .team-bio-panel {
+    grid-template-columns: 1fr !important;
+  }
+
+  html body.team-page-v2 .group__head {
+    padding: clamp(28px, 8vw, 40px) clamp(24px, 7vw, 34px) !important;
+  }
+
+  html body.team-page-v2 .group__head-main,
+  html body.team-page-v2 .group__summary,
+  html body.team-page-v2 .team-bio-panel__meta,
+  html body.team-page-v2 .team-bio-panel__body {
+    grid-column: 1 / -1;
+  }
+
+  html body.team-page-v2 .group__summary {
+    justify-self: start !important;
+    max-width: none !important;
+  }
+
+  html body.team-page-v2 .sv-section-title {
+    max-width: none;
+  }
+
+  html body.team-page-v2 .grid[data-team-grid],
+  html body.team-page-v2 .grid[data-team-count],
+  html body.team-page-v2 .group--leadership .grid[data-team-grid] {
+    grid-template-columns: 1fr !important;
+    row-gap: clamp(38px, 9vw, 54px) !important;
+  }
+
+  html body.team-page-v2 .team-profile__bio-toggle,
+  html body.team-page-v2 .team-profile__linkedin {
+    padding-block: 10px !important;
+  }
+
+  html body.team-page-v2 .team-bio-panel__body {
+    padding-top: clamp(20px, 5vw, 28px) !important;
+  }
+}
+
+/* Client directive follow-up: no horizontal rules/bars may remain on Team. */
+html
+  body.team-page-v2
+  :is(
+    .eyebrow,
+    .eyebrow--red,
+    .sv-hero__eyebrow,
+    .team-hero__statcard-label,
+    .group__head .eyebrow,
+    .team-profile__bio-toggle,
+    .team-profile__linkedin
+  )::before,
+html
+  body.team-page-v2
+  :is(
+    .eyebrow,
+    .eyebrow--red,
+    .sv-hero__eyebrow,
+    .team-hero__statcard-label,
+    .group__head .eyebrow,
+    .team-profile__bio-toggle,
+    .team-profile__linkedin
+  )::after {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html
+  body.team-page-v2
+  :is(
+    .group__head,
+    .team-bio-panel,
+    .team-profile,
+    .team-profile__media,
+    .team-profile__body,
+    .team-profile__actions
+  ) {
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  background-image: none !important;
+}
+
+/* Keep the Team hero stats card/box intact while removing the unrelated
+   decorative horizontal rules from the rest of the page. */
+html body.team-page-v2 .team-hero__proof {
+  border: 0 !important;
+  background-image: linear-gradient(
+    152deg,
+    var(--tr-cinnabar-lt) 0%,
+    var(--tr-cinnabar) 52%,
+    var(--tr-oxblood) 100%
+  ) !important;
+}
+
+html body.team-page-v2 .team-hero__statcard {
+  background: #ffffff !important;
+  border: 1px solid rgba(82, 71, 54, 0.18) !important;
+  box-shadow: 0 18px 42px rgba(23, 28, 28, 0.1);
+}
+
+/* Follow-up: remove remaining horizontal cinnabar rules from Team content. */
+html body.team-page-v2 .group::before,
+html body.team-page-v2 .team-bio-panel::before,
+html body.team-page-v2 .team-bio-panel::after {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html body.team-page-v2 .team-bio-panel {
+  border-top: 0 !important;
+}
+
+/* ==========================================================================
+   Team hero homepage-alignment pass — 2026-07-09
+   Match the homepage hero's desktop height, grid alignment, proportions and
+   type rhythm so the Team opening sits like the China Private Credit masthead.
+   ========================================================================== */
+html body.team-page-v2 .team-hero.hero--team .team-inner {
+  max-width: var(--page-max, var(--tr-max)) !important;
+  padding: clamp(56px, 6vw, 88px) var(--pad-x, clamp(24px, 5vw, 48px))
+    clamp(72px, 7vw, 104px) !important;
+}
+
+html body.team-page-v2 .team-hero.hero--team .team-hero__layout {
+  display: grid !important;
+  grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+  gap: clamp(28px, 3.2vw, 44px) !important;
+  align-items: center !important;
+}
+
+html body.team-page-v2 .team-hero.hero--team .pagehero__intro {
+  grid-column: 1 / 7 !important;
+  justify-content: center !important;
+  padding-block: 0 !important;
+  padding-right: clamp(24px, 3vw, 56px) !important;
+}
+
+html body.team-page-v2 .team-hero.hero--team .team-hero__proof {
+  grid-column: 7 / 13 !important;
+  align-self: center !important;
+  aspect-ratio: 1 / 1 !important;
+  min-height: 0 !important;
+  padding: clamp(34px, 4vw, 56px) !important;
+}
+
+html body.team-page-v2 .team-hero.hero--team .eyebrow {
+  margin: 0 0 18px !important;
+  padding-top: 0 !important;
+  color: var(--tr-oxblood) !important;
+}
+
+html body.team-page-v2 .team-hero.hero--team .team-hero__title {
+  margin: 0 0 24px !important;
+  font-size: clamp(40px, 4.4vw, 60px) !important;
+  line-height: 1.06 !important;
+  max-width: 620px !important;
+}
+
+html body.team-page-v2 .team-hero.hero--team .pagehero__lede {
+  max-width: min(
+    48ch,
+    calc((var(--page-max, 1280px) - (2 * var(--pad-x, 48px))) / 2)
+  ) !important;
+  font-size: 17px !important;
+  line-height: 1.68 !important;
+}
+
+@media (max-width: 900px) {
+  html body.team-page-v2 .team-hero.hero--team .team-hero__layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  html body.team-page-v2 .team-hero.hero--team .pagehero__intro,
+  html body.team-page-v2 .team-hero.hero--team .team-hero__proof {
+    grid-column: auto !important;
+  }
+}
+
+/* 2026-07-09 · Match leadership/support copy to the sitewide editorial callout box. */
+html body.team-page-v2 .group__summary {
+  max-width: 560px !important;
+  padding: clamp(16px, 1.6vw, 22px) clamp(18px, 2vw, 26px) !important;
+  border: 1px solid rgba(183, 164, 116, 0.62) !important;
+  border-left: 4px solid var(--tr-cinnabar) !important;
+  border-radius: 0 !important;
+  background: rgba(255, 255, 255, 0.96) !important;
+  box-shadow: 0 10px 28px rgba(24, 32, 34, 0.04) !important;
+  font: 400 clamp(13px, 1vw, 15px) / 1.5 var(--tr-font) !important;
+  color: var(--tr-muted) !important;
+}
+@media (max-width: 767px) {
+  html body.team-page-v2 .group__summary {
+    max-width: none !important;
+    padding: clamp(15px, 5vw, 20px) !important;
+  }
+}
+
+/* ==========================================================================
+   COHESION PASS — 2026-07-09
+   Brings the Team directory onto the homepage's rhythm: even, disciplined
+   vertical spacing, hairline rules between sections (not oceans of dead
+   whitespace), and section headers that read like the homepage's
+   "title left / supporting line right" pattern — no floating callout box.
+   Loads LAST so it governs the body layout.
+   ========================================================================== */
+
+/* --- Even section rhythm + hairline dividers (kills the cavernous gaps) --- */
+html body.team-page-v2 .team-groups {
+  padding-block: clamp(8px, 1.2vw, 18px) clamp(56px, 6vw, 84px) !important;
+}
+html body.team-page-v2 .group,
+html body.team-page-v2 .group:first-child {
+  padding-block: clamp(34px, 3.6vw, 54px) !important;
+}
+html body.team-page-v2 .group + .group {
+  border-top: 1px solid var(--tr-border) !important;
+}
+
+/* --- Section header: title left, plain supporting line right (homepage) --- */
+html body.team-page-v2 .group__head {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 30rem) !important;
+  column-gap: clamp(32px, 5vw, 76px) !important;
+  row-gap: 12px !important;
+  align-items: end !important;
+  margin: 0 0 clamp(26px, 2.8vw, 38px) !important;
+  padding: 0 0 clamp(16px, 1.8vw, 22px) !important;
+  border-bottom: 1px solid var(--tr-border) !important;
+}
+html body.team-page-v2 .group__head-main {
+  padding-left: 0 !important;
+  border-left: 0 !important;
+}
+html body.team-page-v2 .sv-section-title {
+  font: 500 clamp(26px, 2.6vw, 36px) / 1.06 var(--tr-font) !important;
+  letter-spacing: -0.02em !important;
+}
+html body.team-page-v2 .group__summary {
+  justify-self: end !important;
+  align-self: end !important;
+  width: 100% !important;
+  max-width: 30rem !important;
+  margin: 0 !important;
+  padding: 0 0 3px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  font: 400 clamp(14px, 1.05vw, 15.5px) / 1.6 var(--tr-font) !important;
+  color: var(--tr-muted) !important;
+  text-align: right !important;
+}
+
+/* --- Portrait grid: uniform cards, tighter row rhythm, no ballooning --- */
+@media (min-width: 1181px) {
+  html body.team-page-v2 .grid[data-team-grid],
+  html body.team-page-v2 .grid[data-team-count],
+  html body.team-page-v2 .group--leadership .grid[data-team-grid] {
+    grid-template-columns: repeat(5, minmax(0, 216px)) !important;
+    justify-content: start !important;
+    gap: clamp(28px, 2.6vw, 40px) clamp(22px, 1.8vw, 30px) !important;
+  }
+
+  html body.team-page-v2 .grid[data-team-count="8"] {
+    grid-template-columns: repeat(4, minmax(0, 216px)) !important;
+  }
+}
+
+/* Tighten the card internals so name/role/actions read as one tight unit. */
+html body.team-page-v2 .team-profile__name {
+  margin-top: clamp(13px, 1.2vw, 17px) !important;
+  padding-top: 12px !important;
+  font-size: clamp(16px, 1.25vw, 19px) !important;
+}
+html body.team-page-v2 .team-profile__role,
+html body.team-page-v2 .team-profile__secondary {
+  min-height: 2.6em !important;
+  margin-top: 5px !important;
+  font-size: 13.5px !important;
+}
+html body.team-page-v2 .team-profile__actions {
+  min-height: 0 !important;
+  margin-top: 12px !important;
+}
+
+/* Small-group headers stack the supporting line under the title so partial
+   rows below never read as an empty void beside a lonely right-hand box. */
+@media (max-width: 900px) {
+  html body.team-page-v2 .group__head {
+    grid-template-columns: 1fr !important;
+    align-items: start !important;
+  }
+  html body.team-page-v2 .group__summary {
+    justify-self: start !important;
+    max-width: 46rem !important;
+  }
+}
+
+/* Client directive: remove dividers from the Team page. */
+html body.team-page-v2 .team-hero.hero--team,
+html body.team-page-v2 .group__head,
+html body.team-page-v2 .group + .group,
+html body.team-page-v2 .team-hero__proof article,
+html body.team-page-v2 .team-profile__name,
+html body.team-page-v2 .team-bio-panel,
+html body.team-page-v2 .team-bio-panel__meta {
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+}
+
+html body.team-page-v2 .team-profile__name {
+  padding-top: 0 !important;
+}
+
+/* 2026-07-11 · Align the Leadership section support copy to the right edge. */
+html body.team-page-v2 .group--leadership .group__summary {
+  text-align: right !important;
+}
+
+/* Mobile hero repair — keep the Team intro readable and prevent the stats
+   block from squeezing the paragraph into a narrow column on phones. */
+@media (max-width: 767px) {
+  html body.team-page-v2 .team-hero.hero--team {
+    overflow: hidden !important;
+  }
+
+  html body.team-page-v2 .team-hero.hero--team .team-inner {
+    width: 100% !important;
+    max-width: none !important;
+    padding: clamp(58px, 15vw, 72px) var(--tr-gutter) clamp(56px, 13vw, 72px) !important;
+  }
+
+  html body.team-page-v2 .team-hero.hero--team .team-hero__layout {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: clamp(34px, 9vw, 44px) !important;
+    align-items: stretch !important;
+  }
+
+  html body.team-page-v2 .team-hero.hero--team .pagehero__intro {
+    width: 100% !important;
+    max-width: none !important;
+    padding: 0 !important;
+  }
+
+  html body.team-page-v2 .team-hero.hero--team .team-hero__title {
+    max-width: 9.5ch !important;
+    margin-bottom: clamp(24px, 7vw, 32px) !important;
+    font-size: clamp(36px, 10.6vw, 43px) !important;
+    line-height: 1.04 !important;
+  }
+
+  html body.team-page-v2 .team-hero.hero--team .pagehero__lede {
+    width: 100% !important;
+    max-width: none !important;
+    font-size: 15.5px !important;
+    line-height: 1.56 !important;
+    overflow-wrap: normal !important;
+    word-break: normal !important;
+    hyphens: manual !important;
+  }
+
+  html body.team-page-v2 .team-hero.hero--team .team-hero__proof {
+    width: calc(100% + (var(--tr-gutter) * 2)) !important;
+    margin: clamp(12px, 3vw, 18px) calc(var(--tr-gutter) * -1) 0 !important;
+    padding: clamp(42px, 11vw, 54px) var(--tr-gutter) !important;
+    aspect-ratio: auto !important;
+  }
+
+  html body.team-page-v2 .team-hero.hero--team .team-hero__proof::after {
+    content: none !important;
+  }
+
+  html body.team-page-v2 .team-hero.hero--team .team-hero__statcard {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: clamp(26px, 7vw, 34px) !important;
+  }
+}
+
+/* 2026-07-11 · Mobile parity/performance pass.
+   Keep Team on the same narrow-screen rhythm as the homepage: identical
+   gutters, calmer hero type, contained lede width, and cache-friendly layout. */
+html body.team-page-v2 .group {
+  content-visibility: visible;
+}
+
+@media (max-width: 767px) {
+  html body.team-page-v2 {
+    --pad-x: clamp(18px, 5.625vw, 22px);
+    --tr-gutter: var(--pad-x);
+  }
+
+  html body.team-page-v2 .team-hero .team-inner,
+  html body.team-page-v2 .team-groups .team-inner {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-inline: var(--pad-x) !important;
+  }
+
+  html body.team-page-v2 .team-hero .team-inner {
+    padding-top: clamp(42px, 11vw, 56px) !important;
+    padding-bottom: 0 !important;
+  }
+
+  html body.team-page-v2 .team-hero .sv-hero__eyebrow,
+  html body.team-page-v2 .team-hero .eyebrow {
+    margin-bottom: 18px !important;
+    padding-top: 0 !important;
+    letter-spacing: 0.105em !important;
+  }
+
+  html body.team-page-v2 .team-hero .team-hero__title,
+  html body.team-page-v2 .team-hero h1 {
+    max-width: 13.8ch !important;
+    font-size: clamp(34px, 10.6vw, 43px) !important;
+    line-height: 1.07 !important;
+    letter-spacing: -0.026em !important;
+  }
+
+  html body.team-page-v2 .team-hero .pagehero__lede,
+  html body.team-page-v2 .team-hero .sv-hero__body {
+    max-width: 31ch !important;
+    font-size: clamp(15.5px, 4.15vw, 17px) !important;
+    line-height: 1.62 !important;
+  }
+
+  html body.team-page-v2 .team-hero__proof {
+    margin: clamp(40px, 10vw, 52px) calc(var(--pad-x) * -1) 0 !important;
+    width: auto !important;
+    padding: 32px var(--pad-x) !important;
+  }
+
+  html body.team-page-v2 .team-hero__statcard {
+    max-width: none !important;
+    padding: 24px 20px !important;
+  }
+
+  html body.team-page-v2 .team-groups {
+    padding-top: clamp(48px, 12vw, 64px) !important;
+  }
+}
+
+/* 2026-07-11 · Hero cards/boxes: keep the team proof card visibly elevated. */
+html body.team-page-v2 .team-hero__statcard {
+  box-shadow: 0 18px 42px rgba(23, 28, 28, 0.14) !important;
+}
+
+/* 2026-07-13 · Team grid: four equal desktop columns with centered short rows. */
+html body.team-page-v2 .grid[data-team-grid] {
+  --team-grid-gap: 28px;
+  --team-grid-columns: 4;
+  --team-grid-width: 100%;
+  display: grid !important;
+  width: var(--team-grid-width) !important;
+  max-width: 100% !important;
+  margin-inline: auto !important;
+  grid-template-columns: repeat(var(--team-grid-columns), minmax(0, 1fr)) !important;
+  gap: clamp(28px, 2.6vw, 40px) var(--team-grid-gap) !important;
+  justify-content: center !important;
+  align-items: start !important;
+}
+
+html body.team-page-v2 .grid[data-team-count="2"] {
+  --team-grid-columns: 2;
+  --team-grid-width: calc(50% - (var(--team-grid-gap) / 2));
+}
+
+html body.team-page-v2 .grid[data-team-count="3"] {
+  --team-grid-columns: 3;
+  --team-grid-width: calc(75% - (var(--team-grid-gap) / 4));
+}
+
+html body.team-page-v2 .grid[data-team-count="4"],
+html body.team-page-v2 .grid[data-team-count="8"],
+html body.team-page-v2 .group--leadership .grid[data-team-grid] {
+  --team-grid-columns: 4;
+  --team-grid-width: 100%;
+}
+
+html body.team-page-v2 .team-profile {
+  min-width: 0 !important;
+  width: 100% !important;
+}
+
+html body.team-page-v2 .team-profile__photo {
+  width: 100% !important;
+  aspect-ratio: 1 / 1 !important;
+}
+
+html body.team-page-v2 .team-profile__photo img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+html body.team-page-v2 .team-bio-panel {
+  grid-column: 1 / -1 !important;
+}
+
+@media (max-width: 900px) {
+  html body.team-page-v2 .grid[data-team-grid],
+  html body.team-page-v2 .grid[data-team-count],
+  html body.team-page-v2 .group--leadership .grid[data-team-grid] {
+    --team-grid-columns: 2;
+    --team-grid-width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 560px) {
+  html body.team-page-v2 .grid[data-team-grid],
+  html body.team-page-v2 .grid[data-team-count],
+  html body.team-page-v2 .group--leadership .grid[data-team-grid] {
+    --team-grid-columns: 1;
+    --team-grid-width: 100%;
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
+
+/* 2026-07-13 · Team alignment: reuse the shared chrome/header container.
+   Keep every Team section on the same left/right rails as .sv-header__inner
+   instead of letting the grids expand toward the viewport edges. */
+html body.team-page-v2 .team-groups .team-inner {
+  width: 100% !important;
+  max-width: var(--sv-chrome-page-max, var(--page-max, 1280px)) !important;
+  margin-inline: auto !important;
+  padding-inline: var(--sv-chrome-pad-x, var(--pad-x, clamp(24px, 5vw, 48px))) !important;
+  box-sizing: border-box !important;
+}
+
+html body.team-page-v2 .group__head,
+html body.team-page-v2 .grid[data-team-grid],
+html body.team-page-v2 .grid[data-team-count],
+html body.team-page-v2 .group--leadership .grid[data-team-grid] {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+html body.team-page-v2 .grid[data-team-grid],
+html body.team-page-v2 .grid[data-team-count],
+html body.team-page-v2 .group--leadership .grid[data-team-grid] {
+  --team-grid-columns: 4;
+  --team-grid-width: 100%;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  column-gap: var(--team-grid-gap, 28px) !important;
+  justify-content: stretch !important;
+  margin-inline: 0 !important;
+}
+
+html body.team-page-v2 .team-profile,
+html body.team-page-v2 .team-profile__photo,
+html body.team-page-v2 .team-profile__photo img {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* Neutralize older mobile full-bleed/negative-margin hero proof rules so the
+   Team page never creates horizontal scroll or viewport-edge alignment. */
+@media (max-width: 767px) {
+  html body.team-page-v2 .team-hero .team-inner,
+  html body.team-page-v2 .team-groups .team-inner {
+    width: 100% !important;
+    max-width: var(--sv-chrome-page-max, var(--page-max, 100%)) !important;
+    padding-inline: var(--sv-chrome-pad-x-mobile, var(--pad-x, clamp(18px, 5.625vw, 22px))) !important;
+    box-sizing: border-box !important;
+  }
+
+  html body.team-page-v2 .team-hero__proof,
+  html body.team-page-v2 .team-hero.hero--team .team-hero__proof {
+    width: 100% !important;
+    margin-inline: 0 !important;
+    padding-inline: var(--sv-chrome-pad-x-mobile, var(--pad-x, clamp(18px, 5.625vw, 22px))) !important;
+  }
+}
+
+@media (max-width: 900px) {
+  html body.team-page-v2 .grid[data-team-grid],
+  html body.team-page-v2 .grid[data-team-count],
+  html body.team-page-v2 .group--leadership .grid[data-team-grid] {
+    --team-grid-columns: 2;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 560px) {
+  html body.team-page-v2 .grid[data-team-grid],
+  html body.team-page-v2 .grid[data-team-count],
+  html body.team-page-v2 .group--leadership .grid[data-team-grid] {
+    --team-grid-columns: 1;
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
+
+
+/* Zoom John Jones' portrait in slightly for tighter framing. */
+html body.team-page-v2 .team-profile__photo img.team-profile__img--john-zoom {
+  transform: scale(1.1);
+  transform-origin: center top;
 }

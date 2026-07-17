@@ -6,7 +6,7 @@
      preflight()   → Promise<{ name, ok, detail }>   (connection health)
      …operations   → Promise-based, fail-closed
 
-   PRODUCTION BEHAVIOUR
+   PRODUCTION BEHAVIOR
    - Microsoft Entra ID (MSAL.js, PKCE) is the only authentication path.
    - All processing runs through Power Automate HTTP flows; the browser
      never holds Salesforce/SharePoint/Dataverse credentials.
@@ -16,7 +16,7 @@
      (did the original action succeed?) before any retry on the backup
      connection, using the execution key.
 
-   DEMO BEHAVIOUR
+   DEMO BEHAVIOR
    - mode "demo" answers preflights locally, uses the synthetic store, and
      performs NO network calls. Every demo response is labelled as such.
    ========================================================================== */

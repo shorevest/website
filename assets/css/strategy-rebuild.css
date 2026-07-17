@@ -48,7 +48,7 @@ body.strategy-page .sv-bridge__body p {
 body.strategy-page .sv-bridge__body p:last-child { border-bottom: 0; }
 body.strategy-page .sv-bridge__body p::before {
   content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 0;
-  background: var(--sv-cinnabar); transition: width .15s ease;
+  background: var(--sv-qing, #3D7070); transition: width .15s ease; /* secondary hover: 青, not cinnabar */
 }
 body.strategy-page .sv-bridge__body p:hover { padding-left: 22px; }
 body.strategy-page .sv-bridge__body p:hover::before { width: 3px; }
@@ -100,17 +100,17 @@ body.strategy-page .sx-glance {
 body.strategy-page .sx-glance::before {
   content: ""; position: absolute; z-index: -1; top: 0; bottom: 0;
   left: 50%; transform: translateX(-50%); width: 100vw;
-  background: var(--sv-cinnabar); border-top: none;
+  background: #F3C9C3; border-top: none;
 }
-body.strategy-page .sx-glance > div { padding: 0 32px; border-left: 1px solid rgba(252,249,241,0.28); min-width: 0; }
-body.strategy-page .sx-glance > div:first-child { border-left: 0; padding-left: 0; }
+body.strategy-page .sx-glance > div { padding: 0 32px; border-left: 1px solid rgba(24,37,36,0.18); min-width: 0; text-align: center; }
+body.strategy-page .sx-glance > div:first-child { border-left: 0; }
 body.strategy-page .sx-glance dt {
-  margin: 0 0 14px; font: 600 11px/1.2 var(--sv-font); letter-spacing: 0.15em; text-transform: uppercase; color: rgba(252,249,241,0.82);
+  margin: 0 0 14px; font: 600 11px/1.2 var(--sv-font); letter-spacing: 0.15em; text-transform: uppercase; color: rgba(24,37,36,0.72);
 }
-body.strategy-page .sx-glance dd { margin: 0; font: 400 16.5px/1.5 var(--sv-font); color: var(--sv-ivory); }
+body.strategy-page .sx-glance dd { margin: 0; font: 400 16.5px/1.5 var(--sv-font); color: var(--sv-ink); }
 @media (max-width: 880px) {
   body.strategy-page .sx-glance { grid-template-columns: 1fr; gap: 0; }
-  body.strategy-page .sx-glance > div { padding: 20px 0; border-left: 0; border-top: 1px solid rgba(252,249,241,0.28); }
+  body.strategy-page .sx-glance > div { padding: 20px 0; border-left: 0; border-top: 1px solid rgba(24,37,36,0.18); }
   body.strategy-page .sx-glance > div:first-child { border-top: 0; padding-top: 0; }
 }
 
@@ -119,12 +119,12 @@ body.strategy-page .st-oppfacts {
   display: grid; grid-template-columns: repeat(4, 1fr);
   border-top: 1px solid var(--sv-border-light-strong); margin: clamp(34px, 4vw, 52px) 0 0;
 }
-body.strategy-page .st-oppfact { padding: 22px 24px 0; border-left: 1px solid var(--sv-border-light); }
-body.strategy-page .st-oppfact:first-child { border-left: 0; padding-left: 0; }
+body.strategy-page .st-oppfact { padding: 22px 24px 0; border-left: 1px solid var(--sv-border-light); text-align: center; }
+body.strategy-page .st-oppfact:first-child { border-left: 0; }
 body.strategy-page .st-oppfact__num {
   display: block; font: 500 clamp(26px, 2.6vw, 34px)/1 var(--sv-font); letter-spacing: -0.02em; color: var(--sv-oxide);
 }
-body.strategy-page .st-oppfact__label { display: block; margin-top: 10px; font: 400 13.5px/1.45 var(--sv-font); color: var(--sv-ink-2); max-width: 22ch; }
+body.strategy-page .st-oppfact__label { display: block; margin: 10px auto 0; font: 400 13.5px/1.45 var(--sv-font); color: var(--sv-ink-2); max-width: 22ch; }
 body.strategy-page .st-oppfacts__note { grid-column: 1 / -1; margin: 22px 0 0; font: 400 12px/1.5 var(--sv-font); color: var(--sv-muted, #6E7169); }
 @media (max-width: 880px) {
   body.strategy-page .st-oppfacts { grid-template-columns: 1fr 1fr; }
@@ -179,11 +179,13 @@ body.strategy-page .st-thresholds__label {
   font: 600 11px/1.3 var(--sv-font); letter-spacing: 0.15em; text-transform: uppercase; color: var(--sv-ink);
   padding-top: 0; border-top: 0;
 }
-/* Flat ruled cells: shared cinnabar top rule + thin column dividers. */
+/* Flat ruled cells: shared 青 top rule + thin column dividers. The page's
+   glance ledger, sleeve hovers and risk panel already carry cinnabar, so the
+   underwriting thresholds take the secondary accent. */
 body.strategy-page .st-threshold {
   padding: 24px 32px 0;
   background: transparent; box-shadow: none;
-  border-top: 2px solid var(--sv-cinnabar);
+  border-top: 2px solid var(--sv-qing, #3D7070);
   border-left: 1px solid var(--sv-border-light);
 }
 body.strategy-page .st-threshold:first-of-type { border-left: 0; padding-left: 0; }
@@ -195,8 +197,10 @@ body.strategy-page .st-threshold__l {
   display: block; font: 400 14.5px/1.5 var(--sv-font); color: var(--sv-ink-2);
 }
 body.strategy-page .st-thresholds__note {
-  grid-column: 1 / -1; margin: 26px 0 0;
-  font: 400 12px/1.5 var(--sv-font); color: var(--sv-muted, #6E7169);
+  grid-column: 1 / -1; margin: 26px auto 0;
+  max-width: 56rem;
+  text-align: center;
+  font: 500 15px/1.55 var(--sv-font); color: var(--sv-ink-2);
 }
 
 /* Three sleeves — homepage-standard animated strategy rows */
@@ -288,8 +292,8 @@ body.strategy-page .st-sleeve__tag {
 }
 @media (max-width: 880px) {
   body.strategy-page .st-thresholds { grid-template-columns: 1fr; }
-  body.strategy-page .st-threshold { padding: 22px 0 0; border-left: 0; border-top: 2px solid var(--sv-cinnabar); }
-  body.strategy-page .st-threshold:first-of-type { border-top: 2px solid var(--sv-cinnabar); }
+  body.strategy-page .st-threshold { padding: 22px 0 0; border-left: 0; border-top: 2px solid var(--sv-qing, #3D7070); }
+  body.strategy-page .st-threshold:first-of-type { border-top: 2px solid var(--sv-qing, #3D7070); }
   body.strategy-page .st-sleeve { grid-template-columns: 1fr; gap: 12px; padding: 26px 0; }
 }
 
@@ -315,10 +319,10 @@ body.strategy-page .st-risk__col li {
 }
 body.strategy-page .st-risk__col li:last-child { margin-bottom: 0; }
 body.strategy-page .st-risk__col li::before {
-  content: ""; position: absolute; left: 0; top: 10px; width: 8px; height: 1.5px; background: var(--sv-cinnabar);
+  content: ""; position: absolute; left: 0; top: 0.62em; width: 8px; height: 8px; background: var(--sv-cinnabar);
 }
 body.strategy-page .st-risk__panel {
-  background: linear-gradient(152deg, #CF3A2B 0%, #C93B2A 52%, #8F2A20 100%); color: var(--sv-ivory);
+  background: linear-gradient(152deg, #D65A4D 0%, #C93B2A 58%, #B73528 100%); color: var(--sv-ivory);
   padding: 36px; display: flex; flex-direction: column; justify-content: center;
 }
 body.strategy-page .st-risk__panel-label {
@@ -351,3 +355,1363 @@ body.strategy-page .st-disc__label {
 body.strategy-page .st-disc__note {
   margin: 0; max-width: none; font: 400 13px/1.62 var(--sv-font); color: var(--sv-muted, #6E7169);
 }
+
+
+/* ==========================================================================
+   2026-07-08 clarity pass — cleaner section rhythm, aligned cells and panels
+   ========================================================================== */
+body.strategy-page .st-section {
+  padding-block: clamp(72px, 8vw, 112px);
+}
+body.strategy-page .st-head {
+  align-items: start;
+  margin-bottom: clamp(36px, 4.5vw, 64px);
+}
+body.strategy-page .st-head__l {
+  grid-column: 1 / 7;
+  max-width: 660px;
+}
+body.strategy-page .st-head__r {
+  grid-column: 8 / 13;
+  align-self: start;
+  padding-top: 6px;
+}
+body.strategy-page .st-head__r p {
+  max-width: 42rem;
+}
+body.strategy-page .st-reasons,
+body.strategy-page .st-thresholds,
+body.strategy-page .st-sleeves,
+body.strategy-page .st-risk {
+  clear: both;
+}
+body.strategy-page .st-reasons__kicker {
+  margin-top: clamp(34px, 4vw, 54px);
+  padding-top: clamp(20px, 2vw, 28px);
+  border-top: 1px solid var(--sv-border-light-strong);
+}
+body.strategy-page .st-reasons {
+  gap: clamp(18px, 2vw, 28px);
+  border-top: 0;
+  margin-top: 18px;
+}
+body.strategy-page .st-reason {
+  min-height: 100%;
+  padding: clamp(24px, 2.8vw, 34px);
+  border: 1px solid var(--sv-border-light);
+  border-top: 3px solid var(--sv-qing, #3D7070);
+  background: rgba(252, 249, 241, 0.56);
+}
+body.strategy-page .st-reason:first-child,
+body.strategy-page .st-reason:last-child {
+  padding-inline: clamp(24px, 2.8vw, 34px);
+}
+body.strategy-page .st-reason__body {
+  max-width: 31rem;
+}
+body.strategy-page .st-thresholds {
+  padding: clamp(28px, 3.3vw, 44px);
+  border: 1px solid var(--sv-border-light);
+  border-top: 3px solid var(--sv-qing, #3D7070);
+  background: rgba(252, 249, 241, 0.62);
+  margin-bottom: clamp(34px, 4vw, 56px);
+}
+body.strategy-page .st-thresholds__label {
+  margin-bottom: clamp(20px, 2.2vw, 30px);
+}
+body.strategy-page .st-threshold {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 100%;
+  padding: 0 clamp(22px, 2.4vw, 34px);
+  border-top: 0;
+  border-left: 1px solid var(--sv-border-light-strong);
+}
+body.strategy-page .st-threshold:first-of-type {
+  padding-left: 0;
+}
+body.strategy-page .st-threshold__v,
+body.strategy-page .st-threshold__l {
+  margin: 0;
+}
+body.strategy-page .st-thresholds__note {
+  margin-top: clamp(22px, 2.6vw, 34px);
+  padding-top: 18px;
+  border-top: 1px solid var(--sv-border-light);
+}
+body.strategy-page .st-sleeves {
+  border-top-width: 3px;
+}
+body.strategy-page .st-sleeve {
+  grid-template-columns: minmax(220px, 3.2fr) minmax(0, 8.8fr);
+  align-items: start;
+  padding-inline: clamp(24px, 3vw, 42px);
+}
+body.strategy-page .st-sleeve__body {
+  max-width: 64rem;
+}
+body.strategy-page .sv-exec {
+  padding-block: clamp(72px, 8vw, 112px);
+}
+body.strategy-page .sv-flow {
+  align-items: stretch;
+}
+body.strategy-page .sv-flow__step {
+  height: 100%;
+}
+body.strategy-page .st-risk {
+  grid-template-columns: minmax(0, 2.15fr) minmax(300px, 0.85fr);
+  border: 0;
+  gap: 0;
+  margin-top: 0;
+  background: var(--sv-ivory);
+  box-shadow: inset 0 0 0 1px var(--sv-border-light);
+}
+body.strategy-page .st-risk__cols {
+  min-width: 0;
+}
+body.strategy-page .st-risk__col {
+  padding: clamp(30px, 3.2vw, 46px);
+}
+body.strategy-page .st-risk__col h3 {
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--sv-border-light-strong);
+}
+body.strategy-page .st-risk__panel {
+  min-height: 100%;
+  padding: clamp(34px, 3.6vw, 52px);
+  justify-content: flex-start;
+}
+body.strategy-page .st-risk__panel-body + .st-risk__panel-body {
+  margin-top: 14px;
+}
+@media (max-width: 900px) {
+  body.strategy-page .st-head__l,
+  body.strategy-page .st-head__r {
+    grid-column: 1 / 13;
+  }
+  body.strategy-page .st-head__r {
+    padding-top: 0;
+  }
+  body.strategy-page .st-risk {
+    grid-template-columns: 1fr;
+    box-shadow: none;
+    border: 1px solid var(--sv-border-light);
+  }
+  body.strategy-page .st-risk__cols {
+    grid-template-columns: 1fr;
+  }
+  body.strategy-page .st-risk__panel {
+    min-height: 0;
+  }
+}
+@media (max-width: 880px) {
+  body.strategy-page .st-reasons {
+    gap: 14px;
+  }
+  body.strategy-page .st-reason,
+  body.strategy-page .st-reason:first-child,
+  body.strategy-page .st-reason:last-child {
+    padding: 24px;
+    border: 1px solid var(--sv-border-light);
+    border-top: 3px solid var(--sv-qing, #3D7070);
+  }
+  body.strategy-page .st-thresholds {
+    padding: 24px;
+  }
+  body.strategy-page .st-threshold {
+    padding: 20px 0 0;
+    border-left: 0;
+    border-top: 1px solid var(--sv-border-light-strong);
+  }
+  body.strategy-page .st-threshold:first-of-type {
+    padding-top: 0;
+    border-top: 0;
+  }
+  body.strategy-page .st-sleeve {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding-inline: 0;
+  }
+}
+
+/* ==========================================================================
+   2026-07-08 · Strategy layout differentiation pass
+   Pulls forward Media/Insights techniques (asymmetric blocking, inset ledgers,
+   stronger spacing rhythm) without copying their silhouettes.
+   ========================================================================== */
+body.strategy-page #opportunity { padding-top: clamp(82px, 8vw, 122px); }
+body.strategy-page #opportunity .st-head {
+  align-items: stretch;
+  margin-bottom: clamp(42px, 4.6vw, 66px);
+}
+body.strategy-page #opportunity .st-head__l {
+  grid-column: 1 / 7;
+  padding: clamp(30px, 3vw, 46px) clamp(30px, 3vw, 48px);
+  background: var(--sv-stone);
+  border-top: 3px solid var(--sv-cinnabar);
+}
+body.strategy-page #opportunity .st-head__r {
+  grid-column: 8 / 13;
+  align-self: center;
+  border-left: 2px solid var(--sv-qing, #3D7070);
+  padding-left: clamp(24px, 2.6vw, 40px);
+}
+body.strategy-page .st-reasons {
+  border-top: 0;
+  background: #fff;
+  border-left: 3px solid var(--sv-cinnabar);
+  box-shadow: 0 14px 34px rgba(23, 28, 28, 0.07);
+  padding: clamp(20px, 2vw, 28px) clamp(8px, 1vw, 16px);
+}
+body.strategy-page .st-reason { padding-bottom: 4px; }
+body.strategy-page #sub-strategies .st-head {
+  padding-bottom: clamp(28px, 3vw, 44px);
+  border-bottom: 1px solid var(--sv-border-light-strong);
+}
+body.strategy-page .st-thresholds {
+  position: relative;
+  background: var(--sv-ivory);
+  padding: clamp(28px, 3vw, 42px);
+  border: 1px solid var(--sv-border-light-strong);
+  border-top: 0;
+}
+body.strategy-page .st-thresholds::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: clamp(28px, 3vw, 42px);
+  right: clamp(28px, 3vw, 42px);
+  height: 3px;
+  background: var(--sv-qing, #3D7070);
+}
+@media (max-width: 900px) {
+  body.strategy-page #opportunity .st-head__l,
+  body.strategy-page #opportunity .st-head__r { grid-column: 1 / 13; }
+  body.strategy-page #opportunity .st-head__r { border-left: 0; padding-left: 0; }
+}
+
+/* ==========================================================================
+   Strategy hero — editorial composition (2026-07-08)
+   A single clean portrait photograph on the right (no layered blocks) with the
+   lead copy on the left; the cinnabar glance ledger below is unchanged.
+   ========================================================================== */
+body.strategy-page .sx-hero { padding-block: 0; }
+body.strategy-page .sx-hero__top {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: clamp(28px, 3.2vw, 44px);
+  align-items: center;
+  padding-block: clamp(56px, 6vw, 88px) 0;
+}
+body.strategy-page .sx-hero__lead {
+  grid-column: 1 / 7; min-width: 0;
+  padding-right: clamp(24px, 3vw, 56px);
+}
+body.strategy-page .sx-hero__media { grid-column: 7 / 13; }
+/* Text metrics mirror the homepage hero exactly */
+body.strategy-page .sx-hero__eyebrow {
+  margin: 0 0 18px;
+  font: 600 12px/1.4 var(--sv-font);
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--sv-oxide);
+}
+body.strategy-page .sx-hero__title {
+  margin: 0;
+  font: 500 clamp(40px, 4.4vw, 60px)/1.06 var(--sv-font);
+  letter-spacing: -0.03em; color: var(--sv-ink);
+  max-width: 620px;
+}
+body.strategy-page .sx-hero__body {
+  display: block;
+  margin-top: 24px;
+  max-width: min(48ch, calc((var(--page-max) - (2 * var(--pad-x))) / 2));
+  border-left: 0; padding-left: 0;
+}
+body.strategy-page .sx-hero__body p { font: 400 17px/1.68 var(--sv-font); color: var(--sv-ink-2); }
+body.strategy-page .sx-hero__body p + p { margin-top: 16px; }
+body.strategy-page .sx-hero__media {
+  position: relative;
+  min-width: 0;
+  padding: 0;
+  align-self: center;
+}
+body.strategy-page .sx-hero__media::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: clamp(44px, 4.5vw, 68px);
+  right: clamp(-36px, -2.2vw, -20px);
+  bottom: -26px;
+  left: clamp(36px, 3.5vw, 56px);
+  background: #F3C9C3;
+  border-radius: 0;
+  z-index: 0;
+}
+body.strategy-page .sx-hero__panel {
+  position: relative; z-index: 1;
+  margin: 0; width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  filter: grayscale(1);
+  transition: filter 280ms ease;
+  background:
+    linear-gradient(180deg, rgba(24,37,36,0.08), rgba(24,37,36,0.18)),
+    url("../../pexels-enginakyurt-10648591.jpg") center / cover no-repeat,
+    linear-gradient(135deg, #F6E1DD 0%, #F3C9C3 58%, #E8B6AF 100%);
+}
+body.strategy-page .sx-hero__media:hover .sx-hero__panel {
+  filter: grayscale(0);
+}
+body.strategy-page .sx-hero__panel::before {
+  content: ""; position: absolute; inset: 0;
+  border: 1px solid rgba(24,37,36,0.14);
+  pointer-events: none;
+}
+body.strategy-page .sx-hero__panel::after {
+  content: none;
+}
+@media (max-width: 880px) {
+  body.strategy-page .sx-hero__top { grid-template-columns: 1fr; gap: 36px; }
+  body.strategy-page .sx-hero__lead { grid-column: auto; padding-right: 0; width: 100%; }
+  body.strategy-page .sx-hero__body { margin-top: 22px; max-width: none; width: 100%; }
+  body.strategy-page .sx-hero__media { grid-column: auto; padding: 0; max-width: 560px; }
+  body.strategy-page .sx-hero__media::before { top: 40px; right: calc(var(--pad-x) * -1); bottom: -22px; left: 28px; }
+  body.strategy-page .sx-hero__panel { aspect-ratio: 1 / 1; }
+}
+
+/* ==========================================================================
+   2026-07-08 · Tidy pass — calm the Opportunity section
+   The earlier differentiation pass over-decorated this section: a stone box
+   with a cinnabar top rule around the heading, a qing side-border on the copy,
+   and a reasons panel carrying a cinnabar left bar (poking past its corners),
+   a drop shadow AND qing card-tops. Too many competing accents in one screen.
+   Bring it back in line with the restrained grammar used elsewhere: a plain
+   section head and flat, evenly spaced cards with a single structural rule.
+   Last-in-file so these win the cascade cleanly.
+   ========================================================================== */
+body.strategy-page #opportunity .st-head { align-items: start; }
+body.strategy-page #opportunity .st-head__l {
+  padding: 0;
+  background: none;
+  border-top: 0;
+}
+body.strategy-page #opportunity .st-head__r {
+  align-self: start;
+  border-left: 0;
+  padding-left: 0;
+  padding-top: 6px;
+}
+body.strategy-page .st-reasons {
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(18px, 2vw, 28px);
+  margin-top: 20px;
+  padding: 0;
+  background: none;
+  border: 0;
+  box-shadow: none;
+}
+body.strategy-page .st-reason,
+body.strategy-page .st-reason:first-child,
+body.strategy-page .st-reason:last-child {
+  padding: clamp(24px, 2.6vw, 32px);
+  border: 1px solid var(--sv-border-light);
+  border-top: 2px solid var(--sv-qing, #3D7070);
+  background: #fff;
+}
+@media (max-width: 880px) {
+  body.strategy-page .st-reasons { grid-template-columns: 1fr; gap: 14px; }
+}
+
+
+/* 2026-07-11 · Mobile breathing room for ruled Opportunity content.
+   Keep labels and body copy from sitting too close to divider lines on narrow screens. */
+@media (max-width: 880px) {
+  body.strategy-page .st-oppfact {
+    padding: 24px 24px 22px;
+  }
+  body.strategy-page .st-oppfact:nth-child(odd) {
+    padding-left: 0;
+    padding-right: 24px;
+  }
+  body.strategy-page .st-oppfact:nth-child(even) {
+    padding-left: 24px;
+    padding-right: 0;
+  }
+  body.strategy-page .st-oppfact__label {
+    margin-top: 14px;
+    line-height: 1.6;
+  }
+  body.strategy-page .st-reason,
+  body.strategy-page .st-reason:first-child,
+  body.strategy-page .st-reason:last-child {
+    padding: 30px 28px 32px;
+  }
+  body.strategy-page .st-reason__body {
+    line-height: 1.72;
+  }
+}
+
+/* Client directive: no decorative horizontal rules/bars. */
+:where(hr, [role="separator"], [class*="__rule"], [class*="-rule"], [class*="__divider"], [class*="-divider"], [class*="topline"], [class*="separator"]):not(svg):not(path):not(img) {
+  display: none !important;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  background-image: none !important;
+}
+:where([class*="eyebrow"], [class*="kicker"], [class*="label"])::before,
+:where([class*="eyebrow"], [class*="kicker"], [class*="label"])::after {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+/* ==========================================================================
+   2026-07-08 · Origination panel polish
+   Turn the loose execution copy into a balanced editorial card with equal
+   thirds below, mirroring the boxed presentation requested by the client.
+   ========================================================================== */
+body.strategy-page .sv-exec {
+  background: var(--sv-ivory);
+}
+body.strategy-page .sv-exec__inner {
+  position: relative;
+  padding: clamp(42px, 4.6vw, 68px) clamp(38px, 5vw, 96px);
+  background: #fff;
+  border-left: 5px solid var(--sv-cinnabar);
+  box-shadow: 0 20px 48px rgba(23, 28, 28, 0.08);
+}
+body.strategy-page .sv-exec__head {
+  align-items: start;
+  margin-bottom: clamp(28px, 3.2vw, 44px);
+  padding-bottom: clamp(28px, 3vw, 40px);
+  border-bottom: 1px solid var(--sv-border-light-strong);
+}
+body.strategy-page .sv-exec__head-l {
+  grid-column: 1 / 7;
+}
+body.strategy-page .sv-exec__head-r {
+  grid-column: 8 / 13;
+  align-self: start;
+  padding-top: clamp(34px, 4vw, 56px);
+}
+body.strategy-page .sv-exec__intro {
+  max-width: 48ch;
+  font-size: clamp(17px, 1.35vw, 20px);
+  line-height: 1.62;
+}
+body.strategy-page .sv-flow {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(18px, 2vw, 28px);
+  padding: 0;
+  border-top: 0;
+}
+body.strategy-page .sv-flow__step {
+  display: flex;
+  flex-direction: column;
+  min-height: clamp(210px, 18vw, 260px);
+  padding: clamp(24px, 2.4vw, 34px);
+  background: var(--sv-ivory);
+  border: 1px solid var(--sv-border-light);
+  border-top: 3px solid var(--sv-qing, #3D7070);
+}
+body.strategy-page .sv-flow__title {
+  max-width: 12ch;
+  margin-bottom: clamp(16px, 1.8vw, 24px);
+  font-size: clamp(22px, 1.9vw, 28px);
+  line-height: 1.08;
+}
+body.strategy-page .sv-flow__body {
+  max-width: 30ch;
+  color: var(--sv-ink-2);
+}
+@media (max-width: 900px) {
+  body.strategy-page .sv-exec__inner {
+    padding: clamp(30px, 7vw, 44px) clamp(24px, 6vw, 34px);
+  }
+  body.strategy-page .sv-exec__head-l,
+  body.strategy-page .sv-exec__head-r {
+    grid-column: 1 / 13;
+  }
+  body.strategy-page .sv-exec__head-r {
+    padding-top: 0;
+  }
+  body.strategy-page .sv-flow {
+    grid-template-columns: 1fr;
+  }
+  body.strategy-page .sv-flow__step {
+    min-height: 0;
+  }
+  body.strategy-page .sv-flow__title,
+  body.strategy-page .sv-flow__body {
+    max-width: none;
+  }
+}
+
+/* ==========================================================================
+   2026-07-09 · Clarity & polish pass
+   Three focused refinements for a cleaner, easier-to-follow read:
+   (1) number the three strategies so the "three strategies" set is scannable,
+   (2) tighten the loose vertical gap under the sub-strategies heading, and
+   (3) make the risk block read as one crisp, contained unit with a
+       full-height downside panel.
+   Last-in-file so these resolve the cascade cleanly.
+   ========================================================================== */
+
+/* (1) Numbered strategy rows — the left cell now stacks an accent index above
+   the title. The index anchors while the title slides on hover, giving the
+   rows a quiet editorial rhythm without adding new decorative rules. */
+body.strategy-page .st-sleeve__lead {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 1.2vw, 18px);
+  align-self: start;
+}
+body.strategy-page .st-sleeve__no {
+  font: 500 14px/1 var(--sv-font);
+  letter-spacing: 0.18em;
+  font-variant-numeric: tabular-nums;
+  color: var(--sv-cinnabar);
+}
+body.strategy-page .st-sleeve__lead .st-sleeve__title {
+  margin: 0;
+}
+
+/* (2) Sub-strategies — remove the floating rule under the heading and pull the
+   underwriting panel up so the section reads as one continuous thought. */
+body.strategy-page #sub-strategies .st-head {
+  padding-bottom: 0;
+  border-bottom: 0;
+  margin-bottom: clamp(30px, 3.4vw, 46px);
+}
+
+/* (3) Risk block — a single crisp frame with a full-height downside panel. */
+body.strategy-page .st-risk {
+  box-shadow: inset 0 0 0 1px var(--sv-border-light-strong);
+}
+body.strategy-page .st-risk__panel {
+  align-self: stretch;
+  min-height: 100%;
+  justify-content: flex-start;
+}
+@media (max-width: 900px) {
+  body.strategy-page .st-risk__panel {
+    align-self: auto;
+  }
+}
+
+
+/* 2026-07-09 · Editorial callout boxes for section-support copy. */
+body.strategy-page .st-head__r,
+body.strategy-page .sv-exec__head-r {
+  background: rgba(252, 249, 241, 0.92);
+  border: 1px solid rgba(183, 164, 116, 0.58);
+  border-left: 4px solid var(--sv-cinnabar);
+  border-radius: 0;
+  padding: clamp(28px, 3vw, 42px) clamp(30px, 3.3vw, 46px);
+  box-shadow: 0 10px 28px rgba(24, 32, 34, 0.035);
+}
+body.strategy-page .st-head__r p,
+body.strategy-page .sv-exec__intro {
+  font-size: clamp(15px, 1.05vw, 17px);
+  line-height: 1.58;
+  color: var(--sv-ink-2);
+  max-width: none;
+}
+body.strategy-page .st-head__r p + p { margin-top: clamp(16px, 1.8vw, 24px); }
+body.strategy-page .sv-exec__head-r {
+  align-self: start;
+  padding-top: clamp(28px, 3vw, 42px);
+}
+@media (max-width: 900px) {
+  body.strategy-page .st-head__r,
+  body.strategy-page .sv-exec__head-r {
+    margin-top: clamp(18px, 4vw, 28px);
+    padding: clamp(22px, 6vw, 32px);
+  }
+}
+
+/* ==========================================================================
+   FINAL NO HORIZONTAL RULES / BARS — client directive
+   Suppresses decorative horizontal rule elements and section hairlines.
+   ========================================================================== */
+:where(
+  hr,
+  [role="separator"],
+  [class*="__rule"],
+  [class*="-rule"],
+  [class*="rule-"],
+  [class*="__divider"],
+  [class*="-divider"],
+  [class*="divider-"],
+  [class*="topline"],
+  [class*="separator"]
+):not(svg):not(path):not(img):not(input):not(textarea):not(select) {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  color: transparent !important;
+  overflow: hidden !important;
+}
+
+:where(main > section + section, .sv-hero__right, .cdd-intro__bar, .cdd-arc__list, .cdd-arc__row, .cdd-stat, .research-sub) {
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+:where([class*="eyebrow"], [class*="kicker"], [class*="label"], [class*="heading"], [class*="title"], [class*="intro"], [class*="hero"], [class*="section"])::before,
+:where([class*="eyebrow"], [class*="kicker"], [class*="label"], [class*="heading"], [class*="title"], [class*="intro"], [class*="hero"], [class*="section"])::after {
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+:where([class*="eyebrow"], [class*="kicker"], [class*="label"])::before,
+:where([class*="eyebrow"], [class*="kicker"], [class*="label"])::after {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+/* ==========================================================================
+   2026-07-09 · COHESION PASS (definitive, last-in-file)
+   The page had accreted three competing accent treatments (qing top-rules,
+   cinnabar left-bars, cinnabar top-rules), bolted-on "callout boxes" for the
+   support copy, and one section (Origination) wrapped in a heavy shadowed
+   panel while every other section sat flat. This pass unifies everything on a
+   single restrained grammar so the page reads as one system:
+
+     · section head  = label + H2 (left) · plain editorial deck (right)
+     · card grids     = white card, 1px hairline, single 2px qing top-rule
+     · cinnabar       = reserved for real emphasis (indices, sleeve hover,
+                        the recovery-risk panel) — never as ambient chrome
+     · sections sit flat on the page; no panel wrappers, no drop shadows
+   ========================================================================== */
+
+/* --- Shared section-head rhythm ----------------------------------------- */
+body.strategy-page .st-head,
+body.strategy-page .sv-exec__head {
+  align-items: start;
+  column-gap: clamp(32px, 5vw, 88px);
+  margin-bottom: clamp(40px, 4.6vw, 64px);
+}
+body.strategy-page .st-head__l,
+body.strategy-page .sv-exec__head-l { grid-column: 1 / 7; }
+body.strategy-page .st-head__r,
+body.strategy-page .sv-exec__head-r { grid-column: 7 / 13; }
+body.strategy-page .st-head__l .sv-h2,
+body.strategy-page .sv-exec__head-l .sv-h2 { margin-top: 14px; }
+
+/* Support copy: plain editorial deck — no box, no border, no bar, no shadow.
+   This is the single biggest fix for the "amateurish" feel. */
+body.strategy-page .st-head__r,
+body.strategy-page .sv-exec__head-r {
+  align-self: start;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+  padding-top: 8px;
+  max-width: 46ch;
+}
+body.strategy-page .st-head__r p,
+body.strategy-page .sv-exec__head-r p,
+body.strategy-page .sv-exec__intro {
+  margin: 0;
+  font: 400 clamp(16px, 1.15vw, 18px)/1.66 var(--sv-font);
+  color: var(--sv-ink-2);
+  max-width: none;
+}
+body.strategy-page .st-head__r p + p,
+body.strategy-page .sv-exec__head-r p + p { margin-top: 16px; }
+
+/* --- One card style, everywhere ----------------------------------------- */
+body.strategy-page .st-reason,
+body.strategy-page .st-reason:first-child,
+body.strategy-page .st-reason:last-child,
+body.strategy-page .sv-flow__step {
+  padding: clamp(26px, 2.6vw, 34px);
+  background: #fff;
+  border: 1px solid var(--sv-border-light);
+  border-top: 2px solid var(--sv-qing, #3D7070);
+  border-radius: 0;
+  box-shadow: none;
+}
+body.strategy-page .st-reasons,
+body.strategy-page .sv-flow {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(18px, 2vw, 26px);
+  margin-top: 22px;
+  padding: 0;
+  background: none;
+  border: 0;
+  box-shadow: none;
+}
+
+/* Reasons kicker: plain label, no top rule (matches other section labels) */
+body.strategy-page .st-reasons__kicker {
+  margin: clamp(40px, 4.4vw, 60px) 0 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+/* --- Origination: strip the panel wrapper; flat like every other section - */
+/* This element is also the .sv-shell, so keep the page gutter (padding-inline)
+   and only zero the vertical/panel padding — otherwise the section bleeds to
+   the viewport edges between the mobile and max-width breakpoints. */
+body.strategy-page .sv-exec { background: var(--sv-ivory); }
+body.strategy-page .sv-exec__inner {
+  padding-block: 0;
+  padding-inline: var(--pad-x);
+  background: none;
+  border: 0;
+  border-left: 0;
+  box-shadow: none;
+}
+body.strategy-page .sv-exec__head {
+  margin-bottom: clamp(40px, 4.6vw, 64px);
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+body.strategy-page .sv-exec__head-r { padding-top: 8px; }
+body.strategy-page .sv-flow__step { min-height: clamp(200px, 17vw, 240px); }
+body.strategy-page .sv-flow__title { max-width: 12ch; }
+body.strategy-page .sv-flow__body { max-width: none; }
+
+/* --- Sub-strategies underwriting panel: single flat framed group -------- */
+body.strategy-page .st-thresholds {
+  background: #fff;
+  border: 1px solid var(--sv-border-light);
+  border-top: 2px solid var(--sv-qing, #3D7070);
+  box-shadow: none;
+}
+body.strategy-page .st-thresholds::before { content: none; }
+
+/* --- Risk block: keep the strong contained frame, calm the border ------- */
+body.strategy-page .st-risk {
+  box-shadow: inset 0 0 0 1px var(--sv-border-light-strong);
+}
+
+@media (max-width: 900px) {
+  body.strategy-page .st-head__l,
+  body.strategy-page .st-head__r,
+  body.strategy-page .sv-exec__head-l,
+  body.strategy-page .sv-exec__head-r { grid-column: 1 / 13; }
+  body.strategy-page .st-head__r,
+  body.strategy-page .sv-exec__head-r {
+    margin-top: clamp(16px, 4vw, 24px);
+    padding-top: 0;
+    max-width: none;
+  }
+}
+@media (max-width: 880px) {
+  body.strategy-page .st-reasons,
+  body.strategy-page .sv-flow { grid-template-columns: 1fr; gap: 14px; }
+}
+
+/* ==========================================================================
+   2026-07-09 · RISK BLOCK REFINEMENT (last-in-file, wins on #risk specificity)
+   The three cells (Transaction / Portfolio / Recovery-risk panel) previously
+   read as bolted-together fragments: the two column headings sat on one
+   baseline while the cinnabar panel carried a small kicker above a much larger
+   title, so nothing lined up. This gives all three cells one header rhythm —
+   a title with a hairline rule beneath — with "Risk qualification" demoted to
+   an inline tag on the panel's title row so every title and every divider
+   lands on the same baseline. Cinnabar stays reserved for the panel alone.
+   ========================================================================== */
+body.strategy-page #risk .st-risk {
+  grid-template-columns: minmax(0, 2fr) minmax(300px, 0.92fr);
+  gap: 0;
+  border: 0;
+  margin-top: clamp(10px, 1vw, 16px);
+  background: var(--sv-ivory);
+  box-shadow: inset 0 0 0 1px var(--sv-border-light-strong);
+}
+body.strategy-page #risk .st-risk__cols { grid-template-columns: 1fr 1fr; min-width: 0; }
+
+/* Uniform cells */
+body.strategy-page #risk .st-risk__col,
+body.strategy-page #risk .st-risk__panel {
+  padding: clamp(28px, 3vw, 44px);
+  min-width: 0;
+}
+body.strategy-page #risk .st-risk__col {
+  background: var(--sv-ivory);
+  border-right: 1px solid var(--sv-border-light);
+  border-bottom: 0;
+}
+body.strategy-page #risk .st-risk__col:last-child { border-right: 0; }
+
+/* Shared header rhythm: title + hairline, aligned across all three cells */
+body.strategy-page #risk .st-risk__cell-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  margin: 0 0 clamp(18px, 1.9vw, 26px);
+  padding-bottom: 13px;
+  border-bottom: 1px solid var(--sv-border-light-strong);
+}
+body.strategy-page #risk .st-risk__cell-head h3 {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: 500 clamp(16px, 1.15vw, 18px)/1.28 var(--sv-font);
+  letter-spacing: -0.01em;
+  color: var(--sv-ink);
+}
+
+/* Lists */
+body.strategy-page #risk .st-risk__col ul { list-style: none; margin: 0; padding: 0; }
+body.strategy-page #risk .st-risk__col li {
+  position: relative;
+  padding-left: 20px;
+  margin: 0 0 14px;
+  font: 400 clamp(14px, 1vw, 15px)/1.58 var(--sv-font);
+  color: var(--sv-ink-2);
+}
+body.strategy-page #risk .st-risk__col li:last-child { margin-bottom: 0; }
+body.strategy-page #risk .st-risk__col li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 8px;
+  height: 8px;
+  background: var(--sv-cinnabar);
+}
+
+/* Recovery-risk panel — the one cinnabar fill on the page */
+body.strategy-page #risk .st-risk__panel {
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(158deg, #C4382A 0%, #A83124 100%);
+  color: var(--sv-ivory);
+}
+body.strategy-page #risk .st-risk__panel .st-risk__cell-head {
+  border-bottom-color: rgba(252, 249, 241, 0.28);
+}
+body.strategy-page #risk .st-risk__panel-title {
+  color: var(--sv-ivory);
+}
+body.strategy-page #risk .st-risk__panel-tag {
+  flex: none;
+  font: 600 10px/1 var(--sv-font);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sv-faint-on-cinnabar, rgba(252, 249, 241, 0.72));
+}
+body.strategy-page #risk .st-risk__panel-body {
+  margin: 0;
+  max-width: 44ch;
+  font: 400 clamp(14px, 1vw, 15px)/1.62 var(--sv-font);
+  color: var(--sv-meta-on-cinnabar, rgba(252, 249, 241, 0.9));
+}
+body.strategy-page #risk .st-risk__panel-body + .st-risk__panel-body { margin-top: 14px; }
+
+@media (max-width: 900px) {
+  body.strategy-page #risk .st-risk {
+    grid-template-columns: 1fr;
+    box-shadow: inset 0 0 0 1px var(--sv-border-light-strong);
+  }
+  body.strategy-page #risk .st-risk__cols { grid-template-columns: 1fr; }
+  body.strategy-page #risk .st-risk__col {
+    border-right: 0;
+    border-bottom: 1px solid var(--sv-border-light);
+  }
+}
+
+/* ==========================================================================
+   2026-07-10 · INSTITUTIONAL FLAT PASS (definitive, last-in-file)
+   Course-correction. The prior pass leaned on drop shadows and hover lift,
+   which made the cards and panels read as boxes floating off the page — a
+   consumer/SaaS look, not an institutional one. And the section support copy
+   sat orphaned in the top-right of each head, floating in empty space with
+   nothing anchoring it.
+
+   This pass resets to the grammar credit institutions actually use: flat
+   surfaces, hairline structure, one disciplined accent, and copy that is
+   locked to the grid. No shadows, no lift, no floating. Scoped to
+   body.strategy-page and last in the file so it wins the cascade.
+   ========================================================================== */
+
+body.strategy-page { --st-ease: cubic-bezier(.2, .8, .2, 1); }
+
+/* --- Section rhythm: generous, even air --------------------------------- */
+body.strategy-page .st-section,
+body.strategy-page .sv-exec { padding-block: clamp(76px, 8vw, 120px); }
+
+/* Headline: tighten optical tracking on the large display cut. */
+body.strategy-page .st-head__l .sv-h2,
+body.strategy-page .sv-exec__head-l .sv-h2 {
+  letter-spacing: -0.022em;
+  text-wrap: balance;
+}
+body.strategy-page .st-head__l .sv-label,
+body.strategy-page .sv-exec__head-l .sv-label { color: var(--sv-oxide); }
+
+/* --- De-float the section support copy ---------------------------------- */
+/* The single biggest "floating text box" fix: anchor the right-hand deck to
+   the headline's baseline instead of letting a short sentence drift in the
+   top-right void. Heading and deck now share a bottom edge and read as one
+   locked editorial unit — the standard institutional head. */
+body.strategy-page .st-head,
+body.strategy-page .sv-exec__head {
+  align-items: end;
+}
+body.strategy-page .st-head__r,
+body.strategy-page .sv-exec__head-r {
+  align-self: end;
+  padding-top: 0;
+}
+@media (max-width: 900px) {
+  body.strategy-page .st-head,
+  body.strategy-page .sv-exec__head { align-items: start; }
+  body.strategy-page .st-head__r,
+  body.strategy-page .sv-exec__head-r { align-self: start; }
+}
+
+/* --- One flat card surface: reasons + origination flow ------------------ */
+/* Flat: white surface, hairline frame, a single qing top accent. No shadow,
+   no movement. Hover is a quiet warm wash + the accent stepping to cinnabar —
+   presence without the box lifting off the page. */
+body.strategy-page .st-reason,
+body.strategy-page .st-reason:first-child,
+body.strategy-page .st-reason:last-child,
+body.strategy-page .sv-flow__step {
+  position: relative;
+  background: #fff;
+  border: 1px solid var(--sv-border-light);
+  border-top: 2px solid var(--sv-qing, #3D7070);
+  box-shadow: none;
+  transition: background-color .28s ease, border-color .28s ease;
+}
+body.strategy-page .st-reason:hover,
+body.strategy-page .sv-flow__step:hover {
+  background: var(--sv-ivory);
+  border-top-color: var(--sv-cinnabar);
+}
+
+/* Reasons: keep the eyebrow label unnumbered for a cleaner editorial scan. */
+body.strategy-page .st-reason__title { font-size: 21px; }
+
+/* Origination flow: a semantic <ol>, so number it — same cadence as the
+   numbered sub-strategy sleeves. */
+body.strategy-page .sv-flow { counter-reset: st-flow; }
+body.strategy-page .sv-flow__step { counter-increment: st-flow; }
+body.strategy-page .sv-flow__title::before {
+  content: counter(st-flow);
+  display: block;
+  margin-bottom: clamp(14px, 1.6vw, 20px);
+  font: 600 clamp(44px, 5.2vw, 72px)/0.9 var(--sv-font);
+  letter-spacing: -0.04em;
+  color: var(--sv-cinnabar);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Flat bands & panels — no lift, no gloss ---------------------------- */
+/* Sub-strategies band: flat stone. */
+body.strategy-page #sub-strategies { background: var(--sv-stone); }
+
+/* Underwriting-considerations panel: a flat, clearly framed grouping — a
+   panel, not a floating card. */
+body.strategy-page .st-thresholds {
+  background: #fff;
+  border: 1px solid var(--sv-border-light-strong);
+  border-top: 2px solid var(--sv-qing, #3D7070);
+  box-shadow: none;
+}
+
+/* Risk block: one crisp hairline frame, sitting flat on the page. */
+body.strategy-page #risk .st-risk {
+  box-shadow: inset 0 0 0 1px var(--sv-border-light-strong);
+}
+/* Recovery-risk panel: a single flat cinnabar field, gently graded for weight
+   — no glossy highlight. */
+body.strategy-page #risk .st-risk__panel {
+  background: linear-gradient(158deg, #C4382A 0%, #9E2E22 100%);
+}
+
+/* --- Sub-strategy sleeves: keep the quiet index nudge on hover ---------- */
+body.strategy-page .st-sleeve__no {
+  transition: transform 300ms var(--st-ease), letter-spacing 300ms var(--st-ease);
+}
+body.strategy-page .st-sleeve:hover .st-sleeve__no,
+body.strategy-page .st-sleeve:focus-within .st-sleeve__no {
+  transform: translateX(8px);
+  letter-spacing: 0.24em;
+}
+
+/* --- Disclosures: quiet closing band ------------------------------------ */
+body.strategy-page .st-disc { background: var(--sv-stone); }
+
+@media (prefers-reduced-motion: reduce) {
+  body.strategy-page .st-reason,
+  body.strategy-page .sv-flow__step,
+  body.strategy-page .st-sleeve__no { transition: none; }
+}
+
+/* ==========================================================================
+   2026-07-10 · SIGNATURE REFINEMENT (definitive, last-in-file)
+   Takes the page past "clean and institutional" to a considered, best-in-class
+   finish. Three moves, all flat:
+     1. Replace the flat cinnabar slab under the hero with a deep-ink briefing
+        ledger — the single biggest lift; it reads as a premium data band and
+        returns cinnabar to being a true accent rather than ambient chrome.
+     2. Larger, tighter display headings for real typographic confidence.
+     3. Big, quiet editorial numerals anchoring the three sub-strategies, with
+        the index warming to cinnabar on hover.
+   ========================================================================== */
+
+/* 1 · Strategy-at-a-glance → deep-ink briefing ledger --------------------- */
+body.strategy-page .sx-glance {
+  padding: clamp(46px, 4.8vw, 70px) 0 clamp(48px, 5vw, 72px);
+}
+body.strategy-page .sx-glance::before {
+  background: var(--sv-ink, #182524);
+}
+body.strategy-page .sx-glance > div {
+  padding: 0 clamp(30px, 3.2vw, 48px);
+  border-left-color: rgba(252, 249, 241, 0.14);
+}
+body.strategy-page .sx-glance > div:first-child { padding-left: 0; }
+body.strategy-page .sx-glance dt {
+  margin: 0 0 16px;
+  font: 600 11px/1.3 var(--sv-font);
+  letter-spacing: 0.2em;
+  color: rgba(252, 249, 241, 0.5);
+}
+body.strategy-page .sx-glance dd {
+  font: 400 clamp(16px, 1.25vw, 18.5px)/1.52 var(--sv-font);
+  color: var(--sv-ivory);
+  letter-spacing: -0.005em;
+}
+@media (max-width: 880px) {
+  body.strategy-page .sx-glance > div {
+    padding: 22px 0;
+    border-left: 0;
+    border-top: 1px solid rgba(252, 249, 241, 0.14);
+  }
+  body.strategy-page .sx-glance > div:first-child { border-top: 0; padding-top: 0; }
+}
+
+/* 2 · Display headings: larger and tighter for confidence ---------------- */
+body.strategy-page .st-head__l .sv-h2,
+body.strategy-page .sv-exec__head-l .sv-h2 {
+  font-size: clamp(33px, 3.9vw, 52px);
+  line-height: 1.07;
+  letter-spacing: -0.026em;
+}
+
+/* 3 · Three strategies: large editorial index numerals ------------------- */
+/* The core "three strategies" set now carries big, light, quiet numerals that
+   anchor each row like chapter numbers — presence without another red mark. */
+body.strategy-page .st-sleeve__lead { gap: clamp(14px, 1.4vw, 22px); }
+body.strategy-page .st-sleeve__no {
+  font: 300 clamp(30px, 3.1vw, 44px)/1 var(--sv-font);
+  letter-spacing: -0.01em;
+  color: rgba(24, 37, 36, 0.20);
+  transition: color 300ms var(--st-ease);
+}
+body.strategy-page .st-sleeve:hover .st-sleeve__no,
+body.strategy-page .st-sleeve:focus-within .st-sleeve__no {
+  color: var(--sv-cinnabar);
+  transform: none;
+  letter-spacing: -0.01em;
+}
+body.strategy-page .st-sleeve__title { font-size: clamp(22px, 1.9vw, 25px); }
+
+/* Recovery-risk panel: a deeper, richer oxblood grade ---------------------- */
+body.strategy-page #risk .st-risk__panel {
+  background: linear-gradient(160deg, #BE3627 0%, #892A1E 100%);
+}
+
+/* 2026-07-10 · Match interior hero height to the homepage masthead. */
+@media (min-width: 881px) {
+  body.strategy-page .sx-hero__top { min-height: 650px; }
+}
+
+/* 2026-07-11 · Right-align the section-head supporting decks so the copy
+   sits flush to the right edge of its column, opposite the left-aligned
+   label and heading. */
+body.strategy-page .st-head__r,
+body.strategy-page .st-head__r p,
+body.strategy-page .sv-exec__head-r,
+body.strategy-page .sv-exec__head-r p,
+body.strategy-page .sv-exec__intro {
+  text-align: right;
+}
+
+/* The deck box is capped at max-width:46ch and, as a grid item, defaults to
+   the start (left) of its 6-column grid area — so right-aligned text lands
+   mid-page instead of at the margin. Anchor the box to the end of its grid
+   area (and let any max-width'd child hug it) so the copy sits flush to the
+   right page margin. Scoped to the desktop layout: below 900px the deck
+   already spans the full column width, so the box has nowhere left to shift. */
+@media (min-width: 901px) {
+  body.strategy-page .st-head__r,
+  body.strategy-page .sv-exec__head-r {
+    justify-self: end;
+  }
+  body.strategy-page .sv-exec__intro {
+    margin-left: auto;
+  }
+}
+
+/* 2026-07-13 · Use a light canvas for the Opportunity section so the
+   market-scale facts and reason cards sit on a brighter strategy-page band. */
+body.strategy-page #opportunity {
+  background: var(--sv-ivory, #FCF9F1);
+}
+
+/* 2026-07-11 · Nudge the Opportunity section's supporting sentence lower so it
+   sits beneath the headline baseline instead of feeling pinned to the upper
+   right of the section head. */
+@media (min-width: 901px) {
+  body.strategy-page #opportunity .st-head__r {
+    transform: translateY(clamp(18px, 2vw, 30px));
+  }
+}
+
+/* 2026-07-11 · Mobile tightening for single-deck opportunity and sourcing sections. */
+@media (max-width: 900px) {
+  body.strategy-page #opportunity .st-head,
+  body.strategy-page #origination .sv-exec__head {
+    margin-bottom: 24px;
+  }
+
+  body.strategy-page #opportunity .st-head__l .sv-h2,
+  body.strategy-page #origination .sv-exec__head-l .sv-h2 {
+    margin-top: 10px;
+  }
+
+  body.strategy-page #opportunity .st-head__r,
+  body.strategy-page #origination .sv-exec__head-r {
+    margin-top: 8px;
+  }
+
+  body.strategy-page #opportunity .st-oppfacts {
+    margin-top: 0;
+  }
+
+  body.strategy-page #origination .sv-flow {
+    padding-top: 20px;
+  }
+}
+
+@media (max-width: 600px) {
+  body.strategy-page #opportunity .st-head,
+  body.strategy-page #origination .sv-exec__head {
+    margin-bottom: 20px;
+  }
+
+  body.strategy-page #opportunity .st-head__l .sv-h2,
+  body.strategy-page #origination .sv-exec__head-l .sv-h2 {
+    margin-top: 8px;
+  }
+
+  body.strategy-page #opportunity .st-head__r,
+  body.strategy-page #origination .sv-exec__head-r {
+    margin-top: 6px;
+  }
+
+  body.strategy-page #origination .sv-flow {
+    padding-top: 18px;
+  }
+}
+
+/* ==========================================================================
+   2026-07-13 · Risk controls institutional redesign
+   Replaces the three-column/table-like risk-control matrix with two balanced
+   primary cards and a full-width recovery-risk callout. Scoped to #risk only.
+   ========================================================================== */
+body.strategy-page #risk.st-section {
+  background: var(--sv-ivory, #FCF9F1);
+  scroll-margin-top: calc(var(--header-height, 76px) + clamp(28px, 4vw, 48px));
+}
+body.strategy-page #risk .sv-shell {
+  max-width: 1240px;
+}
+body.strategy-page #risk .st-head {
+  margin-bottom: clamp(34px, 4vw, 54px);
+}
+body.strategy-page #risk .st-risk {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(20px, 2.2vw, 28px);
+  margin-top: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+body.strategy-page #risk .st-risk__cols {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(20px, 2.2vw, 28px);
+  min-width: 0;
+  align-items: stretch;
+}
+body.strategy-page #risk .st-risk__col,
+body.strategy-page #risk .st-risk__panel,
+body.strategy-page #risk .st-risk__panel.svb--split {
+  position: relative;
+  min-width: 0;
+  background: color-mix(in srgb, #fff 92%, var(--sv-ivory, #FCF9F1) 8%);
+  border: 1px solid var(--sv-border-light, rgba(24, 37, 36, 0.14));
+  box-shadow: none;
+  color: var(--sv-ink, #182524);
+}
+body.strategy-page #risk .st-risk__col {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(34px, 3.5vw, 48px);
+}
+body.strategy-page #risk .st-risk__col::before,
+body.strategy-page #risk .st-risk__panel::before {
+  content: none;
+  display: none;
+}
+body.strategy-page #risk .st-risk__cell-head,
+body.strategy-page #risk .st-risk__panel .st-risk__cell-head {
+  display: block;
+  min-height: 0;
+  margin: 0 0 clamp(22px, 2vw, 30px);
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: var(--sv-ink, #182524);
+}
+body.strategy-page #risk .st-risk__cell-head h3,
+body.strategy-page #risk .st-risk__panel-title {
+  margin: 0;
+  font: 500 clamp(22px, 1.9vw, 28px)/1.12 var(--sv-font);
+  letter-spacing: -0.022em;
+  color: var(--sv-ink, #182524);
+  text-wrap: balance;
+}
+body.strategy-page #risk .st-risk__col ul {
+  display: grid;
+  gap: clamp(15px, 1.5vw, 20px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+body.strategy-page #risk .st-risk__col li,
+body.strategy-page #risk .st-risk__panel-body {
+  position: relative;
+  margin: 0;
+  padding: 0 0 0 22px;
+  max-width: none;
+  min-height: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  font: 400 clamp(15px, 1vw, 16px)/1.62 var(--sv-font);
+  color: var(--sv-ink-2, #3F4A47);
+}
+body.strategy-page #risk .st-risk__col li::before,
+body.strategy-page #risk .st-risk__panel-body::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 8px;
+  height: 8px;
+  border: 0;
+  border-radius: 0;
+  background: var(--sv-cinnabar, #C4382A);
+}
+body.strategy-page #risk .st-risk__panel,
+body.strategy-page #risk .st-risk__panel.svb--split {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.72fr) minmax(0, 1.55fr);
+  gap: clamp(26px, 4vw, 72px);
+  align-items: start;
+  padding: clamp(30px, 3.3vw, 44px) clamp(34px, 3.8vw, 52px);
+  background: color-mix(in srgb, var(--sv-stone, #F1EBDD) 46%, #fff 54%);
+  border-top: 2px solid var(--sv-cinnabar, #C4382A);
+}
+body.strategy-page #risk .st-risk__panel::before { content: none; }
+body.strategy-page #risk .st-risk__panel .st-risk__cell-head {
+  margin: 0;
+}
+body.strategy-page #risk .st-risk__panel-tag,
+body.strategy-page #risk .st-risk__panel-label {
+  display: block;
+  margin-top: 14px;
+  font: 600 10px/1.2 var(--sv-font);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--sv-muted, #6E7169);
+  opacity: 1;
+}
+body.strategy-page #risk .st-risk__panel-body-wrap {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(18px, 2.5vw, 36px);
+  margin: 0;
+  padding: 0;
+}
+body.strategy-page #risk .st-risk__panel-body + .st-risk__panel-body { margin-top: 0; }
+body.strategy-page #risk .st-risk__col li:nth-child(odd),
+body.strategy-page #risk .st-risk__col li:nth-child(even),
+body.strategy-page #risk .st-risk__panel-body:nth-child(odd),
+body.strategy-page #risk .st-risk__panel-body:nth-child(even) {
+  background: transparent;
+}
+@media (max-width: 980px) {
+  body.strategy-page #risk .st-risk__cols {
+    grid-template-columns: 1fr;
+  }
+  body.strategy-page #risk .st-risk__panel,
+  body.strategy-page #risk .st-risk__panel.svb--split {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+}
+@media (max-width: 720px) {
+  body.strategy-page #risk.st-section {
+    scroll-margin-top: calc(var(--header-height, 68px) + 24px);
+  }
+  body.strategy-page #risk .st-risk__col {
+    padding: clamp(24px, 7vw, 32px);
+  }
+  body.strategy-page #risk .st-risk__col::before {
+    left: clamp(24px, 7vw, 32px);
+  }
+  body.strategy-page #risk .st-risk__panel,
+  body.strategy-page #risk .st-risk__panel.svb--split {
+    padding: clamp(24px, 7vw, 32px);
+  }
+  body.strategy-page #risk .st-risk__panel-body-wrap {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+/* Avoid an empty stone hero block while the large strategy image is still decoding. */
+body.strategy-page .sx-hero__image { background: transparent !important; }
+
+/* 2026-07-14 · Strategy speed pass: keep the hero visual CSS-only so first paint is not blocked by multi-megabyte photographs. */
+body.strategy-page .sx-hero__image { display: none !important; }

@@ -37,6 +37,10 @@ coverage/
 playwright-report/
 test-results/
 
+# Media-coverage PDF generation: QA previews and temp render pages
+templates/media-coverage/preview/
+templates/media-coverage/*.gen.html
+
 # QA screenshots and scratch captures (keep these out of the repo root)
 /Screenshot*.png
 /Screenshot*.svg

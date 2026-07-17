@@ -2,7 +2,21 @@
   const currentScriptUrl = new URL(document.currentScript?.src || 'assets/js/shared-footer.js', window.location.href);
   const siteRootUrl = new URL('../../', currentScriptUrl);
   const __svt = () => { const t = new URLSearchParams(window.location.search).get('t'); return t ? ('?t=' + encodeURIComponent(t)) : ''; };
-  const siteHref = (path) => new URL(path, siteRootUrl).pathname + __svt();
+  const relativeSiteHref = (path) => {
+    const target = new URL(path, siteRootUrl);
+    const fromDir = window.location.pathname.endsWith('/')
+      ? window.location.pathname
+      : window.location.pathname.replace(/[^/]*$/, '');
+    const fromParts = fromDir.split('/').filter(Boolean);
+    const toParts = target.pathname.split('/').filter(Boolean);
+    while (fromParts.length && toParts.length && fromParts[0] === toParts[0]) {
+      fromParts.shift();
+      toParts.shift();
+    }
+    const rel = `${'../'.repeat(fromParts.length)}${toParts.join('/')}`;
+    return (rel || './') + __svt();
+  };
+  const siteHref = relativeSiteHref;
 
   const path = window.location.pathname.split('/').pop() || 'index.html';
   const localeSuffix = /_cn\.html$/i.test(path) ? 'cn' : 'en';
@@ -31,17 +45,26 @@
       </div>
       <nav class="sv-footer__nav" aria-label="Footer">
         <a href="${siteHref('firm.html')}">Firm</a>
-        <a href="${siteHref('insights.html')}">Insights</a>
         <a href="${siteHref('strategy.html')}">Strategy</a>
+        <a href="${siteHref('insights.html')}">Insights</a>
         <a href="${siteHref('press.html')}">Media</a>
         <a href="${siteHref('team.html')}">Team</a>
+        <a href="${siteHref('internal-preview/careers.html')}">Careers</a>
         <a href="${siteHref('contact.html')}">Contact</a>
         <a href="${siteHref('insights.html')}#archive">China Debt Dynamics</a>
         <span class="sv-footer__access" role="group" aria-label="Access">
           <span class="sv-footer__access-label">Access</span>
-          <a href="${siteHref('investor-portal/index.html')}">Investor Portal</a>${shoreVestOneLinkEn}
+          <a href="${siteHref('investor-portal/index.html')}">Investor Portal</a>
         </span>
       </nav>
+      <div class="sv-footer__social" aria-label="Follow ShoreVest">
+        <a class="sv-footer__social-link" href="https://www.linkedin.com/company/shorevest-partners/" target="_blank" rel="noopener noreferrer" aria-label="Follow ShoreVest Partners on LinkedIn">
+          <svg class="sv-footer__social-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+            <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V8.98h3.42v1.57h.05c.48-.9 1.64-1.85 3.37-1.85 3.61 0 4.27 2.37 4.27 5.46v6.29ZM5.32 7.42a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12Zm1.78 13.03H3.54V8.98H7.1v11.47ZM22.23 0H1.76C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.76 24h20.47c.97 0 1.77-.77 1.77-1.72V1.72C24 .77 23.2 0 22.23 0Z"/>
+          </svg>
+          <span>LinkedIn</span>
+        </a>
+      </div>
     </div>
     <div class="sv-footer__legal">
       <p>ShoreVest Partners and its affiliates provide investment management services to institutional investors. This website is for informational purposes only and does not constitute an offer to sell or a solicitation of an offer to buy any security or investment product, nor investment, legal, or tax advice.</p>
@@ -74,13 +97,22 @@
         <a href="${siteHref('strategy_cn.html')}">策略</a>
         <a href="${siteHref('press_cn.html')}">媒体</a>
         <a href="${siteHref('team_cn.html')}">团队</a>
+        <a href="${siteHref('internal-preview/careers_cn.html')}">人才招聘</a>
         <a href="${siteHref('contact_cn.html')}">联系</a>
         <a href="${siteHref('insights_cn.html')}#archive">中国债务动态</a>
         <span class="sv-footer__access" role="group" aria-label="访问">
           <span class="sv-footer__access-label">访问</span>
-          <a href="${siteHref('investor-portal/index.html')}">投资者门户</a>${shoreVestOneLinkCn}
+          <a href="${siteHref('investor-portal/index_cn.html')}">投资者门户</a>
         </span>
       </nav>
+      <div class="sv-footer__social" aria-label="Follow ShoreVest">
+        <a class="sv-footer__social-link" href="https://www.linkedin.com/company/shorevest-partners/" target="_blank" rel="noopener noreferrer" aria-label="Follow ShoreVest Partners on LinkedIn">
+          <svg class="sv-footer__social-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+            <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V8.98h3.42v1.57h.05c.48-.9 1.64-1.85 3.37-1.85 3.61 0 4.27 2.37 4.27 5.46v6.29ZM5.32 7.42a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12Zm1.78 13.03H3.54V8.98H7.1v11.47ZM22.23 0H1.76C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.76 24h20.47c.97 0 1.77-.77 1.77-1.72V1.72C24 .77 23.2 0 22.23 0Z"/>
+          </svg>
+          <span>LinkedIn</span>
+        </a>
+      </div>
     </div>
     <div class="sv-footer__legal">
       <p>新岸资本（ShoreVest Partners）及其关联机构向机构投资者提供投资管理服务。本网站仅供参考，不构成出售要约或购买任何证券或投资产品的要约邀请，亦不构成投资、法律或税务建议。</p>
@@ -94,7 +126,7 @@
         <a href="${siteHref('important-information_cn.html')}">重要信息</a>
         <a href="${siteHref('legal-notices-disclaimers_cn.html')}">法律声明与免责声明</a>
       </div>
-      <p class="sv-footer__copy">&copy; 2026 新岸资本（ShoreVest Partners）。保留所有权利。</p>
+      <p class="sv-footer__copy">&copy; 2026 ShoreVest Partners. All rights reserved.</p>
     </div>
   </div>`;
 

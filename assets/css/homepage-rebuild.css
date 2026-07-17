@@ -10,13 +10,21 @@
    restrained cinnabar, no cards / icons / imagery.
    ========================================================================== */
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  overscroll-behavior-y: none;
+}
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   body.homepage .sv-srow,
   body.homepage .sv-srow::before,
   body.homepage .sv-srow::after,
-  body.homepage .sv-srow__title { transition: none; }
+  body.homepage .sv-srow__title,
+  body.homepage .sv-textlink span,
+  body.homepage .sv-textlink::after,
+  body.homepage .sv-cdd__feature-read span { transition: none; }
+  body.homepage .sv-textlink:hover span,
+  body.homepage .sv-cdd__feature:hover .sv-cdd__feature-read span { transform: none; }
 }
 :where(a, button, input, select, textarea, [tabindex]):focus-visible {
   outline: 2px solid var(--sv-cinnabar, #C93B2A);
@@ -25,10 +33,20 @@ html { scroll-behavior: smooth; }
 
 :root {
   --sv-cinnabar: #C93B2A;
+  --sv-cinnabar-light: #E8998F;
   --sv-cinnabar-d: #9F2F24;
   --sv-oxide: #9F2F24;
   --sv-teal-900: #1C4040;
   --sv-teal-950: #102628;
+  /* 青 blue-green + Dawn Redwood gold — secondary accents from the brand
+     guide (see shorevest-brand-tokens.css). Qing carries quiet structure
+     (secondary hovers, tags, one background block per page); gold is
+     reserved for featured/ceremonial callouts only. Cinnabar stays lead. */
+  --sv-qing-light: #7AAFAF;
+  --sv-qing: #3D7070;
+  --sv-qing-dark: #1E4040;
+  --sv-gold: #C89A2E;
+  --sv-gold-dark: #7A6030;
   /* Dark surfaces are ink/charcoal (NOT green) so cinnabar leads the brand
      and the page never reads festive. Hero is a cinnabar field; CDD + footer
      are quiet ink. */
@@ -66,19 +84,28 @@ html { scroll-behavior: smooth; }
 /* ---------- Reset / base ---------- */
 body.homepage * { box-sizing: border-box; }
 
-html { scroll-padding-top: calc(var(--header-height) + 32px); }
+html {
+  scroll-padding-top: calc(var(--header-height) + 32px);
+  /* Match the browser canvas to the dark footer so bottom rubber-band /
+     overscroll reveals only the footer color instead of a white page edge. */
+  background: #20211F;
+}
 
 body.homepage {
   margin: 0;
   padding-top: var(--header-h);            /* reserve fixed-header space */
   color: var(--sv-ink);
-  background: var(--sv-ivory);
+  /* Match the body/canvas to the footer so bottom rubber-band overscroll
+     cannot expose a white strip beneath the footer. Page sections paint
+     their own ivory/stone/dark surfaces above it. */
+  background: var(--sv-dark-footer, #20211F);
   font-family: var(--sv-font);
   font-size: 16px;
   line-height: 1.62;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
+  overscroll-behavior-y: none;
 }
 body.homepage img { max-width: 100%; display: block; }
 body.homepage a { color: inherit; }
@@ -163,14 +190,27 @@ body.homepage .sv-btn--ghost-light:hover { border-color: var(--sv-ink); backgrou
 
 /* Text link */
 body.homepage .sv-textlink {
+  position: relative;
   display: inline-flex; align-items: center; gap: 9px;
   font: 600 13px/1 var(--sv-font);
   letter-spacing: 0.08em; text-transform: uppercase;
   color: var(--sv-cinnabar); text-decoration: none;
-  border-bottom: 1px solid transparent; padding-bottom: 3px;
-  transition: border-color .15s ease;
+  padding-bottom: 4px;
+  transition: color .28s cubic-bezier(.2, .7, .2, 1);
 }
-body.homepage .sv-textlink:hover { border-color: var(--sv-cinnabar); }
+body.homepage .sv-textlink::after {
+  content: "";
+  position: absolute; left: 0; bottom: 0;
+  width: 100%; height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform .36s cubic-bezier(.2, .7, .2, 1);
+}
+body.homepage .sv-textlink span { transition: transform .34s cubic-bezier(.2, .7, .2, 1); }
+body.homepage .sv-textlink:hover { color: var(--sv-cinnabar-d); }
+body.homepage .sv-textlink:hover::after { transform: scaleX(1); }
+body.homepage .sv-textlink:hover span { transform: translateX(4px); }
 
 /* Focus states */
 body.homepage a:focus-visible,
@@ -209,16 +249,34 @@ body.homepage .sv-nav ul {
   display: flex; gap: clamp(18px, 2vw, 32px);
 }
 body.homepage .sv-nav a {
+  position: relative;
   font: 600 12.5px/1 var(--sv-font);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--sv-ink);
   text-decoration: none;
   padding: 6px 0;
-  border-bottom: 1px solid transparent;
-  transition: color .15s ease, border-color .15s ease;
+  transition: color .28s cubic-bezier(.2, .7, .2, 1);
 }
-body.homepage .sv-nav a:hover { color: var(--sv-cinnabar); border-color: var(--sv-cinnabar); }
+/* Underline drawn from the left rather than a border toggling on — a precise,
+   deliberate cue that reads as considered rather than reactive. */
+body.homepage .sv-nav a::after {
+  content: "";
+  position: absolute; left: 0; right: 0; bottom: 0;
+  height: 1px;
+  background: var(--sv-cinnabar);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform .34s cubic-bezier(.2, .7, .2, 1);
+}
+body.homepage .sv-nav a:hover { color: var(--sv-cinnabar); }
+body.homepage .sv-nav a:hover::after { transform: scaleX(1); }
+/* Active nav state — cinnabar text + underline on the current page, matching hover */
+body.homepage .sv-nav a[aria-current="page"] { color: var(--sv-cinnabar); }
+body.homepage .sv-nav a[aria-current="page"]::after { transform: scaleX(1); }
+@media (prefers-reduced-motion: reduce) {
+  body.homepage .sv-nav a::after { transition: none; }
+}
 
 body.homepage .sv-utils { display: flex; align-items: center; gap: 14px; }
 body.homepage .sv-lang {
@@ -236,6 +294,37 @@ body.homepage .sv-util-btn {
   white-space: nowrap;
 }
 body.homepage .sv-util-btn:hover { border-color: var(--sv-ink); }
+body.homepage .sv-util-btn[href*="investor-portal"] {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  transition: color .22s ease, border-color .22s ease, box-shadow .22s ease, transform .22s ease;
+}
+body.homepage .sv-util-btn[href*="investor-portal"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(110deg, var(--sv-cinnabar) 0%, var(--sv-cinnabar-d) 100%);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform .32s cubic-bezier(.2, .7, .2, 1);
+}
+body.homepage .sv-util-btn[href*="investor-portal"]:hover,
+body.homepage .sv-util-btn[href*="investor-portal"]:focus-visible {
+  color: var(--sv-ivory);
+  border-color: var(--sv-cinnabar);
+  box-shadow: 0 8px 22px rgba(130, 31, 29, .16);
+  transform: translateY(-1px);
+}
+body.homepage .sv-util-btn[href*="investor-portal"]:hover::before,
+body.homepage .sv-util-btn[href*="investor-portal"]:focus-visible::before { transform: scaleX(1); }
+@media (prefers-reduced-motion: reduce) {
+  body.homepage .sv-util-btn[href*="investor-portal"],
+  body.homepage .sv-util-btn[href*="investor-portal"]::before { transition: none; }
+  body.homepage .sv-util-btn[href*="investor-portal"]:hover,
+  body.homepage .sv-util-btn[href*="investor-portal"]:focus-visible { transform: none; }
+}
 body.homepage .sv-util-btn--cta { background: var(--sv-cinnabar); color: var(--sv-ivory); border-color: var(--sv-cinnabar); }
 body.homepage .sv-util-btn--cta:hover { background: var(--sv-cinnabar-d); border-color: var(--sv-cinnabar-d); }
 
@@ -266,9 +355,9 @@ body.homepage .sv-mobile-menu {
   top: var(--header-h); left: 0; right: 0; bottom: 0;
   width: 100%; max-width: 100vw; box-sizing: border-box;
   background: var(--sv-ivory);
-  border-bottom: 1px solid var(--sv-border-light-strong);
+  border-bottom: 1px solid rgba(216, 206, 176, 0.62);
   z-index: 999;
-  padding: 12px var(--pad-x) 24px;
+  padding: clamp(18px, 4.8vw, 28px) var(--pad-x) calc(28px + env(safe-area-inset-bottom));
   overflow-y: auto; overflow-x: hidden;
   overscroll-behavior: contain;
 }
@@ -276,19 +365,23 @@ body.homepage .sv-mobile-menu * { box-sizing: border-box; max-width: 100%; }
 body.homepage .sv-mobile-menu.is-open { display: block; }
 body.homepage .sv-mobile-menu ul { list-style: none; margin: 0; padding: 0; }
 body.homepage .sv-mobile-menu a {
-  display: block; padding: 14px 0;
-  font: 600 14px/1 var(--sv-font); letter-spacing: 0.06em; text-transform: uppercase;
+  display: block; padding: clamp(16px, 4.3vw, 20px) 0;
+  font: 600 clamp(15px, 4vw, 17px)/1 var(--sv-font);
+  letter-spacing: 0.075em; text-transform: uppercase;
   color: var(--sv-ink); text-decoration: none;
-  border-bottom: 1px solid var(--sv-border-light);
+  border-bottom: 1px solid rgba(216, 206, 176, 0.74);
 }
+/* Active nav state — cinnabar on the current page in the mobile menu */
+body.homepage .sv-mobile-menu a[aria-current="page"] { color: var(--sv-cinnabar); }
 body.homepage .sv-mobile-menu .sv-mobile-utils {
-  display: flex; flex-direction: column; gap: 10px; margin-top: 24px;
+  display: flex; flex-direction: column; gap: 12px; margin-top: clamp(26px, 7vw, 38px);
 }
 body.homepage .sv-mobile-menu .sv-mobile-utils .sv-util-btn {
   display: flex; align-items: center; justify-content: center; width: 100%;
-  min-height: 52px; padding: 14px 18px; box-sizing: border-box;
-  border: 1px solid var(--sv-ink); background: transparent;
-  font: 600 13px/1 var(--sv-font); letter-spacing: 0.1em; text-transform: uppercase;
+  min-height: 56px; padding: 15px 18px; box-sizing: border-box;
+  border: 1px solid rgba(30, 64, 64, 0.34); background: rgba(250, 246, 238, 0.42);
+  font: 600 clamp(13px, 3.5vw, 15px)/1 var(--sv-font);
+  letter-spacing: 0.105em; text-transform: uppercase;
   color: var(--sv-ink); text-decoration: none;
 }
 body.homepage .sv-mobile-menu .sv-mobile-utils .sv-util-btn--cta {
@@ -301,7 +394,7 @@ body.homepage .sv-mobile-menu .sv-mobile-utils .sv-util-btn--cta {
    ========================================================================== */
 body.homepage .sv-hero {
   position: relative;
-  background: #FCF8EE;
+  background: #FAF6EE;
   color: var(--sv-ink);
   overflow: hidden;
   isolation: isolate;
@@ -341,6 +434,16 @@ body.homepage .sv-hero__headline {
   overflow-wrap: normal;
   text-wrap: balance;
   word-break: normal;
+}
+body.homepage .sv-hero__since {
+  white-space: nowrap;
+}
+body.homepage .sv-hero__headline-accent {
+  /* Override the broad "no horizontal rules" suppression: the class name
+     contains the substring "line-" (headline-accent), so [class*="line-"]
+     was hiding the founding year with display:none !important. */
+  display: inline !important;
+  color: var(--sv-cinnabar, #C93B2A);
 }
 body.homepage .sv-hero__body {
   margin: 24px 0 0;
@@ -473,14 +576,19 @@ body.homepage .sv-bridge__body p {
    Overrides the shared .sv-bridge layout for this one section without touching
    the Strategy page's .sv-bridge.st-band Recovery section or any other page.
    ========================================================================== */
-body.homepage .home-firm-preview { background: var(--sv-ivory); padding-block: clamp(76px, 7.8vw, 108px); }
+body.homepage .home-firm-preview {
+  background: var(--sv-ivory);
+  padding-block: clamp(76px, 7.8vw, 108px);
+}
 
 /* The whole block sits inside a thin warm ruled band: top + bottom boundary,
    both columns aligned to the upper rule. */
 body.homepage .home-firm-preview .home-firm-preview__grid {
   align-items: stretch;
   border-top: 2px solid var(--sv-cinnabar);
+  border-bottom: 1px solid var(--sv-border-light-strong);
   padding-block: clamp(42px, 4.2vw, 60px);
+  position: relative;
 }
 
 /* Left — eyebrow + heading (cols 1–6), anchored to the upper rule. */
@@ -503,11 +611,86 @@ body.homepage .home-firm-preview .home-firm-preview__statement p {
   margin: 0;
   max-width: none;
   width: 100%;
+  text-align: right;
   font: 400 clamp(18px, 1.5vw, 21px)/1.62 var(--sv-font); color: var(--sv-ink-2);
+}
+body.homepage .home-firm-preview .home-firm-preview__proof {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  margin-top: clamp(28px, 3vw, 42px);
+  border-top: 1px solid var(--sv-border-light-strong);
+  border-bottom: 1px solid var(--sv-border-light);
+}
+body.homepage .home-firm-preview .home-firm-preview__proof span {
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 18px;
+  border-right: 1px solid var(--sv-border-light);
+  font: 600 12px/1.35 var(--sv-font);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--sv-ink);
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  cursor: default;
+  transition:
+    color 220ms ease,
+    background-color 260ms ease,
+    border-color 260ms ease,
+    transform 260ms cubic-bezier(.2, .8, .2, 1);
+}
+body.homepage .home-firm-preview .home-firm-preview__proof span::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--sv-cinnabar);
+  transform: scaleY(0);
+  transform-origin: 50% 50%;
+  transition: transform 280ms cubic-bezier(.2, .8, .2, 1);
+}
+body.homepage .home-firm-preview .home-firm-preview__proof span::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background: rgba(201, 59, 42, 0.05);
+  opacity: 0;
+  transform: translateX(-12px);
+  transition:
+    opacity 260ms ease,
+    transform 320ms cubic-bezier(.2, .8, .2, 1);
+}
+body.homepage .home-firm-preview .home-firm-preview__proof span:hover {
+  color: var(--sv-cinnabar-d);
+  background-color: rgba(252, 249, 241, 0.58);
+}
+body.homepage .home-firm-preview .home-firm-preview__proof span:hover::before { transform: scaleY(1); }
+body.homepage .home-firm-preview .home-firm-preview__proof span:hover::after { opacity: 1; transform: translateX(0); }
+body.homepage .home-firm-preview .home-firm-preview__proof span:not(:first-child) { padding-left: 18px; }
+body.homepage .home-firm-preview .home-firm-preview__proof span:last-child { border-right: 0; }
+@media (prefers-reduced-motion: reduce) {
+  body.homepage .home-firm-preview .home-firm-preview__proof span,
+  body.homepage .home-firm-preview .home-firm-preview__proof span::before,
+  body.homepage .home-firm-preview .home-firm-preview__proof span::after {
+    transition: none;
+  }
+  body.homepage .home-firm-preview .home-firm-preview__proof span:hover { transform: none; }
 }
 body.homepage .home-firm-preview .home-firm-preview__link {
   margin-top: auto; padding-top: clamp(28px, 3vw, 44px);
-  align-self: flex-start;
+  align-self: flex-end;
+  text-align: right;
 }
 
 @media (max-width: 1023px) {
@@ -521,31 +704,40 @@ body.homepage .home-firm-preview .home-firm-preview__link {
   body.homepage .home-firm-preview { padding-block: clamp(64px, 12vw, 96px); }
   body.homepage .home-firm-preview .home-firm-preview__grid { padding-block: clamp(32px, 7vw, 44px); }
   body.homepage .home-firm-preview .home-firm-preview__statement { margin-top: 24px; }
+  body.homepage .home-firm-preview .home-firm-preview__proof { grid-template-columns: 1fr; }
+  body.homepage .home-firm-preview .home-firm-preview__proof span,
+  body.homepage .home-firm-preview .home-firm-preview__proof span:not(:first-child) { padding: 18px; border-right: 0; border-bottom: 1px solid var(--sv-border-light); min-height: 58px; }
+  body.homepage .home-firm-preview .home-firm-preview__proof span:last-child { border-bottom: 0; }
 }
 
 /* ==========================================================================
    E · STRATEGY (memo)
    ========================================================================== */
-body.homepage .sv-strategy { background: var(--sv-stone); }
+body.homepage .sv-strategy {
+  background: var(--sv-stone);
+}
 body.homepage .sv-strategy__inner { padding-block: var(--section-y); align-items: start; }
 body.homepage .sv-strategy__lead { grid-column: 1 / 6; }
 body.homepage .sv-strategy__lead .sv-h2 { margin: 16px 0 22px; }
 body.homepage .sv-strategy__lead p:not(.sv-label) { margin: 0 0 26px; max-width: 44ch; font: 400 16px/1.66 var(--sv-font); color: var(--sv-ink-2); }
 body.homepage .sv-strategy__rows { grid-column: 7 / 13; }
-body.homepage .sv-strategy__rows { display: flex; flex-direction: column; gap: 0; border-top: 2px solid var(--sv-cinnabar); }
+body.homepage .sv-strategy__rows { display: flex; flex-direction: column; gap: 0; border-top: 2px solid var(--sv-cinnabar); box-shadow: 0 1px 0 var(--sv-border-light-strong); }
 body.homepage .sv-srow {
-  display: flex; align-items: center;
-  min-height: 82px;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 22px;
+  min-height: 112px;
   padding: clamp(22px, 2.2vw, 30px) clamp(20px, 2vw, 28px);
   border-bottom: 1px solid var(--sv-border-light-strong);
   position: relative;
   overflow: hidden;
   isolation: isolate;
-  cursor: default;
+  cursor: pointer;
+  text-decoration: none;
+  background: rgba(252, 249, 241, 0.34);
   transition:
     background-color 260ms ease,
     border-color 260ms ease,
-    transform 260ms ease;
+    transform 260ms ease,
+    box-shadow 260ms ease;
 }
 body.homepage .sv-srow::before {
   content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
@@ -559,8 +751,7 @@ body.homepage .sv-srow::after {
   content: "";
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(90deg, rgba(201, 59, 42, 0.105), rgba(201, 59, 42, 0.035) 48%, rgba(201, 59, 42, 0));
+  background: rgba(201, 59, 42, 0.06);
   opacity: 0;
   transform: translateX(-18px);
   transition:
@@ -570,8 +761,9 @@ body.homepage .sv-srow::after {
 }
 body.homepage .sv-srow:hover,
 body.homepage .sv-srow:focus-within {
-  background-color: rgba(252, 249, 241, 0.42);
+  background-color: rgba(252, 249, 241, 0.72);
   border-bottom-color: rgba(201, 59, 42, 0.32);
+  box-shadow: 0 10px 26px -12px rgba(24, 37, 36, 0.14);
 }
 body.homepage .sv-srow:hover::before,
 body.homepage .sv-srow:focus-within::before {
@@ -582,11 +774,17 @@ body.homepage .sv-srow:focus-within::after {
   opacity: 1;
   transform: translateX(0);
 }
-body.homepage .sv-srow__title {
+body.homepage .sv-srow__index {
   position: relative;
   z-index: 2;
+  font: 600 12px/1 var(--sv-font);
+  letter-spacing: 0.12em;
+  color: var(--sv-cinnabar);
+}
+body.homepage .sv-srow__content { position: relative; z-index: 2; display: block; }
+body.homepage .sv-srow__title {
   margin: 0;
-  font: 500 21px/1.2 var(--sv-font);
+  font: 500 22px/1.2 var(--sv-font);
   letter-spacing: -0.012em;
   color: var(--sv-ink);
   transition:
@@ -596,9 +794,27 @@ body.homepage .sv-srow__title {
 body.homepage .sv-srow:hover .sv-srow__title,
 body.homepage .sv-srow:focus-within .sv-srow__title {
   color: var(--sv-cinnabar-d);
-  transform: translateX(10px);
+  transform: translateX(6px);
 }
-body.homepage .sv-srow__body { margin: 0; font: 400 15.5px/1.6 var(--sv-font); color: var(--sv-ink-2); }
+body.homepage .sv-srow__body { display: block; margin-top: 9px; max-width: 50ch; font: 400 15.5px/1.56 var(--sv-font); color: var(--sv-ink-2); }
+body.homepage .sv-srow__arrow {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--sv-border-light-strong);
+  color: var(--sv-cinnabar);
+  transition: transform 260ms ease, border-color 260ms ease, background 260ms ease;
+}
+body.homepage .sv-srow:hover .sv-srow__arrow,
+body.homepage .sv-srow:focus-within .sv-srow__arrow {
+  transform: translateX(4px);
+  border-color: var(--sv-cinnabar);
+  background: rgba(201, 59, 42, 0.08);
+}
 
 /* ==========================================================================
    F · EXECUTION MODEL (workflow)
@@ -646,7 +862,7 @@ body.homepage .sv-caps .sv-cap:nth-child(2n) { border-right: 0; }
 body.homepage .sv-caps .sv-cap:nth-last-child(-n+2) { border-bottom: 0; }
 body.homepage .sv-cap__title { margin: 0 0 10px; font: 500 18px/1.22 var(--sv-font); color: var(--sv-ink); }
 body.homepage .sv-cap__body { margin: 0; font: 400 14.5px/1.56 var(--sv-font); color: var(--sv-ink-2); }
-body.homepage .sv-opmodel__panel { background: linear-gradient(158deg, #C93B2A 0%, #8F2A20 100%); color: var(--sv-ivory); padding: 36px; display: flex; flex-direction: column; justify-content: center; }
+body.homepage .sv-opmodel__panel { background: var(--sv-cinnabar); color: var(--sv-ivory); padding: 36px; display: flex; flex-direction: column; justify-content: center; }
 body.homepage .sv-opmodel__panel-label { font: 600 11px/1 var(--sv-font); letter-spacing: 0.18em; text-transform: uppercase; color: var(--sv-faint-on-cinnabar); }
 body.homepage .sv-opmodel__panel-title { margin: 14px 0 16px; font: 500 clamp(26px, 2.4vw, 32px)/1.0 var(--sv-font); letter-spacing: -0.02em; color: var(--sv-ivory); }
 body.homepage .sv-opmodel__panel-body { margin: 0; font: 400 15px/1.6 var(--sv-font); color: var(--sv-meta-on-cinnabar); }
@@ -658,7 +874,10 @@ body.homepage .sv-platform__proof {
 /* ==========================================================================
    H · CHINA DEBT DYNAMICS (dark research archive)
    ========================================================================== */
-body.homepage .sv-cdd { background: var(--sv-dark); color: var(--sv-text-on-dark); }
+body.homepage .sv-cdd {
+  background: var(--sv-dark);
+  color: var(--sv-text-on-dark);
+}
 body.homepage .sv-cdd__inner { padding-block: var(--section-y); }
 body.homepage .sv-cdd__head {
   display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: clamp(24px, 4vw, 64px);
@@ -668,25 +887,43 @@ body.homepage .sv-cdd__head {
 body.homepage .sv-cdd__label { margin: 0 0 16px; font: 600 12px/1 var(--sv-font); letter-spacing: 0.14em; text-transform: uppercase; color: var(--sv-cinnabar); }
 body.homepage .sv-cdd__title { margin: 0; font: 500 clamp(34px, 4vw, 56px)/1.0 var(--sv-serif); letter-spacing: -0.01em; color: var(--sv-ivory); }
 body.homepage .sv-cdd__cn { margin: 10px 0 0; font: 500 16px/1.4 var(--sv-cn); letter-spacing: 0.06em; color: var(--sv-meta-on-dark); }
-body.homepage .sv-cdd__desc { margin: 0; font: 400 16px/1.66 var(--sv-font); color: var(--sv-meta-on-dark); max-width: none; width: 100%; justify-self: stretch; }
+body.homepage .sv-cdd__desc { margin: 0; font: 400 16px/1.66 var(--sv-font); color: var(--sv-meta-on-dark); max-width: none; width: 100%; justify-self: stretch; text-align: right; }
 
-/* Featured report — prioritized with a cinnabar top ledge */
+/* Featured report — the one ceremonial callout on the page: gold top ledge
+   and tag (Dawn Redwood gold is reserved for exactly this kind of "special
+   issue" emphasis), so it no longer competes with the cinnabar CTAs. */
 body.homepage .sv-cdd__feature {
   display: grid; grid-template-columns: 200px minmax(0,1fr); gap: clamp(20px, 3vw, 56px);
-  padding: clamp(28px,3vw,40px) 0; margin-top: clamp(28px,3vw,40px);
-  border-top: 2px solid var(--sv-cinnabar);
-  border-top: 1px solid var(--sv-cinnabar);
+  padding: clamp(28px,3vw,40px); margin-top: clamp(28px,3vw,40px);
+  border-top: 1px solid var(--sv-gold, #C89A2E);
   border-bottom: 1px solid var(--sv-border-dark);
+  border-left: 1px solid rgba(200, 154, 46, 0.4);
+  background: rgba(252, 249, 241, 0.035);
   text-decoration: none; color: inherit;
+  transition:
+    background .32s cubic-bezier(.2, .7, .2, 1),
+    border-color .32s cubic-bezier(.2, .7, .2, 1),
+    box-shadow .32s cubic-bezier(.2, .7, .2, 1),
+    transform .32s cubic-bezier(.2, .7, .2, 1);
 }
 body.homepage .sv-cdd__feature-meta { display: flex; flex-direction: column; gap: 10px; }
-body.homepage .sv-cdd__feature-tag { font: 600 11px/1 var(--sv-font); letter-spacing: 0.16em; text-transform: uppercase; color: var(--sv-cinnabar); }
+body.homepage .sv-cdd__feature-tag { font: 600 11px/1 var(--sv-font); letter-spacing: 0.16em; text-transform: uppercase; color: var(--sv-gold, #C89A2E); }
 body.homepage .sv-cdd__feature-issue { font: 500 13px/1.4 var(--sv-font); color: var(--sv-meta-on-dark); }
 body.homepage .sv-cdd__feature-title { margin: 0 0 14px; font: 500 clamp(22px,2.2vw,30px)/1.16 var(--sv-font); letter-spacing: -0.012em; color: var(--sv-ivory); }
 body.homepage .sv-cdd__feature-body { margin: 0 0 18px; font: 400 15.5px/1.6 var(--sv-font); color: var(--sv-meta-on-dark); max-width: 60ch; }
 body.homepage .sv-cdd__feature-read { font: 600 12px/1 var(--sv-font); letter-spacing: 0.1em; text-transform: uppercase; color: var(--sv-ivory); }
-body.homepage .sv-cdd__feature-read span { color: var(--sv-cinnabar); }
-body.homepage .sv-cdd__feature:hover .sv-cdd__feature-title { color: #E8C9C2; }
+body.homepage .sv-cdd__feature-read span { color: var(--sv-gold, #C89A2E); display: inline-block; transition: transform .2s cubic-bezier(.2,.8,.2,1); }
+body.homepage .sv-cdd__feature:hover {
+  background: rgba(252, 249, 241, 0.06);
+  border-left-color: var(--sv-gold, #C89A2E);
+  box-shadow: 0 16px 40px -22px rgba(0, 0, 0, 0.55);
+  transform: translateY(-1px);
+}
+body.homepage .sv-cdd__feature:hover .sv-cdd__feature-read span { transform: translateX(4px); }
+@media (prefers-reduced-motion: reduce) {
+  body.homepage .sv-cdd__feature { transition: background .3s ease, border-color .3s ease; }
+  body.homepage .sv-cdd__feature:hover { transform: none; }
+}
 
 /* Archive table */
 body.homepage .sv-cdd__recent { margin: clamp(30px,3.4vw,46px) 0 0; font: 600 11px/1 var(--sv-font); letter-spacing: 0.16em; text-transform: uppercase; color: var(--sv-faint-on-dark); }
@@ -726,33 +963,65 @@ body.homepage .sv-cdd { border-bottom: 3px solid var(--sv-cinnabar); }
    I · FOOTER / LEGAL (dark teal)
    ========================================================================== */
 body.homepage .sv-footer { background: var(--sv-dark-footer); color: var(--sv-meta-on-dark); }
-body.homepage .sv-footer__inner { padding: 64px var(--pad-x) 30px; max-width: var(--page-max); margin-inline: auto; }
+body.homepage .sv-footer__inner { padding: clamp(52px,6vw,76px) var(--pad-x) 30px; max-width: var(--page-max); margin-inline: auto; }
 body.homepage .sv-footer__top {
-  display: grid; grid-template-columns: minmax(0,1fr) auto; gap: clamp(32px,5vw,72px);
-  align-items: start; padding-bottom: 36px; border-bottom: 1px solid var(--sv-border-dark);
+  display: grid; grid-template-columns: minmax(0,1fr) auto; gap: clamp(40px,6vw,104px);
+  align-items: start; padding-bottom: clamp(34px,4vw,44px); border-bottom: 1px solid var(--sv-border-dark);
 }
-body.homepage .sv-footer__logo img { width: 200px; height: auto; }
-body.homepage .sv-footer__offices { margin: 22px 0 0; font: 400 13.5px/1.7 var(--sv-font); color: var(--sv-meta-on-dark); }
-body.homepage .sv-footer__offices a { color: var(--sv-ivory); text-decoration: none; border-bottom: 1px solid rgba(252,249,241,0.3); }
-body.homepage .sv-footer__nav { display: grid; grid-template-columns: repeat(2, auto); gap: 10px 56px; }
+body.homepage .sv-footer__logo img { width: 190px; height: auto; display: block; }
+body.homepage .sv-footer__offices { margin: 20px 0 0; font: 400 13.5px/1.75 var(--sv-font); color: var(--sv-meta-on-dark); }
+body.homepage .sv-footer__offices a {
+  display: inline-block; margin-top: 6px;
+  color: var(--sv-ivory); text-decoration: none; border-bottom: 1px solid rgba(252,249,241,0.28);
+  transition: border-color .2s ease;
+}
+body.homepage .sv-footer__offices a:hover { border-color: var(--sv-ivory); }
+
+/* Nav: one tidy 2-column set of links; the Investor Portal "access" link is
+   folded in as the final grid item so both columns run to an even height and
+   the left brand column no longer strands a tall empty gap beside it. */
+body.homepage .sv-footer__nav {
+  display: grid; grid-template-columns: repeat(2, minmax(0, max-content));
+  gap: 12px clamp(48px, 5vw, 80px);
+  justify-content: end;
+  justify-items: end;
+  text-align: right;
+}
 body.homepage .sv-footer__nav a {
-  font: 500 13px/1 var(--sv-font); letter-spacing: 0.04em;
-  color: var(--sv-meta-on-dark); text-decoration: none; padding: 5px 0; display: inline-block;
+  font: 500 13px/1 var(--sv-font); letter-spacing: 0.02em;
+  color: var(--sv-meta-on-dark); text-decoration: none; padding: 4px 0; display: inline-block;
+  transition: color .18s ease;
 }
 body.homepage .sv-footer__nav a:hover { color: var(--sv-ivory); }
+/* Investor Portal — dissolve the wrapper into the nav grid and hide its label so it matches the other footer links. */
+body.homepage .sv-footer__access { display: contents; }
+body.homepage .sv-footer__access-label { display: none; }
+body.homepage .sv-footer__access a {
+  font: 500 13px/1 var(--sv-font); letter-spacing: 0.02em;
+  color: var(--sv-meta-on-dark); text-decoration: none; padding: 4px 0; display: inline-block;
+  transition: color .18s ease;
+}
+body.homepage .sv-footer__access a::after { content: none; }
+body.homepage .sv-footer__access a:hover { color: var(--sv-ivory); }
+
 body.homepage .sv-footer__legal {
-  margin: 30px 0 0; padding: 24px 0 0;
-  border-top: 1px solid var(--sv-border-dark);
-  font: 400 12px/1.6 var(--sv-font); color: var(--sv-faint-on-dark);
+  margin: clamp(28px,3.5vw,38px) 0 0; padding: 0;
+  width: 100%;
+  max-width: none;
+  font: 400 12px/1.7 var(--sv-font); color: var(--sv-faint-on-dark);
 }
 body.homepage .sv-footer__legal p { margin: 0 0 10px; }
 body.homepage .sv-footer__legal p:last-child { margin-bottom: 0; }
 body.homepage .sv-footer__bottom {
   display: flex; flex-wrap: wrap; gap: 14px 28px; justify-content: space-between; align-items: center;
-  padding-top: 22px;
+  margin-top: clamp(28px,3.5vw,38px); padding-top: 22px;
+  border-top: 1px solid var(--sv-border-dark);
 }
 body.homepage .sv-footer__links { display: flex; flex-wrap: wrap; gap: 8px 22px; }
-body.homepage .sv-footer__links a { font: 400 12px/1 var(--sv-font); color: var(--sv-meta-on-dark); text-decoration: none; }
+body.homepage .sv-footer__links a {
+  font: 400 12px/1 var(--sv-font); color: var(--sv-meta-on-dark); text-decoration: none;
+  transition: color .18s ease;
+}
 body.homepage .sv-footer__links a:hover { color: var(--sv-ivory); }
 body.homepage .sv-footer__copy { font: 400 12px/1 var(--sv-font); color: var(--sv-faint-on-dark); }
 
@@ -760,14 +1029,17 @@ body.homepage .sv-footer__copy { font: 400 12px/1 var(--sv-font); color: var(--s
    Scroll-to-top
    ========================================================================== */
 body.homepage .sv-totop {
-  position: fixed; width: 44px; height: 44px;
-  right: max(24px, calc((100vw - var(--page-max)) / 2)); bottom: 24px;
+  position: fixed; width: 46px; height: 46px; border-radius: 999px;
+  right: max(24px, calc((100vw - var(--page-max)) / 2)); bottom: 28px;
   display: flex; align-items: center; justify-content: center;
-  background: var(--sv-ivory); border: 1px solid var(--sv-border-light-strong);
+  background: rgba(252,249,241,0.94); border: 1px solid var(--sv-border-light-strong);
   color: var(--sv-ink); cursor: pointer; z-index: 900;
-  opacity: 0; visibility: hidden; transition: opacity .2s ease, visibility .2s ease;
+  box-shadow: 0 6px 20px rgba(24,37,36,0.16);
+  opacity: 0; visibility: hidden; transform: translateY(8px);
+  transition: opacity .2s ease, visibility .2s ease, transform .2s ease, background .2s ease, color .2s ease, border-color .2s ease;
 }
-body.homepage .sv-totop.is-visible { opacity: 1; visibility: visible; }
+body.homepage .sv-totop.is-visible { opacity: 1; visibility: visible; transform: translateY(0); }
+body.homepage .sv-totop:hover { background: var(--sv-dark-footer); border-color: var(--sv-dark-footer); color: var(--sv-ivory); }
 body.homepage .sv-totop svg { width: 16px; height: 16px; }
 
 /* ==========================================================================
@@ -865,9 +1137,10 @@ body.homepage .sv-totop svg { width: 16px; height: 16px; }
   body.homepage .sv-stat:not(:nth-child(1)) { border-top: 1px solid var(--sv-border-light); }
   body.homepage .sv-caps { grid-template-columns: 1fr; }
   body.homepage .sv-cap { border-right: 0; min-height: 0; }
-  body.homepage .sv-footer__nav { grid-template-columns: 1fr; }
+  body.homepage .sv-footer__nav { grid-template-columns: 1fr; gap: 0; justify-content: start; justify-items: start; text-align: left; }
   /* Enlarge footer tap targets to ~44px on mobile. */
-  body.homepage .sv-footer__nav a { padding: 13px 0; }
+  body.homepage .sv-footer__nav a,
+  body.homepage .sv-footer__access a { padding: 13px 0; }
   body.homepage .sv-footer__links { gap: 2px 22px; }
   body.homepage .sv-footer__links a { padding: 13px 0; display: inline-block; }
 }
@@ -876,7 +1149,7 @@ body.homepage .sv-totop svg { width: 16px; height: 16px; }
    Motion
    ========================================================================== */
 @media (prefers-reduced-motion: no-preference) {
-  body.homepage .sv-reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; }
+  body.homepage .sv-reveal { opacity: 1; transform: none; transition: none; }
   body.homepage .sv-reveal.is-in { opacity: 1; transform: none; }
 }
 
@@ -909,6 +1182,11 @@ body.homepage .sv-totop svg { width: 16px; height: 16px; }
 
   body.homepage .sv-mobile-menu {
     padding-inline: var(--pad-x);
+    padding-top: 22px;
+  }
+
+  body.homepage .sv-mobile-menu .sv-mobile-utils .sv-util-btn {
+    min-height: 54px;
   }
 
   body.homepage .sv-hero__inner {
@@ -1312,25 +1590,565 @@ body.homepage .sv-hero__panel-row dt {
   }
 }
 
+/* Footer "Access" group (Investor Portal) is now folded into the footer nav
+   grid — see the .sv-footer__access rules in the FOOTER / LEGAL block above. */
+
 /* ==========================================================================
-   Footer "Access" group — Investor Portal + Employee Portal entry points.
-   The Employee Portal is the private ShoreVest Operations application and
-   opens in a new tab; the public site is only the entry point.
+   B2 · HERO — layered editorial composition (approved 2026-07-08)
+   Square photograph on the right with a single offset cinnabar block behind
+   it and the ivory "at a glance" card floating over the photo edge. The left
+   column keeps plain text on the ivory page ground. This hero system is
+   shared by the Media page (body.press-page also carries .homepage).
    ========================================================================== */
-body.homepage .sv-footer__access {
-  grid-column: 1 / -1;
-  display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px 26px;
-  margin-top: 16px; padding-top: 14px;
-  border-top: 1px solid var(--sv-border-dark);
+body.homepage .sv-hero__inner {
+  align-items: center;
+  min-height: 0;
+  padding-block: clamp(56px, 6vw, 88px) clamp(72px, 7vw, 104px);
 }
-body.homepage .sv-footer__access-label {
-  margin: 0;
-  font: 700 10px/1 var(--sv-font);
-  letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--sv-faint-on-dark);
+body.homepage .sv-hero__main {
+  padding-block: 0;
+  padding-right: clamp(24px, 3vw, 56px);
 }
-body.homepage .sv-footer__access a {
-  font: 500 13px/1 var(--sv-font); letter-spacing: 0.04em;
-  color: var(--sv-meta-on-dark); text-decoration: none; padding: 5px 0; display: inline-block;
+body.homepage .sv-hero__field {
+  position: relative;
+  align-self: center;
+  margin-block: 0;
+  min-height: 0;
+  background: transparent;
+  padding: 0;
+  display: block;
 }
-body.homepage .sv-footer__access a:hover { color: var(--sv-ivory); }
+/* Single layered square: only the cinnabar block sits behind the photo */
+body.homepage .sv-hero__field::after { display: none; }
+/* Cinnabar block offset down-and-right behind the photograph */
+body.homepage .sv-hero__field::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: clamp(44px, 4.5vw, 68px);
+  right: clamp(-36px, -2.2vw, -20px);
+  bottom: -26px;
+  left: clamp(36px, 3.5vw, 56px);
+  width: auto;
+  background: var(--sv-cinnabar);
+  border-radius: 0;
+  z-index: 0;
+}
+body.homepage .sv-hero__image {
+  position: relative; z-index: 1;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border: 0;
+  border-radius: 0;
+  background: var(--sv-stone);
+  overflow: hidden;
+}
+body.homepage .sv-hero__image img {
+  display: block; width: 100%; height: 100%;
+  object-fit: cover; object-position: center;
+  filter: grayscale(1) contrast(1.02);
+  transition: filter 720ms cubic-bezier(.2, .7, .2, 1);
+  will-change: filter;
+}
+/* Keep the hero image stationary on hover; only reveal colour. */
+body.homepage .sv-hero__image:hover img {
+  filter: grayscale(0.12) contrast(1.02);
+}
+@media (prefers-reduced-motion: reduce) {
+  body.homepage .sv-hero__image img { transition: filter 320ms ease; }
+}
+body.homepage .sv-hero__panel {
+  position: absolute; z-index: 2;
+  right: clamp(24px, 2.8vw, 44px);
+  bottom: clamp(26px, 3vw, 44px);
+  width: min(440px, 76%);
+  max-width: none;
+  padding: clamp(26px, 2.8vw, 38px);
+  background: #FFFFFF;
+  border: 1px solid rgba(82, 71, 54, 0.18);
+  border-top: 1px solid rgba(82, 71, 54, 0.18);
+  border-radius: 0;
+  box-shadow: 0 18px 42px rgba(23, 28, 28, 0.10);
+}
+@media (max-width: 1023px) and (min-width: 768px) {
+  body.homepage .sv-hero__main { padding-block: 40px 56px; }
+  body.homepage .sv-hero__field {
+    grid-column: 2 / 12;
+    padding: 0;
+    margin-bottom: 34px;
+  }
+  body.homepage .sv-hero__panel { max-width: none; }
+}
+@media (max-width: 767px) {
+  body.homepage .sv-hero { overflow: hidden; }
+  body.homepage .sv-hero__main { padding-block: 48px 36px; }
+  body.homepage .sv-hero__field {
+    background: transparent;
+    padding: 0 0 22px;
+    margin-inline: 0;
+    width: 100%;
+  }
+  body.homepage .sv-hero__field::before {
+    display: block;
+    top: 40px; right: calc(var(--pad-x) * -1); bottom: 0; left: 28px;
+  }
+  body.homepage .sv-hero__field::after { display: none; }
+  body.homepage .sv-hero__image { margin-right: 14px; width: auto; }
+  body.homepage .sv-hero__panel {
+    position: relative;
+    right: auto; bottom: auto;
+    width: auto;
+    margin: -56px 0 0 22px;
+    padding: 26px 22px;
+    background: #FFFFFF;
+    border-left: 1px solid rgba(82, 71, 54, 0.18);
+    box-shadow: 0 14px 30px rgba(23, 28, 28, 0.10);
+  }
+}
+@media (max-width: 430px) {
+  body.homepage .sv-hero__field { margin-inline: 0; padding: 0 0 20px; }
+  body.homepage .sv-hero__panel { margin: -44px 0 0 14px; }
+}
+
+/* ==========================================================================
+   NO HORIZONTAL LINES / BARS — 2026-07-08
+   Client directive: decorative horizontal rules and bars are banned site-wide.
+   Keep content and layout intact while suppressing visible rule/bar elements,
+   horizontal pseudo-element accents, and standalone <hr> separators.
+   ========================================================================== */
+:where(hr, [role="separator"]),
+:where(
+  [class*="rule"],
+  [class*="divider"],
+  [class*="topline"],
+  [class*="bar"],
+  [class*="separator"],
+  [class*="__line"],
+  [class*="-line"],
+  [class*="line-"]
+):not(svg):not(path):not(img) {
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  background-image: none !important;
+}
+
+:where(
+  [class*="rule"],
+  [class*="divider"],
+  [class*="topline"],
+  [class*="separator"],
+  [class*="__line"],
+  [class*="-line"],
+  [class*="line-"]
+):not(svg):not(path):not(img) {
+  display: none !important;
+}
+
+:where(
+  [class*="eyebrow"],
+  [class*="kicker"],
+  [class*="label"],
+  [class*="heading"],
+  [class*="title"],
+  [class*="intro"],
+  [class*="hero"],
+  [class*="section"]
+)::before,
+:where(
+  [class*="eyebrow"],
+  [class*="kicker"],
+  [class*="label"],
+  [class*="heading"],
+  [class*="title"],
+  [class*="intro"],
+  [class*="hero"],
+  [class*="section"]
+)::after {
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+}
+
+:where(
+  [class*="eyebrow"],
+  [class*="kicker"],
+  [class*="label"]
+)::before,
+:where(
+  [class*="eyebrow"],
+  [class*="kicker"],
+  [class*="label"]
+)::after {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+/* ==========================================================================
+   Page divider standard — warm xuan hairline
+   Matches the supplied reference: one full-width, 1px warm paper rule.
+   ========================================================================== */
+:root {
+  --sv-page-divider-color: rgba(216, 206, 176, 0.82);
+  --sv-page-divider-thickness: 1px;
+  --sv-page-divider-max: var(--page-max, 1684px);
+  --sv-page-divider-pad: var(--pad-x, clamp(24px, 8.9vw, 182px));
+}
+
+:where(
+  hr,
+  [role="separator"],
+  .section-divider,
+  .principles-rule,
+  .home-cdd__rule,
+  .strategy-section-intro__divider,
+  .strategy-section-intro__rule,
+  .strategy-rotation__divider,
+  .strategy-rotation__rule,
+  .opp-lead__rule,
+  .tss-row__bar,
+  .ip__seal,
+  .tss-closer__seal,
+  .cdd-arc__closer-seal,
+  .cdd-arc__seal-rule,
+  .cp-hero__title-rule,
+  .cp-hero__divider,
+  .cp-routing-card__rule,
+  .cp-section-head__rule,
+  .ogeo__divider
+):not(svg):not(path):not(img) {
+  display: block !important;
+  width: min(calc(100% - (2 * var(--sv-page-divider-pad))), var(--sv-page-divider-max)) !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  margin: clamp(56px, 6.3vw, 129px) auto !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-top: var(--sv-page-divider-thickness) solid var(--sv-page-divider-color) !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  color: transparent !important;
+  overflow: hidden !important;
+}
+
+main > section + section {
+  border-top-color: var(--sv-page-divider-color) !important;
+  border-top-width: var(--sv-page-divider-thickness) !important;
+}
+
+/* ==========================================================================
+   FINAL NO HORIZONTAL RULES / BARS — client directive
+   Suppresses decorative horizontal rule elements and section hairlines.
+   ========================================================================== */
+:where(
+  hr,
+  [role="separator"],
+  [class*="__rule"],
+  [class*="-rule"],
+  [class*="rule-"],
+  [class*="__divider"],
+  [class*="-divider"],
+  [class*="divider-"],
+  [class*="topline"],
+  [class*="separator"]
+):not(svg):not(path):not(img):not(input):not(textarea):not(select) {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  color: transparent !important;
+  overflow: hidden !important;
+}
+
+:where(main > section + section, .sv-hero__right, .cdd-intro__bar, .cdd-arc__list, .cdd-arc__row, .cdd-stat, .research-sub) {
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+:where([class*="eyebrow"], [class*="kicker"], [class*="label"], [class*="heading"], [class*="title"], [class*="intro"], [class*="hero"], [class*="section"])::before,
+:where([class*="eyebrow"], [class*="kicker"], [class*="label"], [class*="heading"], [class*="title"], [class*="intro"], [class*="hero"], [class*="section"])::after {
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+:where([class*="eyebrow"], [class*="kicker"], [class*="label"])::before,
+:where([class*="eyebrow"], [class*="kicker"], [class*="label"])::after {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+/* ==========================================================================
+   GLOBAL IMAGE DEPTH
+   Gives site imagery a consistent elevated treatment while preserving the
+   flat rendering of brand lockups and small UI icons.
+   ========================================================================== */
+:root {
+  --sv-image-shadow: 0 18px 42px rgba(13, 35, 43, 0.18), 0 6px 18px rgba(13, 35, 43, 0.12);
+}
+
+body :where(img):not(.sv-header img):not(.sv-footer img):not([src*="/brand/"]):not([src*="assets/brand/"]):not([src*="favicon"]):not([src*="apple-touch-icon"]) {
+  box-shadow: var(--sv-image-shadow) !important;
+}
+
+/* 2026-07-11 · Hero cards/boxes: restore depth on every masthead support box. */
+body.homepage :is(.sv-hero__field, .sv-hero__panel),
+body.press-page :is(.sv-hero__field, .sv-hero__panel),
+body.insights-page .cdd-hero__panel {
+  box-shadow: 0 18px 42px rgba(23, 28, 28, 0.14) !important;
+}
+
+@media (max-width: 640px) {
+  body.homepage :is(.sv-hero__field, .sv-hero__panel),
+  body.press-page :is(.sv-hero__field, .sv-hero__panel),
+  body.insights-page .cdd-hero__panel {
+    box-shadow: 0 14px 30px rgba(23, 28, 28, 0.12) !important;
+  }
+}
+
+/* ==========================================================================
+   GLOBAL BOX DEPTH  (2026-07-11)
+   Companion to GLOBAL IMAGE DEPTH above. Gives every content card / panel /
+   stat block / image frame across the site a consistent soft elevation so no
+   box reads as flat. Namespaced container classes only — inner text elements
+   (labels, values, titles) are never targeted. Loaded before the per-page
+   stylesheets, so !important keeps the treatment consistent everywhere.
+   Framed images (overflow:hidden wrappers) get the shadow on the frame, since
+   the inner <img>'s own shadow would be clipped.
+   ========================================================================== */
+:root {
+  --sv-box-shadow: 0 14px 34px rgba(23, 28, 28, 0.10), 0 3px 9px rgba(23, 28, 28, 0.05);
+}
+
+/* Homepage */
+body.homepage .sv-cdd__feature,
+/* Strategy */
+body.strategy-page .sx-glance,
+body.strategy-page .st-risk__panel,
+/* Team */
+body.team-page-v2 .team-hero__statcard,
+/* Insights */
+body.insights-page .cdd-arc__row--featured,
+/* CDD articles */
+body.cdd-article-page .cdd-stat,
+/* Investor portal */
+body.investor-portal-page .investor-portal-panel,
+body.investor-portal-page .ip-assure__cell {
+  box-shadow: var(--sv-box-shadow) !important;
+}
+
+/* Team portrait frames carry an intentional flat-frame reset in team-refine.css
+   (html body.team-page-v2 .team-profile__photo → none !important). Match that
+   depth with a higher-specificity override so every portrait sits on the same
+   soft elevation as the rest of the site's imagery. */
+html body.team-page-v2 .team-profile .team-profile__photo {
+  box-shadow: var(--sv-box-shadow) !important;
+}
+
+/* ==========================================================================
+   Site-wide mobile polish pass — 2026-07-13
+   Conservative guardrails for every static page that loads this stylesheet:
+   stronger viewport containment, safer fixed-header/mobile-menu geometry,
+   readable narrow-column typography, and comfortable touch targets.
+   ========================================================================== */
+@media (max-width: 767px) {
+  :root {
+    --header-h: calc(72px + env(safe-area-inset-top, 0px));
+    --header-height: var(--header-h);
+    --pad-x: clamp(20px, 5.8vw, 28px);
+  }
+
+  html,
+  body.homepage {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
+  body.homepage {
+    padding-top: var(--header-h);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body.homepage .sv-header {
+    height: var(--header-h);
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  body.homepage .sv-header__inner {
+    min-width: 0;
+    grid-template-columns: minmax(0, auto) minmax(56px, 1fr);
+    gap: 14px;
+  }
+
+  body.homepage .sv-header__logo,
+  body.homepage .sv-header__logo img {
+    min-width: 0;
+  }
+
+  body.homepage .sv-header__logo img {
+    width: clamp(146px, 42vw, 172px);
+  }
+
+  body.homepage .sv-burger {
+    width: 48px;
+    height: 48px;
+    margin-right: -10px;
+    touch-action: manipulation;
+  }
+
+  body.homepage .sv-mobile-menu {
+    position: fixed;
+    top: var(--header-h);
+    left: 0;
+    right: 0;
+    max-height: calc(100dvh - var(--header-h));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: max(24px, env(safe-area-inset-bottom, 0px));
+    z-index: 999;
+  }
+
+  body.homepage .sv-mobile-menu a,
+  body.homepage .sv-mobile-menu .sv-util-btn,
+  body.homepage .sv-btn,
+  body.homepage .sv-textlink,
+  body.homepage .sv-cdd__archive-btn,
+  body.homepage .sv-footer__nav a,
+  body.homepage .sv-footer__links a,
+  body.homepage .sv-footer__access a {
+    min-height: 44px;
+    touch-action: manipulation;
+  }
+
+  body.homepage main,
+  body.homepage section,
+  body.homepage article,
+  body.homepage aside,
+  body.homepage .sv-shell,
+  body.homepage .sv-grid12,
+  body.homepage [class*="__inner"],
+  body.homepage [class*="__grid"],
+  body.homepage [class*="__body"],
+  body.homepage [class*="__copy"] {
+    min-width: 0;
+  }
+
+  body.homepage :is(h1, h2, h3, h4, p, li, a, dt, dd, figcaption) {
+    overflow-wrap: anywhere;
+  }
+
+  body.homepage :is(h1, h2, h3, .sv-h2, .sv-hero__headline) {
+    overflow-wrap: normal;
+    text-wrap: balance;
+  }
+
+  body.homepage img,
+  body.homepage video,
+  body.homepage svg,
+  body.homepage canvas,
+  body.homepage iframe {
+    max-width: 100%;
+  }
+
+  body.homepage table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media (max-width: 390px) {
+  :root {
+    --pad-x: clamp(18px, 5.6vw, 22px);
+  }
+
+  body.homepage .sv-header__inner {
+    gap: 10px;
+  }
+
+  body.homepage .sv-header__logo img {
+    width: clamp(138px, 43vw, 158px);
+  }
+
+  body.homepage .sv-burger {
+    margin-right: -12px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Perceived image-loading fix
+   --------------------------------------------------------------------------
+   Large hero/feature photos can take a moment on cold cache. Avoid showing
+   opaque stone-colored blocks while those files decode; keep the editorial
+   layout stable, but let the page background show through until the image is
+   ready. */
+body.homepage :is(.sv-hero__image, .fm-who__figure, .sx-hero__image, .cdd-hero__image, .media-hero .sv-hero__image, .team-profile__photo, .cp-office__photo) {
+  background: transparent !important;
+}
+
+body.homepage :is(.sv-hero__image, .fm-who__figure, .sx-hero__image, .cdd-hero__image, .media-hero .sv-hero__image, .team-profile__photo) img {
+  background: transparent !important;
+  opacity: 1;
+}
+
+/* Footer LinkedIn social link */
+body.homepage .sv-footer__social {
+  grid-column: 2;
+  justify-self: end;
+  margin-top: 20px;
+}
+body.homepage .sv-footer__social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 8px 0;
+  font: 500 14px/1 var(--sv-font);
+  letter-spacing: 0.03em;
+  color: var(--sv-meta-on-dark);
+  text-decoration: none;
+  text-underline-offset: 4px;
+  transition: color .18s ease;
+}
+body.homepage .sv-footer__social-link:hover,
+body.homepage .sv-footer__social-link:focus-visible {
+  color: var(--sv-ivory);
+  text-decoration: underline;
+}
+body.homepage .sv-footer__social-link:focus-visible {
+  outline: 2px solid rgba(252,249,241,0.72);
+  outline-offset: 4px;
+}
+body.homepage .sv-footer__social-icon {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 17px;
+  fill: currentColor;
+}
+@media (max-width: 767px) {
+  body.homepage .sv-footer__social {
+    grid-column: 1;
+    justify-self: start;
+    margin-top: 18px;
+  }
+}

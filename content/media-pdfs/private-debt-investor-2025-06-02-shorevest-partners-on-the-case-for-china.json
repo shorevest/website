@@ -1,0 +1,36 @@
+{
+  "pdfSlug": "private-debt-investor-2025-06-02-shorevest-partners-on-the-case-for-china",
+  "publication": "Private Debt Investor",
+  "title": "ShoreVest Partners on the case for China",
+  "date": "2025-06-02",
+  "author": "Private Debt Investor",
+  "format": "Sponsored content",
+  "permissionStatus": "source supplied by ShoreVest",
+  "summary": "A sponsored interview addressing common misconceptions about China private credit and the importance of experienced local execution.",
+  "body": [
+    {
+      "type": "editorialNote",
+      "text": "This ShoreVest-hosted archival page is prepared for the Private Debt Investor June 2025 coverage item. The repository available to this build does not include ShoreVest_PDI_Jun25.pdf, so the page uses the approved site archive metadata currently available in press.html pending insertion of the full supplied article text and imagery."
+    },
+    {
+      "type": "heading",
+      "text": "Coverage summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "The article is presented as sponsored content from Private Debt Investor and focuses on the case for China private credit. The media archive summary describes the piece as an interview addressing common misconceptions about China private credit and the importance of experienced local execution."
+    },
+    {
+      "type": "paragraph",
+      "text": "When ShoreVest_PDI_Jun25.pdf is added to the repository, replace this summary-only body with the approved text and imagery from that source document before publication."
+    }
+  ],
+  "images": [
+    {
+      "src": "assets/img/media-hero-fii-priority.svg",
+      "alt": "ShoreVest media coverage visual",
+      "caption": "ShoreVest media coverage archive visual. Replace with approved imagery from ShoreVest_PDI_Jun25.pdf when the source PDF is available."
+    }
+  ],
+  "copyrightNote": "Originally published by Private Debt Investor on 2025-06-02 as sponsored content. Copyright remains with the original publisher and/or author."
+}
