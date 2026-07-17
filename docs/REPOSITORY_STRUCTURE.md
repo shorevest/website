@@ -6,7 +6,7 @@ This repository is a static ShoreVest website. Published pages live at the repos
 
 ```text
 .
-├── index.html and other root HTML pages   # published pages (EN + _cn Chinese)
+├── home.html and other root HTML pages   # published pages (EN + _cn Chinese)
 ├── assets/
 │   ├── brand/            # approved logos, brandmarks, vector masters
 │   ├── css/              # all site stylesheets

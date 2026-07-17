@@ -7,10 +7,22 @@
 <meta name="description" content="了解新岸资本的职业机会与专业发展方向，涵盖投资、资产解决方案、法律、风险、合规、财务、运营、客户解决方案及公司运营等领域。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260717-values-calligraphy">
 <link rel="stylesheet" href="assets/css/din-2014.css?v=20260717">
-<link rel="stylesheet" href="assets/css/internal-careers-preview.css?v=20260717-paths-carousel">
+<link rel="stylesheet" href="assets/css/internal-careers-preview.css?v=20260717-values-din">
+<!-- Keep shared chrome metrics identical to the homepage header.
+     The careers page loads DIN for its page typography, while the homepage
+     header resolves to Barlow because it does not load the DIN webfont.
+     Pin shared chrome to Barlow so nav font size, proportions, and button
+     metrics match the homepage exactly. -->
+<style>
+  body.careers-preview-page .sv-header,
+  body.careers-preview-page .sv-mobile-menu,
+  body.careers-preview-page .sv-footer {
+    --sv-font: "Barlow", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+  }
+</style>
 <link rel="icon" href="assets/favicon-cinnabar.ico?v=20260717" sizes="any">
 <link rel="shortcut icon" href="assets/favicon-cinnabar.ico?v=20260717">
 <link rel="icon" href="assets/favicon-cinnabar.svg?v=20260717" type="image/svg+xml">
@@ -31,7 +43,7 @@
 <body id="top" class="homepage careers-preview-page">
 <header class="sv-header">
   <div class="sv-header__inner">
-    <a class="sv-header__logo" href="index_cn.html" aria-label="新岸资本 — 首页">
+    <a class="sv-header__logo" href="home_cn.html" aria-label="新岸资本 — 首页">
       <img src="assets/brand/sv-lockup-fc-dark.png" alt="ShoreVest 新岸资本" width="172" height="41">
     </a>
     <nav class="sv-nav" aria-label="主导航"><ul><li><a href="firm_cn.html">公司</a></li><li><a href="strategy_cn.html">策略</a></li><li><a href="insights_cn.html">洞察</a></li><li><a href="press_cn.html">媒体</a></li><li><a href="team_cn.html">团队</a></li><li><a href="careers_cn.html" aria-current="page">人才招聘</a></li></ul></nav>
@@ -207,7 +219,7 @@
   <div class="sv-footer__inner">
     <div class="sv-footer__top">
       <div>
-        <a class="sv-footer__logo" href="index_cn.html" aria-label="新岸资本 — 首页">
+        <a class="sv-footer__logo" href="home_cn.html" aria-label="新岸资本 — 首页">
           <img src="assets/brand/sv-lockup-fc-light.png" alt="ShoreVest 新岸资本" width="200" height="48">
         </a>
         <p class="sv-footer__offices">
@@ -257,7 +269,9 @@
   </div>
 </footer>
 <script>document.querySelector('.sv-burger')?.addEventListener('click',function(){var open=this.getAttribute('aria-expanded')==='true';this.setAttribute('aria-expanded',String(!open));document.getElementById('sv-mobile-menu')?.classList.toggle('is-open',!open);});</script>
-<script>(function(){var root=document.querySelector('[data-careers-carousel]');if(!root)return;var track=root.querySelector('.careers-paths');if(!track)return;var slides=track.children;if(slides.length<2)return;var prev=root.querySelector('[data-carousel-prev]');var next=root.querySelector('[data-carousel-next]');var current=root.querySelector('[data-carousel-current]');var total=root.querySelector('[data-carousel-total]');var reduce=window.matchMedia('(prefers-reduced-motion: reduce)');function pad(n){return (n<10?'0':'')+n;}function index(){return Math.max(0,Math.min(slides.length-1,Math.round(track.scrollLeft/track.clientWidth)));}function update(){var i=index();if(current)current.textContent=pad(i+1);if(prev)prev.disabled=i===0;if(next)next.disabled=i===slides.length-1;}function go(delta){var i=Math.max(0,Math.min(slides.length-1,index()+delta));track.scrollTo({left:i*track.clientWidth,behavior:reduce.matches?'auto':'smooth'});}if(total)total.textContent=pad(slides.length);prev&&prev.addEventListener('click',function(){go(-1);});next&&next.addEventListener('click',function(){go(1);});track.addEventListener('scroll',function(){window.requestAnimationFrame(update);},{passive:true});window.addEventListener('resize',update);root.classList.add('is-ready');update();})();</script>
-<script>(function(){var links=document.querySelectorAll('.careers-pagenav a[href^="#"]');if(!links.length||!('IntersectionObserver' in window))return;var map=new Map();links.forEach(function(a){var s=document.querySelector(a.getAttribute('href'));if(s)map.set(s,a);});var current=null;var io=new IntersectionObserver(function(entries){entries.forEach(function(e){if(!e.isIntersecting)return;var link=map.get(e.target);if(!link||link===current)return;if(current){current.classList.remove('is-current');current.removeAttribute('aria-current');}current=link;current.classList.add('is-current');current.setAttribute('aria-current','true');var bar=current.closest('.careers-pagenav__inner');if(bar&&bar.scrollWidth>bar.clientWidth){var r=current.getBoundingClientRect(),b=bar.getBoundingClientRect();bar.scrollTo({left:bar.scrollLeft+(r.left-b.left)-(b.width-r.width)/2,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});}});},{rootMargin:'-45% 0px -50% 0px'});map.forEach(function(_,s){io.observe(s);});})();</script>
+<script>(function(){var nav=document.querySelector('.careers-pagenav');var links=document.querySelectorAll('.careers-pagenav a[href^="#"]');if(!links.length||!('IntersectionObserver' in window))return;var map=new Map();links.forEach(function(a){var s=document.querySelector(a.getAttribute('href'));if(s)map.set(s,a);});var current=null;var io=new IntersectionObserver(function(entries){entries.forEach(function(e){if(!e.isIntersecting)return;var link=map.get(e.target);if(!link||link===current)return;if(current){current.classList.remove('is-current');current.removeAttribute('aria-current');}current=link;current.classList.add('is-current');current.setAttribute('aria-current','true');var bar=current.closest('.careers-pagenav__inner');if(bar&&bar.scrollWidth>bar.clientWidth){var r=current.getBoundingClientRect(),b=bar.getBoundingClientRect();bar.scrollTo({left:bar.scrollLeft+(r.left-b.left)-(b.width-r.width)/2,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});}});},{rootMargin:'-45% 0px -50% 0px'});map.forEach(function(_,s){io.observe(s);});if(nav){var footer=document.querySelector('.sv-footer');if(footer){new IntersectionObserver(function(entries){entries.forEach(function(e){nav.classList.toggle('is-footer-hidden',e.isIntersecting);});},{threshold:0,rootMargin:'0px 0px -65% 0px'}).observe(footer);}}})();</script>
+<script src="assets/js/insights-new-edition.js?v=20260717" defer></script>
+<script src="assets/js/recruitment-role-list.js?v=20260717" defer></script>
+<script src="assets/js/sv-navigation.js?v=20260717" defer></script>
 </body>
 </html>

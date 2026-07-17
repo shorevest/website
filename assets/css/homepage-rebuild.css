@@ -1,6 +1,6 @@
 /* ==========================================================================
    ShoreVest — Homepage Rebuild (2026-06-18)
-   Self-contained homepage system. index.html no longer loads the shared
+   Self-contained homepage system. home.html no longer loads the shared
    header/footer or the legacy homepage stylesheet stack — this file is the
    single authority for the homepage. Other pages are untouched.
 
@@ -86,6 +86,10 @@ body.homepage * { box-sizing: border-box; }
 
 html {
   scroll-padding-top: calc(var(--header-height) + 32px);
+  /* Keep the viewport gutter reserved between route loads so the fixed
+     navigation grid does not shift horizontally when moving between pages
+     with different document heights. */
+  scrollbar-gutter: stable;
   /* Match the browser canvas to the dark footer so bottom rubber-band /
      overscroll reveals only the footer color instead of a white page edge. */
   background: #20211F;
@@ -192,7 +196,7 @@ body.homepage .sv-btn--ghost-light:hover { border-color: var(--sv-ink); backgrou
 body.homepage .sv-textlink {
   position: relative;
   display: inline-flex; align-items: center; gap: 9px;
-  font: 600 13px/1 var(--sv-font);
+  font: 400 13px/1 var(--sv-font);
   letter-spacing: 0.08em; text-transform: uppercase;
   color: var(--sv-cinnabar); text-decoration: none;
   padding-bottom: 4px;
@@ -229,6 +233,8 @@ body.homepage .sv-header {
   background: #FCF9F1;
   border-bottom: 1px solid rgba(23, 53, 54, 0.12);
   z-index: 1000;
+  backface-visibility: hidden;
+  contain: layout;
 }
 body.homepage .sv-header__inner {
   max-width: var(--page-max);
@@ -246,7 +252,7 @@ body.homepage .sv-header__logo img { width: 172px; height: auto; }
 body.homepage .sv-nav { justify-self: center; }
 body.homepage .sv-nav ul {
   list-style: none; margin: 0; padding: 0;
-  display: flex; gap: clamp(18px, 2vw, 32px);
+  display: flex; align-items: center; gap: clamp(18px, 2vw, 32px);
 }
 body.homepage .sv-nav a {
   position: relative;
@@ -271,9 +277,8 @@ body.homepage .sv-nav a::after {
 }
 body.homepage .sv-nav a:hover { color: var(--sv-cinnabar); }
 body.homepage .sv-nav a:hover::after { transform: scaleX(1); }
-/* Active nav state — cinnabar text + underline on the current page, matching hover */
-body.homepage .sv-nav a[aria-current="page"] { color: var(--sv-cinnabar); }
-body.homepage .sv-nav a[aria-current="page"]::after { transform: scaleX(1); }
+/* Keep current-page links visually identical to the homepage default state.
+   Hover remains the only desktop navigation accent so every page header matches the homepage. */
 @media (prefers-reduced-motion: reduce) {
   body.homepage .sv-nav a::after { transition: none; }
 }
@@ -371,8 +376,7 @@ body.homepage .sv-mobile-menu a {
   color: var(--sv-ink); text-decoration: none;
   border-bottom: 1px solid rgba(216, 206, 176, 0.74);
 }
-/* Active nav state — cinnabar on the current page in the mobile menu */
-body.homepage .sv-mobile-menu a[aria-current="page"] { color: var(--sv-cinnabar); }
+/* Keep current-page links visually identical to the homepage default state in the mobile menu. */
 body.homepage .sv-mobile-menu .sv-mobile-utils {
   display: flex; flex-direction: column; gap: 12px; margin-top: clamp(26px, 7vw, 38px);
 }
@@ -572,7 +576,7 @@ body.homepage .sv-bridge__body p {
 
 /* ==========================================================================
    D-bis · HOMEPAGE FIRM PREVIEW — ruled institutional proof block
-   Scoped to .home-firm-preview, which exists ONLY on the homepage (index.html).
+   Scoped to .home-firm-preview, which exists ONLY on the homepage (home.html).
    Overrides the shared .sv-bridge layout for this one section without touching
    the Strategy page's .sv-bridge.st-band Recovery section or any other page.
    ========================================================================== */
@@ -2151,4 +2155,95 @@ body.homepage .sv-footer__social-icon {
     justify-self: start;
     margin-top: 18px;
   }
+}
+
+/* Timed China Debt Dynamics release cue: enabled by insights-new-edition.js
+   for seven days after the configured publication date. The alert is a
+   tailored cinnabar capsule, not the standard nav underline/glow treatment. */
+body.homepage .sv-nav a.sv-nav__new-insights {
+  display: inline-flex;
+  align-items: center;
+  height: 42px;
+  padding: 0 16px;
+  color: var(--sv-ivory) !important;
+  border: 1px solid rgba(138, 31, 18, 0.18);
+  background: var(--sv-cinnabar);
+  box-shadow: inset 0 0 0 1px rgba(252, 249, 241, 0.18), 0 8px 18px rgba(24, 37, 36, 0.10);
+  text-shadow: none;
+  transform: none;
+  animation: svNewInsightsCinnabarBox 1.65s ease-in-out infinite;
+  transition: background .22s ease, border-color .22s ease, box-shadow .22s ease, color .22s ease, transform .22s ease;
+}
+body.homepage .sv-nav a.sv-nav__new-insights::after {
+  display: none;
+}
+body.homepage .sv-nav a.sv-nav__new-insights::before {
+  content: attr(data-new-edition-message);
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 14px);
+  z-index: 4;
+  width: max-content;
+  max-width: 240px;
+  padding: 8px 10px;
+  border: 1px solid rgba(201, 59, 42, 0.28);
+  background: #FCF9F1;
+  box-shadow: 0 12px 26px rgba(24, 37, 36, 0.14);
+  color: var(--sv-ink);
+  font: 600 11px/1.35 var(--sv-font);
+  letter-spacing: 0.04em;
+  text-transform: none;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -4px);
+  transition: opacity .22s ease, transform .22s ease;
+}
+body.homepage .sv-nav a.sv-nav__new-insights:hover,
+body.homepage .sv-nav a.sv-nav__new-insights:focus-visible {
+  background: var(--sv-cinnabar-d);
+  border-color: rgba(138, 31, 18, 0.38);
+  color: var(--sv-ivory) !important;
+  transform: none;
+}
+body.homepage .sv-nav a.sv-nav__new-insights:hover::before,
+body.homepage .sv-nav a.sv-nav__new-insights:focus-visible::before {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+body.homepage .sv-mobile-menu a.sv-nav__new-insights {
+  position: relative;
+  color: var(--sv-cinnabar);
+  padding-right: 112px;
+}
+body.homepage .sv-mobile-menu a.sv-nav__new-insights::after {
+  content: attr(data-new-edition-label);
+  position: absolute;
+  right: 0;
+  top: 50%;
+  padding: 6px 9px;
+  border: 1px solid rgba(138, 31, 18, 0.18);
+  background: var(--sv-cinnabar);
+  color: var(--sv-ivory);
+  font: 700 10px/1 var(--sv-font);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: inset 0 0 0 1px rgba(252, 249, 241, 0.18);
+  transform: translateY(-50%);
+  animation: svNewInsightsCinnabarBox 1.65s ease-in-out infinite;
+}
+@keyframes svNewInsightsCinnabarBox {
+  0%, 100% {
+    background: var(--sv-cinnabar);
+    box-shadow: inset 0 0 0 1px rgba(252, 249, 241, 0.18), 0 8px 18px rgba(24, 37, 36, 0.10);
+  }
+  50% {
+    background: var(--sv-cinnabar-d);
+    box-shadow: inset 0 0 0 1px rgba(252, 249, 241, 0.28), 0 10px 22px rgba(24, 37, 36, 0.14);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.homepage .sv-nav a.sv-nav__new-insights,
+  body.homepage .sv-mobile-menu a.sv-nav__new-insights::after { animation: none; }
+  body.homepage .sv-nav a.sv-nav__new-insights::before { transition: none; }
 }

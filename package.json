@@ -1,0 +1,15 @@
+{
+  "name": "shorevest-website",
+  "version": "1.0.0",
+  "description": "Static website for ShoreVest Partners, including English and Chinese pages, the investor portal, insights, media pages, legal notices, brand assets, and PDF publications.",
+  "type": "commonjs",
+  "private": true,
+  "scripts": {
+    "validate:recruitment": "node scripts/validate-recruitment-roles.js",
+    "test:recruitment": "node tests/recruitment-roles.test.js && node tests/recruitment-role-list.test.js"
+  },
+  "devDependencies": {
+    "ajv": "8.17.1",
+    "ajv-formats": "3.0.1"
+  }
+}

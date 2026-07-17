@@ -549,11 +549,7 @@ body.team-page-v2 .sv-footer__copy {
   margin: 0 !important;
 }
 
-/* Active nav state — subtle cinnabar, matching the homepage hover treatment */
-body.homepage.team-page-v2 .sv-nav a[aria-current="page"] {
-  color: var(--sv-cinnabar, #c93b2a);
-  border-color: var(--sv-cinnabar, #c93b2a);
-}
+/* Current-page nav links inherit the shared homepage default styling. */
 
 /* ==========================================================================
    5 · TEAM DIRECTORY — institutional document grid below the hero

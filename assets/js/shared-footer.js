@@ -18,7 +18,7 @@
   };
   const siteHref = relativeSiteHref;
 
-  const path = window.location.pathname.split('/').pop() || 'index.html';
+  const path = window.location.pathname.split('/').pop() || 'home.html';
   const localeSuffix = /_cn\.html$/i.test(path) ? 'cn' : 'en';
   const isChinesePath = localeSuffix !== 'en';
 
@@ -38,7 +38,7 @@
   <div class="sv-footer__inner">
     <div class="sv-footer__top">
       <div>
-        <a class="sv-footer__logo" href="${siteHref('index.html')}" aria-label="ShoreVest — home">
+        <a class="sv-footer__logo" href="${siteHref('home.html')}" aria-label="ShoreVest — home">
           <img src="${siteHref('assets/brand/sv-lockup-fc-light.png')}" alt="ShoreVest" width="200" height="48" />
         </a>
         <p class="sv-footer__offices">Guangzhou &middot; Shanghai &middot; Beijing &middot; Hong Kong<br /><a href="${siteHref('contact.html')}">General inquiries</a></p>
@@ -49,7 +49,7 @@
         <a href="${siteHref('insights.html')}">Insights</a>
         <a href="${siteHref('press.html')}">Media</a>
         <a href="${siteHref('team.html')}">Team</a>
-        <a href="${siteHref('internal-preview/careers.html')}">Careers</a>
+        <a href="${siteHref('careers.html')}">Careers</a>
         <a href="${siteHref('contact.html')}">Contact</a>
         <a href="${siteHref('insights.html')}#archive">China Debt Dynamics</a>
         <span class="sv-footer__access" role="group" aria-label="Access">
@@ -86,7 +86,7 @@
   <div class="sv-footer__inner">
     <div class="sv-footer__top">
       <div>
-        <a class="sv-footer__logo" href="${siteHref('index_cn.html')}" aria-label="新岸资本 — 首页">
+        <a class="sv-footer__logo" href="${siteHref('home_cn.html')}" aria-label="新岸资本 — 首页">
           <img src="${siteHref('assets/brand/sv-lockup-fc-light.png')}" alt="ShoreVest 新岸资本" width="200" height="48" />
         </a>
         <p class="sv-footer__offices">广州 &middot; 上海 &middot; 北京 &middot; 香港<br /><a href="${siteHref('contact_cn.html')}">一般查询</a></p>
@@ -97,7 +97,7 @@
         <a href="${siteHref('strategy_cn.html')}">策略</a>
         <a href="${siteHref('press_cn.html')}">媒体</a>
         <a href="${siteHref('team_cn.html')}">团队</a>
-        <a href="${siteHref('internal-preview/careers_cn.html')}">人才招聘</a>
+        <a href="${siteHref('careers_cn.html')}">人才招聘</a>
         <a href="${siteHref('contact_cn.html')}">联系</a>
         <a href="${siteHref('insights_cn.html')}#archive">中国债务动态</a>
         <span class="sv-footer__access" role="group" aria-label="访问">

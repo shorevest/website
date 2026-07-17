@@ -1,0 +1,58 @@
+name: Recruitment manifest checks
+
+on:
+  pull_request:
+    paths:
+      - assets/data/recruitment/**
+      - scripts/validate-recruitment-roles.js
+      - tests/recruitment-roles.test.js
+      - tests/recruitment-role-list.test.js
+      - assets/js/recruitment-role-list.js
+      - careers.html
+      - careers_cn.html
+      - package.json
+      - package-lock.json
+      - .github/workflows/recruitment-manifest-checks.yml
+  push:
+    branches:
+      - main
+    paths:
+      - assets/data/recruitment/**
+      - scripts/validate-recruitment-roles.js
+      - tests/recruitment-roles.test.js
+      - tests/recruitment-role-list.test.js
+      - assets/js/recruitment-role-list.js
+      - careers.html
+      - careers_cn.html
+      - package.json
+      - package-lock.json
+      - .github/workflows/recruitment-manifest-checks.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  recruitment-manifest:
+    name: Validate recruitment manifest
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate recruitment manifest
+        run: npm run validate:recruitment
+
+      - name: Run recruitment tests
+        run: npm run test:recruitment

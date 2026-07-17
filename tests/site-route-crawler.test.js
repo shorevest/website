@@ -51,15 +51,15 @@ function resolveInternal(from, url) {
   const clean = url.split('#')[0].split('?')[0];
   if (!clean) return null;
   const rel = clean.startsWith('/') ? clean.slice(1) : path.posix.normalize(path.posix.join(path.posix.dirname(from), clean));
-  return rel === '.' ? 'index.html' : rel;
+  return rel === '.' ? 'home.html' : rel;
 }
 
 const pages = walk().sort();
-assert(pages.includes('index.html'), 'English homepage must exist');
-assert(pages.includes('index_cn.html'), 'Chinese homepage must exist');
+assert(pages.includes('home.html'), 'English homepage must exist');
+assert(pages.includes('home_cn.html'), 'Chinese homepage must exist');
 
 let internalLinkCount = 0;
-const discoveredPages = new Set(['index.html', 'index_cn.html']);
+const discoveredPages = new Set(['home.html', 'home_cn.html']);
 
 for (const page of pages) {
   const html = read(page);
@@ -98,7 +98,7 @@ for (const page of pages) {
 for (const page of discoveredPages) assert(pages.includes(page), `discovered route should be inventoried: ${page}`);
 
 const routePairs = [
-  ['index.html', 'index_cn.html'],
+  ['home.html', 'home_cn.html'],
   ['firm.html', 'firm_cn.html'],
   ['strategy.html', 'strategy_cn.html'],
   ['insights.html', 'insights_cn.html'],

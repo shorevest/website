@@ -111,8 +111,8 @@ function sitePages() {
 }
 
 assertFaviconParity(
-  'index.html',
-  sitePages().filter((page) => page !== 'index.html')
+  'home.html',
+  sitePages().filter((page) => page !== 'home.html')
 );
 
 assertTeamFaviconsAreEarly('team.html');
