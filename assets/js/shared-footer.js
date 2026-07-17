@@ -18,7 +18,7 @@
   };
   const siteHref = relativeSiteHref;
 
-  const path = window.location.pathname.split('/').pop() || 'index.html';
+  const path = window.location.pathname.split('/').pop() || 'home.html';
   const localeSuffix = /_cn\.html$/i.test(path) ? 'cn' : 'en';
   const isChinesePath = localeSuffix !== 'en';
 
@@ -38,7 +38,7 @@
   <div class="sv-footer__inner">
     <div class="sv-footer__top">
       <div>
-        <a class="sv-footer__logo" href="${siteHref('index.html')}" aria-label="ShoreVest — home">
+        <a class="sv-footer__logo" href="${siteHref('home.html')}" aria-label="ShoreVest — home">
           <img src="${siteHref('assets/brand/sv-lockup-fc-light.png')}" alt="ShoreVest" width="200" height="48" />
         </a>
         <p class="sv-footer__offices">Guangzhou &middot; Shanghai &middot; Beijing &middot; Hong Kong<br /><a href="${siteHref('contact.html')}">General inquiries</a></p>
@@ -86,7 +86,7 @@
   <div class="sv-footer__inner">
     <div class="sv-footer__top">
       <div>
-        <a class="sv-footer__logo" href="${siteHref('index_cn.html')}" aria-label="新岸资本 — 首页">
+        <a class="sv-footer__logo" href="${siteHref('home_cn.html')}" aria-label="新岸资本 — 首页">
           <img src="${siteHref('assets/brand/sv-lockup-fc-light.png')}" alt="ShoreVest 新岸资本" width="200" height="48" />
         </a>
         <p class="sv-footer__offices">广州 &middot; 上海 &middot; 北京 &middot; 香港<br /><a href="${siteHref('contact_cn.html')}">一般查询</a></p>

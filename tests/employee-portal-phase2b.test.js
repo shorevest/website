@@ -134,7 +134,7 @@ test('robots.txt disallows the portal path without affecting the public site', (
 });
 
 test('no public HTML page links to ShoreVest One, and the main site is not noindexed', () => {
-  const publicPages = ['index.html', 'firm.html', 'team.html', 'strategy.html',
+  const publicPages = ['home.html', 'firm.html', 'team.html', 'strategy.html',
     'insights.html', 'press.html', 'contact.html', 'important-information.html',
     'investor-portal/index.html'];
   publicPages.forEach((p) => {
@@ -146,7 +146,7 @@ test('no public HTML page links to ShoreVest One, and the main site is not noind
 });
 
 test('the public footer Access group survives with Investor Portal intact', () => {
-  const html = read('index.html');
+  const html = read('home.html');
   assert.ok(html.indexOf('sv-footer__access') !== -1, 'access group present');
   assert.ok(html.indexOf('Investor Portal') !== -1, 'Investor Portal preserved');
   /* No dangling group: the access group should still contain a link. */
