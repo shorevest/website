@@ -234,7 +234,7 @@ body.homepage .sv-header {
   border-bottom: 1px solid rgba(23, 53, 54, 0.12);
   z-index: 1000;
   backface-visibility: hidden;
-  contain: layout paint;
+  contain: layout;
 }
 body.homepage .sv-header__inner {
   max-width: var(--page-max);
