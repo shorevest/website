@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 const fs = require('fs');
 const path = require('path');
+const Ajv2020 = require('ajv/dist/2020');
+const addFormats = require('ajv-formats');
 
 const root = path.resolve(__dirname, '..');
 const manifestPath = path.join(root, 'assets/data/recruitment/roles.v1.json');
@@ -34,12 +36,26 @@ function isNonEmptyString(value) {
   return typeof value === 'string' && value.trim().length > 0;
 }
 
-function isDateTime(value) {
-  return typeof value === 'string' && !Number.isNaN(Date.parse(value)) && /T/.test(value);
-}
-
 function hasDuplicate(values) {
   return new Set(values).size !== values.length;
+}
+
+function formatAjvError(error) {
+  const pathLabel = error.instancePath || '/';
+  let detail = error.message || 'is invalid';
+  if (error.keyword === 'additionalProperties' && error.params?.additionalProperty) {
+    detail = `must not have additional property ${JSON.stringify(error.params.additionalProperty)}`;
+  } else if (error.keyword === 'required' && error.params?.missingProperty) {
+    detail = `must have required property ${JSON.stringify(error.params.missingProperty)}`;
+  }
+  return `${pathLabel} ${detail}`;
+}
+
+function validateJsonSchema(manifest, schema) {
+  const ajv = new Ajv2020({ allErrors: true, strict: true });
+  addFormats(ajv, { formats: ['date-time'] });
+  const validate = ajv.compile(schema);
+  return validate(manifest) ? [] : (validate.errors || []).map(formatAjvError);
 }
 
 function validateNoSecretsOrCandidatePii(manifest, errors) {
@@ -65,115 +81,73 @@ function validateSchemaFile(schema, errors) {
 }
 
 function validateLocalizedRole(role, locale, rolePath, errors) {
-  if (!role) {
-    fail(errors, `${rolePath}.locales.${locale} is required.`);
-    return;
-  }
+  if (!role) return;
   ['title', 'location', 'team', 'detailPath'].forEach((field) => {
     if (!isNonEmptyString(role[field])) fail(errors, `${rolePath}.locales.${locale}.${field} is required.`);
   });
   if (isNonEmptyString(role.detailPath)) {
     const expectedCn = locale === 'zh-CN';
-    if (!/^careers\/[a-z0-9][a-z0-9-]*(_cn)?\.html$/.test(role.detailPath)) {
-      fail(errors, `${rolePath}.locales.${locale}.detailPath must be a careers/*.html path.`);
-    }
-    if (expectedCn && !role.detailPath.endsWith('_cn.html')) {
-      fail(errors, `${rolePath}.locales.${locale}.detailPath must use _cn.html.`);
-    }
-    if (!expectedCn && role.detailPath.endsWith('_cn.html')) {
-      fail(errors, `${rolePath}.locales.${locale}.detailPath must be the English path.`);
-    }
+    if (!/^careers\/[a-z0-9][a-z0-9-]*(_cn)?\.html$/.test(role.detailPath)) fail(errors, `${rolePath}.locales.${locale}.detailPath must be a careers/*.html path.`);
+    if (expectedCn && !role.detailPath.endsWith('_cn.html')) fail(errors, `${rolePath}.locales.${locale}.detailPath must use _cn.html.`);
+    if (!expectedCn && role.detailPath.endsWith('_cn.html')) fail(errors, `${rolePath}.locales.${locale}.detailPath must be the English path.`);
   }
 }
 
 function validateFiles(files, rolePath, errors) {
-  if (!Array.isArray(files) || files.length === 0) {
-    fail(errors, `${rolePath}.files must contain at least one file definition.`);
-    return;
-  }
+  if (!Array.isArray(files)) return;
   const purposes = [];
   files.forEach((file, index) => {
     const filePath = `${rolePath}.files[${index}]`;
     if (!FILE_PURPOSES.has(file.filePurpose)) fail(errors, `${filePath}.filePurpose is unsupported.`);
     purposes.push(file.filePurpose);
-    if (typeof file.required !== 'boolean') fail(errors, `${filePath}.required must be boolean.`);
-    if (!Number.isInteger(file.maxSizeBytes) || file.maxSizeBytes < 1) fail(errors, `${filePath}.maxSizeBytes must be a positive integer.`);
-    if (!Array.isArray(file.allowedExtensions) || file.allowedExtensions.length === 0) fail(errors, `${filePath}.allowedExtensions is required.`);
-    (file.allowedExtensions || []).forEach((extension) => {
-      if (!SUPPORTED_EXTENSIONS.has(extension)) fail(errors, `${filePath} uses unsupported extension ${extension}.`);
-    });
-    if (!Array.isArray(file.allowedMimeTypes) || file.allowedMimeTypes.length === 0) fail(errors, `${filePath}.allowedMimeTypes is required.`);
-    (file.allowedMimeTypes || []).forEach((mimeType) => {
-      if (!SUPPORTED_MIME_TYPES.has(mimeType)) fail(errors, `${filePath} uses unsupported MIME type ${mimeType}.`);
-    });
-    const sig = file.signatureValidation;
-    if (!sig || sig.required !== true) fail(errors, `${filePath}.signatureValidation.required must be true.`);
-    if (!Array.isArray(sig?.acceptedSignatures) || sig.acceptedSignatures.length === 0) fail(errors, `${filePath}.signatureValidation.acceptedSignatures is required.`);
-    (sig?.acceptedSignatures || []).forEach((signature) => {
-      if (!SUPPORTED_SIGNATURES.has(signature)) fail(errors, `${filePath} uses unsupported signature ${signature}.`);
-    });
+    (file.allowedExtensions || []).forEach((extension) => { if (!SUPPORTED_EXTENSIONS.has(extension)) fail(errors, `${filePath} uses unsupported extension ${extension}.`); });
+    (file.allowedMimeTypes || []).forEach((mimeType) => { if (!SUPPORTED_MIME_TYPES.has(mimeType)) fail(errors, `${filePath} uses unsupported MIME type ${mimeType}.`); });
+    (file.signatureValidation?.acceptedSignatures || []).forEach((signature) => { if (!SUPPORTED_SIGNATURES.has(signature)) fail(errors, `${filePath} uses unsupported signature ${signature}.`); });
   });
   if (hasDuplicate(purposes)) fail(errors, `${rolePath}.files must not duplicate filePurpose values.`);
   if (!purposes.includes('cv')) fail(errors, `${rolePath}.files must include a cv definition.`);
 }
 
 function validateScreening(screening, rolePath, errors) {
-  if (!screening) {
-    fail(errors, `${rolePath}.screening is required.`);
-    return;
-  }
+  if (!screening) return;
   const workAuth = screening.workAuthorization;
-  if (!workAuth) fail(errors, `${rolePath}.screening.workAuthorization is required.`);
-  if (workAuth) {
-    if (typeof workAuth.enabled !== 'boolean') fail(errors, `${rolePath}.screening.workAuthorization.enabled must be boolean.`);
-    if (typeof workAuth.required !== 'boolean') fail(errors, `${rolePath}.screening.workAuthorization.required must be boolean.`);
-    if (!Array.isArray(workAuth.jurisdictions)) fail(errors, `${rolePath}.screening.workAuthorization.jurisdictions must be an array.`);
-    if (workAuth.required && !workAuth.enabled) fail(errors, `${rolePath}.screening.workAuthorization cannot be required when disabled.`);
-    if (workAuth.required && workAuth.jurisdictions.length === 0) fail(errors, `${rolePath}.screening.workAuthorization required questions need jurisdictions.`);
-  }
-  if (!Array.isArray(screening.roleSpecificQuestions)) fail(errors, `${rolePath}.screening.roleSpecificQuestions must be an array.`);
+  if (workAuth?.required && !workAuth.enabled) fail(errors, `${rolePath}.screening.workAuthorization cannot be required when disabled.`);
+  if (workAuth?.required && workAuth.jurisdictions?.length === 0) fail(errors, `${rolePath}.screening.workAuthorization required questions need jurisdictions.`);
+  if (!Array.isArray(screening.roleSpecificQuestions)) return;
   const questionIds = [];
-  (screening.roleSpecificQuestions || []).forEach((question, index) => {
+  screening.roleSpecificQuestions.forEach((question, index) => {
     const qPath = `${rolePath}.screening.roleSpecificQuestions[${index}]`;
-    if (!/^[a-z0-9][a-z0-9-]{1,80}$/.test(question.questionId || '')) fail(errors, `${qPath}.questionId is invalid.`);
     questionIds.push(question.questionId);
     if (!QUESTION_TYPES.has(question.type)) fail(errors, `${qPath}.type is unsupported.`);
-    if (typeof question.required !== 'boolean') fail(errors, `${qPath}.required must be boolean.`);
-    if (!isNonEmptyString(question.locales?.en)) fail(errors, `${qPath}.locales.en is required.`);
-    if (!isNonEmptyString(question.locales?.['zh-CN'])) fail(errors, `${qPath}.locales.zh-CN is required.`);
   });
   if (hasDuplicate(questionIds)) fail(errors, `${rolePath}.screening.roleSpecificQuestions must not duplicate questionId values.`);
 }
 
-function validateManifest(manifest, schema) {
+function validateSemantics(manifest, schema) {
   const errors = [];
   validateSchemaFile(schema, errors);
-
-  if (manifest.schemaVersion !== '1.0') fail(errors, 'schemaVersion must be 1.0.');
-  if (!isDateTime(manifest.generatedAtUtc)) fail(errors, 'generatedAtUtc must be a valid ISO date-time string.');
-  if (!Array.isArray(manifest.roles)) fail(errors, 'roles must be an array.');
-
   validateNoSecretsOrCandidatePii(manifest, errors);
-
   const roleIds = [];
   (manifest.roles || []).forEach((role, index) => {
     const rolePath = `roles[${index}]`;
-    if (!/^[a-z0-9][a-z0-9-]{2,80}$/.test(role.roleId || '')) fail(errors, `${rolePath}.roleId is invalid.`);
     roleIds.push(role.roleId);
     if (!ROLE_STATUSES.has(role.status)) fail(errors, `${rolePath}.status is unsupported.`);
     if (!role.locales || !role.locales.en || !role.locales['zh-CN']) fail(errors, `${rolePath} must include both en and zh-CN locale records.`);
     validateLocalizedRole(role.locales?.en, 'en', rolePath, errors);
     validateLocalizedRole(role.locales?.['zh-CN'], 'zh-CN', rolePath, errors);
     if (!EMPLOYMENT_TYPES.has(role.employmentType)) fail(errors, `${rolePath}.employmentType is unsupported.`);
-    if (typeof role.applicationEnabled !== 'boolean') fail(errors, `${rolePath}.applicationEnabled must be boolean.`);
-    if ((role.status === 'active' || role.applicationEnabled) && (!role.locales?.en?.detailPath || !role.locales?.['zh-CN']?.detailPath)) {
-      fail(errors, `${rolePath} public role requires English and Chinese detail-page paths.`);
-    }
+    if ((role.status === 'active' || role.applicationEnabled) && (!role.locales?.en?.detailPath || !role.locales?.['zh-CN']?.detailPath)) fail(errors, `${rolePath} public role requires English and Chinese detail-page paths.`);
     validateFiles(role.files, rolePath, errors);
     validateScreening(role.screening, rolePath, errors);
   });
   if (hasDuplicate(roleIds)) fail(errors, 'roleId values must be unique.');
   return errors;
+}
+
+function validateManifest(manifest, schema) {
+  const schemaErrors = validateJsonSchema(manifest, schema);
+  if (schemaErrors.length) return schemaErrors.map((error) => `Schema ${error}`);
+  return validateSemantics(manifest, schema);
 }
 
 function main() {
@@ -190,4 +164,4 @@ function main() {
 
 if (require.main === module) main();
 
-module.exports = { validateManifest };
+module.exports = { validateManifest, validateJsonSchema, validateSemantics };
