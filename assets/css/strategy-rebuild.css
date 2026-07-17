@@ -25,7 +25,7 @@ body.strategy-page .st-head__r p {
 }
 body.strategy-page .st-head__r p + p { margin-top: 14px; }
 @media (max-width: 900px) {
-  body.strategy-page .st-head__l, body.strategy-page .st-head__r { grid-column: 1 / 13; }
+  body.strategy-page .st-head__l, body.strategy-page .st-head__r { grid-column: 1 / 13; min-width: 0; }
   body.strategy-page .st-head__r { margin-top: 14px; }
 }
 
@@ -1715,3 +1715,13 @@ body.strategy-page .sx-hero__image { background: transparent !important; }
 
 /* 2026-07-14 · Strategy speed pass: keep the hero visual CSS-only so first paint is not blocked by multi-megabyte photographs. */
 body.strategy-page .sx-hero__image { display: none !important; }
+
+/* When the section heads stack (≤900px), their columns still span all 12
+   grid tracks, and a spanning grid item can never shrink below the sum of
+   the column gaps — on narrow phones the 11 gaps alone exceed the shell and
+   push the heading past the right edge. Zero the column gaps when stacked
+   (kept last in the file so no later head-rhythm rule re-widens them). */
+@media (max-width: 900px) {
+  body.strategy-page .st-head,
+  body.strategy-page .sv-exec__head { column-gap: 0; }
+}

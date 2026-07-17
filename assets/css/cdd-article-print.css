@@ -198,3 +198,8 @@ body.cdd-print-layout .wrap { width: 860px; max-width: none; margin-inline: auto
   .cdd-print-layout .cdd-print-note { text-align: left; }
   .cdd-print-layout .cdd-sidecard ul { columns: 1; }
 }
+
+/* This page carries no styles for the shared back-to-top control injected by
+   cdd-article-template.js; suppress it so it cannot render unstyled. */
+.cdd-print-layout .sv-back-to-top,
+.cdd-print-layout .back-to-top { display: none !important; }

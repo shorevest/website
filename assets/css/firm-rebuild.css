@@ -173,7 +173,9 @@ body.firm-page .fm-sechead__r p {
 }
 body.firm-page .fm-sechead__r p + p { margin-top: 14px; }
 @media (max-width: 900px) {
-  body.firm-page .fm-sechead { align-items: start; }
+  /* Stacked items still span all 12 tracks; a spanning item can never be
+     narrower than the sum of the column gaps, so zero them when stacked. */
+  body.firm-page .fm-sechead { align-items: start; column-gap: 0; }
   body.firm-page .fm-sechead__l,
   body.firm-page .fm-sechead__r { grid-column: 1 / 13; }
   body.firm-page .fm-sechead__r { align-self: start; margin-top: 18px; max-width: none; justify-self: stretch; text-align: left; }
