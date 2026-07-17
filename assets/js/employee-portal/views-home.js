@@ -1,9 +1,14 @@
 /* ==========================================================================
-   ShoreVest One — Home, preview shells, and Tools hub
-   Home is the calm personal workbench: Needs you, Today, Waiting elsewhere,
-   and nothing else. Card actions are lightweight local preview only —
-   no emails, no external systems, no background processing. Resolving a card
-   moves it out of "Needs you" with a brief confirmation and an undo.
+   ShoreVest One — Home, My Work, workspaces, preview shells, and Tools hub
+
+   For John and Kelvin, Home is a calm commercial workbench that absorbs
+   complexity: one Focus Now decision, a short Today list, one Under Control
+   reassurance line, and an optional quiet Around ShoreVest note. Celestra keeps
+   her coordination Home. My Work answers "what currently depends on me?".
+
+   Every action here is lightweight local demonstration only. Opening a review
+   prepares and explains; it never sends, invites, publishes, writes to a
+   system, or changes a calendar. Nothing external occurs.
    ========================================================================== */
 (function (root) {
   'use strict';
@@ -15,8 +20,7 @@
   var P = root.SVPortalPersonas;
   var el = U.el, esc = U.esc, frag = U.frag;
 
-  /* Per-session, in-memory record of resolved cards, keyed by persona + card.
-     Not persisted: reloading resets the preview, which is intended. */
+  /* Per-session record of resolved / actioned cards; not persisted. */
   SVOps.state.homeResolved = SVOps.state.homeResolved || {};
 
   /* ── Home customisation (persisted, non-critical arrangement only) ──────── */
@@ -71,151 +75,539 @@
     return renderCoordinationHome(container, user, persona);
   };
 
-    page.appendChild(el('div', { class: 'ops-pagehead home-pagehead' }, [
+  /* ── Commercial Home (John & Kelvin) ────────────────────────────────────── */
+
+  function renderCommercialHome(container, user, persona) {
+    var home = persona.home;
+    var custom = customFor(persona.id);
+    var page = el('div', { class: 'ops-content home home--commercial' + (custom.compact ? ' home--compact' : '') });
+
+    /* Header: greeting, discreet purpose, one situational sentence. */
+    page.appendChild(el('div', { class: 'home-head' }, [
+      el('h1', { class: 'ops-h1', text: greeting() + ', ' + persona.firstName + '.' }),
+      el('p', { class: 'home-head__purpose', text: 'What should I pay attention to right now?' }),
+      el('p', { class: 'home-head__situation', text: home.situational || 'One decision needs you right now.' })
+    ]));
+
+    /* Default indicator + Customise Home. */
+    var bar = el('div', { class: 'home-defaultbar' }, [
+      el('span', { class: 'home-defaultbar__label', text: 'ShoreVest default — Recommended for your role' }),
+      el('button', { type: 'button', class: 'home-customise', text: 'Customise Home',
+        onclick: function () { openCustomise(persona, function () { rerenderHome(container, user); }); } })
+    ]);
+    bar.appendChild(el('span', { class: 'home-synthdate', text: synthDate() + ' · synthetic' }));
+    page.appendChild(bar);
+
+    /* Focus Now — exactly one expanded priority. */
+    var focusSec = el('section', { class: 'home-focus', 'aria-labelledby': 'home-focus-h' });
+    focusSec.appendChild(el('h2', { class: 'home-sectionlabel', id: 'home-focus-h', text: 'Focus Now' }));
+    var resolved = SVOps.state.homeResolved[persona.id] || (SVOps.state.homeResolved[persona.id] = {});
+    focusSec.appendChild(renderFocusCard(persona, home.focus, resolved, function () { rerenderHome(container, user); }));
+    page.appendChild(focusSec);
+
+    /* Secondary sections in the user's chosen order. */
+    var secondary = el('div', { class: 'home-secondary' });
+    custom.order.forEach(function (key) {
+      if (key === 'today') secondary.appendChild(renderToday(home));
+      else if (key === 'underControl') secondary.appendChild(renderUnderControl(home));
+    });
+    page.appendChild(secondary);
+
+    /* Around ShoreVest — optional and quiet. */
+    if (custom.showAround && home.around && home.around.length) {
+      page.appendChild(renderAround(home));
+    }
+
+    container.appendChild(page);
+  }
+
+  function rerenderHome(container, user) {
+    container.innerHTML = '';
+    SVOps.views.home(container, user);
+  }
+
+  /* Focus Now card. */
+  function renderFocusCard(persona, focus, resolved, rerender) {
+    var done = resolved[focus.id];
+    var card = el('article', { class: 'focus-card' + (done ? ' is-actioned' : '') });
+
+    if (done) {
+      card.appendChild(el('div', { class: 'focus-card__done' }, [
+        el('div', {}, [
+          el('p', { class: 'focus-card__done-title', text: focus.title }),
+          el('p', { class: 'focus-card__done-note', text: done.note })
+        ]),
+        el('button', { type: 'button', class: 'home-card__undo', text: 'Undo',
+          onclick: function () { delete resolved[focus.id]; rerender(); } })
+      ]));
+      return card;
+    }
+
+    card.appendChild(el('p', { class: 'focus-card__eyebrow', text: focus.institution }));
+    card.appendChild(el('h3', { class: 'focus-card__title', text: focus.title }));
+
+    var ctx = el('div', { class: 'focus-card__context' });
+    (focus.context || []).forEach(function (line) { ctx.appendChild(el('p', { text: line })); });
+    card.appendChild(ctx);
+
+    /* Exact commercial decision + due + why. */
+    var meta = el('div', { class: 'focus-card__meta' });
+    meta.appendChild(field('The decision', focus.decision));
+    meta.appendChild(field('Due', focus.due));
+    card.appendChild(meta);
+
+    if (focus.requiredAttendee) {
+      card.appendChild(el('p', { class: 'focus-card__required', text: focus.requiredAttendee }));
+    }
+
+    card.appendChild(el('details', { class: 'focus-disc' }, [
+      el('summary', { text: 'Why this needs you' }),
+      el('p', { class: 'focus-disc__body', text: focus.whyYou })
+    ]));
+
+    /* Recommendation + reasoning. */
+    card.appendChild(el('div', { class: 'focus-card__rec' }, [
+      el('span', { class: 'focus-card__rec-label', text: focus.recLabel || 'ShoreVest One recommends' }),
+      el('p', { class: 'focus-card__rec-text', text: focus.recommendation }),
+      el('p', { class: 'focus-card__rec-why', text: focus.reasoning })
+    ]));
+
+    /* Evidence-quality summary (scoped wording, never false-green). */
+    card.appendChild(el('p', { class: 'focus-card__evidence', text: focus.evidenceLine }));
+
+    /* Primary action + safe-correction control. */
+    var actions = el('div', { class: 'focus-card__actions' });
+    actions.appendChild(el('button', {
+      type: 'button', class: 'btn btn--primary',
+      text: focus.primary,
+      onclick: function () { openReview(persona, focus, resolved, rerender); }
+    }));
+    actions.appendChild(el('button', {
+      type: 'button', class: 'btn btn--quiet focus-card__wrong',
+      text: 'Something wrong?',
+      onclick: function () { openCorrections(focus, resolved, rerender); }
+    }));
+    card.appendChild(actions);
+
+    card.appendChild(el('p', { class: 'focus-card__confirmnote', text: 'No message or invitation will be sent until you confirm the exact package.' }));
+
+    /* Progressive disclosures. */
+    var disc = el('div', { class: 'focus-card__disclosures' });
+    disc.appendChild(discBtn('Why am I seeing this?', function () { openWhy(persona, focus); }));
+    disc.appendChild(discBtn('Evidence and sources', function () { openEvidence(focus); }));
+    disc.appendChild(discBtn('What will happen if I confirm?', function () { openWhatHappens(focus); }));
+    card.appendChild(disc);
+
+    return card;
+  }
+
+  function field(label, value) {
+    return el('div', { class: 'focus-field' }, [
+      el('span', { class: 'focus-field__k', text: label }),
+      el('span', { class: 'focus-field__v', text: value })
+    ]);
+  }
+  function discBtn(label, onclick) {
+    return el('button', { type: 'button', class: 'focus-disclose', text: label, onclick: onclick });
+  }
+
+  /* Opening the review — prepares and explains, performs no external action. */
+  function openReview(persona, focus, resolved, rerender) {
+    var body = el('div', {});
+    body.appendChild(U.notice('info',
+      '<strong>Preview only</strong> No message or invitation will be sent until you confirm the exact package. Opening this review changes nothing outside this browser.'));
+    body.appendChild(el('section', {}, [
+      el('h4', { text: 'Recommended plan' }),
+      el('p', { class: 'drawer-copy', text: focus.recommendation }),
+      el('p', { class: 'drawer-copy', text: focus.reasoning })
+    ]));
+    if (focus.requiredAttendee) {
+      body.appendChild(el('section', {}, [
+        el('h4', { text: 'Required attendance' }),
+        el('p', { class: 'drawer-copy', text: focus.requiredAttendee })
+      ]));
+    }
+    body.appendChild(el('section', {}, [
+      el('h4', { text: 'What happens only after you confirm' }),
+      el('p', { class: 'drawer-copy', text: focus.afterConfirm }),
+      el('p', { class: 'drawer-copy', text: focus.owner })
+    ]));
+
+    var confirm = el('button', { type: 'button', class: 'btn btn--primary', text: 'Confirm plan',
+      onclick: function () {
+        resolved[focus.id] = { note: 'Plan confirmed in this demonstration. No message or invitation was sent.' };
+        U.toast('Prepared in this demonstration — nothing was sent.');
+        d.close();
+        rerender();
+      } });
+    var wrap = el('div', { class: 'drawer-actions' }, [
+      confirm,
+      el('button', { type: 'button', class: 'btn btn--quiet', text: 'Close', onclick: function () { d.close(); } })
+    ]);
+    body.appendChild(wrap);
+
+    var d = U.drawer(focus.primary, body);
+  }
+
+  var CORRECTIONS = [
+    { label: 'Change', done: 'Marked for change' },
+    { label: 'Need review', done: 'Sent for review' },
+    { label: 'Not enough information', done: 'Flagged: not enough information' },
+    { label: 'This is not mine', done: 'Flagged: not mine' },
+    { label: 'The information is wrong', done: 'Flagged: information is wrong' },
+    { label: 'Someone else should decide', done: 'Flagged for reassignment' },
+    { label: 'Need help', done: 'Help requested' }
+  ];
+
+  function openCorrections(focus, resolved, rerender) {
+    var body = el('div', {});
+    body.appendChild(el('p', { class: 'drawer-copy', text: 'Choose the closest correction. Each is recorded in this demonstration only — nothing external happens.' }));
+    var list = el('div', { class: 'corrections' });
+    CORRECTIONS.forEach(function (c) {
+      list.appendChild(el('button', { type: 'button', class: 'corrections__item', text: c.label,
+        onclick: function () {
+          resolved[focus.id] = { note: c.done + '.' };
+          U.toast(focus.institution + ' — ' + c.done);
+          d.close();
+          rerender();
+        } }));
+    });
+    body.appendChild(list);
+    var d = U.drawer('Something wrong?', body);
+  }
+
+  function openWhy(persona, focus) {
+    var body = el('div', {});
+    body.appendChild(el('section', {}, [
+      el('h4', { text: 'Why this needs you' }),
+      el('p', { class: 'drawer-copy', text: focus.whyYou })
+    ]));
+    body.appendChild(el('section', {}, [
+      el('h4', { text: 'Applicable policy' }),
+      el('p', { class: 'drawer-copy', text: focus.policy })
+    ]));
+    body.appendChild(U.notice('info', '<strong>Demonstration</strong> This explanation is synthetic. No live systems are consulted.'));
+    U.drawer('Why am I seeing this?', body);
+  }
+
+  var STATE_LABEL = {
+    'system-verified': 'System-verified',
+    'human-confirmed': 'Human-confirmed',
+    'inferred': 'Inferred',
+    'conflicting': 'Conflicting',
+    'stale': 'Stale',
+    'unavailable': 'Not yet available'
+  };
+
+  function openEvidence(focus) {
+    var body = el('div', {});
+    body.appendChild(el('p', { class: 'drawer-copy', text: focus.evidenceLine }));
+    var list = el('ul', { class: 'evidence-list' });
+    (focus.evidence || []).forEach(function (e) {
+      list.appendChild(el('li', { class: 'evidence-item' }, [
+        el('span', { class: 'evidence-item__state evidence-item__state--' + e.state, text: STATE_LABEL[e.state] || e.state }),
+        el('span', { class: 'evidence-item__body' }, [
+          el('span', { class: 'evidence-item__label', text: e.label }),
+          el('span', { class: 'evidence-item__detail', text: e.detail })
+        ])
+      ]));
+    });
+    body.appendChild(list);
+    body.appendChild(U.notice('info', '<strong>Demonstration</strong> Sources are synthetic. Checked at ' + esc(focus.verifiedAt) + '.'));
+    U.drawer('Evidence and sources', body);
+  }
+
+  function openWhatHappens(focus) {
+    var body = el('div', {});
+    body.appendChild(U.notice('info', '<strong>Nothing happens now.</strong> No message or invitation will be sent until you confirm the exact package.'));
+    body.appendChild(el('section', {}, [
+      el('h4', { text: 'If you confirm' }),
+      el('p', { class: 'drawer-copy', text: focus.afterConfirm })
+    ]));
+    body.appendChild(el('section', {}, [
+      el('h4', { text: 'Who owns the next step' }),
+      el('p', { class: 'drawer-copy', text: focus.owner })
+    ]));
+    U.drawer('What will happen if I confirm?', body);
+  }
+
+  /* Today — remaining schedule only; never repeats Focus Now. */
+  function renderToday(home) {
+    var sec = el('section', { class: 'home-panel', 'aria-labelledby': 'home-today-h' });
+    sec.appendChild(el('h2', { class: 'home-panel__title', id: 'home-today-h', text: 'Today' }));
+    var items = el('div', { class: 'today-list' });
+    (home.today || []).slice(0, 3).forEach(function (it) {
+      items.appendChild(el('div', { class: 'today-item' }, [
+        el('span', { class: 'today-item__time', text: it.time + (it.zone ? ' ' + it.zone : '') }),
+        el('span', { class: 'today-item__body' }, [
+          el('span', { class: 'today-item__name', text: it.title }),
+          el('span', { class: 'today-item__state today-item__state--' + (it.state || 'calm'), text: it.note })
+        ])
+      ]));
+    });
+    sec.appendChild(items);
+    return sec;
+  }
+
+  /* Under Control — one reassurance line by default. */
+  function renderUnderControl(home) {
+    var sec = el('section', { class: 'home-panel home-panel--calm', 'aria-labelledby': 'home-uc-h' });
+    sec.appendChild(el('h2', { class: 'home-panel__title', id: 'home-uc-h', text: 'Under Control' }));
+    sec.appendChild(el('p', { class: 'home-uc__line', text: home.underControl }));
+    return sec;
+  }
+
+  /* Around ShoreVest — quiet, no pressure actions. */
+  function renderAround(home) {
+    var sec = el('section', { class: 'home-around', 'aria-labelledby': 'home-around-h' });
+    sec.appendChild(el('h2', { class: 'home-sectionlabel home-sectionlabel--quiet', id: 'home-around-h', text: 'Around ShoreVest' }));
+    (home.around || []).slice(0, 2).forEach(function (a) {
+      var row = el('p', { class: 'home-around__item' }, [
+        el('span', { text: a.title + ' ' }),
+        a.link ? el('a', { class: 'home-around__link', href: a.link, text: a.note || 'Details' }) : el('span', { class: 'home-around__note', text: a.note || '' })
+      ]);
+      sec.appendChild(row);
+    });
+    return sec;
+  }
+
+  /* Customise Home drawer — non-critical arrangement only. */
+  function openCustomise(persona, rerender) {
+    var custom = customFor(persona.id);
+    var body = el('div', {});
+    body.appendChild(el('p', { class: 'drawer-copy', text: 'Adjust the calm parts of your Home. Focus Now, safety warnings and overdue external commitments are always shown.' }));
+
+    var showAround = U.toggleRow('cust-around', 'Show Around ShoreVest', 'The quiet firm note at the bottom of Home', custom.showAround, {
+      onchange: function (e) { setCustom(persona.id, { showAround: e.target.value === 'yes' }); }
+    });
+    var compact = U.toggleRow('cust-compact', 'Compact secondary sections', 'Tighter spacing for Today and Under Control', custom.compact, {
+      onchange: function (e) { setCustom(persona.id, { compact: e.target.value === 'yes' }); }
+    });
+    body.appendChild(showAround);
+    body.appendChild(compact);
+
+    var orderLabel = custom.order[0] === 'today' ? 'Today, then Under Control' : 'Under Control, then Today';
+    var reorder = el('div', { class: 'fld' }, [
+      el('label', { text: 'Secondary order' }),
+      (function () {
+        var sel = el('select', {});
+        [{ v: 'today', l: 'Today, then Under Control' }, { v: 'underControl', l: 'Under Control, then Today' }].forEach(function (o) {
+          var opt = el('option', { value: o.v, text: o.l });
+          if (custom.order[0] === o.v) opt.selected = true;
+          sel.appendChild(opt);
+        });
+        sel.addEventListener('change', function () {
+          setCustom(persona.id, { order: sel.value === 'today' ? ['today', 'underControl'] : ['underControl', 'today'] });
+        });
+        return sel;
+      })()
+    ]);
+    void orderLabel;
+    body.appendChild(reorder);
+
+    body.appendChild(el('div', { class: 'drawer-actions' }, [
+      el('button', { type: 'button', class: 'btn btn--primary', text: 'Done', onclick: function () { d.close(); rerender(); } }),
+      el('button', { type: 'button', class: 'btn btn--quiet', text: 'Restore ShoreVest default',
+        onclick: function () { clearCustom(persona.id); d.close(); rerender(); U.toast('Home restored to the ShoreVest default.'); } })
+    ]));
+    var d = U.drawer('Customise Home', body);
+  }
+
+  /* ── Coordination Home (Celestra — preserved) ───────────────────────────── */
+
+  function renderCoordinationHome(container, user, persona) {
+    var page = el('div', { class: 'ops-content home' });
+    page.appendChild(el('div', { class: 'ops-pagehead' }, [
       el('p', { class: 'ops-label', text: 'Home' }),
-      el('h1', { class: 'ops-h1', text: greeting() + ', ' + firstName(user) }),
-      el('p', { class: 'ops-lede', text: 'Your decisions, actions and blocked items in one place.' }),
-      el('p', { class: 'home-doctrine', text: 'Salesforce remains the official commercial record. ShoreVest One controls review, approvals and next actions.' })
+      el('h1', { class: 'ops-h1', text: greeting() + ', ' + (persona ? persona.firstName : 'there') + '.' }),
+      el('p', { class: 'ops-lede', text: 'What needs you now, what is happening today, and what is waiting elsewhere.' })
     ]));
 
     if (!persona) {
       page.appendChild(U.stateScreen('empty', 'No Home configured',
-        'This role has no Home view yet. Open Tools for the preserved workflow utilities.',
+        'This profile has no Home view. Use Tools to reach the operational prototype.',
         [el('a', { class: 'btn', href: '#/tools', text: 'Go to Tools' })]));
       container.appendChild(page);
       return;
     }
 
     var home = persona.home;
-    var decide = home.needsYou || [];
-    var doItems = home.today || [];
-    var waiting = home.waiting || [];
-    var first = decide[0] || doItems[0] || waiting[0];
+    var resolved = SVOps.state.homeResolved[persona.id] || (SVOps.state.homeResolved[persona.id] = {});
+    var open = home.needsYou.filter(function (c) { return !resolved[c.id]; });
 
-    page.appendChild(el('section', { class: 'home-command', 'aria-label': 'Today summary' }, [
-      el('div', { class: 'home-command__main' }, [
-        el('p', { class: 'home-command__count', text: 'Today: ' + decide.length + ' decisions · ' + doItems.length + ' actions · ' + waiting.length + ' waiting · 1 warning' }),
-        el('p', { class: 'home-command__start', html: '<strong>Start here:</strong> ' + esc(first ? first.explanation : 'Nothing needs you right now.') }),
-        el('button', { type: 'button', class: 'btn btn--primary', text: 'Start first item', onclick: function () { if (first) openItemDrawer(first); } })
-      ]),
-      el('aside', { class: 'home-warning', role: 'status' }, [
-        el('p', { class: 'home-warning__title', text: 'Warning' }),
-        el('p', { class: 'home-warning__text', text: home.warning || 'Suggested work is not official until accepted.' }),
-        el('button', { type: 'button', class: 'btn btn--sm btn--quiet', text: 'Review warnings', onclick: function () { openWarning(home.warning, persona.name); } })
-      ])
+    var needs = el('section', { class: 'home-section', 'aria-labelledby': 'home-needs' });
+    needs.appendChild(el('div', { class: 'home-section__head' }, [
+      el('h2', { class: 'home-section__title', id: 'home-needs', text: 'Needs you' }),
+      el('span', { class: 'home-section__count', text: open.length ? String(open.length) : '' })
     ]));
-
-    page.appendChild(el('div', { class: 'home-workgrid' }, [
-      renderHomeSection('Decide', 'Requires your judgement before work can move.', decide, true),
-      renderHomeSection('Do', 'Ready for you to complete.', doItems, false),
-      renderHomeSection('Waiting', 'No action until someone else responds.', waiting, false)
-    ]));
-
-    page.appendChild(renderRecent(home.recent || []));
-    container.appendChild(page);
-  };
-
-  function renderHomeSection(title, subtitle, items, highlightFirst) {
-    var section = el('section', { class: 'home-section', 'aria-label': title });
-    section.appendChild(el('div', { class: 'home-section__head' }, [
-      el('div', {}, [el('h2', { class: 'home-section__title', text: title }), el('p', { class: 'home-section__sub', text: subtitle })]),
-      el('span', { class: 'home-section__count', title: 'Queue count', text: items && items.length ? String(items.length) : '' })
-    ]));
-    if (!items || !items.length) {
-      section.appendChild(el('div', { class: 'home-empty' }, [el('p', { class: 'home-empty__title', text: 'Nothing here right now.' })]));
-      return section;
+    if (!open.length) {
+      needs.appendChild(el('div', { class: 'home-empty' }, [
+        el('p', { class: 'home-empty__title', text: 'Nothing needs you right now.' }),
+        el('p', { class: 'home-empty__sub', text: 'Anything new will appear here. Today and Waiting elsewhere are below.' })
+      ]));
+    } else {
+      var cards = el('div', { class: 'home-cards' });
+      home.needsYou.forEach(function (card) {
+        cards.appendChild(renderCoordCard(persona, card, resolved, function () {
+          container.innerHTML = ''; renderCoordinationHome(container, user, persona);
+        }));
+      });
+      needs.appendChild(cards);
     }
-    var cards = el('div', { class: 'home-cards' });
-    items.forEach(function (item, idx) { cards.appendChild(renderWorkCard(item, highlightFirst && idx === 0)); });
-    section.appendChild(cards);
-    return section;
+    page.appendChild(needs);
+
+    var lists = el('div', { class: 'home-lists' });
+    lists.appendChild(coordList('Today', home.today, function (item) {
+      return el('div', { class: 'home-list__item' }, [
+        el('span', { class: 'home-list__time', text: item.time || '' }),
+        el('span', { class: 'home-list__body' }, [
+          el('span', { class: 'home-list__name', text: item.title }),
+          el('span', { class: 'home-list__note home-list__note--' + (item.tone || 'calm'), text: item.note })
+        ])
+      ]);
+    }, 'No meetings or deadlines today.'));
+    lists.appendChild(coordList('Waiting elsewhere', home.waiting, function (item) {
+      return el('div', { class: 'home-list__item' }, [
+        el('span', { class: 'home-list__body' }, [
+          el('span', { class: 'home-list__name', text: item.title }),
+          el('span', { class: 'home-list__note home-list__note--waiting', text: item.note })
+        ])
+      ]);
+    }, 'Nothing is waiting on others.'));
+    page.appendChild(lists);
+
+    container.appendChild(page);
   }
 
-  function renderWorkCard(item, recommended) {
-    var node = el('article', { class: 'home-card' + (recommended ? ' home-card--recommended' : ''), tabindex: '0', role: 'button' });
-    node.addEventListener('click', function () { openItemDrawer(item); });
-    node.addEventListener('keydown', function (ev) { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); openItemDrawer(item); } });
-    if (recommended) node.appendChild(el('span', { class: 'home-card__flag', text: 'Recommended first' }));
-    node.appendChild(el('h3', { class: 'home-card__title', text: item.title }));
-    node.appendChild(el('p', { class: 'home-card__explain', text: item.explanation }));
-    node.appendChild(el('div', { class: 'home-card__meta', html: '<span>Status: ' + U.statusHtml(item.status || 'Ready') + '</span><span><strong>Next step:</strong> ' + esc(item.next || 'Open the item.') + '</span>' }));
-    node.appendChild(el('div', { class: 'home-card__actions' }, [
-      el('button', { type: 'button', class: 'btn btn--sm btn--primary', text: item.cta || 'Open item', onclick: function (ev) { ev.stopPropagation(); openItemDrawer(item); } })
+  function coordList(title, items, rowFn, emptyText) {
+    var panel = el('section', { class: 'home-list', 'aria-label': title });
+    panel.appendChild(el('h2', { class: 'home-list__title', text: title }));
+    if (!items || !items.length) {
+      panel.appendChild(el('p', { class: 'home-list__empty', text: emptyText }));
+      return panel;
+    }
+    var body = el('div', { class: 'home-list__items' });
+    items.slice(0, 3).forEach(function (item) { body.appendChild(rowFn(item)); });
+    panel.appendChild(body);
+    return panel;
+  }
+
+  function renderCoordCard(persona, card, resolved, rerender) {
+    var state = resolved[card.id];
+    var node = el('article', { class: 'home-card' + (state ? ' is-resolved' : '') });
+    if (state) {
+      node.appendChild(el('div', { class: 'home-card__resolved' }, [
+        el('div', {}, [
+          el('p', { class: 'home-card__resolved-title', text: card.title }),
+          el('p', { class: 'home-card__resolved-note', text: state.done + '.' })
+        ]),
+        el('button', { class: 'home-card__undo', type: 'button', text: 'Undo',
+          onclick: function () { delete resolved[card.id]; rerender(); } })
+      ]));
+      return node;
+    }
+    node.appendChild(el('h3', { class: 'home-card__title', text: card.title }));
+    var ctx = el('div', { class: 'home-card__context' });
+    (card.context || []).forEach(function (line) { ctx.appendChild(el('p', { text: line })); });
+    node.appendChild(ctx);
+    node.appendChild(el('div', { class: 'home-card__rec' }, [
+      el('span', { class: 'home-card__rec-label', text: card.recLabel || 'Current state' }),
+      el('p', { class: 'home-card__rec-text', text: card.recommendation })
     ]));
-    node.appendChild(el('button', { type: 'button', class: 'home-card__why', text: 'Why am I seeing this?', onclick: function (ev) { ev.stopPropagation(); openWhy(item); } }));
+    var actions = el('div', { class: 'home-card__actions' });
+    (card.actions || []).slice(0, 3).forEach(function (action) {
+      actions.appendChild(el('button', {
+        type: 'button',
+        class: 'btn btn--sm' + (action.intent === 'primary' ? ' btn--primary' : ' btn--quiet'),
+        text: action.label,
+        onclick: function () {
+          resolved[card.id] = { action: action.label, done: action.done || (action.label + ' recorded') };
+          U.toast(card.title + ' — ' + (action.done || action.label));
+          rerender();
+        }
+      }));
+    });
+    node.appendChild(actions);
+    if (card.detail) {
+      node.appendChild(el('button', { type: 'button', class: 'home-card__why', text: 'Why am I seeing this?',
+        onclick: function () {
+          var body = el('div', {});
+          body.appendChild(el('section', {}, [el('h4', { text: 'Why this is here' }), el('p', { class: 'drawer-copy', text: card.detail })]));
+          body.appendChild(U.notice('info', '<strong>Demonstration</strong> This explanation is synthetic. No live systems are consulted.'));
+          U.drawer(card.title, body);
+        } }));
+    }
     return node;
   }
 
-  function renderRecent(items) {
-    var section = el('section', { class: 'home-recent', 'aria-label': 'Recent Work' });
-    section.appendChild(el('h2', { class: 'home-section__title', text: 'Recent Work' }));
-    var list = el('div', { class: 'home-recent__list' });
-    (items || []).slice(0, 3).forEach(function (item) {
-      list.appendChild(el('button', { type: 'button', class: 'home-recent__row', onclick: function () { openItemDrawer({ title: item.title, explanation: item.note, status: 'Complete', next: 'No action needed.', owner: 'ShoreVest One', source: 'Activity history', rule: 'Recent work is shown for context', why: item.note, ignored: 'Nothing happens; this is informational.', systems: 'ShoreVest One activity log', history: [item.note] }); } }, [
-        el('strong', { text: item.title }), el('span', { text: item.note })
+  /* ── My Work (John & Kelvin) ────────────────────────────────────────────── */
+
+  SVOps.views.myWork = function (container, user) {
+    var persona = personaFor(user);
+    var page = el('div', { class: 'ops-content mywork' });
+    page.appendChild(el('div', { class: 'ops-pagehead' }, [
+      el('p', { class: 'ops-label', text: 'My Work' }),
+      el('h1', { class: 'ops-h1', text: 'What currently depends on me' }),
+      el('p', { class: 'ops-lede', text: 'Needs me is yours to action now. Waiting sits with someone else. Later is deliberately deferred.' })
+    ]));
+
+    var mw = persona && persona.myWork;
+    if (!mw) {
+      page.appendChild(U.notice('info', '<strong>Demonstration</strong> My Work is configured for the Client Solutions profiles in this demonstration.'));
+      container.appendChild(page);
+      return;
+    }
+
+    /* Needs me */
+    var needs = el('section', { class: 'mywork-view' });
+    needs.appendChild(el('div', { class: 'mywork-view__head' }, [
+      el('h2', { class: 'mywork-view__title', text: 'Needs me' }),
+      el('p', { class: 'mywork-view__sub', text: 'Ready for you to action now.' })
+    ]));
+    mw.needsMe.forEach(function (it) {
+      needs.appendChild(el('div', { class: 'mywork-item' }, [
+        el('p', { class: 'mywork-item__title', text: it.title }),
+        el('p', { class: 'mywork-item__note', text: it.note }),
+        el('p', { class: 'mywork-item__meta', text: 'Due: ' + it.due })
       ]));
     });
-    section.appendChild(list);
-    return section;
-  }
+    page.appendChild(needs);
 
-  function openWhy(item) {
-    var body = el('div', { class: 'home-drawer-copy' }, [
-      detailRow('Source', item.source),
-      detailRow('Rule', item.rule),
-      detailRow('Owner', item.owner),
-      detailRow('Why it matters', item.why),
-      detailRow('What happens if ignored', item.ignored)
-    ]);
-    U.drawer('Why am I seeing this?', body);
-  }
+    /* Waiting */
+    var waiting = el('section', { class: 'mywork-view' });
+    waiting.appendChild(el('div', { class: 'mywork-view__head' }, [
+      el('h2', { class: 'mywork-view__title', text: 'Waiting' }),
+      el('p', { class: 'mywork-view__sub', text: 'With someone else. Shown so nothing rests by accident.' })
+    ]));
+    mw.waiting.forEach(function (it) {
+      waiting.appendChild(el('div', { class: 'mywork-item' }, [
+        el('p', { class: 'mywork-item__title', text: it.title }),
+        el('dl', { class: 'mywork-wait' }, [
+          el('dt', { text: 'Next action with' }), el('dd', { text: it.who }),
+          el('dt', { text: 'Expected' }), el('dd', { text: it.when }),
+          el('dt', { text: 'Follow up' }), el('dd', { text: it.followUp }),
+          el('dt', { text: 'Accountability' }), el('dd', { text: it.accountable })
+        ])
+      ]));
+    });
+    page.appendChild(waiting);
 
-  function openItemDrawer(item) {
-    var allowed = actionList(item.section === 'Waiting' ? ['Wait', 'Open My Work item'] : [item.cta || 'Open item', 'Open My Work item', 'Mark for review']);
-    var history = el('ul', { class: 'home-history' });
-    (item.history || []).forEach(function (h) { history.appendChild(el('li', { text: h })); });
-    var body = el('div', { class: 'home-drawer-copy' }, [
-      detailRow('What this is', item.explanation),
-      detailRow('Current state', item.status || 'Ready'),
-      detailRow('Why it appeared', item.why),
-      detailRow('Source systems', item.systems || item.source),
-      detailRow('Owner', item.owner),
-      detailRow('Next action', item.next),
-      detailNode('Allowed actions', allowed),
-      detailNode('Activity history', history),
-      el('div', { class: 'home-drawer-actions' }, [
-        el('a', { class: 'btn btn--primary', href: item.href || '#/my-work', text: 'Open My Work item' }),
-        el('button', { type: 'button', class: 'btn btn--quiet', text: 'Copy link', onclick: function () { U.toast('Link copied for preview.'); } })
-      ])
-    ]);
-    U.drawer(item.title, body);
-  }
+    /* Later */
+    var later = el('section', { class: 'mywork-view' });
+    later.appendChild(el('div', { class: 'mywork-view__head' }, [
+      el('h2', { class: 'mywork-view__title', text: 'Later' }),
+      el('p', { class: 'mywork-view__sub', text: 'Deliberately deferred. Nothing is due.' })
+    ]));
+    mw.later.forEach(function (it) {
+      later.appendChild(el('div', { class: 'mywork-item' }, [
+        el('p', { class: 'mywork-item__title', text: it.title }),
+        el('p', { class: 'mywork-item__note', text: it.note })
+      ]));
+    });
+    page.appendChild(later);
 
-  function openWarning(text, owner) {
-    var body = el('div', { class: 'home-drawer-copy' }, [
-      detailRow('Source', 'ShoreVest One controls + MergePoint inputs'),
-      detailRow('Rule', 'Suggested work and stale rankings require human review before they affect official records.'),
-      detailRow('Owner', owner),
-      detailRow('Why it matters', text || 'Suggested work is not official until accepted.'),
-      detailRow('What happens if ignored', 'Suggested items stay held and official Salesforce records remain unchanged.')
-    ]);
-    U.drawer('Review warnings', body);
-  }
-
-  function detailRow(label, value) {
-    return el('div', { class: 'home-detail-row' }, [el('strong', { text: label }), el('span', { text: value || '—' })]);
-  }
-  function detailNode(label, node) {
-    return el('div', { class: 'home-detail-row home-detail-row--stack' }, [el('strong', { text: label }), node]);
-  }
-  function actionList(items) {
-    var ul = el('ul', { class: 'home-history' });
-    items.forEach(function (item) { ul.appendChild(el('li', { text: item })); });
-    return ul;
-  }
-
-  /* Clear a container and hand it back — used to re-render Home in place. */
-  function replace(container) { container.innerHTML = ''; return container; }
+    container.appendChild(page);
+  };
 
   /* ── Workspace placeholders (Relationships … Firm) ──────────────────────── */
 
@@ -253,7 +645,7 @@
     if (!info) {
       page.appendChild(el('div', { class: 'ops-pagehead' }, [
         el('h1', { class: 'ops-h1', text: 'Coming soon' }),
-        el('p', { class: 'ops-lede', text: 'This area is not part of the current preview scope.' })
+        el('p', { class: 'ops-lede', text: 'This area is not part of the current demonstration.' })
       ]));
       page.appendChild(el('a', { class: 'btn', href: '#/home', text: 'Back to Home' }));
       container.appendChild(page);
@@ -266,20 +658,19 @@
     ]));
     var panel = el('div', { class: 'ops-panel' });
     panel.appendChild(frag('<div class="ops-panel__head"><h2 class="ops-panel__title">What will live here</h2>' +
-      '<span class="st st--review">Preview — not yet connected</span></div>'));
+      '<span class="st st--review">Demonstration — not yet built</span></div>'));
     var ul = el('ul', { class: 'home-preview__list' });
     info.points.forEach(function (pt) { ul.appendChild(el('li', { text: pt })); });
     panel.appendChild(ul);
     page.appendChild(panel);
     page.appendChild(U.notice('info',
-      '<strong>Internal preview</strong> This is a preview of where the ' + esc(info.label) +
-      ' workflow will live. It performs no external actions until connected and approved.'));
-
+      '<strong>Demonstration content</strong> This is a preview of where the ' + esc(info.label) +
+      ' workflow will live. It performs no real actions and connects to no external systems.'));
     page.appendChild(el('a', { class: 'btn btn--quiet', href: '#/home', text: 'Back to Home' }));
     container.appendChild(page);
   };
 
-  /* ── Tools hub — the preserved workflow utilities ────────────────────── */
+  /* ── Tools hub — the preserved operational prototype ────────────────────── */
 
   SVOps.views.tools = function (container, user) {
     var page = el('div', { class: 'ops-content' });
@@ -290,14 +681,14 @@
     ]));
 
     var modules = [
-      { n: '1', name: 'Process a List', desc: 'Upload Excel, CSV, or a Salesforce report and generate a controlled output.', hash: '#/process', cap: 'submitFiles' },
-      { n: '2', name: 'Weekly Reporting', desc: 'Generate the Weekly Outreach and Coverage Snapshot from approved source data.', hash: '#/weekly', cap: 'submitFiles' },
-      { n: '3', name: 'Salesforce Data Quality', desc: 'Run contact, account, opportunity, ownership, next-step, and stale-record checks.', hash: '#/dataquality', cap: 'submitFiles' },
-      { n: '4', name: 'Legacy Outreach Preparation', desc: 'Legacy prototype for list processing, exclusions and coverage assignment.', hash: '#/process', cap: 'submitFiles' },
-      { n: '5', name: 'Review Exceptions', desc: 'Resolve ambiguous, invalid, duplicate, blocked, or unmatched records.', hash: '#/exceptions', cap: 'reviewExceptions' },
-      { n: '6', name: 'Previous Runs', desc: 'Prior batches, outputs, exceptions, approvals, errors, and audit history.', hash: '#/runs', cap: null },
-      { n: '7', name: 'Administration', desc: 'Templates, owners, mappings, rules, blocked domains, exclusion lists, and roles.', hash: '#/admin', cap: 'administer' },
-      { n: '8', name: 'Monitoring', desc: 'Processing health, stuck batches, reconciliation failures, and alerts.', hash: '#/monitoring', cap: 'viewMonitoring' }
+      { n: '01', name: 'Process a List', desc: 'Upload Excel, CSV, or a Salesforce report and generate a controlled output.', hash: '#/process', cap: 'submitFiles' },
+      { n: '02', name: 'Weekly Reporting', desc: 'Generate the Weekly Outreach and Coverage Snapshot from approved source data.', hash: '#/weekly', cap: 'submitFiles' },
+      { n: '03', name: 'Salesforce Data Quality', desc: 'Run contact, account, opportunity, ownership, next-step, and stale-record checks.', hash: '#/dataquality', cap: 'submitFiles' },
+      { n: '04', name: 'Outreach Preparation', desc: 'Identify existing contacts, exclude prior outreach, assign coverage, prepare draft-ready outputs.', hash: '#/outreach', cap: 'submitFiles' },
+      { n: '05', name: 'Review Exceptions', desc: 'Resolve ambiguous, invalid, duplicate, blocked, or unmatched records.', hash: '#/exceptions', cap: 'reviewExceptions' },
+      { n: '06', name: 'Previous Runs', desc: 'Prior batches, outputs, exceptions, approvals, errors, and audit history.', hash: '#/runs', cap: null },
+      { n: '07', name: 'Administration', desc: 'Templates, owners, mappings, rules, blocked domains, exclusion lists, and roles.', hash: '#/admin', cap: 'administer' },
+      { n: '08', name: 'Monitoring', desc: 'Processing health, stuck batches, reconciliation failures, and alerts.', hash: '#/monitoring', cap: 'viewMonitoring' }
     ].filter(function (m) { return !m.cap || R.can(user.role, m.cap); });
 
     var grid = el('div', { class: 'ops-grid ops-grid--3' });
@@ -327,7 +718,7 @@
     } else {
       page.appendChild(el('div', { class: 'ops-panel', style: 'margin-top:22px' }, [
         U.stateScreen('empty', 'No batches yet',
-          'Start by processing a list. In preview mode you can use the sample files described in the documentation.',
+          'Start by processing a list. In demonstration mode you can use the sample files described in the documentation.',
           [el('a', { class: 'btn btn--primary', href: '#/process', text: 'Process a List' })])
       ]));
     }
@@ -335,209 +726,4 @@
     container.appendChild(page);
   };
 
-})(typeof self !== 'undefined' ? self : this);
-
-/* Canonical ShoreVest One operating-model shells and Outreach workflow. */
-(function (root) {
-  'use strict';
-  var SVOps = root.SVOps, U = SVOps.ui, P = root.SVPortalPersonas;
-  var el = U.el, esc = U.esc, frag = U.frag;
-  SVOps.state.outreach = SVOps.state.outreach || { step: 'overview', approval: null, version: 0 };
-  var maturity = ['Idea','Designed','Preview','Connected','Validated','Validated'];
-  var heldReasons = ['ownership review','data quality','possible duplicate','institution concentration','active relationship conflict','insufficient evidence','missing current contact','departed contact','research required'];
-  var senders = {
-    'John Jones': { email: 'john@shorevest.com', sig: 'John Jones\nDirector of Client Solutions, Ex-Asia\nShoreVest' },
-    'Kelvin Chan': { email: 'kelvin@shorevest.com', sig: 'Kelvin Chan\nDirector of Client Solutions, Asia\nShoreVest' },
-    'Nico Jacques': { email: 'nico@shorevest.com', sig: 'Nico Jacques\nShoreVest' }
-  };
-  function persona(user){ return P.byId(user.personaId) || {}; }
-  function page(label,title,lede){ var p=el('div',{class:'ops-content'}); p.appendChild(el('div',{class:'ops-pagehead'},[el('p',{class:'ops-label',text:label}),el('h1',{class:'ops-h1',text:title}),el('p',{class:'ops-lede',text:lede})])); return p; }
-  function pill(t){ return el('span',{class:'st st--review',text:t}); }
-  function doctrine(){ return U.notice('info','<strong>How work is controlled</strong> Salesforce remains the official commercial record. ShoreVest One helps you review, prepare and control work across Salesforce, Outlook, SharePoint and approved AI-supported workflows. Suggestions do not become official actions until a human accepts them.'); }
-  function card(name,desc,state,href){ return el(href?'a':'div',{class:'ops-module',href:href||null},[el('span',{class:'ops-module__num',text:state||'Preview'}),el('p',{class:'ops-module__name',text:name}),el('p',{class:'ops-module__desc',text:desc})]); }
-  function actions(back){ return el('div',{class:'ops-actions'},[el('a',{class:'btn btn--quiet',href:back||'#/home',text:'Back'}),el('button',{class:'btn btn--quiet',type:'button',text:'Save & exit',onclick:function(){ localStorage.setItem('svops.demo.lastSaved',new Date().toISOString()); U.toast('Preview state saved in this browser only.'); }}),el('button',{class:'btn btn--quiet',type:'button',text:'Start over',onclick:function(){ SVOps.state.outreach={step:'overview',version:0}; location.hash='#/outreach'; root.dispatchEvent(new Event('svops:render')); }}),el('button',{class:'btn btn--quiet',type:'button',text:'Undo',onclick:function(){ history.back(); }})]); }
-  function defaultSender(user, rows){ var p=persona(user); if(p.id==='nico' && (!rows || rows.some(function(r){return r.region==='Operator permitted';}))) return 'Nico Jacques'; return p.region==='Asia'?'Kelvin Chan':'John Jones'; }
-  function mockedRows(){ var names=['Anna Larsen','Mikkel Holm','Freja Nielsen','Jonas Berg','Sarah Chen','Markus Vogel','Claire Dubois','Tom Eriksen','Mei Tan','Luca Rossi','Emma Wright','Peter Novak','Sofia Lind','Daniel Cho','Eva Schmidt','Oscar Meyer','Mina Park','Henrik Dahl']; return names.map(function(n,i){ var inst=i<6?'ATP':['Nordic Pension','GreenVale Capital','Harbour Ridge','EastGate Assurance','Meridian Insurance'][i%5]; var blocked=i===8||i===13; var held=i>=2&&i<6; return {name:n,institution:inst,region:i%3===0?'Asia':'Ex-Asia',evidence:'Salesforce activity + SharePoint note, refreshed '+(i+1)+' days ago', state:blocked?'Blocked':held?'On hold':'Included', reason:blocked?(i===8?'opt-outs':'active diligence'):held?'institution concentration':(i===10?'ownership review':''), owner:i%3===0?'Kelvin Chan':i%4===0?'Celestra Gallagher':'John Jones', next:blocked?'Cannot override normally':held?'Owner decision before drafting':'Eligible for review'}; }); }
-  function saveRows(rows){ SVOps.state.outreach.rows=rows; localStorage.setItem('svops.demo.outreachRows',JSON.stringify(rows)); }
-  function rows(){ if(SVOps.state.outreach.rows) return SVOps.state.outreach.rows; try{return JSON.parse(localStorage.getItem('svops.demo.outreachRows'))||mockedRows();}catch(e){return mockedRows();} }
-
-  function primaryAction(item, fallback) {
-    var label = item && item.actions && item.actions[0] && item.actions[0].label || fallback || 'Review';
-    if (/send|approve/i.test(label)) return 'Review';
-    if (/prepare|draft/i.test(label)) return 'Prepare';
-    if (/confirm/i.test(label)) return 'Confirm';
-    if (/fix|wrong|change/i.test(label)) return 'Fix';
-    if (/wait|hold/i.test(label)) return 'Wait';
-    return 'Review';
-  }
-
-  SVOps.views.myWork=function(c,user){
-    var pg=page('My Work','My Work','Start with the first item. Each item has one owner and one next step.');
-    var baseOwner = (user.name || 'Celestra Gallagher');
-    var items=[
-      {group:'Do now',action:'Review',title:'Review MergePoint contact proposals',reason:'12 proposed contacts need review before they can be written to Salesforce.',status:'On hold',next:'Confirm owner and account match.',owner:'Celestra',due:'Today',source:'Salesforce + MergePoint',button:'Start review',blocker:'Owner and account match not confirmed.',history:['MergePoint proposals imported.','Salesforce writeback held until review.']},
-      {group:'Do now',action:'Prepare',title:'Data-room access package',reason:'Meridian request is ready, but eligibility and approval version must be frozen.',status:'Ready',next:'Prepare the access package with the approved recipient version.',owner:baseOwner,due:'Today',source:'Diligence & Requests',button:'Open',blocker:'None.'},
-      {group:'Do now',action:'Review',title:'GreenVale diligence answer',reason:'One commercial disclosure decision is required before the response moves forward.',status:'Needs review',next:'Use approved aggregated information instead of named recovery examples.',owner:baseOwner,due:'This week',source:'SharePoint + Salesforce',button:'Open',blocker:'Commercial disclosure choice.'},
-      {group:'Waiting on others',action:'Wait',title:'Ownership confirmation',reason:'Waiting on John before this record can move forward.',status:'Waiting',next:'No action until John confirms.',owner:'John',due:'This week',source:'Owner queue',button:'Open item',blocker:'John'},
-      {group:'Waiting on others',action:'Wait',title:'Salesforce field list',reason:'Waiting on Celestra to confirm which fields are safe for preview.',status:'Waiting',next:'No action until Celestra confirms the field list.',owner:'Celestra',due:'This week',source:'Salesforce admin queue',button:'Open item',blocker:'Celestra'},
-      {group:'Waiting on others',action:'Wait',title:'AI control register evidence',reason:'Waiting on vendors for updated control evidence.',status:'Waiting',next:'No action until the vendor evidence arrives.',owner:'Vendor',due:'This week',source:'Vendor controls',button:'Open item',blocker:'Vendor'},
-      {group:'Suggestions to review',action:'Review',title:'Automated task cleanup',reason:'7 old MergePoint-created tasks may be duplicate or low-value.',status:'Suggested',next:'Review suggestions before anything is changed or removed.',owner:baseOwner,due:'Later',source:'MergePoint + Salesforce',button:'Open',blocker:'Human acceptance required.'},
-      {group:'Done',action:'Confirm',title:'Weekly outreach snapshot',reason:'Snapshot package has been reviewed for this cycle.',status:'Complete',next:'Nothing else needed right now.',owner:baseOwner,due:'Done',source:'Reporting',button:'Open',blocker:'None.'}
-    ];
-    function count(group){return items.filter(function(i){return i.group===group;}).length;}
-    pg.appendChild(el('div',{class:'work-summary'},[
-      summary('Do now',count('Do now')),summary('Waiting',count('Waiting on others')),summary('Suggestions',count('Suggestions to review')),summary('Overdue',0)
-    ]));
-    pg.appendChild(startFirst(items[0]));
-    var tabs=el('div',{class:'ops-filterbar work-tabs'}), listWrap=el('div');
-    ['Do now','Waiting','Suggestions','On hold','Done'].forEach(function(f,i){tabs.appendChild(el('button',{class:'btn btn--quiet'+(i===0?' is-active':''),text:f+' ('+tabItems(f).length+')',onclick:function(){drawTab(f);}}));});
-    pg.appendChild(tabs); pg.appendChild(listWrap); drawTab('Do now');
-    function tabItems(f){var map={'Do now':'Do now','Waiting':'Waiting on others','Suggestions':'Suggestions to review','On hold':'On hold','Done':'Done'};return items.filter(function(i){return i.group===map[f]||i.status===f;});}
-    function drawTab(f){Array.prototype.forEach.call(tabs.querySelectorAll('button'),function(b){b.className='btn btn--quiet'+(b.textContent.indexOf(f+' (')===0?' is-active':'');});listWrap.innerHTML='';var list=tabItems(f); if(!list.length) listWrap.appendChild(el('div',{class:'state'},[el('div',{class:'glyph',text:'·'}),el('h2',{text:'No items here.'})])); else listWrap.appendChild(workSection(f,list));}
-
-    pg.appendChild(el('details',{class:'work-doctrine'},[el('summary',{text:'Operating doctrine'}),el('p',{text:'Salesforce stays the official record. ShoreVest One helps review, approve and track work before anything is written back.'})]));
-    c.appendChild(pg);
-
-    function summary(label,num){return el('div',{class:'work-summary__item'},[el('span',{text:label}),el('strong',{text:String(num)})]);}
-    function startFirst(item){return el('article',{class:'work-start-card',tabindex:'0',onclick:function(){openWork(item);}},[el('p',{class:'ops-label',text:'Start first'}),el('h2',{text:item.title}),el('p',{text:'Reason: '+item.reason}),el('p',{html:'<strong>Status:</strong> '+esc(item.status)}),el('p',{html:'<strong>Next step:</strong> '+esc(item.next)}),el('div',{class:'home-card__actions'},[el('button',{type:'button',class:'btn btn--primary',text:item.button,onclick:function(ev){ev.stopPropagation();openWork(item);}}),el('button',{type:'button',class:'btn btn--quiet',text:'Why am I seeing this?',onclick:function(ev){ev.stopPropagation();openWork(item);}})])]);}
-    function workSection(title,list){var section=el('section',{class:'work-section'});section.appendChild(el('div',{class:'home-section__head'},[el('h2',{class:'home-section__title',text:title}),el('span',{class:'home-section__count',text:String(list.length)})]));var cards=el('div',{class:'work-cards'});list.forEach(function(item){cards.appendChild(workCard(item));});section.appendChild(cards);return section;}
-    function workCard(item){return el('article',{class:'work-card',tabindex:'0',onclick:function(){openWork(item);},onkeydown:function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();openWork(item);}}},[el('div',{class:'work-card__title'},[U.actionChip(item.action),el('h3',{text:item.title})]),el('p',{class:'work-card__reason',text:item.reason}),el('p',{html:'<strong>Status:</strong> '+esc(item.status)}),el('p',{html:'<strong>Next step:</strong> '+esc(item.next)}),el('p',{class:'work-card__meta',text:'Owner: '+item.owner+' · Due: '+item.due+' · Source: '+item.source}),el('button',{type:'button',class:'btn btn--sm btn--primary',text:item.button||'Open',onclick:function(ev){ev.stopPropagation();openWork(item);}})]);}
-    function openWork(item){var history=item.history||['Created from preview signals.','Added to My Work queue.'];U.drawer(item.title,el('div',{},[drawerSection('What this is',item.title),drawerSection('Why it appeared',item.reason),drawerSection('Source',item.source),drawerSection('Owner',item.owner),drawerSection('Next step',item.next),drawerSection('Allowed actions',(item.button||'Open')+', hold, assign owner, mark done'),drawerSection('History',history.join(' · ')),drawerSection('Who/what is blocking it',item.blocker||'None'),el('div',{class:'ops-actions'},[el('a',{class:'btn btn--primary',href:item.title.indexOf('MergePoint')>-1?'#/outreach/review':item.title.indexOf('Data-room')>-1?'#/diligence':'#/my-work',text:item.button==='Start review'?'Start review':'Open workflow'}),el('button',{class:'btn btn--quiet',type:'button',text:'Open item',onclick:function(){U.toast('Item detail is open.');}})])]));}
-    function drawerSection(label,text){return el('section',{},[el('h4',{text:label}),el('p',{class:'drawer-copy',text:text})]);}
-  };
-
-  SVOps.views.relationships=function(c,user){
-    var pg=page('Relationships','Relationships','See important LP and partner relationships that need attention.');
-    var role=(personaFor(user)||{}).id||'john';
-    var filter='All';
-    var tableWrap=el('div',{class:'relationship-table-wrap',style:'display:none'});
-    var sectionsWrap=el('div',{class:'relationship-sections'});
-    var filterButtons=[];
-    var rel=relationshipsFor(role);
-
-    pg.appendChild(el('div',{class:'work-summary relationship-summary'},[
-      summary('Needs review',countStatus('Needs review')),summary('On hold',countStatus('On hold')),summary('Waiting',countStatus('Waiting')),summary('Healthy',countStatus('Healthy'))
-    ]));
-    pg.appendChild(el('div',{class:'ops-next-action relationship-start'},[
-      el('div',{},[el('strong',{text:'Start here: '}),el('span',{text:'review relationships where the stage, owner judgement or recent activity does not match the next action.'})]),
-      el('button',{type:'button',class:'btn btn--primary',text:'Review first relationship',disabled:!rel.length,onclick:function(){openRelationship(firstReview(rel));}})
-    ]));
-    pg.appendChild(el('details',{class:'work-doctrine relationship-doctrine'},[
-      el('summary',{text:'How this page works'}),
-      el('p',{text:'Salesforce remains the official record. This page shows relationship exceptions and next actions.'}),
-      el('p',{text:'ShoreVest One compares Salesforce stage, recent activity, owner judgement and accepted action plans. It flags relationships where something appears missing, stale or inconsistent. Suggestions do not become official actions until accepted.'})
-    ]));
-    pg.appendChild(el('div',{class:'ops-filterbar relationship-filters'},['All','Needs review','On hold','Waiting','Healthy','Mine only'].map(function(f,i){var b=el('button',{type:'button',class:'btn btn--quiet'+(i===0?' is-active':''),text:f,onclick:function(){filter=f;draw();}});filterButtons.push(b);return b;})));
-    pg.appendChild(sectionsWrap);
-    pg.appendChild(el('p',{class:'ops-meta'},[el('button',{type:'button',class:'btn btn--quiet btn--sm',text:'View as table',onclick:function(){tableWrap.style.display=tableWrap.style.display==='none'?'block':'none';this.textContent=tableWrap.style.display==='none'?'View as table':'Hide table';}})]));
-    pg.appendChild(tableWrap);
-    draw();
-    c.appendChild(pg);
-
-    function summary(label,num){return el('div',{class:'work-summary__item'},[el('span',{text:label}),el('strong',{text:String(num)})]);}
-    function countStatus(status){return rel.filter(function(r){return status==='Healthy'?r.group==='Healthy / no action needed':r.group===status;}).length;}
-    function firstReview(list){return list.filter(function(r){return r.group==='Needs review';})[0]||list[0]||null;}
-    function mineName(){return (personaFor(user)||user||{}).name||'';}
-    function shown(){return rel.filter(function(r){if(filter==='All')return true;if(filter==='Mine only')return r.owner===mineName();if(filter==='Healthy')return r.group==='Healthy / no action needed';return r.group===filter;});}
-    function draw(){var visible=shown();filterButtons.forEach(function(b){b.className='btn btn--quiet'+(b.textContent===filter?' is-active':'');});sectionsWrap.innerHTML='';if(!visible.length){sectionsWrap.appendChild(emptyState(filter==='Mine only'?'No relationships assigned to '+(mineName()||'this user')+'.':'No relationships match this filter.'));}else{['Needs review','On hold','Waiting','Healthy / no action needed'].forEach(function(group){var rows=visible.filter(function(r){return r.group===group;});if(rows.length){sectionsWrap.appendChild(section(group,rows));}});}tableWrap.innerHTML='';tableWrap.appendChild(table(visible));}
-    function section(title,rows){var sec=el('section',{class:'work-section relationship-section'});sec.appendChild(el('div',{class:'home-section__head'},[el('h2',{class:'home-section__title',text:title}),el('span',{class:'home-section__count',text:String(rows.length)})]));var cards=el('div',{class:'work-cards relationship-cards'});rows.forEach(function(r){cards.appendChild(card(r));});sec.appendChild(cards);return sec;}
-    function card(r){return el('article',{class:'work-card relationship-card',tabindex:'0',onclick:function(){openRelationship(r);},onkeydown:function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();openRelationship(r);}}},[el('div',{class:'work-card__title'},[el('h3',{text:r.account}),el('span',{class:'st',html:U.statusHtml(r.status)})]),el('p',{html:'<strong>Owner:</strong> '+esc(r.owner)}),el('p',{html:'<strong>Stage:</strong> '+esc(r.stage)}),el('p',{class:'work-card__reason',html:'<strong>Issue:</strong> '+esc(r.issue)}),el('p',{html:'<strong>Next step:</strong> '+esc(r.next)}),el('button',{type:'button',class:'btn btn--sm btn--primary',text:'Open relationship',onclick:function(ev){ev.stopPropagation();openRelationship(r);}})]);}
-    function emptyState(message){return el('div',{class:'state'},[el('div',{class:'glyph',text:'·'}),el('h2',{text:message})]);}
-    function groupForStatus(status){return status==='On hold'?'On hold':status==='Waiting'?'Waiting':status==='Healthy'?'Healthy / no action needed':'Needs review';}
-    function table(rows){return U.table([{key:'account',label:'Account',html:function(r){return esc(r.account)}},{key:'owner',label:'Owner',html:function(r){return esc(r.owner)}},{key:'stage',label:'Salesforce stage',html:function(r){return esc(r.stage)}},{key:'noticed',label:'What ShoreVest One noticed',html:function(r){return esc(r.noticed)}},{key:'issue',label:'Issue',html:function(r){return esc(r.issue)}},{key:'blocker',label:'Blocker',html:function(r){return esc(r.blocker)}},{key:'next',label:'Next step',html:function(r){return esc(r.next)}},{key:'status',label:'Status',html:function(r){return U.statusHtml(r.status)}},{key:'review',label:'Review date',html:function(r){return esc(r.review)}}],rows,{onRowClick:openRelationship});}
-    function openRelationship(r){if(!r){U.toast('No relationship is available for review.');return;}function change(label,status){r.status=status;r.group=groupForStatus(status);r.history.unshift(label+' by '+(user.name||'current user')+' at '+new Date().toISOString());U.toast(label+' saved.');document.querySelector('.drawer-scrim')&&document.querySelector('.drawer-scrim').click();draw();openRelationship(r);}U.drawer(r.account,el('div',{},[drawerSection('Current status',r.status),drawerSection('Why this appeared',r.why),drawerSection('Source systems',r.sources.join(' · ')),drawerSection('Evidence',r.evidence.join(' · ')),drawerSection('Owner',r.owner),drawerSection('Salesforce stage',r.stage),drawerSection('Current blocker',r.blocker),drawerSection('Next step',r.next),drawerSection('Review date',r.review),drawerSection('Allowed actions',r.actions.join(' · ')),drawerSection('Recent history',r.history.join(' · ')),el('div',{class:'ops-actions'},[el('button',{class:'btn btn--primary',type:'button',text:'Confirm action plan',onclick:function(){change('Confirmed action plan','Healthy');}}),el('button',{class:'btn btn--quiet',type:'button',text:'Assign to owner',onclick:function(){r.owner=user.name||r.owner;r.history.unshift('Assigned owner to '+r.owner);U.toast('Owner assigned.');draw();}}),el('button',{class:'btn btn--quiet',type:'button',text:'Put on hold',onclick:function(){change('Put on hold','On hold');}}),el('button',{class:'btn btn--quiet',type:'button',text:'Mark no action needed',onclick:function(){change('Marked no action needed','Healthy');}})])]));}
-    function drawerSection(label,text){return el('section',{},[el('h4',{text:label}),el('p',{class:'drawer-copy',text:text})]);}
-  };
-
-  function relationshipsFor(role){
-    var base={actions:['Confirm action plan','Assign to owner','Put on hold','Mark no action needed'],sources:['Salesforce opportunity stage','Recent meeting note','ShoreVest One rule check']};
-    function groupForStatus(status){return status==='On hold'?'On hold':status==='Waiting'?'Waiting':status==='Healthy'?'Healthy / no action needed':'Needs review';}
-    function r(o){return Object.assign({group:groupForStatus(o.status),noticed:o.noticed||o.issue,blocker:o.blocker||'None recorded',review:o.review||'2026-07-17',actions:base.actions,sources:base.sources,evidence:o.evidence||['Salesforce stage: '+o.stage,'Owner judgement: '+(o.judgement||'needs confirmation'),'Recent activity: '+(o.activity||'not enough recent activity')],history:o.history||['Relationship exception created.','No official Salesforce writeback has occurred.']},o);}
-    var rows={
-      john:[r({account:'NorthBridge Pension',owner:'John Jones',stage:'Stage 4',status:'Needs review',issue:'Advanced stage, but no active action plan is logged.',why:'Salesforce shows Stage 4, but no active action plan is logged.',next:'John to confirm plan and next outreach owner.',activity:'Meeting logged 18 days ago',history:['Meeting logged 18 days ago','No follow-up action accepted','Automated signal flagged high engagement']}),r({account:'ATP',owner:'John Jones',stage:'Stage 2',status:'On hold',issue:'Too many possible contacts at the same institution.',why:'Owner judgement put ATP on hold because there are too many possible contacts at the same institution.',blocker:'Institution concentration',next:'John to choose the best contacts or keep the hold.',review:'2026-07-15'}),r({account:'Gulf Placement Partners',owner:'John Jones',stage:'Partner review',status:'Needs review',issue:'Placement-agent route needs owner judgement before diligence moves.',why:'Recent notes mention a placement-agent path, but the accepted next action does not name the commercial owner.',blocker:'Commercial judgement needed',next:'John to decide whether the retainer question should move to Ben.'}),r({account:'Hamilton Endowment',owner:'John Jones',stage:'Stage 2',status:'Healthy',issue:'Recent activity and next action match the owner plan.',why:'Salesforce stage, owner judgement and recent activity are consistent.',next:'No action needed this week.',review:'2026-07-24'})],
-      kelvin:[r({account:'EastGate Assurance',owner:'Kelvin Chan',stage:'Stage 3',status:'Blocked',issue:'Recent meeting found, but outcome is not logged in Salesforce.',why:'Recent meeting activity exists, but Salesforce does not show the outcome or accepted next step.',blocker:'Missing meeting outcome',next:'Kelvin to confirm meeting outcome and next step.',review:'2026-07-12',activity:'Recent Asia meeting found'}),r({account:'Pacific Harbour Family Office',owner:'Kelvin Chan',stage:'Stage 2',status:'Needs review',issue:'Asia priority looks stale after recent activity.',why:'Recent activity increased, but owner priority has not been refreshed.',blocker:'Stale priority',next:'Kelvin to confirm current Asia priority.'}),r({account:'MergePoint Asia Insurer Route',owner:'Kelvin Chan',stage:'Stage 1',status:'On hold',issue:'Two possible Asia relationship routes need an owner choice.',why:'The account hierarchy has two plausible owner routes.',blocker:'Ambiguous account route',next:'Kelvin to choose the correct route or keep hold.'})],
-      celestra:[r({account:'Meridian Insurance',owner:'Celestra Gallagher',stage:'Stage 1',status:'Waiting',issue:'Current contact may be missing or out of date.',why:'The current contact field is empty or stale compared with recent records.',blocker:'Missing current contact',next:'Celestra to find owner or mark research required.',review:'2026-07-19'}),r({account:'Nordic Pension Duplicate',owner:'Celestra Gallagher',stage:'Data cleanup',status:'Needs review',issue:'Account match issue could attach activity to the wrong record.',why:'A proposed account match conflicts with the existing Salesforce account.',blocker:'Account match issue',next:'Celestra to confirm the correct account match.'})],
-      emily:[r({account:'Standard action category cleanup',owner:'Emily Oestericher',stage:'Process design',status:'Needs review',issue:'Relationship lacks a standard next-action category.',why:'The next action is written as free text and does not match an accepted action category.',blocker:'Missing standard action category',next:'Emily to choose or create the right standard category.'}),r({account:'Meeting brief template exception',owner:'Emily Oestericher',stage:'Template review',status:'Waiting',issue:'Relationship note uses an old briefing template.',why:'The record has a next action, but the template field is inconsistent with the current process.',blocker:'Template decision pending',next:'Emily to confirm the standard template.'})],
-      nico:[r({account:'Meridian Insurance Research Lead',owner:'Nico Jacques',stage:'Research handoff',status:'Waiting',issue:'Outreach-generated lead needs owner acceptance.',why:'Research found a possible current contact, but no relationship owner has accepted it.',blocker:'Owner acceptance missing',next:'Nico to hand off the lead for owner acceptance.'}),r({account:'Danish Teachers Pension',owner:'Nico Jacques',stage:'Stage 1',status:'Needs review',issue:'Missing current contact before outreach can continue.',why:'The outreach list has no verified current contact.',blocker:'Missing current contact',next:'Nico to research a current contact or mark no action.'})],
-      ben:[r({account:'NorthBridge Pension strategic exception',owner:'Ben Fanger',stage:'Stage 4',status:'Needs review',issue:'Important advanced relationship has no accepted action plan.',why:'This is a strategic exception because an advanced relationship lacks an accepted plan.',blocker:'Strategic decision needed',next:'Ben to decide whether to assign a plan or downgrade.'}),r({account:'Placement-agent retainer decision',owner:'Ben Fanger',stage:'Partner review',status:'On hold',issue:'Placement-agent retainer question needs senior decision.',why:'The relationship cannot move until the retainer question is decided.',blocker:'Senior decision pending',next:'Ben to decide the retainer path.'})]
-    };
-    return rows[role]||rows.john;
-  }
-
-SVOps.views.meetings=function(c){ var pg=page('Meetings','Meeting workspace','Concise cumulative briefs, meeting-specific preparation and post-meeting action extraction suggestions.'); pg.appendChild(el('div',{class:'ops-grid ops-grid--2'},[card('Upcoming meeting list','GreenVale, EastGate and Meridian meetings with missing briefing warnings.','Preview'),card('Validation and brief status','Address/link validation, relationship brief status and concise meeting-specific brief.','Designed'),card('Post-meeting update needed','Action suggestions from notes; human acceptance required before task creation.','Preview')])); c.appendChild(pg); };
-  SVOps.views.diligence=function(c){ var pg=page('Diligence & Requests','Diligence and requests','DDQs, data requests, answer bank, governed facts, materials, review/approval state and evidence chain.'); pg.appendChild(el('div',{class:'ops-grid ops-grid--3'},[card('DDQs and data requests','Approved master exists; legal review pending; evidence outdated where marked.','Preview'),card('Answer bank and governed facts','Governed facts with source, freshness and review state.','Designed'),card('Materials','Recipient version needed; data-room access ready; derivative materials controlled.','Connected')])); c.appendChild(pg); };
-  SVOps.views.investorIntelligence=function(c){ var pg=page('Investor Intelligence','Investor Intelligence','Live weekly digest workstream plus market, intermediary and institution context.'); pg.appendChild(el('div',{class:'ops-grid ops-grid--3'},[card('Weekly investor digest','Live/Production workstream.','Validated'),card('Intermediary assessment','Person / firm, claimed region/relationships, tested institutions, evidence, proposal, retainer, success fee, recommendation and next step.','Designed'),card('Regional coverage gaps','Coverage gaps and local decision-maker context.','Preview'),card('Market intelligence','Source, owner and freshness visible.','Connected')])); c.appendChild(pg); };
-  SVOps.views.reporting=function(c){ var pg=page('Reporting','Reporting','Weekly Outreach & Coverage Snapshot and live reporting exceptions.'); pg.appendChild(el('div',{class:'ops-grid ops-grid--3'},[card('Weekly Outreach & Coverage Snapshot','Live weekly digest workstream with stage movement and activity summary.','Validated'),card('Stale records and missing next steps','Data-quality exceptions with owner and source.','Connected'),card('No automatic stage movement','Reports show exceptions; they do not write Salesforce by themselves.','Preview')])); c.appendChild(pg); };
-  SVOps.views.approvals=function(c,user){ var pg=page('Approvals','Shared approval queue','One cross-workflow queue for outreach, diligence, materials and reporting packages. No duplicate workflow-specific approvals.'); pg.appendChild(U.table([{key:'item',label:'Item',html:function(r){return esc(r.item)}},{key:'state',label:'State',html:function(r){return U.statusHtml(r.state)}},{key:'owner',label:'Owner',html:function(r){return esc(r.owner)}},{key:'permission',label:'Permission',html:function(r){return esc(r.permission)}}],[{item:'ATP outreach frozen package',state:'Suggested',owner:defaultSender(user),permission:persona(user).permissions&&persona(user).permissions.canApproveSender?'Can approve sender review':'Can prepare / cannot approve'},{item:'GreenVale DDQ commercial disclosure',state:'On hold',owner:'John Jones',permission:'Shared queue'},{item:'Weekly Outreach Snapshot',state:'Complete',owner:'Celestra Gallagher',permission:'Production reporting workstream'}])); c.appendChild(pg); };
-  var firmSections=[
-    {title:'Team and access',desc:'Manage users, roles, permissions and workspace access.',href:'#/firm/team'},
-    {title:'Templates and signatures',desc:'Manage approved templates, signatures and translated variants.',href:'#/firm/templates'},
-    {title:'Workflow rules',desc:'Manage approvals, routing, restrictions and task rules.',href:'#/firm/workflow'},
-    {title:'Systems and vendors',desc:'See official systems, connected vendors and operating status.',href:'#/firm/systems'},
-    {title:'AI and controls',desc:'Review permitted AI use, evidence gaps and control requirements.',href:'#/firm/ai'},
-    {title:'Audit log',desc:'See recent changes to templates, permissions, rules and overrides.',href:'#/firm/audit'}
-  ];
-  function firmCard(item){ return el('a',{class:'firm-card',href:item.href},[el('h2',{class:'firm-card__title',text:item.title}),el('p',{class:'firm-card__desc',text:item.desc}),el('span',{class:'btn btn--quiet btn--sm',text:'Open'})]); }
-  function systemCard(name,purpose,status){ return el('button',{type:'button',class:'firm-record-card',onclick:function(){U.drawer(name,el('div',{},[detailBlock('Status',status),detailBlock('Purpose',purpose),detailBlock('Source','Firm systems register'),detailBlock('Owner','Firm operations'),detailBlock('Next action','Not connected yet — later this will open live system health, owner, data scope and control evidence.')]))}},[el('p',{class:'firm-record-card__name',text:name}),el('p',{class:'firm-record-card__purpose',text:purpose}),el('p',{class:'firm-record-card__status',html:'Status: '+U.statusHtml(status,'st--ok')} )]); }
-  SVOps.views.firm=function(c,user,params){
-    var sub=params&&params[0];
-    if(sub==='systems') return firmSystems(c);
-    if(sub==='vendors'&&params[1]==='mergepoint') return firmMergePoint(c);
-    if(sub) return firmPlaceholder(c,sub);
-    var pg=page('Firm','Firm configuration','Manage team access, approved templates, workflow rules, connected systems and operating controls.');
-    pg.appendChild(el('div',{class:'firm-overview-grid'},firmSections.map(firmCard)));
-    pg.appendChild(U.notice('info','Salesforce remains the official commercial record. ShoreVest One applies workflow, review and control layers across connected systems.'));
-    c.appendChild(pg);
-  };
-  function firmSystems(c){
-    var pg=page('Firm / Systems and vendors','Systems and vendors','Official systems of record and connected vendors used in ShoreVest One.');
-    pg.appendChild(el('section',{class:'firm-section'},[el('div',{class:'ops-panel__head'},[el('h2',{class:'ops-panel__title',text:'Official systems'})]),el('div',{class:'firm-record-grid'},[
-      systemCard('Salesforce','Official commercial record','Official'),
-      systemCard('Outlook','Official mail system','Official'),
-      systemCard('SharePoint','Document storage','Official'),
-      systemCard('Power Automate','Workflow orchestration','Official')
-    ])]));
-    pg.appendChild(el('section',{class:'firm-section'},[el('div',{class:'ops-panel__head'},[el('h2',{class:'ops-panel__title',text:'Connected vendors'})]),el('div',{class:'firm-vendor-grid'},[
-      el('article',{class:'firm-vendor-card'},[
-        el('div',{class:'firm-vendor-card__head'},[el('h3',{text:'MergePoint'}),el('span',{html:U.statusHtml('Connected with review controls','st--warn')})]),
-        el('p',{text:'Ingestion, notes, enrichment and secondary checks'}),
-        el('dl',{class:'firm-detail-list'},[el('dt',{text:'Key risk'}),el('dd',{text:'Governance evidence incomplete'}),el('dt',{text:'Current rule'}),el('dd',{text:'Not authoritative for ownership, official tasks, opportunity creation or stage movement'})]),
-        el('a',{class:'btn btn--primary btn--sm',href:'#/firm/vendors/mergepoint',text:'Open vendor record'})
-      ])
-    ])]));
-    pg.appendChild(el('a',{class:'btn btn--quiet',href:'#/firm',text:'Back to Firm'}));
-    c.appendChild(pg);
-  }
-  function detailBlock(title,body){return el('section',{class:'firm-detail-block'},[el('h2',{class:'ops-panel__title',text:title}),Array.isArray(body)?el('ul',{class:'firm-clean-list'},body.map(function(x){return el('li',{text:x});})):el('p',{text:body})]);}
-  function firmMergePoint(c){
-    var pg=page('Firm / Systems and vendors / MergePoint','MergePoint','Connected with review controls. Used for ingestion, notes, enrichment and secondary checks.');
-    pg.appendChild(el('div',{class:'firm-detail-layout'},[
-      detailBlock('Status','Connected with review controls'),
-      detailBlock('Purpose','Ingestion, notes, enrichment and secondary checks'),
-      detailBlock('Data touched',['Outlook mail metadata and reviewed message content','SharePoint notes and supporting documents','Salesforce exports used for matching and comparison','Mocked contact and activity fields in this preview']),
-      detailBlock('What is confirmed',['MergePoint suggestions do not update Salesforce by themselves.','Human review is required before proposed contacts, tasks or rankings become official work.','ShoreVest One keeps Salesforce as the commercial system of record.']),
-      detailBlock('What is missing',['Hosting confirmation missing','Subprocessor list not yet recorded','Retention terms not yet recorded','Complete audit logging evidence not yet recorded']),
-      detailBlock('Current ShoreVest rule','MergePoint is not authoritative for ownership, official tasks, opportunity creation or stage movement.'),
-      detailBlock('Owner','Celestra Gallagher'),
-      detailBlock('Last review','2026-07-10'),
-      detailBlock('Open issues',['Review required for hosting evidence.','Review required for subprocessors.','Review required for retention and deletion terms.','Internal policy exists for human approval before Salesforce changes.'])
-    ]));
-    pg.appendChild(el('div',{class:'ops-actions'},[el('a',{class:'btn btn--quiet',href:'#/firm/systems',text:'Back to Systems and vendors'}),el('a',{class:'btn btn--quiet',href:'#/firm',text:'Back to Firm'})]));
-    c.appendChild(pg);
-  }
-  function firmPlaceholder(c,sub){
-    var match=firmSections.filter(function(x){return x.href==='#/firm/'+sub;})[0];
-    var pg=page('Firm',match?match.title:'Firm section',match?match.desc:'This Firm configuration section is not part of the current preview scope.');
-    pg.appendChild(el('div',{class:'ops-panel'},[el('h2',{class:'ops-panel__title',text:'Preview section'}),el('p',{text:'This area will use the same card-first administrative layout. No external system changes happen from this preview.'}),el('a',{class:'btn btn--quiet',href:'#/firm',text:'Back to Firm'})]));
-    c.appendChild(pg);
-  }
-
-  SVOps.views.outreach=function(c,user,params){ var sub=params&&params[0]; if(sub==='find') return outreachFind(c,user); if(sub==='draft') return draft(c,user); if(sub==='sent') return sent(c); var pg=page('Outreach','Outreach overview','Finding people is not the same as deciding to contact them. Build an audience, review Included / On hold / Blocked, then choose what to do next.'); pg.appendChild(el('div',{class:'ops-grid ops-grid--3'},[card('Find or add people','Search ShoreVest records, upload/paste names, saved searches or recent lists.','Preview','#/outreach/find'),card('Draft messages','Only after Prepare messages. Shows exact recipients, sender and managed signature.','Preview','#/outreach/draft'),card('Sent & responses','Preview status only. Nothing is sent from this screen.','Designed','#/outreach/sent')])); pg.appendChild(doctrine()); c.appendChild(pg); };
-  function outreachFind(c,user){ var pg=page('Outreach / Find or add people','Find or add people','Four entry routes: search ShoreVest records, upload or paste names, saved searches and recent lists.'); var input=el('textarea',{class:'ops-input',rows:'3',text:'all people in Denmark we haven’t contacted in 2 months'}); pg.appendChild(el('div',{class:'ops-panel'},[el('h2',{class:'ops-panel__title',text:'Search ShoreVest records'}),input,el('p',{class:'ops-meta',text:'Examples: “everyone at ATP” · “find Sarah Chen” · “European pension contacts with no next action”'}),el('div',{class:'ops-grid ops-grid--2'},[card('Search type','filtered group; can also be one person / one institution / pipeline gap','Suggested'),card('Location meaning','person location / institution HQ / either','Suggested'),card('Not contacted meaning','outbound email only / any activity / by me / by anyone at ShoreVest','Suggested'),card('Time period','2 months','Suggested')]),el('p',{class:'ops-meta',text:'Hard exclusions: opt-outs, hard bounces, restricted contacts, recent declines, scheduled meetings, active diligence, pending outreach batch.'}),el('button',{class:'btn btn--primary',text:'Run search',onclick:function(){var r=mockedRows(); saveRows(r); location.hash='#/outreach/find/results';}})])); pg.appendChild(el('div',{class:'ops-grid ops-grid--3'},[card('Upload or paste names','Preserves original source row and previews Salesforce matching.','Preview','#/outreach/find/upload'),card('Saved searches','Denmark pensions; Europe no next action; Asia family offices.','Designed'),card('Recent lists','Last ATP review and Nordic pension scan.','Designed')])); if(location.hash.indexOf('results')>-1) renderResults(pg,user); if(location.hash.indexOf('upload')>-1) renderUpload(pg); pg.appendChild(actions('#/outreach')); c.appendChild(pg); }
-  function renderUpload(pg){ pg.appendChild(el('div',{class:'ops-panel'},[el('h2',{class:'ops-panel__title',text:'Upload / paste matching'}),U.table([{key:'row',label:'Original source row',html:function(r){return esc(r.row)}},{key:'match',label:'Salesforce matching result',html:function(r){return esc(r.match)}}],[{row:'1, Sarah Chen, ATP',match:'Links to existing Contact'},{row:'2, Daniel Cho, Nordic Pension',match:'Creates Contact under existing Account'},{row:'3, Freja Unknown, New Nordic Fund',match:'Proposes new Account + Contact'},{row:'4, A. Larsen, ATP',match:'Needs duplicate review'}]),U.notice('warn','No Fund III Opportunities are created automatically.') ])); }
-  function renderResults(pg,user){ var r=rows(); ['Included','On hold','Blocked'].forEach(function(state){ pg.appendChild(el('div',{class:'ops-panel'},[el('div',{class:'ops-panel__head'},[el('h2',{class:'ops-panel__title',text:state}),pill(state==='On hold'?'Structured reasons: '+heldReasons.join(', '):state)]), U.table([{key:'name',label:'Person',html:function(x){return esc(x.name)}},{key:'institution',label:'Institution',html:function(x){return esc(x.institution)}},{key:'reason',label:'Reason',html:function(x){return esc(x.reason||'Included by recipe')}},{key:'owner',label:'Owner',html:function(x){return esc(x.owner)}},{key:'next',label:'Next action',html:function(x){return esc(x.next)}}], r.filter(function(x){return x.state===state;}))])); }); pg.appendChild(el('div',{class:'ops-panel'},[el('h2',{class:'ops-panel__title',text:'What do you want to do with these people?'}),el('div',{class:'ops-actions'},['Review people','Save search','Export list','Assign for review'].map(function(t){return el('button',{class:'btn btn--quiet',text:t,onclick:function(){U.toast(t+' recorded as preview action.')}})}).concat([el('a',{class:'btn btn--primary',href:'#/outreach/draft',text:'Prepare messages'})]))])); }
-  function draft(c,user){ var r=rows().filter(function(x){return x.state==='Included';}), sender=defaultSender(user,r); var pg=page('Outreach / Draft messages','Draft review','Drafting begins only after Prepare messages. Managed signatures are separate from editable body.'); pg.appendChild(el('div',{class:'ops-panel'},[el('h2',{class:'ops-panel__title',text:'Draft package'}),el('p',{text:'Exact recipients: '+r.map(function(x){return x.name+' ('+x.institution+')';}).join('; ')}),el('p',{text:'Treatment group: European pension contacts · Objective: measured reconnection / coverage update'}),el('label',{text:'Named sender'}), (function(){var s=el('select',{class:'ops-input'}); Object.keys(senders).forEach(function(n){s.appendChild(el('option',{value:n,text:n,selected:n===sender}));}); s.onchange=function(){location.hash='#/outreach/draft'; U.toast('Sender changed; managed signature updated. Approval version invalidated.'); SVOps.state.outreach.approval=null;}; return s;}()),el('p',{text:'Sender permission state: '+(persona(user).permissions.canApproveSender?'Sender review permitted':'Preparation only; named human approval required')}),el('h3',{text:'Subject'}),el('p',{text:'ShoreVest introduction and coverage update'}),el('h3',{text:'Body'}),el('textarea',{class:'ops-input',rows:'6',text:'Hello — I am writing with a brief ShoreVest update based on our current coverage review. If useful, we can share a concise overview and coordinate through the appropriate ShoreVest relationship owner.'}),el('h3',{text:'Managed preset signature'}),el('pre',{class:'ops-pre',text:senders[sender].sig}),el('p',{class:'ops-meta',text:'Evidence/source note: Salesforce activity, SharePoint notes and mocked search recipe. Full recipient list shown above.'}),el('div',{class:'ops-actions'},[el('button',{class:'btn btn--quiet',text:'Needs changes',onclick:function(){U.toast('Returned to preparation.')}}),el('a',{class:'btn btn--primary',href:'#/outreach/draft/approval',text:'Looks right'})]) ])); pg.appendChild(delivery()); if(location.hash.indexOf('approval')>-1) approval(pg,user,sender,r); pg.appendChild(actions('#/outreach/find/results')); c.appendChild(pg); }
-  function delivery(){ return el('div',{class:'ops-panel'},[el('h2',{class:'ops-panel__title',text:'Delivery policy frozen into approval package'}),el('p',{text:'Automated Power Automate queue: reply-to john@shorevest.com; IROutreach@shorevest.com · BCC shorevest@mergepointai.onmicrosoft.com'}),el('p',{text:'Manual personalised send: reply-to sender mailbox · BCC none, only if approved for that mode'}),el('p',{class:'ops-meta',text:'Users cannot type reply-to or BCC manually.'})]); }
-  function approval(pg,user,sender,r){ pg.appendChild(el('div',{class:'ops-panel'},[el('h2',{class:'ops-panel__title',text:'Frozen approval package'}),el('p',{text:'Recipients: '+r.length+' exact included recipients. On hold and blocked exclusions remain excluded.'}),el('p',{text:'Sender: '+sender+' · Copy, signature, delivery controls, timing and source/audience recipe frozen. Salesforce changes proposed: Contact activity note only after approved execution; no automatic Opportunity creation.'}),el('p',{text:'Maturity state: Internal Preview'}),el('button',{class:'btn btn--primary',text:'Submit approval request',onclick:function(){SVOps.state.outreach.approval={version:++SVOps.state.outreach.version,approved:false}; U.toast('Approval requested. Frozen version created. Nothing executed.');}}),el('p',{class:'ops-meta',text:SVOps.state.outreach.approval?'Approval requested. Frozen version created. Nothing executed. Material changes invalidate this version.':''})])); }
-  function sent(c){ var pg=page('Outreach / Sent & responses','Sent & responses','Preview status only. Every item shows who owns the next step and what is waiting.'); pg.appendChild(U.table([{key:'batch',label:'Batch',html:function(r){return esc(r.batch)}},{key:'state',label:'State',html:function(r){return esc(r.state)}},{key:'next',label:'Next action',html:function(r){return esc(r.next)}}],[{batch:'ATP Denmark pension review',state:'Complete',next:'Awaiting execution control'},{batch:'Nordic reconnect',state:'Blocked',next:'Repair missing evidence before retry'}])); c.appendChild(pg); }
 })(typeof self !== 'undefined' ? self : this);

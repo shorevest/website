@@ -54,7 +54,7 @@
         <a href="${siteHref('insights.html')}#archive">China Debt Dynamics</a>
         <span class="sv-footer__access" role="group" aria-label="Access">
           <span class="sv-footer__access-label">Access</span>
-          <a href="${siteHref('investor-portal/index.html')}">Investor Portal</a>
+          <a href="${siteHref('investor-portal/index.html')}">Investor Portal</a>${shoreVestOneLinkEn}
         </span>
       </nav>
       <div class="sv-footer__social" aria-label="Follow ShoreVest">
@@ -102,7 +102,7 @@
         <a href="${siteHref('insights_cn.html')}#archive">中国债务动态</a>
         <span class="sv-footer__access" role="group" aria-label="访问">
           <span class="sv-footer__access-label">访问</span>
-          <a href="${siteHref('investor-portal/index_cn.html')}">投资者门户</a>
+          <a href="${siteHref('investor-portal/index_cn.html')}">投资者门户</a>${shoreVestOneLinkCn}
         </span>
       </nav>
       <div class="sv-footer__social" aria-label="Follow ShoreVest">
