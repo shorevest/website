@@ -894,3 +894,94 @@ body.careers-preview-page .careers-notices__grid a:focus-visible { color: var(--
 html[lang="zh-CN"] body.careers-preview-page .careers-ledger h3,
 html[lang="zh-CN"] body.careers-preview-page .careers-ledger p { font-family: var(--sv-cn); }
 html[lang="zh-CN"] body.careers-preview-page .careers-ledger p { line-height: 1.8; }
+
+/* What We Value — brush-calligraphy presentation (live careers pages).
+   Section background is matched to the scan's paper color (#1C3635) and the
+   artwork edges are feathered into it so the piece sits directly on the page. */
+body.careers-preview-page .careers-values-section--calligraphy {
+  background: #1C3635;
+}
+body.careers-preview-page .careers-values-section--calligraphy .careers-values-lockup {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: clamp(28px, 3.2vw, 44px);
+  align-items: center;
+}
+body.careers-preview-page .careers-values-section--calligraphy .careers-values-lockup__text {
+  grid-column: 1 / 7;
+  min-width: 0;
+  align-self: center;
+}
+body.careers-preview-page .careers-values-section--calligraphy .careers-values-inscription {
+  display: block;
+  margin: clamp(30px, 3.4vw, 48px) 0 0;
+}
+body.careers-preview-page .careers-values-section--calligraphy .careers-values-interpretation {
+  display: block;
+  max-width: 46ch;
+  margin: 16px 0 0;
+  font: 400 16px/1.7 var(--sv-font) !important;
+  font-style: normal !important;
+  letter-spacing: .01em;
+  color: rgba(252, 249, 241, .68) !important;
+}
+body.careers-preview-page .careers-values-section--calligraphy .careers-values-interpretation em {
+  font-style: normal;
+}
+body.careers-preview-page .careers-values-section--calligraphy .careers-values-calligraphy {
+  grid-column: 8 / 12;
+  justify-self: center;
+  width: min(100%, 330px);
+  max-width: none;
+  margin: 0;
+}
+body.careers-preview-page .careers-values-section--calligraphy .careers-values-calligraphy img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 0;
+  box-shadow: none;
+}
+body.careers-preview-page .careers-values-section--calligraphy .careers-values {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(28px, 3.2vw, 44px);
+  margin-top: clamp(48px, 5.6vw, 80px);
+  padding-top: clamp(30px, 3.4vw, 44px);
+  border-top: 1px solid var(--sv-border-dark, rgba(252, 249, 241, .14));
+}
+body.careers-preview-page .careers-values-section--calligraphy .careers-values h3 {
+  margin: 0 0 14px;
+  font: 600 12.5px/1.3 var(--sv-font);
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--sv-qing-light, #7AAFAF);
+}
+html[lang="zh-CN"] body.careers-preview-page .careers-values-section--calligraphy .careers-values h3 {
+  font: 500 17px/1.3 var(--sv-cn);
+  letter-spacing: .3em;
+}
+@media (max-width: 980px) {
+  body.careers-preview-page .careers-values-section--calligraphy .careers-values-lockup {
+    grid-template-columns: 1fr;
+    row-gap: clamp(32px, 6vw, 44px);
+  }
+  body.careers-preview-page .careers-values-section--calligraphy .careers-values-lockup__text,
+  body.careers-preview-page .careers-values-section--calligraphy .careers-values-calligraphy {
+    grid-column: 1 / -1;
+  }
+  body.careers-preview-page .careers-values-section--calligraphy .careers-values-calligraphy {
+    width: min(78vw, 300px);
+  }
+  body.careers-preview-page .careers-values-section--calligraphy .careers-values {
+    grid-template-columns: 1fr;
+    gap: 0;
+    padding-top: 0;
+  }
+  body.careers-preview-page .careers-values-section--calligraphy .careers-values > div {
+    padding-block: clamp(24px, 5vw, 32px);
+  }
+  body.careers-preview-page .careers-values-section--calligraphy .careers-values > div + div {
+    border-top: 1px solid var(--sv-border-dark, rgba(252, 249, 241, .14));
+  }
+}
