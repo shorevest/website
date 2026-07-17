@@ -22,6 +22,16 @@
   const localeSuffix = /_cn\.html$/i.test(path) ? 'cn' : 'en';
   const isChinesePath = localeSuffix !== 'en';
 
+  /* Single reversible source flag: whether ShoreVest One (the internal
+     demonstration environment) is surfaced on the public website. Hidden in
+     Phase 2B. When re-enabled, the footer "Access" group includes it again. */
+  const siteConfig = window.SHOREVEST_SITE_CONFIG || {};
+  const showShoreVestOne = siteConfig.showShoreVestOnePublicLink === true;
+  const shoreVestOneLinkEn = showShoreVestOne
+    ? `\n          <a href="${siteHref('employee-portal/index.html')}" target="_blank" rel="noopener">ShoreVest One</a>` : '';
+  const shoreVestOneLinkCn = showShoreVestOne
+    ? `\n          <a href="${siteHref('employee-portal/index.html')}" target="_blank" rel="noopener">ShoreVest One</a>` : '';
+
   /* Footer brand lock-up uses a static SVG wordmark with PNG fallback. */
 
   const footerTemplateEn = `

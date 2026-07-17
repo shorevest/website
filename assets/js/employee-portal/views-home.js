@@ -19,26 +19,57 @@
      Not persisted: reloading resets the preview, which is intended. */
   SVOps.state.homeResolved = SVOps.state.homeResolved || {};
 
+  /* ── Home customisation (persisted, non-critical arrangement only) ──────── */
+  var CUSTOM_KEY = 'svops.home.custom.v1';
+  function loadCustom() {
+    try { return JSON.parse(localStorage.getItem(CUSTOM_KEY)) || {}; } catch (e) { return {}; }
+  }
+  function saveCustom(all) {
+    try { localStorage.setItem(CUSTOM_KEY, JSON.stringify(all)); } catch (e) { /* ignore */ }
+  }
+  function customFor(id) {
+    var all = loadCustom();
+    var c = all[id] || {};
+    return {
+      showAround: c.showAround !== false,
+      compact: c.compact === true,
+      order: (c.order && c.order.length === 2) ? c.order : ['today', 'underControl']
+    };
+  }
+  function setCustom(id, patch) {
+    var all = loadCustom();
+    all[id] = Object.assign(customFor(id), patch);
+    saveCustom(all);
+  }
+  function clearCustom(id) {
+    var all = loadCustom();
+    delete all[id];
+    saveCustom(all);
+  }
+
   function personaFor(user) {
     return (user && user.personaId && P.byId(user.personaId)) || null;
   }
-
   function greeting() {
     var h = new Date().getHours();
     if (h < 12) return 'Good morning';
     if (h < 18) return 'Good afternoon';
     return 'Good evening';
   }
-
-  function firstName(user) {
-    return String(user.name || '').split(' ')[0] || user.name;
+  function synthDate() {
+    /* Browser-local date, clearly labelled synthetic. Never 2025. */
+    var d = new Date();
+    if (d.getFullYear() < 2026) d = new Date(2026, d.getMonth(), d.getDate());
+    return d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
   }
 
-  /* ── Home ───────────────────────────────────────────────────────────────── */
+  /* ── Home router ────────────────────────────────────────────────────────── */
 
   SVOps.views.home = function (container, user) {
     var persona = personaFor(user);
-    var page = el('div', { class: 'ops-content home' });
+    if (persona && persona.homeSchema === 'commercial') return renderCommercialHome(container, user, persona);
+    return renderCoordinationHome(container, user, persona);
+  };
 
     page.appendChild(el('div', { class: 'ops-pagehead home-pagehead' }, [
       el('p', { class: 'ops-label', text: 'Home' }),
@@ -186,16 +217,41 @@
   /* Clear a container and hand it back — used to re-render Home in place. */
   function replace(container) { container.innerHTML = ''; return container; }
 
-  /* ── Preview shells for future-facing navigation ────────────────────────── */
+  /* ── Workspace placeholders (Relationships … Firm) ──────────────────────── */
+
+  SVOps.views.workspace = function (container, user, params) {
+    var key = params && params[0];
+    var info = key && P.workspace(key);
+    var page = el('div', { class: 'ops-content ops-content--narrow workspace' });
+    if (!info) {
+      page.appendChild(el('div', { class: 'ops-pagehead' }, [
+        el('h1', { class: 'ops-h1', text: 'Workspace' }),
+        el('p', { class: 'ops-lede', text: 'This workspace is not part of the current demonstration.' })
+      ]));
+      page.appendChild(el('a', { class: 'btn btn--quiet', href: '#/home', text: 'Back to Home' }));
+      container.appendChild(page);
+      return;
+    }
+    page.appendChild(el('div', { class: 'ops-pagehead' }, [
+      el('p', { class: 'ops-label', text: 'Workspace' }),
+      el('h1', { class: 'ops-h1', text: info.title }),
+      el('p', { class: 'ops-lede', text: info.lede })
+    ]));
+    page.appendChild(el('div', { class: 'workspace-note' }, [
+      el('p', { text: 'Demonstration capability — workflow not yet connected.' })
+    ]));
+    page.appendChild(el('a', { class: 'btn btn--quiet', href: '#/home', text: 'Back to Home' }));
+    container.appendChild(page);
+  };
+
+  /* ── Preview shells (Celestra's coordination navigation) ────────────────── */
 
   SVOps.views.preview = function (container, user, params) {
     var key = params && params[0];
     var info = key && P.preview(key);
     var page = el('div', { class: 'ops-content ops-content--narrow' });
-
     if (!info) {
       page.appendChild(el('div', { class: 'ops-pagehead' }, [
-        el('p', { class: 'ops-label', text: 'ShoreVest One' }),
         el('h1', { class: 'ops-h1', text: 'Coming soon' }),
         el('p', { class: 'ops-lede', text: 'This area is not part of the current preview scope.' })
       ]));
@@ -203,13 +259,11 @@
       container.appendChild(page);
       return;
     }
-
     page.appendChild(el('div', { class: 'ops-pagehead' }, [
       el('p', { class: 'ops-label', text: info.label }),
       el('h1', { class: 'ops-h1', text: info.title }),
       el('p', { class: 'ops-lede', text: info.lede })
     ]));
-
     var panel = el('div', { class: 'ops-panel' });
     panel.appendChild(frag('<div class="ops-panel__head"><h2 class="ops-panel__title">What will live here</h2>' +
       '<span class="st st--review">Preview — not yet connected</span></div>'));
@@ -217,7 +271,6 @@
     info.points.forEach(function (pt) { ul.appendChild(el('li', { text: pt })); });
     panel.appendChild(ul);
     page.appendChild(panel);
-
     page.appendChild(U.notice('info',
       '<strong>Internal preview</strong> This is a preview of where the ' + esc(info.label) +
       ' workflow will live. It performs no external actions until connected and approved.'));
@@ -257,7 +310,6 @@
     });
     page.appendChild(grid);
 
-    /* Recent batches — operational, kept as-is (no scores, no metric row). */
     var batches = S.getBatches();
     var mine = R.can(user.role, 'viewAllBatches') ? batches : batches.filter(function (b) { return b.submittedBy === user.name; });
     if (mine.length) {

@@ -10,24 +10,28 @@
   var SVOps = root.SVOps;
   var U = SVOps.ui;
   var R = root.SVPortalRules;
-  var S = root.SVPortalStore;
   var I = root.SVPortalIntegrations;
   var P = root.SVPortalPersonas;
   var el = U.el, esc = U.esc;
-  function frag(html) { return U.frag(html); }
 
   var ROOT_ID = 'svops-root';
-  /* Dark-on-light lockup — the shell and login now sit on light surfaces. */
-  var LOGO = '../assets/brand/sv-lockup-fc-dark.png';
+  /* Full bilingual corporate lockup — login and formal surfaces only. */
+  var CORPORATE_LOCKUP = '../assets/brand/sv-lockup-fc-dark.png';
+  /* Compact ShoreVest mark — used inside the application shell. */
+  var COMPACT_MARK = '../assets/brand/sv-circle-fullcolor.png';
 
   /* Role preview identities. Each carries a persona id (Home and navigation)
      and a shared underlying capability role for the preserved Tools area. */
   var DEMO_USERS = P.list.map(function (p) {
-    return { personaId: p.id, name: p.name, displayRole: p.displayRole,
-      username: p.username, role: p.role };
+    return {
+      personaId: p.id, name: p.name, firstName: p.firstName,
+      title: p.title, coverage: p.coverage, displayRole: p.displayRole,
+      photo: p.photo, initials: p.initials, username: p.username, role: p.role
+    };
   });
 
   var SESSION_KEY = 'svops.session.v2';
+  var COLLAPSE_KEY = 'svops.sidebar.collapsed';
 
   var ACTION_REGISTRY = {
     routes: { home: '#/home', myWork: '#/my-work', relationships: '#/relationships', relationshipDetail: '#/relationships', outreachOverview: '#/outreach', findPeople: '#/outreach/find', reviewAudience: '#/outreach/review', chooseAudienceAction: '#/outreach/review', draftMessages: '#/outreach/draft', deliveryControls: '#/outreach/package', reviewPackage: '#/outreach/package', sentResponses: '#/outreach/sent', meetings: '#/meetings', diligenceRequests: '#/diligence', investorIntelligence: '#/investor-intelligence', reporting: '#/reporting', approvals: '#/approvals', firm: '#/firm', firmSystemsVendors: '#/firm/systems', firmVendorDetail: '#/firm/vendors/mergepoint', tools: '#/tools' },
@@ -59,15 +63,21 @@
 
   function signOut() {
     SVOps.state.user = null;
+    closeProfileMenu();
     try { sessionStorage.removeItem(SESSION_KEY); } catch (e) { /* ignore */ }
     I.EntraAuth.signOut();
     render();
   }
 
-  /* ── Navigation model ──────────────────────────────────────────────────
-     The permanent navigation comes from the selected persona. It ends on
-     Tools, which holds the preserved operational prototype. */
+  /* ── Avatar (approved photo, else restrained initials — never a face) ───── */
+  function avatar(user, cls) {
+    if (user.photo) {
+      return el('img', { class: 'sv-avatar ' + (cls || ''), src: user.photo, alt: user.name, loading: 'lazy' });
+    }
+    return el('span', { class: 'sv-avatar sv-avatar--initials ' + (cls || ''), 'aria-hidden': 'true', text: user.initials || '' });
+  }
 
+  /* ── Navigation model ─────────────────────────────────────────────────── */
   function personaNav(user) {
     var persona = user && user.personaId && P.byId(user.personaId);
     return (persona && persona.nav) || [];
@@ -77,8 +87,6 @@
      under Tools while the user is inside one of them. */
   var TOOLS_ROUTES = ['tools', 'process', 'weekly', 'dataquality',
     'exceptions', 'runs', 'admin', 'monitoring', 'batch'];
-
-  /* ── Router ────────────────────────────────────────────────────────────── */
 
   var ROUTES = {
     home: 'home', preview: 'preview', tools: 'tools',
@@ -95,19 +103,27 @@
     return { view: parts[0] || 'home', params: parts.slice(1) };
   }
 
-  /* Which persona nav item should read as active for the current route. */
   function activeNavKey(route) {
+    if (route.view === 'workspace') return 'workspace:' + (route.params[0] || '');
     if (route.view === 'preview') return 'preview:' + (route.params[0] || '');
+    if (route.view === 'my-work') return 'my-work';
     if (TOOLS_ROUTES.indexOf(route.view) !== -1) return 'tools';
     if (route.view === 'outreach' && route.params[0]) return 'outreach-' + route.params[0];
     return route.view;
   }
 
+  /* Two-letter abbreviation for the collapsed sidebar rail (no icon set exists). */
+  function abbr(label) {
+    var words = String(label).split(/\s+/).filter(function (w) { return w && w !== '&'; });
+    if (words.length === 1) return words[0].slice(0, 1).toUpperCase();
+    return (words[0][0] + words[1][0]).toUpperCase();
+  }
+
   function navKeyFor(item) {
     if (item.key === 'tools') return 'tools';
-    if (item.hash && item.hash.indexOf('#/preview/') === 0) {
-      return 'preview:' + item.hash.slice('#/preview/'.length);
-    }
+    if (item.hash && item.hash.indexOf('#/workspace/') === 0) return 'workspace:' + item.hash.slice('#/workspace/'.length);
+    if (item.hash && item.hash.indexOf('#/preview/') === 0) return 'preview:' + item.hash.slice('#/preview/'.length);
+    if (item.hash === '#/my-work') return 'my-work';
     return item.key;
   }
 
@@ -120,16 +136,20 @@
     if (!user) { mount.innerHTML = ''; mount.appendChild(renderGate()); return; }
 
     var route = parseHash();
-    var viewId = route.view;
-
-    /* Which persona nav item labels this route (for crumb + active state). */
     var activeKey = activeNavKey(route);
     var navItem = personaNav(user).filter(function (n) {
-      return !n.sep && navKeyFor(n) === activeKey;
+      return !n.sep && !n.divider && navKeyFor(n) === activeKey;
     })[0];
 
     mount.innerHTML = '';
-    mount.appendChild(renderShell(user, viewId, route.params, navItem, activeKey));
+    mount.appendChild(renderShell(user, route.view, route.params, navItem, activeKey));
+  }
+
+  function collapsed() {
+    try { return localStorage.getItem(COLLAPSE_KEY) === '1'; } catch (e) { return false; }
+  }
+  function setCollapsed(v) {
+    try { localStorage.setItem(COLLAPSE_KEY, v ? '1' : '0'); } catch (e) { /* ignore */ }
   }
 
   function roleSwitcher(user) {
@@ -161,7 +181,7 @@
       el('p', { class: 'ops-sidebar__env', text: I.demoMode() ? 'Internal Preview' : 'Connected' })
     ]));
 
-    var nav = el('nav', { class: 'ops-nav', 'aria-label': 'Primary' });
+    var nav = el('nav', { class: 'ops-nav', 'aria-label': 'Primary navigation' });
     personaNav(user).forEach(function (item) {
       if (item.sep) { nav.appendChild(el('p', { class: 'ops-nav__sep', text: item.sep })); return; }
       var itemKey = navKeyFor(item);
@@ -190,22 +210,84 @@
     });
     sidebar.appendChild(nav);
 
-    sidebar.appendChild(el('div', { class: 'ops-sidebar__foot' }, [
-      el('span', { html: '<strong>' + esc(user.name) + '</strong><span class="role">' + esc(user.displayRole || user.role) + '</span>' }),
-      el('button', { type: 'button', text: 'Sign out', onclick: signOut })
+    /* Profile identity — clickable, at the bottom. Menu holds Sign out. */
+    var profileBtn = el('button', {
+      type: 'button', class: 'ops-profile', 'aria-haspopup': 'menu', 'aria-expanded': 'false',
+      onclick: function (e) { e.stopPropagation(); toggleProfileMenu(profileBtn, user); }
+    }, [
+      avatar(user, 'ops-profile__avatar'),
+      el('span', { class: 'ops-profile__id' }, [
+        el('span', { class: 'ops-profile__name', text: user.name }),
+        el('span', { class: 'ops-profile__role', text: user.displayRole })
+      ]),
+      el('span', { class: 'ops-profile__chev', 'aria-hidden': 'true',
+        html: '<svg viewBox="0 0 12 12" width="11" height="11"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>' })
+    ]);
+    sidebar.appendChild(el('div', { class: 'ops-sidebar__foot' }, [profileBtn]));
+
+    return sidebar;
+  }
+
+  /* ── Profile menu (Profile, Preferences, Help, Sign out) ─────────────────── */
+  var _menuEls = null;
+  function closeProfileMenu() {
+    if (_menuEls) {
+      _menuEls.menu.remove(); _menuEls.scrim.remove();
+      document.removeEventListener('keydown', _menuEls.onKey);
+      if (_menuEls.anchor) _menuEls.anchor.setAttribute('aria-expanded', 'false');
+      _menuEls = null;
+    }
+  }
+  function toggleProfileMenu(anchor, user) {
+    if (_menuEls) { closeProfileMenu(); return; }
+    var scrim = el('div', { class: 'ops-menu-scrim', onclick: closeProfileMenu });
+    var menu = el('div', { class: 'ops-menu', role: 'menu', 'aria-label': 'Profile menu' });
+    menu.appendChild(el('div', { class: 'ops-menu__head' }, [
+      avatar(user, 'ops-menu__avatar'),
+      el('span', { class: 'ops-menu__id' }, [
+        el('span', { class: 'ops-menu__name', text: user.name }),
+        el('span', { class: 'ops-menu__role', text: user.title + (user.coverage ? ' (' + user.coverage + ')' : '') })
+      ])
     ]));
-    shell.appendChild(sidebar);
+    [
+      { label: 'Profile', fn: function () { synthetic('Profile', 'Your profile would open here. This is a demonstration — nothing external occurs.'); } },
+      { label: 'Preferences', fn: function () { synthetic('Preferences', 'Preferences would open here. This is a demonstration — nothing external occurs.'); } },
+      { label: 'Help', fn: function () { synthetic('Help', 'Help and support would open here. This is a demonstration — nothing external occurs.'); } }
+    ].forEach(function (mi) {
+      menu.appendChild(el('button', { type: 'button', role: 'menuitem', class: 'ops-menu__item', text: mi.label,
+        onclick: function () { closeProfileMenu(); mi.fn(); } }));
+    });
+    menu.appendChild(el('hr', { class: 'ops-menu__sep' }));
+    menu.appendChild(el('button', { type: 'button', role: 'menuitem', class: 'ops-menu__item ops-menu__item--signout', text: 'Sign out',
+      onclick: function () { signOut(); } }));
 
-    /* Main */
-    var main = el('div', { class: 'ops-main' });
+    document.body.appendChild(scrim);
+    document.body.appendChild(menu);
+    /* Position above the anchor (sidebar bottom) or below (topbar). */
+    var r = anchor.getBoundingClientRect();
+    var mw = Math.max(menu.offsetWidth, 220);
+    var top, left = Math.min(r.left, window.innerWidth - mw - 12);
+    if (r.top > window.innerHeight / 2) { top = r.top - menu.offsetHeight - 8; }
+    else { top = r.bottom + 8; left = Math.min(r.right - mw, window.innerWidth - mw - 12); }
+    menu.style.top = Math.max(12, top) + 'px';
+    menu.style.left = Math.max(12, left) + 'px';
 
-    var burger = el('button', { class: 'ops-burger', type: 'button', html: '☰ Menu', onclick: function () {
-      SVOps.state.menuOpen = !SVOps.state.menuOpen; render();
-    } });
-    var topbar = el('div', { class: 'ops-topbar' }, [
-      el('div', { style: 'display:flex;align-items:center;gap:14px' }, [
-        burger,
-        el('span', { class: 'ops-topbar__crumb', html: 'ShoreVest One / <strong>' + esc(navItem ? navItem.label : titleFor(viewId)) + '</strong>' })
+    function onKey(e) { if (e.key === 'Escape') closeProfileMenu(); }
+    document.addEventListener('keydown', onKey);
+    anchor.setAttribute('aria-expanded', 'true');
+    _menuEls = { menu: menu, scrim: scrim, onKey: onKey, anchor: anchor };
+  }
+
+  function synthetic(title, message) {
+    var body = el('div', {});
+    body.appendChild(el('p', { class: 'drawer-copy', text: message }));
+    body.appendChild(U.notice('info', '<strong>Demonstration</strong> This is a synthetic placeholder. No external action occurs.'));
+    U.drawer(title, body);
+  }
+
+  /* ── Top bar (desktop) ──────────────────────────────────────────────────── */
+  function renderTopBar(user) {
+    var bar = el('div', { class: 'ops-topbar' });
 
       ]),
       el('input', { class: 'ops-global-search', type: 'search', placeholder: 'Search people, firms, opportunities, requests, reports or tools', onkeydown: function (ev) { if (ev.key === 'Enter') runGlobalSearch(ev.target.value); } }),
@@ -217,11 +299,25 @@
     main.appendChild(topbar);
 
 
-    var content = el('div', { style: 'flex:1' });
-    main.appendChild(content);
-    routeInto(content, user, viewId, params);
-    shell.appendChild(main);
-    return shell;
+  /* ── Mobile app bar ─────────────────────────────────────────────────────── */
+  function renderAppBar(user) {
+    var bar = el('div', { class: 'ops-appbar' });
+    bar.appendChild(el('span', { class: 'ops-appbar__brand' }, [
+      el('img', { src: COMPACT_MARK, alt: 'ShoreVest', width: '26', height: '26' }),
+      el('span', { class: 'ops-appbar__word', text: 'SHOREVEST ONE' })
+    ]));
+    var right = el('div', { class: 'ops-appbar__right' }, [
+      (function () {
+        var b = el('button', { type: 'button', class: 'ops-topprofile', 'aria-label': 'Profile menu', 'aria-haspopup': 'menu',
+          onclick: function (e) { e.stopPropagation(); toggleProfileMenu(b, user); } }, [avatar(user, 'ops-topprofile__avatar')]);
+        return b;
+      })(),
+      el('button', { type: 'button', class: 'ops-menubtn', 'aria-label': 'Open navigation', 'aria-expanded': SVOps.state.menuOpen ? 'true' : 'false',
+        html: '<svg viewBox="0 0 18 18" width="20" height="20" aria-hidden="true"><path d="M2 4.5h14M2 9h14M2 13.5h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
+        onclick: function () { SVOps.state.menuOpen = !SVOps.state.menuOpen; render(); } })
+    ]);
+    bar.appendChild(right);
+    return bar;
   }
 
   function runGlobalSearch(q) {
@@ -259,37 +355,51 @@
   };
   function titleFor(viewId) { return TITLES[viewId] || 'Home'; }
 
+  /* ── Routing into views ─────────────────────────────────────────────────── */
   function routeInto(content, user, viewId, params) {
     var view = SVOps.views[ROUTES[viewId] || 'home'];
     if (!view) return SVOps.views.home(content, user);
-    try {
-      view(content, user, params);
-    } catch (e) {
+    try { view(content, user, params); }
+    catch (e) {
       content.appendChild(U.stateScreen('error', 'Something went wrong',
         'This view could not be rendered: ' + e.message));
       if (root.console) root.console.error(e);
     }
   }
 
-  /* ── Sign-in gate ──────────────────────────────────────────────────────── */
+  /* ── Login — person-led demonstration profile chooser (not authentication) ── */
 
   function renderGate() {
     var demo = I.demoMode();
-    var gate = el('div', { class: 'gate' });
-    var card = el('main', { class: 'gate__card' });
+    var wrap = el('div', { class: 'login' });
+    var frame = el('div', { class: 'login__frame' });
 
-    /* Restrained brand — mark, wordmark, product name. No explanatory copy. */
-    card.appendChild(el('div', { class: 'gate__brand' }, [
-      el('img', { src: LOGO, alt: 'ShoreVest', width: '172', height: '42' }),
-      el('p', { class: 'gate__product', html: '<span class="rule"></span>ShoreVest One' })
-    ]));
+    /* Left: corporate identity → product name → quiet lines. */
+    var left = el('div', { class: 'login__left' }, [
+      el('img', { class: 'login__lockup', src: CORPORATE_LOCKUP, alt: 'ShoreVest 新岸资本', width: '300', height: '75' }),
+      el('p', { class: 'login__product', text: 'SHOREVEST ONE' }),
+      el('p', { class: 'login__tagline', text: 'The operating workspace for ShoreVest teams.' }),
+      el('p', { class: 'login__env', text: 'Internal demonstration environment' })
+    ]);
+    frame.appendChild(left);
 
-    var form = el('div', { class: 'gate__form' });
+    /* Right: heading, instruction, profile chooser, selected summary, action. */
+    var right = el('div', { class: 'login__right' });
+    right.appendChild(el('h1', { class: 'login__h', text: 'Enter ShoreVest One' }));
 
-    if (demo) {
-      var err = el('p', { class: 'gate__error', role: 'alert', hidden: true });
-      function hideErr() { err.hidden = true; err.textContent = ''; }
-      function showErr(m) { err.textContent = m; err.hidden = false; }
+    if (!demo) {
+      right.appendChild(el('p', { class: 'login__instr', text: 'Production sign-in is configured through Microsoft Entra ID for authorised deployments.' }));
+      frame.appendChild(right); wrap.appendChild(frame); return wrap;
+    }
+
+    right.appendChild(el('p', { class: 'login__instr', text: 'Choose a demonstration profile to continue.' }));
+
+    var sel = el('select', { class: 'login__select', id: 'login-profile', 'aria-label': 'Choose a demonstration profile' });
+    sel.appendChild(el('option', { value: '', text: 'Choose a profile' }));
+    DEMO_USERS.forEach(function (u, i) {
+      sel.appendChild(el('option', { value: String(i), text: u.name }));
+    });
+    right.appendChild(el('div', { class: 'login__field' }, [sel]));
 
       var sel = el('select', { class: 'gate__select', id: 'gate-role', 'aria-label': 'Select role preview' });
       sel.appendChild(el('option', { value: '', text: 'Select a person' }));
@@ -298,61 +408,44 @@
       });
       sel.addEventListener('change', hideErr);
 
-      var enter = el('button', { class: 'gate__submit', type: 'button' }, [
-        el('span', { class: 'gate__submit-label', text: 'Enter ShoreVest One' }),
-        el('span', { class: 'gate__submit-spinner', 'aria-hidden': 'true' })
-      ]);
-      enter.addEventListener('click', function () {
-        if (enter.classList.contains('is-loading')) return;
-        if (sel.value === '') { showErr('Select a person to continue.'); sel.focus(); return; }
-        hideErr();
-        enter.classList.add('is-loading');
-        enter.disabled = true; sel.disabled = true;
-        var u = DEMO_USERS[Number(sel.value)];
-        /* Brief settle so the loading state is perceptible before the shell mounts. */
-        setTimeout(function () { signInDemo(u); }, 240);
-      });
+    var btn = el('button', { class: 'login__submit', type: 'button', disabled: true }, [
+      el('span', { class: 'login__submit-label', text: 'Continue' }),
+      el('span', { class: 'login__submit-spinner', 'aria-hidden': 'true' })
+    ]);
 
-      form.appendChild(sel);
-      form.appendChild(err);
-      form.appendChild(enter);
-    } else {
-      var msBtn = el('button', { class: 'gate__ms', type: 'button' });
-      msBtn.appendChild(frag('<svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><rect x="1" y="1" width="7.6" height="7.6" fill="#F35325"/><rect x="9.4" y="1" width="7.6" height="7.6" fill="#81BC06"/><rect x="1" y="9.4" width="7.6" height="7.6" fill="#05A6F0"/><rect x="9.4" y="9.4" width="7.6" height="7.6" fill="#FFBA08"/></svg>'));
-      msBtn.appendChild(el('span', { class: 'gate__ms-label', text: 'Sign in' }));
-      msBtn.appendChild(el('span', { class: 'gate__submit-spinner', 'aria-hidden': 'true' }));
-      msBtn.addEventListener('click', function () {
-        if (msBtn.classList.contains('is-loading')) return;
-        msBtn.classList.add('is-loading'); msBtn.disabled = true;
-        I.EntraAuth.signIn().catch(function (e) {
-          msBtn.classList.remove('is-loading'); msBtn.disabled = false; U.toast(e.message);
-        });
-      });
-      form.appendChild(msBtn);
+    function renderSummary(u) {
+      summary.innerHTML = '';
+      if (!u) { summary.hidden = true; return; }
+      summary.hidden = false;
+      summary.appendChild(avatar(u, 'login__avatar'));
+      summary.appendChild(el('div', { class: 'login__selected-id' }, [
+        el('p', { class: 'login__selected-name', text: u.name }),
+        el('p', { class: 'login__selected-title', text: u.title }),
+        u.coverage ? el('p', { class: 'login__selected-cov', text: '(' + u.coverage + ')' }) : null
+      ]));
     }
-    card.appendChild(form);
 
     card.appendChild(el('p', { class: 'gate__note', text: 'Authorised access only.' }));
     if (demo) card.appendChild(el('p', { class: 'gate__preview', text: 'Internal Preview — role permissions and home state.' }));
 
-    gate.appendChild(card);
-    return gate;
+    right.appendChild(btn);
+    right.appendChild(el('p', { class: 'login__notice', text: 'Synthetic data only. No external actions occur.' }));
+
+    frame.appendChild(right);
+    wrap.appendChild(frame);
+    return wrap;
   }
 
   /* ── Boot ──────────────────────────────────────────────────────────────── */
-
   function boot() {
-    /* Handle the wizard preset from module launchers. */
     root.addEventListener('svops:render', function () { render(); });
     root.addEventListener('hashchange', function () {
-      /* Apply a pending saved-process preset when entering the wizard. */
-      if (parseHash().view === 'process' && SVOps.state.wizardPreset) {
-        SVOps.state.wizard = null; /* reset */
-      }
+      closeProfileMenu();
+      if (parseHash().view === 'process' && SVOps.state.wizardPreset) { SVOps.state.wizard = null; }
       render();
     });
-    I.EntraAuth.initialize().catch(function () { /* demo mode resolves locally */ }).then(function () {
-      /* Apply preset if navigating straight into process. */
+    root.addEventListener('resize', function () { closeProfileMenu(); });
+    I.EntraAuth.initialize().catch(function () { /* demo resolves locally */ }).then(function () {
       render();
       applyWizardPreset();
     });
@@ -360,7 +453,7 @@
 
   function applyWizardPreset() {
     if (parseHash().view === 'process' && SVOps.state.wizardPreset) {
-      var proc = S.getSavedProcess(SVOps.state.wizardPreset);
+      var proc = root.SVPortalStore.getSavedProcess(SVOps.state.wizardPreset);
       SVOps.state.wizardPreset = null;
       if (proc && SVOps.state.wizard) {
         SVOps.state.wizard.savedProcess = proc;
@@ -376,8 +469,6 @@
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', boot);
-  } else {
-    boot();
-  }
+  } else { boot(); }
 
 })(typeof self !== 'undefined' ? self : this);

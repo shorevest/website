@@ -9,11 +9,12 @@
    used solely to identify the selected preview role. No real emails,
    contact data, or confidential information appears.
 
-   The Home page absorbs complexity: each person sees only the work that needs
-   them, what is happening today, and what is waiting on someone else. The
-   underlying operational prototype (list processing, rules engine, exceptions,
-   administration) is preserved under Tools and reached through the shared
-   capability role below — the persona's *display* role is separate.
+   ShoreVest One absorbs complexity rather than displaying it. For John and
+   Kelvin, Home answers "What should I pay attention to right now?" with exactly
+   one Focus Now item, a short Today list, one Under Control reassurance line,
+   and an optional quiet Around ShoreVest note. My Work answers "What currently
+   depends on me?". Celestra keeps her existing coordination Home. The legacy
+   operational prototype is preserved under Tools for every profile.
    ========================================================================== */
 (function (root) {
   'use strict';
@@ -57,10 +58,11 @@
     ];
   }
 
-  /* ── Home data ──────────────────────────────────────────────────────────
-     Three sections only: Needs you, Today, Waiting elsewhere.
-     Cards ask one question, offer one recommendation or state, and show no
-     more than three actions. The first action is primary. */
+  /* ── Commercial Home schema (John & Kelvin) ─────────────────────────────
+     One expanded Focus Now item that meets the ten-second standard; a short
+     Today list that never repeats Focus Now; one Under Control reassurance
+     line; an optional quiet Around ShoreVest note. Meeting-attendance policy is
+     explained inside the affected decision only, never as a standing warning. */
 
   function homeItem(id, title, explanation, status, next, cta, why, owner, source, rule, section, href, history) {
     return {
@@ -174,7 +176,10 @@
 
   /* ── People ─────────────────────────────────────────────────────────────
      `role` carries the shared capability role so the legacy Tools prototype
-     keeps working; `displayRole` is what the person actually sees. */
+     keeps working. `title` + `coverage` are the exact approved identity;
+     `displayRole` is a single-line convenience that preserves the parentheses.
+     `photo` is an approved employee photograph where one exists in the repo;
+     otherwise `initials` drives a restrained avatar (never a generated face). */
 
   var PERSONAS = [
     {
@@ -222,47 +227,41 @@
      Restrained overviews, clearly marked as preview content. No claim of
      real integration or execution. */
 
-  var PREVIEW = {
-    outreach: {
-      label: 'Outreach',
-      title: 'Outreach',
-      lede: 'Where you will review and approve outreach to institutions in your coverage, one decision at a time.',
-      points: [
-        'Suggested outreach, prepared and waiting for your approval.',
-        'Prior contact and timing considered before anything is proposed.',
-        'Nothing is sent without your explicit approval.'
-      ]
-    },
+  var WORKSPACES = {
     relationships: {
       label: 'Relationships',
       title: 'Relationships',
-      lede: 'A calm view of the institutions you own, and what has recently changed.',
-      points: [
-        'Your coverage, grouped the way you think about it.',
-        'Quiet relationships surfaced only when there is a reason to act.',
-        'No scores, rankings, or activity counts.'
-      ]
+      lede: 'Institutions, people, relationship strategy, commitments and next moves.'
+    },
+    outreach: {
+      label: 'Outreach',
+      title: 'Outreach',
+      lede: 'Targeting, campaigns, sequencing, replies and re-engagement.'
     },
     meetings: {
       label: 'Meetings',
       title: 'Meetings',
-      lede: 'Your meetings, with the single decision each one needs from you.',
-      points: [
-        'What is ready, what needs a decision, and what needs nothing.',
-        'Preparation gathered for you rather than requested from you.',
-        'Follow-ups tracked so they do not rest by accident.'
-      ]
+      lede: 'Preparation, readiness, materials, attendance and follow-up.'
     },
-    'weekly-review': {
-      label: 'Weekly Review',
-      title: 'Weekly Review',
-      lede: 'A short, once-a-week look at your coverage and the decisions ahead.',
-      points: [
-        'A brief summary of the week across your relationships.',
-        'Decisions expected of you in the coming week.',
-        'Anything resting quietly that may deserve attention.'
-      ]
+    diligence: {
+      label: 'Diligence & Requests',
+      title: 'Diligence & Requests',
+      lede: 'DDQs, document requests, data-room requests and delivery control.'
     },
+    'investor-intelligence': {
+      label: 'Investor Intelligence',
+      title: 'Investor Intelligence',
+      lede: 'Source-linked investor feedback, recurring themes and management implications.'
+    },
+    firm: {
+      label: 'Firm',
+      title: 'Firm',
+      lede: 'People, availability, offices, events, resources and internal information.'
+    }
+  };
+
+  /* Preview shells retained for Celestra's coordination navigation. */
+  var PREVIEW = {
     'my-work': {
       label: 'My Work',
       title: 'My Work',
@@ -309,6 +308,7 @@
     TOOLS_ROLE: TOOLS_ROLE,
     list: PERSONAS,
     byId: function (id) { return BY_ID[id] || null; },
+    workspace: function (key) { return WORKSPACES[key] || null; },
     preview: function (key) { return PREVIEW[key] || null; }
   };
 

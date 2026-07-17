@@ -1,0 +1,8 @@
+# ShoreVest — robots directives
+# The public website is fully crawlable. ShoreVest One is an internal
+# demonstration environment and is excluded from crawling in this phase.
+# Note: robots directives are advisory only and are not a security control.
+
+User-agent: *
+Allow: /
+Disallow: /employee-portal/
