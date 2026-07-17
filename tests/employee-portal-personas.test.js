@@ -1,9 +1,11 @@
 /* ==========================================================================
    ShoreVest One — role (persona) configuration test suite
    Run: node tests/employee-portal-personas.test.js
-   Covers role selection, navigation by role, Home data by role, legacy Tools
-   access, and no role leakage between John, Kelvin, and Celestra. Pure data
-   assertions — no DOM or live tenant required.
+
+   Covers exact identities, the frozen John/Kelvin navigation, the commercial
+   Home schema (one Focus Now), My Work, Celestra's preserved coordination Home,
+   animal-based external data, prohibited-name absence, and no role leakage.
+   Pure data assertions — no DOM or live tenant required.
    ========================================================================== */
 'use strict';
 
@@ -17,10 +19,9 @@ function test(name, fn) {
   try { fn(); passed++; } catch (e) { failures.push({ name, error: e }); }
 }
 
-const navLabels = (persona) => persona.nav.filter((n) => !n.sep).map((n) => n.label);
-const cardIds = (persona) => persona.home.needsYou.map((c) => c.id);
+const navLabels = (persona) => persona.nav.filter((n) => !n.sep && !n.divider).map((n) => n.label);
 
-/* ── Role selection ─────────────────────────────────────────────────────── */
+/* ── Exact identities ───────────────────────────────────────────────────── */
 
 test('exactly three demonstration people are offered', () => {
   assert.strictEqual(P.list.length, 3);
@@ -28,50 +29,244 @@ test('exactly three demonstration people are offered', () => {
     ['Celestra Gallagher', 'John Jones', 'Kelvin Chan']);
 });
 
-test('the generic Execution Approver identity is gone', () => {
-  const roles = P.list.map((p) => p.displayRole).concat(P.list.map((p) => p.name));
-  roles.forEach((r) => assert.ok(!/execution approver/i.test(r), 'unexpected: ' + r));
+test('John has the exact approved title and coverage', () => {
+  const j = P.byId('john');
+  assert.strictEqual(j.title, 'Director of Client Solutions');
+  assert.strictEqual(j.coverage, 'Americas, Europe & Middle East');
+  assert.strictEqual(j.displayRole, 'Director of Client Solutions (Americas, Europe & Middle East)');
 });
 
-test('each person has the expected display role', () => {
-  assert.strictEqual(P.byId('john').displayRole, 'Director of Client Solutions — Ex-Asia');
-  assert.strictEqual(P.byId('kelvin').displayRole, 'Director of Client Solutions — Asia');
-  assert.strictEqual(P.byId('celestra').displayRole, 'Investor Relations Associate');
+test('Kelvin has the exact approved title and coverage', () => {
+  const k = P.byId('kelvin');
+  assert.strictEqual(k.title, 'Director of Client Solutions');
+  assert.strictEqual(k.coverage, 'Asia-Pacific');
+  assert.strictEqual(k.displayRole, 'Director of Client Solutions (Asia-Pacific)');
 });
 
-test('byId returns null for an unknown persona', () => {
-  assert.strictEqual(P.byId('nobody'), null);
+test('Celestra has the exact approved title', () => {
+  const c = P.byId('celestra');
+  assert.strictEqual(c.title, 'Investor Relations Associate');
+  assert.strictEqual(c.displayRole, 'Investor Relations Associate');
 });
 
-/* ── Navigation by role ─────────────────────────────────────────────────── */
-
-test('John and Kelvin share the RM navigation structure', () => {
-  const rm = ['Home', 'Outreach', 'Relationships', 'Meetings', 'Weekly Review', 'Tools'];
-  assert.deepStrictEqual(navLabels(P.byId('john')), rm);
-  assert.deepStrictEqual(navLabels(P.byId('kelvin')), rm);
+test('no rejected identity strings are used', () => {
+  const blob = JSON.stringify(P.list);
+  ['Ex-Asia', 'APAC', 'Execution Approver',
+   'Director of Client Solutions — Asia', 'Director of Client Solutions — Americas',
+   'Director of Client Solutions — Ex-Asia'].forEach((bad) => {
+    assert.ok(blob.indexOf(bad) === -1, 'rejected identity present: ' + bad);
+  });
 });
 
-test('Celestra has the coordination navigation structure', () => {
+test('coverage descriptions always display with parentheses (via displayRole)', () => {
+  ['john', 'kelvin'].forEach((id) => {
+    const p = P.byId(id);
+    assert.ok(/\(.+\)$/.test(p.displayRole), p.name + ' displayRole should carry parentheses');
+  });
+});
+
+test('only real employee photos are used; Celestra has an initials avatar', () => {
+  assert.strictEqual(P.byId('john').photo, '../assets/img/team/john-jones.jpg');
+  assert.strictEqual(P.byId('kelvin').photo, '../assets/img/team/kelvin-chan.jpg');
+  assert.strictEqual(P.byId('celestra').photo, null);
+  assert.strictEqual(P.byId('celestra').initials, 'CG');
+});
+
+/* ── Frozen John & Kelvin navigation ────────────────────────────────────── */
+
+const FROZEN_NAV = ['Home', 'My Work', 'Relationships', 'Outreach', 'Meetings',
+  'Diligence & Requests', 'Investor Intelligence', 'Firm', 'Tools'];
+
+test('John and Kelvin use the exact frozen navigation', () => {
+  assert.deepStrictEqual(navLabels(P.byId('john')), FROZEN_NAV);
+  assert.deepStrictEqual(navLabels(P.byId('kelvin')), FROZEN_NAV);
+});
+
+test('Weekly Review (and other excluded items) are absent from John/Kelvin nav', () => {
+  ['Weekly Review', 'Investor Inbox', 'Tasks', 'Calendar', 'Reports', 'Pipeline',
+   'Materials & Delivery', 'Meeting Support', 'Library', 'Approvals', 'Notifications',
+   'Settings', 'Administration', 'Monitoring', 'All Workspaces', 'Knowledge',
+   'Recent Activity'].forEach((excluded) => {
+    ['john', 'kelvin'].forEach((id) => {
+      assert.ok(navLabels(P.byId(id)).indexOf(excluded) === -1, id + ' should not have ' + excluded);
+    });
+  });
+});
+
+test('My Work, Diligence & Requests, Investor Intelligence, Firm and Tools are present', () => {
+  ['john', 'kelvin'].forEach((id) => {
+    const labels = navLabels(P.byId(id));
+    ['My Work', 'Diligence & Requests', 'Investor Intelligence', 'Firm', 'Tools'].forEach((l) => {
+      assert.ok(labels.indexOf(l) !== -1, id + ' missing ' + l);
+    });
+  });
+});
+
+test('a Workspaces group heading and a divider separate the structure', () => {
+  const nav = P.byId('john').nav;
+  assert.ok(nav.some((n) => n.sep === 'Workspaces'), 'Workspaces separator present');
+  assert.ok(nav.some((n) => n.divider), 'divider present before Firm/Tools');
+});
+
+test('Tools is the last item and is marked collapsible/secondary', () => {
+  ['john', 'kelvin'].forEach((id) => {
+    const nav = P.byId(id).nav.filter((n) => !n.sep && !n.divider);
+    const last = nav[nav.length - 1];
+    assert.strictEqual(last.key, 'tools');
+    assert.strictEqual(last.collapsible, true);
+  });
+});
+
+/* ── Home schema (commercial: John & Kelvin) ────────────────────────────── */
+
+test('John and Kelvin use the commercial Home schema', () => {
+  ['john', 'kelvin'].forEach((id) => assert.strictEqual(P.byId(id).homeSchema, 'commercial'));
+});
+
+test('Home contains exactly one Focus Now item (not a three-card grid)', () => {
+  ['john', 'kelvin'].forEach((id) => {
+    const home = P.byId(id).home;
+    assert.ok(home.focus && typeof home.focus === 'object' && !Array.isArray(home.focus),
+      id + ' focus should be a single object');
+    assert.ok(!('needsYou' in home), id + ' must not carry a needs-you card array');
+  });
+});
+
+test('Home has Focus, Today, Under Control and optional Around — nothing else', () => {
+  ['john', 'kelvin'].forEach((id) => {
+    const keys = Object.keys(P.byId(id).home).sort();
+    assert.deepStrictEqual(keys, ['around', 'focus', 'situational', 'today', 'underControl']);
+  });
+});
+
+test('Under Control is a single reassurance line by default', () => {
+  ['john', 'kelvin'].forEach((id) => {
+    const uc = P.byId(id).home.underControl;
+    assert.strictEqual(typeof uc, 'string');
+    assert.ok(uc.indexOf('Nothing is overdue') !== -1, id + ' reassurance line');
+  });
+});
+
+test('Today shows at most three items and never repeats the Focus Now institution', () => {
+  ['john', 'kelvin'].forEach((id) => {
+    const home = P.byId(id).home;
+    assert.ok(home.today.length <= 3, id + ' today length');
+    const focusInstitution = home.focus.institution.split(' (')[0];
+    home.today.forEach((t) => {
+      assert.ok(t.title.indexOf(focusInstitution) === -1,
+        id + ' Today must not repeat Focus Now: ' + t.title);
+    });
+  });
+});
+
+test('Around ShoreVest is optional and quiet (at most two items)', () => {
+  ['john', 'kelvin'].forEach((id) => {
+    const around = P.byId(id).home.around || [];
+    assert.ok(around.length <= 2, id + ' around length');
+  });
+});
+
+test('Focus Now carries the full ten-second-standard content', () => {
+  ['john', 'kelvin'].forEach((id) => {
+    const f = P.byId(id).home.focus;
+    ['title', 'context', 'decision', 'whyYou', 'due', 'recommendation', 'reasoning',
+     'evidenceLine', 'evidence', 'policy', 'primary', 'afterConfirm', 'owner'].forEach((k) => {
+      assert.ok(f[k] != null && (typeof f[k] !== 'string' || f[k].length), id + ' focus missing ' + k);
+    });
+    assert.ok(Array.isArray(f.evidence) && f.evidence.length >= 3, id + ' evidence summary');
+    assert.ok(/review/i.test(f.primary), id + ' primary action is review-oriented');
+  });
+});
+
+test('the John example is Red Panda Capital with the two-attendee policy', () => {
+  const f = P.byId('john').home.focus;
+  assert.ok(f.institution.indexOf('Red Panda Capital') === 0);
+  assert.ok(/two ShoreVest attendees/i.test(f.policy));
+});
+
+test('the Kelvin example demonstrates the mainland attendance rule with a placeholder attendee', () => {
+  const f = P.byId('kelvin').home.focus;
+  assert.ok(/mainland/i.test(f.policy) && /Ben/.test(f.policy), 'mainland rule explained');
+  assert.strictEqual(f.requiredAttendee, 'Eligible mainland-team attendee required');
+});
+
+test('no false-green language appears in Focus Now', () => {
+  ['john', 'kelvin'].forEach((id) => {
+    const blob = JSON.stringify(P.byId(id).home.focus);
+    ['Safe to act', 'Fully verified', 'All clear', 'Everything is safe', 'Verified and approved']
+      .forEach((bad) => assert.ok(blob.indexOf(bad) === -1, id + ' false-green: ' + bad));
+  });
+});
+
+/* ── My Work ────────────────────────────────────────────────────────────── */
+
+test('John and Kelvin have a My Work shell with Needs me / Waiting / Later', () => {
+  ['john', 'kelvin'].forEach((id) => {
+    const mw = P.byId(id).myWork;
+    assert.ok(mw, id + ' has myWork');
+    assert.deepStrictEqual(Object.keys(mw).sort(), ['later', 'needsMe', 'waiting']);
+    mw.waiting.forEach((w) => {
+      ['who', 'when', 'followUp', 'accountable'].forEach((k) =>
+        assert.ok(w[k], id + ' waiting item missing ' + k));
+    });
+  });
+});
+
+/* ── Celestra preserved ─────────────────────────────────────────────────── */
+
+test('Celestra keeps a distinct coordination Home schema', () => {
+  const c = P.byId('celestra');
+  assert.strictEqual(c.homeSchema, 'coordination');
+  assert.deepStrictEqual(Object.keys(c.home).sort(), ['needsYou', 'today', 'waiting']);
+});
+
+test('Celestra keeps her coordination navigation', () => {
   assert.deepStrictEqual(navLabels(P.byId('celestra')),
     ['Home', 'My Work', 'Materials & Delivery', 'Diligence & Requests', 'Meeting Support', 'Tools']);
 });
 
-test('every persona ends on Tools and begins on Home', () => {
-  P.list.forEach((p) => {
-    const labels = navLabels(p);
-    assert.strictEqual(labels[0], 'Home');
-    assert.strictEqual(labels[labels.length - 1], 'Tools');
+test('Celestra is not forced into the commercial Home structure', () => {
+  assert.ok(!('focus' in P.byId('celestra').home), 'Celestra should not have a Focus Now');
+});
+
+/* ── External demo data ─────────────────────────────────────────────────── */
+
+const APPROVED_ANIMALS = ['Red Panda Capital', 'Narwhal Pension Fund', 'Quokka Capital',
+  'Puffin Asset Management', 'Otter Pension Trust', 'Koala Investment Board',
+  'Walrus Holdings', 'Alpaca Foundation'];
+
+test('external institutions use approved animal-based fictional names', () => {
+  ['john', 'kelvin'].forEach((id) => {
+    const p = P.byId(id);
+    const focusInst = p.home.focus.institution.split(' (')[0];
+    assert.ok(APPROVED_ANIMALS.indexOf(focusInst) !== -1, id + ' focus institution: ' + focusInst);
+    p.home.today.forEach((t) => {
+      if (t.title.indexOf('Internal') === 0) return;
+      assert.ok(APPROVED_ANIMALS.indexOf(t.title) !== -1, id + ' today institution: ' + t.title);
+    });
   });
 });
 
-test('Celestra does not see the RM commercial navigation', () => {
-  const ir = navLabels(P.byId('celestra'));
-  ['Outreach', 'Relationships', 'Meetings', 'Weekly Review'].forEach((rmItem) => {
-    assert.ok(ir.indexOf(rmItem) === -1, 'Celestra should not have ' + rmItem);
+test('prohibited external names are absent from John/Kelvin persona data', () => {
+  const blob = JSON.stringify([P.byId('john'), P.byId('kelvin')]);
+  ['AIIB', 'MetLife', 'Albourne', 'Eastspring', 'GreenRam', 'GreenVale',
+   'NorthBridge', 'Meridian', 'Summit Endowment', 'Harbour Ridge', 'EastGate'].forEach((bad) => {
+    assert.ok(blob.indexOf(bad) === -1, 'prohibited name present: ' + bad);
   });
 });
 
-/* ── Legacy Tools access ────────────────────────────────────────────────── */
+test('no invented internal ShoreVest employee appears (only real names / placeholders)', () => {
+  /* The only internal people named in John/Kelvin data are Ben (Benjamin Fanger)
+     and Yao Fu — both real ShoreVest employees. The mainland requirement uses a
+     placeholder, never an invented named employee. */
+  const blob = JSON.stringify([P.byId('john'), P.byId('kelvin')]);
+  assert.ok(blob.indexOf('mainland-team attendee') !== -1, 'placeholder attendee present');
+  ['Alice', 'Bob', 'Jane Doe', 'John Smith'].forEach((invented) => {
+    assert.ok(blob.indexOf(invented) === -1, 'invented employee present: ' + invented);
+  });
+});
+
+/* ── Legacy Tools access + no role leakage ──────────────────────────────── */
 
 test('every persona keeps a capability role that can reach the legacy Tools', () => {
   P.list.forEach((p) => {
@@ -81,73 +276,23 @@ test('every persona keeps a capability role that can reach the legacy Tools', ()
   });
 });
 
-/* ── Home data by role ──────────────────────────────────────────────────── */
-
-test('every Home has exactly the three permitted sections and nothing else', () => {
-  P.list.forEach((p) => {
-    assert.deepStrictEqual(Object.keys(p.home).sort(), ['needsYou', 'today', 'waiting']);
-  });
+test('no synthetic content leaks between John, Kelvin and Celestra', () => {
+  const jFocus = JSON.stringify(P.byId('john').home.focus);
+  const kFocus = JSON.stringify(P.byId('kelvin').home.focus);
+  assert.notStrictEqual(jFocus, kFocus);
+  assert.ok(jFocus.indexOf('Koala') === -1, 'John should not carry Kelvin content');
+  assert.ok(kFocus.indexOf('Red Panda') === -1, 'Kelvin should not carry John content');
+  /* Celestra card ids are namespaced to her. */
+  P.byId('celestra').home.needsYou.forEach((c) =>
+    assert.ok(c.id.indexOf('celestra-') === 0, 'Celestra card not namespaced: ' + c.id));
 });
 
-test('Today and Waiting elsewhere never exceed three items', () => {
-  P.list.forEach((p) => {
-    assert.ok(p.home.today.length <= 3, p.name + ' today');
-    assert.ok(p.home.waiting.length <= 3, p.name + ' waiting');
-  });
-});
-
-test('each card asks one question with at most three actions and a primary', () => {
-  P.list.forEach((p) => {
-    p.home.needsYou.forEach((card) => {
-      assert.ok(card.title && card.recommendation, card.id + ' needs a title and recommendation');
-      assert.ok(card.actions.length >= 1 && card.actions.length <= 3, card.id + ' action count');
-      assert.strictEqual(card.actions[0].intent, 'primary', card.id + ' first action is primary');
-      assert.ok(card.detail, card.id + ' has a "why am I seeing this" detail');
+test('workspace previews exist for every John/Kelvin workspace route', () => {
+  ['relationships', 'outreach', 'meetings', 'diligence', 'investor-intelligence', 'firm']
+    .forEach((key) => {
+      const info = P.workspace(key);
+      assert.ok(info && info.title && info.lede, 'missing workspace ' + key);
     });
-  });
-});
-
-test('John and Kelvin receive different synthetic content', () => {
-  assert.notDeepStrictEqual(cardIds(P.byId('john')), cardIds(P.byId('kelvin')));
-  assert.notDeepStrictEqual(
-    P.byId('john').home.today.map((t) => t.title),
-    P.byId('kelvin').home.today.map((t) => t.title));
-});
-
-test('“challenge” is never used as a control label', () => {
-  P.list.forEach((p) => {
-    p.home.needsYou.forEach((card) => {
-      card.actions.forEach((a) => assert.ok(!/challenge/i.test(a.label), card.id + ': ' + a.label));
-    });
-  });
-});
-
-/* ── No role leakage ────────────────────────────────────────────────────── */
-
-test('no Needs-you card is shared between two different people', () => {
-  const seen = {};
-  P.list.forEach((p) => p.home.needsYou.forEach((c) => {
-    assert.ok(!seen[c.id], 'card id reused across personas: ' + c.id);
-    seen[c.id] = p.id;
-  }));
-});
-
-test('each card id is namespaced to its owner', () => {
-  P.list.forEach((p) => p.home.needsYou.forEach((c) => {
-    assert.ok(c.id.indexOf(p.id + '-') === 0, c.id + ' should start with ' + p.id + '-');
-  }));
-});
-
-/* ── Preview shells ─────────────────────────────────────────────────────── */
-
-test('every future-facing nav item has a restrained preview', () => {
-  P.list.forEach((p) => {
-    p.nav.filter((n) => !n.sep && n.hash.indexOf('#/preview/') === 0).forEach((n) => {
-      const key = n.hash.slice('#/preview/'.length);
-      const info = P.preview(key);
-      assert.ok(info && info.title && info.points.length, 'missing preview for ' + key);
-    });
-  });
 });
 
 /* ── Report ─────────────────────────────────────────────────────────────── */

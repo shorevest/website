@@ -1,19 +1,21 @@
 /* ==========================================================================
    ShoreVest One — role (persona) configuration
    A single small configuration layer describing the three demonstration
-   people: their identity, permanent navigation, Home information, and the
-   restrained previews behind future-facing navigation.
+   people: their exact identity, permanent navigation, Home schema, My Work,
+   and the restrained previews behind workspace navigation.
 
-   Everything here is synthetic. External institutions, contacts, and account
-   details are entirely fictional. Only the internal ShoreVest names are real,
-   used solely to identify the selected demonstration role. No real emails,
-   contact data, or confidential information appears.
+   Everything here is synthetic. External institutions and contacts are entirely
+   fictional and use professional animal-based names. Only internal ShoreVest
+   names are real, used solely to identify the selected demonstration profile or
+   to name a real internal colleague in a limited assignment context. No real
+   emails, LP names, contact data, or confidential information appears.
 
-   The Home page absorbs complexity: each person sees only the work that needs
-   them, what is happening today, and what is waiting on someone else. The
-   underlying operational prototype (list processing, rules engine, exceptions,
-   administration) is preserved under Tools and reached through the shared
-   capability role below — the persona's *display* role is separate.
+   ShoreVest One absorbs complexity rather than displaying it. For John and
+   Kelvin, Home answers "What should I pay attention to right now?" with exactly
+   one Focus Now item, a short Today list, one Under Control reassurance line,
+   and an optional quiet Around ShoreVest note. My Work answers "What currently
+   depends on me?". Celestra keeps her existing coordination Home. The legacy
+   operational prototype is preserved under Tools for every profile.
    ========================================================================== */
 (function (root) {
   'use strict';
@@ -21,154 +23,173 @@
   var R = root.SVPortalRules;
 
   /* Underlying capability role used only to keep the legacy Tools prototype
-     fully accessible for every demonstration persona. This is not the person's
-     display role — see `displayRole` on each persona. */
+     fully accessible for every demonstration profile. This is not the person's
+     display role — see `title`/`coverage`/`displayRole` on each persona. */
   var TOOLS_ROLE = R ? R.ROLES.ADMINISTRATOR : 'Administrator';
 
   /* ── Navigation ─────────────────────────────────────────────────────────
-     Relationship Managers (John, Kelvin) share one navigation structure and
-     interaction design. Celestra has a coordination-oriented structure. Every
-     persona ends on Tools, which holds the preserved operational prototype.
-     Future-facing items route to a single restrained preview shell. */
+     John and Kelvin share one frozen structure. Firm and Tools sit below the
+     Workspaces group; Tools holds the preserved operational prototype and is
+     collapsible. Celestra keeps a coordination-oriented structure. */
 
   var RM_NAV = [
     { key: 'home', label: 'Home', hash: '#/home' },
-    { key: 'outreach', label: 'Outreach', hash: '#/preview/outreach' },
-    { key: 'relationships', label: 'Relationships', hash: '#/preview/relationships' },
-    { key: 'meetings', label: 'Meetings', hash: '#/preview/meetings' },
-    { key: 'weekly-review', label: 'Weekly Review', hash: '#/preview/weekly-review' },
-    { sep: 'Workspace' },
-    { key: 'tools', label: 'Tools', hash: '#/tools' }
+    { key: 'my-work', label: 'My Work', hash: '#/my-work' },
+    { sep: 'Workspaces' },
+    { key: 'relationships', label: 'Relationships', hash: '#/workspace/relationships' },
+    { key: 'outreach', label: 'Outreach', hash: '#/workspace/outreach' },
+    { key: 'meetings', label: 'Meetings', hash: '#/workspace/meetings' },
+    { key: 'diligence', label: 'Diligence & Requests', hash: '#/workspace/diligence' },
+    { key: 'investor-intelligence', label: 'Investor Intelligence', hash: '#/workspace/investor-intelligence' },
+    { divider: true },
+    { key: 'firm', label: 'Firm', hash: '#/workspace/firm' },
+    { key: 'tools', label: 'Tools', hash: '#/tools', collapsible: true }
   ];
 
   var IR_NAV = [
     { key: 'home', label: 'Home', hash: '#/home' },
     { key: 'my-work', label: 'My Work', hash: '#/preview/my-work' },
+    { sep: 'Workspaces' },
     { key: 'materials', label: 'Materials & Delivery', hash: '#/preview/materials' },
     { key: 'diligence', label: 'Diligence & Requests', hash: '#/preview/diligence' },
     { key: 'meeting-support', label: 'Meeting Support', hash: '#/preview/meeting-support' },
-    { sep: 'Workspace' },
-    { key: 'tools', label: 'Tools', hash: '#/tools' }
+    { divider: true },
+    { key: 'tools', label: 'Tools', hash: '#/tools', collapsible: true }
   ];
 
-  /* ── Home data ──────────────────────────────────────────────────────────
-     Three sections only: Needs you, Today, Waiting elsewhere.
-     Cards ask one question, offer one recommendation or state, and show no
-     more than three actions. The first action is primary. */
+  /* ── Commercial Home schema (John & Kelvin) ─────────────────────────────
+     One expanded Focus Now item that meets the ten-second standard; a short
+     Today list that never repeats Focus Now; one Under Control reassurance
+     line; an optional quiet Around ShoreVest note. Meeting-attendance policy is
+     explained inside the affected decision only, never as a standing warning. */
 
   var JOHN_HOME = {
-    needsYou: [
-      {
-        id: 'john-greenvale-meeting',
-        title: 'GreenVale Capital meeting',
-        context: ['A senior ShoreVest attendee will join fifteen minutes late.'],
-        recLabel: 'ShoreVest One suggests',
-        recommendation: 'Begin with allocation timing and hold the senior relationship discussion until the senior attendee joins.',
-        actions: [
-          { label: 'Use revised plan', intent: 'primary', done: 'Revised plan in place' },
-          { label: 'Change', intent: 'secondary', done: 'Marked for change' },
-          { label: 'Need review', intent: 'secondary', done: 'Sent for review' }
-        ],
-        detail: 'The senior attendee’s calendar shows an overlapping internal commitment ending shortly after the scheduled start. The agenda has two parts; only the second needs the senior attendee present.'
-      },
-      {
-        id: 'john-northbridge-outreach',
-        title: 'NorthBridge Pension outreach',
-        context: ['One email was delivered and no substantive response has been identified after eight business days.'],
-        recLabel: 'ShoreVest One suggests',
-        recommendation: 'Send one final follow-up.',
-        actions: [
-          { label: 'Approve', intent: 'primary', done: 'Final follow-up approved' },
-          { label: 'Hold', intent: 'secondary', done: 'On hold' },
-          { label: 'Context is wrong', intent: 'secondary', done: 'Flagged for correction' }
-        ],
-        detail: 'The first note was delivered to the primary contact. No reply, meeting acceptance, or forward has been observed. Standard practice allows a single, measured follow-up before the relationship rests.'
-      },
-      {
-        id: 'john-greenvale-diligence',
-        title: 'GreenVale Capital diligence request',
-        context: ['One commercial disclosure decision is required.'],
-        recLabel: 'ShoreVest One suggests',
-        recommendation: 'Use approved aggregated information rather than named recovery examples.',
-        actions: [
-          { label: 'Approve approach', intent: 'primary', done: 'Approach approved' },
-          { label: 'Request broader review', intent: 'secondary', done: 'Broader review requested' },
-          { label: 'Ask Ben', intent: 'secondary', done: 'Referred to Ben' }
-        ],
-        detail: 'The request asks for evidence of recovery outcomes. Approved aggregated figures answer the question without disclosing named situations, which keeps the response within the agreed disclosure boundary.'
-      }
-    ],
+    situational: 'One decision needs you before your next meeting.',
+    focus: {
+      id: 'john-red-panda-meeting',
+      institution: 'Red Panda Capital',
+      title: 'Red Panda Capital meeting — second attendee no longer available',
+      context: [
+        'Red Panda Capital confirmed the 10:30 ET meeting this morning.',
+        'The required second ShoreVest attendee is no longer available until 10:45 ET.'
+      ],
+      decision: 'Move the meeting start to 10:45 ET, or begin at 10:30 ET with one ShoreVest attendee.',
+      whyYou: 'You own the Red Panda Capital relationship. This is a substantive LP meeting, and ShoreVest policy requires at least two ShoreVest attendees for substantive LP discussions.',
+      due: 'Decide before 10:30 ET',
+      dueZone: 'ET',
+      recLabel: 'ShoreVest One recommends',
+      recommendation: 'Move the meeting start to 10:45 ET rather than begin the substantive discussion with one ShoreVest attendee.',
+      reasoning: 'The agenda is substantive throughout, so the two-attendee requirement applies from the start. A fifteen-minute shift keeps both required attendees present without splitting the agenda.',
+      verifiedAt: '07:42 ET',
+      evidenceLine: 'Relationship ownership and attendee availability checked at 07:42 ET. Red Panda Capital has confirmed; a revised start time has not yet been proposed or confirmed with them.',
+      evidence: [
+        { label: 'Investor confirmation', detail: 'Red Panda Capital confirmed 10:30 ET', state: 'system-verified' },
+        { label: 'Relationship ownership', detail: 'John Jones owns Red Panda Capital', state: 'system-verified' },
+        { label: 'Second-attendee availability', detail: 'Available from 10:45 ET', state: 'system-verified' },
+        { label: 'Meeting purpose', detail: 'Substantive LP discussion (two attendees required)', state: 'human-confirmed' },
+        { label: 'Revised start time', detail: 'Not yet proposed to Red Panda Capital', state: 'unavailable' }
+      ],
+      policy: 'Substantive LP meetings require at least two ShoreVest attendees. A genuinely casual coffee may be solo. Missing required attendance means the meeting is not ready; exceptions require explicit approval and a record.',
+      primary: 'Review revised meeting plan',
+      afterConfirm: 'Confirming would prepare a revised 10:45 ET plan for you to send. Nothing is proposed to Red Panda Capital until you confirm the exact package.',
+      owner: 'After you confirm, the revised time is yours to send to Red Panda Capital; the second attendee is notified only once you confirm.'
+    },
     today: [
-      { time: '10:30', title: 'GreenVale Capital', note: 'Needs one decision', tone: 'attention' },
-      { time: '15:00', title: 'Meridian Insurance', note: 'Ready', tone: 'ready' },
-      { time: '17:00', title: 'Internal Investment update', note: 'No preparation required', tone: 'calm' }
+      { time: '13:00', title: 'Narwhal Pension Fund', note: 'Investor confirmed', state: 'confirmed', zone: 'ET' },
+      { time: '15:30', title: 'Otter Pension Trust', note: 'Ready for meeting', state: 'ready', zone: 'ET' },
+      { time: '17:00', title: 'Internal Investment update', note: 'No preparation required', state: 'calm', zone: 'ET' }
     ],
-    waiting: [
-      { title: 'GreenVale recovery material', note: 'Waiting on Investment' },
-      { title: 'Summit Endowment introduction', note: 'Waiting on Ben' },
-      { title: 'Meridian follow-up package', note: 'Waiting on Legal' }
+    underControl: 'Other items are progressing with Finance, Legal and Investment. Nothing is overdue.',
+    around: [
+      { title: 'Firm dinner in Hong Kong on Thursday', note: 'Details in Firm', link: '#/workspace/firm' }
     ]
   };
 
   var KELVIN_HOME = {
-    needsYou: [
-      {
-        id: 'kelvin-eastgate-meeting',
-        title: 'EastGate Assurance meeting',
-        context: ['Your counterpart has shortened the review to a thirty-minute slot.'],
-        recLabel: 'ShoreVest One suggests',
-        recommendation: 'Lead with the mandate update and defer the fee discussion to a short follow-up.',
-        actions: [
-          { label: 'Use revised plan', intent: 'primary', done: 'Revised plan in place' },
-          { label: 'Change', intent: 'secondary', done: 'Marked for change' },
-          { label: 'Need review', intent: 'secondary', done: 'Sent for review' }
-        ],
-        detail: 'The meeting was rescheduled to a shorter window. The mandate update is time-sensitive; the fee discussion is not, and reads better with supporting figures that can follow.'
-      },
-      {
-        id: 'kelvin-harbour-reconnect',
-        title: 'Harbour Ridge Partners reconnection',
-        context: ['A dormant relationship has a new trigger: a senior contact has moved firm.', 'No substantive contact in fourteen months.'],
-        recLabel: 'ShoreVest One suggests',
-        recommendation: 'Send one reconnection note acknowledging the new role.',
-        actions: [
-          { label: 'Approve', intent: 'primary', done: 'Reconnection approved' },
-          { label: 'Hold', intent: 'secondary', done: 'On hold' },
-          { label: 'Context is wrong', intent: 'secondary', done: 'Flagged for correction' }
-        ],
-        detail: 'The relationship has been quiet for over a year. A senior contact’s move is a natural, low-pressure reason to reconnect without implying an immediate ask.'
-      },
-      {
-        id: 'kelvin-rmb-shareclass',
-        title: 'RMB share-class query',
-        context: ['One commercial disclosure decision is required on RMB share-class availability.'],
-        recLabel: 'ShoreVest One suggests',
-        recommendation: 'Use the approved standard wording rather than bespoke terms.',
-        actions: [
-          { label: 'Approve approach', intent: 'primary', done: 'Approach approved' },
-          { label: 'Request broader review', intent: 'secondary', done: 'Broader review requested' },
-          { label: 'Ask Ben', intent: 'secondary', done: 'Referred to Ben' }
-        ],
-        detail: 'The enquiry touches share-class terms that vary by jurisdiction. Approved standard wording answers the question consistently and avoids committing to bespoke terms before they are settled.'
-      }
-    ],
+    situational: 'One meeting needs the right attendance before you propose times.',
+    focus: {
+      id: 'kelvin-koala-mainland',
+      institution: 'Koala Investment Board (Shanghai office)',
+      title: 'Koala Investment Board (Shanghai) — mainland attendee required',
+      context: [
+        'A substantive meeting is being arranged with the Shanghai office of Koala Investment Board, an international LP.',
+        'Current internal attendance does not include an eligible mainland-team participant.'
+      ],
+      decision: 'Add an eligible mainland-team attendee before the meeting is proposed or confirmed.',
+      whyYou: 'You own the Koala Investment Board relationship in Asia-Pacific. A substantive interaction with the PRC office of an international LP requires Ben or an eligible mainland-team attendee.',
+      due: 'Resolve before proposing times',
+      dueZone: 'HKT',
+      recLabel: 'ShoreVest One recommends',
+      recommendation: 'Add an eligible mainland-team attendee before proposing or confirming the meeting. No confirmed eligible named attendee is available for this slot yet.',
+      reasoning: 'The counterparty is the PRC office of an international LP, so the mainland-attendance rule applies. Confirming attendance first avoids proposing a time the meeting cannot yet satisfy.',
+      verifiedAt: '08:05 HKT',
+      evidenceLine: 'Relationship ownership and counterparty office checked at 08:05 HKT. Eligible mainland-team availability for this slot is not yet confirmed.',
+      evidence: [
+        { label: 'Relationship ownership', detail: 'Kelvin Chan owns Koala Investment Board (Asia-Pacific)', state: 'system-verified' },
+        { label: 'Counterparty office', detail: 'Shanghai (PRC) office of an international LP', state: 'system-verified' },
+        { label: 'Meeting purpose', detail: 'Substantive discussion', state: 'human-confirmed' },
+        { label: 'Mainland-team attendee', detail: 'Eligible mainland-team attendee required', state: 'unavailable' },
+        { label: 'Proposed times', detail: 'Not yet proposed to Koala Investment Board', state: 'unavailable' }
+      ],
+      policy: 'An interaction with the PRC office of an international LP, or any office of a PRC-headquartered LP, requires Ben or an eligible mainland-team attendee. Substantive LP meetings also require at least two ShoreVest attendees. Missing required attendance means the meeting is not ready; exceptions require explicit approval and a record.',
+      primary: 'Review attendance and meeting plan',
+      requiredAttendee: 'Eligible mainland-team attendee required',
+      afterConfirm: 'Confirming would prepare a meeting plan that includes the required mainland-team attendee for you to review. No times are proposed to Koala Investment Board until you confirm the exact package.',
+      owner: 'After you confirm attendance, proposing times to Koala Investment Board remains yours; the mainland-team attendee is contacted internally only once you confirm.'
+    },
     today: [
-      { time: '09:00', title: 'EastGate Assurance', note: 'Needs one decision', tone: 'attention' },
-      { time: '13:30', title: 'Meridian Insurance (Asia)', note: 'Ready', tone: 'ready' },
-      { time: '16:00', title: 'Internal Investment update', note: 'No preparation required', tone: 'calm' }
+      { time: '11:00', title: 'Puffin Asset Management', note: 'Ready for meeting', state: 'ready', zone: 'HKT' },
+      { time: '14:00', title: 'Alpaca Foundation', note: 'Needs preparation', state: 'prep', zone: 'HKT' },
+      { time: '16:30', title: 'Internal Investment update', note: 'No preparation required', state: 'calm', zone: 'HKT' }
     ],
-    waiting: [
-      { title: 'Harbour Ridge term summary', note: 'Waiting on Investment' },
-      { title: 'EastGate introduction', note: 'Waiting on Legal' },
-      { title: 'RMB share-class confirmation', note: 'Waiting on Investment' }
+    underControl: 'Other items are progressing with Finance, Legal and Investment. Nothing is overdue.',
+    around: [
+      { title: 'Yao Fu marks five years at ShoreVest this week', note: 'Details in Firm', link: '#/workspace/firm' }
     ]
   };
+
+  /* ── My Work (John & Kelvin) ────────────────────────────────────────────
+     A lightweight demonstration shell: what needs me, what is waiting on others
+     (with who, when, follow-up and accountability), and what is deliberately
+     later. No inbox, activity feed, or metric dashboard. */
+
+  var JOHN_MYWORK = {
+    needsMe: [
+      { title: 'Red Panda Capital meeting time', note: 'Confirm the revised 10:45 ET plan.', due: 'Before 10:30 ET today' },
+      { title: 'Narwhal Pension Fund follow-up note', note: 'Approve the single follow-up before the relationship rests.', due: 'This week' }
+    ],
+    waiting: [
+      { title: 'Otter Pension Trust recovery material', who: 'Investment team', when: 'Expected tomorrow', followUp: 'Follow up Friday if not received', accountable: 'You remain accountable to Otter Pension Trust.' },
+      { title: 'Quokka Capital introduction', who: 'Ben (Benjamin Fanger)', when: 'Expected this week', followUp: 'No action needed yet', accountable: 'Ben owns the next step.' }
+    ],
+    later: [
+      { title: 'Walrus Holdings re-engagement', note: 'Dormant relationship; revisit next quarter.' }
+    ]
+  };
+
+  var KELVIN_MYWORK = {
+    needsMe: [
+      { title: 'Koala Investment Board attendance', note: 'Confirm an eligible mainland-team attendee before proposing times.', due: 'Before proposing times' },
+      { title: 'Puffin Asset Management pack', note: 'Approve the final meeting pack.', due: 'Today' }
+    ],
+    waiting: [
+      { title: 'Alpaca Foundation term summary', who: 'Investment team', when: 'Expected tomorrow', followUp: 'Follow up Thursday if not received', accountable: 'You remain accountable to Alpaca Foundation.' },
+      { title: 'Puffin Asset Management legal review', who: 'Legal team', when: 'Expected Wednesday', followUp: 'No action needed yet', accountable: 'Legal owns the next step.' }
+    ],
+    later: [
+      { title: 'Koala Investment Board (HK office) reconnection', note: 'Separate relationship; revisit after the Shanghai meeting.' }
+    ]
+  };
+
+  /* ── Coordination Home (Celestra — preserved from the prior phase) ───────
+     Celestra keeps her existing demonstration Home and functionality. She is
+     not forced into the John/Kelvin commercial structure. */
 
   var CELESTRA_HOME = {
     needsYou: [
       {
-        id: 'celestra-greenvale-ddq',
-        title: 'GreenVale DDQ',
+        id: 'celestra-quokka-ddq',
+        title: 'Quokka Capital DDQ',
         context: ['All substantive approvals are complete.', 'The final package needs assembly.'],
         recLabel: 'Current state',
         recommendation: 'Ready to assemble.',
@@ -179,8 +200,8 @@
         detail: 'Each section has an approval recorded against it. Assembly gathers the approved answers into a single document for a final check before delivery.'
       },
       {
-        id: 'celestra-meridian-dataroom',
-        title: 'Meridian data-room access',
+        id: 'celestra-narwhal-dataroom',
+        title: 'Narwhal Pension Fund data-room access',
         context: ['Relationship-owner approval and recipient eligibility are confirmed.'],
         recLabel: 'Current state',
         recommendation: 'Ready to prepare access.',
@@ -191,8 +212,8 @@
         detail: 'The relationship owner has approved access and the recipient has passed the eligibility check. Preparing access sets up the named recipient without granting anything beyond the approved scope.'
       },
       {
-        id: 'celestra-summit-materials',
-        title: 'Summit meeting materials',
+        id: 'celestra-otter-materials',
+        title: 'Otter Pension Trust meeting materials',
         context: ['An approved master exists.', 'A recipient-specific derivative has not been prepared.'],
         recLabel: 'Current state',
         recommendation: 'Ready to prepare the recipient version.',
@@ -204,9 +225,9 @@
       }
     ],
     today: [
-      { time: '11:00', title: 'GreenVale DDQ package', note: 'Due today', tone: 'attention' },
-      { time: '14:00', title: 'Meridian data-room', note: 'Access requested', tone: 'ready' },
-      { time: '16:30', title: 'Summit meeting prep', note: 'Supporting John', tone: 'calm' }
+      { time: '11:00', title: 'Quokka Capital DDQ package', note: 'Due today', tone: 'attention' },
+      { time: '14:00', title: 'Narwhal data-room', note: 'Access requested', tone: 'ready' },
+      { time: '16:30', title: 'Otter Pension Trust prep', note: 'Supporting John', tone: 'calm' }
     ],
     waiting: [
       { title: 'Finance confirmation', note: 'Due tomorrow · No action needed yet' },
@@ -217,34 +238,57 @@
 
   /* ── People ─────────────────────────────────────────────────────────────
      `role` carries the shared capability role so the legacy Tools prototype
-     keeps working; `displayRole` is what the person actually sees. */
+     keeps working. `title` + `coverage` are the exact approved identity;
+     `displayRole` is a single-line convenience that preserves the parentheses.
+     `photo` is an approved employee photograph where one exists in the repo;
+     otherwise `initials` drives a restrained avatar (never a generated face). */
 
   var PERSONAS = [
     {
       id: 'john',
       name: 'John Jones',
-      displayRole: 'Director of Client Solutions — Ex-Asia',
+      firstName: 'John',
+      title: 'Director of Client Solutions',
+      coverage: 'Americas, Europe & Middle East',
+      displayRole: 'Director of Client Solutions (Americas, Europe & Middle East)',
+      photo: '../assets/img/team/john-jones.jpg',
+      initials: 'JJ',
       username: 'john.jones@shorevest.example',
       role: TOOLS_ROLE,
       nav: RM_NAV,
-      home: JOHN_HOME
+      homeSchema: 'commercial',
+      home: JOHN_HOME,
+      myWork: JOHN_MYWORK
     },
     {
       id: 'kelvin',
       name: 'Kelvin Chan',
-      displayRole: 'Director of Client Solutions — Asia',
+      firstName: 'Kelvin',
+      title: 'Director of Client Solutions',
+      coverage: 'Asia-Pacific',
+      displayRole: 'Director of Client Solutions (Asia-Pacific)',
+      photo: '../assets/img/team/kelvin-chan.jpg',
+      initials: 'KC',
       username: 'kelvin.chan@shorevest.example',
       role: TOOLS_ROLE,
       nav: RM_NAV,
-      home: KELVIN_HOME
+      homeSchema: 'commercial',
+      home: KELVIN_HOME,
+      myWork: KELVIN_MYWORK
     },
     {
       id: 'celestra',
       name: 'Celestra Gallagher',
+      firstName: 'Celestra',
+      title: 'Investor Relations Associate',
+      coverage: '',
       displayRole: 'Investor Relations Associate',
+      photo: null,
+      initials: 'CG',
       username: 'celestra.gallagher@shorevest.example',
       role: TOOLS_ROLE,
       nav: IR_NAV,
+      homeSchema: 'coordination',
       home: CELESTRA_HOME
     }
   ];
@@ -252,51 +296,45 @@
   var BY_ID = {};
   PERSONAS.forEach(function (p) { BY_ID[p.id] = p; });
 
-  /* ── Previews behind future-facing navigation ───────────────────────────
-     Restrained overviews, clearly marked as demonstration content. No claim of
-     real integration or execution. */
+  /* ── Workspace and preview overviews ────────────────────────────────────
+     Restrained destinations, clearly marked as demonstration content. No claim
+     of real integration or execution, no metrics, no fake live data. */
 
-  var PREVIEW = {
-    outreach: {
-      label: 'Outreach',
-      title: 'Outreach',
-      lede: 'Where you will review and approve outreach to institutions in your coverage, one decision at a time.',
-      points: [
-        'Suggested outreach, prepared and waiting for your approval.',
-        'Prior contact and timing considered before anything is proposed.',
-        'Nothing is sent without your explicit approval.'
-      ]
-    },
+  var WORKSPACES = {
     relationships: {
       label: 'Relationships',
       title: 'Relationships',
-      lede: 'A calm view of the institutions you own, and what has recently changed.',
-      points: [
-        'Your coverage, grouped the way you think about it.',
-        'Quiet relationships surfaced only when there is a reason to act.',
-        'No scores, rankings, or activity counts.'
-      ]
+      lede: 'Institutions, people, relationship strategy, commitments and next moves.'
+    },
+    outreach: {
+      label: 'Outreach',
+      title: 'Outreach',
+      lede: 'Targeting, campaigns, sequencing, replies and re-engagement.'
     },
     meetings: {
       label: 'Meetings',
       title: 'Meetings',
-      lede: 'Your meetings, with the single decision each one needs from you.',
-      points: [
-        'What is ready, what needs a decision, and what needs nothing.',
-        'Preparation gathered for you rather than requested from you.',
-        'Follow-ups tracked so they do not rest by accident.'
-      ]
+      lede: 'Preparation, readiness, materials, attendance and follow-up.'
     },
-    'weekly-review': {
-      label: 'Weekly Review',
-      title: 'Weekly Review',
-      lede: 'A short, once-a-week look at your coverage and the decisions ahead.',
-      points: [
-        'A brief summary of the week across your relationships.',
-        'Decisions expected of you in the coming week.',
-        'Anything resting quietly that may deserve attention.'
-      ]
+    diligence: {
+      label: 'Diligence & Requests',
+      title: 'Diligence & Requests',
+      lede: 'DDQs, document requests, data-room requests and delivery control.'
     },
+    'investor-intelligence': {
+      label: 'Investor Intelligence',
+      title: 'Investor Intelligence',
+      lede: 'Source-linked investor feedback, recurring themes and management implications.'
+    },
+    firm: {
+      label: 'Firm',
+      title: 'Firm',
+      lede: 'People, availability, offices, events, resources and internal information.'
+    }
+  };
+
+  /* Preview shells retained for Celestra's coordination navigation. */
+  var PREVIEW = {
     'my-work': {
       label: 'My Work',
       title: 'My Work',
@@ -343,6 +381,7 @@
     TOOLS_ROLE: TOOLS_ROLE,
     list: PERSONAS,
     byId: function (id) { return BY_ID[id] || null; },
+    workspace: function (key) { return WORKSPACES[key] || null; },
     preview: function (key) { return PREVIEW[key] || null; }
   };
 

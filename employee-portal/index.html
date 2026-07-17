@@ -4,15 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ShoreVest One</title>
-  <meta name="description" content="ShoreVest One — the firm's internal operating platform. Authorised ShoreVest personnel only." />
-  <meta name="robots" content="noindex, nofollow" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <!-- DIN 2014 loads via the site's Adobe Fonts kit when configured; Barlow is the
-       structural sans-serif fallback used across the public site. The UI is
-       DIN-only — no serif face is loaded. -->
-  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../assets/css/employee-portal.css?v=20260703" />
+  <meta name="description" content="ShoreVest One — internal demonstration environment." />
+  <!-- Preview-entry-page directive only. This applies to the ShoreVest One entry
+       document (employee-portal/index.html); it does not affect any public page,
+       which are separate HTML documents. noindex/robots directives are advisory. -->
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
+  <!-- Typography is DIN 2014, loaded from local installed faces (no external font
+       provider). See @font-face in employee-portal.css. -->
+  <link rel="stylesheet" href="../assets/css/employee-portal.css?v=20260717" />
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
@@ -42,7 +41,7 @@
   <!-- Pure rules engine (also exercised by the Node test suite). -->
   <script src="../assets/js/employee-portal/rules.js?v=20260703"></script>
   <!-- Role (persona) configuration: identity, navigation, Home data. -->
-  <script src="../assets/js/employee-portal/personas.js?v=20260704"></script>
+  <script src="../assets/js/employee-portal/personas.js?v=20260717"></script>
   <!-- File sniffing, CSV parsing, minimal XLSX reader. -->
   <script src="../assets/js/employee-portal/files.js?v=20260703"></script>
   <!-- Demonstration-mode workflow store (Dataverse entity contract). -->
@@ -55,11 +54,11 @@
   <!-- Demonstration processing engine (pipeline, workbook, execution). -->
   <script src="../assets/js/employee-portal/workflow.js?v=20260703"></script>
   <!-- Views -->
-  <script src="../assets/js/employee-portal/views-home.js?v=20260704"></script>
+  <script src="../assets/js/employee-portal/views-home.js?v=20260717"></script>
   <script src="../assets/js/employee-portal/views-process.js?v=20260703"></script>
   <script src="../assets/js/employee-portal/views-review.js?v=20260703"></script>
   <script src="../assets/js/employee-portal/views-admin.js?v=20260703"></script>
-  <!-- Shell: authentication gate, navigation, router, dashboard. -->
-  <script src="../assets/js/employee-portal/app.js?v=20260703"></script>
+  <!-- Shell: login (demonstration profile chooser), navigation, router. -->
+  <script src="../assets/js/employee-portal/app.js?v=20260717"></script>
 </body>
 </html>

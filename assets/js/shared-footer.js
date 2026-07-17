@@ -8,6 +8,16 @@
   const localeSuffix = /_cn\.html$/i.test(path) ? 'cn' : 'en';
   const isChinesePath = localeSuffix !== 'en';
 
+  /* Single reversible source flag: whether ShoreVest One (the internal
+     demonstration environment) is surfaced on the public website. Hidden in
+     Phase 2B. When re-enabled, the footer "Access" group includes it again. */
+  const siteConfig = window.SHOREVEST_SITE_CONFIG || {};
+  const showShoreVestOne = siteConfig.showShoreVestOnePublicLink === true;
+  const shoreVestOneLinkEn = showShoreVestOne
+    ? `\n          <a href="${siteHref('employee-portal/index.html')}" target="_blank" rel="noopener">ShoreVest One</a>` : '';
+  const shoreVestOneLinkCn = showShoreVestOne
+    ? `\n          <a href="${siteHref('employee-portal/index.html')}" target="_blank" rel="noopener">ShoreVest One</a>` : '';
+
   /* Footer brand lock-up uses a static SVG wordmark with PNG fallback. */
 
   const footerTemplateEn = `
@@ -29,8 +39,7 @@
         <a href="${siteHref('insights.html')}#archive">China Debt Dynamics</a>
         <span class="sv-footer__access" role="group" aria-label="Access">
           <span class="sv-footer__access-label">Access</span>
-          <a href="${siteHref('investor-portal/index.html')}">Investor Portal</a>
-          <a href="${siteHref('employee-portal/index.html')}" target="_blank" rel="noopener">ShoreVest One</a>
+          <a href="${siteHref('investor-portal/index.html')}">Investor Portal</a>${shoreVestOneLinkEn}
         </span>
       </nav>
     </div>
@@ -69,8 +78,7 @@
         <a href="${siteHref('insights_cn.html')}#archive">中国债务动态</a>
         <span class="sv-footer__access" role="group" aria-label="访问">
           <span class="sv-footer__access-label">访问</span>
-          <a href="${siteHref('investor-portal/index.html')}">投资者门户</a>
-          <a href="${siteHref('employee-portal/index.html')}" target="_blank" rel="noopener">ShoreVest One</a>
+          <a href="${siteHref('investor-portal/index.html')}">投资者门户</a>${shoreVestOneLinkCn}
         </span>
       </nav>
     </div>
