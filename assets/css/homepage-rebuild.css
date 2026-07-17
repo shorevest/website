@@ -1903,7 +1903,7 @@ main > section + section {
   --sv-image-shadow: 0 18px 42px rgba(13, 35, 43, 0.18), 0 6px 18px rgba(13, 35, 43, 0.12);
 }
 
-body :where(img):not(.sv-header img):not(.sv-footer img):not([src*="/brand/"]):not([src*="assets/brand/"]):not([src*="favicon"]):not([src*="apple-touch-icon"]) {
+body :where(img):not(.sv-header img):not(.sv-footer img):not([src*="/brand/"]):not([src*="assets/brand/"]):not([src*="favicon"]):not([src*="apple-touch-icon"]):not([src*="what-we-value-calligraphy"]) {
   box-shadow: var(--sv-image-shadow) !important;
 }
 
