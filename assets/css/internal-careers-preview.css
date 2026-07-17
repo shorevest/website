@@ -219,6 +219,28 @@ body.careers-preview-page .careers-values-section .careers-two-col {
 }
 body.careers-preview-page .careers-values-section .careers-two-col > :first-child { grid-column: 1 / 5; }
 body.careers-preview-page .careers-values-section .careers-two-col > :last-child { grid-column: 5 / 13; }
+body.careers-preview-page .careers-values-image-placeholder {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(100%, 280px);
+  aspect-ratio: 1 / 1;
+  margin-top: clamp(28px, 4vw, 56px);
+  border: 1px solid var(--sv-border-dark, rgba(252,249,241,.22));
+  background:
+    linear-gradient(135deg, transparent calc(50% - .5px), rgba(252,249,241,.22) 50%, transparent calc(50% + .5px)),
+    linear-gradient(45deg, transparent calc(50% - .5px), rgba(252,249,241,.22) 50%, transparent calc(50% + .5px)),
+    rgba(252,249,241,.035);
+  color: var(--sv-faint-on-dark, rgba(252,249,241,.62));
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+html[lang="zh-CN"] body.careers-preview-page .careers-values-image-placeholder {
+  font-family: var(--sv-cn);
+  letter-spacing: .12em;
+}
 body.careers-preview-page .careers-values {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
