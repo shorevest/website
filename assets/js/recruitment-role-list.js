@@ -10,18 +10,43 @@
   var MANIFEST_PATH = 'assets/data/recruitment/roles.v1.json';
   var SUPPORTED_LOCALES = { en: true, 'zh-CN': true };
   var LINK_LABELS = { en: 'View role', 'zh-CN': '查看职位' };
-  var DETAIL_PATH_PATTERN = /^careers\/[a-z0-9]+(?:-[a-z0-9]+)*(?:_cn)?\.html$/;
+  var EMPLOYMENT_TYPE_LABELS = {
+    en: {
+      'Full-time': 'Full-time',
+      'Part-time': 'Part-time',
+      Internship: 'Internship',
+      Contract: 'Contract'
+    },
+    'zh-CN': {
+      'Full-time': '全职',
+      'Part-time': '兼职',
+      Internship: '实习',
+      Contract: '合同制'
+    }
+  };
+  var DETAIL_PATH_PATTERNS = {
+    en: /^careers\/[a-z0-9]+(?:-[a-z0-9]+)*\.html$/,
+    'zh-CN': /^careers\/[a-z0-9]+(?:-[a-z0-9]+)*_cn\.html$/
+  };
 
   function getLocale(doc) {
     var lang = doc && doc.documentElement ? doc.documentElement.lang : '';
     return SUPPORTED_LOCALES[lang] ? lang : null;
   }
 
-  function isSafeDetailPath(path) {
-    if (typeof path !== 'string') return false;
-    if (!DETAIL_PATH_PATTERN.test(path)) return false;
+  function getEmploymentTypeLabel(employmentType, locale) {
+    var labels = EMPLOYMENT_TYPE_LABELS[locale];
+    return labels && Object.prototype.hasOwnProperty.call(labels, employmentType) ? labels[employmentType] : null;
+  }
+
+  function isSafeDetailPath(path, locale) {
+    var pattern = DETAIL_PATH_PATTERNS[locale];
+    if (typeof path !== 'string' || !pattern) return false;
     if (path.indexOf('://') !== -1 || path.indexOf('//') === 0) return false;
-    return true;
+    if (/^(?:javascript|data|mailto):/i.test(path)) return false;
+    if (path.indexOf('..') !== -1) return false;
+    if (path.indexOf('application-form') !== -1) return false;
+    return pattern.test(path);
   }
 
   function appendMeta(doc, row, value) {
@@ -36,8 +61,11 @@
   function buildRoleRow(doc, role, locale) {
     var localized = role && role.locales ? role.locales[locale] : null;
     if (!localized || role.status !== 'active') return null;
-    if (!isSafeDetailPath(localized.detailPath)) return null;
+    if (!isSafeDetailPath(localized.detailPath, locale)) return null;
     if (typeof localized.title !== 'string' || localized.title.trim() === '') return null;
+
+    var employmentTypeLabel = getEmploymentTypeLabel(role.employmentType, locale);
+    if (!employmentTypeLabel) return null;
 
     var row = doc.createElement('div');
     row.className = 'careers-role-row';
@@ -49,7 +77,7 @@
 
     var hasTeam = appendMeta(doc, row, localized.team);
     var hasLocation = appendMeta(doc, row, localized.location);
-    var hasEmploymentType = appendMeta(doc, row, role.employmentType);
+    var hasEmploymentType = appendMeta(doc, row, employmentTypeLabel);
     if (!hasTeam || !hasLocation || !hasEmploymentType) return null;
 
     var link = doc.createElement('a');

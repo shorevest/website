@@ -59,7 +59,7 @@ function role(id, status = 'active', overrides = {}) {
       en: { title: `Title ${id}`, team: `Team ${id}`, location: `Location ${id}`, detailPath: `careers/${id}.html` },
       'zh-CN': { title: `职位 ${id}`, team: `团队 ${id}`, location: `地点 ${id}`, detailPath: `careers/${id}_cn.html` }
     },
-    employmentType: `Full-time ${id}`,
+    employmentType: 'Full-time',
     applicationEnabled: false,
     ...overrides
   };
@@ -80,7 +80,8 @@ assert.strictEqual(renderer.renderRolesFromManifest(d, manifest([role('investmen
 assert.match(d.container.textContent, /Title investment-analyst/);
 assert.match(d.container.textContent, /Team investment-analyst/);
 assert.match(d.container.textContent, /Location investment-analyst/);
-assert.match(d.container.textContent, /Full-time investment-analyst/);
+assert.match(d.container.textContent, /Full-time/);
+assert.doesNotMatch(d.container.textContent, /全职/);
 assert.strictEqual(links(d)[0].href, 'careers/investment-analyst.html');
 assert.strictEqual(links(d)[0].textContent, 'View role');
 
@@ -89,8 +90,34 @@ assert.strictEqual(renderer.renderRolesFromManifest(d, manifest([role('investmen
 assert.match(d.container.textContent, /职位 investment-analyst/);
 assert.match(d.container.textContent, /团队 investment-analyst/);
 assert.match(d.container.textContent, /地点 investment-analyst/);
+assert.match(d.container.textContent, /全职/);
+assert.doesNotMatch(d.container.textContent, /Full-time/);
 assert.strictEqual(links(d)[0].href, 'careers/investment-analyst_cn.html');
 assert.strictEqual(links(d)[0].textContent, '查看职位');
+
+
+for (const [employmentType, expectedLabel] of [['Part-time', '兼职'], ['Internship', '实习'], ['Contract', '合同制']]) {
+  d = doc('zh-CN', ZH_EMPTY);
+  assert.strictEqual(renderer.renderRolesFromManifest(d, manifest([role(`localized-${employmentType.toLowerCase()}`, 'active', { employmentType })])), 1, `${employmentType} renders in Chinese`);
+  assert.match(d.container.textContent, new RegExp(expectedLabel));
+  assert.doesNotMatch(d.container.textContent, new RegExp(employmentType), `${employmentType} raw English label is not rendered on Chinese page`);
+}
+
+d = doc('en');
+assert.strictEqual(renderer.renderRolesFromManifest(d, manifest([role('unsupported-employment', 'active', { employmentType: 'Temporary' })])), 0, 'unsupported employment type is skipped');
+assert.strictEqual(d.container.textContent, EN_EMPTY);
+
+d = doc('en');
+const englishWithChinesePath = role('english-with-chinese-path');
+englishWithChinesePath.locales.en.detailPath = 'careers/english-with-chinese-path_cn.html';
+assert.strictEqual(renderer.renderRolesFromManifest(d, manifest([englishWithChinesePath])), 0, 'English page rejects Chinese detail path suffix');
+assert.strictEqual(d.container.textContent, EN_EMPTY);
+
+d = doc('zh-CN', ZH_EMPTY);
+const chineseWithEnglishPath = role('chinese-with-english-path');
+chineseWithEnglishPath.locales['zh-CN'].detailPath = 'careers/chinese-with-english-path.html';
+assert.strictEqual(renderer.renderRolesFromManifest(d, manifest([chineseWithEnglishPath])), 0, 'Chinese page rejects English detail path without suffix');
+assert.strictEqual(d.container.textContent, ZH_EMPTY);
 
 d = doc('en');
 assert.strictEqual(renderer.renderRolesFromManifest(d, manifest([role('draft-role', 'draft'), role('closed-role', 'closed'), role('archived-role', 'archived')])), 0, 'inactive roles are skipped');
