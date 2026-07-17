@@ -135,7 +135,8 @@
     'investor-access',
     'investor-portal',
     'investor-access-portal-terms',
-    'contact'
+    'contact',
+    'careers'
   ];
 
   const localizedPageHref = (base, locale) => pageHref(`${base}${locale === 'en' ? '' : `_${locale}`}.html`);
@@ -174,7 +175,7 @@
         { href: pageHref('insights.html'), label: 'Insights' },
         { href: pageHref('press.html'), label: 'Media' },
         { href: pageHref('team.html'), label: 'Team' },
-        { href: pageHref('internal-preview/careers.html'), label: 'Careers' }
+        { href: pageHref('careers.html'), label: 'Careers' }
       ],
       investorPortalHref: pageHref('investor-portal/index.html'),
       investorPortalLabel: 'Investor portal',
@@ -192,7 +193,7 @@
         { href: pageHref('insights_cn.html'), label: '洞察' },
         { href: pageHref('press_cn.html'), label: '媒体' },
         { href: pageHref('team_cn.html'), label: '团队' },
-        { href: pageHref('internal-preview/careers_cn.html'), label: '人才招聘' }
+        { href: pageHref('careers_cn.html'), label: '人才招聘' }
       ],
       investorPortalHref: pageHref('investor-portal/index_cn.html'),
       investorPortalLabel: '投资者门户',
