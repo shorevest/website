@@ -1647,22 +1647,15 @@ body.homepage .sv-hero__image img {
   display: block; width: 100%; height: 100%;
   object-fit: cover; object-position: center;
   filter: grayscale(1) contrast(1.02);
-  transform: scale(1.001);
-  transform-origin: center;
-  transition:
-    filter 720ms cubic-bezier(.2, .7, .2, 1),
-    transform 1200ms cubic-bezier(.2, .7, .2, 1);
-  will-change: transform, filter;
+  transition: filter 720ms cubic-bezier(.2, .7, .2, 1);
+  will-change: filter;
 }
-/* Restrained, cinematic reveal: settle toward colour rather than snapping to a
-   full-saturation pop, paired with a slow, almost-imperceptible push-in. */
+/* Keep the hero image stationary on hover; only reveal colour. */
 body.homepage .sv-hero__image:hover img {
   filter: grayscale(0.12) contrast(1.02);
-  transform: scale(1.035);
 }
 @media (prefers-reduced-motion: reduce) {
-  body.homepage .sv-hero__image img { transition: filter 320ms ease; transform: none; }
-  body.homepage .sv-hero__image:hover img { transform: none; }
+  body.homepage .sv-hero__image img { transition: filter 320ms ease; }
 }
 body.homepage .sv-hero__panel {
   position: absolute; z-index: 2;
