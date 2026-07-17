@@ -180,6 +180,7 @@ body.investor-portal-page .ip-assure__v { margin: 0; font: 400 13.5px/1.55 var(-
   body.investor-portal-page .ip-hero__signin { padding: 0; border-left: 0; }
   body.investor-portal-page .login-form-container { max-width: none; }
   body.investor-portal-page .ip-assure__inner { grid-template-columns: 1fr; gap: 32px; }
+  body.investor-portal-page .ip-access__head h2 { white-space: normal; }
 }
 @media (max-width: 600px) {
   body.investor-portal-page .ip-assure__grid { grid-template-columns: 1fr; }
@@ -197,6 +198,11 @@ body.investor-portal-page .ip-assure__v { margin: 0; font: 400 13.5px/1.55 var(-
     display: grid;
     gap: 10px;
   }
+}
+/* iOS Safari zooms the page when a focused field is set below 16px; hold
+   the sign-in field at 16px on small screens so focusing never triggers it. */
+@media (max-width: 720px) {
+  body.investor-portal-page .form-control { font-size: 16px; }
 }
 
 /* Client directive: no decorative horizontal rules/bars. */

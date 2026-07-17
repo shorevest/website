@@ -268,6 +268,12 @@ body.insights-page .cdd-arc__closer-sub {
   font: 600 11px/1 var(--sv-font); letter-spacing: 0.1em; text-transform: uppercase;
   color: var(--sv-cinnabar); text-decoration: none;
   border-bottom: 1px solid transparent; padding-bottom: 3px; transition: border-color .15s ease;
+  position: relative;
+}
+/* Invisible touch-target extension: keeps the quiet closer look while giving
+   the link a finger-sized hit area on touch screens. */
+body.insights-page .cdd-arc__closer-sub::after {
+  content: ""; position: absolute; inset: -14px -10px;
 }
 body.insights-page .cdd-arc__closer-sub:hover { border-color: var(--sv-cinnabar); }
 
@@ -660,6 +666,12 @@ body.insights-page .cdd-arc__search-input {
 body.insights-page .cdd-arc__search-input::placeholder { color: var(--sv-muted, #6E7169); }
 body.insights-page .cdd-arc__search-input:focus-visible { outline: none; }
 body.insights-page .cdd-arc__search-input::-webkit-search-cancel-button { cursor: pointer; }
+/* iOS Safari zooms the page when a focused field is set below 16px; hold
+   form text at 16px on small screens so focusing never triggers that zoom. */
+@media (max-width: 720px) {
+  body.insights-page .cdd-arc__search-input,
+  body.insights-page .research-sub__field input { font-size: 16px; }
+}
 
 /* --- Row affordance: title nudges + Read arrow slides on hover/focus --- */
 body.insights-page .cdd-arc__row-title { transition: color .15s ease, transform .18s ease; }
