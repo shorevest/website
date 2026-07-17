@@ -839,3 +839,58 @@ html[lang="zh-CN"] body.careers-preview-page .careers-hero__meta { font-family: 
     width: 100%;
   }
 }
+
+/* Cross-links: reuse the homepage sv-textlink grammar, recolored for dark surfaces. */
+body.careers-preview-page .sv-textlink { color: var(--sv-cinnabar-light, #E8998F); }
+body.careers-preview-page .sv-textlink:hover,
+body.careers-preview-page .sv-textlink:focus-visible { color: var(--sv-ivory, #FCF9F1); }
+body.careers-preview-page .careers-copy > .sv-textlink { margin-top: 26px; }
+html[lang="zh-CN"] body.careers-preview-page .sv-textlink { font-family: var(--sv-cn); letter-spacing: .06em; }
+
+/* Hero actions: primary CTA plus a quiet team cross-link. */
+body.careers-preview-page .careers-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 28px;
+}
+
+/* Joining ShoreVest: hairline between the two ledger columns. */
+body.careers-preview-page .careers-joining .careers-ledger { gap: 0; }
+body.careers-preview-page .careers-joining .careers-ledger > div { padding-right: clamp(26px, 4vw, 64px); }
+body.careers-preview-page .careers-joining .careers-ledger > div + div {
+  border-left: 1px solid var(--sv-border-dark, rgba(252,249,241,.14));
+  padding-left: clamp(26px, 4vw, 64px);
+  padding-right: 0;
+}
+@media (max-width: 760px) {
+  body.careers-preview-page .careers-joining .careers-ledger > div { padding-right: 0; }
+  body.careers-preview-page .careers-joining .careers-ledger > div + div {
+    border-left: 0;
+    padding-left: 0;
+    margin-top: clamp(22px, 3vw, 30px);
+    border-top: 1px solid var(--sv-border-dark, rgba(252,249,241,.14));
+  }
+}
+
+/* Open Roles: next-step links under the (currently empty) role list. */
+body.careers-preview-page .careers-open-roles__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px 36px;
+  margin-top: clamp(26px, 3vw, 38px);
+}
+
+/* Recruitment notices: inline links (e.g. the fraud-reporting contact reference). */
+body.careers-preview-page .careers-notices__grid a {
+  color: var(--sv-qing-light, #7AAFAF);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+body.careers-preview-page .careers-notices__grid a:hover,
+body.careers-preview-page .careers-notices__grid a:focus-visible { color: var(--sv-ivory, #FCF9F1); }
+
+/* CN font coverage for the synced joining ledger. */
+html[lang="zh-CN"] body.careers-preview-page .careers-ledger h3,
+html[lang="zh-CN"] body.careers-preview-page .careers-ledger p { font-family: var(--sv-cn); }
+html[lang="zh-CN"] body.careers-preview-page .careers-ledger p { line-height: 1.8; }
