@@ -39,7 +39,7 @@
         <a href="${siteHref('insights.html')}">Insights</a>
         <a href="${siteHref('press.html')}">Media</a>
         <a href="${siteHref('team.html')}">Team</a>
-        <a href="https://www.pafg.com/" target="_blank" rel="noopener noreferrer">PAFG</a>
+        <a href="${siteHref('internal-preview/careers.html')}">Careers</a>
         <a href="${siteHref('contact.html')}">Contact</a>
         <a href="${siteHref('insights.html')}#archive">China Debt Dynamics</a>
         <span class="sv-footer__access" role="group" aria-label="Access">
@@ -87,7 +87,7 @@
         <a href="${siteHref('strategy_cn.html')}">策略</a>
         <a href="${siteHref('press_cn.html')}">媒体</a>
         <a href="${siteHref('team_cn.html')}">团队</a>
-        <a href="https://www.pafg.com/" target="_blank" rel="noopener noreferrer">PAFG</a>
+        <a href="${siteHref('internal-preview/careers_cn.html')}">人才招聘</a>
         <a href="${siteHref('contact_cn.html')}">联系</a>
         <a href="${siteHref('insights_cn.html')}#archive">中国债务动态</a>
         <span class="sv-footer__access" role="group" aria-label="访问">

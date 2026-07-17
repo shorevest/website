@@ -174,7 +174,7 @@
         { href: pageHref('insights.html'), label: 'Insights' },
         { href: pageHref('press.html'), label: 'Media' },
         { href: pageHref('team.html'), label: 'Team' },
-        { href: 'https://www.pafg.com/', label: 'PAFG', external: true }
+        { href: pageHref('internal-preview/careers.html'), label: 'Careers' }
       ],
       investorPortalHref: pageHref('investor-portal/index.html'),
       investorPortalLabel: 'Investor portal',
@@ -192,7 +192,7 @@
         { href: pageHref('insights_cn.html'), label: '洞察' },
         { href: pageHref('press_cn.html'), label: '媒体' },
         { href: pageHref('team_cn.html'), label: '团队' },
-        { href: 'https://www.pafg.com/', label: 'PAFG', external: true }
+        { href: pageHref('internal-preview/careers_cn.html'), label: '人才招聘' }
       ],
       investorPortalHref: pageHref('investor-portal/index_cn.html'),
       investorPortalLabel: '投资者门户',
@@ -218,7 +218,7 @@
      rendering we return early, so every legacy nav/active/annotate routine
      further down is bypassed entirely.
      -------------------------------------------------------------------- */
-  const navBases = ['firm', 'strategy', 'insights', 'press', 'team', 'pafg'];
+  const navBases = ['firm', 'strategy', 'insights', 'press', 'team', 'careers'];
   const svLang = localeSuffix === 'en'
     ? `<a class="sv-lang" href="${localeHrefs.cn}"><span class="on">EN</span><span class="sep">|</span>中文</a>`
     : `<a class="sv-lang" href="${localeHrefs.en}" lang="zh-Hans"><span>EN</span><span class="sep">|</span><span class="on">中文</span></a>`;
