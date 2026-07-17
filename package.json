@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "validate:recruitment": "node scripts/validate-recruitment-roles.js",
-    "test:recruitment": "node tests/recruitment-roles.test.js"
+    "test:recruitment": "node tests/recruitment-roles.test.js && node tests/recruitment-role-list.test.js"
   },
   "devDependencies": {
     "ajv": "8.17.1",
