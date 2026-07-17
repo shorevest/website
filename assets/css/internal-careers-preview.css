@@ -652,7 +652,7 @@ body.careers-preview-page .careers-path__name {
   text-wrap: balance;
 }
 body.careers-preview-page .careers-path__name::before {
-  content: counter(careers-path, decimal-leading-zero);
+  content: counter(careers-path);
   display: block;
   margin-bottom: 12px;
   font: 600 11px/1 var(--sv-font);
