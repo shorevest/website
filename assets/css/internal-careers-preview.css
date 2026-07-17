@@ -689,9 +689,12 @@ html[lang="zh-CN"] body.careers-preview-page .careers-hero__meta { font-family: 
     row-gap: clamp(28px, 8vw, 42px);
   }
   body.careers-preview-page .careers-title {
-    max-width: 12ch;
-    font-size: clamp(34px, 10.4vw, 44px);
-    line-height: 1.02;
+    max-width: 14ch;
+    font-size: clamp(34px, 9.4vw, 42px);
+    line-height: 1.06;
+  }
+  body.careers-preview-page .careers-hero__body .careers-lede {
+    max-width: none;
   }
   body.careers-preview-page .careers-hero__body {
     margin-top: clamp(18px, 5vw, 24px);
@@ -704,13 +707,13 @@ html[lang="zh-CN"] body.careers-preview-page .careers-hero__meta { font-family: 
   body.careers-preview-page .careers-block p,
   body.careers-preview-page .careers-values p,
   body.careers-preview-page .careers-ledger p {
-    font-size: 15.75px;
-    line-height: 1.64;
+    font-size: 16px;
+    line-height: 1.66;
   }
   body.careers-preview-page .careers-hero__meta {
     margin-top: 18px;
     font-size: 11px;
-    letter-spacing: .1em;
+    letter-spacing: .08em;
   }
   body.careers-preview-page .careers-action {
     width: 100%;
@@ -786,6 +789,7 @@ html[lang="zh-CN"] body.careers-preview-page .careers-hero__meta { font-family: 
 @media (max-width: 380px) {
   body.careers-preview-page .careers-title {
     font-size: 32px;
+    max-width: 13ch;
   }
   body.careers-preview-page .careers-hero__media {
     width: 100%;
