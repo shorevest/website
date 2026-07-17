@@ -690,18 +690,75 @@ html[lang="zh-CN"] body.careers-preview-page .careers-notices__grid p { line-hei
   body.careers-preview-page .careers-block p { max-width: none; }
 }
 
-/* Career Paths: function ledger. Rows share the section-head grid
-   (name at columns 1-5, copy at 6-13) so the copy column aligns with the
-   intro paragraph above. */
-body.careers-preview-page .careers-paths {
+/* Career Paths: one team at a time. The function rows sit in a horizontal
+   scroll-snap track stepped by arrow buttons, so the section holds a single
+   row's height instead of listing every team. Each slide keeps the
+   section-head grid (name at columns 1-5, copy at 6-13) so the copy column
+   aligns with the intro paragraph above. Without JS the controls stay hidden
+   and the track scrolls natively with a visible scrollbar. */
+body.careers-preview-page .careers-paths-carousel {
   margin-top: clamp(38px, 4vw, 58px);
+}
+body.careers-preview-page .careers-paths-carousel__controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 16px;
+}
+body.careers-preview-page .careers-paths-carousel:not(.is-ready) .careers-paths-carousel__controls { display: none; }
+body.careers-preview-page .careers-paths-carousel__count {
+  margin: 0;
+  font: 600 12px/1 var(--sv-font);
+  letter-spacing: .14em;
+  font-variant-numeric: tabular-nums;
+  color: var(--sv-meta-on-dark, rgba(252,249,241,.78));
+}
+body.careers-preview-page .careers-paths-carousel__count-sep {
+  margin: 0 7px;
+  color: var(--sv-faint-on-dark, rgba(252,249,241,.45));
+}
+body.careers-preview-page .careers-paths-carousel__nav { display: flex; gap: 10px; }
+body.careers-preview-page .careers-paths-carousel__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--sv-border-dark, rgba(252,249,241,.14));
+  background: transparent;
+  color: var(--sv-ivory, #FCF9F1);
+  cursor: pointer;
+  transition: border-color 180ms ease, color 180ms ease;
+}
+body.careers-preview-page .careers-paths-carousel__btn svg { width: 17px; height: 17px; display: block; }
+body.careers-preview-page .careers-paths-carousel__btn:hover:not(:disabled),
+body.careers-preview-page .careers-paths-carousel__btn:focus-visible {
+  border-color: var(--sv-qing-light, #7AAFAF);
+  color: var(--sv-qing-light, #7AAFAF);
+}
+body.careers-preview-page .careers-paths-carousel__btn:disabled {
+  opacity: .35;
+  cursor: default;
+}
+body.careers-preview-page .careers-paths {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
   border-top: 1px solid var(--sv-ivory, #FCF9F1);
 }
+body.careers-preview-page .careers-paths-carousel.is-ready .careers-paths { scrollbar-width: none; }
+body.careers-preview-page .careers-paths-carousel.is-ready .careers-paths::-webkit-scrollbar { display: none; }
 body.careers-preview-page .careers-path {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   gap: clamp(28px, 3.2vw, 44px);
   align-items: start;
+  align-content: start;
   padding: clamp(26px, 2.8vw, 38px) 0;
   border-bottom: 1px solid var(--sv-border-dark, rgba(252,249,241,.14));
 }
@@ -816,10 +873,14 @@ html[lang="zh-CN"] body.careers-preview-page .careers-hero__meta { font-family: 
   body.careers-preview-page .careers-path {
     gap: 18px;
   }
-  body.careers-preview-page .careers-paths,
+  body.careers-preview-page .careers-paths-carousel,
   body.careers-preview-page .careers-ledger,
   body.careers-preview-page .careers-role-list {
     margin-top: 30px;
+  }
+  body.careers-preview-page .careers-paths-carousel__btn {
+    width: 42px;
+    height: 42px;
   }
   body.careers-preview-page .careers-path,
   body.careers-preview-page .careers-block,
