@@ -26,4 +26,32 @@ for (const file of fs.readdirSync(root).filter(f => f.endsWith('.html'))) {
     if (target) assert.ok(exists(target), `${file} link ${href} should resolve to ${target}`);
   }
 }
-console.log('site QA route, link, language, and metadata tests passed');
+// --- Organization JSON-LD structured data (home.html / home_cn.html) ---
+function organizationJsonLd(html, label) {
+  const blocks = [...html.matchAll(/<script\s+type="application\/ld\+json">([\s\S]*?)<\/script>/gi)]
+    .map(m => JSON.parse(m[1]))
+    .filter(obj => obj['@type'] === 'Organization');
+  assert.strictEqual(blocks.length, 1, `${label} should contain exactly one Organization JSON-LD block`);
+  return blocks[0];
+}
+const orgEn = organizationJsonLd(read('home.html'), 'home.html');
+const orgCn = organizationJsonLd(read('home_cn.html'), 'home_cn.html');
+for (const [label, org] of [['home.html', orgEn], ['home_cn.html', orgCn]]) {
+  assert.strictEqual(org['@id'], 'https://shorevest.com/#organization', `${label} organization @id`);
+  assert.strictEqual(org.name, 'ShoreVest Partners', `${label} organization name`);
+  assert.ok(Array.isArray(org.alternateName), `${label} alternateName is an array`);
+  assert.ok(org.alternateName.includes('ShoreVest'), `${label} alternateName includes ShoreVest`);
+  assert.ok(org.alternateName.includes('新岸资本'), `${label} alternateName includes 新岸资本`);
+  assert.strictEqual(org.url, 'https://shorevest.com/', `${label} organization url`);
+  assert.strictEqual(org.foundingDate, '2016', `${label} organization foundingDate`);
+  assert.strictEqual(org.founder && org.founder.name, 'Benjamin Fanger', `${label} founder name`);
+  assert.ok(Array.isArray(org.sameAs), `${label} sameAs is an array`);
+  assert.ok(org.sameAs.includes('https://www.linkedin.com/company/shorevest-partners/'), `${label} sameAs includes LinkedIn`);
+  assert.ok(org.sameAs.includes('https://adviserinfo.sec.gov/firm/summary/284681'), `${label} sameAs includes SEC`);
+}
+// Both language versions must resolve to one stable entity ID.
+assert.strictEqual(orgEn['@id'], orgCn['@id'], 'EN and CN homepages share one organization @id');
+// The declared logo asset must exist locally.
+assert.ok(exists('assets/apple-touch-icon-cinnabar.png'), 'organization logo asset exists');
+
+console.log('site QA route, link, language, metadata, and organization schema tests passed');
