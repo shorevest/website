@@ -2155,8 +2155,11 @@ body.homepage .sv-footer__social-icon {
    for seven days after the configured publication date. The alert is a
    tailored cinnabar capsule, not the standard nav underline/glow treatment. */
 body.homepage .sv-nav a.sv-nav__new-insights {
+  display: inline-flex;
+  align-items: center;
+  height: 42px;
+  padding: 0 16px;
   color: var(--sv-ivory) !important;
-  padding: 8px 13px 9px;
   border: 1px solid rgba(138, 31, 18, 0.18);
   background: var(--sv-cinnabar);
   box-shadow: inset 0 0 0 1px rgba(252, 249, 241, 0.18), 0 8px 18px rgba(24, 37, 36, 0.10);
