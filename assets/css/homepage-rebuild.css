@@ -271,9 +271,8 @@ body.homepage .sv-nav a::after {
 }
 body.homepage .sv-nav a:hover { color: var(--sv-cinnabar); }
 body.homepage .sv-nav a:hover::after { transform: scaleX(1); }
-/* Active nav state — cinnabar text + underline on the current page, matching hover */
-body.homepage .sv-nav a[aria-current="page"] { color: var(--sv-cinnabar); }
-body.homepage .sv-nav a[aria-current="page"]::after { transform: scaleX(1); }
+/* Keep current-page links visually identical to the homepage default state.
+   Hover remains the only desktop navigation accent so every page header matches the homepage. */
 @media (prefers-reduced-motion: reduce) {
   body.homepage .sv-nav a::after { transition: none; }
 }
@@ -371,8 +370,7 @@ body.homepage .sv-mobile-menu a {
   color: var(--sv-ink); text-decoration: none;
   border-bottom: 1px solid rgba(216, 206, 176, 0.74);
 }
-/* Active nav state — cinnabar on the current page in the mobile menu */
-body.homepage .sv-mobile-menu a[aria-current="page"] { color: var(--sv-cinnabar); }
+/* Keep current-page links visually identical to the homepage default state in the mobile menu. */
 body.homepage .sv-mobile-menu .sv-mobile-utils {
   display: flex; flex-direction: column; gap: 12px; margin-top: clamp(26px, 7vw, 38px);
 }
