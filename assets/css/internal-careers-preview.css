@@ -624,6 +624,15 @@ body.careers-preview-page .careers-pagenav__links a.is-current {
   color: var(--sv-ivory, #FCF9F1);
   border-bottom-color: var(--sv-cinnabar, #C93B2A);
 }
+
+/* Keep the careers in-page navigation from overlaying the footer; the
+   footer should read like the homepage chrome once the user reaches it. */
+body.careers-preview-page .careers-pagenav.is-footer-hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-100%);
+}
+
 /* Anchor targets clear both the fixed header and the sticky page nav. */
 body.careers-preview-page main [id] { scroll-margin-top: calc(var(--header-height, 80px) + 76px); }
 
