@@ -623,3 +623,60 @@ html[lang="zh-CN"] body.careers-preview-page .careers-notices__grid p { line-hei
   body.careers-preview-page .careers-copy p,
   body.careers-preview-page .careers-block p { max-width: none; }
 }
+
+/* Career Paths: numbered function ledger. Rows share the section-head grid
+   (name at columns 1-5, copy at 6-13) so the copy column aligns with the
+   intro paragraph above. */
+body.careers-preview-page .careers-paths {
+  counter-reset: careers-path;
+  margin-top: clamp(38px, 4vw, 58px);
+  border-top: 1px solid var(--sv-ivory, #FCF9F1);
+}
+body.careers-preview-page .careers-path {
+  counter-increment: careers-path;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: clamp(28px, 3.2vw, 44px);
+  align-items: start;
+  padding: clamp(26px, 2.8vw, 38px) 0;
+  border-bottom: 1px solid var(--sv-border-dark, rgba(252,249,241,.14));
+}
+body.careers-preview-page .careers-path > .careers-path__name { grid-column: 1 / 6; min-width: 0; }
+body.careers-preview-page .careers-path > .careers-copy { grid-column: 6 / 13; min-width: 0; }
+body.careers-preview-page .careers-path__name {
+  margin: 0;
+  font: 500 clamp(19px, 1.9vw, 26px)/1.22 var(--sv-font);
+  letter-spacing: -.014em;
+  text-transform: none;
+  color: var(--sv-ivory, #FCF9F1);
+  text-wrap: balance;
+}
+body.careers-preview-page .careers-path__name::before {
+  content: counter(careers-path, decimal-leading-zero);
+  display: block;
+  margin-bottom: 12px;
+  font: 600 11px/1 var(--sv-font);
+  letter-spacing: .16em;
+  color: var(--sv-qing-light, #7AAFAF);
+}
+html[lang="zh-CN"] body.careers-preview-page .careers-path__name { font-family: var(--sv-cn); }
+@media (max-width: 980px) {
+  body.careers-preview-page .careers-path { grid-template-columns: 1fr; gap: 14px; }
+  body.careers-preview-page .careers-path > .careers-path__name,
+  body.careers-preview-page .careers-path > .careers-copy { grid-column: auto; }
+}
+
+/* Hero offices line: quiet factual meta between the lede and the CTA. */
+body.careers-preview-page .careers-hero__meta {
+  margin: 22px 0 0;
+  font: 600 12px/1.5 var(--sv-font);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--sv-meta-on-dark, rgba(252,249,241,.78));
+}
+html[lang="zh-CN"] body.careers-preview-page .careers-hero__meta { font-family: var(--sv-cn); letter-spacing: .2em; }
+
+/* Smooth in-page scrolling for the pagenav and hero CTA anchors. */
+@media (prefers-reduced-motion: no-preference) {
+  html:has(body.careers-preview-page) { scroll-behavior: smooth; }
+}
