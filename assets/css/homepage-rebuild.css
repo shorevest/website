@@ -196,7 +196,7 @@ body.homepage .sv-btn--ghost-light:hover { border-color: var(--sv-ink); backgrou
 body.homepage .sv-textlink {
   position: relative;
   display: inline-flex; align-items: center; gap: 9px;
-  font: 600 13px/1 var(--sv-font);
+  font: 400 13px/1 var(--sv-font);
   letter-spacing: 0.08em; text-transform: uppercase;
   color: var(--sv-cinnabar); text-decoration: none;
   padding-bottom: 4px;
