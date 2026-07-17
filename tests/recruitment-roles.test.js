@@ -41,7 +41,29 @@ assert.deepStrictEqual(validateManifest(manifest, schema), [], 'checked-in recru
 assert.strictEqual(manifest.schemaVersion, '1.0', 'manifest schemaVersion should be 1.0');
 assert.ok(!Number.isNaN(Date.parse(manifest.generatedAtUtc)), 'manifest generatedAtUtc should be parseable');
 assert.ok(Array.isArray(manifest.roles), 'manifest roles should be an array');
-assert.strictEqual(manifest.roles.length, 0, 'PR 1 must not publish an unapproved role');
+assert.strictEqual(manifest.roles.length, 2, 'temporary preview manifest should include two sample roles');
+assert.ok(manifest.roles.every((role) => role.status === 'active'), 'temporary preview roles should be active for role-list review');
+assert.ok(manifest.roles.every((role) => role.applicationEnabled === false), 'application submission remains disabled for every role');
+assert.ok(manifest.roles.every((role) => role.screening.workAuthorization.enabled === false), 'work authorization screening remains disabled');
+assert.ok(manifest.roles.every((role) => role.screening.roleSpecificQuestions.length === 0), 'no role-specific screening questions are present');
+
+
+const detailPages = [
+  'careers/investment-analyst.html',
+  'careers/investment-analyst_cn.html',
+  'careers/finance-fund-operations-associate.html',
+  'careers/finance-fund-operations-associate_cn.html'
+];
+detailPages.forEach((relativePath) => {
+  const absolutePath = path.join(root, relativePath);
+  assert.ok(fs.existsSync(absolutePath), `${relativePath} should exist`);
+  const html = fs.readFileSync(absolutePath, 'utf8');
+  assert.match(html, /<meta name="robots" content="noindex, nofollow, noarchive">/, `${relativePath} should be noindex`);
+  assert.ok(html.includes('INTERNAL PREVIEW') || html.includes('内部预览'), `${relativePath} should contain the internal-preview notice`);
+  assert.doesNotMatch(html, /<form\b/i, `${relativePath} must not contain a form`);
+  assert.doesNotMatch(html, /<input\b[^>]*type=["']file["']/i, `${relativePath} must not contain file inputs`);
+  assert.doesNotMatch(html, /<button\b/i, `${relativePath} must not contain active submission buttons`);
+});
 
 const validRole = {
   roleId: 'investment-analyst-2026-gz',

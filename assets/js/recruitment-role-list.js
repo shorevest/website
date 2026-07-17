@@ -10,6 +10,10 @@
   var MANIFEST_PATH = 'assets/data/recruitment/roles.v1.json';
   var SUPPORTED_LOCALES = { en: true, 'zh-CN': true };
   var LINK_LABELS = { en: 'View role', 'zh-CN': '查看职位' };
+  var EMPLOYMENT_TYPE_LABELS = {
+    en: { 'Full-time': 'Full-time', 'Part-time': 'Part-time', Internship: 'Internship', Contract: 'Contract' },
+    'zh-CN': { 'Full-time': '全职', 'Part-time': '兼职', Internship: '实习', Contract: '合同' }
+  };
   var DETAIL_PATH_PATTERN = /^careers\/[a-z0-9]+(?:-[a-z0-9]+)*(?:_cn)?\.html$/;
 
   function getLocale(doc) {
@@ -49,7 +53,8 @@
 
     var hasTeam = appendMeta(doc, row, localized.team);
     var hasLocation = appendMeta(doc, row, localized.location);
-    var hasEmploymentType = appendMeta(doc, row, role.employmentType);
+    var employmentType = EMPLOYMENT_TYPE_LABELS[locale] && EMPLOYMENT_TYPE_LABELS[locale][role.employmentType] ? EMPLOYMENT_TYPE_LABELS[locale][role.employmentType] : role.employmentType;
+    var hasEmploymentType = appendMeta(doc, row, employmentType);
     if (!hasTeam || !hasLocation || !hasEmploymentType) return null;
 
     var link = doc.createElement('a');

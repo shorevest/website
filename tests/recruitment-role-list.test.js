@@ -68,12 +68,18 @@ function role(id, status = 'active', overrides = {}) {
 function manifest(roles) { return { schemaVersion: '1.0', generatedAtUtc: '2026-07-17T00:00:00Z', roles }; }
 
 let d = doc('en');
-assert.strictEqual(renderer.renderRolesFromManifest(d, checkedInManifest), 0, 'empty checked-in manifest renders no English roles');
-assert.strictEqual(d.container.textContent, EN_EMPTY, 'English empty state is preserved');
+assert.strictEqual(renderer.renderRolesFromManifest(d, checkedInManifest), 2, 'checked-in manifest renders both English roles');
+assert.match(d.container.textContent, /Investment Analyst/);
+assert.match(d.container.textContent, /Finance and Fund Operations Associate/);
+assert.match(d.container.textContent, /Full-time/);
+assert.deepStrictEqual(links(d).map((link) => link.href), ['careers/investment-analyst.html', 'careers/finance-fund-operations-associate.html'], 'English role list links only to English detail pages');
 
 d = doc('zh-CN', ZH_EMPTY);
-assert.strictEqual(renderer.renderRolesFromManifest(d, checkedInManifest), 0, 'empty checked-in manifest renders no Chinese roles');
-assert.strictEqual(d.container.textContent, ZH_EMPTY, 'Chinese empty state is preserved');
+assert.strictEqual(renderer.renderRolesFromManifest(d, checkedInManifest), 2, 'checked-in manifest renders both Chinese roles');
+assert.match(d.container.textContent, /投资分析师/);
+assert.match(d.container.textContent, /财务及基金运营专员/);
+assert.match(d.container.textContent, /全职/);
+assert.deepStrictEqual(links(d).map((link) => link.href), ['careers/investment-analyst_cn.html', 'careers/finance-fund-operations-associate_cn.html'], 'Chinese role list links only to Chinese detail pages');
 
 d = doc('en');
 assert.strictEqual(renderer.renderRolesFromManifest(d, manifest([role('investment-analyst')])), 1, 'valid English role renders');
@@ -89,6 +95,7 @@ assert.strictEqual(renderer.renderRolesFromManifest(d, manifest([role('investmen
 assert.match(d.container.textContent, /职位 investment-analyst/);
 assert.match(d.container.textContent, /团队 investment-analyst/);
 assert.match(d.container.textContent, /地点 investment-analyst/);
+assert.match(d.container.textContent, /全职/);
 assert.strictEqual(links(d)[0].href, 'careers/investment-analyst_cn.html');
 assert.strictEqual(links(d)[0].textContent, '查看职位');
 
