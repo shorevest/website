@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <script>
@@ -8,31 +8,28 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   var T=window.__SVT;
   function tok(u){try{var url=new URL(u,location.href);if(url.origin===location.origin&&!url.searchParams.get('t')){url.searchParams.set('t',T);return url.href;}return u;}catch(e){return u;}}
   window.__svTok=tok;
-  (function(){var _f=window.fetch;if(_f){window.fetch=function(i,n){try{var u;if(typeof i==='string'){u=new URL(i,location.href);if(u.origin===location.origin&&!u.searchParams.get('t')){u.searchParams.set('t',T);i=u.href;}}else if(i&&i.url){u=new URL(i.url,location.href);if(u.origin===location.origin&&!u.searchParams.get('t')){u.searchParams.set('t',T);i=new Request(u.href,i);}}}catch(e){}return _f.call(this,i,n);};}var _o=window.XMLHttpRequest&&window.XMLHttpRequest.prototype.open;if(_o){window.XMLHttpRequest.prototype.open=function(m,u){try{var x=new URL(u,location.href);if(x.origin===location.origin&&!x.searchParams.get('t')){x.searchParams.set('t',T);u=x.href;}}catch(e){}return _o.apply(this,[m,u].concat([].slice.call(arguments,2)));};}})();
   function fixEl(el){
     if(el.nodeType!==1)return;
-    if(el.hasAttribute('data-svsrc')&&!el.__sd){el.__sd=1;el.setAttribute('src',tok(el.getAttribute('data-svsrc')));}
-    if(el.hasAttribute('data-svsrcset')&&!el.__ss){el.__ss=1;el.setAttribute('srcset',el.getAttribute('data-svsrcset').split(',').map(function(p){var q=p.trim().split(/\s+/);if(q[0])q[0]=tok(q[0]);return q.join(' ');}).join(', '));}
     if(el.tagName==='IMG'){var s=el.getAttribute('src');if(s){var ts=tok(s);if(ts!==s)el.setAttribute('src',ts);}}
   }
-  function scan(root){if(!root||root.nodeType!==1)return;fixEl(root);if(root.querySelectorAll){var n=root.querySelectorAll('img,source,[data-svsrc],[data-svsrcset]');for(var i=0;i<n.length;i++)fixEl(n[i]);}}
+  function scan(root){if(!root||root.nodeType!==1)return;fixEl(root);if(root.querySelectorAll){var n=root.querySelectorAll('img');for(var i=0;i<n.length;i++)fixEl(n[i]);}}
   new MutationObserver(function(ms){for(var j=0;j<ms.length;j++){var a=ms[j].addedNodes;for(var i=0;i<a.length;i++)scan(a[i]);}}).observe(document.documentElement,{childList:true,subtree:true});
   if(document.readyState!=='loading')scan(document.body);else document.addEventListener('DOMContentLoaded',function(){scan(document.body);});
   document.addEventListener('click',function(e){var t=e.target;var a=t&&t.closest?t.closest('a[href]'):null;if(!a)return;var h=a.getAttribute('href');if(!h||h.charAt(0)==='#'||/^(mailto:|tel:|javascript:|https?:|\/\/)/i.test(h))return;var url;try{url=new URL(h,location.href);}catch(_){return;}if(url.origin!==location.origin)return;e.preventDefault();if(!url.searchParams.get('t'))url.searchParams.set('t',T);window.location.href=url.href;},true);
 })();
 </script>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ShoreVest | 重要信息</title>
-  <meta name="description" content="关于新岸资本（ShoreVest Partners）网站的重要信息。" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
-
-<script>document.write('<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260701-mobile-audit-430&t='+window.__SVT+'">');</script>
-<script>document.write('<link rel="stylesheet" href="assets/css/legal-rebuild.css?v=20260703-legal-home-chrome&t='+window.__SVT+'">');</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新岸资本 | 中国资产支持私募信贷</title>
+<meta name="description" content="新岸资本（ShoreVest）是一家私募信贷公司，为中国各地的借款人与金融机构提供资产支持信贷解决方案。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<!-- Self-contained homepage: this stylesheet is the single authority (same as EN). -->
+<script>document.write('<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260716-hero-2004-accent&t='+window.__SVT+'">');</script>
 <script>document.write('<link rel="stylesheet" href="assets/css/chinese-latin-typography.css?t='+window.__SVT+'">');</script>
-<!-- Keep the chrome on the DIN/Barlow stack with CJK fallbacks (same block as index_cn/firm_cn). -->
+<!-- CN font override: keep the DIN/Barlow stack but add a sans CJK fallback so
+     Chinese glyphs render in a sans face (not serif) after the legacy sheets are dropped. -->
 <style>
   body.homepage {
     --sv-font: "DIN 2014", "Barlow", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
@@ -47,17 +44,19 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-cinnabar-16x16.png?v=20260717">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon-cinnabar.png?v=20260717">
 <link rel="manifest" href="site.webmanifest?v=20260717">
+<link rel="preload" as="image" href="assets/img/trees/home-hero-metasequoia-sq.jpg" fetchpriority="high">
 
-<link rel="canonical" href="https://shorevest.com/important-information_cn.html">
-<link rel="alternate" hreflang="zh-Hans" href="https://shorevest.com/important-information_cn.html">
-<link rel="alternate" hreflang="en" href="https://shorevest.com/important-information.html">
-<meta property="og:title" content="ShoreVest | 重要信息">
-<meta property="og:description" content="关于新岸资本（ShoreVest Partners）网站的重要信息。">
-<meta property="og:url" content="https://shorevest.com/important-information_cn.html">
+<link rel="canonical" href="https://shorevest.com/home_cn.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://shorevest.com/home_cn.html">
+<link rel="alternate" hreflang="en" href="https://shorevest.com/home.html">
+<meta property="og:title" content="新岸资本 | 中国资产支持私募信贷">
+<meta property="og:description" content="新岸资本（ShoreVest）是一家私募信贷公司，为中国各地的借款人与金融机构提供资产支持信贷解决方案。">
+<meta property="og:url" content="https://shorevest.com/home_cn.html">
 <meta property="og:locale" content="zh_CN">
 <script src="assets/js/favicon-guard.js?v=20260717" defer></script>
 </head>
-<body id="top" class="homepage legal-page">
+<body id="top" class="homepage home-page">
+
 <!-- ============================================================ A · HEADER -->
 <header class="sv-header">
   <div class="sv-header__inner">
@@ -75,7 +74,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
       </ul>
     </nav>
     <div class="sv-utils">
-      <a class="sv-lang" href="important-information.html">EN<span class="sep">|</span><span class="on">中文</span></a>
+      <a class="sv-lang" href="home.html">EN<span class="sep">|</span><span class="on">中文</span></a>
       <a class="sv-util-btn" href="investor-portal/index_cn.html">投资者门户</a>
       <a class="sv-util-btn sv-util-btn--cta" href="contact_cn.html">联系</a>
     </div>
@@ -96,34 +95,119 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
         <li><a href="careers_cn.html">人才招聘</a></li>
     </ul>
     <div class="sv-mobile-utils">
-      <a class="sv-util-btn" href="important-information.html">EN</a>
+      <a class="sv-util-btn" href="home.html">EN</a>
       <a class="sv-util-btn" href="investor-portal/index_cn.html">投资者门户</a>
       <a class="sv-util-btn sv-util-btn--cta" href="contact_cn.html">联系</a>
     </div>
   </nav>
 </div>
 
-  <main id="content" class="legal-main">
-    <article class="sv-container legal-container legal-content legal-document__content">
-      <header class="legal-page__intro-block">
-        <p class="legal-page__kicker">法律声明</p>
-        <h1>重要信息</h1>
-      </header>
+<main id="content">
 
-  <p>本网站所载信息仅供一般信息参考之用，不构成投资、法律或税务建议，亦不构成购买或出售任何证券或任何投资基金权益的要约或要约邀请。</p>
-
-  <p>任何发售均将仅通过适用的最终发售文件进行，并仅面向符合适用法律项下相关资格要求的投资者。投资产品可能并非在所有司法管辖区均可提供。</p>
-
-  <p>访问本网站的人士有责任自行了解并遵守其所在司法管辖区适用的任何法律或监管限制。投资涉及风险，包括可能损失本金。过往业绩不代表未来结果。</p>
-
-  <p>更多信息请参阅<a href="legal-notices-disclaimers_cn.html">法律声明与免责声明</a>、<a href="terms-of-use_cn.html">使用条款</a>、<a href="privacy-policy_cn.html">隐私政策</a>及 <a href="cookie-notice_cn.html"><span class="latin-text" lang="en">Cookie</span> 通知</a>。</p>
-
-  <div class="legal-contact-actions">
-    <a href="home_cn.html">返回首页</a>
+<!-- ============================================================ B · HERO -->
+<section class="sv-hero" id="hero" data-screen-label="首页" aria-label="新岸资本简介">
+  <div class="sv-hero__inner">
+    <div class="sv-hero__main">
+      <span class="sv-hero__rule" aria-hidden="true"></span>
+      <p class="sv-hero__label">信贷解决方案</p>
+      <h1 class="sv-hero__headline">中国资产支持私募信贷 <span class="sv-hero__since">始于 <span class="sv-hero__headline-accent">2004</span> 年</span></h1>
+      <p class="sv-hero__body">新岸资本是一家私募信贷公司，为中国各地的借款人与金融机构提供解决方案。</p>
+      <p class="sv-hero__body">作为该领域二十余年来的先行者，新岸资本的平台将无可比拟的本地执行能力与国际机构化风险管理相结合。</p>
+      <div class="sv-hero__cta">
+        <a href="strategy_cn.html" class="sv-textlink">了解我们的策略<span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+    <div class="sv-hero__field">
+      <div class="sv-hero__image" aria-hidden="true"><img src="assets/img/trees/home-hero-metasequoia-sq.jpg" alt="" width="1600" height="1600" loading="eager" decoding="async" fetchpriority="high"></div>
+    </div>
   </div>
+</section>
 
+<!-- ============================================================ D · THE FIRM -->
+<section class="sv-bridge home-firm-preview" id="firm" data-screen-label="公司" aria-labelledby="sv-bridge-title">
+  <div class="sv-shell sv-grid12 sv-bridge__inner home-firm-preview__grid">
+    <div class="sv-bridge__head home-firm-preview__copy">
+      <p class="sv-label">公司</p>
+      <h2 class="sv-h2" id="sv-bridge-title">历经二十余年积淀而成。</h2>
+    </div>
+    <div class="sv-bridge__body home-firm-preview__statement">
+      <p>新岸资本将本地市场关系与机构化投资管理能力相结合，覆盖项目寻源、承销、法律结构设计、资产服务及处置。</p>
+      <div class="home-firm-preview__proof" aria-label="公司能力">
+        <span>本地寻源</span>
+        <span>法律结构设计</span>
+        <span>资产服务</span>
+      </div>
+      <a class="sv-textlink home-firm-preview__link" href="firm_cn.html">了解公司 <span aria-hidden="true">&rarr;</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ E · STRATEGY -->
+<section class="sv-strategy" id="strategy" data-screen-label="策略" aria-labelledby="sv-strategy-title">
+  <div class="sv-shell sv-grid12 sv-strategy__inner">
+    <div class="sv-strategy__lead">
+      <p class="sv-label">策略</p>
+      <h2 class="sv-h2" id="sv-strategy-title">应对复杂情境的信贷解决方案</h2>
+      <p>新岸资本与借款人及金融机构合作，围绕下行保护、可执行性及可行的回收路径来构建资产支持信贷。</p>
+      <a href="strategy_cn.html" class="sv-textlink">了解我们的策略<span aria-hidden="true">→</span></a>
+    </div>
+    <div class="sv-strategy__rows">
+      <a class="sv-srow" href="strategy_cn.html">
+        <span class="sv-srow__content">
+          <h3 class="sv-srow__title">资产支持贷款</h3>
+          <span class="sv-srow__body">围绕抵押品、法律文件及可执行回收路径设计的信贷。</span>
+        </span>
+        <span class="sv-srow__arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="sv-srow" href="strategy_cn.html">
+        <span class="sv-srow__content">
+          <h3 class="sv-srow__title">资产重组</h3>
+          <span class="sv-srow__body">通过运营与法律工作稳定资产，并为处置创造可选方案。</span>
+        </span>
+        <span class="sv-srow__arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="sv-srow" href="strategy_cn.html">
+        <span class="sv-srow__content">
+          <h3 class="sv-srow__title">债务处置</h3>
+          <span class="sv-srow__body">与机构化承销标准一致的严谨债务重组、资产服务及退出。</span>
+        </span>
+        <span class="sv-srow__arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ H · CHINA DEBT DYNAMICS -->
+<section class="sv-cdd" id="research" data-screen-label="中国债务动态" aria-labelledby="sv-cdd-title">
+  <div class="sv-shell sv-cdd__inner">
+    <div class="sv-cdd__head">
+      <div>
+        <p class="sv-cdd__label">研究系列 · 始于 2018 年</p>
+        <h2 class="sv-cdd__title" id="sv-cdd-title">中国债务动态</h2>
+      </div>
+      <p class="sv-cdd__desc">关于中国私募信贷市场、政策发展、法律框架及债权人回收的研究。</p>
+    </div>
+
+    <article>
+      <a class="sv-cdd__feature" href="china-debt-dynamics-v10i2.html">
+        <div class="sv-cdd__feature-meta">
+          <span class="sv-cdd__feature-tag">精选报告</span>
+          <span class="sv-cdd__feature-issue">第 47 期 · 2026 年 7 月 17 日</span>
+        </div>
+        <div class="sv-cdd__feature-main">
+          <h3 class="sv-cdd__feature-title">中国低利率环境中私募信贷高回报的悖论</h3>
+          <span class="sv-cdd__feature-read">阅读本期 <span aria-hidden="true">→</span></span>
+        </div>
+      </a>
     </article>
-  </main>
+
+    <div class="sv-cdd__foot sv-cdd__foot--compact">
+      <a class="sv-cdd__archive-btn" href="insights_cn.html#archive">查看完整归档<span aria-hidden="true">→</span></a>
+    </div>
+  </div>
+</section>
+
+</main>
 
 <!-- ============================================================ I · FOOTER -->
 <footer class="sv-footer" aria-label="网站页脚">
@@ -206,6 +290,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   }
 })();
 </script>
+
 <script src="assets/js/insights-new-edition.js?v=20260717" defer></script>
 </body>
 </html>

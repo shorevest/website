@@ -1,6 +1,6 @@
 /* ==========================================================================
    ShoreVest — Homepage Rebuild (2026-06-18)
-   Self-contained homepage system. index.html no longer loads the shared
+   Self-contained homepage system. home.html no longer loads the shared
    header/footer or the legacy homepage stylesheet stack — this file is the
    single authority for the homepage. Other pages are untouched.
 
@@ -576,7 +576,7 @@ body.homepage .sv-bridge__body p {
 
 /* ==========================================================================
    D-bis · HOMEPAGE FIRM PREVIEW — ruled institutional proof block
-   Scoped to .home-firm-preview, which exists ONLY on the homepage (index.html).
+   Scoped to .home-firm-preview, which exists ONLY on the homepage (home.html).
    Overrides the shared .sv-bridge layout for this one section without touching
    the Strategy page's .sv-bridge.st-band Recovery section or any other page.
    ========================================================================== */

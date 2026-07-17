@@ -6,7 +6,7 @@ Static website for ShoreVest Partners, including English and Chinese pages, the 
 
 | Path | Purpose |
 | --- | --- |
-| `index.html`, `*_cn.html`, and other root HTML files | Published static pages served from the site root. Keep these at the root unless links and hosting rules are updated together. |
+| `home.html`, `*_cn.html`, and other root HTML files | Published static pages served from the site root. Keep these at the root unless links and hosting rules are updated together. |
 | `assets/pdfs/` | Published China Debt Dynamics issues and white papers linked from `insights.html`, article pages, and `assets/data/*.json`. Filenames are live URLs — do not rename or move without updating every reference. |
 | `assets/brand/` | Approved ShoreVest logo, brandmark, and vector master files. |
 | `assets/css/` | All site stylesheets. |
