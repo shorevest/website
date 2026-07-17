@@ -4,7 +4,7 @@
     published: '2026-07-17T00:00:00Z',
     href: 'insights.html#archive',
     label: 'New edition',
-    message: 'Check out the new China Debt Dynamics edition'
+    message: 'Read the latest China Debt Dynamics'
   };
 
   const releaseTime = Date.parse(latestIssue.published);
