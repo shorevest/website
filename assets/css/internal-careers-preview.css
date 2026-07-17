@@ -47,7 +47,7 @@ body.careers-preview-page .careers-hero__media {
 }
 body.careers-preview-page .careers-eyebrow {
   margin: 0 0 18px;
-  font: 600 12px/1.4 var(--sv-font);
+  font: 400 12px/1.4 var(--sv-font);
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--sv-qing-light, #7AAFAF);
