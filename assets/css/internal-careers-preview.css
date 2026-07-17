@@ -238,6 +238,22 @@ body.careers-preview-page .careers-values-intro p {
 }
 body.careers-preview-page .careers-values-intro p + p { margin-top: 12px; }
 body.careers-preview-page .careers-values-intro .careers-values { margin-top: clamp(24px, 3vw, 36px); }
+body.careers-preview-page .careers-values-calligraphy {
+  max-width: min(100%, 360px);
+  margin: 0 0 clamp(28px, 4vw, 44px);
+}
+body.careers-preview-page .careers-values-calligraphy img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid rgba(252, 249, 241, .14);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, .28);
+}
+body.careers-preview-page .careers-values-calligraphy figcaption {
+  display: grid;
+  gap: 8px;
+  margin-top: 16px;
+}
 body.careers-preview-page .careers-values-inscription {
   font: 500 clamp(24px, 2.45vw, 34px)/1.25 var(--sv-font) !important;
   letter-spacing: .04em;
