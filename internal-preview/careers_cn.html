@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/homepage-rebuild.css?v=20260701-mobile-audit-430">
-<link rel="stylesheet" href="../assets/css/internal-careers-preview.css?v=20260716-hero-align-eyebrow">
+<link rel="stylesheet" href="../assets/css/internal-careers-preview.css?v=20260717-career-paths-ledger">
 <link rel="icon" href="../assets/favicon-cinnabar.ico?v=20260717" sizes="any">
 <link rel="shortcut icon" href="../assets/favicon-cinnabar.ico?v=20260717">
 <link rel="icon" href="../assets/favicon-cinnabar.svg?v=20260717" type="image/svg+xml">
@@ -155,6 +155,6 @@
   </div>
 </footer>
 <script>document.querySelector('.sv-burger')?.addEventListener('click',function(){var open=this.getAttribute('aria-expanded')==='true';this.setAttribute('aria-expanded',String(!open));document.getElementById('sv-mobile-menu')?.classList.toggle('is-open',!open);});</script>
-<script>(function(){var links=document.querySelectorAll('.careers-pagenav a[href^="#"]');if(!links.length||!('IntersectionObserver' in window))return;var map=new Map();links.forEach(function(a){var s=document.querySelector(a.getAttribute('href'));if(s)map.set(s,a);});var current=null;var io=new IntersectionObserver(function(entries){entries.forEach(function(e){if(!e.isIntersecting)return;var link=map.get(e.target);if(!link||link===current)return;if(current)current.classList.remove('is-current');current=link;current.classList.add('is-current');});},{rootMargin:'-45% 0px -50% 0px'});map.forEach(function(_,s){io.observe(s);});})();</script>
+<script>(function(){var links=document.querySelectorAll('.careers-pagenav a[href^="#"]');if(!links.length||!('IntersectionObserver' in window))return;var map=new Map();links.forEach(function(a){var s=document.querySelector(a.getAttribute('href'));if(s)map.set(s,a);});var current=null;var io=new IntersectionObserver(function(entries){entries.forEach(function(e){if(!e.isIntersecting)return;var link=map.get(e.target);if(!link||link===current)return;if(current){current.classList.remove('is-current');current.removeAttribute('aria-current');}current=link;current.classList.add('is-current');current.setAttribute('aria-current','true');});},{rootMargin:'-45% 0px -50% 0px'});map.forEach(function(_,s){io.observe(s);});})();</script>
 </body>
 </html>
