@@ -624,16 +624,14 @@ html[lang="zh-CN"] body.careers-preview-page .careers-notices__grid p { line-hei
   body.careers-preview-page .careers-block p { max-width: none; }
 }
 
-/* Career Paths: numbered function ledger. Rows share the section-head grid
+/* Career Paths: function ledger. Rows share the section-head grid
    (name at columns 1-5, copy at 6-13) so the copy column aligns with the
    intro paragraph above. */
 body.careers-preview-page .careers-paths {
-  counter-reset: careers-path;
   margin-top: clamp(38px, 4vw, 58px);
   border-top: 1px solid var(--sv-ivory, #FCF9F1);
 }
 body.careers-preview-page .careers-path {
-  counter-increment: careers-path;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   gap: clamp(28px, 3.2vw, 44px);
@@ -650,14 +648,6 @@ body.careers-preview-page .careers-path__name {
   text-transform: none;
   color: var(--sv-ivory, #FCF9F1);
   text-wrap: balance;
-}
-body.careers-preview-page .careers-path__name::before {
-  content: counter(careers-path);
-  display: block;
-  margin-bottom: 12px;
-  font: 600 11px/1 var(--sv-font);
-  letter-spacing: .16em;
-  color: var(--sv-qing-light, #7AAFAF);
 }
 html[lang="zh-CN"] body.careers-preview-page .careers-path__name { font-family: var(--sv-cn); }
 @media (max-width: 980px) {
@@ -769,9 +759,6 @@ html[lang="zh-CN"] body.careers-preview-page .careers-hero__meta { font-family: 
   body.careers-preview-page .careers-block,
   body.careers-preview-page .careers-ledger > div {
     padding-block: 24px;
-  }
-  body.careers-preview-page .careers-path__name::before {
-    margin-bottom: 8px;
   }
   body.careers-preview-page .careers-list {
     gap: 9px;
