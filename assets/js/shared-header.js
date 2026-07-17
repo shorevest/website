@@ -53,7 +53,7 @@
 
   const pathname = window.location.pathname;
   const isInvestorPortalPath = /\/investor-portal(?:\.html|\/|\/index(?:_cn)?\.html)?$/i.test(pathname);
-  const path = isInvestorPortalPath ? 'investor-portal' : (pathname.split('/').pop() || 'index.html');
+  const path = isInvestorPortalPath ? 'investor-portal' : (pathname.split('/').pop() || 'home.html');
   const localeSuffixMatch = path.match(/[-_](cn)\.html$/i);
   const localeSuffix = localeSuffixMatch ? localeSuffixMatch[1].toLowerCase() : 'en';
 
@@ -135,7 +135,8 @@
     'investor-access',
     'investor-portal',
     'investor-access-portal-terms',
-    'contact'
+    'contact',
+    'careers'
   ];
 
   const localizedPageHref = (base, locale) => pageHref(`${base}${locale === 'en' ? '' : `_${locale}`}.html`);
@@ -166,7 +167,7 @@
   const localized = {
     en: {
       navClass: 'nav--en',
-      home: pageHref('index.html'),
+      home: pageHref('home.html'),
       wordmark: '\u65b0\u5cb8\u8cc7\u672c',
       navItems: [
         { href: pageHref('firm.html'), label: 'Firm' },
@@ -174,7 +175,7 @@
         { href: pageHref('insights.html'), label: 'Insights' },
         { href: pageHref('press.html'), label: 'Media' },
         { href: pageHref('team.html'), label: 'Team' },
-        { href: pageHref('internal-preview/careers.html'), label: 'Careers' }
+        { href: pageHref('careers.html'), label: 'Careers' }
       ],
       investorPortalHref: pageHref('investor-portal/index.html'),
       investorPortalLabel: 'Investor portal',
@@ -184,7 +185,7 @@
     },
     cn: {
       navClass: 'nav--cn nav--sc',
-      home: pageHref('index_cn.html'),
+      home: pageHref('home_cn.html'),
       wordmark: '新岸資本',
       navItems: [
         { href: pageHref('firm_cn.html'), label: '公司' },
@@ -192,7 +193,7 @@
         { href: pageHref('insights_cn.html'), label: '洞察' },
         { href: pageHref('press_cn.html'), label: '媒体' },
         { href: pageHref('team_cn.html'), label: '团队' },
-        { href: pageHref('internal-preview/careers_cn.html'), label: '人才招聘' }
+        { href: pageHref('careers_cn.html'), label: '人才招聘' }
       ],
       investorPortalHref: pageHref('investor-portal/index_cn.html'),
       investorPortalLabel: '投资者门户',

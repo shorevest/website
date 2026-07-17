@@ -7,8 +7,8 @@ This repo now includes a HubSpot-ready signup flow for the ShoreVest homepage in
 - `assets/js/newsletter-signup.js`: submits the homepage signup form to the HubSpot Forms API.
 - `assets/email/welcome-template.html`: suggested English welcome email.
 - `assets/email/welcome-template-cn.html`: suggested Chinese welcome email.
-- `index.html`: English signup form markup.
-- `index_cn.html`: Chinese signup form markup.
+- `home.html`: English signup form markup.
+- `home_cn.html`: Chinese signup form markup.
 
 ## Required HubSpot setup
 

@@ -53,6 +53,13 @@
   --sv-chrome-footer-small-size: 12px;
 }
 
+html {
+  /* Reserve scrollbar space consistently across pages so the fixed header's
+     centered grid does not jump when a destination route has a different
+     scroll height. */
+  scrollbar-gutter: stable;
+}
+
 /* ---------- HEADER ------------------------------------------------------- */
 .sv-header {
   position: fixed; top: 0; left: 0; right: 0;
@@ -61,6 +68,8 @@
   border-bottom: 1px solid var(--sv-chrome-border-soft);
   z-index: 1000;
   box-sizing: border-box;
+  backface-visibility: hidden;
+  contain: layout paint;
 }
 /* Reserve the fixed-header space (homepage does this via body padding). */
 body.contact-page, body.insights-page, body.press-page, body.investor-portal-page,

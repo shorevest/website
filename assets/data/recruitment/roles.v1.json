@@ -1,0 +1,112 @@
+{
+  "schemaVersion": "1.0",
+  "generatedAtUtc": "2026-07-17T00:00:00Z",
+  "roles": [
+    {
+      "roleId": "investment-analyst",
+      "status": "active",
+      "locales": {
+        "en": {
+          "title": "Investment Analyst",
+          "location": "Guangzhou",
+          "team": "Investment",
+          "detailPath": "careers/investment-analyst.html"
+        },
+        "zh-CN": {
+          "title": "投资分析师",
+          "location": "广州",
+          "team": "投资",
+          "detailPath": "careers/investment-analyst_cn.html"
+        }
+      },
+      "employmentType": "Full-time",
+      "applicationEnabled": false,
+      "files": [
+        {
+          "filePurpose": "cv",
+          "required": true,
+          "maxSizeBytes": 10485760,
+          "allowedExtensions": [
+            ".pdf",
+            ".doc",
+            ".docx"
+          ],
+          "allowedMimeTypes": [
+            "application/pdf",
+            "application/msword",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+          ],
+          "signatureValidation": {
+            "required": true,
+            "acceptedSignatures": [
+              "pdf",
+              "oleCompoundFile",
+              "zipDocx"
+            ]
+          }
+        }
+      ],
+      "screening": {
+        "workAuthorization": {
+          "enabled": false,
+          "required": false,
+          "jurisdictions": []
+        },
+        "roleSpecificQuestions": []
+      }
+    },
+    {
+      "roleId": "finance-fund-operations-associate",
+      "status": "active",
+      "locales": {
+        "en": {
+          "title": "Finance and Fund Operations Associate",
+          "location": "Hong Kong",
+          "team": "Finance and Fund Operations",
+          "detailPath": "careers/finance-fund-operations-associate.html"
+        },
+        "zh-CN": {
+          "title": "财务及基金运营专员",
+          "location": "香港",
+          "team": "财务及基金运营",
+          "detailPath": "careers/finance-fund-operations-associate_cn.html"
+        }
+      },
+      "employmentType": "Full-time",
+      "applicationEnabled": false,
+      "files": [
+        {
+          "filePurpose": "cv",
+          "required": true,
+          "maxSizeBytes": 10485760,
+          "allowedExtensions": [
+            ".pdf",
+            ".doc",
+            ".docx"
+          ],
+          "allowedMimeTypes": [
+            "application/pdf",
+            "application/msword",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+          ],
+          "signatureValidation": {
+            "required": true,
+            "acceptedSignatures": [
+              "pdf",
+              "oleCompoundFile",
+              "zipDocx"
+            ]
+          }
+        }
+      ],
+      "screening": {
+        "workAuthorization": {
+          "enabled": false,
+          "required": false,
+          "jurisdictions": []
+        },
+        "roleSpecificQuestions": []
+      }
+    }
+  ]
+}
