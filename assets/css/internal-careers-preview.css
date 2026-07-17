@@ -237,8 +237,9 @@ body.careers-preview-page .careers-values-intro p {
   color: var(--sv-meta-on-dark, rgba(252,249,241,.78));
 }
 body.careers-preview-page .careers-values-intro p + p { margin-top: 12px; }
+body.careers-preview-page .careers-values-intro .careers-values { margin-top: clamp(24px, 3vw, 36px); }
 body.careers-preview-page .careers-values-inscription {
-  font: 500 clamp(24px, 2.45vw, 34px)/1.25 var(--sv-cn) !important;
+  font: 500 clamp(24px, 2.45vw, 34px)/1.25 var(--sv-font) !important;
   letter-spacing: .04em;
   color: var(--sv-ivory, #FCF9F1) !important;
 }
