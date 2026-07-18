@@ -1051,6 +1051,9 @@ body.careers-preview-page .careers-values-section--calligraphy .careers-values h
   text-transform: uppercase;
   color: var(--sv-qing-light, #7AAFAF);
 }
+body.careers-preview-page .careers-values-section--calligraphy .careers-values p {
+  grid-column: 2;
+}
 html[lang="zh-CN"] body.careers-preview-page .careers-values-section--calligraphy .careers-values h3 {
   padding-top: 0;
   font: 500 16px/1.5 var(--sv-cn);
@@ -1078,5 +1081,8 @@ html[lang="zh-CN"] body.careers-preview-page .careers-values-section--calligraph
   }
   body.careers-preview-page .careers-values-section--calligraphy .careers-values h3 {
     padding-top: 0;
+  }
+  body.careers-preview-page .careers-values-section--calligraphy .careers-values p {
+    grid-column: auto;
   }
 }
