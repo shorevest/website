@@ -18,7 +18,7 @@
     var total = root.querySelector('[data-carousel-total]');
     var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-    function pad(n) { return (n < 10 ? '0' : '') + n; }
+    function pad(n) { return '' + n; }
 
     function index() {
       return Math.max(0, Math.min(slides.length - 1, Math.round(track.scrollLeft / track.clientWidth)));
