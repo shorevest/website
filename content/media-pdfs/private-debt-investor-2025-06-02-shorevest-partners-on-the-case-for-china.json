@@ -1,36 +1,128 @@
 {
   "pdfSlug": "private-debt-investor-2025-06-02-shorevest-partners-on-the-case-for-china",
   "publication": "Private Debt Investor",
-  "title": "ShoreVest Partners on the case for China",
+  "title": "The case for China",
   "date": "2025-06-02",
-  "author": "Private Debt Investor",
-  "format": "Sponsored content",
-  "permissionStatus": "source supplied by ShoreVest",
-  "summary": "A sponsored interview addressing common misconceptions about China private credit and the importance of experienced local execution.",
+  "author": "Benjamin Fanger, ShoreVest Partners",
+  "format": "Sponsored content — Expert commentary",
+  "permissionStatus": "shorevest-owned — sponsored expert commentary; source supplied by ShoreVest (ShoreVest_PDI_Jun25.pdf)",
+  "summary": "The Chinese debt market may have been around for two decades, but there are still many misconceptions around private credit in the world's second-largest economy, says Benjamin Fanger of ShoreVest Partners.",
   "body": [
     {
       "type": "editorialNote",
-      "text": "This ShoreVest-hosted archival page is prepared for the Private Debt Investor June 2025 coverage item. The repository available to this build does not include ShoreVest_PDI_Jun25.pdf, so the page uses the approved site archive metadata currently available in press.html pending insertion of the full supplied article text and imagery."
+      "text": "This is ShoreVest-sponsored expert commentary, reproduced from the source supplied by ShoreVest (ShoreVest_PDI_Jun25.pdf) as published in Private Debt Investor, June 2025."
+    },
+    {
+      "type": "image",
+      "src": "assets/img/team/benjamin-fanger.jpg",
+      "alt": "Benjamin Fanger headshot.",
+      "caption": "Benjamin Fanger is managing partner and founder of ShoreVest Partners, a private credit firm focused on China."
+    },
+    {
+      "type": "paragraph",
+      "text": "The US has long been seen as the primary safe harbour for private credit. But with an overabundance of dry powder in the market, on top of a rapidly changing regulatory and economic environment, global allocators have begun looking elsewhere to see where they can find uncorrelated returns in private credit. Could China be one of the options?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Chinese private credit is a strategy that has been in place for more than two decades, but is very often unfamiliar to global allocators. It's a large uncorrelated market that warrants consideration."
     },
     {
       "type": "heading",
-      "text": "Coverage summary"
+      "text": "What strategies have been used to get credit exposure in China?"
     },
     {
       "type": "paragraph",
-      "text": "The article is presented as sponsored content from Private Debt Investor and focuses on the case for China private credit. The media archive summary describes the piece as an interview addressing common misconceptions about China private credit and the importance of experienced local execution."
+      "text": "International investors have sought credit exposure in China through a variety of approaches, some unsuccessful. One approach has been offshore unsecured debt in Hong Kong (such as high-yield bonds), but this typically suffers from no directly enforceable collateral (as was the case with China Evergrande Group, the property giant that defaulted in 2021)."
     },
     {
       "type": "paragraph",
-      "text": "When ShoreVest_PDI_Jun25.pdf is added to the repository, replace this summary-only body with the approved text and imagery from that source document before publication."
-    }
-  ],
-  "images": [
+      "text": "Another approach has been lending to property developers onshore on the China mainland, but this has suffered from collateral with questionable marketability (eg, land or incomplete buildings). Because of these higher risks, our experience suggests these two strategies should be avoided."
+    },
     {
-      "src": "assets/img/media-hero-fii-priority.svg",
-      "alt": "ShoreVest media coverage visual",
-      "caption": "ShoreVest media coverage archive visual. Replace with approved imagery from ShoreVest_PDI_Jun25.pdf when the source PDF is available."
+      "type": "paragraph",
+      "text": "Onshore first-lien asset-backed private credit to corporations in a variety of industries – other than property development – has had much better outcomes, and is where ShoreVest has focused for more than 20 years. Within this approach, we pursue three sub-strategies: performing asset-based corporate lending, asset restructuring (good asset/bad balance sheet clean-up), and purchasing loans at deep discounts from banks (non-performing loans). In all three cases, the common theme is first-liens on enforceable collateral, where the loan amount leaves a significant margin of safety. For example, ShoreVest's typical loan-to-value is 30-60 percent."
+    },
+    {
+      "type": "heading",
+      "text": "Does China private credit provide a return premium or more security?"
+    },
+    {
+      "type": "paragraph",
+      "text": "If done with an experienced manager, returns on Chinese private credit are typically meaningfully higher than more mature markets. But more importantly, lenders are able to negotiate significant downside protection. Because they lack options, Chinese corporate borrowers in need of credit not only pay a premium to returns found in mature markets, but also grant more first-lien collateral coverage, together with personal guarantees and other protections."
+    },
+    {
+      "type": "paragraph",
+      "text": "Another salient characteristic of ShoreVest's experience has been the exceptionally high distributions to paid-in capital. Contrary to some foreign perceptions, Chinese private credit can be faster at returning capital. For instance, across the last 20 deals we invested in, the weighted average life of the transactions was about 18 months to exit."
+    },
+    {
+      "type": "heading",
+      "text": "What are the market conditions, and who are the players?"
+    },
+    {
+      "type": "paragraph",
+      "text": "In China, a company has limited options for obtaining credit, the primary source being commercial bank loans, which are extremely rigid in their underwriting. Historically, China's shadow banking sector was a significant source of non-bank lending, but Beijing essentially shut down the shadow bankers around 2018 because most of the capital came from retail investors. So today, because of the government's efforts to de-risk and de-lever, there is a multi-trillion-dollar vacuum of private credit in China."
+    },
+    {
+      "type": "paragraph",
+      "text": "As the manufacturing hub of the world, China presents a vast array of private credit opportunities in traditional industrial spaces. But beyond that, China's growing leadership in green technologies, high-value manufacturing and AI, in its bid to re-orient its economy away from domestic property development, also presents a constant flow of asset-based lending opportunities in such sectors."
+    },
+    {
+      "type": "paragraph",
+      "text": "Even though there is strong demand for private credit, there are very few lenders in the space. Global players have yet to successfully establish any meaningful presence (much less experience) in mainland China. At the same time, domestic Chinese providers of private credit are still immature, and few raise institutional long-term capital."
+    },
+    {
+      "type": "heading",
+      "text": "But does China's legal system work for enforcing credit?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Yes. For over 20 years now, we have been enforcing credit investments and recovering cash in China. In the early days, it could take quite a long time – often four to five years – to enforce credit. Today enforcement usually takes 18 to 24 months. The improvements have been actively driven by the government; for example, in 2017, China's government began requiring courts to finish most credit enforcement cases within 18 months."
+    },
+    {
+      "type": "paragraph",
+      "text": "Not all cases proceed through the courts so quickly. For example, cases involving unsecured offshore credit carry significant legal uncertainty, as do situations where the enforcement of collateral would cause social unrest risk because they involve evicting people from homes or mass layoffs. An experienced local manager will avoid such kinds of credit."
+    },
+    {
+      "type": "paragraph",
+      "text": "ShoreVest has seen many situations where foreign investors parachute into China without fully understanding the legal system, resulting in unfavourable outcomes that are more a result of the investor's lack of experience than the shortcomings of the court system. Assuming such situations are avoided, China's legal system for enforcing credit can be quite predictable."
+    },
+    {
+      "type": "paragraph",
+      "text": "Importantly, because Chinese corporate borrowers are aware of the protections afforded by China's legal system, repayment under the terms of a loan are the norm, whereas a need for enforcement is more rare."
+    },
+    {
+      "type": "heading",
+      "text": "Even if you can enforce, with China's real estate malaise, will anyone buy the collateral?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Beijing has pulled the rug from under developers imprudently building homes nobody would ever buy, and as a result the residential real estate market has suffered. But in the second-largest economy in the world, certain types of commercial real estate in certain locations are in high demand (as seen from the fact that Shanghai saw a higher volume of commercial real estate transactions last year than any US city apart from New York)."
+    },
+    {
+      "type": "paragraph",
+      "text": "Of course, investors that acquired any type of property at the market's pre-pandemic peak will have a tough time liquidating their positions at a profit. But our experience is that properly priced assets, of the right type and location, can be sold quite quickly."
+    },
+    {
+      "type": "heading",
+      "text": "But can you get money out of China?"
+    },
+    {
+      "type": "paragraph",
+      "text": "ShoreVest has never had an issue getting exits turned back into USD and distributed to investors overseas. This is because we obtain proper government approval on every deal and have experience with repatriation of capital."
+    },
+    {
+      "type": "heading",
+      "text": "Conclusion"
+    },
+    {
+      "type": "paragraph",
+      "text": "China is the second-largest credit market in the world and could, in coming decades, become the largest economy. With private credit becoming a flooded space in more mature markets, and China's market in need of experienced credit solutions providers, now is an ideal time to begin to explore this uncorrelated opportunity that, at least for experienced investors with strong local experience, has generated consistent returns and cashflow for more than 20 years."
+    },
+    {
+      "type": "paragraph",
+      "text": "Benjamin Fanger is managing partner and founder of ShoreVest Partners, a private credit firm focused on China."
     }
   ],
-  "copyrightNote": "Originally published by Private Debt Investor on 2025-06-02 as sponsored content. Copyright remains with the original publisher and/or author."
+  "images": [],
+  "copyrightNote": "Sponsored expert commentary by Benjamin Fanger of ShoreVest Partners, published by Private Debt Investor in June 2025. Reproduced by ShoreVest from its own supplied source material."
 }
