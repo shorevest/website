@@ -15,6 +15,11 @@
     }
   },
   "$defs": {
+    "plainStringArray": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1, "maxLength": 600 },
+      "maxItems": 40
+    },
     "localizedRole": {
       "type": "object",
       "additionalProperties": false,
@@ -23,7 +28,29 @@
         "title": { "type": "string", "minLength": 1, "maxLength": 160 },
         "location": { "type": "string", "minLength": 1, "maxLength": 120 },
         "team": { "type": "string", "minLength": 1, "maxLength": 120 },
-        "detailPath": { "type": "string", "minLength": 1, "maxLength": 240, "pattern": "^careers/[a-z0-9][a-z0-9-]*(_cn)?\\.html$" }
+        "detailPath": { "type": "string", "minLength": 1, "maxLength": 240, "pattern": "^careers/[a-z0-9][a-z0-9-]*(_cn)?\\.html$" },
+        "summary": { "type": "string", "maxLength": 1200 },
+        "responsibilities": { "$ref": "#/$defs/plainStringArray" },
+        "requirements": { "$ref": "#/$defs/plainStringArray" },
+        "preferredQualifications": { "$ref": "#/$defs/plainStringArray" },
+        "applicationStatementPrompt": { "type": "string", "maxLength": 600 }
+      }
+    },
+    "reportingLine": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["approved", "locales"],
+      "properties": {
+        "approved": { "type": "boolean" },
+        "locales": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["en", "zh-CN"],
+          "properties": {
+            "en": { "type": "string", "minLength": 1, "maxLength": 200 },
+            "zh-CN": { "type": "string", "minLength": 1, "maxLength": 200 }
+          }
+        }
       }
     },
     "fileDefinition": {
@@ -138,6 +165,17 @@
           }
         },
         "employmentType": { "enum": ["Full-time", "Part-time", "Internship", "Contract"] },
+        "applicationDeadline": {
+          "type": ["string", "null"],
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}(T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[+-]\\d{2}:\\d{2}))?$"
+        },
+        "deadlineAdminOverride": { "type": "boolean" },
+        "reportingLine": {
+          "oneOf": [
+            { "type": "null" },
+            { "$ref": "#/$defs/reportingLine" }
+          ]
+        },
         "applicationEnabled": { "type": "boolean" },
         "files": {
           "type": "array",

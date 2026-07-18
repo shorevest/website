@@ -392,6 +392,15 @@ body.careers-preview-page .careers-action[aria-disabled="true"] {
   cursor: not-allowed;
 }
 body.careers-preview-page .careers-pending { color: var(--sv-qing-light, #7AAFAF) !important; }
+/* Recruitment/privacy note rendered by recruitment-role-detail.js beneath the apply state. */
+body.careers-preview-page .careers-meta-note {
+  margin-top: 34px;
+  padding-top: 22px;
+  border-top: 1px solid var(--sv-border-dark, rgba(252,249,241,.14));
+  font: 400 13.5px/1.6 var(--sv-font);
+  color: var(--sv-meta-on-dark, rgba(252,249,241,.72));
+}
+html[lang="zh-CN"] body.careers-preview-page .careers-meta-note { font-family: var(--sv-cn); line-height: 1.86; }
 body.careers-preview-page .careers-copy--cn,
 body.careers-preview-page .careers-copy--cn p,
 body.careers-preview-page .careers-copy--cn li,
