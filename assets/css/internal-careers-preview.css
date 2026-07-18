@@ -27,14 +27,14 @@ body.careers-preview-page .careers-hero__grid {
   align-items: center;
 }
 body.careers-preview-page .careers-hero__lead {
-  grid-column: 1 / 7;
+  grid-column: 1 / 8;
   grid-row: 1;
   min-width: 0;
   align-self: center;
-  padding-right: clamp(24px, 3vw, 56px);
+  padding-right: clamp(12px, 1.6vw, 28px);
 }
 body.careers-preview-page .careers-hero__media {
-  grid-column: 7 / 13;
+  grid-column: 8 / 13;
   grid-row: 1;
   position: relative;
   min-width: 0;
