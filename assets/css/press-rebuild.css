@@ -233,6 +233,7 @@ body.press-page .press-row > .press-row__item {
 }
 body.press-page .press-row > a:hover { background: rgba(122, 175, 175, 0.10); }
 body.press-page .press-row > .press-row__item--archived { cursor: pointer; }
+body.press-page .press-row > .press-row__item--inactive { cursor: default; }
 body.press-page .press-row[hidden] { display: none; }
 
 body.press-page .press-publication {
