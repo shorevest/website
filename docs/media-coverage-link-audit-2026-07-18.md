@@ -54,6 +54,14 @@ Direction: paste in full text where ShoreVest can supply it; otherwise link out 
 - **Dropped (1):** Lin-gang Special Area — the English site moved to `en.lingang.gov.cn` and the original article URL no longer resolves. Row removed from both pages; stub page + JSON deleted.
 - **Left as metadata-only stubs (11) — could not be verified or linked from the audit sandbox:** the 3 Economist items (`economist.com` blocks the crawler), Reorg (subscriber-only, not publicly indexable), Bloomberg "U.S. firms could win a lucrative role" (only an ambiguous near-match URL surfaced), Nikkei "$7.7trn asset sale" (2017), AllAboutAlpha, Reuters "The Exchange", and the AIM Summit / Debtwire webinars — plus ShoreVest's own "China's credit environment" webinar (no recording in the repo). These were **not** deleted: "not findable from this sandbox" is not evidence the source is dead, and most are major outlets whose articles are almost certainly still live. To finish them, supply the correct original URLs (they are on shorevest.com's own press page) to link out, or confirm any that are genuinely gone so they can be dropped.
 
+## Paywall / broken-link pass (18 Jul 2026)
+
+Direction: remove any external link that does not work or sits behind a paywall.
+
+- **Paywalled coverage — de-linked to non-clickable credits (7):** Bloomberg, Nikkei Asia, AsianInvestor, Private Debt Investor (Loan Note **and** Why-lending), South China Morning Post, and Pensions & Investments. Each row is kept on both `press.html`/`press_cn.html` as a `press-row__item--archived` credit (publication, headline, summary, date) but no longer links out to a paywalled article. SCMP and P&I are metered rather than hard paywalls — restore their links if you consider them accessible enough.
+- **Kept as working links (free):** HSBC (open insight article), Investment Magazine ×2 (credit-crunch, special-situations), Week in China (free, HSBC-funded), plus the free platform links — Apple Podcasts, Portico Advisers, C*Funds, Asia Society, and the upcoming-event organiser sites.
+- **Left in place, flagged for a manual click (could not be machine-verified from the sandbox — WebFetch is proxy-blocked):** the FII Institute YouTube panel (video `t9BHji_UQlA`, linked from the archive and the Previous-events recaps) and the three ShoreVest LinkedIn recap posts. These are ShoreVest-controlled and not paywalled, so they were not removed; confirm the video still plays and that the LinkedIn posts open for logged-out visitors, and say the word if any should be de-linked.
+
 ## Open items for Ben
 
 1. Supply source material (text/PDF) for each of the 22 stubs so the full articles can be pasted into the template, and confirm reproduction rights per `content/media-pdfs/README.md`.
