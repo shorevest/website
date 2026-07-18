@@ -1,4 +1,15 @@
-/* Highlights the Insights nav link for seven days after a China Debt Dynamics release. */
+/* Automatic Insights nav highlight rule.
+ *
+ * RULE: For two weeks (14 days) after a China Debt Dynamics edition is
+ * published, the Insights nav link flashes inside a cinnabar box. Once the
+ * two weeks elapse it reverts to the normal nav link automatically — no code
+ * change required to turn it off.
+ *
+ * TO PUBLISH A NEW EDITION: set `published` below to the new edition's
+ * publication date. The highlight switches on automatically from that date
+ * and switches itself off two weeks later. That single value is the only
+ * thing to update per edition.
+ */
 (function () {
   const latestIssue = {
     published: '2026-07-17T00:00:00Z',
@@ -7,11 +18,14 @@
     message: 'Read the latest China Debt Dynamics'
   };
 
+  // Two-week window, in milliseconds.
+  const HIGHLIGHT_WINDOW_MS = 14 * 24 * 60 * 60 * 1000;
+
   const releaseTime = Date.parse(latestIssue.published);
-  const sevenDays = 7 * 24 * 60 * 60 * 1000;
   const now = Date.now();
 
-  if (!Number.isFinite(releaseTime) || now < releaseTime || now - releaseTime > sevenDays) return;
+  // Only highlight while we are inside the two-week window after publication.
+  if (!Number.isFinite(releaseTime) || now < releaseTime || now - releaseTime > HIGHLIGHT_WINDOW_MS) return;
 
   const isChinesePage = document.documentElement.lang && document.documentElement.lang.toLowerCase().startsWith('zh');
   const label = isChinesePage ? '新刊' : latestIssue.label;

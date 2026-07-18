@@ -2169,8 +2169,9 @@ body.homepage .sv-footer__social-icon {
 }
 
 /* Timed China Debt Dynamics release cue: enabled by insights-new-edition.js
-   for seven days after the configured publication date. The alert is a
-   tailored cinnabar capsule, not the standard nav underline/glow treatment. */
+   for two weeks (14 days) after the configured publication date, then removed
+   automatically. The alert is a tailored cinnabar capsule, not the standard
+   nav underline/glow treatment. */
 body.homepage .sv-nav a.sv-nav__new-insights {
   display: inline-flex;
   align-items: center;
