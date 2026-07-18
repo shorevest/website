@@ -40,6 +40,29 @@ function hasDuplicate(values) {
   return new Set(values).size !== values.length;
 }
 
+// Candidate-facing manifest text is rendered through textContent only. Reject any
+// value that carries HTML-tag or entity syntax so unsafe markup can never be authored.
+function looksLikeHtml(value) {
+  return typeof value === 'string' && /<[a-z!/]|&#?\w+;|<\s*script/i.test(value);
+}
+
+function isValidIsoDate(value) {
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2}))?$/.test(value)) return false;
+  return !Number.isNaN(Date.parse(value));
+}
+
+function deadlineHasPassed(value, now) {
+  if (!isValidIsoDate(value)) return false;
+  // Date-only deadlines are treated as end-of-day UTC so an application remains open
+  // for the whole stated closing day.
+  const iso = /^\d{4}-\d{2}-\d{2}$/.test(value) ? `${value}T23:59:59Z` : value;
+  return Date.parse(iso) < now.getTime();
+}
+
+function isPlainStringArray(value) {
+  return Array.isArray(value) && value.every((item) => typeof item === 'string');
+}
+
 function formatAjvError(error) {
   const pathLabel = error.instancePath || '/';
   let detail = error.message || 'is invalid';
@@ -59,7 +82,15 @@ function validateJsonSchema(manifest, schema) {
 }
 
 function validateNoSecretsOrCandidatePii(manifest, errors) {
-  const text = JSON.stringify(manifest, null, 2);
+  // Structured ISO date fields (generatedAtUtc, applicationDeadline) are controlled machine
+  // values, not candidate free text; strip them before the PII scan so date syntax is not
+  // mistaken for a telephone number.
+  const scanned = JSON.parse(JSON.stringify(manifest));
+  delete scanned.generatedAtUtc;
+  if (Array.isArray(scanned.roles)) {
+    scanned.roles.forEach((role) => { if (role && typeof role === 'object') delete role.applicationDeadline; });
+  }
+  const text = JSON.stringify(scanned, null, 2);
   const forbidden = [
     [/-----BEGIN [A-Z ]*PRIVATE KEY-----/i, 'private key'],
     [/AccountKey\s*=|SharedAccessKey\s*=|DefaultEndpointsProtocol=/i, 'storage connection string'],
@@ -87,9 +118,70 @@ function validateLocalizedRole(role, locale, rolePath, errors) {
   });
   if (isNonEmptyString(role.detailPath)) {
     const expectedCn = locale === 'zh-CN';
-    if (!/^careers\/[a-z0-9][a-z0-9-]*(_cn)?\.html$/.test(role.detailPath)) fail(errors, `${rolePath}.locales.${locale}.detailPath must be a careers/*.html path.`);
-    if (expectedCn && !role.detailPath.endsWith('_cn.html')) fail(errors, `${rolePath}.locales.${locale}.detailPath must use _cn.html.`);
-    if (!expectedCn && role.detailPath.endsWith('_cn.html')) fail(errors, `${rolePath}.locales.${locale}.detailPath must be the English path.`);
+    // detailPath must be an internal relative careers/*.html path: reject external URLs,
+    // javascript:, protocol-relative //, path traversal, and absolute filesystem paths.
+    const path = role.detailPath;
+    if (path.indexOf('://') !== -1 || path.indexOf('//') === 0) fail(errors, `${rolePath}.locales.${locale}.detailPath must not be an external or protocol-relative URL.`);
+    if (/^(?:javascript|data|mailto|file):/i.test(path)) fail(errors, `${rolePath}.locales.${locale}.detailPath must not use a non-http scheme.`);
+    if (path.indexOf('..') !== -1) fail(errors, `${rolePath}.locales.${locale}.detailPath must not contain path traversal.`);
+    if (path.startsWith('/') || /^[a-zA-Z]:\\/.test(path)) fail(errors, `${rolePath}.locales.${locale}.detailPath must be a relative path.`);
+    if (!/^careers\/[a-z0-9][a-z0-9-]*(_cn)?\.html$/.test(path)) fail(errors, `${rolePath}.locales.${locale}.detailPath must be a careers/*.html path.`);
+    if (expectedCn && !path.endsWith('_cn.html')) fail(errors, `${rolePath}.locales.${locale}.detailPath must use _cn.html.`);
+    if (!expectedCn && path.endsWith('_cn.html')) fail(errors, `${rolePath}.locales.${locale}.detailPath must be the English path.`);
+  }
+
+  // Candidate-facing text (fixed fields, optional prose, and array items) must be plain
+  // text with no HTML syntax, since the renderer inserts it through textContent only.
+  const textFields = ['title', 'location', 'team', 'summary', 'applicationStatementPrompt'];
+  textFields.forEach((field) => {
+    if (typeof role[field] === 'string' && looksLikeHtml(role[field])) fail(errors, `${rolePath}.locales.${locale}.${field} must not contain HTML.`);
+  });
+  ['responsibilities', 'requirements', 'preferredQualifications'].forEach((field) => {
+    if (role[field] === undefined) return;
+    if (!isPlainStringArray(role[field])) {
+      fail(errors, `${rolePath}.locales.${locale}.${field} must be an array of plain strings.`);
+      return;
+    }
+    role[field].forEach((item, index) => {
+      if (!isNonEmptyString(item)) fail(errors, `${rolePath}.locales.${locale}.${field}[${index}] must be a non-empty string.`);
+      if (looksLikeHtml(item)) fail(errors, `${rolePath}.locales.${locale}.${field}[${index}] must not contain HTML.`);
+    });
+  });
+}
+
+// Minimum content a role must carry before applications may be enabled. This prevents an
+// unreviewed placeholder role (empty responsibilities/requirements) from ever being turned on.
+function localeHasMinimumContent(localized) {
+  return Boolean(
+    localized &&
+    isNonEmptyString(localized.summary) &&
+    Array.isArray(localized.responsibilities) && localized.responsibilities.some(isNonEmptyString) &&
+    Array.isArray(localized.requirements) && localized.requirements.some(isNonEmptyString) &&
+    isNonEmptyString(localized.applicationStatementPrompt)
+  );
+}
+
+function validateApplicationReadiness(role, rolePath, errors, now) {
+  if (typeof role.applicationEnabled !== 'boolean') fail(errors, `${rolePath}.applicationEnabled must be a boolean.`);
+  if (role.applicationEnabled !== true) return;
+
+  // An inactive/closed/draft/archived role can never accept applications.
+  if (role.status !== 'active') fail(errors, `${rolePath} cannot set applicationEnabled true unless status is active.`);
+
+  // Applications require a valid required CV-upload definition.
+  const cv = Array.isArray(role.files) ? role.files.find((file) => file && file.filePurpose === 'cv') : null;
+  if (!cv || cv.required !== true || !Array.isArray(cv.allowedExtensions) || cv.allowedExtensions.length === 0) {
+    fail(errors, `${rolePath} cannot set applicationEnabled true without a valid required CV upload definition.`);
+  }
+
+  // Both locales must carry the minimum reviewed content.
+  if (!localeHasMinimumContent(role.locales?.en) || !localeHasMinimumContent(role.locales?.['zh-CN'])) {
+    fail(errors, `${rolePath} cannot set applicationEnabled true without approved summary, responsibilities, requirements, and application prompt in both locales.`);
+  }
+
+  // A passed deadline blocks enablement unless an explicit administrative override is recorded.
+  if (deadlineHasPassed(role.applicationDeadline, now) && role.deadlineAdminOverride !== true) {
+    fail(errors, `${rolePath} cannot set applicationEnabled true after applicationDeadline has passed without deadlineAdminOverride.`);
   }
 }
 
@@ -123,7 +215,24 @@ function validateScreening(screening, rolePath, errors) {
   if (hasDuplicate(questionIds)) fail(errors, `${rolePath}.screening.roleSpecificQuestions must not duplicate questionId values.`);
 }
 
-function validateSemantics(manifest, schema) {
+function validateDeadlineAndReporting(role, rolePath, errors) {
+  if (role.applicationDeadline !== undefined && role.applicationDeadline !== null && !isValidIsoDate(role.applicationDeadline)) {
+    fail(errors, `${rolePath}.applicationDeadline must be null or a valid ISO date.`);
+  }
+  if (role.reportingLine !== undefined && role.reportingLine !== null) {
+    const line = role.reportingLine;
+    if (typeof line !== 'object' || typeof line.approved !== 'boolean' || !line.locales) {
+      fail(errors, `${rolePath}.reportingLine must be null or an object with approved and locales.`);
+    } else {
+      ['en', 'zh-CN'].forEach((locale) => {
+        if (!isNonEmptyString(line.locales[locale])) fail(errors, `${rolePath}.reportingLine.locales.${locale} must be a non-empty string.`);
+        if (looksLikeHtml(line.locales[locale])) fail(errors, `${rolePath}.reportingLine.locales.${locale} must not contain HTML.`);
+      });
+    }
+  }
+}
+
+function validateSemantics(manifest, schema, now = new Date()) {
   const errors = [];
   validateSchemaFile(schema, errors);
   validateNoSecretsOrCandidatePii(manifest, errors);
@@ -139,6 +248,8 @@ function validateSemantics(manifest, schema) {
     if ((role.status === 'active' || role.applicationEnabled) && (!role.locales?.en?.detailPath || !role.locales?.['zh-CN']?.detailPath)) fail(errors, `${rolePath} public role requires English and Chinese detail-page paths.`);
     validateFiles(role.files, rolePath, errors);
     validateScreening(role.screening, rolePath, errors);
+    validateDeadlineAndReporting(role, rolePath, errors);
+    validateApplicationReadiness(role, rolePath, errors, now);
   });
   if (hasDuplicate(roleIds)) fail(errors, 'roleId values must be unique.');
   return errors;
@@ -164,4 +275,4 @@ function main() {
 
 if (require.main === module) main();
 
-module.exports = { validateManifest, validateJsonSchema, validateSemantics };
+module.exports = { validateManifest, validateJsonSchema, validateSemantics, looksLikeHtml, isValidIsoDate, deadlineHasPassed };

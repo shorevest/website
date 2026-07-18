@@ -5,11 +5,25 @@ on:
     paths:
       - assets/data/recruitment/**
       - scripts/validate-recruitment-roles.js
-      - tests/recruitment-roles.test.js
-      - tests/recruitment-role-list.test.js
       - assets/js/recruitment-role-list.js
+      - assets/js/recruitment-role-detail.js
+      - assets/js/recruitment-application.js
+      - assets/css/recruitment-application.css
+      - assets/css/internal-careers-preview.css
       - careers.html
       - careers_cn.html
+      - careers/**
+      - api/recruitment/**
+      - tests/recruitment-roles.test.js
+      - tests/recruitment-role-list.test.js
+      - tests/recruitment-role-detail.test.js
+      - tests/recruitment-application.test.js
+      - tests/recruitment-backend.test.js
+      - tests/recruitment-static-security.test.js
+      - docs/recruitment-application-backend.md
+      - docs/recruitment-operations-setup.md
+      - docs/recruitment-role-management.md
+      - docs/recruitment/**
       - package.json
       - package-lock.json
       - .github/workflows/recruitment-manifest-checks.yml
@@ -19,11 +33,25 @@ on:
     paths:
       - assets/data/recruitment/**
       - scripts/validate-recruitment-roles.js
-      - tests/recruitment-roles.test.js
-      - tests/recruitment-role-list.test.js
       - assets/js/recruitment-role-list.js
+      - assets/js/recruitment-role-detail.js
+      - assets/js/recruitment-application.js
+      - assets/css/recruitment-application.css
+      - assets/css/internal-careers-preview.css
       - careers.html
       - careers_cn.html
+      - careers/**
+      - api/recruitment/**
+      - tests/recruitment-roles.test.js
+      - tests/recruitment-role-list.test.js
+      - tests/recruitment-role-detail.test.js
+      - tests/recruitment-application.test.js
+      - tests/recruitment-backend.test.js
+      - tests/recruitment-static-security.test.js
+      - docs/recruitment-application-backend.md
+      - docs/recruitment-operations-setup.md
+      - docs/recruitment-role-management.md
+      - docs/recruitment/**
       - package.json
       - package-lock.json
       - .github/workflows/recruitment-manifest-checks.yml
@@ -51,8 +79,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Syntax-check recruitment scripts
+        run: npm run check:recruitment
+
       - name: Validate recruitment manifest
         run: npm run validate:recruitment
 
       - name: Run recruitment tests
         run: npm run test:recruitment
+
+      - name: Check for whitespace/merge-conflict artifacts
+        run: git diff --check

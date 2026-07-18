@@ -18,7 +18,8 @@ Static website for ShoreVest Partners, including English and Chinese pages, the 
 | `investor-portal/` | Investor portal static entry point. |
 | `employee-portal/` | ShoreVest One — internal operating platform entry point. `employee-portal/` is the legacy implementation path (see `docs/employee-portal/ARCHITECTURE.md`). |
 | `assets/js/employee-portal/` | ShoreVest One application: rules engine, file handling, workflow store, integration adapters, and views. |
-| `docs/` | Maintenance notes, setup guides, and source documents (`docs/source-documents/`). |
+| `docs/` | Maintenance notes, setup guides, and source documents (`docs/source-documents/`). Recruitment: `docs/recruitment-application-backend.md`, `docs/recruitment-operations-setup.md`, `docs/recruitment-role-management.md`, and `docs/recruitment/`. |
+| `api/` | Reference-only recruitment backend scaffold. **Not deployed** and not wired to any host (no `host.json`/`function.json`); contains no secrets. See `api/README.md`. |
 | `scripts/` | Utility scripts for one-off generation or content maintenance tasks. |
 
 For a more detailed organization guide, see [`docs/REPOSITORY_STRUCTURE.md`](docs/REPOSITORY_STRUCTURE.md).

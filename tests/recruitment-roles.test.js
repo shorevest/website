@@ -184,4 +184,121 @@ const invalidExit = runValidatorAgainst(maxSizeTooLarge);
 assert.notStrictEqual(invalidExit.status, 0, 'validator should exit non-zero for invalid manifests');
 assert.match(invalidExit.stderr, /maxSizeBytes/, 'validator should print invalid field details');
 
+// --- Phase 1 hardening: extended manifest validation ---------------------------------
+
+// A fully-populated, application-ready role used to exercise the enablement gates.
+function readyRole(overrides = {}) {
+  const base = clone(validRole);
+  base.roleId = 'ready-role';
+  base.locales.en.detailPath = 'careers/ready-role.html';
+  base.locales['zh-CN'].detailPath = 'careers/ready-role_cn.html';
+  base.locales.en.summary = 'A concise approved summary of the role.';
+  base.locales.en.responsibilities = ['Lead reviews.'];
+  base.locales.en.requirements = ['Relevant experience.'];
+  base.locales.en.applicationStatementPrompt = 'Explain your interest.';
+  base.locales['zh-CN'].summary = '经批准的职位简要说明。';
+  base.locales['zh-CN'].responsibilities = ['负责审核。'];
+  base.locales['zh-CN'].requirements = ['相关经验。'];
+  base.locales['zh-CN'].applicationStatementPrompt = '请说明您的兴趣。';
+  base.applicationEnabled = true;
+  return Object.assign(base, overrides);
+}
+
+// A representative role carrying the new optional prose fields still validates.
+const withContent = clone(validManifest);
+withContent.roles[0].locales.en.summary = 'Approved summary.';
+withContent.roles[0].locales.en.responsibilities = ['Do the work.'];
+withContent.roles[0].locales.en.requirements = ['Have the skills.'];
+withContent.roles[0].locales.en.preferredQualifications = ['A nice-to-have.'];
+withContent.roles[0].locales.en.applicationStatementPrompt = 'Tell us why.';
+withContent.roles[0].locales['zh-CN'].summary = '经批准的摘要。';
+withContent.roles[0].locales['zh-CN'].responsibilities = ['完成工作。'];
+withContent.roles[0].locales['zh-CN'].requirements = ['具备技能。'];
+withContent.roles[0].applicationDeadline = null;
+withContent.roles[0].reportingLine = null;
+assert.deepStrictEqual(validateManifest(withContent, schema), [], 'role with optional prose fields validates');
+
+// Raw HTML in candidate-facing text is rejected.
+const htmlInTitle = clone(validManifest);
+htmlInTitle.roles[0].locales.en.title = '<b>Analyst</b>';
+assert.ok(validateManifest(htmlInTitle, schema).some((e) => e.includes('must not contain HTML')), 'HTML in title is rejected');
+
+const htmlInResponsibility = clone(validManifest);
+htmlInResponsibility.roles[0].locales.en.responsibilities = ['<img src=x onerror=alert(1)>'];
+assert.ok(validateManifest(htmlInResponsibility, schema).some((e) => e.includes('must not contain HTML')), 'HTML in responsibilities is rejected');
+
+// External / unsafe detail paths are rejected (schema pattern and/or semantic layer).
+for (const [label, badPath] of [
+  ['external URL', 'https://evil.example/role.html'],
+  ['protocol-relative', '//evil.example/role.html'],
+  ['javascript scheme', 'javascript:alert(1)'],
+  ['path traversal', 'careers/../secret.html'],
+  ['absolute path', '/etc/passwd']
+]) {
+  const bad = clone(validManifest);
+  bad.roles[0].locales.en.detailPath = badPath;
+  assert.ok(validateManifest(bad, schema).length > 0, `${label} detail path is rejected`);
+}
+
+// The semantic detail-path guards fire independently of the JSON-schema pattern, so unsafe
+// paths are caught even if the pattern is ever loosened.
+const { validateSemantics } = require('../scripts/validate-recruitment-roles');
+for (const [badPath, expected] of [
+  ['https://evil.example/role.html', 'external or protocol-relative'],
+  ['//evil.example/role.html', 'external or protocol-relative'],
+  ['javascript:alert(1)', 'non-http scheme'],
+  ['careers/../secret.html', 'path traversal'],
+  ['/etc/passwd', 'relative path']
+]) {
+  const bad = clone(validManifest);
+  bad.roles[0].locales.en.detailPath = badPath;
+  assert.ok(validateSemantics(bad, schema).some((e) => e.includes(expected)), `semantic layer rejects ${badPath}`);
+}
+
+// applicationEnabled on an inactive role is rejected.
+const enabledInactive = { ...manifest, roles: [readyRole({ status: 'draft' })] };
+assert.ok(validateManifest(enabledInactive, schema).some((e) => e.includes('unless status is active')), 'enabled application on inactive role is rejected');
+
+const enabledClosed = { ...manifest, roles: [readyRole({ status: 'closed' })] };
+assert.ok(validateManifest(enabledClosed, schema).some((e) => e.includes('unless status is active')), 'enabled application on closed role is rejected');
+
+// A ready role with all content and active status validates when enabled.
+assert.deepStrictEqual(validateManifest({ ...manifest, roles: [readyRole()] }, schema), [], 'fully-populated active enabled role validates');
+
+// applicationEnabled without the minimum reviewed content is rejected.
+const enabledNoContent = clone(validManifest);
+enabledNoContent.roles[0].applicationEnabled = true;
+assert.ok(validateManifest(enabledNoContent, schema).some((e) => e.includes('without approved summary')), 'enabled role without content is rejected');
+
+// applicationEnabled without a valid required CV definition is rejected.
+const enabledNoCv = readyRole();
+enabledNoCv.files[0].required = false;
+assert.ok(validateManifest({ ...manifest, roles: [enabledNoCv] }, schema).some((e) => e.includes('valid required CV upload')), 'enabled role without required CV is rejected');
+
+// A passed deadline blocks enablement unless an administrative override is present.
+const enabledPastDeadline = readyRole({ applicationDeadline: '2000-01-01' });
+assert.ok(validateManifest({ ...manifest, roles: [enabledPastDeadline] }, schema).some((e) => e.includes('after applicationDeadline has passed')), 'enabled role with passed deadline is rejected');
+
+const enabledPastDeadlineOverride = readyRole({ applicationDeadline: '2000-01-01', deadlineAdminOverride: true });
+assert.deepStrictEqual(validateManifest({ ...manifest, roles: [enabledPastDeadlineOverride] }, schema), [], 'administrative override permits a passed-deadline enablement');
+
+// Invalid deadline formats are rejected.
+const badDeadline = clone(validManifest);
+badDeadline.roles[0].applicationDeadline = '31-12-2026';
+assert.ok(validateManifest(badDeadline, schema).length > 0, 'malformed applicationDeadline is rejected');
+
+// A future, active-but-disabled role with a valid deadline validates.
+const futureDeadline = clone(validManifest);
+futureDeadline.roles[0].applicationDeadline = '2999-12-31';
+assert.deepStrictEqual(validateManifest(futureDeadline, schema), [], 'future deadline on disabled role validates');
+
+// reportingLine must be null or a well-formed approved/locales object.
+const badReporting = clone(validManifest);
+badReporting.roles[0].reportingLine = { approved: 'yes', locales: { en: 'Head of Investment', 'zh-CN': '投资主管' } };
+assert.ok(validateManifest(badReporting, schema).length > 0, 'malformed reportingLine is rejected');
+
+const goodReporting = clone(validManifest);
+goodReporting.roles[0].reportingLine = { approved: true, locales: { en: 'Head of Investment', 'zh-CN': '投资主管' } };
+assert.deepStrictEqual(validateManifest(goodReporting, schema), [], 'well-formed reportingLine validates');
+
 console.log('recruitment role manifest contract tests passed');
