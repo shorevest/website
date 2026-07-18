@@ -994,7 +994,7 @@ body.careers-preview-page .careers-values-section--calligraphy .careers-values-l
   align-items: start;
 }
 body.careers-preview-page .careers-values-section--calligraphy .careers-values-lockup__text {
-  grid-column: 1 / 8;
+  grid-column: 1 / 7;
   min-width: 0;
 }
 body.careers-preview-page .careers-values-section--calligraphy .careers-values-inscription {
@@ -1014,10 +1014,10 @@ body.careers-preview-page .careers-values-section--calligraphy .careers-values-i
   font-style: normal;
 }
 body.careers-preview-page .careers-values-section--calligraphy .careers-values-calligraphy {
-  grid-column: 8 / 13;
+  grid-column: 7 / 13;
   justify-self: center;
   align-self: center;
-  width: min(100%, 380px);
+  width: min(100%, 520px);
   max-width: none;
   margin: 0;
 }
@@ -1070,7 +1070,7 @@ html[lang="zh-CN"] body.careers-preview-page .careers-values-section--calligraph
   }
   body.careers-preview-page .careers-values-section--calligraphy .careers-values-calligraphy {
     align-self: auto;
-    width: min(72vw, 340px);
+    width: min(78vw, 420px);
   }
 }
 @media (max-width: 640px) {
