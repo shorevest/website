@@ -45,6 +45,15 @@ Live but paywalled (noted, no action needed): AsianInvestor interview, PDI Loan 
 - Archive rows on both pages repointed to the local pages; no archive row links to the placeholder PDF or to an external article any more.
 - Chinese page parity restored (duplicates removed, dates/labels fixed, missing rows added).
 
+## Follow-up pass (18 Jul 2026) — paste-in or link-out
+
+Direction: paste in full text where ShoreVest can supply it; otherwise link out to the live original, and drop items whose original is gone.
+
+- **Pasted in full text (1):** *Private Debt Investor* — "The case for China" (2 Jun 2025). Source `ShoreVest_PDI_Jun25.pdf` is in the repo and it is ShoreVest-sponsored expert commentary by Benjamin Fanger, so the full Q&A is now in `content/media-pdfs/private-debt-investor-2025-06-02-shorevest-partners-on-the-case-for-china.json` and renders on the hosted page. (`media-pensions-investments-few-foreign-investors-positioned-for-china-npls` was already full-text and is unchanged.)
+- **Linked out to live originals (11):** AsianInvestor (Executive Exchange), PDI (Loan Note SC Lowy), HSBC (Finding opportunities), Nikkei Asia (Evergrande liquidation), P&I (Cambridge Associates), Investment Magazine (credit-crunch, 2021), SCMP (Opportunity of a lifetime), Bloomberg ($1.5trn minefield), PDI (Why lending is safer), Investment Magazine (special situations podcast, 2020), Week in China (No stranger to distress). Each row on both `press.html`/`press_cn.html` now points at the original article; the redundant local stub page + JSON were deleted.
+- **Dropped (1):** Lin-gang Special Area — the English site moved to `en.lingang.gov.cn` and the original article URL no longer resolves. Row removed from both pages; stub page + JSON deleted.
+- **Left as metadata-only stubs (11) — could not be verified or linked from the audit sandbox:** the 3 Economist items (`economist.com` blocks the crawler), Reorg (subscriber-only, not publicly indexable), Bloomberg "U.S. firms could win a lucrative role" (only an ambiguous near-match URL surfaced), Nikkei "$7.7trn asset sale" (2017), AllAboutAlpha, Reuters "The Exchange", and the AIM Summit / Debtwire webinars — plus ShoreVest's own "China's credit environment" webinar (no recording in the repo). These were **not** deleted: "not findable from this sandbox" is not evidence the source is dead, and most are major outlets whose articles are almost certainly still live. To finish them, supply the correct original URLs (they are on shorevest.com's own press page) to link out, or confirm any that are genuinely gone so they can be dropped.
+
 ## Open items for Ben
 
 1. Supply source material (text/PDF) for each of the 22 stubs so the full articles can be pasted into the template, and confirm reproduction rights per `content/media-pdfs/README.md`.
