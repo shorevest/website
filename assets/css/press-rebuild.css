@@ -315,7 +315,7 @@ body.press-page .pr-disclosures__body {
 
 /* ==========================================================================
    Media hero — reuses the shared homepage layered hero system (grayscale
-   square image + white reference panel + offset cinnabar block). press.html
+   square image + white reference panel + offset cinnabar block). media.html
    carries body.homepage, so the body.homepage .sv-hero__* rules apply here
    unchanged; the square carries the FII conference photograph, cropped
    toward the stage and panelists.
