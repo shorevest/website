@@ -87,8 +87,10 @@ body.cdd-print-layout .wrap { width: var(--p-page-width); max-width: none; margi
   content: "";
   position: absolute;
   top: 0;
-  left: 0;
-  right: 0;
+  left: 50%;
+  right: auto;
+  width: var(--p-page-width);
+  transform: translateX(-50%);
   height: var(--p-print-top-rule-height);
   background: var(--p-cinnabar);
   -webkit-print-color-adjust: exact;
@@ -235,10 +237,11 @@ body.cdd-print-layout .wrap { width: var(--p-page-width); max-width: none; margi
     content: "";
     position: absolute;
     top: 0;
-    left: 0;
-    right: 0;
+    left: 50%;
+    right: auto;
     display: block;
-    width: 100%;
+    width: var(--p-page-width);
+    transform: translateX(-50%);
     height: var(--p-print-top-rule-height);
     background: var(--p-cinnabar);
     -webkit-print-color-adjust: exact;
