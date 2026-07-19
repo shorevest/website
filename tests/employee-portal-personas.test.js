@@ -9,8 +9,8 @@
    every Home line links back to an item My Work carries in full.
 
    These are pure data assertions — no DOM or live tenant required. They also
-   enforce the data rule: every synthetic person is a fictional animal codename
-   and no real ShoreVest employee name, investor name, or email appears.
+   enforce the data rule: every synthetic person uses a dull generic placeholder
+   name and no real ShoreVest employee name, investor name, or email appears.
    ========================================================================== */
 'use strict';
 
@@ -159,18 +159,18 @@ test('no false-green language appears in any decision detail', () => {
     .forEach((bad) => assert.ok(blob.indexOf(bad) === -1, 'false-green: ' + bad));
 });
 
-/* ── Data rule: fictional animal codenames, no real people or emails ────── */
+/* ── Data rule: generic placeholder names, no real people or emails ─────── */
 
-const APPROVED_OWNERS = ['Red Fox', 'Snow Leopard', 'River Otter', 'Peregrine Falcon',
-  'Black Bear', 'Grey Wolf', 'Sea Turtle', 'Golden Eagle'];
+const APPROVED_OWNERS = ['Jane Brown', 'Mark Davis', 'Susan Clark', 'Linda Moore',
+  'Bob Smith', 'Paul Wilson', 'Tom Harris', 'Karen Allen'];
 
-test('every owner is a fictional animal codename; waiting-on is a codename or a generic team', () => {
+test('every owner is a dull generic placeholder; waiting-on is a placeholder or a generic team', () => {
   const TEAMS = ['Investment team', 'Legal team', 'Finance team', 'Compliance team'];
   P.workItems.forEach((it) => {
-    assert.ok(APPROVED_OWNERS.indexOf(it.owner) !== -1, 'non-codename owner: ' + it.owner);
+    assert.ok(APPROVED_OWNERS.indexOf(it.owner) !== -1, 'non-placeholder owner: ' + it.owner);
     if (it.waitingOn) {
       assert.ok(APPROVED_OWNERS.indexOf(it.waitingOn) !== -1 || TEAMS.indexOf(it.waitingOn) !== -1,
-        'non-codename / non-team waitingOn: ' + it.waitingOn);
+        'non-placeholder / non-team waitingOn: ' + it.waitingOn);
     }
   });
 });
