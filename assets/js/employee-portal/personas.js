@@ -383,7 +383,7 @@
     }
   };
 
-  /* Preview shells retained for Celestra's coordination navigation. */
+  /* Preview shells retained for the coordination navigation. */
   var PREVIEW = {
     'my-work': {
       label: 'My Work',

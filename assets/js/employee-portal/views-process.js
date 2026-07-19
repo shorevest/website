@@ -369,7 +369,7 @@
     var ta = el('textarea', {
       id: 'instruction',
       placeholder: 'Clean this list, match it against Salesforce, exclude duplicates and previous outreach, ' +
-        'assign Asia to Kelvin and Ex-Asia to John, and generate a review workbook. ' +
+        'assign Asia to Snow Leopard and Ex-Asia to Grey Wolf, and generate a review workbook. ' +
         'Do not send emails or update Salesforce.'
     });
     ta.value = w.instruction;

@@ -52,12 +52,12 @@
       sp('Weekly Outreach and Coverage Snapshot',
          'Generates the ShoreVest Weekly Outreach and Coverage Snapshot from approved source data.',
          { processType: 'Weekly Reporting' }),
-      sp('Kelvin Asia Conference Outreach',
+      sp('Snow Leopard Asia Conference Outreach',
          'Conference contact list processed for Asia coverage; review workbook output.',
-         { processType: 'Outreach Preparation', coverageOwner: 'Kelvin', region: 'Asia' }),
-      sp('John Ex-Asia Reconnect List',
+         { processType: 'Outreach Preparation', coverageOwner: 'Snow Leopard', region: 'Asia' }),
+      sp('Grey Wolf Ex-Asia Reconnect List',
          'Reconnect list processed for Ex-Asia coverage; review workbook output.',
-         { processType: 'Outreach Preparation', coverageOwner: 'John', region: 'Ex-Asia' }),
+         { processType: 'Outreach Preparation', coverageOwner: 'Grey Wolf', region: 'Ex-Asia' }),
       sp('Existing Contact Reconnect',
          'Keeps rows that match existing Salesforce Contacts for reconnection review.',
          { processType: 'Outreach Preparation', treatExistingContacts: 'include' }),
@@ -84,8 +84,8 @@
     }
     return [
       cfg('owners', JSON.stringify([
-        { name: 'Kelvin', regions: ['Asia'] },
-        { name: 'John', regions: ['Ex-Asia'] }
+        { name: 'Snow Leopard', regions: ['Asia'] },
+        { name: 'Grey Wolf', regions: ['Ex-Asia'] }
       ]), 'Coverage'),
       cfg('regions', JSON.stringify(['Asia', 'Ex-Asia', 'Europe', 'North America', 'Middle East']), 'Coverage'),
       cfg('funds', JSON.stringify(['Fund II', 'Fund III']), 'Funds'),
@@ -126,15 +126,15 @@
       label: 'DEMONSTRATION DATA — synthetic records, not Salesforce',
       contacts: [
         { id: 'DEMO-C-001', name: 'Demo Contact One', email: 'existing.contact@demo-institution.crm',
-          accountId: 'DEMO-A-001', accountName: 'Demo Institution One', owner: 'Kelvin' },
+          accountId: 'DEMO-A-001', accountName: 'Demo Institution One', owner: 'Snow Leopard' },
         { id: 'DEMO-C-002', name: 'Demo Contact Two', email: 'ambiguous@demo-institution.crm',
-          accountId: 'DEMO-A-002', accountName: 'Demo Institution Two', owner: 'John' },
+          accountId: 'DEMO-A-002', accountName: 'Demo Institution Two', owner: 'Grey Wolf' },
         { id: 'DEMO-C-003', name: 'Demo Contact Two B', email: 'ambiguous@demo-institution.crm',
-          accountId: 'DEMO-A-003', accountName: 'Demo Institution Three', owner: 'Kelvin' },
+          accountId: 'DEMO-A-003', accountName: 'Demo Institution Three', owner: 'Snow Leopard' },
         { id: 'DEMO-C-004', name: 'Demo Blocked Contact', email: 'blocked.account@demo-institution.crm',
-          accountId: 'DEMO-ACCT-BLOCKED', accountName: 'Demo Blocked Institution', owner: 'John' },
+          accountId: 'DEMO-ACCT-BLOCKED', accountName: 'Demo Blocked Institution', owner: 'Grey Wolf' },
         { id: 'DEMO-C-005', name: 'Demo Live Process', email: 'live.process@demo-institution.crm',
-          accountId: 'DEMO-A-005', accountName: 'Demo Institution Five', owner: 'Kelvin' }
+          accountId: 'DEMO-A-005', accountName: 'Demo Institution Five', owner: 'Snow Leopard' }
       ],
       liveProcessEmails: ['live.process@demo-institution.crm']
     };
