@@ -176,7 +176,7 @@ body.cdd-print-layout .wrap { width: var(--p-page-width); max-width: none; margi
    PRINT
    ========================================================================== */
 @media print {
-  @page { margin: 0 var(--p-page-margin-x) var(--p-page-margin-bottom); }
+  @page { margin: 0; }
 
   :root {
     --p-print-top-rule-height: 3px;
@@ -185,12 +185,13 @@ body.cdd-print-layout .wrap { width: var(--p-page-width); max-width: none; margi
   /*
      Export only the white document area: the beige browser-preview backdrop,
      toolbar/nameplate strip, and screen shadow are intentionally removed for
-     print-ready PDFs. The print page owns the top cinnabar rule so it sits
-     flush with the physical page edge, while body padding preserves the
-     original top whitespace before the masthead.
+     print-ready PDFs. The sheet, not the browser page box, owns the content
+     inset so browser print matches the full-bleed PDF generator: the page box
+     has zero margin, the cinnabar rule reaches both physical edges, and the
+     content width stays the same as the on-screen A4/PDF preview.
   */
   body.cdd-print-layout {
-    padding: var(--p-page-margin-top) 0 0;
+    padding: 0;
     background: var(--p-paper);
   }
   body.cdd-print-layout::before {
@@ -211,8 +212,8 @@ body.cdd-print-layout .wrap { width: var(--p-page-width); max-width: none; margi
     content: "";
     position: fixed;
     top: 0;
-    left: calc(-1 * var(--p-page-margin-x));
-    right: calc(-1 * var(--p-page-margin-x));
+    left: 0;
+    right: 0;
     z-index: 9998;
     display: block;
     height: var(--p-print-top-rule-height);
@@ -227,7 +228,7 @@ body.cdd-print-layout .wrap { width: var(--p-page-width); max-width: none; margi
   .cdd-print-layout .cdd-print-shell {
     border-top: 0;
     box-shadow: none;
-    padding: 0;
+    padding: var(--p-page-margin-top) var(--p-page-margin-x) var(--p-page-margin-bottom);
   }
   .cdd-print-layout .cdd-body > h2 { break-after: avoid; }
   .cdd-print-layout .cdd-disclaimer { break-inside: avoid; }
