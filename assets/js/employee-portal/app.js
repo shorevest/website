@@ -68,7 +68,7 @@
   /* ── Avatar (approved photo, else restrained initials — never a face) ───── */
   function avatar(user, cls) {
     if (user.photo) {
-      return el('img', { class: 'sv-avatar ' + (cls || ''), src: user.photo, alt: user.name, loading: 'lazy' });
+      return el('img', { class: 'sv-avatar ' + (cls || ''), src: user.photo, alt: user.name, loading: 'eager' });
     }
     return el('span', { class: 'sv-avatar sv-avatar--initials ' + (cls || ''), 'aria-hidden': 'true', text: user.initials || '' });
   }
