@@ -8,7 +8,11 @@
    ========================================================================== */
 
 :root {
-  --p-printable-width: 178mm;
+  --p-page-width: 210mm;
+  --p-page-margin-x: 16mm;
+  --p-page-margin-top: 17mm;
+  --p-page-margin-bottom: 18mm;
+  --p-printable-width: calc(var(--p-page-width) - (var(--p-page-margin-x) * 2));
   --p-cinnabar: #C93B2A;
   --p-cinnabar-d: #9F2F24;
   --p-ink: #182524;
@@ -35,10 +39,10 @@ body.cdd-print-layout {
   font-size: 16px; line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
-body.cdd-print-layout .wrap { width: var(--p-printable-width); max-width: none; margin-inline: auto; }
+body.cdd-print-layout .wrap { width: var(--p-page-width); max-width: none; margin-inline: auto; }
 
 /* ---- Running header strip (publication nameplate + screen toolbar) ---- */
-.cdd-print-layout .cdd-topline { max-width: var(--p-printable-width); margin: 0 auto 14px; padding: 0 4px; }
+.cdd-print-layout .cdd-topline { max-width: var(--p-page-width); margin: 0 auto 14px; padding: 0 4px; }
 .cdd-print-layout .cdd-topline__inner {
   display: flex; align-items: center; justify-content: space-between; gap: 24px;
 }
@@ -71,7 +75,7 @@ body.cdd-print-layout .wrap { width: var(--p-printable-width); max-width: none; 
   background: var(--p-paper);
   border-top: 3px solid var(--p-cinnabar);
   box-shadow: 0 1px 0 var(--p-line), 0 18px 50px rgba(20, 30, 28, 0.14);
-  padding: clamp(40px, 6vw, 64px) clamp(34px, 6vw, 60px) clamp(44px, 6vw, 60px);
+  padding: var(--p-page-margin-top) var(--p-page-margin-x) var(--p-page-margin-bottom);
 }
 
 /* ---- Masthead ---- */
@@ -172,7 +176,7 @@ body.cdd-print-layout .wrap { width: var(--p-printable-width); max-width: none; 
    PRINT
    ========================================================================== */
 @media print {
-  @page { margin: 0 16mm 18mm; }
+  @page { margin: 0 var(--p-page-margin-x) var(--p-page-margin-bottom); }
 
   /*
      Export only the white document area: the beige browser-preview backdrop,
@@ -182,7 +186,7 @@ body.cdd-print-layout .wrap { width: var(--p-printable-width); max-width: none; 
      original top whitespace before the masthead.
   */
   body.cdd-print-layout {
-    padding: 17mm 0 0;
+    padding: var(--p-page-margin-top) 0 0;
     background: var(--p-paper);
   }
   body.cdd-print-layout::before {
@@ -201,6 +205,7 @@ body.cdd-print-layout .wrap { width: var(--p-printable-width); max-width: none; 
   .cdd-print-layout .cdd-print-shell {
     border-top: 0;
     box-shadow: none;
+    padding: 0;
   }
   .cdd-print-layout .cdd-body > h2 { break-after: avoid; }
   .cdd-print-layout .cdd-disclaimer { break-inside: avoid; }
