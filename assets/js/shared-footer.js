@@ -49,7 +49,7 @@
         <a href="${siteHref('insights.html')}">Insights</a>
         <a href="${siteHref('media.html')}">Media</a>
         <a href="${siteHref('team.html')}">Team</a>
-        <a href="${siteHref('careers.html')}">Careers</a>
+        <a href="${siteHref('careers/')}">Careers</a>
         <a href="${siteHref('contact.html')}">Contact</a>
         <a href="${siteHref('insights.html')}#archive">China Debt Dynamics</a>
         <span class="sv-footer__access" role="group" aria-label="Access">
