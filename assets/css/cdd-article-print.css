@@ -8,6 +8,7 @@
    ========================================================================== */
 
 :root {
+  --p-printable-width: 178mm;
   --p-cinnabar: #C93B2A;
   --p-cinnabar-d: #9F2F24;
   --p-ink: #182524;
@@ -34,10 +35,10 @@ body.cdd-print-layout {
   font-size: 16px; line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
-body.cdd-print-layout .wrap { width: 860px; max-width: none; margin-inline: auto; }
+body.cdd-print-layout .wrap { width: var(--p-printable-width); max-width: none; margin-inline: auto; }
 
 /* ---- Running header strip (publication nameplate + screen toolbar) ---- */
-.cdd-print-layout .cdd-topline { max-width: 860px; margin: 0 auto 14px; padding: 0 4px; }
+.cdd-print-layout .cdd-topline { max-width: var(--p-printable-width); margin: 0 auto 14px; padding: 0 4px; }
 .cdd-print-layout .cdd-topline__inner {
   display: flex; align-items: center; justify-content: space-between; gap: 24px;
 }
