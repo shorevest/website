@@ -76,9 +76,21 @@ body.cdd-print-layout .wrap { width: var(--p-page-width); max-width: none; margi
 .cdd-print-layout .cdd-print-shell {
   overflow: visible;
   background: var(--p-paper);
-  border-top: var(--p-print-top-rule-height) solid var(--p-cinnabar);
+  position: relative;
+  border-top: 0;
   box-shadow: 0 1px 0 var(--p-line), 0 18px 50px rgba(20, 30, 28, 0.14);
   padding: var(--p-page-margin-top) var(--p-page-margin-x) var(--p-page-margin-bottom);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+.cdd-print-layout .cdd-print-shell::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--p-print-top-rule-height);
+  background: var(--p-cinnabar);
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
 }
@@ -190,10 +202,10 @@ body.cdd-print-layout .wrap { width: var(--p-page-width); max-width: none; margi
      print-ready PDFs. The first page box has zero margin so the cinnabar rule
      sits flush at the top, while continued pages add a browser page-box top
      margin as a fallback/guardrail for engines that do not clone the shell's
-     top padding cleanly across fragments. The print shell uses a document-start
-     pseudo-element for the first-page cinnabar rule instead of a cloned border,
-     preventing the rule from reappearing at subsequent page breaks. The content
-     width stays the same as the on-screen A4/PDF preview.
+     top padding cleanly across fragments. A fixed print pseudo-element owns
+     the first-page cinnabar rule so it spans the full page box instead of
+     inheriting any browser-generated printable-area inset. The content width
+     stays the same as the on-screen A4/PDF preview.
   */
   body.cdd-print-layout {
     padding: 0;
@@ -211,19 +223,22 @@ body.cdd-print-layout .wrap { width: var(--p-page-width); max-width: none; margi
     min-height: 297mm;
     margin: 0 auto;
     border-top: 0;
-    padding: calc(var(--p-page-margin-top) + var(--p-print-top-rule-height)) var(--p-page-margin-x) var(--p-page-margin-bottom);
+    padding: var(--p-page-margin-top) var(--p-page-margin-x) var(--p-page-margin-bottom);
     -webkit-box-decoration-break: clone;
     box-decoration-break: clone;
   }
   .cdd-print-layout .cdd-print-shell::before {
     content: "";
-    display: block;
-    position: absolute;
+    position: fixed;
     top: 0;
-    left: var(--p-page-margin-x);
-    right: var(--p-page-margin-x);
+    left: 0;
+    right: 0;
+    display: block;
+    width: 100%;
     height: var(--p-print-top-rule-height);
     background: var(--p-cinnabar);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 
   /*
