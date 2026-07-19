@@ -175,7 +175,7 @@
         { href: pageHref('insights.html'), label: 'Insights' },
         { href: pageHref('media.html'), label: 'Media' },
         { href: pageHref('team.html'), label: 'Team' },
-        { href: 'https://shorevest.github.io/website/careers/?t=', label: 'Careers' }
+        { href: pageHref('careers.html'), label: 'Careers' }
       ],
       investorPortalHref: pageHref('investor-portal/index.html'),
       investorPortalLabel: 'Investor portal',
