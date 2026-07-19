@@ -162,9 +162,67 @@
     });
   };
 
+
+  const initPortraitPrivacy = () => {
+    const photos = document.querySelectorAll(
+      ".team-profile__photo, .team-profile__photo img",
+    );
+    const blockEvent = (event) => event.preventDefault();
+
+    photos.forEach((photo) => {
+      photo.addEventListener("contextmenu", blockEvent);
+      photo.addEventListener("dragstart", blockEvent);
+      photo.addEventListener("copy", blockEvent);
+      photo.addEventListener("cut", blockEvent);
+      photo.addEventListener("selectstart", blockEvent);
+      if (photo.tagName === "IMG") {
+        photo.setAttribute("draggable", "false");
+      }
+    });
+
+    let privacyTimer;
+    const showPrivacyShield = () => {
+      document.body.classList.add("team-portrait-privacy-active");
+      window.clearTimeout(privacyTimer);
+      privacyTimer = window.setTimeout(() => {
+        document.body.classList.remove("team-portrait-privacy-active");
+      }, 2500);
+    };
+
+    document.addEventListener(
+      "keydown",
+      (event) => {
+        const key = event.key ? event.key.toLowerCase() : "";
+        const isPrintScreen = key === "printscreen";
+        const isSaveOrPrint = (event.metaKey || event.ctrlKey) &&
+          (key === "s" || key === "p");
+
+        if (!isPrintScreen && !isSaveOrPrint) return;
+        showPrivacyShield();
+
+        if (isPrintScreen && navigator.clipboard?.writeText) {
+          navigator.clipboard
+            .writeText(
+              isChinesePage
+                ? "团队头像受保护，请勿复制或截屏。"
+                : "Team portraits are protected. Please do not copy or screenshot.",
+            )
+            .catch(() => {});
+        }
+      },
+      true,
+    );
+
+    window.addEventListener("beforeprint", showPrivacyShield);
+    window.addEventListener("afterprint", () => {
+      document.body.classList.remove("team-portrait-privacy-active");
+    });
+  };
+
   const initAllGrids = () => {
     const grids = Array.from(document.querySelectorAll("[data-team-grid]"));
     grids.forEach(initGrid);
+    initPortraitPrivacy();
   };
 
   if (document.readyState === "loading") {
