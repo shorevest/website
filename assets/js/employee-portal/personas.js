@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ShoreVest One — profile (persona) configuration
+   ShoreVest One — profile (persona) configuration ("the motherboard")
 
    The demonstration runs on ONE neutral profile ("ShoreVest Demo") with the
    full workspace: every section and every tool is exposed on the left. This is
@@ -7,17 +7,17 @@
    are real people given the narrower set of sections and tools their role
    needs. That per-role split lives in this file, never in the UI.
 
-   The crafted per-person demonstration content (John's Red Panda decision,
-   Kelvin's mainland-attendance decision, Celestra's coordination cards, and the
-   two My Work shells) is preserved verbatim below and composed into a single
-   combined Home and My Work, so a later split back into per-role profiles needs
-   no rewriting.
+   Home and My Work are driven by ONE shared queue (WORK_ITEMS). Home is a short,
+   selective company-wide summary — where attention is needed — and every Home
+   line points back to the same underlying item. My Work is the full
+   cross-workspace execution queue, grouped by state. There is no duplicate data:
+   completing an item changes both surfaces.
 
-   Everything here is synthetic. External institutions and contacts are entirely
-   fictional and use professional animal-based names. Only internal ShoreVest
-   names are real, used solely to name a real internal colleague in a limited
-   assignment context. No real emails, LP names, contact data, or confidential
-   information appears. The legacy operational prototype is preserved under
+   IMPORTANT DATA RULE. Everything here is synthetic. Every person is a fictional
+   animal codename (Red Fox, Snow Leopard, River Otter, …) and every institution
+   is fictional (Cedar Ridge Pension, Blue River Endowment, …). No real ShoreVest
+   employee name, investor name, contact name, email address, or confidential
+   data appears anywhere. The legacy operational prototype is preserved under
    Tools.
    ========================================================================== */
 (function (root) {
@@ -54,211 +54,270 @@
     { key: 'tools', label: 'Tools', hash: '#/tools', collapsible: true }
   ];
 
-  /* ── Commercial Home schema (John & Kelvin) ─────────────────────────────
-     One expanded Focus Now item that meets the ten-second standard; a short
-     Today list that never repeats Focus Now; one Under Control reassurance
-     line; an optional quiet Around ShoreVest note. Meeting-attendance policy is
-     explained inside the affected decision only, never as a standing warning. */
+  /* ── Shared work-item store ─────────────────────────────────────────────
+     ONE canonical cross-workspace queue. Home and My Work both read from it, so
+     there is never a second set of records. Each item carries a single action,
+     a single fictional owner (animal codename), a reason, a current state, a
+     next step, its originating workspace, and where "Open" leads.
 
-  var JOHN_HOME = {
-    situational: 'One decision needs you before your next meeting.',
-    focus: {
-      id: 'john-red-panda-meeting',
-      institution: 'Red Panda Capital',
-      title: 'Red Panda Capital meeting — second attendee no longer available',
-      context: [
-        'Red Panda Capital confirmed the 10:30 ET meeting this morning.',
-        'The required second ShoreVest attendee is no longer available until 10:45 ET.'
-      ],
-      decision: 'Move the meeting start to 10:45 ET, or begin at 10:30 ET with one ShoreVest attendee.',
-      whyYou: 'You own the Red Panda Capital relationship. This is a substantive LP meeting, and ShoreVest policy requires at least two ShoreVest attendees for substantive LP discussions.',
-      due: 'Decide before 10:30 ET',
-      dueZone: 'ET',
-      recLabel: 'ShoreVest One recommends',
-      recommendation: 'Move the meeting start to 10:45 ET rather than begin the substantive discussion with one ShoreVest attendee.',
-      reasoning: 'The agenda is substantive throughout, so the two-attendee requirement applies from the start. A fifteen-minute shift keeps both required attendees present without splitting the agenda.',
-      verifiedAt: '07:42 ET',
-      evidenceLine: 'Relationship ownership and attendee availability checked at 07:42 ET. Red Panda Capital has confirmed; a revised start time has not yet been proposed or confirmed with them.',
-      evidence: [
-        { label: 'Investor confirmation', detail: 'Red Panda Capital confirmed 10:30 ET', state: 'system-verified' },
-        { label: 'Relationship ownership', detail: 'John Jones owns Red Panda Capital', state: 'system-verified' },
-        { label: 'Second-attendee availability', detail: 'Available from 10:45 ET', state: 'system-verified' },
-        { label: 'Meeting purpose', detail: 'Substantive LP discussion (two attendees required)', state: 'human-confirmed' },
-        { label: 'Revised start time', detail: 'Not yet proposed to Red Panda Capital', state: 'unavailable' }
-      ],
-      policy: 'Substantive LP meetings require at least two ShoreVest attendees. A genuinely casual coffee may be solo. Missing required attendance means the meeting is not ready; exceptions require explicit approval and a record.',
-      primary: 'Review revised meeting plan',
-      afterConfirm: 'Confirming would prepare a revised 10:45 ET plan for you to send. Nothing is proposed to Red Panda Capital until you confirm the exact package.',
-      owner: 'After you confirm, the revised time is yours to send to Red Panda Capital; the second attendee is notified only once you confirm.'
+     `bucket` places the item in My Work:
+        do-now | waiting | suggestion | on-hold | done
+     `home` (optional) surfaces a short summary line in one Home section:
+        decide | do | waiting | warnings | recent
+     Home stays selective — most queue items never appear on Home. `detail` (for
+     decisions) powers an explanatory drawer without bloating either surface. */
+
+  var WORK_ITEMS = [
+    /* ── Do now ─────────────────────────────────────────────────────────── */
+    {
+      id: 'contacts-review',
+      bucket: 'do-now',
+      action: 'Review 12 proposed contacts',
+      workspace: 'Outreach',
+      owner: 'Red Fox',
+      reason: 'A ranking source proposed 12 new contacts for the Cedar Ridge Pension outreach list.',
+      status: 'Awaiting your decision',
+      nextStep: 'Open the contact-review workflow and accept or hold each contact.',
+      due: 'Today',
+      link: '#/outreach/review',
+      home: { section: 'decide', summary: '12 proposed contacts need a decision.' }
     },
-    today: [
-      { time: '13:00', title: 'Narwhal Pension Fund', note: 'Investor confirmed', state: 'confirmed', zone: 'ET' },
-      { time: '15:30', title: 'Otter Pension Trust', note: 'Ready for meeting', state: 'ready', zone: 'ET' },
-      { time: '17:00', title: 'Internal Investment update', note: 'No preparation required', state: 'calm', zone: 'ET' }
-    ],
-    underControl: 'Other items are progressing with Finance, Legal and Investment. Nothing is overdue.',
-    around: [
-      { title: 'Firm dinner in Hong Kong on Thursday', note: 'Details in Firm', link: '#/workspace/firm' }
-    ]
-  };
-
-  var KELVIN_HOME = {
-    situational: 'One meeting needs the right attendance before you propose times.',
-    focus: {
-      id: 'kelvin-koala-mainland',
-      institution: 'Koala Investment Board (Shanghai office)',
-      title: 'Koala Investment Board (Shanghai) — mainland attendee required',
-      context: [
-        'A substantive meeting is being arranged with the Shanghai office of Koala Investment Board, an international LP.',
-        'Current internal attendance does not include an eligible mainland-team participant.'
-      ],
-      decision: 'Add an eligible mainland-team attendee before the meeting is proposed or confirmed.',
-      whyYou: 'You own the Koala Investment Board relationship in Asia-Pacific. A substantive interaction with the PRC office of an international LP requires Ben or an eligible mainland-team attendee.',
-      due: 'Resolve before proposing times',
-      dueZone: 'HKT',
-      recLabel: 'ShoreVest One recommends',
-      recommendation: 'Add an eligible mainland-team attendee before proposing or confirming the meeting. No confirmed eligible named attendee is available for this slot yet.',
-      reasoning: 'The counterparty is the PRC office of an international LP, so the mainland-attendance rule applies. Confirming attendance first avoids proposing a time the meeting cannot yet satisfy.',
-      verifiedAt: '08:05 HKT',
-      evidenceLine: 'Relationship ownership and counterparty office checked at 08:05 HKT. Eligible mainland-team availability for this slot is not yet confirmed.',
-      evidence: [
-        { label: 'Relationship ownership', detail: 'Kelvin Chan owns Koala Investment Board (Asia-Pacific)', state: 'system-verified' },
-        { label: 'Counterparty office', detail: 'Shanghai (PRC) office of an international LP', state: 'system-verified' },
-        { label: 'Meeting purpose', detail: 'Substantive discussion', state: 'human-confirmed' },
-        { label: 'Mainland-team attendee', detail: 'Eligible mainland-team attendee required', state: 'unavailable' },
-        { label: 'Proposed times', detail: 'Not yet proposed to Koala Investment Board', state: 'unavailable' }
-      ],
-      policy: 'An interaction with the PRC office of an international LP, or any office of a PRC-headquartered LP, requires Ben or an eligible mainland-team attendee. Substantive LP meetings also require at least two ShoreVest attendees. Missing required attendance means the meeting is not ready; exceptions require explicit approval and a record.',
-      primary: 'Review attendance and meeting plan',
-      requiredAttendee: 'Eligible mainland-team attendee required',
-      afterConfirm: 'Confirming would prepare a meeting plan that includes the required mainland-team attendee for you to review. No times are proposed to Koala Investment Board until you confirm the exact package.',
-      owner: 'After you confirm attendance, proposing times to Koala Investment Board remains yours; the mainland-team attendee is contacted internally only once you confirm.'
-    },
-    today: [
-      { time: '11:00', title: 'Puffin Asset Management', note: 'Ready for meeting', state: 'ready', zone: 'HKT' },
-      { time: '14:00', title: 'Alpaca Foundation', note: 'Needs preparation', state: 'prep', zone: 'HKT' },
-      { time: '16:30', title: 'Internal Investment update', note: 'No preparation required', state: 'calm', zone: 'HKT' }
-    ],
-    underControl: 'Other items are progressing with Finance, Legal and Investment. Nothing is overdue.',
-    around: [
-      { title: 'Yao Fu marks five years at ShoreVest this week', note: 'Details in Firm', link: '#/workspace/firm' }
-    ]
-  };
-
-  /* ── My Work (John & Kelvin) ────────────────────────────────────────────
-     A lightweight demonstration shell: what needs me, what is waiting on others
-     (with who, when, follow-up and accountability), and what is deliberately
-     later. No inbox, activity feed, or metric dashboard. */
-
-  var JOHN_MYWORK = {
-    needsMe: [
-      { title: 'Red Panda Capital meeting time', note: 'Confirm the revised 10:45 ET plan.', due: 'Before 10:30 ET today' },
-      { title: 'Narwhal Pension Fund follow-up note', note: 'Approve the single follow-up before the relationship rests.', due: 'This week' }
-    ],
-    waiting: [
-      { title: 'Otter Pension Trust recovery material', who: 'Investment team', when: 'Expected tomorrow', followUp: 'Follow up Friday if not received', accountable: 'You remain accountable to Otter Pension Trust.' },
-      { title: 'Quokka Capital introduction', who: 'Ben (Benjamin Fanger)', when: 'Expected this week', followUp: 'No action needed yet', accountable: 'Ben owns the next step.' }
-    ],
-    later: [
-      { title: 'Walrus Holdings re-engagement', note: 'Dormant relationship; revisit next quarter.' }
-    ]
-  };
-
-  var KELVIN_MYWORK = {
-    needsMe: [
-      { title: 'Koala Investment Board attendance', note: 'Confirm an eligible mainland-team attendee before proposing times.', due: 'Before proposing times' },
-      { title: 'Puffin Asset Management pack', note: 'Approve the final meeting pack.', due: 'Today' }
-    ],
-    waiting: [
-      { title: 'Alpaca Foundation term summary', who: 'Investment team', when: 'Expected tomorrow', followUp: 'Follow up Thursday if not received', accountable: 'You remain accountable to Alpaca Foundation.' },
-      { title: 'Puffin Asset Management legal review', who: 'Legal team', when: 'Expected Wednesday', followUp: 'No action needed yet', accountable: 'Legal owns the next step.' }
-    ],
-    later: [
-      { title: 'Koala Investment Board (HK office) reconnection', note: 'Separate relationship; revisit after the Shanghai meeting.' }
-    ]
-  };
-
-  /* ── Coordination Home (Celestra — preserved from the prior phase) ───────
-     Celestra keeps her existing demonstration Home and functionality. She is
-     not forced into the John/Kelvin commercial structure. */
-
-  var CELESTRA_HOME = {
-    needsYou: [
-      {
-        id: 'celestra-quokka-ddq',
-        title: 'Quokka Capital DDQ',
-        context: ['All substantive approvals are complete.', 'The final package needs assembly.'],
-        recLabel: 'Current state',
-        recommendation: 'Ready to assemble.',
-        actions: [
-          { label: 'Prepare package', intent: 'primary', done: 'Package prepared' },
-          { label: 'Need review', intent: 'secondary', done: 'Sent for review' }
+    {
+      id: 'redpanda-meeting',
+      bucket: 'do-now',
+      action: 'Confirm Red Panda Capital meeting attendance',
+      workspace: 'Meetings',
+      owner: 'Golden Eagle',
+      reason: 'Red Panda Capital confirmed the 10:30 ET meeting, but the required second ShoreVest attendee is not available until 10:45 ET.',
+      status: 'Decision needed before 10:30 ET',
+      nextStep: 'Move the start to 10:45 ET, or begin at 10:30 ET with one attendee.',
+      due: 'Before 10:30 ET',
+      link: '#/workspace/meetings',
+      home: { section: 'decide', summary: 'Red Panda Capital meeting attendance needs a decision.' },
+      detail: {
+        context: [
+          'Red Panda Capital confirmed the 10:30 ET meeting this morning.',
+          'The required second ShoreVest attendee is not available until 10:45 ET.'
         ],
-        detail: 'Each section has an approval recorded against it. Assembly gathers the approved answers into a single document for a final check before delivery.'
-      },
-      {
-        id: 'celestra-narwhal-dataroom',
-        title: 'Narwhal Pension Fund data-room access',
-        context: ['Relationship-owner approval and recipient eligibility are confirmed.'],
-        recLabel: 'Current state',
-        recommendation: 'Ready to prepare access.',
-        actions: [
-          { label: 'Prepare access', intent: 'primary', done: 'Access prepared' },
-          { label: 'Need review', intent: 'secondary', done: 'Sent for review' }
-        ],
-        detail: 'The relationship owner has approved access and the recipient has passed the eligibility check. Preparing access sets up the named recipient without granting anything beyond the approved scope.'
-      },
-      {
-        id: 'celestra-otter-materials',
-        title: 'Otter Pension Trust meeting materials',
-        context: ['An approved master exists.', 'A recipient-specific derivative has not been prepared.'],
-        recLabel: 'Current state',
-        recommendation: 'Ready to prepare the recipient version.',
-        actions: [
-          { label: 'Prepare material', intent: 'primary', done: 'Material prepared' },
-          { label: 'Need review', intent: 'secondary', done: 'Sent for review' }
-        ],
-        detail: 'The approved master is the source. The recipient version applies the agreed adjustments for this audience without changing any approved content.'
+        recommendation: 'Move the start to 10:45 ET rather than begin a substantive discussion with one attendee.',
+        reasoning: 'The agenda is substantive throughout, so the two-attendee requirement applies from the start. A fifteen-minute shift keeps both required attendees present.',
+        policy: 'Substantive LP meetings require at least two ShoreVest attendees. Missing required attendance means the meeting is not ready; exceptions require explicit approval and a record.',
+        evidence: [
+          { label: 'Investor confirmation', detail: 'Red Panda Capital confirmed 10:30 ET', state: 'system-verified' },
+          { label: 'Relationship ownership', detail: 'Golden Eagle owns Red Panda Capital', state: 'system-verified' },
+          { label: 'Second-attendee availability', detail: 'Available from 10:45 ET', state: 'system-verified' },
+          { label: 'Revised start time', detail: 'Not yet proposed to Red Panda Capital', state: 'unavailable' }
+        ]
       }
-    ],
-    today: [
-      { time: '11:00', title: 'Quokka Capital DDQ package', note: 'Due today', tone: 'attention' },
-      { time: '14:00', title: 'Narwhal data-room', note: 'Access requested', tone: 'ready' },
-      { time: '16:30', title: 'Otter Pension Trust prep', note: 'Supporting John', tone: 'calm' }
-    ],
-    waiting: [
-      { title: 'Finance confirmation', note: 'Due tomorrow · No action needed yet' },
-      { title: 'Legal review', note: 'Expected Wednesday · No action needed yet' },
-      { title: 'John commercial decision', note: 'Pending · No action needed yet' }
-    ]
-  };
+    },
+    {
+      id: 'koala-mainland',
+      bucket: 'do-now',
+      action: 'Confirm the mainland attendee for Koala Investment Board',
+      workspace: 'Meetings',
+      owner: 'Snow Leopard',
+      reason: 'A substantive meeting with the Shanghai office of an international LP requires an eligible mainland-team attendee before times are proposed.',
+      status: 'Attendance unresolved',
+      nextStep: 'Confirm an eligible mainland-team attendee before proposing times.',
+      due: 'Before proposing times',
+      link: '#/workspace/meetings',
+      detail: {
+        context: [
+          'A substantive meeting is being arranged with the Shanghai office of Koala Investment Board.',
+          'Current internal attendance does not include an eligible mainland-team participant.'
+        ],
+        recommendation: 'Confirm an eligible mainland-team attendee before proposing or confirming the meeting.',
+        reasoning: 'The counterparty is the PRC office of an international LP, so the mainland-attendance rule applies. Confirming attendance first avoids proposing a time the meeting cannot satisfy.',
+        policy: 'An interaction with the PRC office of an international LP, or any office of a PRC-headquartered LP, requires an eligible mainland-team attendee. Substantive LP meetings also require at least two ShoreVest attendees.',
+        evidence: [
+          { label: 'Relationship ownership', detail: 'Snow Leopard owns Koala Investment Board', state: 'system-verified' },
+          { label: 'Counterparty office', detail: 'Shanghai (PRC) office of an international LP', state: 'system-verified' },
+          { label: 'Mainland-team attendee', detail: 'Eligible mainland-team attendee required', state: 'unavailable' },
+          { label: 'Proposed times', detail: 'Not yet proposed to Koala Investment Board', state: 'unavailable' }
+        ]
+      }
+    },
+    {
+      id: 'blueriver-access',
+      bucket: 'do-now',
+      action: 'Prepare the Blue River Endowment access package',
+      workspace: 'Diligence & Requests',
+      owner: 'River Otter',
+      reason: 'Relationship-owner approval and recipient eligibility are confirmed for Blue River Endowment data-room access.',
+      status: 'Ready to prepare',
+      nextStep: 'Prepare the named-recipient access package.',
+      due: 'Today',
+      link: '#/workspace/diligence'
+    },
+    {
+      id: 'approval-cedar',
+      bucket: 'do-now',
+      action: 'Submit the Cedar Ridge approval package',
+      workspace: 'Approvals',
+      owner: 'River Otter',
+      reason: 'All substantive approvals are complete; the package is assembled and ready to submit.',
+      status: 'Ready to submit',
+      nextStep: 'Review the assembled package and submit it.',
+      due: 'Today',
+      link: '#/my-work',
+      home: { section: 'do', summary: 'One approval package is ready.' }
+    },
+    {
+      id: 'dq-atp',
+      bucket: 'do-now',
+      action: 'Correct the ATP account match',
+      workspace: 'Diligence & Requests',
+      owner: 'Snow Leopard',
+      reason: 'Three data-quality issues are blocking the Cedar Ridge outreach list; an automated match linked a contact to the wrong parent account.',
+      status: 'Blocking outreach',
+      nextStep: 'Reassign the contact to the correct account and re-run validation.',
+      due: 'Today',
+      link: '#/dataquality',
+      home: { section: 'warnings', summary: 'Three data-quality issues are blocking outreach.' }
+    },
 
-  /* ── Combined Home (single demonstration profile) ───────────────────────
-     "The motherboard" — one Home that combines everything: the commercial
-     Focus Now decisions (John and Kelvin), the coordination Needs You cards
-     (Celestra), a merged Today, one Under Control reassurance line, Waiting
-     elsewhere, and the quiet Around ShoreVest notes. The crafted per-person
-     content above is preserved verbatim and composed here, so a later split
-     back into per-role Homes needs no rewriting. */
+    /* ── Waiting ────────────────────────────────────────────────────────── */
+    {
+      id: 'ownership-granite',
+      bucket: 'waiting',
+      action: 'Confirm ownership of Granite Peak Capital',
+      workspace: 'Relationships',
+      owner: 'Red Fox',
+      waitingOn: 'Grey Wolf',
+      reason: 'Grey Wolf has not confirmed ownership of the Granite Peak Capital relationship.',
+      status: 'Waiting on Grey Wolf',
+      nextStep: 'Follow up Friday if ownership is still unconfirmed.',
+      link: '#/workspace/relationships',
+      home: { section: 'waiting', summary: 'Grey Wolf has not confirmed Granite Peak ownership.' }
+    },
+    {
+      id: 'recovery-otter',
+      bucket: 'waiting',
+      action: 'Otter Pension Trust recovery material',
+      workspace: 'Recovery & Enforcement',
+      owner: 'Golden Eagle',
+      waitingOn: 'Investment team',
+      reason: 'The Investment team is preparing recovery material for Otter Pension Trust.',
+      status: 'Waiting on Investment team',
+      nextStep: 'Expected tomorrow; follow up Friday if not received.',
+      link: '#/my-work'
+    },
+    {
+      id: 'legal-silverpine',
+      bucket: 'waiting',
+      action: 'Silver Pine Insurance pack legal review',
+      workspace: 'Compliance',
+      owner: 'Snow Leopard',
+      waitingOn: 'Legal team',
+      reason: 'Legal is reviewing the Silver Pine Insurance meeting pack.',
+      status: 'Waiting on Legal team',
+      nextStep: 'Expected Wednesday; no action needed yet.',
+      link: '#/my-work'
+    },
 
-  var DEMO_HOME = {
-    situational: 'The full ShoreVest One workspace — every section and tool, in one demonstration profile.',
-    /* Focus Now becomes a small ordered set rather than a single card. */
-    focus: [JOHN_HOME.focus, KELVIN_HOME.focus],
-    needsYou: CELESTRA_HOME.needsYou,
-    /* John's day (ET) plus Kelvin's first two (HKT); avoids a duplicated
-       "Internal Investment update" row while showing both regions. */
-    today: JOHN_HOME.today.concat(KELVIN_HOME.today.slice(0, 2)),
-    underControl: JOHN_HOME.underControl,
-    waiting: CELESTRA_HOME.waiting,
-    around: [JOHN_HOME.around[0], KELVIN_HOME.around[0]]
-  };
+    /* ── Suggestions (not yet accepted work) ────────────────────────────── */
+    {
+      id: 'sugg-deletions',
+      bucket: 'suggestion',
+      action: 'Review 7 suggested task deletions',
+      workspace: 'Workflow Rules',
+      owner: 'Peregrine Falcon',
+      reason: 'A ranking source suggested removing 7 tasks it believes are stale. These are suggestions, not accepted work.',
+      status: 'Suggested — not yet accepted',
+      nextStep: 'Accept or dismiss each suggested deletion.',
+      link: '#/my-work'
+    },
+    {
+      id: 'sugg-northharbour',
+      bucket: 'suggestion',
+      action: 'Consider 4 proposed contacts for North Harbour Foundation',
+      workspace: 'Outreach',
+      owner: 'Red Fox',
+      reason: 'A ranking source proposed 4 additional contacts for North Harbour Foundation.',
+      status: 'Suggested — not yet accepted',
+      nextStep: 'Accept into the outreach list or dismiss.',
+      link: '#/outreach'
+    },
 
-  var DEMO_MYWORK = {
-    needsMe: JOHN_MYWORK.needsMe.concat(KELVIN_MYWORK.needsMe),
-    waiting: JOHN_MYWORK.waiting.concat(KELVIN_MYWORK.waiting),
-    later: JOHN_MYWORK.later.concat(KELVIN_MYWORK.later)
-  };
+    /* ── On hold ────────────────────────────────────────────────────────── */
+    {
+      id: 'ranking-stale',
+      bucket: 'on-hold',
+      action: 'Granite Peak ranking relies on stale information',
+      workspace: 'Investor Intelligence',
+      owner: 'Peregrine Falcon',
+      reason: 'The ranking for Granite Peak Capital is based on data last refreshed six weeks ago.',
+      status: 'On hold — awaiting data refresh',
+      nextStep: 'Request a refresh before relying on the ranking.',
+      link: '#/workspace/investor-intelligence',
+      home: { section: 'warnings', summary: 'A relationship ranking relies on stale information.' }
+    },
+    {
+      id: 'walrus-hold',
+      bucket: 'on-hold',
+      action: 'Walrus Holdings re-engagement',
+      workspace: 'Relationships',
+      owner: 'Grey Wolf',
+      reason: 'Dormant relationship deliberately deferred to next quarter.',
+      status: 'On hold — deferred',
+      nextStep: 'Revisit next quarter.',
+      link: '#/workspace/relationships'
+    },
+
+    /* ── Done (recent work) ─────────────────────────────────────────────── */
+    {
+      id: 'done-narwhal',
+      bucket: 'done',
+      action: 'Narwhal Pension Fund follow-up note approved',
+      workspace: 'Relationships',
+      owner: 'Golden Eagle',
+      reason: 'The single follow-up note was approved and the relationship can rest.',
+      status: 'Done',
+      nextStep: 'No further action.',
+      link: '#/my-work',
+      home: { section: 'recent', summary: 'Narwhal Pension Fund follow-up approved.' }
+    },
+    {
+      id: 'done-otter-material',
+      bucket: 'done',
+      action: 'Otter Pension Trust recipient material prepared',
+      workspace: 'Materials & Delivery',
+      owner: 'River Otter',
+      reason: 'The recipient-specific version was prepared from the approved master.',
+      status: 'Done',
+      nextStep: 'No further action.',
+      link: '#/my-work',
+      home: { section: 'recent', summary: 'Otter Pension Trust material prepared.' }
+    }
+  ];
+
+  /* Home "Start here" — the recommended first thing to open, plus the two
+     workflows worth continuing. These are curated shortcuts, not queue items. */
+  var START_HERE = [
+    { label: 'Open the Blue River Endowment access package', sub: 'Recommended first — ready to prepare', hash: '#/workspace/diligence' },
+    { label: 'Continue the Outreach workflow', sub: 'Find people → review → prepare messages', hash: '#/outreach' },
+    { label: 'Open the complete Tool catalogue', sub: 'Every ShoreVest One tool, grouped by workspace', hash: '#/tools' }
+  ];
+
+  /* Ordered Home sections (short, selective). Start here and Recent work sit
+     around the attention sections in between. */
+  var HOME_SECTIONS = [
+    { key: 'decide', title: 'Decide', sub: 'Decisions waiting on you.' },
+    { key: 'do', title: 'Do', sub: 'Ready to action now.' },
+    { key: 'waiting', title: 'Waiting', sub: 'Sitting with someone else.' },
+    { key: 'warnings', title: 'Warnings', sub: 'Exceptions and stale information.' }
+  ];
+
+  /* Ordered My Work buckets (the full execution queue). */
+  var MYWORK_BUCKETS = [
+    { key: 'do-now', title: 'Do now', sub: 'Yours to action now.' },
+    { key: 'waiting', title: 'Waiting', sub: 'With someone else. Shown so nothing rests by accident.' },
+    { key: 'suggestion', title: 'Suggestions', sub: 'Proposed, not yet accepted. Accept before it becomes a task.' },
+    { key: 'on-hold', title: 'On hold', sub: 'Deliberately paused. Nothing is due.' },
+    { key: 'done', title: 'Done', sub: 'Recently completed.' }
+  ];
+
+  var SITUATIONAL = 'A selective, company-wide view of where attention is needed across ShoreVest One.';
 
   /* ── People ─────────────────────────────────────────────────────────────
      One neutral demonstration profile with full access. It is not a real
@@ -280,9 +339,7 @@
       username: 'demo@shorevest.example',
       role: TOOLS_ROLE,
       nav: ALL_NAV,
-      homeSchema: 'combined',
-      home: DEMO_HOME,
-      myWork: DEMO_MYWORK
+      homeSchema: 'motherboard'
     }
   ];
 
@@ -318,6 +375,11 @@
       label: 'Firm',
       title: 'Firm',
       lede: 'People, availability, offices, events, resources and internal information.'
+    },
+    outreach: {
+      label: 'Outreach',
+      title: 'Outreach',
+      lede: 'Find people, review lists, prepare messages and assemble approval packages.'
     }
   };
 
@@ -370,7 +432,26 @@
     list: PERSONAS,
     byId: function (id) { return BY_ID[id] || null; },
     workspace: function (key) { return WORKSPACES[key] || null; },
-    preview: function (key) { return PREVIEW[key] || null; }
+    preview: function (key) { return PREVIEW[key] || null; },
+
+    /* Shared work-item store — the single source Home and My Work both read. */
+    workItems: WORK_ITEMS,
+    startHere: START_HERE,
+    homeSections: HOME_SECTIONS,
+    myWorkBuckets: MYWORK_BUCKETS,
+    situational: SITUATIONAL,
+    /* Items surfaced in a given Home section, in queue order. */
+    homeItems: function (section) {
+      return WORK_ITEMS.filter(function (it) { return it.home && it.home.section === section; });
+    },
+    /* Items in a given My Work bucket, in queue order. */
+    bucketItems: function (bucket) {
+      return WORK_ITEMS.filter(function (it) { return it.bucket === bucket; });
+    },
+    itemById: function (id) {
+      for (var i = 0; i < WORK_ITEMS.length; i++) { if (WORK_ITEMS[i].id === id) return WORK_ITEMS[i]; }
+      return null;
+    }
   };
 
   if (typeof module !== 'undefined' && module.exports) {

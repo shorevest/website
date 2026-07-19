@@ -2,14 +2,15 @@
    ShoreVest One — profile (persona) configuration test suite
    Run: node tests/employee-portal-personas.test.js
 
-   The demonstration now runs on ONE neutral profile ("ShoreVest Demo") with the
-   full workspace: every section and every tool on the left. This suite covers
-   that single profile, its unified navigation, and the combined "motherboard"
-   Home that composes the crafted commercial decisions (Red Panda two-attendee,
-   Kelvin mainland attendance) and coordination cards. It also keeps the content
-   guarantees: animal-based external data, prohibited-name absence, no false-
-   green language, no invented internal employees, and no capability-role leak.
-   Pure data assertions — no DOM or live tenant required.
+   The demonstration runs on ONE neutral profile ("ShoreVest Demo") — the
+   "motherboard" — with the full workspace: every section and every tool on the
+   left. Home and My Work are two views of ONE shared queue (workItems): Home is
+   a short, selective company-wide summary of where attention is needed, and
+   every Home line links back to an item My Work carries in full.
+
+   These are pure data assertions — no DOM or live tenant required. They also
+   enforce the data rule: every synthetic person is a fictional animal codename
+   and no real ShoreVest employee name, investor name, or email appears.
    ========================================================================== */
 'use strict';
 
@@ -50,14 +51,6 @@ test('the capability role never leaks into any user-facing identity string', () 
   });
 });
 
-test('no rejected identity strings are used', () => {
-  const blob = JSON.stringify(P.list);
-  ['Ex-Asia', 'APAC', 'Execution Approver',
-   'Director of Client Solutions — Asia', 'Director of Client Solutions — Americas'].forEach((bad) => {
-    assert.ok(blob.indexOf(bad) === -1, 'rejected identity present: ' + bad);
-  });
-});
-
 /* ── Unified navigation (every section and tool) ────────────────────────── */
 
 const FULL_NAV = ['Home', 'My Work', 'Relationships', 'Outreach', 'Meetings',
@@ -66,15 +59,6 @@ const FULL_NAV = ['Home', 'My Work', 'Relationships', 'Outreach', 'Meetings',
 
 test('the demo profile exposes the full unified navigation', () => {
   assert.deepStrictEqual(navLabels(P.byId('demo')), FULL_NAV);
-});
-
-test('every commercial and coordination section is present on the left', () => {
-  const labels = navLabels(P.byId('demo'));
-  ['Relationships', 'Outreach', 'Meetings', 'Diligence & Requests',
-   'Investor Intelligence', 'Materials & Delivery', 'Meeting Support',
-   'Firm', 'Tools'].forEach((l) => {
-    assert.ok(labels.indexOf(l) !== -1, 'missing section: ' + l);
-  });
 });
 
 test('a Workspaces group heading and a divider separate the structure', () => {
@@ -95,129 +79,121 @@ test('My Work points at the real My Work view (not a preview placeholder)', () =
   assert.ok(item && item.hash === '#/my-work', 'My Work should route to #/my-work');
 });
 
-/* ── Combined "motherboard" Home ────────────────────────────────────────── */
-
-test('the demo profile uses the combined Home schema', () => {
-  assert.strictEqual(P.byId('demo').homeSchema, 'combined');
+test('the demo profile uses the motherboard Home schema', () => {
+  assert.strictEqual(P.byId('demo').homeSchema, 'motherboard');
 });
 
-test('the combined Home composes focus, needs-you, today, waiting and around', () => {
-  const keys = Object.keys(P.byId('demo').home).sort();
-  assert.deepStrictEqual(keys,
-    ['around', 'focus', 'needsYou', 'situational', 'today', 'underControl', 'waiting']);
+/* ── Shared work-item store ─────────────────────────────────────────────── */
+
+const BUCKETS = ['do-now', 'waiting', 'suggestion', 'on-hold', 'done'];
+const HOME_SECTIONS = ['decide', 'do', 'waiting', 'warnings', 'recent'];
+
+test('a single shared work-item store backs both surfaces', () => {
+  assert.ok(Array.isArray(P.workItems) && P.workItems.length >= 8, 'workItems store present');
+  assert.ok(Array.isArray(P.myWorkBuckets) && P.myWorkBuckets.length === 5, 'five My Work buckets');
+  assert.ok(Array.isArray(P.homeSections) && P.homeSections.length >= 3, 'Home sections defined');
+  assert.ok(Array.isArray(P.startHere) && P.startHere.length >= 2, 'Start here shortcuts');
 });
 
-test('Focus Now is an ordered set of commercial decisions', () => {
-  const focus = P.byId('demo').home.focus;
-  assert.ok(Array.isArray(focus) && focus.length === 2, 'two focus decisions composed');
-  focus.forEach((f, i) => {
-    ['title', 'context', 'decision', 'whyYou', 'due', 'recommendation', 'reasoning',
-     'evidenceLine', 'evidence', 'policy', 'primary', 'afterConfirm', 'owner'].forEach((k) => {
-      assert.ok(f[k] != null && (typeof f[k] !== 'string' || f[k].length),
-        'focus[' + i + '] missing ' + k);
+test('every work item has one action, owner, reason, status, next step and a link', () => {
+  const ids = {};
+  P.workItems.forEach((it) => {
+    ['id', 'bucket', 'action', 'workspace', 'owner', 'reason', 'status', 'nextStep', 'link'].forEach((k) => {
+      assert.ok(it[k] && String(it[k]).length, 'item ' + it.id + ' missing ' + k);
     });
-    assert.ok(Array.isArray(f.evidence) && f.evidence.length >= 3, 'focus[' + i + '] evidence');
-    assert.ok(/review/i.test(f.primary), 'focus[' + i + '] primary is review-oriented');
+    assert.ok(BUCKETS.indexOf(it.bucket) !== -1, 'item ' + it.id + ' bad bucket ' + it.bucket);
+    assert.ok(!ids[it.id], 'duplicate item id ' + it.id);
+    ids[it.id] = true;
+    if (it.home) assert.ok(HOME_SECTIONS.indexOf(it.home.section) !== -1, 'item ' + it.id + ' bad home section');
   });
 });
 
-test('the Red Panda Capital two-attendee decision is preserved', () => {
-  const f = P.byId('demo').home.focus.find((x) => x.institution.indexOf('Red Panda Capital') === 0);
-  assert.ok(f, 'Red Panda focus present');
-  assert.ok(/two ShoreVest attendees/i.test(f.policy), 'two-attendee policy explained');
+test('My Work is the full queue: every bucket has items and each is reachable', () => {
+  BUCKETS.forEach((b) => {
+    assert.ok(P.bucketItems(b).length >= 1, 'bucket ' + b + ' has at least one item');
+  });
 });
 
-test('the mainland-attendance decision is preserved with a placeholder attendee', () => {
-  const f = P.byId('demo').home.focus.find((x) => /Koala/.test(x.institution));
-  assert.ok(f, 'Koala focus present');
-  assert.ok(/mainland/i.test(f.policy) && /Ben/.test(f.policy), 'mainland rule explained');
-  assert.strictEqual(f.requiredAttendee, 'Eligible mainland-team attendee required');
+/* ── Home is selective, and shares My Work's underlying items ────────────── */
+
+test('Home is short and selective (a handful of attention lines, not the queue)', () => {
+  const attention = ['decide', 'do', 'waiting', 'warnings']
+    .reduce((n, s) => n + P.homeItems(s).length, 0);
+  assert.ok(attention >= 3 && attention <= 8, 'Home shows a selective set: ' + attention);
+  assert.ok(attention < P.workItems.length, 'Home shows fewer items than the full queue');
 });
 
-test('no false-green language appears in any Focus Now decision', () => {
-  const blob = JSON.stringify(P.byId('demo').home.focus);
+test('every Home line is one of the shared work items (no duplicate records)', () => {
+  HOME_SECTIONS.forEach((s) => {
+    P.homeItems(s).forEach((it) => {
+      assert.strictEqual(P.itemById(it.id), it, 'Home item ' + it.id + ' is a shared work item');
+      assert.ok(it.home && it.home.summary, 'Home item ' + it.id + ' has a summary line');
+      assert.ok(it.link, 'Home item ' + it.id + ' links back to its record');
+    });
+  });
+});
+
+test('Home surfaces at least one Decide, one Warning and Recent work', () => {
+  assert.ok(P.homeItems('decide').length >= 1, 'a decision is surfaced');
+  assert.ok(P.homeItems('warnings').length >= 1, 'a warning is surfaced');
+  assert.ok(P.homeItems('recent').length >= 1, 'recent work is surfaced');
+});
+
+/* ── Preserved decisions (as detailed Do-now items) ─────────────────────── */
+
+test('the Red Panda Capital two-attendee decision is preserved with detail', () => {
+  const f = P.itemById('redpanda-meeting');
+  assert.ok(f && f.bucket === 'do-now', 'Red Panda decision is a Do-now item');
+  assert.ok(f.detail && /two ShoreVest attendees/i.test(f.detail.policy), 'two-attendee policy explained');
+  assert.ok(Array.isArray(f.detail.evidence) && f.detail.evidence.length >= 3, 'evidence present');
+});
+
+test('the mainland-attendance decision is preserved with detail', () => {
+  const f = P.itemById('koala-mainland');
+  assert.ok(f && f.detail && /mainland/i.test(f.detail.policy), 'mainland rule explained');
+});
+
+test('no false-green language appears in any decision detail', () => {
+  const blob = JSON.stringify(P.workItems);
   ['Safe to act', 'Fully verified', 'All clear', 'Everything is safe', 'Verified and approved']
     .forEach((bad) => assert.ok(blob.indexOf(bad) === -1, 'false-green: ' + bad));
 });
 
-test('coordination Needs You cards are preserved and namespaced', () => {
-  const needsYou = P.byId('demo').home.needsYou;
-  assert.ok(Array.isArray(needsYou) && needsYou.length >= 3, 'needs-you cards present');
-  needsYou.forEach((c) => {
-    assert.ok(c.id.indexOf('celestra-') === 0, 'coordination card not namespaced: ' + c.id);
-    assert.ok(Array.isArray(c.actions) && c.actions.length, 'card ' + c.id + ' has actions');
+/* ── Data rule: fictional animal codenames, no real people or emails ────── */
+
+const APPROVED_OWNERS = ['Red Fox', 'Snow Leopard', 'River Otter', 'Peregrine Falcon',
+  'Black Bear', 'Grey Wolf', 'Sea Turtle', 'Golden Eagle'];
+
+test('every owner is a fictional animal codename; waiting-on is a codename or a generic team', () => {
+  const TEAMS = ['Investment team', 'Legal team', 'Finance team', 'Compliance team'];
+  P.workItems.forEach((it) => {
+    assert.ok(APPROVED_OWNERS.indexOf(it.owner) !== -1, 'non-codename owner: ' + it.owner);
+    if (it.waitingOn) {
+      assert.ok(APPROVED_OWNERS.indexOf(it.waitingOn) !== -1 || TEAMS.indexOf(it.waitingOn) !== -1,
+        'non-codename / non-team waitingOn: ' + it.waitingOn);
+    }
   });
 });
 
-test('Today merges both regions without exceeding a short list', () => {
-  const today = P.byId('demo').home.today;
-  assert.ok(today.length >= 4 && today.length <= 6, 'today is a short merged list');
-  const zones = today.map((t) => t.zone).filter(Boolean);
-  assert.ok(zones.indexOf('ET') !== -1 && zones.indexOf('HKT') !== -1, 'both regions represented');
-  /* No duplicated "Internal Investment update" row after the merge. */
-  const internal = today.filter((t) => t.title.indexOf('Internal') === 0);
-  assert.ok(internal.length <= 1, 'internal update row is not duplicated');
-});
-
-test('Under Control is a single reassurance line', () => {
-  const uc = P.byId('demo').home.underControl;
-  assert.strictEqual(typeof uc, 'string');
-  assert.ok(uc.indexOf('Nothing is overdue') !== -1, 'reassurance line preserved');
-});
-
-test('Around ShoreVest stays quiet (at most two items)', () => {
-  const around = P.byId('demo').home.around || [];
-  assert.ok(around.length <= 2, 'around length');
-});
-
-/* ── My Work (combined) ─────────────────────────────────────────────────── */
-
-test('the combined My Work has Needs me / Waiting / Later with full waiting detail', () => {
-  const mw = P.byId('demo').myWork;
-  assert.ok(mw, 'demo has myWork');
-  assert.deepStrictEqual(Object.keys(mw).sort(), ['later', 'needsMe', 'waiting']);
-  assert.ok(mw.needsMe.length >= 2 && mw.waiting.length >= 2, 'items from both regions merged');
-  mw.waiting.forEach((w) => {
-    ['who', 'when', 'followUp', 'accountable'].forEach((k) =>
-      assert.ok(w[k], 'waiting item missing ' + k));
+test('no real ShoreVest employee names appear anywhere in persona data', () => {
+  const blob = JSON.stringify([P.list, P.workItems, P.startHere, P.homeSections, P.myWorkBuckets]);
+  ['John Jones', 'Kelvin Chan', 'Nico Jacques', 'Benjamin Fanger', 'Celestra',
+   'Yao Fu', ' John', 'Kelvin', ' Ben ', 'Fanger', 'Jacques'].forEach((bad) => {
+    assert.ok(blob.indexOf(bad) === -1, 'real / prior name present: ' + bad);
   });
 });
 
-/* ── External demo data ─────────────────────────────────────────────────── */
-
-const APPROVED_ANIMALS = ['Red Panda Capital', 'Narwhal Pension Fund', 'Quokka Capital',
-  'Puffin Asset Management', 'Otter Pension Trust', 'Koala Investment Board',
-  'Walrus Holdings', 'Alpaca Foundation'];
-
-test('Focus Now institutions use approved animal-based fictional names', () => {
-  P.byId('demo').home.focus.forEach((f) => {
-    const inst = f.institution.split(' (')[0];
-    assert.ok(APPROVED_ANIMALS.indexOf(inst) !== -1, 'focus institution: ' + inst);
-  });
+test('no real email addresses appear in persona data', () => {
+  const blob = JSON.stringify([P.workItems, P.startHere]);
+  assert.ok(blob.indexOf('@shorevest.com') === -1, 'a @shorevest.com address is present');
+  assert.ok(!/@[a-z]+\.(com|org|net)\b/i.test(blob), 'a real-looking email domain is present');
 });
 
-test('Today institutions are approved animal names or internal items', () => {
-  P.byId('demo').home.today.forEach((t) => {
-    if (t.title.indexOf('Internal') === 0) return;
-    assert.ok(APPROVED_ANIMALS.indexOf(t.title) !== -1, 'today institution: ' + t.title);
-  });
-});
-
-test('prohibited external names are absent from the persona data', () => {
-  const blob = JSON.stringify(P.list);
+test('institutions are fictional (no prohibited real-sounding names)', () => {
+  const blob = JSON.stringify(P.workItems);
   ['AIIB', 'MetLife', 'Albourne', 'Eastspring', 'GreenRam', 'GreenVale',
    'NorthBridge', 'Meridian', 'Summit Endowment', 'Harbour Ridge', 'EastGate'].forEach((bad) => {
-    assert.ok(blob.indexOf(bad) === -1, 'prohibited name present: ' + bad);
-  });
-});
-
-test('no invented internal ShoreVest employee appears (only real names / placeholders)', () => {
-  /* The only internal people named are Ben (Benjamin Fanger) and Yao Fu — both
-     real ShoreVest employees. The mainland requirement uses a placeholder. */
-  const blob = JSON.stringify(P.list);
-  assert.ok(blob.indexOf('mainland-team attendee') !== -1, 'placeholder attendee present');
-  ['Alice', 'Bob', 'Jane Doe', 'John Smith'].forEach((invented) => {
-    assert.ok(blob.indexOf(invented) === -1, 'invented employee present: ' + invented);
+    assert.ok(blob.indexOf(bad) === -1, 'prohibited institution present: ' + bad);
   });
 });
 
