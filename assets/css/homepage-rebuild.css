@@ -2266,3 +2266,33 @@ body.homepage .sv-mobile-menu a.sv-nav__new-insights::after {
   body.homepage .sv-mobile-menu a.sv-nav__new-insights::after { animation: none; }
   body.homepage .sv-nav a.sv-nav__new-insights::before { transition: none; }
 }
+
+/* 2026-07-19 · Mobile hero image/block cleanup
+   Keep phone mastheads to the intended editorial stack: the photograph plus a
+   single offset cinnabar block. The transparent hero field should never render
+   as a separate white/shadowed card behind the image. */
+body.homepage .sv-hero__field,
+body.press-page .sv-hero__field {
+  box-shadow: none !important;
+}
+
+@media (max-width: 767px) {
+  body.homepage .sv-hero__field,
+  body.press-page .sv-hero__field {
+    background: transparent !important;
+    box-shadow: none !important;
+    padding-bottom: clamp(22px, 6vw, 30px);
+  }
+
+  body.homepage .sv-hero__field::before,
+  body.press-page .sv-hero__field::before {
+    left: 0;
+    right: calc(var(--pad-x) * -1);
+    bottom: 0;
+  }
+
+  body.homepage .sv-hero__image,
+  body.press-page .sv-hero__image {
+    margin-right: 0;
+  }
+}
