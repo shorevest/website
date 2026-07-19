@@ -77,7 +77,7 @@ body.cdd-print-layout .wrap { width: var(--p-page-width); max-width: none; margi
   overflow: visible;
   background: var(--p-paper);
   position: relative;
-  border-top: 0;
+  border-top: var(--p-print-top-rule-height) solid var(--p-cinnabar);
   box-shadow: 0 1px 0 var(--p-line), 0 18px 50px rgba(20, 30, 28, 0.14);
   padding: var(--p-page-margin-top) var(--p-page-margin-x) var(--p-page-margin-bottom);
   -webkit-print-color-adjust: exact;
@@ -230,7 +230,7 @@ body.cdd-print-layout .wrap { width: var(--p-page-width); max-width: none; margi
     min-height: 297mm;
     margin: 0 auto;
     overflow: visible;
-    border-top: 0;
+    border-top: var(--p-print-top-rule-height) solid var(--p-cinnabar);
     padding: var(--p-page-margin-top) var(--p-page-margin-x) var(--p-page-margin-bottom);
     -webkit-box-decoration-break: clone;
     box-decoration-break: clone;
