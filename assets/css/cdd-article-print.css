@@ -32,7 +32,7 @@
 html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 
 body.cdd-print-layout {
-  margin: 0; padding: 32px 16px 56px;
+  margin: 0; padding: 0 16px 56px;
   background: #E7E4DC;                 /* screen backdrop only */
   color: var(--p-ink-2);
   font-family: var(--p-font);
@@ -42,7 +42,7 @@ body.cdd-print-layout {
 body.cdd-print-layout .wrap { width: var(--p-page-width); max-width: none; margin-inline: auto; }
 
 /* ---- Running header strip (publication nameplate + screen toolbar) ---- */
-.cdd-print-layout .cdd-topline { max-width: var(--p-page-width); margin: 0 auto 14px; padding: 0 4px; }
+.cdd-print-layout .cdd-topline { max-width: var(--p-page-width); margin: 0 auto 14px; padding: 32px 4px 0; }
 .cdd-print-layout .cdd-topline__inner {
   display: flex; align-items: center; justify-content: space-between; gap: 24px;
 }
@@ -72,10 +72,19 @@ body.cdd-print-layout .wrap { width: var(--p-page-width); max-width: none; margi
 
 /* ---- The sheet ---- */
 .cdd-print-layout .cdd-print-shell {
+  overflow: visible;
   background: var(--p-paper);
-  border-top: 3px solid var(--p-cinnabar);
   box-shadow: 0 1px 0 var(--p-line), 0 18px 50px rgba(20, 30, 28, 0.14);
   padding: var(--p-page-margin-top) var(--p-page-margin-x) var(--p-page-margin-bottom);
+}
+.cdd-print-layout .cdd-print-shell::before {
+  content: "";
+  display: block;
+  height: 3px;
+  margin: calc(-1 * var(--p-page-margin-top)) calc(-1 * var(--p-page-margin-x)) var(--p-page-margin-top);
+  background: var(--p-cinnabar);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 
 /* ---- Masthead ---- */
@@ -176,7 +185,8 @@ body.cdd-print-layout .wrap { width: var(--p-page-width); max-width: none; margi
    PRINT
    ========================================================================== */
 @media print {
-  @page { margin: 0; }
+  @page { margin: 17mm 0 18mm; }
+  @page:first { margin: 0; }
 
   :root {
     --p-print-top-rule-height: 3px;
@@ -186,49 +196,25 @@ body.cdd-print-layout .wrap { width: var(--p-page-width); max-width: none; margi
      Export only the white document area: the beige browser-preview backdrop,
      toolbar/nameplate strip, and screen shadow are intentionally removed for
      print-ready PDFs. The sheet, not the browser page box, owns the content
-     inset so browser print matches the full-bleed PDF generator: the page box
-     has zero margin, the cinnabar rule reaches both physical edges, and the
-     content width stays the same as the on-screen A4/PDF preview.
+     inset so browser print matches the full-bleed PDF generator: the first
+     page box has zero margin for the cinnabar rule, later pages regain a top
+     margin, and the content width stays the same as the on-screen A4/PDF preview.
   */
   body.cdd-print-layout {
     padding: 0;
     background: var(--p-paper);
-  }
-  body.cdd-print-layout::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 9999;
-    display: block;
-    width: 100vw;
-    height: var(--p-print-top-rule-height);
-    background: var(--p-cinnabar) !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-  .cdd-print-layout .cdd-print-shell::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 9998;
-    display: block;
-    height: var(--p-print-top-rule-height);
-    background: var(--p-cinnabar) !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
   }
   .cdd-print-layout .cdd-topline,
   .cdd-print-layout .cdd-print-hide,
   .cdd-print-layout .cdd-topline__tools { display: none !important; }
   .cdd-print-layout .wrap { width: auto; max-width: none; }
   .cdd-print-layout .cdd-print-shell {
-    border-top: 0;
     box-shadow: none;
     padding: var(--p-page-margin-top) var(--p-page-margin-x) var(--p-page-margin-bottom);
+  }
+  .cdd-print-layout .cdd-print-shell::before {
+    height: var(--p-print-top-rule-height);
+    background: var(--p-cinnabar) !important;
   }
   .cdd-print-layout .cdd-body > h2 { break-after: avoid; }
   .cdd-print-layout .cdd-disclaimer { break-inside: avoid; }
