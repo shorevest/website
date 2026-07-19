@@ -37,7 +37,7 @@
     { key: 'my-work', label: 'My Work', hash: '#/my-work' },
     { sep: 'Workspaces' },
     { key: 'relationships', label: 'Relationships', hash: '#/workspace/relationships' },
-    { key: 'outreach', label: 'Outreach', hash: '#/workspace/outreach' },
+    { key: 'outreach', label: 'Outreach', hash: '#/outreach' },
     { key: 'meetings', label: 'Meetings', hash: '#/workspace/meetings' },
     { key: 'diligence', label: 'Diligence & Requests', hash: '#/workspace/diligence' },
     { key: 'investor-intelligence', label: 'Investor Intelligence', hash: '#/workspace/investor-intelligence' },
@@ -305,11 +305,6 @@
       label: 'Relationships',
       title: 'Relationships',
       lede: 'Institutions, people, relationship strategy, commitments and next moves.'
-    },
-    outreach: {
-      label: 'Outreach',
-      title: 'Outreach',
-      lede: 'Targeting, campaigns, sequencing, replies and re-engagement.'
     },
     meetings: {
       label: 'Meetings',

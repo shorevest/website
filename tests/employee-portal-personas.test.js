@@ -288,7 +288,7 @@ test('no synthetic content leaks between John, Kelvin and Celestra', () => {
 });
 
 test('workspace previews exist for every John/Kelvin workspace route', () => {
-  ['relationships', 'outreach', 'meetings', 'diligence', 'investor-intelligence', 'firm']
+  ['relationships', 'meetings', 'diligence', 'investor-intelligence', 'firm']
     .forEach((key) => {
       const info = P.workspace(key);
       assert.ok(info && info.title && info.lede, 'missing workspace ' + key);

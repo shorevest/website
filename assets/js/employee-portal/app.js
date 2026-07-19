@@ -79,7 +79,10 @@
     return (persona && persona.nav) || [];
   }
 
-  var TOOLS_ROUTES = ['tools', 'process', 'weekly', 'dataquality', 'outreach',
+  /* Routes reached only through the Tools hub — they highlight the Tools nav
+     item. Outreach is intentionally excluded: it is a first-class sidebar
+     destination (#/outreach and its sub-routes) and highlights its own item. */
+  var TOOLS_ROUTES = ['tools', 'process', 'weekly', 'dataquality',
     'exceptions', 'runs', 'admin', 'monitoring', 'batch'];
 
   var ROUTES = {
