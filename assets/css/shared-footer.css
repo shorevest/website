@@ -829,3 +829,24 @@ html body footer.sv-footer .sv-footer__social-icon {
     margin-top: 18px !important;
   }
 }
+
+/* Mobile bottom canvas lock.
+   Some mobile browsers expose the document canvas beneath the last element
+   during rubber-band scrolling or under the bottom browser bar. Keep that
+   canvas, plus the footer safe-area padding, the same dark colour as the
+   shared footer so every page finishes footer-coloured instead of white. */
+@media (max-width: 800px) {
+  html,
+  body {
+    background-color: var(--sv-dark-footer, #20211F) !important;
+  }
+
+  html body footer.sv-footer {
+    background-color: var(--sv-dark-footer, #20211F) !important;
+    padding-bottom: max(env(safe-area-inset-bottom, 0px), 28px) !important;
+  }
+
+  html body footer.sv-footer > .sv-footer__inner {
+    padding-bottom: 0 !important;
+  }
+}
