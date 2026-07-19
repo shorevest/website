@@ -28,11 +28,11 @@ const sharedFooter = read('assets/js/shared-footer.js');
 
 /* ── Login ──────────────────────────────────────────────────────────────── */
 
-test('login is person-led with the approved copy', () => {
+test('login is a single-profile entry with the approved copy', () => {
   assert.ok(app.indexOf('Enter ShoreVest One') !== -1);
-  assert.ok(app.indexOf('Choose a demonstration profile to continue.') !== -1);
-  assert.ok(app.indexOf("text: 'Choose a profile'") !== -1, 'default selector text');
-  assert.ok(app.indexOf("'Continue as ' + u.firstName") !== -1, 'button updates to person name');
+  assert.ok(app.indexOf('One demonstration profile with the full workspace — every section and every tool.') !== -1);
+  assert.ok(app.indexOf("text: 'Choose a profile'") === -1, 'no profile selector remains');
+  assert.ok(app.indexOf("'Continue as ' + u.firstName") === -1, 'no per-person continue label remains');
   assert.ok(app.indexOf('Synthetic data only. No external actions occur.') !== -1);
 });
 
@@ -46,9 +46,9 @@ test('the compact mark (not the corporate lockup) is used in the shell', () => {
   assert.ok(app.indexOf('SHOREVEST ONE') !== -1, 'SHOREVEST ONE lockup text');
 });
 
-test('the Continue button starts disabled before a profile is selected', () => {
-  assert.ok(/login__submit'[^]*disabled: true/.test(app) || app.indexOf('disabled: true') !== -1,
-    'submit rendered disabled initially');
+test('the entry button is immediately actionable (no profile selection required)', () => {
+  assert.ok(app.indexOf("class: 'login__submit', type: 'button' }") !== -1,
+    'submit rendered without an initial disabled state');
 });
 
 test('login does not contain rejected copy', () => {

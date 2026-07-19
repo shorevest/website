@@ -391,52 +391,29 @@
       frame.appendChild(right); wrap.appendChild(frame); return wrap;
     }
 
-    right.appendChild(el('p', { class: 'login__instr', text: 'Choose a demonstration profile to continue.' }));
+    right.appendChild(el('p', { class: 'login__instr', text: 'One demonstration profile with the full workspace — every section and every tool.' }));
 
-    var sel = el('select', { class: 'login__select', id: 'login-profile', 'aria-label': 'Choose a demonstration profile' });
-    sel.appendChild(el('option', { value: '', text: 'Choose a profile' }));
-    DEMO_USERS.forEach(function (u, i) {
-      sel.appendChild(el('option', { value: String(i), text: u.name }));
-    });
-    right.appendChild(el('div', { class: 'login__field' }, [sel]));
+    /* A single neutral demonstration profile. No chooser: everyone enters the
+       same workspace. Per-role access is applied later, after sign-off. */
+    var u = DEMO_USERS[0];
 
-    var summary = el('div', { class: 'login__selected', 'aria-live': 'polite', hidden: true });
+    var summary = el('div', { class: 'login__selected' });
+    summary.appendChild(avatar(u, 'login__avatar'));
+    summary.appendChild(el('div', { class: 'login__selected-id' }, [
+      el('p', { class: 'login__selected-name', text: u.name }),
+      el('p', { class: 'login__selected-title', text: u.title }),
+      u.coverage ? el('p', { class: 'login__selected-cov', text: '(' + u.coverage + ')' }) : null
+    ]));
     right.appendChild(summary);
 
-    var btn = el('button', { class: 'login__submit', type: 'button', disabled: true }, [
-      el('span', { class: 'login__submit-label', text: 'Continue' }),
+    var btn = el('button', { class: 'login__submit', type: 'button' }, [
+      el('span', { class: 'login__submit-label', text: 'Enter ShoreVest One' }),
       el('span', { class: 'login__submit-spinner', 'aria-hidden': 'true' })
     ]);
 
-    function renderSummary(u) {
-      summary.innerHTML = '';
-      if (!u) { summary.hidden = true; return; }
-      summary.hidden = false;
-      summary.appendChild(avatar(u, 'login__avatar'));
-      summary.appendChild(el('div', { class: 'login__selected-id' }, [
-        el('p', { class: 'login__selected-name', text: u.name }),
-        el('p', { class: 'login__selected-title', text: u.title }),
-        u.coverage ? el('p', { class: 'login__selected-cov', text: '(' + u.coverage + ')' }) : null
-      ]));
-    }
-
-    sel.addEventListener('change', function () {
-      if (sel.value === '') {
-        renderSummary(null);
-        btn.disabled = true;
-        btn.querySelector('.login__submit-label').textContent = 'Continue';
-      } else {
-        var u = DEMO_USERS[Number(sel.value)];
-        renderSummary(u);
-        btn.disabled = false;
-        btn.querySelector('.login__submit-label').textContent = 'Continue as ' + u.firstName;
-      }
-    });
-
     btn.addEventListener('click', function () {
-      if (sel.value === '' || btn.classList.contains('is-loading')) return;
-      btn.classList.add('is-loading'); btn.disabled = true; sel.disabled = true;
-      var u = DEMO_USERS[Number(sel.value)];
+      if (btn.classList.contains('is-loading')) return;
+      btn.classList.add('is-loading'); btn.disabled = true;
       setTimeout(function () { signInDemo(u); }, 220);
     });
 
