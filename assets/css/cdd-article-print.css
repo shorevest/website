@@ -11,6 +11,7 @@
   --p-page-width: 210mm;
   --p-page-margin-x: 16mm;
   --p-page-margin-top: 17mm;
+  --p-print-top-rule-height: 3px;
   --p-page-margin-bottom: 18mm;
   --p-printable-width: calc(var(--p-page-width) - (var(--p-page-margin-x) * 2));
   --p-cinnabar: #C93B2A;
@@ -188,10 +189,6 @@ body.cdd-print-layout .wrap { width: var(--p-page-width); max-width: none; margi
   @page { margin: 17mm 0 18mm; }
   @page:first { margin: 0; }
 
-  :root {
-    --p-print-top-rule-height: 3px;
-  }
-
   /*
      Export only the white document area: the beige browser-preview backdrop,
      toolbar/nameplate strip, and screen shadow are intentionally removed for
@@ -208,13 +205,25 @@ body.cdd-print-layout .wrap { width: var(--p-page-width); max-width: none; margi
   .cdd-print-layout .cdd-print-hide,
   .cdd-print-layout .cdd-topline__tools { display: none !important; }
   .cdd-print-layout .wrap { width: auto; max-width: none; }
+  body.cdd-print-layout::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--p-print-top-rule-height);
+    background: var(--p-cinnabar) !important;
+    z-index: 9999;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
   .cdd-print-layout .cdd-print-shell {
     box-shadow: none;
     padding: var(--p-page-margin-top) var(--p-page-margin-x) var(--p-page-margin-bottom);
   }
   .cdd-print-layout .cdd-print-shell::before {
-    height: var(--p-print-top-rule-height);
-    background: var(--p-cinnabar) !important;
+    content: none;
+    display: none;
   }
   .cdd-print-layout .cdd-body > h2 { break-after: avoid; }
   .cdd-print-layout .cdd-disclaimer { break-inside: avoid; }
