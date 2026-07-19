@@ -115,7 +115,7 @@ body.cdd-print-layout .wrap { width: 860px; max-width: none; margin-inline: auto
   margin: 0 0 12px; font: 600 11px/1.3 var(--p-font); letter-spacing: 0.14em;
   text-transform: uppercase; color: var(--p-muted);
 }
-.cdd-print-layout .cdd-sidecard ul { list-style: none; margin: 0; padding: 0; columns: 2; column-gap: 40px; }
+.cdd-print-layout .cdd-sidecard ul { list-style: none; margin: 0; padding: 0; columns: 1; }
 .cdd-print-layout .cdd-sidecard ul li {
   position: relative; padding: 0 0 12px 18px; margin: 0; break-inside: avoid;
   font: 400 13px/1.5 var(--p-font); color: var(--p-ink-2);
@@ -171,21 +171,34 @@ body.cdd-print-layout .wrap { width: 860px; max-width: none; margin-inline: auto
    PRINT
    ========================================================================== */
 @media print {
+  @page { margin: 0 16mm 18mm; }
+
   /*
      Export only the white document area: the beige browser-preview backdrop,
      toolbar/nameplate strip, and screen shadow are intentionally removed for
-     print-ready PDFs while the sheet padding and A4 page proportions remain
-     governed by the base template and @page rule above.
+     print-ready PDFs. The print page owns the top cinnabar rule so it sits
+     flush with the physical page edge, while body padding preserves the
+     original top whitespace before the masthead.
   */
   body.cdd-print-layout {
-    padding: 0;
+    padding: 17mm 0 0;
     background: var(--p-paper);
+  }
+  body.cdd-print-layout::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--p-cinnabar);
   }
   .cdd-print-layout .cdd-topline,
   .cdd-print-layout .cdd-print-hide,
   .cdd-print-layout .cdd-topline__tools { display: none !important; }
   .cdd-print-layout .wrap { width: auto; max-width: none; }
   .cdd-print-layout .cdd-print-shell {
+    border-top: 0;
     box-shadow: none;
   }
   .cdd-print-layout .cdd-body > h2 { break-after: avoid; }
