@@ -39,7 +39,7 @@
     <div class="sv-footer__top">
       <div>
         <a class="sv-footer__logo" href="${siteHref('home.html')}" aria-label="ShoreVest — home">
-          <img src="${siteHref('assets/brand/sv-lockup-fc-light.png')}" alt="ShoreVest" width="200" height="48" />
+          <img src="${siteHref('assets/brand/sv-lockup-fc-light.png')}" alt="ShoreVest" width="200" height="48"  loading="eager" decoding="async" fetchpriority="high" />
         </a>
         <p class="sv-footer__offices">Guangzhou &middot; Shanghai &middot; Beijing &middot; Hong Kong<br /><a href="${siteHref('contact.html')}">General inquiries</a></p>
       </div>
@@ -87,7 +87,7 @@
     <div class="sv-footer__top">
       <div>
         <a class="sv-footer__logo" href="${siteHref('home_cn.html')}" aria-label="新岸资本 — 首页">
-          <img src="${siteHref('assets/brand/sv-lockup-fc-light.png')}" alt="ShoreVest 新岸资本" width="200" height="48" />
+          <img src="${siteHref('assets/brand/sv-lockup-fc-light.png')}" alt="ShoreVest 新岸资本" width="200" height="48"  loading="eager" decoding="async" fetchpriority="high" />
         </a>
         <p class="sv-footer__offices">广州 &middot; 上海 &middot; 北京 &middot; 香港<br /><a href="${siteHref('contact_cn.html')}">一般查询</a></p>
       </div>

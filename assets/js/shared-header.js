@@ -41,9 +41,9 @@
 
   // Official lockup artwork (transparent PNGs cut from the brand files).
   // The legacy shorevest-lockup.svg carries the wrong Chinese face — do not use it.
-  const buildBrandLockup = () => `<img class="brand-lockup-svg brand-lockup-svg--dark" src="${LOADER_BRAND_PNG_PATH}" alt="ShoreVest 新岸資本" /><img class="brand-lockup-svg brand-lockup-svg--light" src="${LOADER_BRAND_LIGHT_PNG_PATH}" alt="" aria-hidden="true" />`;
+  const buildBrandLockup = () => `<img class="brand-lockup-svg brand-lockup-svg--dark" src="${LOADER_BRAND_PNG_PATH}" alt="ShoreVest 新岸資本"  loading="eager" decoding="async" fetchpriority="high" /><img class="brand-lockup-svg brand-lockup-svg--light" src="${LOADER_BRAND_LIGHT_PNG_PATH}" alt="" aria-hidden="true"  loading="eager" decoding="async" fetchpriority="high" />`;
 
-  const buildLoaderBrandLockup = () => `<img class="site-loader-logo" src="${LOADER_BRAND_PNG_PATH}" alt="ShoreVest 新岸資本" />`;
+  const buildLoaderBrandLockup = () => `<img class="site-loader-logo" src="${LOADER_BRAND_PNG_PATH}" alt="ShoreVest 新岸資本"  loading="eager" decoding="async" fetchpriority="high" />`;
 
   // Loader tree mark — "Ink-in" (approved option F): the outline reveals
   // first, then inks into the solid badge. Two mask-rendered layers in the
@@ -229,7 +229,7 @@
   mount.innerHTML = `<header class="sv-header">
   <div class="sv-header__inner">
     <a class="sv-header__logo" href="${locale.home}" aria-label="${localeSuffix === 'en' ? 'ShoreVest — home' : '新岸资本 — 首页'}">
-      <img src="${assetHref('assets/brand/sv-lockup-fc-dark.png')}" alt="ShoreVest" width="172" height="41" />
+      <img src="${assetHref('assets/brand/sv-lockup-fc-dark.png')}" alt="ShoreVest" width="172" height="41"  loading="eager" decoding="async" fetchpriority="high" />
     </a>
     <nav class="sv-nav" aria-label="${localeSuffix === 'en' ? 'Primary' : '主导航'}">
       <ul>${navItems.map((item, i) => `<li><a href="${item.href}"${item.external ? ' target="_blank" rel="noopener noreferrer"' : ''}${navBases[i] === localeBase ? ' aria-current="page"' : ''}>${item.label}</a></li>`).join('')}</ul>
