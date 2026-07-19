@@ -32,7 +32,7 @@
 html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 
 body.cdd-print-layout {
-  margin: 0; padding: 32px 16px 56px;
+  margin: 0; padding: 0 16px 56px;
   background: #E7E4DC;                 /* screen backdrop only */
   color: var(--p-ink-2);
   font-family: var(--p-font);
@@ -42,7 +42,7 @@ body.cdd-print-layout {
 body.cdd-print-layout .wrap { width: var(--p-page-width); max-width: none; margin-inline: auto; }
 
 /* ---- Running header strip (publication nameplate + screen toolbar) ---- */
-.cdd-print-layout .cdd-topline { max-width: var(--p-page-width); margin: 0 auto 14px; padding: 0 4px; }
+.cdd-print-layout .cdd-topline { max-width: var(--p-page-width); margin: 0 auto 14px; padding: 32px 4px 0; }
 .cdd-print-layout .cdd-topline__inner {
   display: flex; align-items: center; justify-content: space-between; gap: 24px;
 }
