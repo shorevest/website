@@ -77,23 +77,15 @@ body.cdd-print-layout .wrap { width: var(--p-page-width); max-width: none; margi
   overflow: visible;
   background: var(--p-paper);
   position: relative;
-  border-top: 0;
+  border-top: var(--p-print-top-rule-height) solid var(--p-cinnabar);
   box-shadow: 0 1px 0 var(--p-line), 0 18px 50px rgba(20, 30, 28, 0.14);
   padding: var(--p-page-margin-top) var(--p-page-margin-x) var(--p-page-margin-bottom);
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
 }
-.cdd-print-layout .cdd-print-shell::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: var(--p-print-top-rule-height);
-  background: var(--p-cinnabar);
-  -webkit-print-color-adjust: exact;
-  print-color-adjust: exact;
-}
+/* The sheet-edge top rule is a real border instead of an absolutely positioned
+   pseudo-element so it paints across the full border box in browser PDF output. */
+.cdd-print-layout .cdd-print-shell::before { content: none; }
 
 /* ---- Masthead ---- */
 .cdd-print-layout .cdd-print-masthead { margin-bottom: 26px; }
@@ -226,24 +218,14 @@ body.cdd-print-layout .wrap { width: var(--p-page-width); max-width: none; margi
     min-height: 297mm;
     margin: 0 auto;
     overflow: visible;
-    border-top: 0;
+    border-top: var(--p-print-top-rule-height) solid var(--p-cinnabar);
     padding: var(--p-page-margin-top) var(--p-page-margin-x) var(--p-page-margin-bottom);
     -webkit-box-decoration-break: clone;
     box-decoration-break: clone;
   }
-  .cdd-print-layout .cdd-print-shell::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    display: block;
-    width: 100%;
-    height: var(--p-print-top-rule-height);
-    background: var(--p-cinnabar);
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
+  /* Keep the print rule as the shell border; pseudo-elements are less reliable
+     when browser PDF engines resolve absolute positioning against page padding. */
+  .cdd-print-layout .cdd-print-shell::before { content: none; }
 
   /*
      Keep print typography independent of each browser's print viewport. Safari
