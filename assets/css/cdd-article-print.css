@@ -10,8 +10,8 @@
 :root {
   --p-page-width: 210mm;
   --p-page-margin-x: 16mm;
-  --p-page-margin-top: 17mm;
-  --p-page-margin-bottom: 18mm;
+  --p-page-margin-top: 24mm;
+  --p-page-margin-bottom: 24mm;
   --p-printable-width: calc(var(--p-page-width) - (var(--p-page-margin-x) * 2));
   --p-cinnabar: #C93B2A;
   --p-cinnabar-d: #9F2F24;
@@ -27,7 +27,7 @@
 
 * { box-sizing: border-box; }
 
-@page { size: A4; margin: 17mm 16mm 18mm; }
+@page { size: A4; margin: 24mm 16mm 24mm; }
 
 html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 
@@ -185,8 +185,7 @@ body.cdd-print-layout .wrap { width: var(--p-page-width); max-width: none; margi
    PRINT
    ========================================================================== */
 @media print {
-  @page { margin: 17mm 0 18mm; }
-  @page:first { margin: 0; }
+  @page { margin: 0; }
 
   :root {
     --p-print-top-rule-height: 3px;
@@ -196,9 +195,9 @@ body.cdd-print-layout .wrap { width: var(--p-page-width); max-width: none; margi
      Export only the white document area: the beige browser-preview backdrop,
      toolbar/nameplate strip, and screen shadow are intentionally removed for
      print-ready PDFs. The sheet, not the browser page box, owns the content
-     inset so browser print matches the full-bleed PDF generator: the first
-     page box has zero margin for the cinnabar rule, later pages regain a top
-     margin, and the content width stays the same as the on-screen A4/PDF preview.
+     inset so browser print matches the full-bleed PDF generator: every page box
+     has zero browser margin, while cloned sheet padding gives continued pages
+     the same visible top and bottom padding as the opening page.
   */
   body.cdd-print-layout {
     padding: 0;
@@ -211,6 +210,8 @@ body.cdd-print-layout .wrap { width: var(--p-page-width); max-width: none; margi
   .cdd-print-layout .cdd-print-shell {
     box-shadow: none;
     padding: var(--p-page-margin-top) var(--p-page-margin-x) var(--p-page-margin-bottom);
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
   }
   .cdd-print-layout .cdd-print-shell::before {
     height: var(--p-print-top-rule-height);
