@@ -315,3 +315,75 @@
 @media (min-width: 881px) {
   body.team-page .pagehero.team-hero > .team-inner { min-height: 650px; }
 }
+
+
+/* Privacy layer: obscure team portraits when printing or when a capture/print/save
+   shortcut is detected. Browser pages cannot block operating-system screenshots,
+   so this provides the strongest available in-page protection. */
+.team-profile__photo,
+.team-profile__photo img {
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.team-profile__photo {
+  isolation: isolate;
+}
+
+.team-profile__photo img {
+  -webkit-user-drag: none;
+}
+
+.team-portrait-privacy-active .team-profile__photo img {
+  filter: blur(18px) grayscale(100%) !important;
+  opacity: 0.08;
+}
+
+.team-portrait-privacy-active .team-profile__photo::after {
+  content: "Portrait protected";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(242, 236, 216, 0.96);
+  color: var(--sv-qing-dark);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1.4;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.team-page--cn.team-portrait-privacy-active .team-profile__photo::after {
+  content: "头像受保护";
+}
+
+@media print {
+  .team-profile__photo img {
+    visibility: hidden !important;
+  }
+
+  .team-profile__photo::after {
+    content: "Portrait protected" !important;
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: grid;
+    place-items: center;
+    padding: 16px;
+    background: var(--sv-xuan-light);
+    color: var(--sv-qing-dark);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .team-page--cn .team-profile__photo::after {
+    content: "头像受保护" !important;
+  }
+}
