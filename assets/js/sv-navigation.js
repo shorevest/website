@@ -1,4 +1,40 @@
 (function () {
+  var CAREERS_HREF = 'https://shorevest.github.io/website/careers/?t=';
+
+  function isCareersHref(href) {
+    if (!href) return false;
+    return /^(?:\.\.\/)?careers\.html(?:[?#].*)?$/i.test(href) ||
+      /^(?:\.\.\/)?careers\/(?:[?#].*)?$/i.test(href) ||
+      /^\/careers\/(?:[?#].*)?$/i.test(href) ||
+      /^https:\/\/shorevest\.com\/careers(?:\.html|\/)?(?:[?#].*)?$/i.test(href);
+  }
+
+  function fixCareersLinks(root) {
+    var scope = root && root.querySelectorAll ? root : document;
+    var links = scope.querySelectorAll('a[href]');
+    links.forEach(function (link) {
+      if (isCareersHref(link.getAttribute('href'))) {
+        link.setAttribute('href', CAREERS_HREF);
+      }
+    });
+  }
+
+  fixCareersLinks(document);
+
+  if (window.MutationObserver) {
+    new MutationObserver(function (mutations) {
+      mutations.forEach(function (mutation) {
+        mutation.addedNodes.forEach(function (node) {
+          if (node.nodeType !== 1) return;
+          if (node.matches && node.matches('a[href]') && isCareersHref(node.getAttribute('href'))) {
+            node.setAttribute('href', CAREERS_HREF);
+          }
+          fixCareersLinks(node);
+        });
+      });
+    }).observe(document.documentElement, { childList: true, subtree: true });
+  }
+
   function resetNavigation() {
     var burgers = document.querySelectorAll('.sv-burger');
     var menus = document.querySelectorAll('.sv-mobile-menu');
