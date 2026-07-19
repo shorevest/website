@@ -7,7 +7,9 @@
   "scripts": {
     "validate:recruitment": "node scripts/validate-recruitment-roles.js",
     "check:recruitment": "node --check assets/js/recruitment-role-list.js && node --check assets/js/recruitment-role-detail.js && node --check assets/js/recruitment-application.js && node --check scripts/validate-recruitment-roles.js && node --check api/recruitment/applicationValidation.js && node --check api/recruitment/fileSignatures.js && node --check api/recruitment/handler.js",
-    "test:recruitment": "node tests/recruitment-roles.test.js && node tests/recruitment-role-list.test.js && node tests/recruitment-role-detail.test.js && node tests/recruitment-application.test.js && node tests/recruitment-backend.test.js && node tests/recruitment-static-security.test.js"
+    "test:recruitment": "node tests/recruitment-roles.test.js && node tests/recruitment-role-list.test.js && node tests/recruitment-role-detail.test.js && node tests/recruitment-application.test.js && node tests/recruitment-backend.test.js && node tests/recruitment-static-security.test.js",
+    "check:security": "node tests/security-headers.test.js",
+    "test:security": "node tests/security-headers.test.js && node tests/recruitment-static-security.test.js"
   },
   "devDependencies": {
     "ajv": "8.17.1",
