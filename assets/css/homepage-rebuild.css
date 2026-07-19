@@ -84,15 +84,23 @@ html {
 /* ---------- Reset / base ---------- */
 body.homepage * { box-sizing: border-box; }
 
+html,
+body {
+  /* Match every page's browser canvas to the dark footer. Mobile Safari/Chrome
+     can reveal the root/body background when the user rubber-band scrolls past
+     the document bottom or into the bottom safe-area; keeping both roots dark
+     prevents a white strip below the footer on any page that uses this shared
+     stylesheet. Individual page sections still paint their intended ivory,
+     stone, or dark surfaces above the footer. */
+  background: var(--sv-dark-footer, #20211F);
+}
+
 html {
   scroll-padding-top: calc(var(--header-height) + 32px);
   /* Keep the viewport gutter reserved between route loads so the fixed
      navigation grid does not shift horizontally when moving between pages
      with different document heights. */
   scrollbar-gutter: stable;
-  /* Match the browser canvas to the dark footer so bottom rubber-band /
-     overscroll reveals only the footer color instead of a white page edge. */
-  background: #20211F;
 }
 
 body.homepage {
@@ -978,7 +986,15 @@ body.homepage .sv-cdd { border-bottom: 3px solid var(--sv-cinnabar); }
    I · FOOTER / LEGAL (dark teal)
    ========================================================================== */
 body.homepage .sv-footer { background: var(--sv-dark-footer); color: var(--sv-meta-on-dark); }
-body.homepage .sv-footer__inner { padding: clamp(52px,6vw,76px) var(--pad-x) 30px; max-width: var(--page-max); margin-inline: auto; }
+
+
+/* Extend the dark footer into mobile browser safe areas so the final pixels at
+   the bottom of every page stay footer-coloured rather than white. */
+html body footer.sv-footer {
+  padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+  background-color: var(--sv-dark-footer, #20211F) !important;
+}
+body.homepage .sv-footer__inner { padding: clamp(52px,6vw,76px) var(--pad-x) calc(30px + env(safe-area-inset-bottom, 0px)); max-width: var(--page-max); margin-inline: auto; }
 body.homepage .sv-footer__top {
   display: grid; grid-template-columns: minmax(0,1fr) auto; gap: clamp(40px,6vw,104px);
   align-items: start; padding-bottom: clamp(34px,4vw,44px); border-bottom: 1px solid var(--sv-border-dark);
