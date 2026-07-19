@@ -812,19 +812,23 @@ html[lang="zh-CN"] body.careers-preview-page .careers-hero__meta { font-family: 
    dominating narrow screens while preserving the dark editorial system. */
 @media (max-width: 760px) {
   body.careers-preview-page .careers-hero__grid {
-    padding-block: clamp(38px, 11vw, 56px) clamp(46px, 12vw, 68px);
+    padding-block: clamp(34px, 10vw, 50px) clamp(44px, 12vw, 62px);
     row-gap: clamp(28px, 8vw, 42px);
   }
+  body.careers-preview-page .careers-hero__lead {
+    width: 100%;
+  }
   body.careers-preview-page .careers-title {
-    max-width: 14ch;
-    font-size: clamp(34px, 9.4vw, 42px);
-    line-height: 1.06;
+    max-width: min(100%, 11.5ch);
+    font-size: clamp(36px, 10.8vw, 46px);
+    line-height: 1.03;
   }
   body.careers-preview-page .careers-hero__body .careers-lede {
-    max-width: none;
+    max-width: min(100%, 36ch);
   }
   body.careers-preview-page .careers-hero__body {
     margin-top: clamp(18px, 5vw, 24px);
+    max-width: none;
   }
   body.careers-preview-page .careers-hero__body > :last-child {
     margin-top: clamp(24px, 7vw, 32px);
@@ -835,7 +839,7 @@ html[lang="zh-CN"] body.careers-preview-page .careers-hero__meta { font-family: 
   body.careers-preview-page .careers-values p,
   body.careers-preview-page .careers-ledger p {
     font-size: 16px;
-    line-height: 1.66;
+    line-height: 1.58;
   }
   body.careers-preview-page .careers-hero__meta {
     margin-top: 18px;
@@ -843,17 +847,13 @@ html[lang="zh-CN"] body.careers-preview-page .careers-hero__meta { font-family: 
     letter-spacing: .08em;
   }
   body.careers-preview-page .careers-action {
-    width: 100%;
-    justify-content: center;
+    width: min(100%, 260px);
+    justify-content: space-between;
     min-height: 46px;
+    padding-inline: 18px;
   }
   body.careers-preview-page .careers-hero__media {
-    width: 100%;
-    justify-self: stretch;
-    margin-top: 0;
-    padding: 0 0 20px;
-    background: transparent;
-    aspect-ratio: auto;
+    display: none;
   }
   body.careers-preview-page .careers-preview-note {
     margin-top: 0;
