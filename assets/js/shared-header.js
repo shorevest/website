@@ -125,7 +125,7 @@
     'firm',
     'strategy',
     'insights',
-    'press',
+    'media',
     'team',
     'privacy-policy',
     'cookie-notice',
@@ -173,7 +173,7 @@
         { href: pageHref('firm.html'), label: 'Firm' },
         { href: pageHref('strategy.html'), label: 'Strategy' },
         { href: pageHref('insights.html'), label: 'Insights' },
-        { href: pageHref('press.html'), label: 'Media' },
+        { href: pageHref('media.html'), label: 'Media' },
         { href: pageHref('team.html'), label: 'Team' },
         { href: pageHref('careers.html'), label: 'Careers' }
       ],
@@ -191,7 +191,7 @@
         { href: pageHref('firm_cn.html'), label: '公司' },
         { href: pageHref('strategy_cn.html'), label: '策略' },
         { href: pageHref('insights_cn.html'), label: '洞察' },
-        { href: pageHref('press_cn.html'), label: '媒体' },
+        { href: pageHref('media_cn.html'), label: '媒体' },
         { href: pageHref('team_cn.html'), label: '团队' },
         { href: pageHref('careers_cn.html'), label: '人才招聘' }
       ],
@@ -219,7 +219,7 @@
      rendering we return early, so every legacy nav/active/annotate routine
      further down is bypassed entirely.
      -------------------------------------------------------------------- */
-  const navBases = ['firm', 'strategy', 'insights', 'press', 'team', 'careers'];
+  const navBases = ['firm', 'strategy', 'insights', 'media', 'team', 'careers'];
   const svLang = localeSuffix === 'en'
     ? `<a class="sv-lang" href="${localeHrefs.cn}"><span class="on">EN</span><span class="sep">|</span>中文</a>`
     : `<a class="sv-lang" href="${localeHrefs.en}" lang="zh-Hans"><span>EN</span><span class="sep">|</span><span class="on">中文</span></a>`;
@@ -466,7 +466,7 @@
     firm: ['firm.html', 'firm_cn.html', pageHref('firm.html'), pageHref('firm_cn.html')],
     strategy: ['strategy.html', 'strategy_cn.html', pageHref('strategy.html'), pageHref('strategy_cn.html')],
     insights: ['insights.html', 'insights_cn.html', pageHref('insights.html'), pageHref('insights_cn.html')],
-    press: ['press.html', 'press_cn.html', pageHref('press.html'), pageHref('press_cn.html')],
+    media: ['media.html', 'media_cn.html', pageHref('media.html'), pageHref('media_cn.html')],
     team: ['team.html', 'team_cn.html', pageHref('team.html'), pageHref('team_cn.html')],
     investor: [pageHref('investor-portal/index.html'), 'investor-portal', 'investor-access.html', 'investor-access_cn.html', pageHref('investor-access.html'), pageHref('investor-access_cn.html')]
   };
@@ -475,7 +475,7 @@
     if (isInvestorPortalPath) return 'investor';
     if (activeMap.firm.includes(currentPath)) return 'firm';
     if (activeMap.strategy.includes(currentPath)) return 'strategy';
-    if (activeMap.press.includes(currentPath)) return 'press';
+    if (activeMap.media.includes(currentPath)) return 'media';
     if (activeMap.team.includes(currentPath)) return 'team';
     if (activeMap.investor.includes(currentPath)) return 'investor';
     if (activeMap.insights.includes(currentPath)) return 'insights';

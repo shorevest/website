@@ -135,7 +135,7 @@ test('robots.txt disallows the portal path without affecting the public site', (
 
 test('no public HTML page links to ShoreVest One, and the main site is not noindexed', () => {
   const publicPages = ['home.html', 'firm.html', 'team.html', 'strategy.html',
-    'insights.html', 'press.html', 'contact.html', 'important-information.html',
+    'insights.html', 'media.html', 'contact.html', 'important-information.html',
     'investor-portal/index.html'];
   publicPages.forEach((p) => {
     const html = read(p);

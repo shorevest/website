@@ -102,7 +102,7 @@ const routePairs = [
   ['firm.html', 'firm_cn.html'],
   ['strategy.html', 'strategy_cn.html'],
   ['insights.html', 'insights_cn.html'],
-  ['press.html', 'press_cn.html'],
+  ['media.html', 'media_cn.html'],
   ['team.html', 'team_cn.html'],
   ['contact.html', 'contact_cn.html'],
   ['important-information.html', 'important-information_cn.html'],

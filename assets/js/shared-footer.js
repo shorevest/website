@@ -47,7 +47,7 @@
         <a href="${siteHref('firm.html')}">Firm</a>
         <a href="${siteHref('strategy.html')}">Strategy</a>
         <a href="${siteHref('insights.html')}">Insights</a>
-        <a href="${siteHref('press.html')}">Media</a>
+        <a href="${siteHref('media.html')}">Media</a>
         <a href="${siteHref('team.html')}">Team</a>
         <a href="${siteHref('careers.html')}">Careers</a>
         <a href="${siteHref('contact.html')}">Contact</a>
@@ -95,7 +95,7 @@
         <a href="${siteHref('firm_cn.html')}">公司</a>
         <a href="${siteHref('insights_cn.html')}">洞察</a>
         <a href="${siteHref('strategy_cn.html')}">策略</a>
-        <a href="${siteHref('press_cn.html')}">媒体</a>
+        <a href="${siteHref('media_cn.html')}">媒体</a>
         <a href="${siteHref('team_cn.html')}">团队</a>
         <a href="${siteHref('careers_cn.html')}">人才招聘</a>
         <a href="${siteHref('contact_cn.html')}">联系</a>
