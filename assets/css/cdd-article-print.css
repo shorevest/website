@@ -190,10 +190,10 @@ body.cdd-print-layout .wrap { width: var(--p-page-width); max-width: none; margi
      page box has zero margin so the cinnabar rule sits flush at the top, while
      subsequent page boxes keep the normal top/bottom margins to prevent content
      from starting against the paper edge. The print shell owns the first-page
-     cinnabar rule with an absolutely positioned top stripe, avoiding browser
-     fixed-element/page-margin offsets while keeping the rule anchored to the
-     white sheet edge shown in the browser preview. The content width stays the
-     same as the on-screen A4/PDF preview.
+     cinnabar rule as a real border instead of a positioned pseudo-element,
+     because Safari can offset absolutely positioned print decoration from the
+     padded content box. The content width stays the same as the on-screen
+     A4/PDF preview.
   */
   body.cdd-print-layout {
     padding: 0;
@@ -207,23 +207,40 @@ body.cdd-print-layout .wrap { width: var(--p-page-width); max-width: none; margi
     position: relative;
     box-shadow: none;
     background: var(--p-paper);
+    width: var(--p-page-width);
+    min-height: 297mm;
+    margin: 0 auto;
+    border-top: var(--p-print-top-rule-height) solid var(--p-cinnabar);
     padding: var(--p-page-margin-top) var(--p-page-margin-x) var(--p-page-margin-bottom);
     -webkit-box-decoration-break: clone;
     box-decoration-break: clone;
   }
   .cdd-print-layout .cdd-print-shell::before {
-    content: "";
-    position: absolute;
-    display: block;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: var(--p-print-top-rule-height);
-    margin: 0;
-    background: var(--p-cinnabar) !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
+    content: none;
+    display: none;
   }
+
+  /*
+     Keep print typography independent of each browser's print viewport. Safari
+     and Chromium resolve vw/clamp() differently in print preview, which changes
+     text metrics and can turn the same article into a different page count.
+  */
+  .cdd-print-layout .cdd-title {
+    font-size: 38px;
+    line-height: 1.1;
+    text-wrap: normal;
+  }
+  .cdd-print-layout .cdd-dek {
+    font-size: 17px;
+    line-height: 1.55;
+    text-wrap: normal;
+  }
+  .cdd-print-layout .cdd-body > h2 {
+    font-size: 21px;
+    line-height: 1.2;
+    text-wrap: normal;
+  }
+
   .cdd-print-layout .cdd-body > h2 { break-after: avoid; }
 
   .cdd-print-layout .cdd-body > h2 {
