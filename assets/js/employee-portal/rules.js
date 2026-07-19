@@ -826,7 +826,7 @@
       proposed.generateReviewWorkbook = true; hit('generate review workbook');
     }
 
-    /* Owner assignments: "assign Asia to Kelvin", "Asia to Kelvin",
+    /* Owner assignments: "assign Asia to Snow Leopard", "Asia to Snow Leopard",
        "ex-asia to john". Owners are validated against the controlled
        vocabulary; unknown names are routed to review, never invented. */
     var assignRe = /(?:assign\s+)?([a-z][a-z /-]{1,30}?)\s+to\s+([a-z][a-z .'-]{1,30}?)(?=[,.;]|\s+and\s+|$)/g;
