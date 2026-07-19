@@ -1,21 +1,24 @@
 /* ==========================================================================
-   ShoreVest One — role (persona) configuration
-   A single small configuration layer describing the three demonstration
-   people: their exact identity, permanent navigation, Home schema, My Work,
-   and the restrained previews behind workspace navigation.
+   ShoreVest One — profile (persona) configuration
+
+   The demonstration runs on ONE neutral profile ("ShoreVest Demo") with the
+   full workspace: every section and every tool is exposed on the left. This is
+   deliberate — the demo shows the whole product, and only once it is signed off
+   are real people given the narrower set of sections and tools their role
+   needs. That per-role split lives in this file, never in the UI.
+
+   The crafted per-person demonstration content (John's Red Panda decision,
+   Kelvin's mainland-attendance decision, Celestra's coordination cards, and the
+   two My Work shells) is preserved verbatim below and composed into a single
+   combined Home and My Work, so a later split back into per-role profiles needs
+   no rewriting.
 
    Everything here is synthetic. External institutions and contacts are entirely
    fictional and use professional animal-based names. Only internal ShoreVest
-   names are real, used solely to identify the selected demonstration profile or
-   to name a real internal colleague in a limited assignment context. No real
-   emails, LP names, contact data, or confidential information appears.
-
-   ShoreVest One absorbs complexity rather than displaying it. For John and
-   Kelvin, Home answers "What should I pay attention to right now?" with exactly
-   one Focus Now item, a short Today list, one Under Control reassurance line,
-   and an optional quiet Around ShoreVest note. My Work answers "What currently
-   depends on me?". Celestra keeps her existing coordination Home. The legacy
-   operational prototype is preserved under Tools for every profile.
+   names are real, used solely to name a real internal colleague in a limited
+   assignment context. No real emails, LP names, contact data, or confidential
+   information appears. The legacy operational prototype is preserved under
+   Tools.
    ========================================================================== */
 (function (root) {
   'use strict';
@@ -28,11 +31,14 @@
   var TOOLS_ROLE = R ? R.ROLES.ADMINISTRATOR : 'Administrator';
 
   /* ── Navigation ─────────────────────────────────────────────────────────
-     John and Kelvin share one frozen structure. Firm and Tools sit below the
-     Workspaces group; Tools holds the preserved operational prototype and is
-     collapsible. Celestra keeps a coordination-oriented structure. */
+     One unified structure for the single demonstration profile. Every section
+     and every tool is exposed on the left so the demo shows the whole product.
+     When the demo is signed off, real people are given only the sections and
+     tools their role needs — the per-role navigation lives here, not in the UI.
+     Firm and Tools sit below the Workspaces group; Tools holds the preserved
+     operational prototype and is collapsible. */
 
-  var RM_NAV = [
+  var ALL_NAV = [
     { key: 'home', label: 'Home', hash: '#/home' },
     { key: 'my-work', label: 'My Work', hash: '#/my-work' },
     { sep: 'Workspaces' },
@@ -41,19 +47,10 @@
     { key: 'meetings', label: 'Meetings', hash: '#/workspace/meetings' },
     { key: 'diligence', label: 'Diligence & Requests', hash: '#/workspace/diligence' },
     { key: 'investor-intelligence', label: 'Investor Intelligence', hash: '#/workspace/investor-intelligence' },
-    { divider: true },
-    { key: 'firm', label: 'Firm', hash: '#/workspace/firm' },
-    { key: 'tools', label: 'Tools', hash: '#/tools', collapsible: true }
-  ];
-
-  var IR_NAV = [
-    { key: 'home', label: 'Home', hash: '#/home' },
-    { key: 'my-work', label: 'My Work', hash: '#/preview/my-work' },
-    { sep: 'Workspaces' },
     { key: 'materials', label: 'Materials & Delivery', hash: '#/preview/materials' },
-    { key: 'diligence', label: 'Diligence & Requests', hash: '#/preview/diligence' },
     { key: 'meeting-support', label: 'Meeting Support', hash: '#/preview/meeting-support' },
     { divider: true },
+    { key: 'firm', label: 'Firm', hash: '#/workspace/firm' },
     { key: 'tools', label: 'Tools', hash: '#/tools', collapsible: true }
   ];
 
@@ -236,60 +233,56 @@
     ]
   };
 
+  /* ── Combined Home (single demonstration profile) ───────────────────────
+     "The motherboard" — one Home that combines everything: the commercial
+     Focus Now decisions (John and Kelvin), the coordination Needs You cards
+     (Celestra), a merged Today, one Under Control reassurance line, Waiting
+     elsewhere, and the quiet Around ShoreVest notes. The crafted per-person
+     content above is preserved verbatim and composed here, so a later split
+     back into per-role Homes needs no rewriting. */
+
+  var DEMO_HOME = {
+    situational: 'The full ShoreVest One workspace — every section and tool, in one demonstration profile.',
+    /* Focus Now becomes a small ordered set rather than a single card. */
+    focus: [JOHN_HOME.focus, KELVIN_HOME.focus],
+    needsYou: CELESTRA_HOME.needsYou,
+    /* John's day (ET) plus Kelvin's first two (HKT); avoids a duplicated
+       "Internal Investment update" row while showing both regions. */
+    today: JOHN_HOME.today.concat(KELVIN_HOME.today.slice(0, 2)),
+    underControl: JOHN_HOME.underControl,
+    waiting: CELESTRA_HOME.waiting,
+    around: [JOHN_HOME.around[0], KELVIN_HOME.around[0]]
+  };
+
+  var DEMO_MYWORK = {
+    needsMe: JOHN_MYWORK.needsMe.concat(KELVIN_MYWORK.needsMe),
+    waiting: JOHN_MYWORK.waiting.concat(KELVIN_MYWORK.waiting),
+    later: JOHN_MYWORK.later.concat(KELVIN_MYWORK.later)
+  };
+
   /* ── People ─────────────────────────────────────────────────────────────
-     `role` carries the shared capability role so the legacy Tools prototype
-     keeps working. `title` + `coverage` are the exact approved identity;
-     `displayRole` is a single-line convenience that preserves the parentheses.
-     `photo` is an approved employee photograph where one exists in the repo;
-     otherwise `initials` drives a restrained avatar (never a generated face). */
+     One neutral demonstration profile with full access. It is not a real
+     person: it exists only to show the whole workspace during the demo. When
+     the demo is signed off, real named people and per-role navigation replace
+     this single profile. `role` carries the shared capability role so every
+     tool in the legacy prototype is reachable. */
 
   var PERSONAS = [
     {
-      id: 'john',
-      name: 'John Jones',
-      firstName: 'John',
-      title: 'Director of Client Solutions',
-      coverage: 'Americas, Europe & Middle East',
-      displayRole: 'Director of Client Solutions (Americas, Europe & Middle East)',
-      photo: '../assets/img/team/john-jones.jpg',
-      initials: 'JJ',
-      username: 'john.jones@shorevest.example',
-      role: TOOLS_ROLE,
-      nav: RM_NAV,
-      homeSchema: 'commercial',
-      home: JOHN_HOME,
-      myWork: JOHN_MYWORK
-    },
-    {
-      id: 'kelvin',
-      name: 'Kelvin Chan',
-      firstName: 'Kelvin',
-      title: 'Director of Client Solutions',
-      coverage: 'Asia-Pacific',
-      displayRole: 'Director of Client Solutions (Asia-Pacific)',
-      photo: '../assets/img/team/kelvin-chan.jpg',
-      initials: 'KC',
-      username: 'kelvin.chan@shorevest.example',
-      role: TOOLS_ROLE,
-      nav: RM_NAV,
-      homeSchema: 'commercial',
-      home: KELVIN_HOME,
-      myWork: KELVIN_MYWORK
-    },
-    {
-      id: 'celestra',
-      name: 'Celestra Gallagher',
-      firstName: 'Celestra',
-      title: 'Investor Relations Associate',
-      coverage: '',
-      displayRole: 'Investor Relations Associate',
+      id: 'demo',
+      name: 'ShoreVest Demo',
+      firstName: 'team',
+      title: 'Demonstration profile',
+      coverage: 'Full access',
+      displayRole: 'Full demonstration access',
       photo: null,
-      initials: 'CG',
-      username: 'celestra.gallagher@shorevest.example',
+      initials: 'SV',
+      username: 'demo@shorevest.example',
       role: TOOLS_ROLE,
-      nav: IR_NAV,
-      homeSchema: 'coordination',
-      home: CELESTRA_HOME
+      nav: ALL_NAV,
+      homeSchema: 'combined',
+      home: DEMO_HOME,
+      myWork: DEMO_MYWORK
     }
   ];
 
