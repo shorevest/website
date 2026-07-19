@@ -193,23 +193,26 @@ body.cdd-print-layout .wrap { width: var(--p-page-width); max-width: none; margi
    PRINT
    ========================================================================== */
 @media print {
-  @page { size: A4; margin: 14mm 0 18mm; }
-  @page :first { margin: 0; }
+  @page { size: A4; margin: 0; }
 
   /*
      Export only the white document area: the beige browser-preview backdrop,
      toolbar/nameplate strip, and screen shadow are intentionally removed for
-     print-ready PDFs. The first page box has zero margin so the cinnabar rule
-     sits flush at the top, while continued pages add a browser page-box top
-     margin as a fallback/guardrail for engines that do not clone the shell's
-     top padding cleanly across fragments. A fixed print pseudo-element owns
-     the first-page cinnabar rule so it spans the full page box instead of
-     inheriting any browser-generated printable-area inset. The content width
-     stays the same as the on-screen A4/PDF preview.
+     print-ready PDFs. Browser print engines disagree on @page margin handling
+     (especially Safari versus Chromium), so keep the page box itself at zero
+     margin and let the cloned A4 shell own every printable inset. This makes
+     the generated PDF geometry deterministic across browsers. The content
+     width stays the same as the on-screen A4/PDF preview.
   */
+  html,
   body.cdd-print-layout {
+    width: var(--p-page-width);
+    min-width: var(--p-page-width);
+    margin: 0 auto;
     padding: 0;
     background: var(--p-paper);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
   .cdd-print-layout .cdd-topline,
   .cdd-print-layout .cdd-print-hide,
@@ -222,6 +225,7 @@ body.cdd-print-layout .wrap { width: var(--p-page-width); max-width: none; margi
     width: var(--p-page-width);
     min-height: 297mm;
     margin: 0 auto;
+    overflow: visible;
     border-top: 0;
     padding: var(--p-page-margin-top) var(--p-page-margin-x) var(--p-page-margin-bottom);
     -webkit-box-decoration-break: clone;
@@ -229,7 +233,7 @@ body.cdd-print-layout .wrap { width: var(--p-page-width); max-width: none; margi
   }
   .cdd-print-layout .cdd-print-shell::before {
     content: "";
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     right: 0;
@@ -248,6 +252,7 @@ body.cdd-print-layout .wrap { width: var(--p-page-width); max-width: none; margi
   */
   .cdd-print-layout .cdd-title {
     font-size: 38px;
+    font-kerning: normal;
     line-height: 1.1;
     text-wrap: normal;
   }
@@ -258,6 +263,7 @@ body.cdd-print-layout .wrap { width: var(--p-page-width); max-width: none; margi
   }
   .cdd-print-layout .cdd-body > h2 {
     font-size: 21px;
+    font-kerning: normal;
     line-height: 1.2;
     text-wrap: normal;
   }

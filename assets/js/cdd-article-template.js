@@ -126,10 +126,30 @@
   }
 
   if (shouldAutoPrint) {
+    await waitForPrintAssets();
     requestAnimationFrame(() => {
       setTimeout(() => window.print(), 120);
     });
   }
+  async function waitForPrintAssets() {
+    if (!isPrint) return;
+
+    const fontPromise = document.fonts && document.fonts.ready
+      ? document.fonts.ready.catch(() => {})
+      : Promise.resolve();
+
+    const imagePromises = Array.from(document.images || []).map((img) => {
+      if (img.complete) return Promise.resolve();
+      return new Promise((resolve) => {
+        img.addEventListener('load', resolve, { once: true });
+        img.addEventListener('error', resolve, { once: true });
+      });
+    });
+
+    await Promise.all([fontPromise, ...imagePromises]);
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  }
+
 
   function issueHrefFromSource(src) {
     if (!src) return '';
