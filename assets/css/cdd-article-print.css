@@ -186,7 +186,7 @@ body.cdd-print-layout .wrap { width: var(--p-page-width); max-width: none; margi
    PRINT
    ========================================================================== */
 @media print {
-  @page { margin: 17mm 0 18mm; }
+  @page { margin: 24mm 0 24mm; }
   @page:first { margin: 0; }
 
   /*
@@ -194,8 +194,8 @@ body.cdd-print-layout .wrap { width: var(--p-page-width); max-width: none; margi
      toolbar/nameplate strip, and screen shadow are intentionally removed for
      print-ready PDFs. The sheet, not the browser page box, owns the content
      inset so browser print matches the full-bleed PDF generator: the first
-     page box has zero margin for the cinnabar rule, later pages regain a top
-     margin, and the content width stays the same as the on-screen A4/PDF preview.
+     page box has zero margin for the cinnabar rule, later pages regain larger top and bottom
+     margins, and the content width stays the same as the on-screen A4/PDF preview.
   */
   body.cdd-print-layout {
     padding: 0;
