@@ -105,7 +105,7 @@
     var copy = el(doc, 'div', 'careers-copy' + (strings === STRINGS['zh-CN'] ? ' careers-copy--cn' : ''));
     copy.appendChild(el(doc, 'p', 'careers-pending', message));
     var back = el(doc, 'a', 'sv-textlink', strings.backToCareers);
-    back.href = strings === STRINGS['zh-CN'] ? '../careers_cn.html' : '../careers.html';
+    back.href = strings === STRINGS['zh-CN'] ? '../careers_cn.html' : '../careers/';
     copy.appendChild(back);
     var wrap = el(doc, 'div', 'sv-shell careers-two-col');
     var head = el(doc, 'div');
