@@ -230,10 +230,9 @@ body.cdd-print-layout .wrap { width: var(--p-page-width); max-width: none; margi
   .cdd-print-layout .cdd-body > h2 { break-after: avoid; }
 
   .cdd-print-layout .cdd-body > h2 {
-    break-before: page;
-    margin-top: 0;
-    padding-top: var(--p-page-margin-top);
-    border-top: 0;
+    margin-top: 26px;
+    padding-top: 18px;
+    border-top: 1px solid var(--p-line);
   }
   .cdd-print-layout .cdd-disclaimer { break-inside: avoid; }
 }
