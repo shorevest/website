@@ -71,9 +71,88 @@
 
   SVOps.views.home = function (container, user) {
     var persona = personaFor(user);
+    if (persona && persona.homeSchema === 'combined') return renderCombinedHome(container, user, persona);
     if (persona && persona.homeSchema === 'commercial') return renderCommercialHome(container, user, persona);
     return renderCoordinationHome(container, user, persona);
   };
+
+  /* ── Combined Home (single demonstration profile — "the motherboard") ─────
+     One Home that composes everything: every Focus Now decision, the
+     coordination Needs You cards, a merged Today, the Under Control line,
+     Waiting elsewhere, and the quiet Around ShoreVest notes. Reuses the same
+     card and list renderers as the per-role Homes it is built from. */
+
+  function renderCombinedHome(container, user, persona) {
+    var home = persona.home;
+    var page = el('div', { class: 'ops-content home home--commercial' });
+    var rerender = function () { rerenderHome(container, user); };
+    var resolved = SVOps.state.homeResolved[persona.id] || (SVOps.state.homeResolved[persona.id] = {});
+
+    page.appendChild(el('div', { class: 'home-head' }, [
+      el('h1', { class: 'ops-h1', text: greeting() + '.' }),
+      el('p', { class: 'home-head__purpose', text: 'What should I pay attention to right now?' }),
+      el('p', { class: 'home-head__situation', text: home.situational || '' })
+    ]));
+
+    page.appendChild(el('div', { class: 'home-defaultbar' }, [
+      el('span', { class: 'home-defaultbar__label', text: 'ShoreVest One — full demonstration workspace' }),
+      el('span', { class: 'home-synthdate', text: synthDate() + ' · synthetic' })
+    ]));
+
+    /* Focus Now — every commercial decision, one card each. */
+    var focusList = [].concat(home.focus || []);
+    if (focusList.length) {
+      var focusSec = el('section', { class: 'home-focus', 'aria-labelledby': 'home-focus-h' });
+      focusSec.appendChild(el('h2', { class: 'home-sectionlabel', id: 'home-focus-h', text: 'Focus Now' }));
+      focusList.forEach(function (f) {
+        focusSec.appendChild(renderFocusCard(persona, f, resolved, rerender));
+      });
+      page.appendChild(focusSec);
+    }
+
+    /* Needs you — coordination cards. */
+    if (home.needsYou && home.needsYou.length) {
+      var open = home.needsYou.filter(function (c) { return !resolved[c.id]; });
+      var needs = el('section', { class: 'home-section', 'aria-labelledby': 'home-needs' });
+      needs.appendChild(el('div', { class: 'home-section__head' }, [
+        el('h2', { class: 'home-section__title', id: 'home-needs', text: 'Needs you' }),
+        el('span', { class: 'home-section__count', text: open.length ? String(open.length) : '' })
+      ]));
+      var cards = el('div', { class: 'home-cards' });
+      home.needsYou.forEach(function (card) {
+        cards.appendChild(renderCoordCard(persona, card, resolved, rerender));
+      });
+      needs.appendChild(cards);
+      page.appendChild(needs);
+    }
+
+    /* Today + Under Control. */
+    var secondary = el('div', { class: 'home-secondary' });
+    secondary.appendChild(renderToday(home, 6));
+    secondary.appendChild(renderUnderControl(home));
+    page.appendChild(secondary);
+
+    /* Waiting elsewhere. */
+    if (home.waiting && home.waiting.length) {
+      var lists = el('div', { class: 'home-lists' });
+      lists.appendChild(coordList('Waiting elsewhere', home.waiting, function (item) {
+        return el('div', { class: 'home-list__item' }, [
+          el('span', { class: 'home-list__body' }, [
+            el('span', { class: 'home-list__name', text: item.title }),
+            el('span', { class: 'home-list__note home-list__note--waiting', text: item.note })
+          ])
+        ]);
+      }, 'Nothing is waiting on others.'));
+      page.appendChild(lists);
+    }
+
+    /* Around ShoreVest. */
+    if (home.around && home.around.length) {
+      page.appendChild(renderAround(home));
+    }
+
+    container.appendChild(page);
+  }
 
   /* ── Commercial Home (John & Kelvin) ────────────────────────────────────── */
 
@@ -332,11 +411,11 @@
   }
 
   /* Today — remaining schedule only; never repeats Focus Now. */
-  function renderToday(home) {
+  function renderToday(home, limit) {
     var sec = el('section', { class: 'home-panel', 'aria-labelledby': 'home-today-h' });
     sec.appendChild(el('h2', { class: 'home-panel__title', id: 'home-today-h', text: 'Today' }));
     var items = el('div', { class: 'today-list' });
-    (home.today || []).slice(0, 3).forEach(function (it) {
+    (home.today || []).slice(0, limit || 3).forEach(function (it) {
       items.appendChild(el('div', { class: 'today-item' }, [
         el('span', { class: 'today-item__time', text: it.time + (it.zone ? ' ' + it.zone : '') }),
         el('span', { class: 'today-item__body' }, [
