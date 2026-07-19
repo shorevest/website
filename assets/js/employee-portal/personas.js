@@ -13,8 +13,8 @@
    cross-workspace execution queue, grouped by state. There is no duplicate data:
    completing an item changes both surfaces.
 
-   IMPORTANT DATA RULE. Everything here is synthetic. Every person is a fictional
-   animal codename (Red Fox, Snow Leopard, River Otter, …) and every institution
+   IMPORTANT DATA RULE. Everything here is synthetic. Every person is a dull, generic
+   placeholder name (Jane Brown, Bob Smith, Mark Davis, …) and every institution
    is fictional (Cedar Ridge Pension, Blue River Endowment, …). No real ShoreVest
    employee name, investor name, contact name, email address, or confidential
    data appears anywhere. The legacy operational prototype is preserved under
@@ -57,7 +57,7 @@
   /* ── Shared work-item store ─────────────────────────────────────────────
      ONE canonical cross-workspace queue. Home and My Work both read from it, so
      there is never a second set of records. Each item carries a single action,
-     a single fictional owner (animal codename), a reason, a current state, a
+     a single generic placeholder owner, a reason, a current state, a
      next step, its originating workspace, and where "Open" leads.
 
      `bucket` places the item in My Work:
@@ -74,7 +74,7 @@
       bucket: 'do-now',
       action: 'Review 12 proposed contacts',
       workspace: 'Outreach',
-      owner: 'Red Fox',
+      owner: 'Jane Brown',
       reason: 'A ranking source proposed 12 new contacts for the Cedar Ridge Pension outreach list.',
       status: 'Awaiting your decision',
       nextStep: 'Open the contact-review workflow and accept or hold each contact.',
@@ -87,7 +87,7 @@
       bucket: 'do-now',
       action: 'Confirm Red Panda Capital meeting attendance',
       workspace: 'Meetings',
-      owner: 'Golden Eagle',
+      owner: 'Bob Smith',
       reason: 'Red Panda Capital confirmed the 10:30 ET meeting, but the required second ShoreVest attendee is not available until 10:45 ET.',
       status: 'Decision needed before 10:30 ET',
       nextStep: 'Move the start to 10:45 ET, or begin at 10:30 ET with one attendee.',
@@ -104,7 +104,7 @@
         policy: 'Substantive LP meetings require at least two ShoreVest attendees. Missing required attendance means the meeting is not ready; exceptions require explicit approval and a record.',
         evidence: [
           { label: 'Investor confirmation', detail: 'Red Panda Capital confirmed 10:30 ET', state: 'system-verified' },
-          { label: 'Relationship ownership', detail: 'Golden Eagle owns Red Panda Capital', state: 'system-verified' },
+          { label: 'Relationship ownership', detail: 'Bob Smith owns Red Panda Capital', state: 'system-verified' },
           { label: 'Second-attendee availability', detail: 'Available from 10:45 ET', state: 'system-verified' },
           { label: 'Revised start time', detail: 'Not yet proposed to Red Panda Capital', state: 'unavailable' }
         ]
@@ -115,7 +115,7 @@
       bucket: 'do-now',
       action: 'Confirm the mainland attendee for Koala Investment Board',
       workspace: 'Meetings',
-      owner: 'Snow Leopard',
+      owner: 'Mark Davis',
       reason: 'A substantive meeting with the Shanghai office of an international LP requires an eligible mainland-team attendee before times are proposed.',
       status: 'Attendance unresolved',
       nextStep: 'Confirm an eligible mainland-team attendee before proposing times.',
@@ -130,7 +130,7 @@
         reasoning: 'The counterparty is the PRC office of an international LP, so the mainland-attendance rule applies. Confirming attendance first avoids proposing a time the meeting cannot satisfy.',
         policy: 'An interaction with the PRC office of an international LP, or any office of a PRC-headquartered LP, requires an eligible mainland-team attendee. Substantive LP meetings also require at least two ShoreVest attendees.',
         evidence: [
-          { label: 'Relationship ownership', detail: 'Snow Leopard owns Koala Investment Board', state: 'system-verified' },
+          { label: 'Relationship ownership', detail: 'Mark Davis owns Koala Investment Board', state: 'system-verified' },
           { label: 'Counterparty office', detail: 'Shanghai (PRC) office of an international LP', state: 'system-verified' },
           { label: 'Mainland-team attendee', detail: 'Eligible mainland-team attendee required', state: 'unavailable' },
           { label: 'Proposed times', detail: 'Not yet proposed to Koala Investment Board', state: 'unavailable' }
@@ -142,7 +142,7 @@
       bucket: 'do-now',
       action: 'Prepare the Blue River Endowment access package',
       workspace: 'Diligence & Requests',
-      owner: 'River Otter',
+      owner: 'Susan Clark',
       reason: 'Relationship-owner approval and recipient eligibility are confirmed for Blue River Endowment data-room access.',
       status: 'Ready to prepare',
       nextStep: 'Prepare the named-recipient access package.',
@@ -154,7 +154,7 @@
       bucket: 'do-now',
       action: 'Submit the Cedar Ridge approval package',
       workspace: 'Approvals',
-      owner: 'River Otter',
+      owner: 'Susan Clark',
       reason: 'All substantive approvals are complete; the package is assembled and ready to submit.',
       status: 'Ready to submit',
       nextStep: 'Review the assembled package and submit it.',
@@ -167,7 +167,7 @@
       bucket: 'do-now',
       action: 'Correct the ATP account match',
       workspace: 'Diligence & Requests',
-      owner: 'Snow Leopard',
+      owner: 'Mark Davis',
       reason: 'Three data-quality issues are blocking the Cedar Ridge outreach list; an automated match linked a contact to the wrong parent account.',
       status: 'Blocking outreach',
       nextStep: 'Reassign the contact to the correct account and re-run validation.',
@@ -182,20 +182,20 @@
       bucket: 'waiting',
       action: 'Confirm ownership of Granite Peak Capital',
       workspace: 'Relationships',
-      owner: 'Red Fox',
-      waitingOn: 'Grey Wolf',
-      reason: 'Grey Wolf has not confirmed ownership of the Granite Peak Capital relationship.',
-      status: 'Waiting on Grey Wolf',
+      owner: 'Jane Brown',
+      waitingOn: 'Paul Wilson',
+      reason: 'Paul Wilson has not confirmed ownership of the Granite Peak Capital relationship.',
+      status: 'Waiting on Paul Wilson',
       nextStep: 'Follow up Friday if ownership is still unconfirmed.',
       link: '#/workspace/relationships',
-      home: { section: 'waiting', summary: 'Grey Wolf has not confirmed Granite Peak ownership.' }
+      home: { section: 'waiting', summary: 'Paul Wilson has not confirmed Granite Peak ownership.' }
     },
     {
       id: 'recovery-otter',
       bucket: 'waiting',
       action: 'Otter Pension Trust recovery material',
       workspace: 'Recovery & Enforcement',
-      owner: 'Golden Eagle',
+      owner: 'Bob Smith',
       waitingOn: 'Investment team',
       reason: 'The Investment team is preparing recovery material for Otter Pension Trust.',
       status: 'Waiting on Investment team',
@@ -207,7 +207,7 @@
       bucket: 'waiting',
       action: 'Silver Pine Insurance pack legal review',
       workspace: 'Compliance',
-      owner: 'Snow Leopard',
+      owner: 'Mark Davis',
       waitingOn: 'Legal team',
       reason: 'Legal is reviewing the Silver Pine Insurance meeting pack.',
       status: 'Waiting on Legal team',
@@ -221,7 +221,7 @@
       bucket: 'suggestion',
       action: 'Review 7 suggested task deletions',
       workspace: 'Workflow Rules',
-      owner: 'Peregrine Falcon',
+      owner: 'Linda Moore',
       reason: 'A ranking source suggested removing 7 tasks it believes are stale. These are suggestions, not accepted work.',
       status: 'Suggested — not yet accepted',
       nextStep: 'Accept or dismiss each suggested deletion.',
@@ -232,7 +232,7 @@
       bucket: 'suggestion',
       action: 'Consider 4 proposed contacts for North Harbour Foundation',
       workspace: 'Outreach',
-      owner: 'Red Fox',
+      owner: 'Jane Brown',
       reason: 'A ranking source proposed 4 additional contacts for North Harbour Foundation.',
       status: 'Suggested — not yet accepted',
       nextStep: 'Accept into the outreach list or dismiss.',
@@ -245,7 +245,7 @@
       bucket: 'on-hold',
       action: 'Granite Peak ranking relies on stale information',
       workspace: 'Investor Intelligence',
-      owner: 'Peregrine Falcon',
+      owner: 'Linda Moore',
       reason: 'The ranking for Granite Peak Capital is based on data last refreshed six weeks ago.',
       status: 'On hold — awaiting data refresh',
       nextStep: 'Request a refresh before relying on the ranking.',
@@ -257,7 +257,7 @@
       bucket: 'on-hold',
       action: 'Walrus Holdings re-engagement',
       workspace: 'Relationships',
-      owner: 'Grey Wolf',
+      owner: 'Paul Wilson',
       reason: 'Dormant relationship deliberately deferred to next quarter.',
       status: 'On hold — deferred',
       nextStep: 'Revisit next quarter.',
@@ -270,7 +270,7 @@
       bucket: 'done',
       action: 'Narwhal Pension Fund follow-up note approved',
       workspace: 'Relationships',
-      owner: 'Golden Eagle',
+      owner: 'Bob Smith',
       reason: 'The single follow-up note was approved and the relationship can rest.',
       status: 'Done',
       nextStep: 'No further action.',
@@ -282,7 +282,7 @@
       bucket: 'done',
       action: 'Otter Pension Trust recipient material prepared',
       workspace: 'Materials & Delivery',
-      owner: 'River Otter',
+      owner: 'Susan Clark',
       reason: 'The recipient-specific version was prepared from the approved master.',
       status: 'Done',
       nextStep: 'No further action.',

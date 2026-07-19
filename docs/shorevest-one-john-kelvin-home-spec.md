@@ -163,7 +163,7 @@ unavailable. Show a concise evidence-quality summary, not just "Evidence (3)".
 - **John** — *Red Panda Capital meeting*: LP confirmed 10:30 ET; the required
   second ShoreVest attendee is unavailable until 10:45 ET; recommend moving the
   start to 10:45 ET. Two-attendee policy explained contextually.
-- **Kelvin** — a different animal-based institution demonstrating the **mainland
+- **Kelvin** — a different synthetic institution demonstrating the **mainland
   attendance rule**: a substantive interaction with a PRC-headquartered LP (or
   the PRC office of an international LP) where internal attendance lacks an
   eligible mainland-team participant; recommend adding an eligible mainland-team
