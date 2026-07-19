@@ -295,3 +295,38 @@ body.cdd-print-layout .wrap { width: var(--p-page-width); max-width: none; margi
    cdd-article-template.js; suppress it so it cannot render unstyled. */
 .cdd-print-layout .sv-back-to-top,
 .cdd-print-layout .back-to-top { display: none !important; }
+
+/* Safari's print compositor can treat a physically sized body as a shrink-to-fit
+   page, while Chromium prints the same CDD sheet at the CSS page size declared
+   above. Anchor the Safari print canvas to the page origin and make the A4 sheet
+   the only physical-width element so Save as PDF matches Chromium's geometry. */
+@media print {
+  html.cdd-print-safari,
+  html.cdd-print-safari body.cdd-print-layout {
+    width: auto;
+    min-width: 0;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+  }
+
+  html.cdd-print-safari body.cdd-print-layout {
+    display: block;
+  }
+
+  html.cdd-print-safari .cdd-print-layout .cdd-print-shell {
+    left: 0;
+    right: auto;
+    margin-left: 0;
+    margin-right: 0;
+    max-width: var(--p-page-width);
+    transform: none;
+  }
+
+  html.cdd-print-safari .cdd-print-layout .cdd-print-shell::before {
+    left: 0;
+    width: var(--p-page-width);
+    transform: none;
+  }
+}
