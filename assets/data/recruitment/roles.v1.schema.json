@@ -4,146 +4,72 @@
   "title": "ShoreVest recruitment role manifest v1",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "generatedAtUtc", "roles"],
+  "required": [
+    "schemaVersion",
+    "generatedAtUtc",
+    "roles"
+  ],
   "properties": {
-    "schemaVersion": { "const": "1.0" },
-    "generatedAtUtc": { "type": "string", "format": "date-time" },
+    "schemaVersion": {
+      "const": "1.0"
+    },
+    "generatedAtUtc": {
+      "type": "string",
+      "format": "date-time"
+    },
     "roles": {
       "type": "array",
       "uniqueItems": true,
-      "items": { "$ref": "#/$defs/role" }
+      "items": {
+        "$ref": "#/$defs/role"
+      }
     }
   },
   "$defs": {
-    "plainStringArray": {
-      "type": "array",
-      "items": { "type": "string", "minLength": 1, "maxLength": 600 },
-      "maxItems": 40
-    },
-    "localizedRole": {
+    "localizedText": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["title", "location", "team", "detailPath"],
+      "required": [
+        "en",
+        "zh-CN"
+      ],
       "properties": {
-        "title": { "type": "string", "minLength": 1, "maxLength": 160 },
-        "location": { "type": "string", "minLength": 1, "maxLength": 120 },
-        "team": { "type": "string", "minLength": 1, "maxLength": 120 },
-        "detailPath": { "type": "string", "minLength": 1, "maxLength": 240, "pattern": "^careers/[a-z0-9][a-z0-9-]*(_cn)?\\.html$" },
-        "summary": { "type": "string", "maxLength": 1200 },
-        "responsibilities": { "$ref": "#/$defs/plainStringArray" },
-        "requirements": { "$ref": "#/$defs/plainStringArray" },
-        "preferredQualifications": { "$ref": "#/$defs/plainStringArray" },
-        "applicationStatementPrompt": { "type": "string", "maxLength": 600 }
-      }
-    },
-    "reportingLine": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["approved", "locales"],
-      "properties": {
-        "approved": { "type": "boolean" },
-        "locales": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["en", "zh-CN"],
-          "properties": {
-            "en": { "type": "string", "minLength": 1, "maxLength": 200 },
-            "zh-CN": { "type": "string", "minLength": 1, "maxLength": 200 }
-          }
+        "en": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 3000
+        },
+        "zh-CN": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 3000
         }
       }
     },
-    "fileDefinition": {
+    "localizedArray": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["filePurpose", "required", "maxSizeBytes", "allowedExtensions", "allowedMimeTypes", "signatureValidation"],
+      "required": [
+        "en",
+        "zh-CN"
+      ],
       "properties": {
-        "filePurpose": { "enum": ["cv", "cover_letter", "supporting_document"] },
-        "required": { "type": "boolean" },
-        "maxSizeBytes": { "type": "integer", "minimum": 1, "maximum": 52428800 },
-        "allowedExtensions": {
-          "type": "array",
-          "minItems": 1,
-          "items": { "enum": [".pdf", ".doc", ".docx"] },
-          "uniqueItems": true
-        },
-        "allowedMimeTypes": {
+        "en": {
           "type": "array",
           "minItems": 1,
           "items": {
-            "enum": [
-              "application/pdf",
-              "application/msword",
-              "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-            ]
-          },
-          "uniqueItems": true
-        },
-        "signatureValidation": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["required", "acceptedSignatures"],
-          "properties": {
-            "required": { "const": true },
-            "acceptedSignatures": {
-              "type": "array",
-              "minItems": 1,
-              "items": { "enum": ["pdf", "oleCompoundFile", "zipDocx"] },
-              "uniqueItems": true
-            }
-          }
-        }
-      }
-    },
-    "workAuthorization": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["enabled", "required", "jurisdictions"],
-      "properties": {
-        "enabled": { "type": "boolean" },
-        "required": { "type": "boolean" },
-        "jurisdictions": {
-          "type": "array",
-          "items": { "type": "string", "minLength": 2, "maxLength": 80 },
-          "uniqueItems": true
-        }
-      }
-    },
-    "roleSpecificQuestion": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["questionId", "type", "required", "locales"],
-      "properties": {
-        "questionId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{1,80}$" },
-        "type": { "enum": ["short_text", "long_text", "single_select", "multi_select", "yes_no"] },
-        "required": { "type": "boolean" },
-        "locales": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["en", "zh-CN"],
-          "properties": {
-            "en": { "type": "string", "minLength": 1, "maxLength": 500 },
-            "zh-CN": { "type": "string", "minLength": 1, "maxLength": 500 }
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
           }
         },
-        "options": {
+        "zh-CN": {
           "type": "array",
+          "minItems": 1,
           "items": {
-            "type": "object",
-            "additionalProperties": false,
-            "required": ["value", "locales"],
-            "properties": {
-              "value": { "type": "string", "minLength": 1, "maxLength": 80 },
-              "locales": {
-                "type": "object",
-                "additionalProperties": false,
-                "required": ["en", "zh-CN"],
-                "properties": {
-                  "en": { "type": "string", "minLength": 1, "maxLength": 160 },
-                  "zh-CN": { "type": "string", "minLength": 1, "maxLength": 160 }
-                }
-              }
-            }
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
           }
         }
       }
@@ -151,48 +77,94 @@
     "role": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["roleId", "status", "locales", "employmentType", "applicationEnabled", "files", "screening"],
+      "required": [
+        "id",
+        "slug",
+        "status",
+        "contentReviewRequired",
+        "contentReviewNote",
+        "title",
+        "location",
+        "department",
+        "reportingLine",
+        "employmentType",
+        "targetStartDate",
+        "roleOverview",
+        "responsibilities",
+        "requiredQualifications",
+        "preferredQualifications",
+        "recruitmentStatus",
+        "datePosted",
+        "dateUpdated",
+        "displayOrder"
+      ],
       "properties": {
-        "roleId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{2,80}$" },
-        "status": { "enum": ["draft", "active", "closed", "archived"] },
-        "locales": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["en", "zh-CN"],
-          "properties": {
-            "en": { "$ref": "#/$defs/localizedRole" },
-            "zh-CN": { "$ref": "#/$defs/localizedRole" }
-          }
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]{2,80}$"
         },
-        "employmentType": { "enum": ["Full-time", "Part-time", "Internship", "Contract"] },
-        "applicationDeadline": {
-          "type": ["string", "null"],
-          "pattern": "^\\d{4}-\\d{2}-\\d{2}(T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[+-]\\d{2}:\\d{2}))?$"
+        "slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]{2,80}$"
         },
-        "deadlineAdminOverride": { "type": "boolean" },
-        "reportingLine": {
-          "oneOf": [
-            { "type": "null" },
-            { "$ref": "#/$defs/reportingLine" }
+        "status": {
+          "enum": [
+            "draft",
+            "published",
+            "closed"
           ]
         },
-        "applicationEnabled": { "type": "boolean" },
-        "files": {
-          "type": "array",
-          "minItems": 1,
-          "items": { "$ref": "#/$defs/fileDefinition" }
+        "contentReviewRequired": {
+          "type": "boolean"
         },
-        "screening": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["workAuthorization", "roleSpecificQuestions"],
-          "properties": {
-            "workAuthorization": { "$ref": "#/$defs/workAuthorization" },
-            "roleSpecificQuestions": {
-              "type": "array",
-              "items": { "$ref": "#/$defs/roleSpecificQuestion" }
-            }
-          }
+        "contentReviewNote": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "title": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "location": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "department": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "reportingLine": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "employmentType": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "targetStartDate": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "roleOverview": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "responsibilities": {
+          "$ref": "#/$defs/localizedArray"
+        },
+        "requiredQualifications": {
+          "$ref": "#/$defs/localizedArray"
+        },
+        "preferredQualifications": {
+          "$ref": "#/$defs/localizedArray"
+        },
+        "recruitmentStatus": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "datePosted": {
+          "type": "string",
+          "format": "date"
+        },
+        "dateUpdated": {
+          "type": "string",
+          "format": "date"
+        },
+        "displayOrder": {
+          "type": "integer",
+          "minimum": 1
         }
       }
     }

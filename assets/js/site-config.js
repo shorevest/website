@@ -23,7 +23,8 @@
   'use strict';
 
   var SITE_CONFIG = {
-    showShoreVestOnePublicLink: false
+    showShoreVestOnePublicLink: false,
+    careersOpenRolesEnabled: false
   };
 
   root.SHOREVEST_SITE_CONFIG = SITE_CONFIG;
