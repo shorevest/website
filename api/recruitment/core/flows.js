@@ -105,12 +105,16 @@ function canonicalFingerprintInput({ request, roleId, candidate }) {
 
 async function requestFingerprint(deps, data) {
   const canonical = canonicalFingerprintInput(data);
-  if (deps.fingerprints?.hmac) return deps.fingerprints.hmac(canonical);
-  return crypto.createHmac('sha256', 'test-only-fingerprint-secret').update(canonical).digest('hex');
+  if (!deps.fingerprints || typeof deps.fingerprints.hmac !== 'function') {
+    const error = new Error('fingerprint adapter is not configured');
+    error.code = ERROR_CODES.INTERNAL_CONFIGURATION_ERROR;
+    throw error;
+  }
+  return deps.fingerprints.hmac(canonical);
 }
 
 function stableAlreadySubmitted(application, file, reservation) {
-  return { success: true, alreadySubmitted: true, applicationReference: application.applicationReference, fileReference: file.fileReference, quarantineBlobPath: file.quarantineBlobPath, applicationStatus: application.technicalStatus, fileStatus: file.technicalStatus, credentialGeneration: reservation?.credentialGeneration || file.credentialGeneration || 0, lastCredentialExpiryUtc: reservation?.lastCredentialExpiryUtc || file.credentialExpiresAtUtc || null };
+  return { success: true, alreadySubmitted: true, applicationReference: application.applicationReference, fileReference: file.fileReference, applicationStatus: application.technicalStatus, fileStatus: file.technicalStatus, retryAfterMs: 0 };
 }
 
 function validateCompleteRequest(request) {
@@ -277,17 +281,21 @@ function validateScanEvent(event) {
 }
 
 
-function hasOutbox(deps, idempotencyKey, type) {
-  const events = deps.applicationStore?.outboxEvents || deps.outbox?.events || [];
-  return events.some((e) => e.idempotencyKey === idempotencyKey && (!type || e.type === type));
+async function hasOutbox(deps, applicationReference, idempotencyKey, type) {
+  if (!deps.applicationStore || typeof deps.applicationStore.hasOutboxEvent !== 'function') {
+    const error = new Error('outbox lookup adapter is not configured');
+    error.code = ERROR_CODES.INTERNAL_CONFIGURATION_ERROR;
+    throw error;
+  }
+  return deps.applicationStore.hasOutboxEvent({ applicationReference, idempotencyKey, type });
 }
 
 async function reconcileAppliedScanOutcome(event, deps, application, file, eventKey) {
   if (!application || !file || file.scanEventId !== event.eventId || file.quarantineBlobPath !== event.blobPath || file.scanResult !== event.result) return false;
   let ok = false;
-  if (event.result === S.Clean) ok = file.technicalStatus === F.Ready && application.technicalStatus === A.Ready && file.cleanBlobPath === file.quarantineBlobPath && hasOutbox(deps, `outbox:${application.applicationReference}:documents-ready`, N.DocumentsReady);
-  else if (event.result === S.Malicious) ok = file.technicalStatus === F.Malicious && application.technicalStatus === A.Blocked && hasOutbox(deps, `outbox:${application.applicationReference}:${file.fileReference}:malicious`, N.MaliciousFileDetected);
-  else ok = file.technicalStatus === F.ManualReview && application.technicalStatus === A.ManualReview && hasOutbox(deps, `outbox:${application.applicationReference}:${file.fileReference}:manual-review`, N.ManualReviewRequired);
+  if (event.result === S.Clean) ok = file.technicalStatus === F.Ready && application.technicalStatus === A.Ready && file.cleanBlobPath === file.quarantineBlobPath && await hasOutbox(deps, application.applicationReference, `outbox:${application.applicationReference}:documents-ready`, N.DocumentsReady);
+  else if (event.result === S.Malicious) ok = file.technicalStatus === F.Malicious && application.technicalStatus === A.Blocked && await hasOutbox(deps, application.applicationReference, `outbox:${application.applicationReference}:${file.fileReference}:malicious`, N.MaliciousFileDetected);
+  else ok = file.technicalStatus === F.ManualReview && application.technicalStatus === A.ManualReview && await hasOutbox(deps, application.applicationReference, `outbox:${application.applicationReference}:${file.fileReference}:manual-review`, N.ManualReviewRequired);
   if (!ok) return false;
   await deps.scanEvents.complete(eventKey, { success: true, reconciled: true });
   return true;

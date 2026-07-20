@@ -1,0 +1,24 @@
+name: Recruitment Functions CI
+on:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci
+      - run: npm ci
+        working-directory: services/recruitment-functions
+      - run: npm run validate:recruitment
+      - run: npm run check:recruitment
+      - run: npm run test:recruitment
+      - run: npm run check:security
+      - run: npm run check:functions
+      - run: npm run test:functions
+      - run: az bicep build --file infra/recruitment/main.bicep
+      - run: az bicep build --file infra/recruitment/main.bicep --stdout >/dev/null
+      - run: git diff --check
