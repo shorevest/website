@@ -172,3 +172,9 @@ rotation · separate test/production environments · no production CVs in local 
   retention decisions.
 - **Legal**: approve the privacy notice and consent wording; complete cross-border/PIPL
   analysis; approve retention.
+
+## Phase 2A direct-upload operations note
+
+Phase 2A defines code contracts only. Do not provision Azure resources from this repository change. Phase 2B must configure private `recruitment-quarantine` and `recruitment-clean` containers, Defender for Storage malware scanning on quarantine uploads, Event Grid delivery to the scan-result function, restricted SharePoint Lists, and production CORS limited to `https://shorevest.com` and `https://www.shorevest.com`.
+
+No storage account names, tenant IDs, SharePoint IDs, secrets, credentials, or email addresses belong in committed code. Use managed identity and environment/key-vault references in the production adapter phase.

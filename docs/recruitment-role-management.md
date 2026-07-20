@@ -140,3 +140,9 @@ Before changing `"applicationEnabled": false` → `true`:
 10. Test applications confirm storage, register creation, HR notification, candidate
     acknowledgement, and closed-role rejection.
 11. Deploy; verify the live form; create the LinkedIn Job with the external apply URL.
+
+## Application configuration in the role manifest
+
+Each role now carries an `application` object used by the future backend as the authoritative eligibility and CV-rule source. Keep draft roles with `application.enabled: false`. A role may accept applications only after publication, approved privacy notice version, no content-review hold, valid locale, and an unexpired deadline. PDF and DOCX are the only accepted CV formats; legacy `.doc` must not be added.
+
+Do not add public Apply buttons, forms, mailto links, candidate accounts, candidate portals, live API URLs, or live SAS generation while `careersOpenRolesEnabled` remains false and roles remain draft.

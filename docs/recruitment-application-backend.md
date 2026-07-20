@@ -1,139 +1,75 @@
-# Recruitment application backend — contract and design
+# Recruitment application backend — Phase 2A core contract
 
-Status: **design and contract only. No backend is deployed.** The ShoreVest website is a
-static site with no compatible live-backend deployment path, so this document defines the
-server-side contract planned for Phase 2, and the reference scaffold under
-[`api/`](../api/README.md) preserves useful validation/orchestration logic in reviewable form. Nothing here
-is live. Phase 1.1 does not include a public application page or frontend form; application submission stays disabled until the backend
-is built, deployed, tested, and approved.
+Status: Phase 2A implemented as testable domain modules only. No public form, live Azure Function, live SAS generator, SharePoint adapter, credentials, or Azure resources are included.
 
-This document complements — it does not replace — the authoritative first-party Azure build
-specification in [`docs/recruitment/PHASE_1_BUILD_SPEC.md`](recruitment/PHASE_1_BUILD_SPEC.md).
+## Endpoint contracts
 
-## 1. What is implemented today (frontend)
+### `POST /api/recruitment/applications/initiate`
+Accepts role id, locale, source, clientSubmissionId, minimal candidate fields, privacy acceptance/version, and declared CV metadata only. The API never receives CV bytes. On success it reserves application/file records and returns an application reference, file reference, one short-lived PUT upload grant, and an opaque completion token.
 
-- Manifest-driven bilingual role listing (`assets/js/recruitment-role-list.js`) with the public
-  open-roles flag defaulting off.
-- Reusable role-detail renderer (`assets/js/recruitment-role-detail.js`) that renders role
-  content with `textContent`, hides draft roles by default, and supports `?preview=1` for
-  internal draft-page review.
-- No public application pages, application form, upload control, email fallback, or success mock
-  are currently shipped. The former `careers/apply.html`, `careers/apply_cn.html`, and
-  `assets/js/recruitment-application.js` Phase 1 prototype were intentionally left out of
-  Phase 1.1 until the secure Phase 2 architecture is approved.
+### `POST /api/recruitment/applications/complete`
+Accepts applicationReference, fileReference, and completionToken. It verifies the token, resolves server-side records, checks the exact quarantine blob, verifies size/content type, inspects actual PDF/DOCX bytes, marks scan pending, and moves the application to Scanning. It does not run antivirus scanning.
 
-## 2. Endpoint
+### Event Grid scan result
+The testable handler accepts normalized Defender results: Clean, Malicious, ScanFailed, Unsupported, Timeout. Clean files are promoted server-side to `recruitment-clean`; malicious files are blocked; failed/unsupported/timeouts require manual review.
 
-Configurable, same-origin, approved endpoint — set via `data-recruitment-endpoint` on the
-application page `<body>`. Example value once live:
-
-```
-/api/recruitment/applications
-```
-
-- Method: `POST`
-- Encoding: `multipart/form-data`
-- Transport: HTTPS only.
-- When the attribute is empty (its checked-in state), the frontend treats the backend as
-  unavailable and shows a neutral failure. No employee email address and no third-party form
-  provider is ever hard-coded.
-
-## 3. Request fields (multipart)
-
-| Field | Source | Trust |
-| --- | --- | --- |
-| `roleId` | manifest-selected | validated server-side against the authoritative manifest |
-| `roleTitle`, `roleTeam`, `roleLocation` | manifest (debug/compare only) | **untrusted** — the backend overwrites these from its own manifest |
-| `locale` | document | validated (`en` / `zh-CN`) |
-| `source` | normalized referral | attribution only; allowlist `website`/`linkedin`/`direct`/`other`, else `direct` |
-| `fullName`, `email`, `location`, `applicationStatement` | candidate | required; validated |
-| `telephone`, `linkedinUrl` | candidate | optional; validated if present |
-| `privacyAccepted` | candidate | must be `true` |
-| `privacyNoticeVersion` | page constant | recorded (`recruitment-privacy-draft-2026-07`) |
-| `submittedAtClientUtc` | client clock | recorded (untrusted) |
-| `applicationPageVersion` | page constant | optional diagnostic |
-| `cv` | candidate | required file; re-validated + signature-checked + scanned server-side |
-
-The backend must treat server-side manifest/database data as authoritative and must never
-trust `roleTitle`, `roleTeam`, or `roleLocation` from the browser.
-
-## 4. Responses
-
-Success:
-
-```json
-{ "success": true, "applicationReference": "SV-2026-000001" }
+```mermaid
+sequenceDiagram
+  participant Browser
+  participant Function
+  participant Quarantine as recruitment-quarantine
+  participant Defender
+  participant Clean as recruitment-clean
+  participant Records as SharePoint lists (future)
+  participant PowerAutomate as Power Automate (future)
+  Browser->>Function: initiate metadata + proposed CV metadata
+  Function->>Records: reserve RecruitmentApplications/RecruitmentFiles
+  Function-->>Browser: write-only single-blob SAS + completion token
+  Browser->>Quarantine: PUT CV directly
+  Browser->>Function: complete token
+  Function->>Quarantine: verify exact blob, size, content type, signature
+  Function->>Records: mark received/scanning
+  Defender-->>Function: normalized malware scan event
+  Function->>Clean: server-side copy clean file
+  Function->>Quarantine: delete only after clean copy verification
+  Function->>Records: update technical statuses
+  Records-->>PowerAutomate: notification events/record changes, no CV attachment or public link
 ```
 
-Controlled failure:
+## Role eligibility
+The server-bundled role manifest is authoritative. A role accepts applications only when `status` is `published`, `application.enabled` is true, `application.privacyNoticeVersion` is a non-empty approved value matching the request, `contentReviewRequired` is false, any `deadlineUtc` has not passed, and the requested locale exists. Browser-supplied role title, department, location, application status, and file rules are ignored.
 
-```json
-{ "success": false, "errorCode": "ROLE_NOT_OPEN" }
-```
+## Candidate and file contract
+Required fields: `fullName`, `email`, `privacyAccepted`. Optional fields: `telephone`, `currentLocation`, `linkedinUrl`, `coverNote`. System fields: `roleId`, `locale`, `source`, `clientSubmissionId`, `privacyNoticeVersion`, `submittedAtClientUtc`. Limits are 200/254/50/200/300/4000 characters respectively, original filename 255 characters, and CV size from the manifest. Email normalization trims and lowercases only the domain.
 
-Supported future error codes (to be mapped to neutral candidate-facing messages by the Phase 2 client):
+CV uploads are PDF and DOCX only. Legacy `.doc` files are rejected. Completion verifies `%PDF-` magic bytes for PDFs and ZIP entries `[Content_Types].xml` plus `word/document.xml` for DOCX.
 
-`ROLE_NOT_FOUND`, `ROLE_NOT_OPEN`, `ROLE_CLOSED`, `APPLICATION_DEADLINE_PASSED`,
-`VALIDATION_FAILED`, `FILE_MISSING`, `FILE_TYPE_REJECTED`, `FILE_TOO_LARGE`,
-`FILE_SIGNATURE_REJECTED`, `RATE_LIMITED`, `MALWARE_SCAN_FAILED`, `STORAGE_FAILED`,
-`SUBMISSION_FAILED`.
+## Storage and SAS restrictions
+Private logical containers: `recruitment-quarantine` and `recruitment-clean`. Blob paths use `recruitment/{year}/{roleId}/{applicationReference}/{fileReference}.{extension}` and never include name, email, telephone, or original filename. Original filenames are stored only as controlled RecruitmentFiles metadata.
 
-Responses must never contain stack traces, HTTP bodies from upstream services, storage
-errors, Microsoft Graph errors, SharePoint paths, internal IDs, or raw exception messages.
+Production upload grants must be user-delegation SAS, HTTPS-only, one exact blob, create/write only, no read/list/delete/container permissions, maximum 10 minute expiry, small clock-skew start time, and no browser secrets. Production CORS origins: `https://shorevest.com` and `https://www.shorevest.com`; GitHub Pages origin may be non-production only.
 
-## 5. Server-side processing pipeline
+## State machines
+Application states: Initiated, UploadPending, Received, Scanning, Ready, ManualReview, Blocked, Incomplete, Error. File states: SASIssued, Uploaded, ValidationFailed, ScanPending, Clean, Ready, Malicious, ScanFailed, ManualReview, Removed. Hiring stages are separate: New, UnderReview, Interview, Hold, Rejected, Offer, Hired, Withdrawn. Public APIs cannot set hiring stages.
 
-Reference implementation: [`api/recruitment/handler.js`](../api/recruitment/handler.js)
-(validation in [`api/recruitment/applicationValidation.js`](../api/recruitment/applicationValidation.js),
-signatures in [`api/recruitment/fileSignatures.js`](../api/recruitment/fileSignatures.js)).
+## Repository interfaces
+Phase 2A uses dependency injection for role manifest loading, application repository, file repository, Blob Storage, SAS issuance, idempotency, rate limiting, bot verification, token signing/verification, reference generation, structured logging, internal notification events, scan-event deduplication, and clock/time. In-memory adapters are implemented for tests; Azure/SharePoint production adapters remain Phase 2B.
 
-1. Accept HTTPS multipart with strict request-size limits (enforced at the host/binding).
-2. Parse fields safely.
-3. Validate `roleId` (safe slug).
-4. Read the authoritative, server-bundled role configuration.
-5. Confirm the role is `active`.
-6. Confirm `applicationEnabled` is `true`.
-7. Confirm the deadline has not passed.
-8. Validate all text fields; bound lengths.
-9. Normalize the email cautiously (trim; lowercase domain only).
-10. Validate the LinkedIn URL if supplied.
-11. Validate file presence, size, extension, MIME, and **actual byte signature**
-    (PDF `%PDF-`, OLE `D0CF11E0…`, ZIP/`docx` `PK…`).
-12. Reject path traversal in the declared filename.
-13. Generate a randomized stored filename `{applicationReference}-{randomId}.{ext}`; the
-    original name is kept only as controlled metadata.
-14. Store the CV in restricted (private, non-public) storage / quarantine; scan for malware
-    before any reviewer can reach it. Never a public link; never an email attachment.
-15. Apply rate limiting and bot/spam controls.
-16. Create a structured application register record.
-17. Return a non-sensitive `applicationReference`.
-18. Log operational events with minimal PII — never log CV bytes or full personal data.
-19. Handle partial failure safely and idempotently (below).
-20. Use managed identity / environment configuration for all secrets. No credentials are ever
-    exposed to the frontend.
+## SharePoint schemas
+`RecruitmentApplications`: ApplicationReference, RoleId, RoleTitle, RoleDepartment, RoleLocation, Locale, Source, CandidateName, CandidateEmail, CandidateTelephone, CandidateLocation, LinkedInUrl, CoverNote, PrivacyNoticeVersion, PrivacyAcceptedAtUtc, SubmittedAtClientUtc, SubmittedAtServerUtc, TechnicalStatus, HiringStage, FileCount, ReadyFileCount, RequiresManualReview, RetentionReviewDate, LastUpdatedAtUtc.
 
-## 6. Idempotency and duplicate handling
+`RecruitmentFiles`: FileReference, ApplicationReference, FilePurpose, OriginalFileName, DeclaredMimeType, DetectedFileType, SizeBytes, QuarantineBlobPath, CleanBlobPath, TechnicalStatus, ScanResult, ScanEventId, ScanCompletedAtUtc, ReadyAtUtc, RetentionReviewDate, LastUpdatedAtUtc.
 
-Avoid duplicate application records when the candidate double-clicks, the browser retries after
-a timeout, the backend succeeds but the response is lost, or a downstream flow retries.
+Both lists require restricted HR list/site permissions. Filtered SharePoint views are not access control. CVs must remain in Azure Blob Storage, not a SharePoint document library.
 
-- Use a **server-derived** idempotency key (e.g. a submission-session identifier). Do **not**
-  use the applicant's email address alone as the deduplication key.
-- Applying to more than one role with the same email must always be allowed.
-- The frontend also guards against double submission (disabled submit button + in-flight lock),
-  but the server key is the authoritative dedupe.
+## Notifications
+Internal event names: ApplicationReceived, DocumentsReady, ManualReviewRequired, MaliciousFileDetected. The core does not send email. Future Power Automate flows must not include CV attachments or public CV links.
 
-## 7. Local development / mock mode
+## Error-code contract
+Candidate-facing responses use generic codes: ROLE_NOT_FOUND, ROLE_NOT_OPEN, APPLICATION_DEADLINE_PASSED, VALIDATION_FAILED, PRIVACY_VERSION_INVALID, FILE_MISSING, FILE_TYPE_REJECTED, FILE_TOO_LARGE, FILE_SIGNATURE_REJECTED, RATE_LIMITED, BOT_VERIFICATION_FAILED, TOKEN_INVALID, BLOB_NOT_FOUND, BLOB_MISMATCH, DUPLICATE_EVENT, STATE_TRANSITION_INVALID, SUBMISSION_FAILED.
 
-No Phase 1.1 page includes a mock submission flow. If Phase 2 adds a development mock, it must
-require both an explicit opt-in and a non-production host, and tests must assert that production
-can never fake success.
+## Phase 2B environment variables
+Names only: recruitment manifest bundle path, Azure Storage account/container names, managed-identity/client configuration, token-signing key reference, CORS environment, rate-limit store configuration, bot-verification provider configuration, SharePoint site/list identifiers, notification event destination, retention-policy settings, structured-log sink.
 
-## 8. Security assumptions for the production backend
-
-- HTTPS only; managed identity where available; environment-specific configuration.
-- Restricted SharePoint / storage permissions; private upload storage only.
-- File scanning; request-size limits; rate limiting; bot protection; strict input validation.
-- Structured logging with minimal personal data; audit trails; secret rotation.
-- Separate test and production environments; no production CVs in local development.
-- Do not implement a weak security substitute merely to complete the workflow.
+## Unresolved decisions
+Final recruitment privacy notice/version, production bot provider, rate-limit thresholds, retention periods for malicious/manual-review files, SharePoint site/list provisioning, Power Automate owner and message templates, Defender Event Grid normalization details, and candidate acknowledgement wording.
