@@ -11,7 +11,7 @@ Accepts role id, locale, source, clientSubmissionId, minimal candidate fields, p
 Accepts applicationReference, fileReference, and completionToken. It verifies the token, resolves server-side records, checks the exact quarantine blob, verifies size/content type, inspects actual PDF/DOCX bytes, marks scan pending, and moves the application to Scanning. It does not run antivirus scanning.
 
 ### Event Grid scan result
-The testable handler accepts normalized Defender results: Clean, Malicious, ScanFailed, Unsupported, Timeout. Clean files are promoted server-side to `recruitment-clean`; malicious files are blocked; failed/unsupported/timeouts require manual review.
+The testable handler accepts normalized Defender results: Clean, Malicious, ScanFailed, Unsupported, Timeout. Clean files are promoted through `storage.promoteClean`, which may represent an asynchronous Azure server-side copy and must not be treated as complete until the adapter reports verified success. Malicious files are blocked; failed/unsupported/timeouts require manual review.
 
 ```mermaid
 sequenceDiagram
@@ -42,7 +42,7 @@ The server-bundled role manifest is authoritative. A role accepts applications o
 ## Candidate and file contract
 Required fields: `fullName`, `email`, `privacyAccepted`. Optional fields: `telephone`, `currentLocation`, `linkedinUrl`, `coverNote`. System fields: `roleId`, `locale`, `source`, `clientSubmissionId`, `privacyNoticeVersion`, `submittedAtClientUtc`. Limits are 200/254/50/200/300/4000 characters respectively, original filename 255 characters, and CV size from the manifest. Email normalization trims and lowercases only the domain.
 
-CV uploads are PDF and DOCX only. Legacy `.doc` files are rejected. Completion verifies `%PDF-` magic bytes for PDFs and ZIP entries `[Content_Types].xml` plus `word/document.xml` for DOCX.
+CV uploads are PDF and DOCX only. Legacy `.doc` files are rejected. Completion verifies `%PDF-` magic bytes and a minimum plausible size for PDFs. DOCX validation uses bounded ZIP parsing without filesystem extraction, rejects encrypted/malformed/traversal/unsupported-compression archives and ZIP bombs, requires `[Content_Types].xml` and `word/document.xml`, and verifies the content-types part identifies a WordprocessingML document. Malware scanning remains the security boundary; signature checks only reject obvious format mismatches before scan processing.
 
 ## Storage and SAS restrictions
 Private logical containers: `recruitment-quarantine` and `recruitment-clean`. Blob paths use `recruitment/{year}/{roleId}/{applicationReference}/{fileReference}.{extension}` and never include name, email, telephone, or original filename. Original filenames are stored only as controlled RecruitmentFiles metadata.
@@ -53,17 +53,23 @@ Production upload grants must be user-delegation SAS, HTTPS-only, one exact blob
 Application states: Initiated, UploadPending, Received, Scanning, Ready, ManualReview, Blocked, Incomplete, Error. File states: SASIssued, Uploaded, ValidationFailed, ScanPending, Clean, Ready, Malicious, ScanFailed, ManualReview, Removed. Hiring stages are separate: New, UnderReview, Interview, Hold, Rejected, Offer, Hired, Withdrawn. Public APIs cannot set hiring stages.
 
 ## Repository interfaces
-Phase 2A uses dependency injection for role manifest loading, application repository, file repository, Blob Storage, SAS issuance, idempotency, rate limiting, bot verification, token signing/verification, reference generation, structured logging, internal notification events, scan-event deduplication, and clock/time. In-memory adapters are implemented for tests; Azure/SharePoint production adapters remain Phase 2B.
+All infrastructure-facing dependency methods are asynchronous and must be awaited, even when a test adapter can return an immediate value. This includes `loadManifest`, `rateLimiter.check`, `botVerifier.verify`, reference generation, token signing/verification, SAS issuance, application/file persistence, Blob operations, scan-event records, outbox writes, logging, and clock abstractions.
+
+Initiation idempotency is atomic: `idempotency.begin(key, leaseDuration)` claims `init:{roleId}:{clientSubmissionId}`, `complete(key, result)` publishes the completed result, `fail(key, retryableReason)` releases retryable failures, and `getCompleted(key)` reads completed results. Candidate email is never an idempotency key. Concurrent callers for the same role/clientSubmissionId either receive the completed result or wait for the in-progress claim.
+
+Application/file creation uses `applicationStore.reserveSubmission({ application, file, idempotencyKey })` as one logical operation so Phase 2B can map it to a SharePoint batch/transaction or a compensated durable workflow. Follow-up state changes use `applicationStore.updateApplicationAndFile({ application, file, outboxEvent })` so status updates and outbox records commit together.
+
+Scan-event processing uses an atomic lifecycle: Processing, Completed, RetryableFailure, and PermanentFailure. Events are marked Completed only after durable state/outbox updates succeed; retryable infrastructure exceptions do not permanently suppress future retries.
 
 ## SharePoint schemas
 `RecruitmentApplications`: ApplicationReference, RoleId, RoleTitle, RoleDepartment, RoleLocation, Locale, Source, CandidateName, CandidateEmail, CandidateTelephone, CandidateLocation, LinkedInUrl, CoverNote, PrivacyNoticeVersion, PrivacyAcceptedAtUtc, SubmittedAtClientUtc, SubmittedAtServerUtc, TechnicalStatus, HiringStage, FileCount, ReadyFileCount, RequiresManualReview, RetentionReviewDate, LastUpdatedAtUtc.
 
-`RecruitmentFiles`: FileReference, ApplicationReference, FilePurpose, OriginalFileName, DeclaredMimeType, DetectedFileType, SizeBytes, QuarantineBlobPath, CleanBlobPath, TechnicalStatus, ScanResult, ScanEventId, ScanCompletedAtUtc, ReadyAtUtc, RetentionReviewDate, LastUpdatedAtUtc.
+`RecruitmentFiles`: FileReference, ApplicationReference, FilePurpose, OriginalFileName, DeclaredMimeType, DetectedFileType, SizeBytes, ExpectedHash, QuarantineBlobPath, CleanBlobPath, QuarantineRemovalPending, TechnicalStatus, ScanResult, ScanEventId, UploadVerifiedAtUtc, ScanStartedAtUtc, ScanCompletedAtUtc, ReadyAtUtc, QuarantineRemovedAtUtc, RetentionReviewDate, LastUpdatedAtUtc.
 
 Both lists require restricted HR list/site permissions. Filtered SharePoint views are not access control. CVs must remain in Azure Blob Storage, not a SharePoint document library.
 
 ## Notifications
-Internal event names: ApplicationReceived, DocumentsReady, ManualReviewRequired, MaliciousFileDetected. The core does not send email. Future Power Automate flows must not include CV attachments or public CV links.
+Internal outbox event names: ApplicationReceived, DocumentsReady, ManualReviewRequired, MaliciousFileDetected, QuarantineCleanupRequired. The core does not send email or call external notification delivery directly. Future Power Automate flows must not include CV attachments or public CV links.
 
 ## Error-code contract
 Candidate-facing responses use generic codes: ROLE_NOT_FOUND, ROLE_NOT_OPEN, APPLICATION_DEADLINE_PASSED, VALIDATION_FAILED, PRIVACY_VERSION_INVALID, FILE_MISSING, FILE_TYPE_REJECTED, FILE_TOO_LARGE, FILE_SIGNATURE_REJECTED, RATE_LIMITED, BOT_VERIFICATION_FAILED, TOKEN_INVALID, BLOB_NOT_FOUND, BLOB_MISMATCH, DUPLICATE_EVENT, STATE_TRANSITION_INVALID, SUBMISSION_FAILED.

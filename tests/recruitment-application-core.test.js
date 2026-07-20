@@ -33,3 +33,42 @@ assert.throws(()=>transition('application',A.Ready,A.UploadPending),/not allowed
 assert.ok(!JSON.stringify(deps.logger.logs).includes('%PDF-test'));
 console.log('recruitment application core tests passed');
 })();
+
+(async()=>{
+const docx=makeTinyZip([
+  {name:'[Content_Types].xml',data:'<Types><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>'},
+  {name:'word/document.xml',data:'<w:document />'}
+]);
+assert.strictEqual(require('../api/recruitment/core/fileTypes').detect(docx),'docx');
+assert.strictEqual(require('../api/recruitment/core/fileTypes').detect(makeTinyZip(['[Content_Types].xml','word/document.xml'])),'zip');
+assert.doesNotThrow(()=>require('../api/recruitment/core/fileTypes').detect(Buffer.from([0x50,0x4b,3,4,1])));
+assert.strictEqual((await start(manifest(),req({candidate:{...req().candidate,telephone:42}}))).res.errorCode,E.VALIDATION_FAILED);
+assert.strictEqual((await start(manifest(),req({clientSubmissionId:'not-a-uuid'}))).res.errorCode,E.VALIDATION_FAILED);
+let deps=createMemoryAdapters({manifest:manifest(),async:true});
+let calls=Array.from({length:8},()=>initiateApplication(req(),deps));
+let results=await Promise.all(calls);
+assert.ok(results.every(r=>r.success&&r.applicationReference===results[0].applicationReference));
+assert.strictEqual(deps.counters.applications,1);
+assert.strictEqual(deps.counters.files,1);
+assert.strictEqual(deps.counters.sas,1);
+({deps,res}=await start(manifest({application:{enabled:true,deadlineUtc:null,privacyNoticeVersion:'approved-v1',allowedSources:['website','linkedin','direct','other'],cv:{required:true,maxSizeBytes:1000,allowedExtensions:['.pdf','.docx'],allowedMimeTypes:['application/pdf','application/vnd.openxmlformats-officedocument.wordprocessingml.document']}}}),req({file:{originalName:'cv.docx',declaredMimeType:'application/vnd.openxmlformats-officedocument.wordprocessingml.document',sizeBytes:docx.length}})));
+deps.storage.put('recruitment-quarantine',deps.files.get(res.fileReference).quarantineBlobPath,docx,'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+assert.ok((await completeUpload({applicationReference:res.applicationReference,fileReference:res.fileReference,completionToken:res.completionToken},deps)).success);
+const body=res.completionToken.split('.')[0];
+assert.strictEqual((await completeUpload({applicationReference:res.applicationReference,fileReference:res.fileReference,completionToken:`${body}.bad`},deps)).errorCode,E.TOKEN_INVALID);
+({deps,res}=await start());
+deps.storage.put('recruitment-quarantine',deps.files.get(res.fileReference).quarantineBlobPath,Buffer.from('%PDF-test'),'application/pdf');
+await completeUpload({applicationReference:res.applicationReference,fileReference:res.fileReference,completionToken:res.completionToken},deps);
+let file=deps.files.get(res.fileReference); deps.storage.put('recruitment-quarantine',file.quarantineBlobPath,Buffer.from('%PDF-test'),'application/pdf','wrong');
+assert.strictEqual((await processScanResult({eventId:'copy1',fileReference:res.fileReference,blobPath:file.quarantineBlobPath,result:S.Clean,scannedAtUtc:'2026-07-20T00:05:00Z'},deps)).errorCode,E.INFRASTRUCTURE_RETRYABLE);
+file.expectedHash='wrong';
+assert.ok((await processScanResult({eventId:'copy1',fileReference:res.fileReference,blobPath:file.quarantineBlobPath,result:S.Clean,scannedAtUtc:'2026-07-20T00:05:00Z'},deps)).success);
+assert.strictEqual((await processScanResult({eventId:'copy1',fileReference:res.fileReference,blobPath:file.quarantineBlobPath,result:S.Clean,scannedAtUtc:'2026-07-20T00:05:00Z'},deps)).deduplicated,true);
+({deps,res}=await start());
+deps.failures.afterApplicationCreate=1;
+assert.strictEqual((await initiateApplication(req({clientSubmissionId:'550e8400-e29b-41d4-a716-446655440001'}),deps)).errorCode,E.SUBMISSION_FAILED);
+assert.strictEqual(deps.applications.apps.size,1);
+assert.strictEqual(deps.files.files.size,1);
+assert.ok((await initiateApplication(req({clientSubmissionId:'550e8400-e29b-41d4-a716-446655440001'}),deps)).success);
+console.log('recruitment hardening regression tests passed');
+})();

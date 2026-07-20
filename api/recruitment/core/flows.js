@@ -1,11 +1,339 @@
 'use strict';
-const {APPLICATION_STATES:A,FILE_STATES:F,HIRING_STAGES:H,NOTIFICATION_EVENTS:N,SCAN_RESULTS:S,CONTAINERS,ERROR_CODES}=require('./constants');
-const {transition}=require('./stateMachines');
-const {role:validateRole,candidate:validateCandidate,fileMeta}=require('./validation');
-const {detect}=require('./fileTypes');
-function fail(code){return {success:false,errorCode:code};}
-function cleanPath(year,roleId,appRef,fileRef,extension){return `recruitment/${year}/${roleId}/${appRef}/${fileRef}.${extension}`;}
-async function initiateApplication(req,deps){const now=deps.now();if(deps.rateLimiter&&deps.rateLimiter.check(req.clientSubmissionId).allowed!==true)return fail(ERROR_CODES.RATE_LIMITED);if(deps.botVerifier&&deps.botVerifier.verify(req).ok!==true)return fail(ERROR_CODES.BOT_VERIFICATION_FAILED);const rr=validateRole(deps.loadManifest(),req.roleId,req.locale,req.privacyNoticeVersion,now);if(!rr.ok)return fail(rr.errorCode);if(!rr.role.application.allowedSources.includes(req.source))return fail(ERROR_CODES.VALIDATION_FAILED);const cr=validateCandidate(req.candidate,req.privacyAccepted);if(!cr.ok)return cr;const fr=fileMeta(req.file,rr.role.application.cv);if(!fr.ok)return fr;const idemKey=`init:${req.roleId}:${req.clientSubmissionId}`;const existing=deps.idempotency.get(idemKey);if(existing)return existing;const appRef=deps.references.application();const fileRef=deps.references.file();const path=cleanPath(now.getUTCFullYear(),rr.role.id,appRef,fileRef,fr.extension);const exp=new Date(now.getTime()+10*60*1000).toISOString();const upload=deps.sas.issue({container:CONTAINERS.quarantine,blobPath:path,permissions:['create','write'],httpsOnly:true,userDelegation:true,expiresAtUtc:exp,startsAtUtc:new Date(now.getTime()-5*60*1000).toISOString(),contentType:req.file.declaredMimeType});const token=deps.tokens.sign({applicationReference:appRef,fileReference:fileRef,blobPath:path,sizeBytes:req.file.sizeBytes,contentType:req.file.declaredMimeType,exp});const app={applicationReference:appRef,roleId:rr.role.id,roleTitle:rr.role.title[req.locale],roleDepartment:rr.role.department[req.locale],roleLocation:rr.role.location[req.locale],locale:req.locale,source:req.source,candidateName:cr.candidate.fullName,candidateEmail:cr.candidate.email,candidateTelephone:cr.candidate.telephone,candidateLocation:cr.candidate.currentLocation,linkedInUrl:cr.candidate.linkedinUrl,coverNote:cr.candidate.coverNote,privacyNoticeVersion:req.privacyNoticeVersion,privacyAcceptedAtUtc:now.toISOString(),submittedAtClientUtc:req.submittedAtClientUtc||null,submittedAtServerUtc:now.toISOString(),technicalStatus:A.UploadPending,hiringStage:H.New,fileCount:1,readyFileCount:0,requiresManualReview:false,lastUpdatedAtUtc:now.toISOString()};const file={fileReference:fileRef,applicationReference:appRef,filePurpose:'CV',originalFileName:req.file.originalName,declaredMimeType:req.file.declaredMimeType,detectedFileType:null,sizeBytes:req.file.sizeBytes,quarantineBlobPath:path,cleanBlobPath:null,technicalStatus:F.SASIssued,scanResult:null,lastUpdatedAtUtc:now.toISOString()};deps.applications.create(app);deps.files.create(file);const res={success:true,applicationReference:appRef,fileReference:fileRef,upload,completionToken:token};deps.idempotency.put(idemKey,res);deps.logger&&deps.logger.log('initiate_application',{applicationReference:appRef,roleId:rr.role.id});return res;}
-async function completeUpload(req,deps){let t;try{t=deps.tokens.verify(req.completionToken);}catch(e){return fail(ERROR_CODES.TOKEN_INVALID);}if(t.applicationReference!==req.applicationReference||t.fileReference!==req.fileReference)return fail(ERROR_CODES.TOKEN_INVALID);const app=deps.applications.get(req.applicationReference), file=deps.files.get(req.fileReference);if(!app||!file||file.applicationReference!==app.applicationReference)return fail(ERROR_CODES.VALIDATION_FAILED);if(file.technicalStatus===F.ScanPending&&app.technicalStatus===A.Scanning)return {success:true,applicationReference:app.applicationReference,fileReference:file.fileReference,status:app.technicalStatus};const props=deps.storage.properties(CONTAINERS.quarantine,file.quarantineBlobPath);if(!props)return fail(ERROR_CODES.BLOB_NOT_FOUND);if(props.sizeBytes!==file.sizeBytes||props.contentType!==file.declaredMimeType)return fail(ERROR_CODES.BLOB_MISMATCH);const bytes=deps.storage.read(CONTAINERS.quarantine,file.quarantineBlobPath);const detected=detect(bytes);if((file.declaredMimeType==='application/pdf'&&detected!=='pdf')||(file.declaredMimeType.indexOf('wordprocessingml')!==-1&&detected!=='docx')){file.technicalStatus=transition('file',file.technicalStatus,F.ValidationFailed);deps.files.update(file);return fail(ERROR_CODES.FILE_SIGNATURE_REJECTED);}file.detectedFileType=detected;file.technicalStatus=transition('file',file.technicalStatus,F.Uploaded);file.technicalStatus=transition('file',file.technicalStatus,F.ScanPending);app.technicalStatus=transition('application',app.technicalStatus,A.Received);app.technicalStatus=transition('application',app.technicalStatus,A.Scanning);deps.files.update(file);deps.applications.update(app);deps.notifications.emit({type:N.ApplicationReceived,applicationReference:app.applicationReference});return {success:true,applicationReference:app.applicationReference,fileReference:file.fileReference,status:app.technicalStatus};}
-async function processScanResult(ev,deps,policy={deleteMaliciousQuarantine:false}){const key=`${ev.eventId}:${ev.fileReference}`;if(deps.scanEvents.has(key))return {success:true,deduplicated:true};const file=deps.files.get(ev.fileReference);if(!file||file.quarantineBlobPath!==ev.blobPath)return fail(ERROR_CODES.BLOB_MISMATCH);const app=deps.applications.get(file.applicationReference);deps.scanEvents.put(key);file.scanEventId=ev.eventId;file.scanResult=ev.result;file.scanCompletedAtUtc=ev.scannedAtUtc;if(ev.result===S.Clean){const clean=file.quarantineBlobPath;deps.storage.copy(CONTAINERS.quarantine,file.quarantineBlobPath,CONTAINERS.clean,clean);if(!deps.storage.exists(CONTAINERS.clean,clean))return fail(ERROR_CODES.BLOB_MISMATCH);deps.storage.delete(CONTAINERS.quarantine,file.quarantineBlobPath);file.technicalStatus=transition('file',file.technicalStatus,F.Clean);file.technicalStatus=transition('file',file.technicalStatus,F.Ready);file.cleanBlobPath=clean;file.readyAtUtc=ev.scannedAtUtc;app.technicalStatus=transition('application',app.technicalStatus,A.Ready);app.readyFileCount=1;deps.notifications.emit({type:N.DocumentsReady,applicationReference:app.applicationReference});}else if(ev.result===S.Malicious){file.technicalStatus=transition('file',file.technicalStatus,F.Malicious);app.technicalStatus=transition('application',app.technicalStatus,A.Blocked);if(policy.deleteMaliciousQuarantine)deps.storage.delete(CONTAINERS.quarantine,file.quarantineBlobPath);deps.notifications.emit({type:N.MaliciousFileDetected,applicationReference:app.applicationReference,fileReference:file.fileReference});}else{file.technicalStatus=transition('file',file.technicalStatus,F.ScanFailed);file.technicalStatus=transition('file',file.technicalStatus,F.ManualReview);app.technicalStatus=transition('application',app.technicalStatus,A.ManualReview);app.requiresManualReview=true;deps.notifications.emit({type:N.ManualReviewRequired,applicationReference:app.applicationReference,fileReference:file.fileReference});}deps.files.update(file);deps.applications.update(app);return {success:true};}
-module.exports={initiateApplication,completeUpload,processScanResult,cleanPath};
+
+const crypto = require('crypto');
+const {
+  APPLICATION_STATES: A,
+  FILE_STATES: F,
+  HIRING_STAGES: H,
+  NOTIFICATION_EVENTS: N,
+  SCAN_RESULTS: S,
+  CONTAINERS,
+  ERROR_CODES
+} = require('./constants');
+const { transition } = require('./stateMachines');
+const { role: validateRole, candidate: validateCandidate, request: validateRequest, fileMeta } = require('./validation');
+const { detect } = require('./fileTypes');
+
+const TOKEN_VERSION = 1;
+const TOKEN_ISSUER = 'shorevest.recruitment.phase2a';
+const TOKEN_AUDIENCE = 'shorevest.recruitment.upload-completion';
+const CLOCK_SKEW_MS = 5 * 60 * 1000;
+
+function fail(errorCode) {
+  return { success: false, errorCode };
+}
+
+function cleanPath(year, roleId, applicationReference, fileReference, extension) {
+  return `recruitment/${year}/${roleId}/${applicationReference}/${fileReference}.${extension}`;
+}
+
+function addMinutes(date, minutes) {
+  return new Date(date.getTime() + minutes * 60 * 1000).toISOString();
+}
+
+function hashBuffer(buffer) {
+  return crypto.createHash('sha256').update(buffer).digest('hex');
+}
+
+async function log(deps, event, fields) {
+  if (deps.logger?.log) await deps.logger.log(event, fields);
+}
+
+function completionTokenPayload({ now, applicationReference, fileReference, blobPath, sizeBytes, contentType, tokenId }) {
+  return {
+    version: TOKEN_VERSION,
+    issuer: TOKEN_ISSUER,
+    audience: TOKEN_AUDIENCE,
+    issuedAtUtc: now.toISOString(),
+    expiresAtUtc: addMinutes(now, 10),
+    tokenId,
+    applicationReference,
+    fileReference,
+    quarantineBlobPath: blobPath,
+    expectedSizeBytes: sizeBytes,
+    expectedDeclaredMimeType: contentType
+  };
+}
+
+function validateTokenPayload(payload, request, file, now) {
+  if (payload.version !== TOKEN_VERSION) return false;
+  if (payload.issuer !== TOKEN_ISSUER || payload.audience !== TOKEN_AUDIENCE) return false;
+  if (Date.parse(payload.expiresAtUtc) < now.getTime()) return false;
+  if (Date.parse(payload.issuedAtUtc) > now.getTime() + CLOCK_SKEW_MS) return false;
+  if (payload.applicationReference !== request.applicationReference) return false;
+  if (payload.fileReference !== request.fileReference) return false;
+  if (payload.quarantineBlobPath !== file.quarantineBlobPath) return false;
+  if (payload.expectedSizeBytes !== file.sizeBytes) return false;
+  if (payload.expectedDeclaredMimeType !== file.declaredMimeType) return false;
+  return true;
+}
+
+async function initiateApplication(request, deps) {
+  const now = await deps.now();
+  const requestValidation = validateRequest(request, now);
+  if (!requestValidation.ok) return requestValidation;
+
+  const rateLimit = deps.rateLimiter ? await deps.rateLimiter.check(request.clientSubmissionId) : { allowed: true };
+  if (rateLimit.allowed !== true) return fail(ERROR_CODES.RATE_LIMITED);
+
+  const botVerification = deps.botVerifier ? await deps.botVerifier.verify(request) : { ok: true };
+  if (botVerification.ok !== true) return fail(ERROR_CODES.BOT_VERIFICATION_FAILED);
+
+  const manifest = await deps.loadManifest();
+  const roleResult = validateRole(manifest, request.roleId, request.locale, request.privacyNoticeVersion, now);
+  if (!roleResult.ok) return fail(roleResult.errorCode);
+  if (!roleResult.role.application.allowedSources.includes(request.source)) return fail(ERROR_CODES.VALIDATION_FAILED);
+
+  const candidateResult = validateCandidate(request.candidate, request.privacyAccepted);
+  if (!candidateResult.ok) return candidateResult;
+
+  const fileResult = fileMeta(request.file, roleResult.role.application.cv);
+  if (!fileResult.ok) return fileResult;
+
+  const idempotencyKey = `init:${request.roleId}:${request.clientSubmissionId}`;
+  const claim = await deps.idempotency.begin(idempotencyKey, 10 * 60 * 1000);
+  if (claim.status === 'completed') return claim.result;
+  if (claim.status === 'in_progress') return claim.promise;
+
+  try {
+    const applicationReference = await deps.references.application();
+    const fileReference = await deps.references.file();
+    const blobPath = cleanPath(now.getUTCFullYear(), roleResult.role.id, applicationReference, fileReference, fileResult.extension);
+    const uploadExpiresAtUtc = addMinutes(now, 10);
+    const tokenId = deps.references.tokenId ? await deps.references.tokenId() : `${applicationReference}:${fileReference}`;
+
+    const upload = await deps.sas.issue({
+      container: CONTAINERS.quarantine,
+      blobPath,
+      permissions: ['create', 'write'],
+      httpsOnly: true,
+      userDelegation: true,
+      expiresAtUtc: uploadExpiresAtUtc,
+      startsAtUtc: addMinutes(now, -5),
+      contentType: request.file.declaredMimeType
+    });
+
+    const tokenPayload = completionTokenPayload({
+      now,
+      applicationReference,
+      fileReference,
+      blobPath,
+      sizeBytes: request.file.sizeBytes,
+      contentType: request.file.declaredMimeType,
+      tokenId
+    });
+    const completionToken = await deps.tokens.sign(tokenPayload);
+    const timestamp = now.toISOString();
+
+    const application = {
+      applicationReference,
+      roleId: roleResult.role.id,
+      roleTitle: roleResult.role.title[request.locale],
+      roleDepartment: roleResult.role.department[request.locale],
+      roleLocation: roleResult.role.location[request.locale],
+      locale: request.locale,
+      source: request.source,
+      candidateName: candidateResult.candidate.fullName,
+      candidateEmail: candidateResult.candidate.email,
+      candidateTelephone: candidateResult.candidate.telephone,
+      candidateLocation: candidateResult.candidate.currentLocation,
+      linkedInUrl: candidateResult.candidate.linkedinUrl,
+      coverNote: candidateResult.candidate.coverNote,
+      privacyNoticeVersion: request.privacyNoticeVersion,
+      privacyAcceptedAtUtc: timestamp,
+      submittedAtClientUtc: request.submittedAtClientUtc || null,
+      submittedAtServerUtc: timestamp,
+      technicalStatus: A.UploadPending,
+      hiringStage: H.New,
+      fileCount: 1,
+      readyFileCount: 0,
+      requiresManualReview: false,
+      retentionReviewDate: addMinutes(now, 60 * 24 * 365),
+      lastUpdatedAtUtc: timestamp
+    };
+
+    const file = {
+      fileReference,
+      applicationReference,
+      filePurpose: 'CV',
+      originalFileName: request.file.originalName,
+      declaredMimeType: request.file.declaredMimeType,
+      detectedFileType: null,
+      sizeBytes: request.file.sizeBytes,
+      expectedHash: null,
+      quarantineBlobPath: blobPath,
+      cleanBlobPath: null,
+      quarantineRemovalPending: false,
+      technicalStatus: F.SASIssued,
+      scanResult: null,
+      lastUpdatedAtUtc: timestamp
+    };
+
+    await deps.applicationStore.reserveSubmission({ application, file, idempotencyKey });
+    const result = { success: true, applicationReference, fileReference, upload, completionToken };
+    await deps.idempotency.complete(idempotencyKey, result);
+    await log(deps, 'initiate_application', { applicationReference, roleId: roleResult.role.id });
+    return result;
+  } catch (error) {
+    await deps.idempotency.fail(idempotencyKey, ERROR_CODES.SUBMISSION_FAILED);
+    await log(deps, 'initiate_application_failed', { roleId: request.roleId, errorCode: ERROR_CODES.SUBMISSION_FAILED });
+    return fail(ERROR_CODES.SUBMISSION_FAILED);
+  }
+}
+
+async function completeUpload(request, deps) {
+  const now = await deps.now();
+  let tokenPayload;
+  try {
+    tokenPayload = await deps.tokens.verify(request.completionToken);
+  } catch (_) {
+    return fail(ERROR_CODES.TOKEN_INVALID);
+  }
+
+  if (tokenPayload.applicationReference !== request.applicationReference || tokenPayload.fileReference !== request.fileReference) return fail(ERROR_CODES.TOKEN_INVALID);
+
+  const application = await deps.applicationStore.getApplication(request.applicationReference);
+  const file = await deps.applicationStore.getFile(request.fileReference);
+  if (!application || !file || file.applicationReference !== application.applicationReference) return fail(ERROR_CODES.VALIDATION_FAILED);
+  if (!validateTokenPayload(tokenPayload, request, file, now)) return fail(ERROR_CODES.TOKEN_INVALID);
+
+  if (file.technicalStatus === F.ScanPending && application.technicalStatus === A.Scanning) {
+    return { success: true, applicationReference: application.applicationReference, fileReference: file.fileReference, status: application.technicalStatus };
+  }
+
+  const properties = await deps.storage.properties(CONTAINERS.quarantine, file.quarantineBlobPath);
+  if (!properties) return fail(ERROR_CODES.BLOB_NOT_FOUND);
+  if (properties.sizeBytes !== file.sizeBytes || properties.contentType !== file.declaredMimeType) return fail(ERROR_CODES.BLOB_MISMATCH);
+
+  const bytes = await deps.storage.read(CONTAINERS.quarantine, file.quarantineBlobPath, { maxBytes: file.sizeBytes });
+  const detectedType = detect(bytes);
+  const expectedDocx = file.declaredMimeType.includes('wordprocessingml');
+  if ((file.declaredMimeType === 'application/pdf' && detectedType !== 'pdf') || (expectedDocx && detectedType !== 'docx')) {
+    file.technicalStatus = transition('file', file.technicalStatus, F.ValidationFailed);
+    file.lastUpdatedAtUtc = now.toISOString();
+    await deps.applicationStore.updateApplicationAndFile({ application, file });
+    return fail(ERROR_CODES.FILE_SIGNATURE_REJECTED);
+  }
+
+  file.detectedFileType = detectedType;
+  file.expectedHash = hashBuffer(bytes);
+  file.technicalStatus = transition('file', transition('file', file.technicalStatus, F.Uploaded), F.ScanPending);
+  file.uploadVerifiedAtUtc = now.toISOString();
+  file.scanStartedAtUtc = now.toISOString();
+  file.lastUpdatedAtUtc = now.toISOString();
+  application.technicalStatus = transition('application', transition('application', application.technicalStatus, A.Received), A.Scanning);
+  application.lastUpdatedAtUtc = now.toISOString();
+
+  await deps.applicationStore.updateApplicationAndFile({
+    application,
+    file,
+    outboxEvent: { type: N.ApplicationReceived, idempotencyKey: `outbox:${application.applicationReference}:received`, applicationReference: application.applicationReference }
+  });
+
+  return { success: true, applicationReference: application.applicationReference, fileReference: file.fileReference, status: application.technicalStatus };
+}
+
+function validateScanEvent(event) {
+  if (!event || typeof event !== 'object') return false;
+  if (typeof event.eventId !== 'string' || !event.eventId) return false;
+  if (typeof event.fileReference !== 'string' || !event.fileReference) return false;
+  if (typeof event.blobPath !== 'string' || !event.blobPath) return false;
+  if (!Object.values(S).includes(event.result)) return false;
+  if (typeof event.scannedAtUtc !== 'string' || Number.isNaN(Date.parse(event.scannedAtUtc))) return false;
+  return true;
+}
+
+async function processScanResult(event, deps, policy = { deleteMaliciousQuarantine: false }) {
+  if (!validateScanEvent(event)) return fail(ERROR_CODES.VALIDATION_FAILED);
+  const eventKey = `${event.eventId}:${event.fileReference}`;
+  const claim = await deps.scanEvents.claim(eventKey);
+  if (claim.status === 'completed') return { success: true, deduplicated: true };
+  if (claim.status === 'in_progress') return fail(ERROR_CODES.EVENT_IN_PROGRESS);
+
+  try {
+    const file = await deps.applicationStore.getFile(event.fileReference);
+    if (!file || file.quarantineBlobPath !== event.blobPath) {
+      await deps.scanEvents.permanentFailure(eventKey, ERROR_CODES.BLOB_MISMATCH);
+      return fail(ERROR_CODES.BLOB_MISMATCH);
+    }
+
+    const application = await deps.applicationStore.getApplication(file.applicationReference);
+    if (!application || application.applicationReference !== file.applicationReference || file.technicalStatus !== F.ScanPending) {
+      await deps.scanEvents.permanentFailure(eventKey, ERROR_CODES.STATE_TRANSITION_INVALID);
+      return fail(ERROR_CODES.STATE_TRANSITION_INVALID);
+    }
+
+    file.scanEventId = event.eventId;
+    file.scanResult = event.result;
+    file.scanCompletedAtUtc = event.scannedAtUtc;
+    file.lastUpdatedAtUtc = event.scannedAtUtc;
+    application.lastUpdatedAtUtc = event.scannedAtUtc;
+
+    let outboxEvent;
+    if (event.result === S.Clean) {
+      const cleanBlobPath = file.quarantineBlobPath;
+      const promoted = await deps.storage.promoteClean({
+        sourceContainer: CONTAINERS.quarantine,
+        sourcePath: file.quarantineBlobPath,
+        destinationContainer: CONTAINERS.clean,
+        destinationPath: cleanBlobPath,
+        expectedSizeBytes: file.sizeBytes,
+        expectedContentType: file.declaredMimeType,
+        expectedHash: file.expectedHash
+      });
+      if (promoted.status !== 'Succeeded') throw new Error('clean promotion incomplete');
+
+      file.technicalStatus = transition('file', transition('file', file.technicalStatus, F.Clean), F.Ready);
+      file.cleanBlobPath = cleanBlobPath;
+      file.readyAtUtc = event.scannedAtUtc;
+      application.technicalStatus = transition('application', application.technicalStatus, A.Ready);
+      application.readyFileCount = 1;
+      application.readyAtUtc = event.scannedAtUtc;
+      outboxEvent = { type: N.DocumentsReady, idempotencyKey: `outbox:${application.applicationReference}:documents-ready`, applicationReference: application.applicationReference };
+
+      try {
+        await deps.storage.delete(CONTAINERS.quarantine, file.quarantineBlobPath);
+        file.quarantineRemovedAtUtc = event.scannedAtUtc;
+        file.quarantineRemovalPending = false;
+      } catch (_) {
+        file.quarantineRemovalPending = true;
+        outboxEvent.cleanupRequired = true;
+      }
+    } else if (event.result === S.Malicious) {
+      file.technicalStatus = transition('file', file.technicalStatus, F.Malicious);
+      application.technicalStatus = transition('application', application.technicalStatus, A.Blocked);
+      application.blockedAtUtc = event.scannedAtUtc;
+      outboxEvent = { type: N.MaliciousFileDetected, idempotencyKey: `outbox:${application.applicationReference}:${file.fileReference}:malicious`, applicationReference: application.applicationReference, fileReference: file.fileReference };
+      if (policy.deleteMaliciousQuarantine) await deps.storage.delete(CONTAINERS.quarantine, file.quarantineBlobPath);
+    } else {
+      file.technicalStatus = transition('file', transition('file', file.technicalStatus, F.ScanFailed), F.ManualReview);
+      application.technicalStatus = transition('application', application.technicalStatus, A.ManualReview);
+      application.requiresManualReview = true;
+      application.manualReviewAtUtc = event.scannedAtUtc;
+      outboxEvent = { type: N.ManualReviewRequired, idempotencyKey: `outbox:${application.applicationReference}:${file.fileReference}:manual-review`, applicationReference: application.applicationReference, fileReference: file.fileReference };
+    }
+
+    await deps.applicationStore.updateApplicationAndFile({ application, file, outboxEvent });
+    const result = { success: true };
+    await deps.scanEvents.complete(eventKey, result);
+    return result;
+  } catch (error) {
+    await deps.scanEvents.retryableFailure(eventKey, ERROR_CODES.INFRASTRUCTURE_RETRYABLE);
+    await log(deps, 'process_scan_result_failed', { eventId: event.eventId, fileReference: event.fileReference, errorCode: ERROR_CODES.INFRASTRUCTURE_RETRYABLE });
+    return fail(ERROR_CODES.INFRASTRUCTURE_RETRYABLE);
+  }
+}
+
+async function retryQuarantineCleanup({ fileReference }, deps) {
+  const file = await deps.applicationStore.getFile(fileReference);
+  if (!file || !file.quarantineRemovalPending) return fail(ERROR_CODES.VALIDATION_FAILED);
+  await deps.storage.delete(CONTAINERS.quarantine, file.quarantineBlobPath);
+  file.quarantineRemovalPending = false;
+  file.quarantineRemovedAtUtc = (await deps.now()).toISOString();
+  file.lastUpdatedAtUtc = file.quarantineRemovedAtUtc;
+  const application = await deps.applicationStore.getApplication(file.applicationReference);
+  await deps.applicationStore.updateApplicationAndFile({ application, file });
+  return { success: true };
+}
+
+module.exports = { initiateApplication, completeUpload, processScanResult, retryQuarantineCleanup, cleanPath };
