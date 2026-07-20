@@ -4,7 +4,7 @@ const {createMemoryAdapters}=require('../api/recruitment/core/inMemoryAdapters')
 const {initiateApplication,completeUpload,processScanResult}=require('../api/recruitment/core/flows');
 const {APPLICATION_STATES:A,FILE_STATES:F,SCAN_RESULTS:S,ERROR_CODES:E}=require('../api/recruitment/core/constants');
 const {transition}=require('../api/recruitment/core/stateMachines');
-const {makeTinyZip}=require('../api/recruitment/core/fileTypes');
+const {makeTinyZip,makeDocxFixture}=require('../api/recruitment/core/fileTypes');
 function manifest(rolePatch={}){const m=JSON.parse(JSON.stringify(base));m.roles=[Object.assign(m.roles.find(r=>r.id==='legal-assistant'),{status:'published',contentReviewRequired:false,application:{enabled:true,deadlineUtc:null,privacyNoticeVersion:'approved-v1',allowedSources:['website','linkedin','direct','other'],cv:{required:true,maxSizeBytes:100,allowedExtensions:['.pdf','.docx'],allowedMimeTypes:['application/pdf','application/vnd.openxmlformats-officedocument.wordprocessingml.document']}}},rolePatch)];return m;}
 function req(p={}){return Object.assign({roleId:'legal-assistant',locale:'en',source:'website',clientSubmissionId:'550e8400-e29b-41d4-a716-446655440000',candidate:{fullName:'Candidate Name',email:'Person@Example.COM',telephone:'',currentLocation:'',linkedinUrl:'',coverNote:''},privacyAccepted:true,privacyNoticeVersion:'approved-v1',submittedAtClientUtc:'2026-07-20T00:00:00Z',file:{originalName:'cv.pdf',declaredMimeType:'application/pdf',sizeBytes:9}},p);}
 async function start(m=manifest(),r=req()){const deps=createMemoryAdapters({manifest:m});const res=await initiateApplication(r,deps);return {deps,res};}
@@ -35,10 +35,7 @@ console.log('recruitment application core tests passed');
 })();
 
 (async()=>{
-const docx=makeTinyZip([
-  {name:'[Content_Types].xml',data:'<Types><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>'},
-  {name:'word/document.xml',data:'<w:document />'}
-]);
+const docx=makeDocxFixture();
 assert.strictEqual(require('../api/recruitment/core/fileTypes').detect(docx),'docx');
 assert.strictEqual(require('../api/recruitment/core/fileTypes').detect(makeTinyZip(['[Content_Types].xml','word/document.xml'])),'zip');
 assert.doesNotThrow(()=>require('../api/recruitment/core/fileTypes').detect(Buffer.from([0x50,0x4b,3,4,1])));

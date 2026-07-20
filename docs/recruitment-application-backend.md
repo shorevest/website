@@ -20,10 +20,10 @@ sequenceDiagram
   participant Quarantine as recruitment-quarantine
   participant Defender
   participant Clean as recruitment-clean
-  participant Records as SharePoint lists (future)
+  participant Records as Authoritative technical store (future Azure durable storage)
   participant PowerAutomate as Power Automate (future)
   Browser->>Function: initiate metadata + proposed CV metadata
-  Function->>Records: reserve RecruitmentApplications/RecruitmentFiles
+  Function->>Records: reserve idempotency/application/file aggregate
   Function-->>Browser: write-only single-blob SAS + completion token
   Browser->>Quarantine: PUT CV directly
   Browser->>Function: complete token
@@ -33,7 +33,7 @@ sequenceDiagram
   Function->>Clean: server-side copy clean file
   Function->>Quarantine: delete only after clean copy verification
   Function->>Records: update technical statuses
-  Records-->>PowerAutomate: notification events/record changes, no CV attachment or public link
+  Records-->>PowerAutomate: outbox projection events, no CV attachment or public link
 ```
 
 ## Role eligibility
@@ -52,16 +52,36 @@ Production upload grants must be user-delegation SAS, HTTPS-only, one exact blob
 ## State machines
 Application states: Initiated, UploadPending, Received, Scanning, Ready, ManualReview, Blocked, Incomplete, Error. File states: SASIssued, Uploaded, ValidationFailed, ScanPending, Clean, Ready, Malicious, ScanFailed, ManualReview, Removed. Hiring stages are separate: New, UnderReview, Interview, Hold, Rejected, Offer, Hired, Withdrawn. Public APIs cannot set hiring stages.
 
+## Authoritative technical persistence
+The durable technical application state, file state, idempotency records, initiation reservations, completion claims, scan-event claims, and outbox events belong in one authoritative technical persistence layer. Phase 2B must implement this with Azure-native durable storage that supports conditional writes and transactional updates within one application aggregate. SharePoint is not the authoritative transaction store; it is the restricted HR-facing administrative projection populated from outbox/projection workers.
+
+Future projection flow:
+
+```text
+Authoritative technical store
+        ↓
+Outbox / projection worker
+        ↓
+RecruitmentApplications SharePoint List
+RecruitmentFiles SharePoint List
+```
+
 ## Repository interfaces
 All infrastructure-facing dependency methods are asynchronous and must be awaited, even when a test adapter can return an immediate value. This includes `loadManifest`, `rateLimiter.check`, `botVerifier.verify`, reference generation, token signing/verification, SAS issuance, application/file persistence, Blob operations, scan-event records, outbox writes, logging, and clock abstractions.
 
-Initiation idempotency is atomic: `idempotency.begin(key, leaseDuration)` claims `init:{roleId}:{clientSubmissionId}`, `complete(key, result)` publishes the completed result, `fail(key, retryableReason)` releases retryable failures, and `getCompleted(key)` reads completed results. Candidate email is never an idempotency key. Concurrent callers for the same role/clientSubmissionId either receive the completed result or wait for the in-progress claim.
+Initiation idempotency is durable and status-based: `idempotency.claim(key, leaseOwner, leaseExpiresAtUtc)`, `get(key)`, `recordReservation(key, reservation)`, `complete(key, result)`, `retryableFailure(key, reason)`, `permanentFailure(key, reason)`, and `releaseExpiredClaim(key)`. Records use Claimed, SubmissionReserved, Completed, RetryableFailure, and PermanentFailure states. Adapters must never return live JavaScript promises for another invocation. Active claims are resolved only by a short bounded poll or a controlled `SUBMISSION_IN_PROGRESS` response with retry-after metadata.
 
-Application/file creation uses `applicationStore.reserveSubmission({ application, file, idempotencyKey })` as one logical operation so Phase 2B can map it to a SharePoint batch/transaction or a compensated durable workflow. Follow-up state changes use `applicationStore.updateApplicationAndFile({ application, file, outboxEvent })` so status updates and outbox records commit together.
+Initiation reservations persist idempotency key, role id, clientSubmissionId, generated application/file references, exact quarantine blob path, expected extension/size/MIME type, state, and timestamps. Retries after reservation, SAS issuance, token signing, record creation, or idempotency-completion failures reuse the same reservation and must not create duplicate applications, files, or blob paths. `reserveSubmission` must enforce durable uniqueness for the idempotency key, application reference, file reference, and quarantine blob path.
 
-Scan-event processing uses an atomic lifecycle: Processing, Completed, RetryableFailure, and PermanentFailure. Events are marked Completed only after durable state/outbox updates succeed; retryable infrastructure exceptions do not permanently suppress future retries.
+Aggregate writes use `applicationStore.commitAggregate({ expectedVersion, application, files, outboxEvents })`. The implementation must atomically commit application changes, related file changes, aggregate version, and outbox events, using optimistic concurrency through an aggregate version, ETag, or equivalent expected version. A stale expected version is a controlled retryable conflict; injected application, file, or outbox failures must leave no partial aggregate update.
 
-## SharePoint schemas
+Upload completion has its own durable lifecycle: NotStarted, Processing, Completed, RetryableFailure, and PermanentFailure. A lease or conditional transition ensures only one caller verifies a SASIssued file and only one `ApplicationReceived` event is committed. Concurrent callers receive the completed result, `SUBMISSION_IN_PROGRESS`, or a retryable controlled response; expired Processing leases can be reclaimed.
+
+Scan-event processing uses a durable leased lifecycle with event key, event id, file reference, state, lease owner/expiry, attempt count, last error code, and created/updated/completed timestamps. Completed events deduplicate, active leases block concurrent handling, expired Processing and RetryableFailure records can be retried, and PermanentFailure records are not silently retried. Events are marked Completed only after durable state/outbox updates succeed.
+
+Clean scan ordering is promote-and-verify clean blob first, commit Ready state plus `DocumentsReady` and `quarantineRemovalPending=true` atomically, mark the scan event Completed, then delete quarantine separately. Failed deletion preserves Ready state, creates `QuarantineCleanupRequired`, and is retried by `retryQuarantineCleanup`. Malicious ordering commits Blocked/Malicious state and `MaliciousFileDetected` before any quarantine retention/deletion policy is applied.
+
+## HR-facing SharePoint projection schemas
 `RecruitmentApplications`: ApplicationReference, RoleId, RoleTitle, RoleDepartment, RoleLocation, Locale, Source, CandidateName, CandidateEmail, CandidateTelephone, CandidateLocation, LinkedInUrl, CoverNote, PrivacyNoticeVersion, PrivacyAcceptedAtUtc, SubmittedAtClientUtc, SubmittedAtServerUtc, TechnicalStatus, HiringStage, FileCount, ReadyFileCount, RequiresManualReview, RetentionReviewDate, LastUpdatedAtUtc.
 
 `RecruitmentFiles`: FileReference, ApplicationReference, FilePurpose, OriginalFileName, DeclaredMimeType, DetectedFileType, SizeBytes, ExpectedHash, QuarantineBlobPath, CleanBlobPath, QuarantineRemovalPending, TechnicalStatus, ScanResult, ScanEventId, UploadVerifiedAtUtc, ScanStartedAtUtc, ScanCompletedAtUtc, ReadyAtUtc, QuarantineRemovedAtUtc, RetentionReviewDate, LastUpdatedAtUtc.
@@ -72,7 +92,7 @@ Both lists require restricted HR list/site permissions. Filtered SharePoint view
 Internal outbox event names: ApplicationReceived, DocumentsReady, ManualReviewRequired, MaliciousFileDetected, QuarantineCleanupRequired. The core does not send email or call external notification delivery directly. Future Power Automate flows must not include CV attachments or public CV links.
 
 ## Error-code contract
-Candidate-facing responses use generic codes: ROLE_NOT_FOUND, ROLE_NOT_OPEN, APPLICATION_DEADLINE_PASSED, VALIDATION_FAILED, PRIVACY_VERSION_INVALID, FILE_MISSING, FILE_TYPE_REJECTED, FILE_TOO_LARGE, FILE_SIGNATURE_REJECTED, RATE_LIMITED, BOT_VERIFICATION_FAILED, TOKEN_INVALID, BLOB_NOT_FOUND, BLOB_MISMATCH, DUPLICATE_EVENT, STATE_TRANSITION_INVALID, SUBMISSION_FAILED.
+Candidate-facing responses use generic codes: ROLE_NOT_FOUND, ROLE_NOT_OPEN, APPLICATION_DEADLINE_PASSED, VALIDATION_FAILED, PRIVACY_VERSION_INVALID, FILE_MISSING, FILE_TYPE_REJECTED, FILE_TOO_LARGE, FILE_SIGNATURE_REJECTED, RATE_LIMITED, BOT_VERIFICATION_FAILED, TOKEN_INVALID, BLOB_NOT_FOUND, BLOB_MISMATCH, DUPLICATE_EVENT, STATE_TRANSITION_INVALID, SUBMISSION_FAILED, SUBMISSION_IN_PROGRESS.
 
 ## Phase 2B environment variables
 Names only: recruitment manifest bundle path, Azure Storage account/container names, managed-identity/client configuration, token-signing key reference, CORS environment, rate-limit store configuration, bot-verification provider configuration, SharePoint site/list identifiers, notification event destination, retention-policy settings, structured-log sink.
