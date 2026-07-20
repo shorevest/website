@@ -23,7 +23,9 @@ sequenceDiagram
   participant Records as Authoritative technical store (future Azure durable storage)
   participant PowerAutomate as Power Automate (future)
   Browser->>Function: initiate metadata + proposed CV metadata
-  Function->>Records: reserve idempotency/application/file aggregate
+  Function->>Function: validate envelope, rate limit, bot, role, privacy, candidate, file metadata
+  Function->>Function: compute keyed request fingerprint
+  Function->>Records: claim idempotency and reserve application/file aggregate
   Function-->>Browser: write-only single-blob SAS + completion token
   Browser->>Quarantine: PUT CV directly
   Browser->>Function: complete token
@@ -31,8 +33,9 @@ sequenceDiagram
   Function->>Records: mark received/scanning
   Defender-->>Function: normalized malware scan event
   Function->>Clean: server-side copy clean file
-  Function->>Quarantine: delete only after clean copy verification
-  Function->>Records: update technical statuses
+  Function->>Records: commit Ready aggregate and DocumentsReady outbox
+  Function->>Records: mark scan event Completed
+  Function->>Quarantine: delete only after durable Ready state and scan completion
   Records-->>PowerAutomate: outbox projection events, no CV attachment or public link
 ```
 
@@ -69,15 +72,27 @@ RecruitmentFiles SharePoint List
 ## Repository interfaces
 All infrastructure-facing dependency methods are asynchronous and must be awaited, even when a test adapter can return an immediate value. This includes `loadManifest`, `rateLimiter.check`, `botVerifier.verify`, reference generation, token signing/verification, SAS issuance, application/file persistence, Blob operations, scan-event records, outbox writes, logging, and clock abstractions.
 
-Initiation idempotency is durable and status-based: `idempotency.claim(key, leaseOwner, leaseExpiresAtUtc)`, `get(key)`, `recordReservation(key, reservation)`, `complete(key, result)`, `retryableFailure(key, reason)`, `permanentFailure(key, reason)`, and `releaseExpiredClaim(key)`. Records use Claimed, SubmissionReserved, Completed, RetryableFailure, and PermanentFailure states. Adapters must never return live JavaScript promises for another invocation. Active claims are resolved only by a short bounded poll or a controlled `SUBMISSION_IN_PROGRESS` response with retry-after metadata.
+Initiation validation is completed before any durable idempotency claim is acquired: request envelope and field types, rate limit, bot verification, authoritative manifest load, role/locale/privacy/source eligibility, candidate fields, and file metadata all reject without creating or retaining an initiation claim. Only after those deterministic checks pass does the domain compute a keyed request fingerprint and call the idempotency adapter.
 
-Initiation reservations persist idempotency key, role id, clientSubmissionId, generated application/file references, exact quarantine blob path, expected extension/size/MIME type, state, and timestamps. Retries after reservation, SAS issuance, token signing, record creation, or idempotency-completion failures reuse the same reservation and must not create duplicate applications, files, or blob paths. `reserveSubmission` must enforce durable uniqueness for the idempotency key, application reference, file reference, and quarantine blob path.
+Initiation idempotency is durable and status-based: `idempotency.claim(key, leaseOwner, leaseExpiresAtUtc, requestFingerprint)`, `get(key)`, `recordReservation(key, reservation)`, credential-issuance lease methods, `retryableFailure(key, reason)`, `permanentFailure(key, reason)`, and `releaseExpiredClaim(key)`. Records use Claimed, SubmissionReserved, CredentialIssuing, CredentialsIssued, CredentialRetryable, RetryableFailure, and PermanentFailure states. The completed initiation record stores stable submission state separately from temporary upload credentials. Adapters must never return live JavaScript promises for another invocation. Active claims are resolved only by a short bounded poll or a controlled `SUBMISSION_IN_PROGRESS` response with retry-after metadata.
+
+Initiation reservations persist idempotency key, role id, clientSubmissionId, generated application/file references, exact quarantine blob path, original filename, expected extension/size/MIME type, privacy notice version, keyed request fingerprint, credential generation, state, and timestamps. Retries after reservation, SAS issuance, token signing, record creation, or idempotency-completion failures reuse the same reservation and must not create duplicate applications, files, or blob paths. `reserveSubmission` must enforce durable uniqueness for the idempotency key, application reference, file reference, and quarantine blob path. If existing application/file records are found, they must match the reservation and request fingerprint across role id, idempotency key, references, blob path, expected size/MIME type, privacy version, and fingerprint; mismatches are permanent integrity conflicts and must not be overwritten.
+
+
+
+Request fingerprints are produced from canonical validated immutable submission data: role id, locale, source, normalized candidate fields, privacy notice version, original file name, expected file size, and expected MIME type. The canonical plaintext is never stored or logged. Production adapters must use keyed HMAC or equivalent keyed hashing so candidate emails cannot be dictionary-searched from the technical store. Reusing the same role id and clientSubmissionId with materially different validated data returns `IDEMPOTENCY_CONFLICT` without revealing which field differed and without creating another application or file.
+
+Credential issuance uses a durable conditional lease. Only a caller that transitions the initiation record to CredentialIssuing may issue the SAS URL and sign the completion token. Duplicate callers during active issuance receive `SUBMISSION_IN_PROGRESS`; expired issuance leases and retryable issuance failures can be reclaimed. Retries always reuse the same application reference, file reference, quarantine blob path, expected size, and expected MIME type. Only the committed generation is authoritative.
+
+Upload credentials are temporary. The stable initiation result records application reference, file reference, quarantine blob path, application/file technical statuses, authoritative credential generation, and last credential expiry. While upload remains pending, a retry returns current credentials only when they are safely valid; otherwise it issues a fresh SAS and completion token for the same reservation and increments the generation. Once upload verification or scanning has begun, initiation retries do not issue new SAS URLs and return an already-submitted/status response. Ready, ManualReview, and Blocked applications likewise return stable already-submitted wording without scan internals.
+
+Completion tokens include the credential generation. The simple Phase 2A.3 rule is that only the latest generation is accepted; superseded, expired, tampered, or cross-application tokens return `TOKEN_INVALID`. Completion claims preserve permanent failures, allow RetryableFailure and expired Processing leases to be reclaimed, return active Processing as in-progress, and return Completed results idempotently.
 
 Aggregate writes use `applicationStore.commitAggregate({ expectedVersion, application, files, outboxEvents })`. The implementation must atomically commit application changes, related file changes, aggregate version, and outbox events, using optimistic concurrency through an aggregate version, ETag, or equivalent expected version. A stale expected version is a controlled retryable conflict; injected application, file, or outbox failures must leave no partial aggregate update.
 
 Upload completion has its own durable lifecycle: NotStarted, Processing, Completed, RetryableFailure, and PermanentFailure. A lease or conditional transition ensures only one caller verifies a SASIssued file and only one `ApplicationReceived` event is committed. Concurrent callers receive the completed result, `SUBMISSION_IN_PROGRESS`, or a retryable controlled response; expired Processing leases can be reclaimed.
 
-Scan-event processing uses a durable leased lifecycle with event key, event id, file reference, state, lease owner/expiry, attempt count, last error code, and created/updated/completed timestamps. Completed events deduplicate, active leases block concurrent handling, expired Processing and RetryableFailure records can be retried, and PermanentFailure records are not silently retried. Events are marked Completed only after durable state/outbox updates succeed.
+Scan-event processing uses a durable leased lifecycle with event key, event id, file reference, state, lease owner/expiry, attempt count, last error code, and created/updated/completed timestamps. Completed events deduplicate, active leases block concurrent handling, expired Processing and RetryableFailure records can be retried, and PermanentFailure records are not silently retried. Events are marked Completed only after durable state/outbox updates succeed. If aggregate and outbox commits succeeded but scan-event completion recording failed, retry reconciles the exact already-applied Clean, Malicious, or ManualReview outcome by matching event id, file reference, blob path, result, final application/file states, expected clean blob path where applicable, and the required outbox event. Matching retries mark the scan event Completed without duplicate outbox, promotion, or destructive cleanup; conflicting outcomes remain permanent integrity failures.
 
 Clean scan ordering is promote-and-verify clean blob first, commit Ready state plus `DocumentsReady` and `quarantineRemovalPending=true` atomically, mark the scan event Completed, then delete quarantine separately. Failed deletion preserves Ready state, creates `QuarantineCleanupRequired`, and is retried by `retryQuarantineCleanup`. Malicious ordering commits Blocked/Malicious state and `MaliciousFileDetected` before any quarantine retention/deletion policy is applied.
 
@@ -92,7 +107,7 @@ Both lists require restricted HR list/site permissions. Filtered SharePoint view
 Internal outbox event names: ApplicationReceived, DocumentsReady, ManualReviewRequired, MaliciousFileDetected, QuarantineCleanupRequired. The core does not send email or call external notification delivery directly. Future Power Automate flows must not include CV attachments or public CV links.
 
 ## Error-code contract
-Candidate-facing responses use generic codes: ROLE_NOT_FOUND, ROLE_NOT_OPEN, APPLICATION_DEADLINE_PASSED, VALIDATION_FAILED, PRIVACY_VERSION_INVALID, FILE_MISSING, FILE_TYPE_REJECTED, FILE_TOO_LARGE, FILE_SIGNATURE_REJECTED, RATE_LIMITED, BOT_VERIFICATION_FAILED, TOKEN_INVALID, BLOB_NOT_FOUND, BLOB_MISMATCH, DUPLICATE_EVENT, STATE_TRANSITION_INVALID, SUBMISSION_FAILED, SUBMISSION_IN_PROGRESS.
+Candidate-facing responses use generic codes: ROLE_NOT_FOUND, ROLE_NOT_OPEN, APPLICATION_DEADLINE_PASSED, VALIDATION_FAILED, PRIVACY_VERSION_INVALID, FILE_MISSING, FILE_TYPE_REJECTED, FILE_TOO_LARGE, FILE_SIGNATURE_REJECTED, RATE_LIMITED, BOT_VERIFICATION_FAILED, TOKEN_INVALID, BLOB_NOT_FOUND, BLOB_MISMATCH, DUPLICATE_EVENT, STATE_TRANSITION_INVALID, SUBMISSION_FAILED, SUBMISSION_IN_PROGRESS, IDEMPOTENCY_CONFLICT, RESERVATION_INTEGRITY_CONFLICT.
 
 ## Phase 2B environment variables
 Names only: recruitment manifest bundle path, Azure Storage account/container names, managed-identity/client configuration, token-signing key reference, CORS environment, rate-limit store configuration, bot-verification provider configuration, SharePoint site/list identifiers, notification event destination, retention-policy settings, structured-log sink.

@@ -42,7 +42,7 @@ function hashBuffer(buffer) {
 }
 
 
-function completionTokenPayload({ now, applicationReference, fileReference, blobPath, sizeBytes, contentType, tokenId }) {
+function completionTokenPayload({ now, applicationReference, fileReference, blobPath, sizeBytes, contentType, tokenId, credentialGeneration }) {
   return {
     version: TOKEN_VERSION,
     issuer: TOKEN_ISSUER,
@@ -50,6 +50,7 @@ function completionTokenPayload({ now, applicationReference, fileReference, blob
     issuedAtUtc: now.toISOString(),
     expiresAtUtc: addMinutes(now, 10),
     tokenId,
+    credentialGeneration,
     applicationReference,
     fileReference,
     quarantineBlobPath: blobPath,
@@ -74,8 +75,42 @@ function validateTokenPayload(payload, request, file, now) {
   if (expires < now.getTime() - CLOCK_SKEW_MS || issued > now.getTime() + CLOCK_SKEW_MS) return false;
   if (payload.applicationReference !== request.applicationReference || payload.fileReference !== request.fileReference) return false;
   if (payload.quarantineBlobPath !== file.quarantineBlobPath) return false;
+  if (payload.credentialGeneration !== file.credentialGeneration) return false;
   if (payload.expectedSizeBytes !== file.sizeBytes || payload.expectedDeclaredMimeType !== file.declaredMimeType) return false;
   return true;
+}
+
+
+function canonicalFingerprintInput({ request, roleId, candidate }) {
+  return JSON.stringify({
+    roleId,
+    locale: request.locale,
+    source: request.source,
+    candidate: {
+      fullName: candidate.fullName,
+      email: candidate.email,
+      telephone: candidate.telephone,
+      currentLocation: candidate.currentLocation,
+      linkedinUrl: candidate.linkedinUrl,
+      coverNote: candidate.coverNote
+    },
+    privacyNoticeVersion: request.privacyNoticeVersion,
+    file: {
+      originalName: request.file.originalName.trim(),
+      sizeBytes: request.file.sizeBytes,
+      declaredMimeType: request.file.declaredMimeType
+    }
+  });
+}
+
+async function requestFingerprint(deps, data) {
+  const canonical = canonicalFingerprintInput(data);
+  if (deps.fingerprints?.hmac) return deps.fingerprints.hmac(canonical);
+  return crypto.createHmac('sha256', 'test-only-fingerprint-secret').update(canonical).digest('hex');
+}
+
+function stableAlreadySubmitted(application, file, reservation) {
+  return { success: true, alreadySubmitted: true, applicationReference: application.applicationReference, fileReference: file.fileReference, quarantineBlobPath: file.quarantineBlobPath, applicationStatus: application.technicalStatus, fileStatus: file.technicalStatus, credentialGeneration: reservation?.credentialGeneration || file.credentialGeneration || 0, lastCredentialExpiryUtc: reservation?.lastCredentialExpiryUtc || file.credentialExpiresAtUtc || null };
 }
 
 function validateCompleteRequest(request) {
@@ -93,17 +128,6 @@ async function initiateApplication(request, deps) {
     const requestValidation = validateRequest(request, now);
     if (!requestValidation.ok) return requestValidation;
     idempotencyKey = `init:${request.roleId}:${request.clientSubmissionId}`;
-    const leaseOwner = deps.leaseOwner || `lease-${crypto.randomUUID ? crypto.randomUUID() : crypto.randomBytes(8).toString('hex')}`;
-    const claim = await deps.idempotency.claim(idempotencyKey, leaseOwner, addMinutes(now, 10));
-    if (claim.status === 'completed') return claim.result;
-    if (claim.status === 'in_progress') {
-      for (let attempt = 0; attempt < 5; attempt += 1) {
-        if (deps.delay) await deps.delay(10);
-        const current = await deps.idempotency.get(idempotencyKey);
-        if (current?.state === 'Completed') return current.result;
-      }
-      return fail(ERROR_CODES.SUBMISSION_IN_PROGRESS, { retryAfterMs: claim.retryAfterMs || 1000 });
-    }
 
     const rateLimit = deps.rateLimiter ? await deps.rateLimiter.check(request.clientSubmissionId) : { allowed: true };
     if (rateLimit.allowed !== true) return fail(ERROR_CODES.RATE_LIMITED);
@@ -117,45 +141,79 @@ async function initiateApplication(request, deps) {
     if (!candidateResult.ok) return candidateResult;
     const fileResult = fileMeta(request.file, roleResult.role.application.cv);
     if (!fileResult.ok) return fileResult;
+    const fingerprint = await requestFingerprint(deps, { request, roleId: roleResult.role.id, candidate: candidateResult.candidate });
 
-    let reservation = await deps.applicationStore.getReservation?.(idempotencyKey);
+    const leaseOwner = deps.leaseOwner || `lease-${crypto.randomUUID ? crypto.randomUUID() : crypto.randomBytes(8).toString('hex')}`;
+    const claim = await deps.idempotency.claim(idempotencyKey, leaseOwner, addMinutes(now, 10), fingerprint);
+    if (claim.status === 'conflict') return fail(ERROR_CODES.IDEMPOTENCY_CONFLICT);
+    if (claim.status === 'in_progress') {
+      for (let attempt = 0; attempt < 5; attempt += 1) {
+        if (deps.delay) await deps.delay(10);
+        const current = await deps.idempotency.get(idempotencyKey);
+        if (current?.state === 'CredentialsIssued' && current.requestFingerprint === fingerprint && current.result) return current.result;
+      }
+      return fail(ERROR_CODES.SUBMISSION_IN_PROGRESS, { retryAfterMs: claim.retryAfterMs || 1000 });
+    }
+
+    let reservation = claim.reservation || claim.record?.reservation || await deps.applicationStore.getReservation?.(idempotencyKey);
+    if (reservation && reservation.requestFingerprint !== fingerprint) return fail(ERROR_CODES.IDEMPOTENCY_CONFLICT);
     if (!reservation) {
       const applicationReference = await deps.references.application();
       const fileReference = await deps.references.file();
-      reservation = {
-        idempotencyKey, roleId: roleResult.role.id, clientSubmissionId: request.clientSubmissionId,
+      reservation = { idempotencyKey, roleId: roleResult.role.id, clientSubmissionId: request.clientSubmissionId,
         applicationReference, fileReference,
         quarantineBlobPath: cleanPath(now.getUTCFullYear(), roleResult.role.id, applicationReference, fileReference, fileResult.extension),
         expectedExtension: fileResult.extension, expectedSizeBytes: request.file.sizeBytes, expectedMimeType: request.file.declaredMimeType,
-        reservationState: 'Reserved', createdAtUtc: now.toISOString(), updatedAtUtc: now.toISOString()
-      };
+        originalFileName: request.file.originalName.trim(), privacyNoticeVersion: request.privacyNoticeVersion, requestFingerprint: fingerprint,
+        reservationState: 'Reserved', credentialGeneration: 0, createdAtUtc: now.toISOString(), updatedAtUtc: now.toISOString() };
       reservation = await deps.applicationStore.reserveSubmission(reservation);
       await deps.idempotency.recordReservation(idempotencyKey, reservation);
     }
 
     const timestamp = now.toISOString();
-    const application = {
-      applicationReference: reservation.applicationReference, roleId: roleResult.role.id,
+    const application = { applicationReference: reservation.applicationReference, roleId: roleResult.role.id,
       roleTitle: roleResult.role.title[request.locale], roleDepartment: roleResult.role.department[request.locale], roleLocation: roleResult.role.location[request.locale],
       locale: request.locale, source: request.source, candidateName: candidateResult.candidate.fullName, candidateEmail: candidateResult.candidate.email,
       candidateTelephone: candidateResult.candidate.telephone, candidateLocation: candidateResult.candidate.currentLocation,
       linkedInUrl: candidateResult.candidate.linkedinUrl, coverNote: candidateResult.candidate.coverNote,
-      privacyNoticeVersion: request.privacyNoticeVersion, privacyAcceptedAtUtc: timestamp, submittedAtClientUtc: request.submittedAtClientUtc || null,
+      privacyNoticeVersion: request.privacyNoticeVersion, requestFingerprint: fingerprint, privacyAcceptedAtUtc: timestamp, submittedAtClientUtc: request.submittedAtClientUtc || null,
       submittedAtServerUtc: timestamp, technicalStatus: A.UploadPending, hiringStage: H.New, fileCount: 1, readyFileCount: 0,
-      requiresManualReview: false, retentionReviewDate: addMinutes(now, 60 * 24 * 365), lastUpdatedAtUtc: timestamp
-    };
-    const file = { fileReference: reservation.fileReference, applicationReference: reservation.applicationReference, filePurpose: 'CV', originalFileName: request.file.originalName,
+      requiresManualReview: false, retentionReviewDate: addMinutes(now, 60 * 24 * 365), lastUpdatedAtUtc: timestamp };
+    const file = { fileReference: reservation.fileReference, applicationReference: reservation.applicationReference, filePurpose: 'CV', originalFileName: reservation.originalFileName,
       declaredMimeType: reservation.expectedMimeType, detectedFileType: null, sizeBytes: reservation.expectedSizeBytes, expectedHash: null,
-      quarantineBlobPath: reservation.quarantineBlobPath, cleanBlobPath: null, quarantineRemovalPending: false, technicalStatus: F.SASIssued, scanResult: null, lastUpdatedAtUtc: timestamp };
-    await deps.applicationStore.createInitialRecords({ application, file, idempotencyKey });
+      quarantineBlobPath: reservation.quarantineBlobPath, cleanBlobPath: null, quarantineRemovalPending: false, technicalStatus: F.SASIssued, scanResult: null, requestFingerprint: fingerprint, credentialGeneration: reservation.credentialGeneration || 0, lastUpdatedAtUtc: timestamp };
+    await deps.applicationStore.createInitialRecords({ application, file, idempotencyKey, reservation });
 
-    const upload = await deps.sas.issue({ container: CONTAINERS.quarantine, blobPath: reservation.quarantineBlobPath, permissions: ['create','write'], httpsOnly: true, userDelegation: true, expiresAtUtc: addMinutes(now, 10), startsAtUtc: addMinutes(now, -5), contentType: reservation.expectedMimeType });
-    const completionToken = await deps.tokens.sign(completionTokenPayload({ now, applicationReference: reservation.applicationReference, fileReference: reservation.fileReference, blobPath: reservation.quarantineBlobPath, sizeBytes: reservation.expectedSizeBytes, contentType: reservation.expectedMimeType, tokenId: await deps.references.tokenId() }));
-    const result = { success: true, applicationReference: reservation.applicationReference, fileReference: reservation.fileReference, upload, completionToken };
-    await deps.idempotency.complete(idempotencyKey, result);
-    await safeLog(deps, 'initiate_application', { applicationReference: reservation.applicationReference, roleId: roleResult.role.id });
-    return result;
+    const currentApp = await deps.applicationStore.getApplication(reservation.applicationReference);
+    const currentFile = await deps.applicationStore.getFile(reservation.fileReference);
+    if (currentFile.technicalStatus !== F.SASIssued || currentApp.technicalStatus !== A.UploadPending) return stableAlreadySubmitted(currentApp, currentFile, reservation);
+    const safeUntil = Date.parse(reservation.lastCredentialExpiryUtc || currentFile.credentialExpiresAtUtc || 0) - 60 * 1000;
+    if (claim.record?.result && safeUntil > now.getTime()) return claim.record.result;
+
+    const lease = await deps.idempotency.beginCredentialIssuance(idempotencyKey, leaseOwner, addMinutes(now, 2));
+    if (lease.status === 'in_progress') {
+      for (let attempt = 0; attempt < 5; attempt += 1) {
+        if (deps.delay) await deps.delay(10);
+        const current = await deps.idempotency.get(idempotencyKey);
+        if (current?.state === 'CredentialsIssued' && current.requestFingerprint === fingerprint && current.result) return current.result;
+      }
+      return fail(ERROR_CODES.SUBMISSION_IN_PROGRESS, { retryAfterMs: lease.retryAfterMs || 1000 });
+    }
+    const generation = lease.generation || ((reservation.credentialGeneration || 0) + 1);
+    try {
+      const expiresAtUtc = addMinutes(now, 10);
+      const upload = await deps.sas.issue({ container: CONTAINERS.quarantine, blobPath: reservation.quarantineBlobPath, permissions: ['create','write'], httpsOnly: true, userDelegation: true, expiresAtUtc, startsAtUtc: addMinutes(now, -5), contentType: reservation.expectedMimeType });
+      const completionToken = await deps.tokens.sign(completionTokenPayload({ now, applicationReference: reservation.applicationReference, fileReference: reservation.fileReference, blobPath: reservation.quarantineBlobPath, sizeBytes: reservation.expectedSizeBytes, contentType: reservation.expectedMimeType, tokenId: await deps.references.tokenId(), credentialGeneration: generation }));
+      const result = { success: true, applicationReference: reservation.applicationReference, fileReference: reservation.fileReference, upload, completionToken, credentialGeneration: generation };
+      const stable = { applicationReference: reservation.applicationReference, fileReference: reservation.fileReference, quarantineBlobPath: reservation.quarantineBlobPath, applicationStatus: currentApp.technicalStatus, fileStatus: currentFile.technicalStatus, credentialGeneration: generation, lastCredentialExpiryUtc: expiresAtUtc };
+      currentFile.credentialGeneration = generation; currentFile.credentialExpiresAtUtc = expiresAtUtc; currentFile.lastUpdatedAtUtc = timestamp;
+      await deps.applicationStore.commitAggregate({ expectedVersion: currentApp.aggregateVersion || 0, application: currentApp, files: [currentFile], outboxEvents: [] });
+      await deps.idempotency.credentialsIssued(idempotencyKey, result, stable);
+      await safeLog(deps, 'initiate_application', { applicationReference: reservation.applicationReference, roleId: roleResult.role.id, credentialGeneration: generation });
+      return result;
+    } catch (e) { await safeCall(() => deps.idempotency.credentialRetryableFailure(idempotencyKey, ERROR_CODES.SUBMISSION_FAILED)); throw e; }
   } catch (error) {
+    if (error.code === ERROR_CODES.RESERVATION_INTEGRITY_CONFLICT) { await safeLog(deps, 'reservation_integrity_conflict', { idempotencyKey }); return fail(ERROR_CODES.RESERVATION_INTEGRITY_CONFLICT); }
     if (idempotencyKey) await safeCall(() => deps.idempotency.retryableFailure(idempotencyKey, ERROR_CODES.SUBMISSION_FAILED));
     await safeLog(deps, 'initiate_application_failed', { roleId: request?.roleId, errorCode: ERROR_CODES.SUBMISSION_FAILED });
     return fail(ERROR_CODES.SUBMISSION_FAILED);
@@ -170,13 +228,14 @@ async function completeUpload(request, deps) {
     let tokenPayload;
     try { tokenPayload = await deps.tokens.verify(request.completionToken); } catch (_) { return fail(ERROR_CODES.TOKEN_INVALID); }
     if (tokenPayload.applicationReference !== request.applicationReference || tokenPayload.fileReference !== request.fileReference) return fail(ERROR_CODES.TOKEN_INVALID);
-    const claim = await deps.completionClaims.claim(claimKey, deps.leaseOwner || 'completion-worker', addMinutes(now, 5));
-    if (claim.status === 'completed') return claim.result;
-    if (claim.status === 'in_progress') return fail(ERROR_CODES.SUBMISSION_IN_PROGRESS, { retryAfterMs: claim.retryAfterMs || 1000 });
     const application = await deps.applicationStore.getApplication(request.applicationReference);
     const file = await deps.applicationStore.getFile(request.fileReference);
-    if (!application || !file || file.applicationReference !== application.applicationReference) { await deps.completionClaims.permanentFailure(claimKey, ERROR_CODES.VALIDATION_FAILED); return fail(ERROR_CODES.VALIDATION_FAILED); }
-    if (!validateTokenPayload(tokenPayload, request, file, now)) { await deps.completionClaims.permanentFailure(claimKey, ERROR_CODES.TOKEN_INVALID); return fail(ERROR_CODES.TOKEN_INVALID); }
+    if (!application || !file || file.applicationReference !== application.applicationReference) return fail(ERROR_CODES.VALIDATION_FAILED);
+    if (!validateTokenPayload(tokenPayload, request, file, now)) return fail(ERROR_CODES.TOKEN_INVALID);
+    const claim = await deps.completionClaims.claim(claimKey, deps.leaseOwner || 'completion-worker', addMinutes(now, 5));
+    if (claim.status === 'completed') return claim.result;
+    if (claim.status === 'permanent_failure') return claim.result || fail(ERROR_CODES.TOKEN_INVALID);
+    if (claim.status === 'in_progress') return fail(ERROR_CODES.SUBMISSION_IN_PROGRESS, { retryAfterMs: claim.retryAfterMs || 1000 });
     if (file.technicalStatus === F.ScanPending && application.technicalStatus === A.Scanning) {
       const result = { success: true, applicationReference: application.applicationReference, fileReference: file.fileReference, status: application.technicalStatus };
       await deps.completionClaims.complete(claimKey, result); return result;
@@ -217,6 +276,23 @@ function validateScanEvent(event) {
   return true;
 }
 
+
+function hasOutbox(deps, idempotencyKey, type) {
+  const events = deps.applicationStore?.outboxEvents || deps.outbox?.events || [];
+  return events.some((e) => e.idempotencyKey === idempotencyKey && (!type || e.type === type));
+}
+
+async function reconcileAppliedScanOutcome(event, deps, application, file, eventKey) {
+  if (!application || !file || file.scanEventId !== event.eventId || file.quarantineBlobPath !== event.blobPath || file.scanResult !== event.result) return false;
+  let ok = false;
+  if (event.result === S.Clean) ok = file.technicalStatus === F.Ready && application.technicalStatus === A.Ready && file.cleanBlobPath === file.quarantineBlobPath && hasOutbox(deps, `outbox:${application.applicationReference}:documents-ready`, N.DocumentsReady);
+  else if (event.result === S.Malicious) ok = file.technicalStatus === F.Malicious && application.technicalStatus === A.Blocked && hasOutbox(deps, `outbox:${application.applicationReference}:${file.fileReference}:malicious`, N.MaliciousFileDetected);
+  else ok = file.technicalStatus === F.ManualReview && application.technicalStatus === A.ManualReview && hasOutbox(deps, `outbox:${application.applicationReference}:${file.fileReference}:manual-review`, N.ManualReviewRequired);
+  if (!ok) return false;
+  await deps.scanEvents.complete(eventKey, { success: true, reconciled: true });
+  return true;
+}
+
 async function processScanResult(event, deps, policy = { deleteMaliciousQuarantine: false }) {
   if (!validateScanEvent(event)) return fail(ERROR_CODES.VALIDATION_FAILED);
   const eventKey = `${event.eventId}:${event.fileReference}`;
@@ -229,7 +305,11 @@ async function processScanResult(event, deps, policy = { deleteMaliciousQuaranti
     const file = await deps.applicationStore.getFile(event.fileReference);
     if (!file || file.quarantineBlobPath !== event.blobPath) { await safeCall(() => deps.scanEvents.permanentFailure(eventKey, ERROR_CODES.BLOB_MISMATCH)); return fail(ERROR_CODES.BLOB_MISMATCH); }
     const application = await deps.applicationStore.getApplication(file.applicationReference);
-    if (!application || application.applicationReference !== file.applicationReference || file.technicalStatus !== F.ScanPending) { await safeCall(() => deps.scanEvents.permanentFailure(eventKey, ERROR_CODES.STATE_TRANSITION_INVALID)); return fail(ERROR_CODES.STATE_TRANSITION_INVALID); }
+    if (!application || application.applicationReference !== file.applicationReference) { await safeCall(() => deps.scanEvents.permanentFailure(eventKey, ERROR_CODES.STATE_TRANSITION_INVALID)); return fail(ERROR_CODES.STATE_TRANSITION_INVALID); }
+    if (file.technicalStatus !== F.ScanPending) {
+      if (await reconcileAppliedScanOutcome(event, deps, application, file, eventKey)) return { success: true, reconciled: true };
+      await safeCall(() => deps.scanEvents.permanentFailure(eventKey, ERROR_CODES.STATE_TRANSITION_INVALID)); return fail(ERROR_CODES.STATE_TRANSITION_INVALID);
+    }
     let nextFile = { ...file, scanEventId: event.eventId, scanResult: event.result, scanCompletedAtUtc: event.scannedAtUtc, lastUpdatedAtUtc: event.scannedAtUtc };
     let nextApp = { ...application, lastUpdatedAtUtc: event.scannedAtUtc };
     let outboxEvent;
