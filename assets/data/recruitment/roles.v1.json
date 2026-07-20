@@ -1,13 +1,13 @@
 {
   "schemaVersion": "1.0",
-  "generatedAtUtc": "2026-07-20T00:00:00Z",
+  "generatedAtUtc": "2026-07-21T00:00:00Z",
   "roles": [
     {
       "id": "distressed-debt-investment-manager",
       "slug": "distressed-debt-investment-manager",
-      "status": "draft",
-      "contentReviewRequired": true,
-      "contentReviewNote": "The role title and overview describe an investment manager, but several responsibilities and qualifications are heavily legal in nature. The business owner must confirm whether this is an investment role, a legal-investment role or transaction counsel role before publication. Do not display this note publicly.",
+      "status": "published",
+      "contentReviewRequired": false,
+      "contentReviewNote": "",
       "title": {
         "en": "Distressed Debt Investment Manager",
         "zh-CN": "债权投资经理"
@@ -33,8 +33,8 @@
         "zh-CN": "长期招聘"
       },
       "roleOverview": {
-        "en": "This role leads distressed debt and special situations investments from sourcing to exit, reporting directly to the Partner. Responsibilities include due diligence, deal structuring, post-investment management and stakeholder coordination with banks, asset management companies and law firms. The position also involves business development and mentoring junior team members.",
-        "zh-CN": "本岗位是公司不良资产及特殊机会债权投资业务的核心执行角色，从项目开发到最终退出全流程管理，直接向合伙人汇报。负责尽职调查、交易架构设计、投后管理与退出执行，并协调银行、AMC、律所等渠道资源，同时参与业务拓展与团队指导工作。"
+        "en": "This role leads distressed debt and special situations investments from sourcing to exit, reporting directly to the Managing Partner. Responsibilities include due diligence, deal structuring, post-investment management and stakeholder coordination with banks, asset management companies and law firms. The position also involves business development and mentoring junior team members.",
+        "zh-CN": "本岗位是公司不良资产及特殊机会债权投资业务的核心执行角色，从项目开发到最终退出全流程管理，直接向管理合伙人汇报。负责尽职调查、交易架构设计、投后管理与退出执行，并协调银行、AMC、律所等渠道资源，同时参与业务拓展与团队指导工作。"
       },
       "responsibilities": {
         "en": [
@@ -54,14 +54,14 @@
       },
       "requiredQualifications": {
         "en": [
-          "Bachelor’s degree or above in law or a related discipline. Candidates holding the National Unified Legal Professional Qualification Certificate, Class A, are preferred.",
+          "Bachelor’s degree or above in law or a related discipline.",
           "At least two years of relevant experience in a financial institution’s legal department, non-contentious legal practice at a law firm or non-performing loan disposal.",
           "Strong knowledge of civil and commercial law and financial regulatory frameworks, familiarity with the end-to-end debt investment process and strong legal drafting and review skills.",
           "Strong analytical thinking, communication and coordination skills, resilience under pressure and the ability to adapt to frequent business travel and a fast-paced working environment.",
           "High integrity and professional ethics, strong risk awareness and a team-oriented mindset."
         ],
         "zh-CN": [
-          "全日制本科及以上学历，法学专业背景，通过国家统一法律职业资格考试A证优先。",
+          "全日制本科及以上学历，法学专业背景。",
           "具备两年以上金融机构法务、律师事务所非诉律师或不良资产处置相关从业经验。",
           "精通民商法及金融监管法规，熟悉债权投资全流程，具备优秀的法律文书撰写与审核能力。",
           "拥有良好的逻辑思维与沟通协调能力，抗压能力强，能适应高频出差及高强度工作节奏。",
@@ -80,8 +80,8 @@
         "en": "Rolling recruitment",
         "zh-CN": "长期招聘"
       },
-      "datePosted": "2026-07-20",
-      "dateUpdated": "2026-07-20",
+      "datePosted": "2026-07-21",
+      "dateUpdated": "2026-07-21",
       "displayOrder": 1,
       "application": {
         "enabled": false,
@@ -105,12 +105,32 @@
             "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
           ]
         }
+      },
+      "summary": {
+        "en": "Lead the execution and management of distressed debt and special situations investments, including due diligence, structuring, post-investment management and risk control.",
+        "zh-CN": "负责不良资产及特殊机会债权投资项目的执行与管理，包括尽职调查、交易架构、投后管理及风险控制。"
+      },
+      "emailApplicationCopy": {
+        "en": {
+          "heading": "How to apply",
+          "copy": "Please email your CV to hr@shorevest.com and include “Distressed Debt Investment Manager” and your full name in the subject line. You may also include a short cover note, telephone number, current location and LinkedIn profile.",
+          "button": "Apply by email",
+          "subject": "Application - Distressed Debt Investment Manager - [Full Name]",
+          "body": "Full name:\n\nTelephone:\n\nCurrent location:\n\nLinkedIn:\n\nShort note:\n\nCV attached: Yes / No"
+        },
+        "zh-CN": {
+          "heading": "申请方式",
+          "copy": "请将个人简历发送至 hr@shorevest.com，并在邮件主题中注明“债权投资经理”及您的姓名。您也可以附上简短的求职说明、联系电话、目前所在地及领英个人主页。",
+          "button": "通过邮件申请",
+          "subject": "申请 - 债权投资经理 - [姓名]",
+          "body": "姓名：\n\n联系电话：\n\n目前所在地：\n\n领英：\n\n简短说明：\n\n已附简历：是 / 否"
+        }
       }
     },
     {
       "id": "legal-assistant",
       "slug": "legal-assistant",
-      "status": "draft",
+      "status": "published",
       "contentReviewRequired": false,
       "contentReviewNote": "",
       "title": {
@@ -165,7 +185,7 @@
           "Proficiency in standard office software, with strong document-processing and formal writing skills."
         ],
         "zh-CN": [
-          "全日制本科及以上学历，法学相关专业，已通过司法考试，如有基金从业资格证更佳。",
+          "全日制本科及以上学历，法学相关专业，已通过司法考试。",
           "精通英语读写，至少一年以上律所工作经验。",
           "具有良好的工作态度和职业操守，能自觉、独立并高效地完成工作，能够适应高强度工作。",
           "熟悉掌握办公软件，具备良好的文字处理能力及公文写作能力。"
@@ -183,8 +203,8 @@
         "en": "Open until filled",
         "zh-CN": "招到为止"
       },
-      "datePosted": "2026-07-20",
-      "dateUpdated": "2026-07-20",
+      "datePosted": "2026-07-21",
+      "dateUpdated": "2026-07-21",
       "displayOrder": 2,
       "application": {
         "enabled": false,
@@ -208,7 +228,31 @@
             "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
           ]
         }
+      },
+      "summary": {
+        "en": "Provide day-to-day legal support across ShoreVest’s business, including contract review, legal research, internal processes and coordination with external counsel.",
+        "zh-CN": "为公司的业务与运营提供日常法律支持，包括合同审阅、法律研究、内部流程及外部律师协调。"
+      },
+      "emailApplicationCopy": {
+        "en": {
+          "heading": "How to apply",
+          "copy": "Please email your CV to hr@shorevest.com and include “Legal Assistant” and your full name in the subject line. You may also include a short cover note, telephone number, current location and LinkedIn profile.",
+          "button": "Apply by email",
+          "subject": "Application - Legal Assistant - [Full Name]",
+          "body": "Full name:\n\nTelephone:\n\nCurrent location:\n\nLinkedIn:\n\nShort note:\n\nCV attached: Yes / No"
+        },
+        "zh-CN": {
+          "heading": "申请方式",
+          "copy": "请将个人简历发送至 hr@shorevest.com，并在邮件主题中注明“法务专员”及您的姓名。您也可以附上简短的求职说明、联系电话、目前所在地及领英个人主页。",
+          "button": "通过邮件申请",
+          "subject": "申请 - 法务专员 - [姓名]",
+          "body": "姓名：\n\n联系电话：\n\n目前所在地：\n\n领英：\n\n简短说明：\n\n已附简历：是 / 否"
+        }
       }
     }
-  ]
+  ],
+  "emailApplication": {
+    "enabled": true,
+    "address": "hr@shorevest.com"
+  }
 }

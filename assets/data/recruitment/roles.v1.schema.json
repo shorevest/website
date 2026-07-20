@@ -7,6 +7,7 @@
   "required": [
     "schemaVersion",
     "generatedAtUtc",
+    "emailApplication",
     "roles"
   ],
   "properties": {
@@ -23,6 +24,9 @@
       "items": {
         "$ref": "#/$defs/role"
       }
+    },
+    "emailApplication": {
+      "$ref": "#/$defs/emailApplication"
     }
   },
   "$defs": {
@@ -97,7 +101,9 @@
         "datePosted",
         "dateUpdated",
         "displayOrder",
-        "application"
+        "application",
+        "summary",
+        "emailApplicationCopy"
       ],
       "properties": {
         "id": {
@@ -169,6 +175,12 @@
         },
         "application": {
           "$ref": "#/$defs/application"
+        },
+        "summary": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "emailApplicationCopy": {
+          "$ref": "#/$defs/emailApplicationCopy"
         }
       }
     },
@@ -263,6 +275,78 @@
               }
             }
           }
+        }
+      }
+    },
+    "emailApplication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enabled",
+        "address"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "address": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 254
+        }
+      }
+    },
+    "emailCopyLocale": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "heading",
+        "copy",
+        "button",
+        "subject",
+        "body"
+      ],
+      "properties": {
+        "heading": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "copy": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "button": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "subject": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "body": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      }
+    },
+    "emailApplicationCopy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "en",
+        "zh-CN"
+      ],
+      "properties": {
+        "en": {
+          "$ref": "#/$defs/emailCopyLocale"
+        },
+        "zh-CN": {
+          "$ref": "#/$defs/emailCopyLocale"
         }
       }
     }
