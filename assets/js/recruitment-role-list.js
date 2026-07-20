@@ -1,142 +1,17 @@
-(function (root, factory) {
-  if (typeof module === 'object' && module.exports) {
-    module.exports = factory();
-  } else {
-    root.ShoreVestRecruitmentRoleList = factory();
-  }
-})(typeof window !== 'undefined' ? window : globalThis, function () {
+(function (root, factory) { if (typeof module === 'object' && module.exports) module.exports = factory(); else root.ShoreVestRecruitmentRoleList = factory(); })(typeof window !== 'undefined' ? window : globalThis, function () {
   'use strict';
-
   var MANIFEST_PATH = 'assets/data/recruitment/roles.v1.json';
   var SUPPORTED_LOCALES = { en: true, 'zh-CN': true };
   var LINK_LABELS = { en: 'View role', 'zh-CN': '查看职位' };
-  var EMPLOYMENT_TYPE_LABELS = {
-    en: {
-      'Full-time': 'Full-time',
-      'Part-time': 'Part-time',
-      Internship: 'Internship',
-      Contract: 'Contract'
-    },
-    'zh-CN': {
-      'Full-time': '全职',
-      'Part-time': '兼职',
-      Internship: '实习',
-      Contract: '合同制'
-    }
-  };
-  var DETAIL_PATH_PATTERNS = {
-    en: /^careers\/[a-z0-9]+(?:-[a-z0-9]+)*\.html$/,
-    'zh-CN': /^careers\/[a-z0-9]+(?:-[a-z0-9]+)*_cn\.html$/
-  };
-
-  function getLocale(doc) {
-    var lang = doc && doc.documentElement ? doc.documentElement.lang : '';
-    return SUPPORTED_LOCALES[lang] ? lang : null;
-  }
-
-  function getEmploymentTypeLabel(employmentType, locale) {
-    var labels = EMPLOYMENT_TYPE_LABELS[locale];
-    return labels && Object.prototype.hasOwnProperty.call(labels, employmentType) ? labels[employmentType] : null;
-  }
-
-  function isSafeDetailPath(path, locale) {
-    var pattern = DETAIL_PATH_PATTERNS[locale];
-    if (typeof path !== 'string' || !pattern) return false;
-    if (path.indexOf('://') !== -1 || path.indexOf('//') === 0) return false;
-    if (/^(?:javascript|data|mailto):/i.test(path)) return false;
-    if (path.indexOf('..') !== -1) return false;
-    if (path.indexOf('application-form') !== -1) return false;
-    return pattern.test(path);
-  }
-
-  function appendMeta(doc, row, value) {
-    if (typeof value !== 'string' || value.trim() === '') return false;
-    var meta = doc.createElement('p');
-    meta.className = 'careers-role-row__meta';
-    meta.textContent = value;
-    row.appendChild(meta);
-    return true;
-  }
-
-  function buildRoleRow(doc, role, locale) {
-    var localized = role && role.locales ? role.locales[locale] : null;
-    if (!localized || role.status !== 'active') return null;
-    if (!isSafeDetailPath(localized.detailPath, locale)) return null;
-    if (typeof localized.title !== 'string' || localized.title.trim() === '') return null;
-
-    var employmentTypeLabel = getEmploymentTypeLabel(role.employmentType, locale);
-    if (!employmentTypeLabel) return null;
-
-    var row = doc.createElement('div');
-    row.className = 'careers-role-row';
-
-    var title = doc.createElement('h3');
-    title.className = 'careers-role-row__title';
-    title.textContent = localized.title;
-    row.appendChild(title);
-
-    var hasTeam = appendMeta(doc, row, localized.team);
-    var hasLocation = appendMeta(doc, row, localized.location);
-    var hasEmploymentType = appendMeta(doc, row, employmentTypeLabel);
-    if (!hasTeam || !hasLocation || !hasEmploymentType) return null;
-
-    var link = doc.createElement('a');
-    link.className = 'careers-role-row__link';
-    link.href = localized.detailPath;
-    link.textContent = LINK_LABELS[locale];
-    row.appendChild(link);
-
-    return row;
-  }
-
-  function renderRolesFromManifest(doc, manifest) {
-    var container = doc.querySelector('[data-role-list="open-roles"]');
-    var locale = getLocale(doc);
-    if (!container || !locale || !manifest || !Array.isArray(manifest.roles)) return 0;
-
-    var rows = [];
-    manifest.roles.forEach(function (role) {
-      var row = buildRoleRow(doc, role, locale);
-      if (row) rows.push(row);
-    });
-
-    if (!rows.length) return 0;
-    container.replaceChildren.apply(container, rows);
-    return rows.length;
-  }
-
-  function warnLoadFailure(win) {
-    if (win.console && typeof win.console.warn === 'function') {
-      win.console.warn('Recruitment role list unavailable.');
-    }
-  }
-
-  function initRoleList(win) {
-    var doc = win.document;
-    if (!doc || !doc.querySelector('[data-role-list="open-roles"]') || typeof win.fetch !== 'function') return Promise.resolve(0);
-
-    return win.fetch(MANIFEST_PATH, { credentials: 'same-origin' })
-      .then(function (response) {
-        if (!response || !response.ok) throw new Error('Manifest unavailable');
-        return response.json();
-      })
-      .then(function (manifest) {
-        return renderRolesFromManifest(doc, manifest);
-      })
-      .catch(function () {
-        warnLoadFailure(win);
-        return 0;
-      });
-  }
-
-  if (typeof window !== 'undefined' && window.document) {
-    initRoleList(window);
-  }
-
-  return {
-    initRoleList: initRoleList,
-    renderRolesFromManifest: renderRolesFromManifest,
-    isSafeDetailPath: isSafeDetailPath,
-    MANIFEST_PATH: MANIFEST_PATH
-  };
+  function getLocale(doc) { var lang = doc && doc.documentElement ? doc.documentElement.lang : ''; return SUPPORTED_LOCALES[lang] ? lang : null; }
+  function flagEnabled(win) { return !!(win && win.SHOREVEST_SITE_CONFIG && win.SHOREVEST_SITE_CONFIG.careersOpenRolesEnabled === true); }
+  function localized(role, field, locale) { return role && role[field] && typeof role[field][locale] === 'string' ? role[field][locale] : ''; }
+  function detailPath(role, locale) { return locale === 'zh-CN' ? 'careers/' + role.slug + '_cn.html' : 'careers/' + role.slug + '.html'; }
+  function isSafeDetailPath(path, locale) { var p = locale === 'zh-CN' ? /^careers\/[a-z0-9]+(?:-[a-z0-9]+)*_cn\.html$/ : /^careers\/[a-z0-9]+(?:-[a-z0-9]+)*\.html$/; return typeof path === 'string' && path.indexOf('://') === -1 && path.indexOf('..') === -1 && !/^(?:javascript|data|mailto):/i.test(path) && p.test(path); }
+  function appendMeta(doc, row, value) { if (!value) return false; var meta = doc.createElement('p'); meta.className = 'careers-role-row__meta'; meta.textContent = value; row.appendChild(meta); return true; }
+  function buildRoleRow(doc, role, locale) { if (!role || role.status !== 'published') return null; var path = detailPath(role, locale); if (!isSafeDetailPath(path, locale)) return null; var titleText = localized(role, 'title', locale); if (!titleText) return null; var row = doc.createElement('div'); row.className = 'careers-role-row'; var title = doc.createElement('h3'); title.className = 'careers-role-row__title'; title.textContent = titleText; row.appendChild(title); if (!appendMeta(doc,row,localized(role,'department',locale)) || !appendMeta(doc,row,localized(role,'location',locale)) || !appendMeta(doc,row,localized(role,'employmentType',locale))) return null; var link = doc.createElement('a'); link.className = 'careers-role-row__link'; link.href = path; link.textContent = LINK_LABELS[locale]; row.appendChild(link); return row; }
+  function renderRolesFromManifest(doc, manifest, options) { options = options || {}; var container = doc.querySelector('[data-role-list="open-roles"]'); var locale = options.locale || getLocale(doc); var enabled = options.featureEnabled === true; if (!container || !locale || !enabled || !manifest || !Array.isArray(manifest.roles)) return 0; var rows = manifest.roles.slice().sort(function(a,b){return (a.displayOrder||999)-(b.displayOrder||999);}).map(function(role){ return buildRoleRow(doc, role, locale); }).filter(Boolean); if (!rows.length) return 0; container.replaceChildren.apply(container, rows); return rows.length; }
+  function initRoleList(win) { var doc = win.document; if (!doc || !doc.querySelector('[data-role-list="open-roles"]') || !flagEnabled(win) || typeof win.fetch !== 'function') return Promise.resolve(0); return win.fetch(MANIFEST_PATH,{credentials:'same-origin'}).then(function(r){ if(!r||!r.ok) throw new Error('Manifest unavailable'); return r.json(); }).then(function(m){ return renderRolesFromManifest(doc,m,{featureEnabled:true}); }).catch(function(){ return 0; }); }
+  if (typeof window !== 'undefined' && window.document) initRoleList(window);
+  return { initRoleList:initRoleList, renderRolesFromManifest:renderRolesFromManifest, isSafeDetailPath:isSafeDetailPath, MANIFEST_PATH:MANIFEST_PATH };
 });
