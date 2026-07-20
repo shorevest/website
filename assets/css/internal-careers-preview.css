@@ -6,6 +6,11 @@ body.careers-preview-page main {
   font-family: var(--sv-font);
 }
 body.careers-preview-page .careers-hero {
+  /* Match the homepage hero's effective Barlow metrics. Careers pages load the
+     embedded DIN face for later content; if the masthead inherits that face,
+     the hero copy reflows after the font is available and appears to shift on
+     page entry. */
+  --sv-font: "Barlow", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
   background: var(--sv-dark-footer, #20211F);
   color: var(--sv-text-on-dark, #FCF9F1);
   overflow: hidden;
