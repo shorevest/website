@@ -82,6 +82,23 @@
       });
       body.appendChild(ul);
     }
+
+    (section.images || []).forEach((image) => {
+      if (!image || !image.src) return;
+      const figure = document.createElement('figure');
+      figure.className = 'cdd-figure';
+      const img = document.createElement('img');
+      img.src = safeText(image.src);
+      img.alt = safeText(image.alt || image.caption || '');
+      img.loading = 'lazy';
+      figure.appendChild(img);
+      if (image.caption) {
+        const caption = document.createElement('figcaption');
+        caption.textContent = safeText(image.caption);
+        figure.appendChild(caption);
+      }
+      body.appendChild(figure);
+    });
   });
 
   findings.innerHTML = '';
