@@ -139,13 +139,11 @@ Manual process:
 
 ### URL patterns
 
-- LinkedIn external apply: `https://shorevest.com/careers/apply.html?role={roleId}&source=linkedin`
-- Website apply (EN): `https://shorevest.com/careers/apply.html?role={roleId}&source=website`
-- Website apply (ZH): `https://shorevest.com/careers/apply_cn.html?role={roleId}&source=website`
+Phase 1.1 has no live application URLs. Do not configure LinkedIn or website Apply links until
+Phase 2 provides approved `careers/apply*.html` pages and a secure backend.
 
-Do not create tracking URLs that contain candidate information. Do not add arbitrary campaign
-parameters; only the allowlisted, normalized `source` values are honored (anything else →
-`direct`).
+Do not create tracking URLs that contain candidate information. When Phase 2 restores
+attribution parameters, only allowlisted, normalized `source` values should be honored.
 
 ## 6. Data retention (HR + Legal must approve — not invented here)
 
