@@ -32,6 +32,12 @@
   font-style: normal; font-weight: 700; font-display: swap;
 }
 
+html,
+body,
+* {
+  overscroll-behavior: none;
+}
+
 :root {
   /* DIN 2014 only — system-ui is the last-resort device fallback. No external font. */
   --ops-font: "DIN 2014", "DIN2014", system-ui, -apple-system, "Segoe UI", sans-serif;

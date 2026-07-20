@@ -12,7 +12,12 @@
 
 html {
   scroll-behavior: smooth;
-  overscroll-behavior-y: none;
+}
+
+html,
+body,
+* {
+  overscroll-behavior: none;
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
