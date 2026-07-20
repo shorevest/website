@@ -24,7 +24,7 @@
 
   var SITE_CONFIG = {
     showShoreVestOnePublicLink: false,
-    careersOpenRolesEnabled: false
+    careersOpenRolesEnabled: true
   };
 
   root.SHOREVEST_SITE_CONFIG = SITE_CONFIG;
