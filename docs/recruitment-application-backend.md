@@ -2,9 +2,9 @@
 
 Status: **design and contract only. No backend is deployed.** The ShoreVest website is a
 static site with no compatible live-backend deployment path, so this document defines the
-server-side contract the frontend already speaks to, and the reference scaffold under
-[`api/`](../api/README.md) implements the validation logic in unit-tested form. Nothing here
-is live. Application submission stays disabled (`applicationEnabled: false`) until the backend
+server-side contract planned for Phase 2, and the reference scaffold under
+[`api/`](../api/README.md) preserves useful validation/orchestration logic in reviewable form. Nothing here
+is live. Phase 1.1 does not include a public application page or frontend form; application submission stays disabled until the backend
 is built, deployed, tested, and approved.
 
 This document complements — it does not replace — the authoritative first-party Azure build
@@ -12,19 +12,15 @@ specification in [`docs/recruitment/PHASE_1_BUILD_SPEC.md`](recruitment/PHASE_1_
 
 ## 1. What is implemented today (frontend)
 
-- Manifest-driven bilingual role listing (`assets/js/recruitment-role-list.js`) — unchanged.
-- Reusable role-detail renderer (`assets/js/recruitment-role-detail.js`) — renders role
-  content via `textContent`, shows safe unavailable / closed / disabled states, and only
-  renders the Apply button when a role is `active` + `applicationEnabled` + deadline not
-  passed.
-- Shared bilingual application pages (`careers/apply.html`, `careers/apply_cn.html`) driven by
-  `assets/js/recruitment-application.js`. The form is gated by the authoritative manifest and
-  is hidden for any role that is missing, closed, inactive, disabled, past deadline, or missing
-  the current locale.
-- Strict, allowlisted referral-source handling; the raw `source` query value is never
-  rendered, reflected, or executed.
-- Honest failure behavior: with no backend configured, the form shows a neutral failure and
-  **never** fakes success.
+- Manifest-driven bilingual role listing (`assets/js/recruitment-role-list.js`) with the public
+  open-roles flag defaulting off.
+- Reusable role-detail renderer (`assets/js/recruitment-role-detail.js`) that renders role
+  content with `textContent`, hides draft roles by default, and supports `?preview=1` for
+  internal draft-page review.
+- No public application pages, application form, upload control, email fallback, or success mock
+  are currently shipped. The former `careers/apply.html`, `careers/apply_cn.html`, and
+  `assets/js/recruitment-application.js` Phase 1 prototype were intentionally left out of
+  Phase 1.1 until the secure Phase 2 architecture is approved.
 
 ## 2. Endpoint
 
@@ -75,8 +71,7 @@ Controlled failure:
 { "success": false, "errorCode": "ROLE_NOT_OPEN" }
 ```
 
-Supported error codes (mapped to neutral candidate-facing messages on the client — see
-`ERROR_CODE_MESSAGES` in `assets/js/recruitment-application.js`):
+Supported future error codes (to be mapped to neutral candidate-facing messages by the Phase 2 client):
 
 `ROLE_NOT_FOUND`, `ROLE_NOT_OPEN`, `ROLE_CLOSED`, `APPLICATION_DEADLINE_PASSED`,
 `VALIDATION_FAILED`, `FILE_MISSING`, `FILE_TYPE_REJECTED`, `FILE_TOO_LARGE`,
@@ -130,10 +125,9 @@ a timeout, the backend succeeds but the response is lost, or a downstream flow r
 
 ## 7. Local development / mock mode
 
-`assets/js/recruitment-application.js` supports a development-only success mock. It is
-impossible to enable in production: it requires **both** an explicit `data-recruitment-mock="true"`
-opt-in **and** a non-production host (`localhost`/`127.0.0.1`/`::1`). Tests assert that a
-production host never fakes success. The checked-in pages do not set the mock attribute.
+No Phase 1.1 page includes a mock submission flow. If Phase 2 adds a development mock, it must
+require both an explicit opt-in and a non-production host, and tests must assert that production
+can never fake success.
 
 ## 8. Security assumptions for the production backend
 

@@ -1,16 +1,16 @@
 # Recruitment role management — adding, closing, and activating roles
 
 Status: operational guide for ShoreVest staff. Adding a role to the manifest does **not** enable
-application submission. Roles ship with `applicationEnabled: false` and stay that way until the
-full activation checklist is complete and the backend is live.
+application submission. Phase 1.1 has no public application form; roles stay as `draft` until the
+full publication and Phase 2 application checklist is complete.
 
 Key files:
 
 - Manifest: `assets/data/recruitment/roles.v1.json`
 - Schema: `assets/data/recruitment/roles.v1.schema.json`
 - Validator: `scripts/validate-recruitment-roles.js` (`npm run validate:recruitment`)
-- Renderers: `assets/js/recruitment-role-list.js`, `assets/js/recruitment-role-detail.js`,
-  `assets/js/recruitment-application.js`
+- Renderers: `assets/js/recruitment-role-list.js`, `assets/js/recruitment-role-detail.js`
+  (no Phase 1.1 application renderer is shipped)
 - Tests: `npm run test:recruitment`
 
 ## 1. Manifest role shape
@@ -48,7 +48,7 @@ Each role supports (optional fields may be omitted or left empty until approved)
 Rules enforced by the validator (see `tests/recruitment-roles.test.js`):
 
 - `roleId` is a unique, safe lowercase slug — no spaces, slashes, URL/query syntax, or traversal.
-- `status` ∈ {`draft`, `active`, `closed`, `archived`}; `employmentType` ∈
+- `status` ∈ {`draft`, `published`, `closed`, `archived`}; `employmentType` ∈
   {`Full-time`, `Part-time`, `Internship`, `Contract`}.
 - Both `en` and `zh-CN` locales are present; only those locale IDs are accepted.
 - Titles, team, and location are non-empty plain strings; `detailPath` is an internal relative
@@ -68,9 +68,9 @@ Rules enforced by the validator (see `tests/recruitment-roles.test.js`):
 - The Careers listing (`careers.html` / `careers_cn.html`) shows roles with `status: active`,
   regardless of `applicationEnabled`. This lets HR display an approved vacancy before the
   application system is switched on.
-- The role-detail page renders the Apply button only when the role is `active`,
-  `applicationEnabled: true`, and the deadline has not passed. Otherwise it shows the neutral
-  disabled or closed state.
+- The Phase 1.1 role-detail page does not render an Apply button. Draft roles are hidden by
+  default and render only for internal review URLs that include `?preview=1`; closed roles show
+  a controlled closed message.
 - A `closed` role is removed from the listing but its direct URL still shows a controlled closed
   message, and the application page rejects it.
 
