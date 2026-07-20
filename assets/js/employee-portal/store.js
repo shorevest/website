@@ -154,6 +154,7 @@
       alerts: [],
       errorLogs: [],
       connections: null,    /* cached pre-flight results */
+      jobOpenings: [],       /* HR-created recruitment-opening drafts (demo only) */
       lastEndToEndTest: null
     };
   }
@@ -465,6 +466,46 @@
     return out;
   }
 
+
+  /* ── HR job openings (demonstration only) ──────────────────────────────── */
+
+  function getJobOpenings() {
+    return (load().jobOpenings || []).slice().sort(function (a, b) {
+      return String(b.updatedAt || b.createdAt).localeCompare(String(a.updatedAt || a.createdAt));
+    });
+  }
+
+  function createJobOpening(input, user) {
+    var s = load();
+    if (!s.jobOpenings) s.jobOpenings = [];
+    var record = Object.assign({
+      jobOpeningId: uid('JOB'),
+      status: 'draft',
+      applicationEnabled: false,
+      createdAt: nowIso(),
+      createdBy: user || 'Unknown',
+      updatedAt: nowIso(),
+      updatedBy: user || 'Unknown'
+    }, input || {});
+    s.jobOpenings.unshift(record);
+    audit({ eventType: 'JobOpeningCreated', newValue: JSON.stringify(record), performedBy: user,
+      reason: 'HR created a draft job opening in ShoreVest One.' });
+    save();
+    return record;
+  }
+
+  function updateJobOpening(id, patch, user) {
+    var s = load();
+    var opening = (s.jobOpenings || []).filter(function (j) { return j.jobOpeningId === id; })[0];
+    if (!opening) return null;
+    var before = JSON.stringify(opening);
+    Object.assign(opening, patch || {}, { updatedAt: nowIso(), updatedBy: user || 'Unknown' });
+    audit({ eventType: 'JobOpeningUpdated', previousValue: before, newValue: JSON.stringify(opening), performedBy: user,
+      reason: 'HR updated a draft job opening in ShoreVest One.' });
+    save();
+    return opening;
+  }
+
   /* ── Alerts and error logs (monitoring) ────────────────────────────────── */
 
   function addAlert(alert) {
@@ -529,6 +570,9 @@
     finishExecution: finishExecution,
     processedHashes: processedHashes,
     previousBatchEmails: previousBatchEmails,
+    getJobOpenings: getJobOpenings,
+    createJobOpening: createJobOpening,
+    updateJobOpening: updateJobOpening,
     addAlert: addAlert,
     getAlerts: getAlerts,
     acknowledgeAlert: acknowledgeAlert,

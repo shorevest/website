@@ -83,12 +83,12 @@
      item. Outreach is intentionally excluded: it is a first-class sidebar
      destination (#/outreach and its sub-routes) and highlights its own item. */
   var TOOLS_ROUTES = ['tools', 'process', 'weekly', 'dataquality',
-    'exceptions', 'runs', 'admin', 'monitoring', 'batch', 'cdd-publisher'];
+    'exceptions', 'runs', 'admin', 'monitoring', 'batch', 'job-openings'];
 
   var ROUTES = {
     home: 'home', 'my-work': 'myWork', workspace: 'workspace', preview: 'preview',
     tools: 'tools', process: 'process', weekly: 'weekly',
-    dataquality: 'dataquality', outreach: 'outreach', cdd: 'cddPublisher', 'cdd-publisher': 'cddPublisher', exceptions: 'exceptions',
+    dataquality: 'dataquality', outreach: 'outreach', 'job-openings': 'jobOpenings', exceptions: 'exceptions',
     runs: 'runs', admin: 'admin', monitoring: 'monitoring', batch: 'batch'
   };
 
