@@ -75,7 +75,7 @@ function validateTokenPayload(payload, request, file, now) {
   if (expires < now.getTime() - CLOCK_SKEW_MS || issued > now.getTime() + CLOCK_SKEW_MS) return false;
   if (payload.applicationReference !== request.applicationReference || payload.fileReference !== request.fileReference) return false;
   if (payload.quarantineBlobPath !== file.quarantineBlobPath) return false;
-  if (payload.credentialGeneration !== file.credentialGeneration) return false;
+  if (payload.credentialGeneration > file.credentialGeneration) return false;
   if (payload.expectedSizeBytes !== file.sizeBytes || payload.expectedDeclaredMimeType !== file.declaredMimeType) return false;
   return true;
 }
@@ -133,7 +133,7 @@ async function initiateApplication(request, deps) {
     if (!requestValidation.ok) return requestValidation;
     idempotencyKey = `init:${request.roleId}:${request.clientSubmissionId}`;
 
-    const rateLimit = deps.rateLimiter ? await deps.rateLimiter.check(request.clientSubmissionId) : { allowed: true };
+    const rateLimit = deps.rateLimiter ? await deps.rateLimiter.check(`${request.roleId}:${request.clientSubmissionId}`) : { allowed: true };
     if (rateLimit.allowed !== true) return fail(ERROR_CODES.RATE_LIMITED);
     const botVerification = deps.botVerifier ? await deps.botVerifier.verify(request) : { ok: true };
     if (botVerification.ok !== true) return fail(ERROR_CODES.BOT_VERIFICATION_FAILED);
@@ -170,7 +170,7 @@ async function initiateApplication(request, deps) {
         expectedExtension: fileResult.extension, expectedSizeBytes: request.file.sizeBytes, expectedMimeType: request.file.declaredMimeType,
         originalFileName: request.file.originalName.trim(), privacyNoticeVersion: request.privacyNoticeVersion, requestFingerprint: fingerprint,
         reservationState: 'Reserved', credentialGeneration: 0, createdAtUtc: now.toISOString(), updatedAtUtc: now.toISOString() };
-      reservation = await deps.applicationStore.reserveSubmission(reservation);
+      reservation = await reservation;
       await deps.idempotency.recordReservation(idempotencyKey, reservation);
     }
 
@@ -189,7 +189,7 @@ async function initiateApplication(request, deps) {
     await deps.applicationStore.createInitialRecords({ application, file, idempotencyKey, reservation });
 
     const currentApp = await deps.applicationStore.getApplication(reservation.applicationReference);
-    const currentFile = await deps.applicationStore.getFile(reservation.fileReference);
+    const currentFile = await deps.applicationStore.getFile(reservation.applicationReference, reservation.fileReference);
     if (currentFile.technicalStatus !== F.SASIssued || currentApp.technicalStatus !== A.UploadPending) return stableAlreadySubmitted(currentApp, currentFile, reservation);
     const safeUntil = Date.parse(reservation.lastCredentialExpiryUtc || currentFile.credentialExpiresAtUtc || 0) - 60 * 1000;
     if (claim.record?.result && safeUntil > now.getTime()) return claim.record.result;
@@ -233,20 +233,21 @@ async function completeUpload(request, deps) {
     try { tokenPayload = await deps.tokens.verify(request.completionToken); } catch (_) { return fail(ERROR_CODES.TOKEN_INVALID); }
     if (tokenPayload.applicationReference !== request.applicationReference || tokenPayload.fileReference !== request.fileReference) return fail(ERROR_CODES.TOKEN_INVALID);
     const application = await deps.applicationStore.getApplication(request.applicationReference);
-    const file = await deps.applicationStore.getFile(request.fileReference);
+    const file = await deps.applicationStore.getFile(request.applicationReference, request.fileReference);
     if (!application || !file || file.applicationReference !== application.applicationReference) return fail(ERROR_CODES.VALIDATION_FAILED);
     if (!validateTokenPayload(tokenPayload, request, file, now)) return fail(ERROR_CODES.TOKEN_INVALID);
-    const claim = await deps.completionClaims.claim(claimKey, deps.leaseOwner || 'completion-worker', addMinutes(now, 5));
+    const completionClaim = { applicationReference: request.applicationReference, fileReference: request.fileReference, claimKey, leaseOwner: deps.leaseOwner || 'completion-worker', leaseExpiresAtUtc: addMinutes(now, 5) };
+    const claim = await deps.completionClaims.claim(completionClaim);
     if (claim.status === 'completed') return claim.result;
     if (claim.status === 'permanent_failure') return claim.result || fail(ERROR_CODES.TOKEN_INVALID);
     if (claim.status === 'in_progress') return fail(ERROR_CODES.SUBMISSION_IN_PROGRESS, { retryAfterMs: claim.retryAfterMs || 1000 });
     if (file.technicalStatus === F.ScanPending && application.technicalStatus === A.Scanning) {
       const result = { success: true, applicationReference: application.applicationReference, fileReference: file.fileReference, status: application.technicalStatus };
-      await deps.completionClaims.complete(claimKey, result); return result;
+      await deps.completionClaims.complete(completionClaim, result); return result;
     }
     const properties = await deps.storage.properties(CONTAINERS.quarantine, file.quarantineBlobPath);
-    if (!properties) { await deps.completionClaims.retryableFailure(claimKey, ERROR_CODES.BLOB_NOT_FOUND); return fail(ERROR_CODES.BLOB_NOT_FOUND); }
-    if (properties.sizeBytes !== file.sizeBytes || properties.contentType !== file.declaredMimeType) { await deps.completionClaims.permanentFailure(claimKey, ERROR_CODES.BLOB_MISMATCH); return fail(ERROR_CODES.BLOB_MISMATCH); }
+    if (!properties) { await deps.completionClaims.retryableFailure(completionClaim, ERROR_CODES.BLOB_NOT_FOUND); return fail(ERROR_CODES.BLOB_NOT_FOUND); }
+    if (properties.sizeBytes !== file.sizeBytes || properties.contentType !== file.declaredMimeType) { await deps.completionClaims.permanentFailure(completionClaim, ERROR_CODES.BLOB_MISMATCH); return fail(ERROR_CODES.BLOB_MISMATCH); }
     const bytes = await deps.storage.read(CONTAINERS.quarantine, file.quarantineBlobPath, { maxBytes: file.sizeBytes });
     deps.counters && (deps.counters.verifications += 1);
     const detectedType = detect(bytes);
@@ -254,17 +255,17 @@ async function completeUpload(request, deps) {
     if ((file.declaredMimeType === 'application/pdf' && detectedType !== 'pdf') || (expectedDocx && detectedType !== 'docx')) {
       const failedFile = { ...file, technicalStatus: transition('file', file.technicalStatus, F.ValidationFailed), lastUpdatedAtUtc: now.toISOString() };
       await deps.applicationStore.commitAggregate({ expectedVersion: application.aggregateVersion || 0, application, files: [failedFile], outboxEvents: [] });
-      await deps.completionClaims.permanentFailure(claimKey, ERROR_CODES.FILE_SIGNATURE_REJECTED);
+      await deps.completionClaims.permanentFailure(completionClaim, ERROR_CODES.FILE_SIGNATURE_REJECTED);
       return fail(ERROR_CODES.FILE_SIGNATURE_REJECTED);
     }
     const nextFile = { ...file, detectedFileType: detectedType, expectedHash: hashBuffer(bytes), technicalStatus: transition('file', transition('file', file.technicalStatus, F.Uploaded), F.ScanPending), uploadVerifiedAtUtc: now.toISOString(), scanStartedAtUtc: now.toISOString(), lastUpdatedAtUtc: now.toISOString() };
     const nextApp = { ...application, technicalStatus: transition('application', transition('application', application.technicalStatus, A.Received), A.Scanning), lastUpdatedAtUtc: now.toISOString() };
     await deps.applicationStore.commitAggregate({ expectedVersion: application.aggregateVersion || 0, application: nextApp, files: [nextFile], outboxEvents: [{ type: N.ApplicationReceived, idempotencyKey: `outbox:${application.applicationReference}:received`, applicationReference: application.applicationReference }] });
     const result = { success: true, applicationReference: application.applicationReference, fileReference: file.fileReference, status: A.Scanning };
-    await deps.completionClaims.complete(claimKey, result);
+    await deps.completionClaims.complete(completionClaim, result);
     return result;
   } catch (error) {
-    await safeCall(() => deps.completionClaims.retryableFailure(claimKey, ERROR_CODES.INFRASTRUCTURE_RETRYABLE));
+    await safeCall(() => deps.completionClaims.retryableFailure({ applicationReference: request.applicationReference, fileReference: request.fileReference, claimKey }, ERROR_CODES.INFRASTRUCTURE_RETRYABLE));
     await safeLog(deps, 'complete_upload_failed', { applicationReference: request.applicationReference, fileReference: request.fileReference, errorCode: ERROR_CODES.INFRASTRUCTURE_RETRYABLE });
     return fail(ERROR_CODES.INFRASTRUCTURE_RETRYABLE);
   }
@@ -297,26 +298,33 @@ async function reconcileAppliedScanOutcome(event, deps, application, file, event
   else if (event.result === S.Malicious) ok = file.technicalStatus === F.Malicious && application.technicalStatus === A.Blocked && await hasOutbox(deps, application.applicationReference, `outbox:${application.applicationReference}:${file.fileReference}:malicious`, N.MaliciousFileDetected);
   else ok = file.technicalStatus === F.ManualReview && application.technicalStatus === A.ManualReview && await hasOutbox(deps, application.applicationReference, `outbox:${application.applicationReference}:${file.fileReference}:manual-review`, N.ManualReviewRequired);
   if (!ok) return false;
-  await deps.scanEvents.complete(eventKey, { success: true, reconciled: true });
+  await deps.scanEvents.complete(scanClaim, { success: true, reconciled: true });
   return true;
 }
 
 async function processScanResult(event, deps, policy = { deleteMaliciousQuarantine: false }) {
+  if (!event?.applicationReference && deps.applicationStore?.getReservationByFile && event?.fileReference) {
+    const reservation = await deps.applicationStore.getReservationByFile(event.fileReference);
+    if (reservation?.applicationReference) event = { ...event, applicationReference: reservation.applicationReference };
+  }
   if (!validateScanEvent(event)) return fail(ERROR_CODES.VALIDATION_FAILED);
+  if (typeof event.applicationReference !== 'string' || !event.applicationReference) return fail(ERROR_CODES.VALIDATION_FAILED);
   const eventKey = `${event.eventId}:${event.fileReference}`;
+  const scanClaim = { applicationReference: event.applicationReference, fileReference: event.fileReference, eventId: event.eventId, eventKey, leaseOwner: deps.leaseOwner || 'scan-worker', leaseExpiresAtUtc: null };
   try {
     const now = await deps.now();
-    const claim = await deps.scanEvents.claim(eventKey, { eventId: event.eventId, fileReference: event.fileReference, leaseOwner: deps.leaseOwner || 'scan-worker', leaseExpiresAtUtc: addMinutes(now, 5) });
+    scanClaim.leaseExpiresAtUtc = addMinutes(now, 5);
+    const claim = await deps.scanEvents.claim(scanClaim);
     if (claim.status === 'completed') return { success: true, deduplicated: true };
     if (claim.status === 'in_progress') return fail(ERROR_CODES.EVENT_IN_PROGRESS);
     if (claim.status === 'permanent_failure') return fail(ERROR_CODES.STATE_TRANSITION_INVALID);
-    const file = await deps.applicationStore.getFile(event.fileReference);
-    if (!file || file.quarantineBlobPath !== event.blobPath) { await safeCall(() => deps.scanEvents.permanentFailure(eventKey, ERROR_CODES.BLOB_MISMATCH)); return fail(ERROR_CODES.BLOB_MISMATCH); }
+    const file = await deps.applicationStore.getFile(event.applicationReference, event.fileReference);
+    if (!file || file.quarantineBlobPath !== event.blobPath) { await safeCall(() => deps.scanEvents.permanentFailure(scanClaim, ERROR_CODES.BLOB_MISMATCH)); return fail(ERROR_CODES.BLOB_MISMATCH); }
     const application = await deps.applicationStore.getApplication(file.applicationReference);
-    if (!application || application.applicationReference !== file.applicationReference) { await safeCall(() => deps.scanEvents.permanentFailure(eventKey, ERROR_CODES.STATE_TRANSITION_INVALID)); return fail(ERROR_CODES.STATE_TRANSITION_INVALID); }
+    if (!application || application.applicationReference !== file.applicationReference) { await safeCall(() => deps.scanEvents.permanentFailure(scanClaim, ERROR_CODES.STATE_TRANSITION_INVALID)); return fail(ERROR_CODES.STATE_TRANSITION_INVALID); }
     if (file.technicalStatus !== F.ScanPending) {
       if (await reconcileAppliedScanOutcome(event, deps, application, file, eventKey)) return { success: true, reconciled: true };
-      await safeCall(() => deps.scanEvents.permanentFailure(eventKey, ERROR_CODES.STATE_TRANSITION_INVALID)); return fail(ERROR_CODES.STATE_TRANSITION_INVALID);
+      await safeCall(() => deps.scanEvents.permanentFailure(scanClaim, ERROR_CODES.STATE_TRANSITION_INVALID)); return fail(ERROR_CODES.STATE_TRANSITION_INVALID);
     }
     let nextFile = { ...file, scanEventId: event.eventId, scanResult: event.result, scanCompletedAtUtc: event.scannedAtUtc, lastUpdatedAtUtc: event.scannedAtUtc };
     let nextApp = { ...application, lastUpdatedAtUtc: event.scannedAtUtc };
@@ -330,15 +338,15 @@ async function processScanResult(event, deps, policy = { deleteMaliciousQuaranti
       outboxEvent = { type: N.DocumentsReady, idempotencyKey: `outbox:${application.applicationReference}:documents-ready`, applicationReference: application.applicationReference };
       await deps.applicationStore.commitAggregate({ expectedVersion: application.aggregateVersion || 0, application: nextApp, files: [nextFile], outboxEvents: [outboxEvent] });
       const result = { success: true };
-      await deps.scanEvents.complete(eventKey, result);
+      await deps.scanEvents.complete(scanClaim, result);
       try {
         await deps.storage.delete(CONTAINERS.quarantine, file.quarantineBlobPath);
         const freshApp = await deps.applicationStore.getApplication(application.applicationReference);
-        const freshFile = await deps.applicationStore.getFile(file.fileReference);
+        const freshFile = await deps.applicationStore.getFile(application.applicationReference, file.fileReference);
         await deps.applicationStore.commitAggregate({ expectedVersion: freshApp.aggregateVersion || 0, application: freshApp, files: [{ ...freshFile, quarantineRemovalPending: false, quarantineRemovedAtUtc: event.scannedAtUtc, lastUpdatedAtUtc: event.scannedAtUtc }], outboxEvents: [] });
       } catch (_) {
         const freshApp = await deps.applicationStore.getApplication(application.applicationReference);
-        const freshFile = await deps.applicationStore.getFile(file.fileReference);
+        const freshFile = await deps.applicationStore.getFile(application.applicationReference, file.fileReference);
         await safeCall(() => deps.applicationStore.commitAggregate({ expectedVersion: freshApp.aggregateVersion || 0, application: freshApp, files: [{ ...freshFile, quarantineRemovalPending: true }], outboxEvents: [{ type: N.QuarantineCleanupRequired, idempotencyKey: `outbox:${application.applicationReference}:${file.fileReference}:quarantine-cleanup`, applicationReference: application.applicationReference, fileReference: file.fileReference }] }));
       }
       return result;
@@ -349,7 +357,7 @@ async function processScanResult(event, deps, policy = { deleteMaliciousQuaranti
       outboxEvent = { type: N.MaliciousFileDetected, idempotencyKey: `outbox:${application.applicationReference}:${file.fileReference}:malicious`, applicationReference: application.applicationReference, fileReference: file.fileReference };
       await deps.applicationStore.commitAggregate({ expectedVersion: application.aggregateVersion || 0, application: nextApp, files: [nextFile], outboxEvents: [outboxEvent] });
       const result = { success: true };
-      await deps.scanEvents.complete(eventKey, result);
+      await deps.scanEvents.complete(scanClaim, result);
       if (policy.deleteMaliciousQuarantine) await safeCall(() => deps.storage.delete(CONTAINERS.quarantine, file.quarantineBlobPath));
       return result;
     }
@@ -357,18 +365,18 @@ async function processScanResult(event, deps, policy = { deleteMaliciousQuaranti
     nextApp = { ...nextApp, technicalStatus: transition('application', application.technicalStatus, A.ManualReview), requiresManualReview: true, manualReviewAtUtc: event.scannedAtUtc };
     outboxEvent = { type: N.ManualReviewRequired, idempotencyKey: `outbox:${application.applicationReference}:${file.fileReference}:manual-review`, applicationReference: application.applicationReference, fileReference: file.fileReference };
     await deps.applicationStore.commitAggregate({ expectedVersion: application.aggregateVersion || 0, application: nextApp, files: [nextFile], outboxEvents: [outboxEvent] });
-    const result = { success: true }; await deps.scanEvents.complete(eventKey, result); return result;
+    const result = { success: true }; await deps.scanEvents.complete(scanClaim, result); return result;
   } catch (error) {
-    await safeCall(() => deps.scanEvents.retryableFailure(eventKey, ERROR_CODES.INFRASTRUCTURE_RETRYABLE));
+    await safeCall(() => deps.scanEvents.retryableFailure(scanClaim, ERROR_CODES.INFRASTRUCTURE_RETRYABLE));
     await safeLog(deps, 'process_scan_result_failed', { eventId: event?.eventId, fileReference: event?.fileReference, errorCode: ERROR_CODES.INFRASTRUCTURE_RETRYABLE });
     return fail(ERROR_CODES.INFRASTRUCTURE_RETRYABLE);
   }
 }
 
-async function retryQuarantineCleanup({ fileReference } = {}, deps) {
+async function retryQuarantineCleanup({ applicationReference, fileReference } = {}, deps) {
   try {
-    if (typeof fileReference !== 'string' || !fileReference) return fail(ERROR_CODES.VALIDATION_FAILED);
-    const file = await deps.applicationStore.getFile(fileReference);
+    if (typeof applicationReference !== 'string' || !applicationReference || typeof fileReference !== 'string' || !fileReference) return fail(ERROR_CODES.VALIDATION_FAILED);
+    const file = await deps.applicationStore.getFile(arguments[0]?.applicationReference, fileReference);
     if (!file || !file.quarantineRemovalPending) return fail(ERROR_CODES.VALIDATION_FAILED);
     await deps.storage.delete(CONTAINERS.quarantine, file.quarantineBlobPath);
     const application = await deps.applicationStore.getApplication(file.applicationReference);
