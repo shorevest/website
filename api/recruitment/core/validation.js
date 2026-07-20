@@ -1,12 +1,154 @@
 'use strict';
-const crypto=require('crypto');
-const {ERROR_CODES}=require('./constants');
-const {ext,hasPathTraversal}=require('./fileTypes');
-const LIMITS={fullName:200,email:254,telephone:50,currentLocation:200,linkedinUrl:300,coverNote:4000,originalName:255};
-function safeEqual(a,b){const x=Buffer.from(String(a||''));const y=Buffer.from(String(b||''));return x.length===y.length&&crypto.timingSafeEqual(x,y);}
-function normalizeEmail(v){if(typeof v!=='string')return '';const t=v.trim();const at=t.lastIndexOf('@');return at<0?t:t.slice(0,at)+'@'+t.slice(at+1).toLowerCase();}
-function validEmail(v){return typeof v==='string'&&v.length<=254&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);}
-function role(manifest,roleId,locale,privacyVersion,now){if(typeof roleId!=='string'||!/^[a-z0-9][a-z0-9-]{2,80}$/.test(roleId))return {ok:false,errorCode:ERROR_CODES.ROLE_NOT_FOUND};const r=manifest&&Array.isArray(manifest.roles)&&manifest.roles.find(x=>x.id===roleId);if(!r)return {ok:false,errorCode:ERROR_CODES.ROLE_NOT_FOUND};if(r.status!=='published'||r.application?.enabled!==true||r.contentReviewRequired===true)return {ok:false,errorCode:ERROR_CODES.ROLE_NOT_OPEN};if(!r.title||!Object.prototype.hasOwnProperty.call(r.title,locale))return {ok:false,errorCode:ERROR_CODES.VALIDATION_FAILED};const pv=r.application.privacyNoticeVersion;if(typeof pv!=='string'||pv.trim()===''||!safeEqual(pv,privacyVersion))return {ok:false,errorCode:ERROR_CODES.PRIVACY_VERSION_INVALID};if(r.application.deadlineUtc&&Date.parse(r.application.deadlineUtc)<(now?now.getTime():Date.now()))return {ok:false,errorCode:ERROR_CODES.APPLICATION_DEADLINE_PASSED};return {ok:true,role:r};}
-function candidate(c,privacyAccepted){const bad=[];c=c||{};if(typeof c.fullName!=='string'||!c.fullName.trim())bad.push('fullName');if(!validEmail(normalizeEmail(c.email||'')))bad.push('email');for(const [k,n] of Object.entries(LIMITS)){if(k==='originalName')continue;if(typeof c[k]==='string'&&c[k].length>n)bad.push(k);}if(c.linkedinUrl&&(!/^https:\/\//i.test(c.linkedinUrl.trim())||!/linkedin\./i.test(c.linkedinUrl)))bad.push('linkedinUrl');if(privacyAccepted!==true)bad.push('privacyAccepted');return bad.length?{ok:false,errorCode:ERROR_CODES.VALIDATION_FAILED,fields:[...new Set(bad)]}:{ok:true,candidate:{fullName:c.fullName.trim(),email:normalizeEmail(c.email),telephone:(c.telephone||'').trim(),currentLocation:(c.currentLocation||'').trim(),linkedinUrl:(c.linkedinUrl||'').trim(),coverNote:(c.coverNote||'').trim()}};}
-function fileMeta(f,cv){if(!f)return {ok:false,errorCode:ERROR_CODES.FILE_MISSING};if(typeof f.originalName!=='string'||!f.originalName.trim()||f.originalName.length>LIMITS.originalName||hasPathTraversal(f.originalName))return {ok:false,errorCode:ERROR_CODES.VALIDATION_FAILED};const e=ext(f.originalName);if(cv.allowedExtensions.indexOf(e)===-1)return {ok:false,errorCode:ERROR_CODES.FILE_TYPE_REJECTED};if(cv.allowedMimeTypes.indexOf(f.declaredMimeType)===-1)return {ok:false,errorCode:ERROR_CODES.FILE_TYPE_REJECTED};if((e==='.pdf'&&f.declaredMimeType!=='application/pdf')||(e==='.docx'&&f.declaredMimeType!=='application/vnd.openxmlformats-officedocument.wordprocessingml.document'))return {ok:false,errorCode:ERROR_CODES.FILE_TYPE_REJECTED};if(!Number.isInteger(f.sizeBytes)||f.sizeBytes<1||f.sizeBytes>cv.maxSizeBytes)return {ok:false,errorCode:ERROR_CODES.FILE_TOO_LARGE};return {ok:true,extension:e.slice(1)};}
-module.exports={LIMITS,safeEqual,normalizeEmail,validEmail,role,candidate,fileMeta};
+
+const crypto = require('crypto');
+const { ERROR_CODES } = require('./constants');
+const { ext, hasPathTraversal } = require('./fileTypes');
+
+const LIMITS = {
+  fullName: 200,
+  email: 254,
+  telephone: 50,
+  currentLocation: 200,
+  linkedinUrl: 300,
+  coverNote: 4000,
+  originalName: 255
+};
+
+const OPTIONAL_TEXT_FIELDS = ['telephone', 'currentLocation', 'linkedinUrl', 'coverNote'];
+const REQUIRED_CANDIDATE_FIELDS = ['fullName', 'email'];
+const CANDIDATE_FIELDS = new Set([...REQUIRED_CANDIDATE_FIELDS, ...OPTIONAL_TEXT_FIELDS]);
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+function safeEqual(a, b) {
+  const left = Buffer.from(String(a || ''));
+  const right = Buffer.from(String(b || ''));
+  return left.length === right.length && crypto.timingSafeEqual(left, right);
+}
+
+function normalizeEmail(value) {
+  if (typeof value !== 'string') return '';
+  const trimmed = value.trim();
+  const at = trimmed.lastIndexOf('@');
+  return at < 0 ? trimmed : `${trimmed.slice(0, at)}@${trimmed.slice(at + 1).toLowerCase()}`;
+}
+
+function validEmail(value) {
+  return typeof value === 'string' && value.length <= LIMITS.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+function validIsoTimestamp(value, now) {
+  if (value == null) return true;
+  if (typeof value !== 'string' || Number.isNaN(Date.parse(value))) return false;
+  const parsed = Date.parse(value);
+  const futureLimit = now.getTime() + 15 * 60 * 1000;
+  const pastLimit = now.getTime() - 366 * 24 * 60 * 60 * 1000;
+  return parsed >= pastLimit && parsed <= futureLimit;
+}
+
+function role(manifest, roleId, locale, privacyVersion, now) {
+  if (typeof roleId !== 'string' || !/^[a-z0-9][a-z0-9-]{2,80}$/.test(roleId)) {
+    return { ok: false, errorCode: ERROR_CODES.ROLE_NOT_FOUND };
+  }
+
+  const roles = manifest && Array.isArray(manifest.roles) ? manifest.roles : [];
+  const foundRole = roles.find((item) => item.id === roleId);
+  if (!foundRole) return { ok: false, errorCode: ERROR_CODES.ROLE_NOT_FOUND };
+
+  if (foundRole.status !== 'published' || foundRole.application?.enabled !== true || foundRole.contentReviewRequired === true) {
+    return { ok: false, errorCode: ERROR_CODES.ROLE_NOT_OPEN };
+  }
+
+  if (!foundRole.title || !Object.prototype.hasOwnProperty.call(foundRole.title, locale)) {
+    return { ok: false, errorCode: ERROR_CODES.VALIDATION_FAILED };
+  }
+
+  const privacyNoticeVersion = foundRole.application.privacyNoticeVersion;
+  if (typeof privacyNoticeVersion !== 'string' || privacyNoticeVersion.trim() === '' || !safeEqual(privacyNoticeVersion, privacyVersion)) {
+    return { ok: false, errorCode: ERROR_CODES.PRIVACY_VERSION_INVALID };
+  }
+
+  if (foundRole.application.deadlineUtc && Date.parse(foundRole.application.deadlineUtc) < now.getTime()) {
+    return { ok: false, errorCode: ERROR_CODES.APPLICATION_DEADLINE_PASSED };
+  }
+
+  return { ok: true, role: foundRole };
+}
+
+function candidate(candidateInput, privacyAccepted) {
+  const fields = [];
+  if (!candidateInput || typeof candidateInput !== 'object' || Array.isArray(candidateInput)) {
+    return { ok: false, errorCode: ERROR_CODES.VALIDATION_FAILED, fields: ['candidate'] };
+  }
+
+  for (const key of Object.keys(candidateInput)) {
+    if (!CANDIDATE_FIELDS.has(key)) fields.push(key);
+  }
+
+  for (const key of REQUIRED_CANDIDATE_FIELDS) {
+    if (typeof candidateInput[key] !== 'string' || !candidateInput[key].trim()) fields.push(key);
+  }
+
+  for (const key of OPTIONAL_TEXT_FIELDS) {
+    if (candidateInput[key] != null && typeof candidateInput[key] !== 'string') fields.push(key);
+  }
+
+  for (const [key, limit] of Object.entries(LIMITS)) {
+    if (key === 'originalName') continue;
+    if (typeof candidateInput[key] === 'string' && candidateInput[key].length > limit) fields.push(key);
+  }
+
+  const email = normalizeEmail(candidateInput.email);
+  if (!validEmail(email)) fields.push('email');
+
+  const linkedInUrl = candidateInput.linkedinUrl;
+  if (typeof linkedInUrl === 'string' && linkedInUrl.trim() && (!/^https:\/\//i.test(linkedInUrl.trim()) || !/linkedin\./i.test(linkedInUrl))) {
+    fields.push('linkedinUrl');
+  }
+
+  if (privacyAccepted !== true) fields.push('privacyAccepted');
+  if (fields.length) return { ok: false, errorCode: ERROR_CODES.VALIDATION_FAILED, fields: [...new Set(fields)] };
+
+  return {
+    ok: true,
+    candidate: {
+      fullName: candidateInput.fullName.trim(),
+      email,
+      telephone: (candidateInput.telephone || '').trim(),
+      currentLocation: (candidateInput.currentLocation || '').trim(),
+      linkedinUrl: (candidateInput.linkedinUrl || '').trim(),
+      coverNote: (candidateInput.coverNote || '').trim()
+    }
+  };
+}
+
+function request(input, now) {
+  const fields = [];
+  if (!input || typeof input !== 'object' || Array.isArray(input)) fields.push('request');
+  if (typeof input?.source !== 'string') fields.push('source');
+  if (typeof input?.clientSubmissionId !== 'string' || !UUID_RE.test(input.clientSubmissionId)) fields.push('clientSubmissionId');
+  if (typeof input?.privacyNoticeVersion !== 'string' || !input.privacyNoticeVersion.trim()) fields.push('privacyNoticeVersion');
+  if (!validIsoTimestamp(input?.submittedAtClientUtc, now)) fields.push('submittedAtClientUtc');
+  return fields.length ? { ok: false, errorCode: ERROR_CODES.VALIDATION_FAILED, fields } : { ok: true };
+}
+
+function fileMeta(fileInput, cv) {
+  if (!fileInput) return { ok: false, errorCode: ERROR_CODES.FILE_MISSING };
+  if (typeof fileInput !== 'object' || Array.isArray(fileInput)) return { ok: false, errorCode: ERROR_CODES.VALIDATION_FAILED };
+  if (typeof fileInput.originalName !== 'string' || !fileInput.originalName.trim() || fileInput.originalName.length > LIMITS.originalName || hasPathTraversal(fileInput.originalName)) {
+    return { ok: false, errorCode: ERROR_CODES.VALIDATION_FAILED };
+  }
+  if (typeof fileInput.declaredMimeType !== 'string' || !Number.isInteger(fileInput.sizeBytes)) {
+    return { ok: false, errorCode: ERROR_CODES.VALIDATION_FAILED };
+  }
+
+  const extension = ext(fileInput.originalName);
+  if (!cv.allowedExtensions.includes(extension)) return { ok: false, errorCode: ERROR_CODES.FILE_TYPE_REJECTED };
+  if (!cv.allowedMimeTypes.includes(fileInput.declaredMimeType)) return { ok: false, errorCode: ERROR_CODES.FILE_TYPE_REJECTED };
+  if ((extension === '.pdf' && fileInput.declaredMimeType !== 'application/pdf') || (extension === '.docx' && fileInput.declaredMimeType !== 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')) {
+    return { ok: false, errorCode: ERROR_CODES.FILE_TYPE_REJECTED };
+  }
+  if (fileInput.sizeBytes < 1 || fileInput.sizeBytes > cv.maxSizeBytes) return { ok: false, errorCode: ERROR_CODES.FILE_TOO_LARGE };
+  return { ok: true, extension: extension.slice(1) };
+}
+
+module.exports = { LIMITS, safeEqual, normalizeEmail, validEmail, validIsoTimestamp, role, candidate, request, fileMeta };
