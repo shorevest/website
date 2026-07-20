@@ -324,7 +324,11 @@ body.cdd-print-layout .wrap { max-width: none; margin-inline: auto; }
 /* Safari's print compositor can treat a physically sized body as a shrink-to-fit
    page, while Chromium prints the same CDD sheet at the CSS page size declared
    above. Anchor the Safari print canvas to the page origin and make the A4 sheet
-   the only physical-width element so Save as PDF matches Chromium's geometry. */
+   the only physical-width element so Save as PDF matches Chromium's geometry.
+   The print page margins for Safari are injected from the template after user-
+   agent detection; Safari does not reliably clone the shell's top/bottom padding
+   across fragmented PDF pages, so the browser page box owns vertical whitespace
+   there while this sheet keeps Chromium's horizontal content geometry. */
 @media print {
   html.cdd-print-safari,
   html.cdd-print-safari body.cdd-print-layout {
@@ -346,6 +350,9 @@ body.cdd-print-layout .wrap { max-width: none; margin-inline: auto; }
     margin-left: 0;
     margin-right: 0;
     max-width: var(--p-page-width);
+    min-height: calc(297mm - var(--p-page-margin-top) - var(--p-page-margin-bottom));
+    padding-top: 0;
+    padding-bottom: 0;
     transform: none;
   }
 

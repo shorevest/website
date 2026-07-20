@@ -42,7 +42,13 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 (function(){
   var ua = navigator.userAgent;
   var isSafari = /Safari/i.test(ua) && !/(Chrome|Chromium|CriOS|FxiOS|Edg|OPR)\//i.test(ua);
-  if (isSafari) document.documentElement.classList.add('cdd-print-safari');
+  if (isSafari) {
+    document.documentElement.classList.add('cdd-print-safari');
+    var pageStyle = document.createElement('style');
+    pageStyle.media = 'print';
+    pageStyle.textContent = '@page { size: A4; margin: 17mm 0 18mm; }';
+    document.head.appendChild(pageStyle);
+  }
 })();
 </script>
 </head>
