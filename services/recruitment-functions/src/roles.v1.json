@@ -1,0 +1,214 @@
+{
+  "schemaVersion": "1.0",
+  "generatedAtUtc": "2026-07-20T00:00:00Z",
+  "roles": [
+    {
+      "id": "distressed-debt-investment-manager",
+      "slug": "distressed-debt-investment-manager",
+      "status": "draft",
+      "contentReviewRequired": true,
+      "contentReviewNote": "The role title and overview describe an investment manager, but several responsibilities and qualifications are heavily legal in nature. The business owner must confirm whether this is an investment role, a legal-investment role or transaction counsel role before publication. Do not display this note publicly.",
+      "title": {
+        "en": "Distressed Debt Investment Manager",
+        "zh-CN": "债权投资经理"
+      },
+      "location": {
+        "en": "Guangzhou, China",
+        "zh-CN": "中国广东省广州市"
+      },
+      "department": {
+        "en": "Investment Department",
+        "zh-CN": "投资部门"
+      },
+      "reportingLine": {
+        "en": "Managing Partner",
+        "zh-CN": "管理合伙人"
+      },
+      "employmentType": {
+        "en": "Full-time",
+        "zh-CN": "全职"
+      },
+      "targetStartDate": {
+        "en": "Rolling recruitment",
+        "zh-CN": "长期招聘"
+      },
+      "roleOverview": {
+        "en": "This role leads distressed debt and special situations investments from sourcing to exit, reporting directly to the Partner. Responsibilities include due diligence, deal structuring, post-investment management and stakeholder coordination with banks, asset management companies and law firms. The position also involves business development and mentoring junior team members.",
+        "zh-CN": "本岗位是公司不良资产及特殊机会债权投资业务的核心执行角色，从项目开发到最终退出全流程管理，直接向合伙人汇报。负责尽职调查、交易架构设计、投后管理与退出执行，并协调银行、AMC、律所等渠道资源，同时参与业务拓展与团队指导工作。"
+      },
+      "responsibilities": {
+        "en": [
+          "Conduct legal due diligence for debt investment projects, comprehensively identify legal risks in transaction structures and prepare professional risk-analysis reports.",
+          "Lead or participate in the design of debt investment plans and draft and review core legal documents, including investment agreements, guarantee contracts and related instruments.",
+          "Perform post-investment management for existing debt assets, monitor debtor performance and promptly identify, escalate and address potential default risks.",
+          "Collaborate with business teams during project negotiations, coordinate with third parties such as law firms and valuation agencies and drive projects towards compliant closing and execution.",
+          "Monitor macroeconomic trends and regulatory-policy changes and provide legal-compliance support and industry-research insights for investment decision-making."
+        ],
+        "zh-CN": [
+          "负责债权类投资项目的法律尽职调查，全面识别交易结构中的法律风险并出具专业分析报告。",
+          "主导或参与债权投资方案设计，起草及审核投资协议、担保合同等核心法律文件。",
+          "对存量债权资产进行投后管理，监控债务人履约情况，及时预警并处置潜在违约风险。",
+          "协同业务团队开展项目谈判，对接律所、评估机构等第三方，推动项目合规落地与交割。",
+          "跟踪宏观经济与监管政策变化，为投资决策提供法律合规支持及行业研究建议。"
+        ]
+      },
+      "requiredQualifications": {
+        "en": [
+          "Bachelor’s degree or above in law or a related discipline. Candidates holding the National Unified Legal Professional Qualification Certificate, Class A, are preferred.",
+          "At least two years of relevant experience in a financial institution’s legal department, non-contentious legal practice at a law firm or non-performing loan disposal.",
+          "Strong knowledge of civil and commercial law and financial regulatory frameworks, familiarity with the end-to-end debt investment process and strong legal drafting and review skills.",
+          "Strong analytical thinking, communication and coordination skills, resilience under pressure and the ability to adapt to frequent business travel and a fast-paced working environment.",
+          "High integrity and professional ethics, strong risk awareness and a team-oriented mindset."
+        ],
+        "zh-CN": [
+          "全日制本科及以上学历，法学专业背景，通过国家统一法律职业资格考试A证优先。",
+          "具备两年以上金融机构法务、律师事务所非诉律师或不良资产处置相关从业经验。",
+          "精通民商法及金融监管法规，熟悉债权投资全流程，具备优秀的法律文书撰写与审核能力。",
+          "拥有良好的逻辑思维与沟通协调能力，抗压能力强，能适应高频出差及高强度工作节奏。",
+          "正直诚信，职业操守良好，具备敏锐的风险洞察力及较强的团队协作精神。"
+        ]
+      },
+      "preferredQualifications": {
+        "en": [
+          "Candidates holding the National Unified Legal Professional Qualification Certificate, Class A, are preferred."
+        ],
+        "zh-CN": [
+          "通过国家统一法律职业资格考试A证优先。"
+        ]
+      },
+      "recruitmentStatus": {
+        "en": "Rolling recruitment",
+        "zh-CN": "长期招聘"
+      },
+      "datePosted": "2026-07-20",
+      "dateUpdated": "2026-07-20",
+      "displayOrder": 1,
+      "application": {
+        "enabled": false,
+        "deadlineUtc": null,
+        "privacyNoticeVersion": null,
+        "allowedSources": [
+          "website",
+          "linkedin",
+          "direct",
+          "other"
+        ],
+        "cv": {
+          "required": true,
+          "maxSizeBytes": 10485760,
+          "allowedExtensions": [
+            ".pdf",
+            ".docx"
+          ],
+          "allowedMimeTypes": [
+            "application/pdf",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+          ]
+        }
+      }
+    },
+    {
+      "id": "legal-assistant",
+      "slug": "legal-assistant",
+      "status": "draft",
+      "contentReviewRequired": false,
+      "contentReviewNote": "",
+      "title": {
+        "en": "Legal Assistant",
+        "zh-CN": "法务专员"
+      },
+      "location": {
+        "en": "Guangzhou, China",
+        "zh-CN": "中国广东省广州市"
+      },
+      "department": {
+        "en": "Legal Department",
+        "zh-CN": "法务部门"
+      },
+      "reportingLine": {
+        "en": "Legal Supervisor",
+        "zh-CN": "法务主管"
+      },
+      "employmentType": {
+        "en": "Full-time",
+        "zh-CN": "全职"
+      },
+      "targetStartDate": {
+        "en": "Immediate availability preferred",
+        "zh-CN": "尽快到岗"
+      },
+      "roleOverview": {
+        "en": "This entry-level legal role provides day-to-day legal support across the business and its operations, with a focus on contract drafting and review, legal advice and the development of internal legal policies and processes. The role also supports coordination with external law firms to help ensure that the company receives efficient and high-quality legal services. Prior distressed debt experience is not required, but a strong legal foundation and willingness to learn are essential.",
+        "zh-CN": "本岗位是法务部门的初级执行角色，主要负责为业务与运营端提供日常法律支持。工作内容包括合同起草与审阅、法律咨询回复，以及协助完善公司法律制度与流程。同时参与与外部律所的沟通协调，保障公司获得高效优质的法律服务。公司主营业务为不良资产及特殊机会债权投资，本岗位不要求具备该领域经验，更看重扎实的法律基础以及良好的学习意愿。核心目标是通过专业可靠的法律服务，维护公司合法权益，有效控制法律风险。"
+      },
+      "responsibilities": {
+        "en": [
+          "Participate in legal work relating to company projects, research legal issues arising from business operations, provide legal advice and help mitigate related legal risks.",
+          "Support the company’s day-to-day legal affairs, including providing legal advice and drafting, revising and reviewing relevant legal documents.",
+          "Assist in improving the company’s legal processes and policies so that they remain appropriate for the company’s development.",
+          "Participate in consultations and negotiations with external legal service providers and help ensure that they provide high-quality legal services that meet the company’s needs.",
+          "Complete other duties assigned by the company."
+        ],
+        "zh-CN": [
+          "参与公司项目的法律工作，对业务端口的法律问题进行研究并提供法律意见，避免相关法律风险。",
+          "参与公司日常法务事务，包括但不限于提供法律咨询，起草、修改、审核相关法律文件。",
+          "协助完善公司法务相关的流程和政策，确保其符合公司的发展。",
+          "参与与外部法律服务商磋商洽谈，促使其提供高水平的法律服务，以满足公司的需求。",
+          "完成公司交待的其他工作。"
+        ]
+      },
+      "requiredQualifications": {
+        "en": [
+          "Full-time bachelor’s degree or above in law or a related field and successful completion of the National Judicial Examination or equivalent legal qualification examination.",
+          "Strong written English and at least one year of work experience at a law firm.",
+          "A professional working attitude and strong professional ethics, with the ability to work conscientiously, independently and efficiently and to adapt to a high-intensity working environment.",
+          "Proficiency in standard office software, with strong document-processing and formal writing skills."
+        ],
+        "zh-CN": [
+          "全日制本科及以上学历，法学相关专业，已通过司法考试，如有基金从业资格证更佳。",
+          "精通英语读写，至少一年以上律所工作经验。",
+          "具有良好的工作态度和职业操守，能自觉、独立并高效地完成工作，能够适应高强度工作。",
+          "熟悉掌握办公软件，具备良好的文字处理能力及公文写作能力。"
+        ]
+      },
+      "preferredQualifications": {
+        "en": [
+          "A Fund Practising Qualification Certificate is preferred but not required."
+        ],
+        "zh-CN": [
+          "持有基金从业资格证优先，但非必须。"
+        ]
+      },
+      "recruitmentStatus": {
+        "en": "Open until filled",
+        "zh-CN": "招到为止"
+      },
+      "datePosted": "2026-07-20",
+      "dateUpdated": "2026-07-20",
+      "displayOrder": 2,
+      "application": {
+        "enabled": false,
+        "deadlineUtc": null,
+        "privacyNoticeVersion": null,
+        "allowedSources": [
+          "website",
+          "linkedin",
+          "direct",
+          "other"
+        ],
+        "cv": {
+          "required": true,
+          "maxSizeBytes": 10485760,
+          "allowedExtensions": [
+            ".pdf",
+            ".docx"
+          ],
+          "allowedMimeTypes": [
+            "application/pdf",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+          ]
+        }
+      }
+    }
+  ]
+}
