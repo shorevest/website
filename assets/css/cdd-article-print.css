@@ -207,16 +207,16 @@ body.cdd-print-layout .wrap { max-width: none; margin-inline: auto; }
    PRINT
    ========================================================================== */
 @media print {
-  @page { size: A4; margin: 0; }
+  @page { size: A4; margin: 17mm 0 18mm; }
 
   /*
      Export only the white document area: the beige browser-preview backdrop,
      toolbar/nameplate strip, and screen shadow are intentionally removed for
-     print-ready PDFs. Browser print engines disagree on @page margin handling
-     (especially Safari versus Chromium), so keep the page box itself at zero
-     margin and let the cloned A4 shell own every printable inset. This makes
-     the generated PDF geometry deterministic across browsers. The content
-     width stays the same as the on-screen A4/PDF preview.
+     print-ready PDFs. Browser print engines disagree on cloned element padding
+     across fragmented pages (especially Safari versus Chromium), so the page
+     box owns vertical insets and the A4 shell owns horizontal insets. This keeps
+     second and later PDF pages from starting too close to the top edge while
+     preserving the same content width as the on-screen A4/PDF preview.
   */
   html,
   body.cdd-print-layout {
@@ -252,11 +252,11 @@ body.cdd-print-layout .wrap { max-width: none; margin-inline: auto; }
     box-shadow: none;
     background: var(--p-paper);
     width: var(--p-page-width);
-    min-height: 297mm;
+    min-height: calc(297mm - var(--p-page-margin-top) - var(--p-page-margin-bottom));
     margin: 0 auto;
     overflow: visible;
     border-top: 0;
-    padding: var(--p-page-margin-top) var(--p-page-margin-x) var(--p-page-margin-bottom);
+    padding: 0 var(--p-page-margin-x);
     -webkit-box-decoration-break: clone;
     box-decoration-break: clone;
   }
