@@ -1,0 +1,9 @@
+'use strict';
+const APPLICATION_STATES=Object.freeze({Initiated:'Initiated',UploadPending:'UploadPending',Received:'Received',Scanning:'Scanning',Ready:'Ready',ManualReview:'ManualReview',Blocked:'Blocked',Incomplete:'Incomplete',Error:'Error'});
+const FILE_STATES=Object.freeze({SASIssued:'SASIssued',Uploaded:'Uploaded',ValidationFailed:'ValidationFailed',ScanPending:'ScanPending',Clean:'Clean',Ready:'Ready',Malicious:'Malicious',ScanFailed:'ScanFailed',ManualReview:'ManualReview',Removed:'Removed'});
+const HIRING_STAGES=Object.freeze({New:'New',UnderReview:'UnderReview',Interview:'Interview',Hold:'Hold',Rejected:'Rejected',Offer:'Offer',Hired:'Hired',Withdrawn:'Withdrawn'});
+const NOTIFICATION_EVENTS=Object.freeze({ApplicationReceived:'ApplicationReceived',DocumentsReady:'DocumentsReady',ManualReviewRequired:'ManualReviewRequired',MaliciousFileDetected:'MaliciousFileDetected'});
+const SCAN_RESULTS=Object.freeze({Clean:'Clean',Malicious:'Malicious',ScanFailed:'ScanFailed',Unsupported:'Unsupported',Timeout:'Timeout'});
+const CONTAINERS=Object.freeze({quarantine:'recruitment-quarantine',clean:'recruitment-clean'});
+const ERROR_CODES=Object.freeze({ROLE_NOT_FOUND:'ROLE_NOT_FOUND',ROLE_NOT_OPEN:'ROLE_NOT_OPEN',APPLICATION_DEADLINE_PASSED:'APPLICATION_DEADLINE_PASSED',VALIDATION_FAILED:'VALIDATION_FAILED',PRIVACY_VERSION_INVALID:'PRIVACY_VERSION_INVALID',FILE_MISSING:'FILE_MISSING',FILE_TYPE_REJECTED:'FILE_TYPE_REJECTED',FILE_TOO_LARGE:'FILE_TOO_LARGE',FILE_SIGNATURE_REJECTED:'FILE_SIGNATURE_REJECTED',RATE_LIMITED:'RATE_LIMITED',BOT_VERIFICATION_FAILED:'BOT_VERIFICATION_FAILED',TOKEN_INVALID:'TOKEN_INVALID',BLOB_NOT_FOUND:'BLOB_NOT_FOUND',BLOB_MISMATCH:'BLOB_MISMATCH',DUPLICATE_EVENT:'DUPLICATE_EVENT',STATE_TRANSITION_INVALID:'STATE_TRANSITION_INVALID',SUBMISSION_FAILED:'SUBMISSION_FAILED'});
+module.exports={APPLICATION_STATES,FILE_STATES,HIRING_STAGES,NOTIFICATION_EVENTS,SCAN_RESULTS,CONTAINERS,ERROR_CODES};

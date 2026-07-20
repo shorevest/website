@@ -20,7 +20,7 @@ for (const f of rolePages) {
 }
 assert.doesNotMatch(read('assets/data/recruitment/roles.v1.json'), /JobPosting/i, 'draft manifest does not contain JobPosting metadata');
 assert.match(read('assets/js/site-config.js'), /careersOpenRolesEnabled: false/, 'careers feature flag defaults false');
-for (const f of ['api/recruitment/applicationValidation.js','api/recruitment/fileSignatures.js','api/recruitment/handler.js']) {
-  assert.match(read(f), /Phase 2 recruitment application scaffold restored/, `${f} is clearly isolated as Phase 2 scaffold`);
+for (const f of ['api/recruitment/applicationValidation.js','api/recruitment/fileSignatures.js','api/recruitment/handler.js','api/recruitment/core/flows.js']) {
+  assert.doesNotMatch(read(f), /applicationStatement|status: active|applicationEnabled|role\.files/, `${f} does not preserve the obsolete upload-through-API contract`);
 }
 console.log('recruitment static security checks passed');
