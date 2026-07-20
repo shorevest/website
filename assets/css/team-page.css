@@ -109,7 +109,7 @@
 .team-profile__photo { position: relative; display: grid; place-items: center; width: 100%; aspect-ratio: 1 / 1; overflow: hidden; background: linear-gradient(135deg, rgba(216, 206, 176, 0.45), rgba(250, 246, 238, 0.78)); cursor: pointer; max-height: none; margin-bottom: clamp(18px, 1.8vw, 24px); }
 .team-profile__photo::before { content: ""; width: clamp(54px, 5vw, 72px); aspect-ratio: 1; border: 1px solid rgba(61, 112, 112, 0.35); border-radius: 50%; background: radial-gradient(circle at 50% 34%, rgba(61, 112, 112, 0.18) 0 18%, transparent 19%), radial-gradient(ellipse at 50% 82%, rgba(61, 112, 112, 0.18) 0 38%, transparent 39%); }
 .team-profile__photo::after { content: ""; position: absolute; inset: 0; border: 1px solid rgba(216, 206, 176, 0.45); pointer-events: none; }
-.team-profile__photo img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center top; filter: grayscale(100%); transition: filter var(--team-photo-filter-transition); }
+.team-profile__photo img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center top; filter: none; transition: filter var(--team-photo-filter-transition); }
 
 /* Image styles are retained only as a defensive fallback if a future portrait is added. */
 .team-profile__photo img {
@@ -126,7 +126,7 @@
 
 .team-profile:hover .team-profile__photo img,
 .team-profile.is-active .team-profile__photo img,
-.team-profile__photo:hover img { filter: grayscale(0%); }
+.team-profile__photo:hover img { filter: none; }
 .team-profile__name { margin-top: 0; color: var(--sv-qing-dark); font-family: var(--font-din, "DIN 2014", "DIN2014", "DIN", sans-serif); font-size: clamp(1.16rem, 1.45vw, 1.42rem); line-height: 1.13; font-weight: 700; letter-spacing: -0.016em; transition: color 180ms ease; }
 .team-profile:hover .team-profile__name,
 .team-profile:focus-within .team-profile__name { color: #133535; }
@@ -335,7 +335,7 @@
 }
 
 .team-portrait-privacy-active .team-profile__photo img {
-  filter: blur(18px) grayscale(100%) !important;
+  filter: blur(18px) !important;
   opacity: 0.08;
 }
 
