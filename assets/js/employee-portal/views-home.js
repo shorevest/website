@@ -434,7 +434,8 @@
       { n: '05', name: 'Review Exceptions', desc: 'Resolve ambiguous, invalid, duplicate, blocked, or unmatched records.', hash: '#/exceptions', cap: 'reviewExceptions' },
       { n: '06', name: 'Previous Runs', desc: 'Prior batches, outputs, exceptions, approvals, errors, and audit history.', hash: '#/runs', cap: null },
       { n: '07', name: 'Administration', desc: 'Templates, owners, mappings, rules, blocked domains, exclusion lists, and roles.', hash: '#/admin', cap: 'administer' },
-      { n: '08', name: 'Monitoring', desc: 'Processing health, stuck batches, reconciliation failures, and alerts.', hash: '#/monitoring', cap: 'viewMonitoring' }
+      { n: '08', name: 'Monitoring', desc: 'Processing health, stuck batches, reconciliation failures, and alerts.', hash: '#/monitoring', cap: 'viewMonitoring' },
+      { n: '09', name: 'CDD Publisher', desc: 'Turn CDD text and images into website JSON, an article shell, archive snippet, and a print/PDF-ready preview.', hash: '#/cdd-publisher', cap: 'submitFiles' }
     ].filter(function (m) { return !m.cap || R.can(user.role, m.cap); });
 
     var grid = el('div', { class: 'ops-grid ops-grid--3' });
