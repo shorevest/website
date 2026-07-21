@@ -35,6 +35,35 @@ body.cdd-print-layout .cdd-figure figcaption {
   line-height: 1.55;
 }
 
+/* v9i3 figures sit inside a genuine editorial panel. The panel owns the
+   border and gutter; the SVG no longer runs hard against the reading column. */
+body.cdd-article-page[data-article-source*="china-debt-dynamics-v9i3"] .cdd-figure {
+  width: min(820px, calc(100% - clamp(72px, 8vw, 112px)));
+  max-width: calc(100% - 32px);
+  margin: clamp(48px, 5.5vw, 72px) auto;
+  padding: clamp(22px, 2.4vw, 30px) clamp(24px, 3vw, 34px) 18px;
+  box-sizing: border-box;
+  border: 1px solid var(--sv-border-light-strong, rgba(216, 206, 176, 0.9));
+  background: var(--sv-ivory, #FCF9F1);
+  box-shadow: none !important;
+}
+
+body.cdd-article-page[data-article-source*="china-debt-dynamics-v9i3"] .cdd-figure img {
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+body.cdd-article-page[data-article-source*="china-debt-dynamics-v9i3"] .cdd-figure figcaption {
+  margin: 16px 0 0;
+  padding: 14px 0 0;
+  border-left: 0;
+  border-top: 1px solid var(--sv-border-light, rgba(216, 206, 176, 0.55));
+  color: var(--sv-muted, #6E7169);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
 /* Empty chapter rows are navigational dividers, not full article headings. */
 body.cdd-article-page .cdd-body > h2.cdd-part-label {
   max-width: none;
@@ -126,7 +155,7 @@ body.cdd-article-page .cdd-source-note__copy {
 }
 
 @media (min-width: 701px) {
-  body.cdd-article-page .cdd-figure {
+  body.cdd-article-page:not([data-article-source*="china-debt-dynamics-v9i3"]) .cdd-figure {
     width: calc(100% - clamp(40px, 5vw, 72px));
     margin-right: auto;
     margin-left: auto;
@@ -144,6 +173,21 @@ body.cdd-article-page .cdd-source-note__copy {
   body.cdd-article-page .cdd-figure img,
   body.cdd-article-page .cdd-figure figcaption {
     min-width: 760px;
+  }
+
+  body.cdd-article-page[data-article-source*="china-debt-dynamics-v9i3"] .cdd-figure {
+    width: 100%;
+    max-width: 100%;
+    margin: 40px 0 48px;
+    padding: 14px 14px 12px;
+  }
+
+  body.cdd-article-page[data-article-source*="china-debt-dynamics-v9i3"] .cdd-figure img {
+    min-width: 720px;
+  }
+
+  body.cdd-article-page[data-article-source*="china-debt-dynamics-v9i3"] .cdd-figure figcaption {
+    min-width: 0;
   }
 
   body.cdd-article-page .cdd-body > h2.cdd-part-label {
@@ -174,9 +218,19 @@ body.cdd-article-page .cdd-source-note__copy {
     margin: 22px 0 26px;
   }
 
+  body.cdd-print-layout[data-article-source*="china-debt-dynamics-v9i3"] .cdd-figure {
+    padding: 12px;
+    border: 1px solid rgba(24, 37, 36, 0.25);
+    background: #fff;
+  }
+
   body.cdd-print-layout .cdd-figure img {
     min-width: 0;
     border-color: rgba(24, 37, 36, 0.25);
+  }
+
+  body.cdd-print-layout[data-article-source*="china-debt-dynamics-v9i3"] .cdd-figure img {
+    border: 0;
   }
 
   body.cdd-print-layout .cdd-figure figcaption {
@@ -186,5 +240,11 @@ body.cdd-article-page .cdd-source-note__copy {
     border-left-width: 1.5px;
     font-size: 10.5px;
     line-height: 1.4;
+  }
+
+  body.cdd-print-layout[data-article-source*="china-debt-dynamics-v9i3"] .cdd-figure figcaption {
+    padding: 8px 0 0;
+    border-left: 0;
+    border-top: 1px solid rgba(24, 37, 36, 0.2);
   }
 }
