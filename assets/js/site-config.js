@@ -3,28 +3,34 @@
    One small, reversible source of truth for cross-cutting public-site options.
 
    showShoreVestOnePublicLink
-     Controls whether ShoreVest One (the internal demonstration environment) is
-     surfaced anywhere on the public website: desktop navigation, mobile
-     navigation, the footer "Access" group, any generated route manifest, the
-     public client-side search index, and the public sitemap.
+     Controls whether ShoreVest One is surfaced anywhere on the public website.
+     Hiding a link is not access control; the internal preview must still be
+     protected separately before it contains live data.
 
-     Phase 2B intentionally hides ShoreVest One from the public site. The
-     removal is temporary and reversible: set this flag back to `true` (and,
-     for the current static footers, re-apply the single ShoreVest One access
-     anchor) to restore public entry points. ShoreVest One itself is NOT
-     removed — the direct preview route employee-portal/ stays
-     reachable for internal review.
+   careersOpenRolesEnabled
+     Controls whether individual role pages may be reached from the public site.
+     When false, the Careers landing page remains visible with its no-vacancies
+     state and role-detail routes return visitors to that page.
 
-     Note: hiding the link is not a security control. The direct URL remains
-     accessible to anyone who knows it; noindex/robots directives are advisory;
-     the demonstration profile selector is not authentication.
+   mediaArchiveEnabled
+     Controls whether the historical Media article archive is displayed and
+     whether article-detail routes remain publicly reachable.
+
+   contactFormMode
+     The static GitHub Pages deployment has no server-side contact endpoint.
+     `mailto` opens a pre-addressed message and never claims that an inquiry was
+     received before the visitor actually sends it.
    ========================================================================== */
 (function (root) {
   'use strict';
 
   var SITE_CONFIG = {
     showShoreVestOnePublicLink: false,
-    careersOpenRolesEnabled: false
+    careersOpenRolesEnabled: false,
+    mediaArchiveEnabled: false,
+    contactFormMode: 'mailto',
+    contactInquiryRecipient: 'inquiries@shorevest.com',
+    mediaInquiryRecipient: 'media@shorevest.com'
   };
 
   root.SHOREVEST_SITE_CONFIG = SITE_CONFIG;
