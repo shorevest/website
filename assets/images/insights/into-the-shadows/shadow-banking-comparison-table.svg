@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="500" viewBox="0 0 1200 500" role="img" aria-label="Comparison of China shadow banking and US private credit">
+<style>text{font-family:DIN 2014, Barlow, Arial, Helvetica, sans-serif;fill:#222222}.title{font-size:28px;font-weight:700}.axis{font-size:14px;fill:#666666}.label{font-size:14px;font-weight:600}.small{font-size:12px;fill:#666666}.cell{font-size:14px}.head{font-size:14px;font-weight:700}.boxhead{font-size:14px;font-weight:700}.boxtext{font-size:12px}</style>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<line x1="20" y1="25" x2="20" y2="475" stroke="#333"/>
+<line x1="350" y1="25" x2="350" y2="475" stroke="#333"/>
+<line x1="555" y1="25" x2="555" y2="475" stroke="#333"/>
+<line x1="765" y1="25" x2="765" y2="475" stroke="#333"/>
+<line x1="1010" y1="25" x2="1010" y2="475" stroke="#333"/>
+<line x1="1200" y1="25" x2="1200" y2="475" stroke="#333"/>
+<line x1="20" y1="25" x2="1200" y2="25" stroke="#333"/>
+<line x1="20" y1="135" x2="1200" y2="135" stroke="#333"/>
+<line x1="20" y1="203" x2="1200" y2="203" stroke="#333"/>
+<line x1="20" y1="271" x2="1200" y2="271" stroke="#333"/>
+<line x1="20" y1="339" x2="1200" y2="339" stroke="#333"/>
+<line x1="20" y1="407" x2="1200" y2="407" stroke="#333"/>
+<line x1="20" y1="475" x2="1200" y2="475" stroke="#333"/>
+<text class="head" x="452.5" y="66.0" text-anchor="middle">China</text>
+<text class="head" x="452.5" y="85.0" text-anchor="middle">pre-pandemic</text>
+<text class="head" x="452.5" y="104.0" text-anchor="middle">shadow banking</text>
+<text class="head" x="660.0" y="66.0" text-anchor="middle">US post-pandemic</text>
+<text class="head" x="660.0" y="85.0" text-anchor="middle">private credit /</text>
+<text class="head" x="660.0" y="104.0" text-anchor="middle">shadow banking</text>
+<text class="head" x="887.5" y="66.0" text-anchor="middle">China regulatory or</text>
+<text class="head" x="887.5" y="85.0" text-anchor="middle">investor-imposed</text>
+<text class="head" x="887.5" y="104.0" text-anchor="middle">restraint?</text>
+<text class="head" x="1105.0" y="66.0" text-anchor="middle">US regulatory or</text>
+<text class="head" x="1105.0" y="85.0" text-anchor="middle">investor-imposed</text>
+<text class="head" x="1105.0" y="104.0" text-anchor="middle">restraint?</text>
+<text class="head" x="32" y="163.5" text-anchor="start">Trillions of USD AUM growth</text>
+<text class="head" x="32" y="182.5" text-anchor="start">in a few years?</text>
+<text class="cell" x="452.5" y="173.0" text-anchor="middle">Yes</text>
+<text class="cell" x="660.0" y="173.0" text-anchor="middle">Yes</text>
+<text class="cell" x="887.5" y="173.0" text-anchor="middle">Yes</text>
+<text class="cell" x="1105.0" y="173.0" text-anchor="middle">TBD</text>
+<text class="head" x="32" y="231.5" text-anchor="start">Use of leverage dramatically</text>
+<text class="head" x="32" y="250.5" text-anchor="start">increasing?</text>
+<text class="cell" x="452.5" y="241.0" text-anchor="middle">Yes</text>
+<text class="cell" x="660.0" y="241.0" text-anchor="middle">Yes</text>
+<text class="cell" x="887.5" y="241.0" text-anchor="middle">Yes</text>
+<text class="cell" x="1105.0" y="241.0" text-anchor="middle">TBD</text>
+<text class="head" x="32" y="299.5" text-anchor="start">Commercial banks</text>
+<text class="head" x="32" y="318.5" text-anchor="start">indirectly exposed to risk?</text>
+<text class="cell" x="452.5" y="309.0" text-anchor="middle">Yes</text>
+<text class="cell" x="660.0" y="309.0" text-anchor="middle">Yes</text>
+<text class="cell" x="887.5" y="309.0" text-anchor="middle">Yes</text>
+<text class="cell" x="1105.0" y="309.0" text-anchor="middle">TBD</text>
+<text class="head" x="32" y="367.5" text-anchor="start">Insurance companies</text>
+<text class="head" x="32" y="386.5" text-anchor="start">indirectly exposed to risk?</text>
+<text class="cell" x="452.5" y="377.0" text-anchor="middle">Yes</text>
+<text class="cell" x="660.0" y="377.0" text-anchor="middle">Yes</text>
+<text class="cell" x="887.5" y="377.0" text-anchor="middle">Yes</text>
+<text class="cell" x="1105.0" y="377.0" text-anchor="middle">TBD</text>
+<text class="head" x="32" y="435.5" text-anchor="start">Large amounts of retail</text>
+<text class="head" x="32" y="454.5" text-anchor="start">investor capital raised?</text>
+<text class="cell" x="452.5" y="445.0" text-anchor="middle">Yes</text>
+<text class="cell" x="660.0" y="445.0" text-anchor="middle">Yes</text>
+<text class="cell" x="887.5" y="445.0" text-anchor="middle">Yes</text>
+<text class="cell" x="1105.0" y="445.0" text-anchor="middle">TBD</text>
+</svg>
