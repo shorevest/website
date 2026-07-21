@@ -11,6 +11,32 @@
   const empty = root.querySelector('[data-cdd-arc-empty]');
   const reset = root.querySelector('[data-cdd-arc-reset]');
 
+  /* Fragment-only links resolve against <base href="/"> on clean routes.
+     Keep the subscription CTA on the current Insights page instead. */
+  const subscriptionTarget = document.getElementById('subscribe');
+  const subscriptionLinks = Array.from(document.querySelectorAll('a[href="#subscribe"]'));
+  const currentPath = window.location.pathname.replace(/\/index\.html$/i, '/');
+
+  subscriptionLinks.forEach((link) => {
+    const destination = currentPath + '#subscribe';
+    link.setAttribute('href', destination);
+
+    link.addEventListener('click', (event) => {
+      if (!subscriptionTarget) return;
+
+      event.preventDefault();
+      subscriptionTarget.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      if (window.location.hash !== '#subscribe') {
+        try {
+          window.history.pushState(null, '', destination);
+        } catch (_) {
+          window.location.hash = 'subscribe';
+        }
+      }
+    });
+  });
+
   // Cache each row's searchable text once (title + excerpt + category).
   rows.forEach((row) => {
     row.dataset.cddArcText = (row.textContent || '').toLowerCase().replace(/\s+/g, ' ').trim();
