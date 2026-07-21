@@ -1,0 +1,46 @@
+name: Audit China Debt Dynamics content
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/audit-cdd-content.cjs'
+      - 'assets/data/china-debt-dynamics-*.json'
+      - 'china-debt-dynamics*.html'
+      - 'insights.html'
+      - 'insights/index.html'
+      - 'insights/china-debt-dynamics/**/index.html'
+      - 'assets/data/clean-url-manifest.json'
+      - 'sitemap.xml'
+      - '.github/workflows/cdd-content-audit.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'scripts/audit-cdd-content.cjs'
+      - 'assets/data/china-debt-dynamics-*.json'
+      - 'china-debt-dynamics*.html'
+      - 'insights.html'
+      - 'insights/index.html'
+      - 'insights/china-debt-dynamics/**/index.html'
+      - 'assets/data/clean-url-manifest.json'
+      - 'sitemap.xml'
+      - '.github/workflows/cdd-content-audit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Audit article metadata and archive consistency
+        run: node scripts/audit-cdd-content.cjs
