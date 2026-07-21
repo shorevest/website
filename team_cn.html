@@ -25,7 +25,7 @@
         function tok(u) {
           try {
             var url = new URL(u,document.baseURI);
-            if (url.origin === location.origin && !url.searchParams.get("t")) {
+            if(T&&url.origin===location.origin&&!url.searchParams.get('t')) {
               url.searchParams.set("t", T);
               return url.href;
             }
@@ -153,7 +153,7 @@
             }
             if (url.origin !== location.origin) return;
             e.preventDefault();
-            if (!url.searchParams.get("t")) url.searchParams.set("t", T);
+            if(T&&!url.searchParams.get('t'))url.searchParams.set('t',T);
             window.location.href = url.href;
           },
           true,
@@ -202,7 +202,7 @@
       '">',
   );
 </script>
-<script>document.write('<link rel="stylesheet" href="assets/css/chinese-latin-typography.css?t='+window.__SVT+'">');</script>
+<script>document.write('<link rel="stylesheet" href="assets/css/chinese-latin-typography.css">');</script>
 <style>
   body.homepage {
     --sv-font: "DIN 2014", "Barlow", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;

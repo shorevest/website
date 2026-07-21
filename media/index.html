@@ -7,13 +7,13 @@ try{window.addEventListener('error',function(e){if(e&&typeof e.message==='string
 window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 (function(){
   var T=window.__SVT;
-  function tok(u){try{var url=new URL(u,document.baseURI);if(url.origin===location.origin&&!url.searchParams.get('t')){url.searchParams.set('t',T);return url.href;}return u;}catch(e){return u;}}
+  function tok(u){try{var url=new URL(u,document.baseURI);if(T&&url.origin===location.origin&&!url.searchParams.get('t')){url.searchParams.set('t',T);return url.href;}return u;}catch(e){return u;}}
   window.__svTok=tok;
   function fixEl(el){if(el.nodeType!==1)return;if(el.tagName==='IMG'){var s=el.getAttribute('src');if(s){var ts=tok(s);if(ts!==s)el.setAttribute('src',ts);}}}
   function scan(root){if(!root||root.nodeType!==1)return;fixEl(root);if(root.querySelectorAll){var n=root.querySelectorAll('img');for(var i=0;i<n.length;i++)fixEl(n[i]);}}
   new MutationObserver(function(ms){for(var j=0;j<ms.length;j++){var a=ms[j].addedNodes;for(var i=0;i<a.length;i++)scan(a[i]);}}).observe(document.documentElement,{childList:true,subtree:true});
   if(document.readyState!=='loading')scan(document.body);else document.addEventListener('DOMContentLoaded',function(){scan(document.body);});
-  document.addEventListener('click',function(e){var t=e.target;var a=t&&t.closest?t.closest('a[href]'):null;if(!a)return;var h=a.getAttribute('href');if(!h||h.charAt(0)==='#'||/^(mailto:|tel:|javascript:|https?:|\/\/)/i.test(h))return;var url;try{url=new URL(h,document.baseURI);}catch(_){return;}if(url.origin!==location.origin)return;e.preventDefault();if(!url.searchParams.get('t'))url.searchParams.set('t',T);window.location.href=url.href;},true);
+  document.addEventListener('click',function(e){var t=e.target;var a=t&&t.closest?t.closest('a[href]'):null;if(!a)return;var h=a.getAttribute('href');if(!h||h.charAt(0)==='#'||/^(mailto:|tel:|javascript:|https?:|\/\/)/i.test(h))return;var url;try{url=new URL(h,document.baseURI);}catch(_){return;}if(url.origin!==location.origin)return;e.preventDefault();if(T&&!url.searchParams.get('t'))url.searchParams.set('t',T);window.location.href=url.href;},true);
 })();
 </script>
 <meta charset="UTF-8">
@@ -23,8 +23,8 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
-<script>document.write('<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260717-header-unify&t='+window.__SVT+'">');</script>
-<script>document.write('<link rel="stylesheet" href="assets/css/press-rebuild.css?v=20260717-mobile-polish&t='+window.__SVT+'">');</script>
+<script>document.write('<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260717-header-unify">');</script>
+<script>document.write('<link rel="stylesheet" href="assets/css/press-rebuild.css?v=20260717-mobile-polish">');</script>
 <link rel="icon" href="assets/favicon-cinnabar.ico?v=20260717" sizes="any">
 <link rel="shortcut icon" href="assets/favicon-cinnabar.ico?v=20260717">
 <link rel="icon" href="assets/favicon-cinnabar.svg?v=20260717" type="image/svg+xml">
