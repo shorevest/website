@@ -34,6 +34,15 @@
     return href + (href.indexOf("?") > -1 ? "&" : "?") + "t=" + t;
   }
 
+  function loadCitationEnhancer() {
+    if (document.querySelector('script[data-cdd-citations]')) return;
+    var script = document.createElement('script');
+    script.src = withToken('/assets/js/cdd-citations.js?v=20260722-inline-citations-v1');
+    script.async = false;
+    script.setAttribute('data-cdd-citations', 'true');
+    document.head.appendChild(script);
+  }
+
   function build() {
     var disc = document.querySelector(".cdd-disclaimer");
     if (!disc || document.querySelector(".cdd-pager")) return;
@@ -78,6 +87,7 @@
     return a;
   }
 
+  loadCitationEnhancer();
   if (document.readyState !== "loading") build();
   else document.addEventListener("DOMContentLoaded", build);
   // The article body is injected async; rebuild shortly after load as a safety.
