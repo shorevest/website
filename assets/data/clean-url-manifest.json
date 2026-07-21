@@ -1,0 +1,457 @@
+{
+  "generatedBy": "scripts/generate-clean-public-urls.js",
+  "siteOrigin": "https://shorevest.com",
+  "note": "Legacy .html files remain available for compatibility. Internal navigation and canonical URLs use the clean routes.",
+  "routes": [
+    {
+      "source": "home.html",
+      "route": "/",
+      "destination": "index.html",
+      "indexable": true
+    },
+    {
+      "source": "careers/index.html",
+      "route": "/careers/",
+      "destination": "careers/index.html",
+      "indexable": true
+    },
+    {
+      "source": "careers/distressed-debt-investment-manager.html",
+      "route": "/careers/distressed-debt-investment-manager/",
+      "destination": "careers/distressed-debt-investment-manager/index.html",
+      "indexable": true
+    },
+    {
+      "source": "careers/finance-fund-operations-associate.html",
+      "route": "/careers/finance-fund-operations-associate/",
+      "destination": "careers/finance-fund-operations-associate/index.html",
+      "indexable": false
+    },
+    {
+      "source": "careers/investment-analyst.html",
+      "route": "/careers/investment-analyst/",
+      "destination": "careers/investment-analyst/index.html",
+      "indexable": false
+    },
+    {
+      "source": "careers/legal-assistant.html",
+      "route": "/careers/legal-assistant/",
+      "destination": "careers/legal-assistant/index.html",
+      "indexable": true
+    },
+    {
+      "source": "home_cn.html",
+      "route": "/cn/",
+      "destination": "cn/index.html",
+      "indexable": true
+    },
+    {
+      "source": "careers_cn.html",
+      "route": "/cn/careers/",
+      "destination": "cn/careers/index.html",
+      "indexable": true
+    },
+    {
+      "source": "careers/distressed-debt-investment-manager_cn.html",
+      "route": "/cn/careers/distressed-debt-investment-manager/",
+      "destination": "cn/careers/distressed-debt-investment-manager/index.html",
+      "indexable": true
+    },
+    {
+      "source": "careers/finance-fund-operations-associate_cn.html",
+      "route": "/cn/careers/finance-fund-operations-associate/",
+      "destination": "cn/careers/finance-fund-operations-associate/index.html",
+      "indexable": false
+    },
+    {
+      "source": "careers/investment-analyst_cn.html",
+      "route": "/cn/careers/investment-analyst/",
+      "destination": "cn/careers/investment-analyst/index.html",
+      "indexable": false
+    },
+    {
+      "source": "careers/legal-assistant_cn.html",
+      "route": "/cn/careers/legal-assistant/",
+      "destination": "cn/careers/legal-assistant/index.html",
+      "indexable": true
+    },
+    {
+      "source": "contact_cn.html",
+      "route": "/cn/contact/",
+      "destination": "cn/contact/index.html",
+      "indexable": true
+    },
+    {
+      "source": "cookie-notice_cn.html",
+      "route": "/cn/cookie-notice/",
+      "destination": "cn/cookie-notice/index.html",
+      "indexable": true
+    },
+    {
+      "source": "firm_cn.html",
+      "route": "/cn/firm/",
+      "destination": "cn/firm/index.html",
+      "indexable": true
+    },
+    {
+      "source": "important-information_cn.html",
+      "route": "/cn/important-information/",
+      "destination": "cn/important-information/index.html",
+      "indexable": true
+    },
+    {
+      "source": "insights_cn.html",
+      "route": "/cn/insights/",
+      "destination": "cn/insights/index.html",
+      "indexable": true
+    },
+    {
+      "source": "investor-access_cn.html",
+      "route": "/cn/investor-access/",
+      "destination": "cn/investor-access/index.html",
+      "indexable": true
+    },
+    {
+      "source": "investor-access-portal-terms_cn.html",
+      "route": "/cn/investor-access/terms/",
+      "destination": "cn/investor-access/terms/index.html",
+      "indexable": true
+    },
+    {
+      "source": "investor-portal/index_cn.html",
+      "route": "/cn/investor-portal/",
+      "destination": "cn/investor-portal/index.html",
+      "indexable": false
+    },
+    {
+      "source": "legal-notices-disclaimers_cn.html",
+      "route": "/cn/legal-notices-disclaimers/",
+      "destination": "cn/legal-notices-disclaimers/index.html",
+      "indexable": true
+    },
+    {
+      "source": "media_cn.html",
+      "route": "/cn/media/",
+      "destination": "cn/media/index.html",
+      "indexable": true
+    },
+    {
+      "source": "privacy-policy_cn.html",
+      "route": "/cn/privacy-policy/",
+      "destination": "cn/privacy-policy/index.html",
+      "indexable": true
+    },
+    {
+      "source": "strategy_cn.html",
+      "route": "/cn/strategy/",
+      "destination": "cn/strategy/index.html",
+      "indexable": true
+    },
+    {
+      "source": "team_cn.html",
+      "route": "/cn/team/",
+      "destination": "cn/team/index.html",
+      "indexable": true
+    },
+    {
+      "source": "terms-of-use_cn.html",
+      "route": "/cn/terms-of-use/",
+      "destination": "cn/terms-of-use/index.html",
+      "indexable": true
+    },
+    {
+      "source": "contact.html",
+      "route": "/contact/",
+      "destination": "contact/index.html",
+      "indexable": true
+    },
+    {
+      "source": "cookie-notice.html",
+      "route": "/cookie-notice/",
+      "destination": "cookie-notice/index.html",
+      "indexable": true
+    },
+    {
+      "source": "firm.html",
+      "route": "/firm/",
+      "destination": "firm/index.html",
+      "indexable": true
+    },
+    {
+      "source": "important-information.html",
+      "route": "/important-information/",
+      "destination": "important-information/index.html",
+      "indexable": true
+    },
+    {
+      "source": "insights.html",
+      "route": "/insights/",
+      "destination": "insights/index.html",
+      "indexable": true
+    },
+    {
+      "source": "china-debt-dynamics-print.html",
+      "route": "/insights/china-debt-dynamics/print/",
+      "destination": "insights/china-debt-dynamics/print/index.html",
+      "indexable": false
+    },
+    {
+      "source": "china-debt-dynamics-v10i1.html",
+      "route": "/insights/china-debt-dynamics/v10i1/",
+      "destination": "insights/china-debt-dynamics/v10i1/index.html",
+      "indexable": true
+    },
+    {
+      "source": "china-debt-dynamics-v10i2.html",
+      "route": "/insights/china-debt-dynamics/v10i2/",
+      "destination": "insights/china-debt-dynamics/v10i2/index.html",
+      "indexable": true
+    },
+    {
+      "source": "china-debt-dynamics-v2i4.html",
+      "route": "/insights/china-debt-dynamics/v2i4/",
+      "destination": "insights/china-debt-dynamics/v2i4/index.html",
+      "indexable": true
+    },
+    {
+      "source": "china-debt-dynamics-v3i5.html",
+      "route": "/insights/china-debt-dynamics/v3i5/",
+      "destination": "insights/china-debt-dynamics/v3i5/index.html",
+      "indexable": true
+    },
+    {
+      "source": "china-debt-dynamics-v4i4.html",
+      "route": "/insights/china-debt-dynamics/v4i4/",
+      "destination": "insights/china-debt-dynamics/v4i4/index.html",
+      "indexable": true
+    },
+    {
+      "source": "china-debt-dynamics-v5i4.html",
+      "route": "/insights/china-debt-dynamics/v5i4/",
+      "destination": "insights/china-debt-dynamics/v5i4/index.html",
+      "indexable": true
+    },
+    {
+      "source": "china-debt-dynamics-v5i7.html",
+      "route": "/insights/china-debt-dynamics/v5i7/",
+      "destination": "insights/china-debt-dynamics/v5i7/index.html",
+      "indexable": true
+    },
+    {
+      "source": "china-debt-dynamics-v6i3.html",
+      "route": "/insights/china-debt-dynamics/v6i3/",
+      "destination": "insights/china-debt-dynamics/v6i3/index.html",
+      "indexable": true
+    },
+    {
+      "source": "china-debt-dynamics-v7i1.html",
+      "route": "/insights/china-debt-dynamics/v7i1/",
+      "destination": "insights/china-debt-dynamics/v7i1/index.html",
+      "indexable": true
+    },
+    {
+      "source": "china-debt-dynamics-v7i2.html",
+      "route": "/insights/china-debt-dynamics/v7i2/",
+      "destination": "insights/china-debt-dynamics/v7i2/index.html",
+      "indexable": true
+    },
+    {
+      "source": "china-debt-dynamics-v7i3.html",
+      "route": "/insights/china-debt-dynamics/v7i3/",
+      "destination": "insights/china-debt-dynamics/v7i3/index.html",
+      "indexable": true
+    },
+    {
+      "source": "china-debt-dynamics-v7i4.html",
+      "route": "/insights/china-debt-dynamics/v7i4/",
+      "destination": "insights/china-debt-dynamics/v7i4/index.html",
+      "indexable": true
+    },
+    {
+      "source": "china-debt-dynamics-v8i2.html",
+      "route": "/insights/china-debt-dynamics/v8i2/",
+      "destination": "insights/china-debt-dynamics/v8i2/index.html",
+      "indexable": true
+    },
+    {
+      "source": "china-debt-dynamics-v8i1.html",
+      "route": "/insights/china-debt-dynamics/v8i3/",
+      "destination": "insights/china-debt-dynamics/v8i3/index.html",
+      "indexable": true
+    },
+    {
+      "source": "china-debt-dynamics-v8i4.html",
+      "route": "/insights/china-debt-dynamics/v8i4/",
+      "destination": "insights/china-debt-dynamics/v8i4/index.html",
+      "indexable": true
+    },
+    {
+      "source": "china-debt-dynamics-v8i3.html",
+      "route": "/insights/china-debt-dynamics/v8i5/",
+      "destination": "insights/china-debt-dynamics/v8i5/index.html",
+      "indexable": true
+    },
+    {
+      "source": "china-debt-dynamics-v8i5.html",
+      "route": "/insights/china-debt-dynamics/v8i6/",
+      "destination": "insights/china-debt-dynamics/v8i6/index.html",
+      "indexable": true
+    },
+    {
+      "source": "china-debt-dynamics-v9i1.html",
+      "route": "/insights/china-debt-dynamics/v9i1/",
+      "destination": "insights/china-debt-dynamics/v9i1/index.html",
+      "indexable": true
+    },
+    {
+      "source": "china-debt-dynamics-v9i2.html",
+      "route": "/insights/china-debt-dynamics/v9i2/",
+      "destination": "insights/china-debt-dynamics/v9i2/index.html",
+      "indexable": true
+    },
+    {
+      "source": "china-debt-dynamics-into-the-shadows-of-us-private-credit.html",
+      "route": "/insights/china-debt-dynamics/v9i3/",
+      "destination": "insights/china-debt-dynamics/v9i3/index.html",
+      "indexable": true
+    },
+    {
+      "source": "china-debt-dynamics-45-beijings-campaign-against-overcapacity-creates-private-credit-opportunities.html",
+      "route": "/insights/china-debt-dynamics/v9i4/",
+      "destination": "insights/china-debt-dynamics/v9i4/index.html",
+      "indexable": true
+    },
+    {
+      "source": "investor-access.html",
+      "route": "/investor-access/",
+      "destination": "investor-access/index.html",
+      "indexable": true
+    },
+    {
+      "source": "investor-access-portal-terms.html",
+      "route": "/investor-access/terms/",
+      "destination": "investor-access/terms/index.html",
+      "indexable": true
+    },
+    {
+      "source": "investor-portal/index.html",
+      "route": "/investor-portal/",
+      "destination": "investor-portal/index.html",
+      "indexable": false
+    },
+    {
+      "source": "legal-notices-disclaimers.html",
+      "route": "/legal-notices-disclaimers/",
+      "destination": "legal-notices-disclaimers/index.html",
+      "indexable": true
+    },
+    {
+      "source": "media.html",
+      "route": "/media/",
+      "destination": "media/index.html",
+      "indexable": true
+    },
+    {
+      "source": "media-aim-summit-unique-post-covid-19-dynamics-in-private-credit.html",
+      "route": "/media/aim-summit-unique-post-covid-19-dynamics-in-private-credit/",
+      "destination": "media/aim-summit-unique-post-covid-19-dynamics-in-private-credit/index.html",
+      "indexable": true
+    },
+    {
+      "source": "media-allaboutalpha-a-comparative-analysis-of-chinese-private-debt.html",
+      "route": "/media/allaboutalpha-a-comparative-analysis-of-chinese-private-debt/",
+      "destination": "media/allaboutalpha-a-comparative-analysis-of-chinese-private-debt/index.html",
+      "indexable": true
+    },
+    {
+      "source": "media-bloomberg-us-firms-could-win-a-lucrative-role-in-cleaning-up-chinas-bad-debt.html",
+      "route": "/media/bloomberg-us-firms-could-win-a-lucrative-role-in-cleaning-up-chinas-bad-debt/",
+      "destination": "media/bloomberg-us-firms-could-win-a-lucrative-role-in-cleaning-up-chinas-bad-debt/index.html",
+      "indexable": true
+    },
+    {
+      "source": "media-debtwire-the-new-global-npl-markets.html",
+      "route": "/media/debtwire-the-new-global-npl-markets/",
+      "destination": "media/debtwire-the-new-global-npl-markets/index.html",
+      "indexable": true
+    },
+    {
+      "source": "media-nikkei-asia-china-debt-could-prompt-7-7-trillion-asset-sale.html",
+      "route": "/media/nikkei-asia-china-debt-could-prompt-7-7-trillion-asset-sale/",
+      "destination": "media/nikkei-asia-china-debt-could-prompt-7-7-trillion-asset-sale/index.html",
+      "indexable": true
+    },
+    {
+      "source": "media-pensions-investments-few-foreign-investors-positioned-for-china-npls.html",
+      "route": "/media/pensions-investments-few-foreign-investors-positioned-for-china-npls/",
+      "destination": "media/pensions-investments-few-foreign-investors-positioned-for-china-npls/index.html",
+      "indexable": true
+    },
+    {
+      "source": "media-private-debt-investor-shorevest-partners-on-the-case-for-china.html",
+      "route": "/media/private-debt-investor-shorevest-partners-on-the-case-for-china/",
+      "destination": "media/private-debt-investor-shorevest-partners-on-the-case-for-china/index.html",
+      "indexable": true
+    },
+    {
+      "source": "media-reorg-china-npl-investors-call-the-us-china-trade-deal-a-positive-development.html",
+      "route": "/media/reorg-china-npl-investors-call-the-us-china-trade-deal-a-positive-development/",
+      "destination": "media/reorg-china-npl-investors-call-the-us-china-trade-deal-a-positive-development/index.html",
+      "indexable": true
+    },
+    {
+      "source": "media-reuters-the-exchange-chinas-bad-debt-opportunity.html",
+      "route": "/media/reuters-the-exchange-chinas-bad-debt-opportunity/",
+      "destination": "media/reuters-the-exchange-chinas-bad-debt-opportunity/index.html",
+      "indexable": true
+    },
+    {
+      "source": "media-shorevest-chinas-credit-environment-in-the-wake-of-covid-19.html",
+      "route": "/media/shorevest-chinas-credit-environment-in-the-wake-of-covid-19/",
+      "destination": "media/shorevest-chinas-credit-environment-in-the-wake-of-covid-19/index.html",
+      "indexable": true
+    },
+    {
+      "source": "media-the-economist-as-chinas-debt-soars-the-market-for-buying-bad-loans-revs-up.html",
+      "route": "/media/the-economist-as-chinas-debt-soars-the-market-for-buying-bad-loans-revs-up/",
+      "destination": "media/the-economist-as-chinas-debt-soars-the-market-for-buying-bad-loans-revs-up/index.html",
+      "indexable": true
+    },
+    {
+      "source": "media-the-economist-breaking-bad.html",
+      "route": "/media/the-economist-breaking-bad/",
+      "destination": "media/the-economist-breaking-bad/index.html",
+      "indexable": true
+    },
+    {
+      "source": "media-the-economist-money-talks-china-financial-system-distressed-debt.html",
+      "route": "/media/the-economist-money-talks-china-financial-system-distressed-debt/",
+      "destination": "media/the-economist-money-talks-china-financial-system-distressed-debt/index.html",
+      "indexable": true
+    },
+    {
+      "source": "privacy-policy.html",
+      "route": "/privacy-policy/",
+      "destination": "privacy-policy/index.html",
+      "indexable": true
+    },
+    {
+      "source": "strategy.html",
+      "route": "/strategy/",
+      "destination": "strategy/index.html",
+      "indexable": true
+    },
+    {
+      "source": "team.html",
+      "route": "/team/",
+      "destination": "team/index.html",
+      "indexable": true
+    },
+    {
+      "source": "terms-of-use.html",
+      "route": "/terms-of-use/",
+      "destination": "terms-of-use/index.html",
+      "indexable": true
+    }
+  ]
+}

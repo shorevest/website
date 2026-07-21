@@ -12,7 +12,7 @@
      removal is temporary and reversible: set this flag back to `true` (and,
      for the current static footers, re-apply the single ShoreVest One access
      anchor) to restore public entry points. ShoreVest One itself is NOT
-     removed — the direct preview route employee-portal/index.html stays
+     removed — the direct preview route employee-portal/ stays
      reachable for internal review.
 
      Note: hiding the link is not a security control. The direct URL remains

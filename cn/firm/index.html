@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<base href="/">
+<script>
+try{window.addEventListener('error',function(e){if(e&&typeof e.message==='string'&&e.message.indexOf('ResizeObserver loop')!==-1){e.stopImmediatePropagation();e.preventDefault();}},true);}catch(_){}
+window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
+(function(){
+  var T=window.__SVT;
+  function tok(u){try{var url=new URL(u,location.href);if(url.origin===location.origin&&!url.searchParams.get('t')){url.searchParams.set('t',T);return url.href;}return u;}catch(e){return u;}}
+  window.__svTok=tok;
+  function fixEl(el){if(el.nodeType!==1)return;if(el.tagName==='IMG'){var s=el.getAttribute('src');if(s){var ts=tok(s);if(ts!==s)el.setAttribute('src',ts);}}}
+  function scan(root){if(!root||root.nodeType!==1)return;fixEl(root);if(root.querySelectorAll){var n=root.querySelectorAll('img');for(var i=0;i<n.length;i++)fixEl(n[i]);}}
+  new MutationObserver(function(ms){for(var j=0;j<ms.length;j++){var a=ms[j].addedNodes;for(var i=0;i<a.length;i++)scan(a[i]);}}).observe(document.documentElement,{childList:true,subtree:true});
+  if(document.readyState!=='loading')scan(document.body);else document.addEventListener('DOMContentLoaded',function(){scan(document.body);});
+  document.addEventListener('click',function(e){var t=e.target;var a=t&&t.closest?t.closest('a[href]'):null;if(!a)return;var h=a.getAttribute('href');if(!h||h.charAt(0)==='#'||/^(mailto:|tel:|javascript:|https?:|\/\/)/i.test(h))return;var url;try{url=new URL(h,location.href);}catch(_){return;}if(url.origin!==location.origin)return;e.preventDefault();if(!url.searchParams.get('t'))url.searchParams.set('t',T);window.location.href=url.href;},true);
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新岸资本 | 公司</title>
+<meta name="description" content="了解新岸资本（ShoreVest）专注中国的私募信贷平台、自 2004 年以来积累的机构化投资管理经验及本地运营能力。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<script>document.write('<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260717-header-unify&t='+window.__SVT+'">');</script>
+<script>document.write('<link rel="stylesheet" href="assets/css/firm-rebuild.css?v=20260717-mobile-polish&t='+window.__SVT+'">');</script>
+<script>document.write('<link rel="stylesheet" href="assets/css/chinese-latin-typography.css?t='+window.__SVT+'">');</script>
+<link rel="icon" href="assets/favicon-cinnabar.ico?v=20260717" sizes="any">
+<link rel="shortcut icon" href="assets/favicon-cinnabar.ico?v=20260717">
+<link rel="icon" href="assets/favicon-cinnabar.svg?v=20260717" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-cinnabar-32x32.png?v=20260717">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-cinnabar-16x16.png?v=20260717">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon-cinnabar.png?v=20260717">
+<link rel="manifest" href="site.webmanifest?v=20260717">
+<link rel="preload" as="image" href="pexels-keat007-37785251.jpg" fetchpriority="high">
+
+<link rel="canonical" href="https://shorevest.com/cn/firm/">
+<link rel="alternate" hreflang="zh-Hans" href="https://shorevest.com/cn/firm/">
+<link rel="alternate" hreflang="en" href="https://shorevest.com/firm/">
+<meta property="og:title" content="新岸资本 | 公司">
+<meta property="og:description" content="了解新岸资本（ShoreVest）专注中国的私募信贷平台、自 2004 年以来积累的机构化投资管理经验及本地运营能力。">
+<meta property="og:url" content="https://shorevest.com/cn/firm/">
+<meta property="og:locale" content="zh_CN">
+<script src="assets/js/favicon-guard.js?v=20260717" defer></script>
+</head>
+<body id="top" class="homepage firm-page firm-page--cn">
+<!-- ============================================================ A · HEADER -->
+<header class="sv-header">
+  <div class="sv-header__inner">
+    <a class="sv-header__logo" href="/cn/" aria-label="新岸资本 — 首页">
+      <img src="assets/brand/sv-lockup-fc-dark.png" alt="ShoreVest 新岸资本" width="172" height="41" loading="eager" decoding="async" fetchpriority="high">
+    </a>
+    <nav class="sv-nav" aria-label="主导航">
+      <ul>
+        <li><a href="/cn/firm/" aria-current="page">公司</a></li>
+        <li><a href="/cn/strategy/">策略</a></li>
+        <li><a href="/cn/insights/">洞察</a></li>
+        <li><a href="/cn/media/">媒体</a></li>
+        <li><a href="/cn/team/">团队</a></li>
+        <li><a href="/cn/careers/">人才招聘</a></li>
+      </ul>
+    </nav>
+    <div class="sv-utils">
+      <a class="sv-lang" href="/firm/">EN<span class="sep">|</span><span class="on">中文</span></a>
+      <a class="sv-util-btn" href="/investor-portal/index/">投资者门户</a>
+      <a class="sv-util-btn sv-util-btn--cta" href="/cn/contact/">联系</a>
+    </div>
+    <button class="sv-burger" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="sv-mobile-menu">
+      <span></span>
+    </button>
+  </div>
+</header>
+
+<div class="sv-mobile-menu" id="sv-mobile-menu">
+  <nav aria-label="移动导航">
+    <ul>
+      <li><a href="/cn/firm/" aria-current="page">公司</a></li>
+      <li><a href="/cn/strategy/">策略</a></li>
+      <li><a href="/cn/insights/">洞察</a></li>
+      <li><a href="/cn/media/">媒体</a></li>
+      <li><a href="/cn/team/">团队</a></li>
+        <li><a href="/cn/careers/">人才招聘</a></li>
+    </ul>
+    <div class="sv-mobile-utils">
+      <a class="sv-util-btn" href="/firm/">EN</a>
+      <a class="sv-util-btn" href="/investor-portal/index/">投资者门户</a>
+      <a class="sv-util-btn sv-util-btn--cta" href="/cn/contact/">联系</a>
+    </div>
+  </nav>
+</div>
+
+<main id="content">
+
+<!-- 1 · AUTHORITY OPENING — cinnabar masthead + full-bleed proof ledger -->
+<section class="fm-open" id="firm" data-screen-label="公司" aria-labelledby="fm-h1">
+  <div class="sv-shell fm-open__inner">
+    <div class="fm-hero__frame">
+      <p class="fm-eyebrow">公司</p>
+      <h1 class="fm-open__h1" id="fm-h1">本地能力，机构经验。</h1>
+    </div>
+    <div class="fm-open__body">
+      <p>新岸资本是一家专注中国的私募信贷投资管理人，其团队自 2004 年起活跃于该市场。</p>
+      <p>平台覆盖项目寻源、承销、法律结构设计、资产服务及投资组合管理。</p>
+    </div>
+  </div>
+  <div class="sv-shell">
+    <div class="fm-glance" role="group" aria-label="平台概览">
+      <p class="fm-glance__label">平台概览</p>
+      <dl class="fm-glance__grid">
+        <div class="fm-glance__item">
+          <dt class="fm-glance__k">受托为机构投资者管理的私募信贷投资</dt>
+          <dd class="fm-glance__v">20 亿美元+</dd>
+        </div>
+        <div class="fm-glance__item">
+          <dt class="fm-glance__k">团队跨越多个市场周期活跃于中国信贷市场</dt>
+          <dd class="fm-glance__v">始于 2004 年</dd>
+        </div>
+        <div class="fm-glance__item">
+          <dt class="fm-glance__k">广州&ensp;&middot;&ensp;上海&ensp;&middot;&ensp;北京&ensp;&middot;&ensp;香港</dt>
+          <dd class="fm-glance__v">4 个办公室</dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- 2 · WHO WE ARE — annual-report spread: narrative left, square image right -->
+<section class="fm-who" id="who-we-are" data-screen-label="关于我们" aria-labelledby="fm-who-title">
+  <div class="sv-shell fm-who__inner">
+    <div class="fm-who__main">
+      <p class="fm-kicker">关于我们</p>
+      <h2 id="fm-who-title" class="fm-who__title">专注中国的私募信贷平台</h2>
+      <p class="fm-who__lead">自 2004 年以来，新岸资本团队受托为机构投资者在中国管理逾 20 亿美元的私募信贷投资。</p>
+      <p class="fm-who__narr">平台的发展依托与借款人、金融机构、服务提供商及机构资本合作伙伴之间的关系，并由本地团队与机构化投资管理流程提供支持。</p>
+    </div>
+    <figure class="fm-who__figure" aria-hidden="true">
+      <img src="pexels-keat007-37785251.jpg" alt="" width="5460" height="8204" loading="eager" decoding="async" fetchpriority="high">
+    </figure>
+  </div>
+</section>
+
+<!-- 3 · INSTITUTIONAL INVESTOR BASE — standalone register on stone -->
+<section class="fm-inv-sec" id="investor-base" data-screen-label="投资者基础" aria-labelledby="fm-inv-title">
+  <div class="sv-shell">
+    <div class="fm-sechead">
+      <div class="fm-sechead__l">
+        <p class="fm-kicker">资本合作伙伴</p>
+        <h2 id="fm-inv-title" class="fm-sechead__title">机构投资者基础</h2>
+      </div>
+      <div class="fm-sechead__r">
+        <p>新岸资本服务于长期机构资本基础，包括主权财富基金、养老金、保险公司、基金会、捐赠基金及家族办公室。</p>
+      </div>
+    </div>
+    <ul class="fm-inv" aria-label="投资者类型">
+      <li class="fm-inv__cell"><span class="fm-inv__num" aria-hidden="true">1</span><span class="fm-inv__name">主权财富基金</span></li>
+      <li class="fm-inv__cell"><span class="fm-inv__num" aria-hidden="true">2</span><span class="fm-inv__name">养老金</span></li>
+      <li class="fm-inv__cell"><span class="fm-inv__num" aria-hidden="true">3</span><span class="fm-inv__name">保险公司</span></li>
+      <li class="fm-inv__cell"><span class="fm-inv__num" aria-hidden="true">4</span><span class="fm-inv__name">基金会</span></li>
+      <li class="fm-inv__cell"><span class="fm-inv__num" aria-hidden="true">5</span><span class="fm-inv__name">捐赠基金</span></li>
+      <li class="fm-inv__cell"><span class="fm-inv__num" aria-hidden="true">6</span><span class="fm-inv__name">家族办公室</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- 4 · CORE COMPETENCIES — capability ledger -->
+<section class="fm-comp-sec" id="core-competencies" data-screen-label="公司能力" aria-labelledby="fm-comp-title">
+  <div class="sv-shell">
+    <div class="fm-sechead">
+      <div class="fm-sechead__l">
+        <p class="fm-kicker">公司能力</p>
+        <h2 id="fm-comp-title" class="fm-sechead__title">平台背后的三项专业能力</h2>
+      </div>
+      <div class="fm-sechead__r">
+        <p>平台将长期市场经验、结构化信贷能力与本地执行相结合，覆盖项目寻源、承销、资产服务及处置。</p>
+      </div>
+    </div>
+    <ol class="fm-comp">
+      <li class="fm-comp__item">
+        <p class="fm-comp__num" aria-hidden="true">1</p>
+        <h3 class="fm-comp__name">自 2004 年以来的经验</h3>
+        <p class="fm-comp__desc">二十余年的中国信贷经验，为新岸资本的承销、投资组合管理及机构治理提供支撑。</p>
+      </li>
+      <li class="fm-comp__item">
+        <p class="fm-comp__num" aria-hidden="true">2</p>
+        <h3 class="fm-comp__name">信贷解决方案</h3>
+        <p class="fm-comp__desc">新岸资本与借款人及金融机构合作，为复杂融资、重组及处置情形设计资产支持信贷结构。</p>
+      </li>
+      <li class="fm-comp__item">
+        <p class="fm-comp__num" aria-hidden="true">3</p>
+        <h3 class="fm-comp__name">本地执行</h3>
+        <p class="fm-comp__desc">本地团队支持中国各地的项目寻源、尽职调查、法律结构设计、资产服务及处置，并通过新岸资本的机构化投资管理平台进行协调。</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- 5 · CLOSING — dark statement band -->
+<section class="fm-close" id="trust" data-screen-label="以关系为本" aria-label="以关系为本的业务">
+  <div class="sv-shell fm-close__inner">
+    <p class="fm-close__label">以关系为本的业务</p>
+    <p class="fm-close__text">新岸资本的工作依托与借款人、金融机构、交易对手及机构投资者之间经年建立的信任。</p>
+    <p class="fm-close__cta"><a href="/cn/team/">认识团队<span aria-hidden="true">&ensp;&rarr;</span></a></p>
+  </div>
+</section>
+
+</main>
+
+<footer class="sv-footer" aria-label="网站页脚">
+  <div class="sv-footer__inner">
+    <div class="sv-footer__top">
+      <div>
+        <a class="sv-footer__logo" href="/cn/" aria-label="新岸资本 — 首页">
+          <img src="assets/brand/sv-lockup-fc-light.png" alt="ShoreVest 新岸资本" width="200" height="48" loading="eager" decoding="async" fetchpriority="high">
+        </a>
+        <p class="sv-footer__offices">
+          广州 · 上海 · 北京 · 香港<br>
+          <a href="/cn/contact/">一般咨询</a>
+        </p>
+      </div>
+      <nav class="sv-footer__nav" aria-label="页脚导航">
+        <a href="/cn/firm/">公司</a>
+        <a href="/cn/strategy/">策略</a>
+        <a href="/cn/insights/">洞察</a>
+        <a href="/cn/media/">媒体</a>
+        <a href="/cn/team/">团队</a>
+        <a href="/cn/careers/">人才招聘</a>
+        <a href="/cn/contact/">联系</a>
+        <a href="/cn/insights/#archive">中国债务动态</a>
+        <span class="sv-footer__access" role="group" aria-label="访问">
+          <span class="sv-footer__access-label">入口</span>
+          <a href="/investor-portal/index/">投资者门户</a>
+        </span>
+      </nav>
+      <div class="sv-footer__social" aria-label="Follow ShoreVest">
+        <a class="sv-footer__social-link" href="https://www.linkedin.com/company/shorevest-partners/" target="_blank" rel="noopener noreferrer" aria-label="Follow ShoreVest Partners on LinkedIn">
+          <svg class="sv-footer__social-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+            <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V8.98h3.42v1.57h.05c.48-.9 1.64-1.85 3.37-1.85 3.61 0 4.27 2.37 4.27 5.46v6.29ZM5.32 7.42a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12Zm1.78 13.03H3.54V8.98H7.1v11.47ZM22.23 0H1.76C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.76 24h20.47c.97 0 1.77-.77 1.77-1.72V1.72C24 .77 23.2 0 22.23 0Z"/>
+          </svg>
+          <span>LinkedIn</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="sv-footer__legal">
+      <p>新岸资本（ShoreVest Partners）及其关联机构向机构投资者提供投资管理服务。本网站仅供信息参考，不构成出售任何证券或投资产品的要约，或购买任何证券或投资产品的要约邀请，亦不构成投资、法律或税务建议。</p>
+      <p>过往表现并不预示未来结果。私募信贷与私募债务投资涉及风险，包括可能损失本金。所示数据均为近似值，可能发生变动。</p>
+    </div>
+
+    <div class="sv-footer__bottom">
+      <div class="sv-footer__links">
+        <a href="/cn/privacy-policy/">隐私政策</a>
+        <a href="/cn/cookie-notice/">Cookie 通知</a>
+        <a href="/cn/terms-of-use/">使用条款</a>
+        <a href="/cn/important-information/">重要信息</a>
+        <a href="/cn/legal-notices-disclaimers/">法律声明与免责声明</a>
+      </div>
+      <p class="sv-footer__copy">© 2026 ShoreVest Partners. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<button class="sv-totop" type="button" aria-label="返回顶部">
+  <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 13V3M8 3L3.5 7.5M8 3l4.5 4.5" stroke="currentColor" stroke-width="1.5"/></svg>
+</button>
+
+<script>
+(function(){
+  var burger = document.querySelector('.sv-burger');
+  var menu = document.getElementById('sv-mobile-menu');
+  if (burger && menu) {
+    burger.addEventListener('click', function(){
+      var open = menu.classList.toggle('is-open');
+      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      burger.setAttribute('aria-label', open ? '关闭菜单' : '打开菜单');
+    });
+    menu.addEventListener('click', function(e){ if (e.target.closest('a')) { menu.classList.remove('is-open'); burger.setAttribute('aria-expanded','false'); } });
+  }
+  var toTop = document.querySelector('.sv-totop');
+  if (toTop) {
+    var onScroll = function(){ if (window.scrollY > 600) toTop.classList.add('is-visible'); else toTop.classList.remove('is-visible'); };
+    window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+    toTop.addEventListener('click', function(){ window.scrollTo({ top: 0, behavior: 'smooth' }); });
+  }
+})();
+</script>
+
+<script src="assets/js/insights-new-edition.js?v=20260717" defer></script>
+<script src="assets/js/sv-navigation.js?v=20260717" defer></script>
+</body>
+</html>

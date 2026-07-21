@@ -5,27 +5,27 @@
 (function () {
   // Newest first. file = article page; label = issue number; title = short title.
   var ISSUES = [
-    { file: "china-debt-dynamics-v10i2.html", label: "10.2", title: "The Paradox of High Private Credit Returns in China\u2019s Low-rate Environment" },
-    { file: "china-debt-dynamics-v10i1.html", label: "10.1", title: "The End of the \u201CChina Is Uninvestable\u201D Myth" },
+    { file: "/insights/china-debt-dynamics/v10i2/", label: "10.2", title: "The Paradox of High Private Credit Returns in China\u2019s Low-rate Environment" },
+    { file: "/insights/china-debt-dynamics/v10i1/", label: "10.1", title: "The End of the \u201CChina Is Uninvestable\u201D Myth" },
     { file: "assets/pdfs/china-debt-dynamics-45-beijings-campaign-against-overcapacity.pdf", label: "9.4", title: "Beijing\u2019s Campaign Against Overcapacity Creates Private Credit Opportunities" },
-    { file: "china-debt-dynamics-into-the-shadows-of-us-private-credit.html", label: "9.3", title: "Into the Shadows of US Private Credit" },
-    { file: "china-debt-dynamics-v9i2.html", label: "9.2", title: "China: An Uncorrelated Harbor in a Stormy World" },
-    { file: "china-debt-dynamics-v9i1.html", label: "9.1", title: "Green Finance: Sowing the Seeds of China\u2019s Next Wave of NPLs" },
-    { file: "china-debt-dynamics-v8i5.html", label: "8.5", title: "United States of China" },
-    { file: "china-debt-dynamics-v8i4.html", label: "8.4", title: "Quantifying China\u2019s NPL Market" },
-    { file: "china-debt-dynamics-v8i3.html", label: "8.3", title: "Private Credit in a Reset World Order" },
-    { file: "china-debt-dynamics-v8i2.html", label: "8.2", title: "China Refocuses on Financial Risk and Ramps Up NPL Disposals" },
-    { file: "china-debt-dynamics-v8i1.html", label: "8.1", title: "Bailing Out the Banks: The Hidden Significance of Beijing Property Support Measures" },
-    { file: "china-debt-dynamics-v7i4.html", label: "7.4", title: "Beijing\u2019s Strategy for Dealing With Local Government Debt: No Bailouts, but a Helping Hand" },
-    { file: "china-debt-dynamics-v7i3.html", label: "7.3", title: "Where\u2019s the Stimulus? Parsing Beijing\u2019s Lackluster Response to Growth" },
-    { file: "china-debt-dynamics-v7i2.html", label: "7.2", title: "Bank Exposure to Developers: A Challenge but Not a Risk" },
-    { file: "china-debt-dynamics-v7i1.html", label: "7.1", title: "New Regulations Set to Accelerate NPL Disposals" },
-    { file: "china-debt-dynamics-v6i3.html", label: "6.3", title: "China\u2019s Property Support Measures: Rescue, not Reflation" },
-    { file: "china-debt-dynamics-v5i7.html", label: "5.7", title: "Evergrande: A Result of China Deleveraging and What Next" },
-    { file: "china-debt-dynamics-v5i4.html", label: "5.4", title: "Sustained Shadow Banking Contraction Creating Private Credit Opportunities" },
-    { file: "china-debt-dynamics-v4i4.html", label: "4.4", title: "Dealing With a Coming Surge in Nonperforming Loans" },
-    { file: "china-debt-dynamics-v3i5.html", label: "3.5", title: "A Look at the Tools Being Deployed to Help China\u2019s Banks Dispose of Their NPLs" },
-    { file: "china-debt-dynamics-v2i4.html", label: "2.4", title: "\u201CDisclose & Dispose\u201D: Stricter Accounting Requirements to Push Up NPLs Further" }
+    { file: "/insights/china-debt-dynamics/v9i3/", label: "9.3", title: "Into the Shadows of US Private Credit" },
+    { file: "/insights/china-debt-dynamics/v9i2/", label: "9.2", title: "China: An Uncorrelated Harbor in a Stormy World" },
+    { file: "/insights/china-debt-dynamics/v9i1/", label: "9.1", title: "Green Finance: Sowing the Seeds of China\u2019s Next Wave of NPLs" },
+    { file: "/insights/china-debt-dynamics/v8i6/", label: "8.5", title: "United States of China" },
+    { file: "/insights/china-debt-dynamics/v8i4/", label: "8.4", title: "Quantifying China\u2019s NPL Market" },
+    { file: "/insights/china-debt-dynamics/v8i5/", label: "8.3", title: "Private Credit in a Reset World Order" },
+    { file: "/insights/china-debt-dynamics/v8i2/", label: "8.2", title: "China Refocuses on Financial Risk and Ramps Up NPL Disposals" },
+    { file: "/insights/china-debt-dynamics/v8i3/", label: "8.1", title: "Bailing Out the Banks: The Hidden Significance of Beijing Property Support Measures" },
+    { file: "/insights/china-debt-dynamics/v7i4/", label: "7.4", title: "Beijing\u2019s Strategy for Dealing With Local Government Debt: No Bailouts, but a Helping Hand" },
+    { file: "/insights/china-debt-dynamics/v7i3/", label: "7.3", title: "Where\u2019s the Stimulus? Parsing Beijing\u2019s Lackluster Response to Growth" },
+    { file: "/insights/china-debt-dynamics/v7i2/", label: "7.2", title: "Bank Exposure to Developers: A Challenge but Not a Risk" },
+    { file: "/insights/china-debt-dynamics/v7i1/", label: "7.1", title: "New Regulations Set to Accelerate NPL Disposals" },
+    { file: "/insights/china-debt-dynamics/v6i3/", label: "6.3", title: "China\u2019s Property Support Measures: Rescue, not Reflation" },
+    { file: "/insights/china-debt-dynamics/v5i7/", label: "5.7", title: "Evergrande: A Result of China Deleveraging and What Next" },
+    { file: "/insights/china-debt-dynamics/v5i4/", label: "5.4", title: "Sustained Shadow Banking Contraction Creating Private Credit Opportunities" },
+    { file: "/insights/china-debt-dynamics/v4i4/", label: "4.4", title: "Dealing With a Coming Surge in Nonperforming Loans" },
+    { file: "/insights/china-debt-dynamics/v3i5/", label: "3.5", title: "A Look at the Tools Being Deployed to Help China\u2019s Banks Dispose of Their NPLs" },
+    { file: "/insights/china-debt-dynamics/v2i4/", label: "2.4", title: "\u201CDisclose & Dispose\u201D: Stricter Accounting Requirements to Push Up NPLs Further" }
   ];
 
   function withToken(href) {
@@ -50,7 +50,7 @@
     nav.appendChild(side("prev", older, "Older issue"));
     var home = document.createElement("a");
     home.className = "cdd-pager__home";
-    home.href = withToken("insights.html#archive");
+    home.href = withToken("/insights/#archive");
     home.textContent = "All issues";
     nav.appendChild(home);
     nav.appendChild(side("next", newer, "Newer issue"));

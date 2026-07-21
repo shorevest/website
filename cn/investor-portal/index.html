@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<base href="/">
+<script>
+try{window.addEventListener('error',function(e){if(e&&typeof e.message==='string'&&e.message.indexOf('ResizeObserver loop')!==-1){e.stopImmediatePropagation();e.preventDefault();}},true);}catch(_){}
+window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
+(function(){
+  var T=window.__SVT;
+  function tok(u){try{var url=new URL(u,location.href);if(url.origin===location.origin&&!url.searchParams.get('t')){url.searchParams.set('t',T);return url.href;}return u;}catch(e){return u;}}
+  window.__svTok=tok;
+  function fixEl(el){if(el.nodeType!==1)return;if(el.tagName==='IMG'){var s=el.getAttribute('src');if(s){var ts=tok(s);if(ts!==s)el.setAttribute('src',ts);}}}
+  function scan(root){if(!root||root.nodeType!==1)return;fixEl(root);if(root.querySelectorAll){var n=root.querySelectorAll('img');for(var i=0;i<n.length;i++)fixEl(n[i]);}}
+  new MutationObserver(function(ms){for(var j=0;j<ms.length;j++){var a=ms[j].addedNodes;for(var i=0;i<a.length;i++)scan(a[i]);}}).observe(document.documentElement,{childList:true,subtree:true});
+  if(document.readyState!=='loading')scan(document.body);else document.addEventListener('DOMContentLoaded',function(){scan(document.body);});
+  (function(){var _f=window.fetch;if(_f){window.fetch=function(i,n){try{var u;if(typeof i==='string'){u=new URL(i,location.href);if(u.origin===location.origin&&!u.searchParams.get('t')){u.searchParams.set('t',T);i=u.href;}}else if(i&&i.url){u=new URL(i.url,location.href);if(u.origin===location.origin&&!u.searchParams.get('t')){u.searchParams.set('t',T);i=new Request(u.href,i);}}}catch(e){}return _f.call(this,i,n);};}var _o=window.XMLHttpRequest&&window.XMLHttpRequest.prototype.open;if(_o){window.XMLHttpRequest.prototype.open=function(m,u){try{var x=new URL(u,location.href);if(x.origin===location.origin&&!x.searchParams.get('t')){x.searchParams.set('t',T);u=x.href;}}catch(e){}return _o.apply(this,[m,u].concat([].slice.call(arguments,2)));};}})();
+  document.addEventListener('click',function(e){var t=e.target;var a=t&&t.closest?t.closest('a[href]'):null;if(!a)return;var h=a.getAttribute('href');if(!h||h.charAt(0)==='#'||/^(mailto:|tel:|javascript:|https?:|\/\/)/i.test(h))return;var url;try{url=new URL(h,location.href);}catch(_){return;}if(url.origin!==location.origin)return;e.preventDefault();if(!url.searchParams.get('t'))url.searchParams.set('t',T);window.location.href=url.href;},true);
+})();
+</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ShoreVest | 投资者门户</title>
+  <meta name="description" content="为 ShoreVest 投资者提供安全的投资者门户访问。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- TODO: ADD ADOBE FONTS KIT FOR DIN 2014 — replace [KIT_ID] below and uncomment. Until configured, pages use the canonical DIN 2014 stack with only a generic sans-serif emergency fallback. -->
+  <!-- <link rel="stylesheet" href="https://use.typekit.net/[KIT_ID].css"> -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Canonical homepage chrome (header/footer/tokens) then the architectural rebuild. -->
+  <script>document.write('<link rel="stylesheet" href="../assets/css/homepage-rebuild.css?v=20260717-header-unify&t='+window.__SVT+'">');</script>
+  <script>document.write('<link rel="stylesheet" href="../assets/css/investor-portal-rebuild.css?v=20260717-mobile-polish&t='+window.__SVT+'">');</script>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="../assets/favicon-cinnabar.ico?v=20260717" sizes="any">
+<link rel="shortcut icon" href="../assets/favicon-cinnabar.ico?v=20260717">
+<link rel="icon" href="../assets/favicon-cinnabar.svg?v=20260717" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-cinnabar-32x32.png?v=20260717">
+<link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-cinnabar-16x16.png?v=20260717">
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon-cinnabar.png?v=20260717">
+<link rel="manifest" href="../site.webmanifest?v=20260717">
+<script src="../assets/js/favicon-guard.js?v=20260717" defer></script>
+  <link rel="canonical" href="https://shorevest.com/cn/investor-portal/">
+</head>
+  <body class="homepage investor-portal-page">
+
+<header class="sv-header">
+  <div class="sv-header__inner">
+    <a class="sv-header__logo" href="../cn/" aria-label="新岸资本 — 首页">
+      <img src="../assets/brand/sv-lockup-fc-dark.png" alt="ShoreVest 新岸资本" width="172" height="41" loading="eager" decoding="async" fetchpriority="high">
+    </a>
+    <nav class="sv-nav" aria-label="主导航">
+      <ul>
+        <li><a href="../cn/firm/">公司</a></li>
+        <li><a href="../cn/strategy/">策略</a></li>
+        <li><a href="../cn/insights/">洞察</a></li>
+        <li><a href="../cn/media/">媒体</a></li>
+        <li><a href="../cn/team/">团队</a></li>
+        <li><a href="../cn/careers/">人才招聘</a></li>
+      </ul>
+    </nav>
+    <div class="sv-utils">
+      <a class="sv-lang" href="/">EN<span class="sep">|</span><span class="on">中文</span></a>
+      <a class="sv-util-btn" href="/cn/index/">投资者门户</a>
+      <a class="sv-util-btn sv-util-btn--cta" href="../cn/contact/">联系</a>
+    </div>
+    <button class="sv-burger" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="sv-mobile-menu">
+      <span></span>
+    </button>
+  </div>
+</header>
+
+<div class="sv-mobile-menu" id="sv-mobile-menu">
+  <nav aria-label="移动导航">
+    <ul>
+      <li><a href="../cn/firm/">公司</a></li>
+      <li><a href="../cn/strategy/">策略</a></li>
+      <li><a href="../cn/insights/">洞察</a></li>
+      <li><a href="../cn/media/">媒体</a></li>
+      <li><a href="../cn/team/">团队</a></li>
+        <li><a href="../cn/careers/">人才招聘</a></li>
+    </ul>
+    <div class="sv-mobile-utils">
+      <a class="sv-util-btn" href="/">EN</a>
+      <a class="sv-util-btn" href="/cn/index/">投资者门户</a>
+      <a class="sv-util-btn sv-util-btn--cta" href="../cn/contact/">联系</a>
+    </div>
+  </nav>
+</div>
+
+  <main class="investor-portal-main" aria-labelledby="investor-portal-title">
+    <section class="investor-portal-hero" data-screen-label="投资者门户" aria-labelledby="investor-portal-title">
+      <div class="investor-portal-hero__inner">
+        <div class="ip-hero__red">
+          <p class="investor-portal-hero__eyebrow">投资者门户</p>
+          <h1 id="investor-portal-title">数据室。</h1>
+          <span class="ip-hero__rule" aria-hidden="true"></span>
+          <p class="ip-hero__desc">基金文件和报告托管于 iDeals 虚拟数据室。</p>
+          <p class="ip-hero__confidential">仅限授权用户</p>
+        </div>
+
+        <div class="ip-hero__signin">
+          <p class="ip-signin__kicker">安全登录</p>
+          <h2 class="ip-signin__title">请输入您的电子邮件以继续。</h2>
+          <p class="ip-signin__note">获授权投资者将直接进入 ShoreVest iDeals 数据室。</p>
+<section class="login-form-container">
+  <form name="login" id="vdr-login-form" class="login-form" method="POST">
+    <h3>
+      登录由以下服务支持的数据室：
+      <a href="https://www.idealsvdr.com/" target="_blank">
+        <svg width="156" height="42" viewBox="0 0 156 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0.691101 4.67743C0.691101 2.22886 2.67064 0.363281 5.17418 0.363281C7.61949 0.363281 9.54081 2.22886 9.54081 4.67743C9.54081 7.18429 7.61949 8.99157 5.17418 8.99157C2.61242 8.99157 0.691101 7.18429 0.691101 4.67743ZM1.56443 40.9396V12.3729H8.49282V40.9396H1.56443Z" fill="#002325"/>
+          <path d="M42.2032 1.00488V40.9982H35.4495V37.267C33.3535 39.7739 30.3842 41.6978 26.2504 41.6978C18.0412 41.6978 11.9279 35.2266 11.9279 26.7149C11.9279 18.3198 18.0994 11.7902 26.1922 11.7902C30.2677 11.7902 33.1788 13.6558 35.2748 16.1044V1.00488H42.2032ZM35.6824 26.6566C35.6824 21.9343 32.3637 17.97 27.2402 17.97C22.1749 17.97 18.8563 21.9343 18.8563 26.6566C18.8563 31.4954 22.1749 35.4015 27.2402 35.4015C32.3055 35.4015 35.6824 31.4954 35.6824 26.6566Z" fill="#002325"/>
+          <path d="M74.3999 29.1051H52.4503C53.3236 32.778 56.0018 35.6929 61.2418 35.6929C64.5022 35.6929 68.2284 34.4686 70.7319 32.7197L73.4683 37.6168C70.7901 39.599 66.1906 41.5812 60.9506 41.5812C50.1214 41.5812 45.3472 34.2355 45.3472 26.6565C45.3472 18.1449 51.344 11.7319 60.3102 11.7319C68.403 11.7319 74.5745 17.0372 74.5745 26.0736C74.6328 27.2395 74.5163 28.1723 74.3999 29.1051ZM52.4503 23.9165H67.8208C67.2386 19.8938 64.2693 17.4453 60.3102 17.4453C56.3511 17.4453 53.3818 19.9521 52.4503 23.9165Z" fill="#002325"/>
+          <path d="M107.47 12.3732V40.9399H100.891V37.4419C98.7366 39.8905 95.6508 41.6395 91.5171 41.6395C83.1914 41.6395 77.2527 34.9933 77.2527 26.5399C77.2527 17.97 83.3078 11.7319 91.5171 11.7319C95.6508 11.7319 98.6784 13.5975 100.891 16.0461V12.4315H107.47V12.3732ZM101.065 26.6565C101.065 21.9343 97.6304 17.97 92.5651 17.97C87.4998 17.97 84.1229 21.9343 84.1229 26.6565C84.1229 31.4371 87.4998 35.4014 92.5651 35.4014C97.5722 35.4014 101.065 31.4371 101.065 26.6565Z" fill="#002325"/>
+          <path d="M111.836 40.9399V1.00488H118.707V40.9982H111.836V40.9399Z" fill="#002325"/>
+          <path d="M121.56 36.0427L125.46 31.8452C127.44 34.4103 130.409 35.8678 133.204 35.8678C135.707 35.8678 137.454 34.5269 137.454 32.8946C137.454 31.6703 136.639 30.8541 135.3 30.1545C133.67 29.3383 129.943 28.114 128.139 27.1812C124.878 25.6072 123.306 23.042 123.306 19.8938C123.306 14.9967 127.382 11.4404 133.786 11.4404C137.454 11.4404 141.064 12.723 143.684 15.638L140.074 20.0104C138.036 17.9116 135.591 17.0372 133.611 17.0372C131.399 17.0372 130.118 18.2614 130.118 19.7189C130.118 20.71 130.759 21.8177 132.622 22.5173C134.485 23.2752 137.279 24.208 139.55 25.374C142.752 27.0646 144.441 29.28 144.441 32.6614C144.441 37.7334 140.074 41.6978 133.262 41.6978C128.663 41.6978 124.296 39.8322 121.56 36.0427Z" fill="#002325"/>
+          <path d="M146.187 37.675C146.187 35.4013 148.05 33.6523 150.379 33.6523C152.592 33.6523 154.397 35.4013 154.397 37.675C154.397 40.0653 152.592 41.7559 150.379 41.7559C148.05 41.8142 146.187 40.0653 146.187 37.675Z" fill="#002325"/>
+        </svg>
+      </a>
+    </h3>
+
+    <div class="form-group">
+      <label for="email">电子邮件</label>
+      <input id="email" type="text" name="email" class="form-control" placeholder="name@website.com" autocomplete="off" />
+      <small class="error"></small>
+    </div>
+
+    <button type="submit" class="btn btn-primary" name="submit">进入数据室</button>
+  </form>
+  <p class="ip-signin__secure">加密连接 · iDeals 安全虚拟数据室</p>
+</section>
+<script>
+  (function(ELEMENT) {
+    ELEMENT.matches = ELEMENT.matches || ELEMENT.mozMatchesSelector || ELEMENT.msMatchesSelector || ELEMENT.oMatchesSelector || ELEMENT.webkitMatchesSelector;
+    ELEMENT.closest = ELEMENT.closest || function closest(selector) {
+      if (!this) return null;
+      if (this.matches(selector)) return this;
+      if (!this.parentElement) {return null}
+      else return this.parentElement.closest(selector)
+    };
+  }(Element.prototype));
+</script>
+<script>
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+  function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+  function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+  (function () {
+    var SHOREVEST_DATA_ROOM_URL = 'https://app.idealsvdr.com/projects/all/documents';
+
+    var ERROR_MESSAGES = {
+      INVALID_EMAIL: '请输入有效的电子邮件',
+      REQUIRED_FIELD: '请填写后继续'
+    };
+
+    var Login = /*#__PURE__*/function () {
+      "use strict";
+
+      function Login(form) {
+        _classCallCheck(this, Login);
+
+        this.form = form;
+        this.emailField = this.form.email;
+        this.submitBtn = this.form.submit;
+        this.addListeners();
+      }
+
+      _createClass(Login, [{
+        key: "addListeners",
+        value: function addListeners() {
+          this.form.addEventListener('submit', this.submit.bind(this));
+          this.emailField.addEventListener('keydown', this.clearErrors.bind(this));
+          this.emailField.addEventListener('change', this.clearErrors.bind(this));
+        }
+      }, {
+        key: "submit",
+        value: function submit(event) {
+          var _this = this;
+
+          event.preventDefault();
+
+          if (this.validateForm()) {
+            var email = encodeURIComponent(_this.emailField.value);
+            window.location.href = SHOREVEST_DATA_ROOM_URL + '?email=' + email;
+          }
+        }
+      }, {
+        key: "setErrorText",
+        value: function setErrorText(element, text) {
+          element.closest('.form-group').querySelector('.error').innerText = text;
+        }
+      }, {
+        key: "showError",
+        value: function showError(element) {
+          var formGroup = element.closest('.form-group');
+
+          if (!formGroup.classList.contains('has-error')) {
+            formGroup.classList.add('has-error');
+          }
+        }
+      }, {
+        key: "hideError",
+        value: function hideError(element) {
+          var formGroup = element.closest('.form-group');
+
+          if (formGroup.classList.contains('has-error')) {
+            formGroup.classList.remove('has-error');
+          }
+        }
+      }, {
+        key: "clearErrors",
+        value: function clearErrors(event) {
+          this.hideError(event.target);
+          this.setErrorText(event.target, '');
+        }
+      }, {
+        key: "validateForm",
+        value: function validateForm() {
+          var emailValid = this.validateEmail();
+          return emailValid;
+        }
+      }, {
+        key: "validateEmail",
+        value: function validateEmail() {
+          var re = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
+          var value = this.emailField.value;
+
+          if (value === "" || value === undefined) {
+            this.setErrorText(this.emailField, ERROR_MESSAGES.REQUIRED_FIELD);
+            this.showError(this.emailField);
+            return false;
+          }
+
+          if (!re.test(value)) {
+            this.setErrorText(this.emailField, ERROR_MESSAGES.INVALID_EMAIL);
+            this.showError(this.emailField);
+            return false;
+          }
+
+          return true;
+        }
+      }]);
+
+      return Login;
+    }();
+
+    window.addEventListener('load', function () {
+      new Login(document.getElementById('vdr-login-form'));
+    });
+  })();
+</script>
+      </div>
+      </div>
+    </section>
+  </main>
+
+  <section class="investor-portal-panel" aria-label="门户访问信息">
+    <div class="ip-shell">
+      <div class="ip-access__head">
+        <p class="ip-access__label">访问</p>
+        <h2>数据室内可查看的内容。</h2>
+      </div>
+      <div class="ip-access">
+        <div class="ip-access__row">
+          <div class="ip-access__body">
+            <p class="ip-access__rowtitle">授权访问</p>
+            <p class="ip-access__copy">本门户仅限已获 ShoreVest 授权访问的投资者使用。请使用与您的访问权限关联的电子邮件地址登录。</p>
+          </div>
+        </div>
+        <div class="ip-access__row">
+          <div class="ip-access__body">
+            <p class="ip-access__rowtitle">基金资料</p>
+            <p class="ip-access__copy">授权用户可查阅托管于 iDeals 虚拟数据室的基金文件、报告及相关资料。</p>
+          </div>
+        </div>
+        <div class="ip-access__row">
+          <div class="ip-access__body">
+            <p class="ip-access__rowtitle">需要访问权限？</p>
+            <p class="ip-access__copy">如果您尚未获授访问权限，请联系您的 ShoreVest 代表，或通过<a href="../cn/contact/">联系页面</a>与我们联系。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ip-assure" aria-labelledby="ip-assure-title">
+    <div class="ip-assure__inner">
+      <div class="ip-assure__lead">
+        <p class="ip-access__label">安全与保密</p>
+        <h2 id="ip-assure-title">数据室内的每份文件均适用三项保障措施。</h2>
+      </div>
+      <div class="ip-assure__grid">
+        <div class="ip-assure__cell">
+          <p class="ip-assure__k">受控</p>
+          <p class="ip-assure__v">访问仅限授权投资者，并由 ShoreVest 管理。</p>
+        </div>
+        <div class="ip-assure__cell">
+          <p class="ip-assure__k">加密</p>
+          <p class="ip-assure__v">iDeals 数据室为文件查阅提供加密环境。</p>
+        </div>
+        <div class="ip-assure__cell">
+          <p class="ip-assure__k">保密</p>
+          <p class="ip-assure__v">所有资料均属保密，仅供授权接收人使用。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="sv-footer" aria-label="网站页脚">
+  <div class="sv-footer__inner">
+    <div class="sv-footer__top">
+      <div>
+        <a class="sv-footer__logo" href="../cn/" aria-label="新岸资本 — 首页">
+          <img src="../assets/brand/sv-lockup-fc-light.png" alt="ShoreVest 新岸资本" width="200" height="48" loading="eager" decoding="async" fetchpriority="high">
+        </a>
+        <p class="sv-footer__offices">
+          广州 · 上海 · 北京 · 香港<br>
+          <a href="../cn/contact/">一般咨询</a>
+        </p>
+      </div>
+      <nav class="sv-footer__nav" aria-label="页脚导航">
+        <a href="../cn/firm/">公司</a>
+        <a href="../cn/strategy/">策略</a>
+        <a href="../cn/insights/">洞察</a>
+        <a href="../cn/media/">媒体</a>
+        <a href="../cn/team/">团队</a>
+        <a href="../cn/careers/">人才招聘</a>
+        <a href="../cn/contact/">联系</a>
+        <a href="../cn/insights/#archive">中国债务动态</a>
+        <span class="sv-footer__access" role="group" aria-label="访问">
+          <span class="sv-footer__access-label">入口</span>
+          <a href="/cn/index/">投资者门户</a>
+        </span>
+      </nav>
+      <div class="sv-footer__social" aria-label="Follow ShoreVest">
+        <a class="sv-footer__social-link" href="https://www.linkedin.com/company/shorevest-partners/" target="_blank" rel="noopener noreferrer" aria-label="Follow ShoreVest Partners on LinkedIn">
+          <svg class="sv-footer__social-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+            <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V8.98h3.42v1.57h.05c.48-.9 1.64-1.85 3.37-1.85 3.61 0 4.27 2.37 4.27 5.46v6.29ZM5.32 7.42a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12Zm1.78 13.03H3.54V8.98H7.1v11.47ZM22.23 0H1.76C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.76 24h20.47c.97 0 1.77-.77 1.77-1.72V1.72C24 .77 23.2 0 22.23 0Z"/>
+          </svg>
+          <span>LinkedIn</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="sv-footer__legal">
+      <p>新岸资本（ShoreVest Partners）及其关联机构向机构投资者提供投资管理服务。本网站仅供信息参考，不构成出售任何证券或投资产品的要约，或购买任何证券或投资产品的要约邀请，亦不构成投资、法律或税务建议。</p>
+      <p>过往表现并不预示未来结果。私募信贷与私募债务投资涉及风险，包括可能损失本金。所示数据均为近似值，可能发生变动。</p>
+    </div>
+
+    <div class="sv-footer__bottom">
+      <div class="sv-footer__links">
+        <a href="../cn/privacy-policy/">隐私政策</a>
+        <a href="../cn/cookie-notice/">Cookie 通知</a>
+        <a href="../cn/terms-of-use/">使用条款</a>
+        <a href="../cn/important-information/">重要信息</a>
+        <a href="../cn/legal-notices-disclaimers/">法律声明与免责声明</a>
+      </div>
+      <p class="sv-footer__copy">© 2026 ShoreVest Partners. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<button class="sv-totop" type="button" aria-label="返回顶部">
+  <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 13V3M8 3L3.5 7.5M8 3l4.5 4.5" stroke="currentColor" stroke-width="1.5"/></svg>
+</button>
+
+  <script>
+(function(){
+  var burger=document.querySelector('.sv-burger'); var menu=document.getElementById('sv-mobile-menu');
+  if(burger&&menu){burger.addEventListener('click',function(){var open=menu.classList.toggle('is-open');burger.setAttribute('aria-expanded',open?'true':'false');burger.setAttribute('aria-label',open?'关闭菜单':'打开菜单');});menu.addEventListener('click',function(e){if(e.target.closest('a')){menu.classList.remove('is-open');burger.setAttribute('aria-expanded','false');}});}
+  var toTop=document.querySelector('.sv-totop');
+  if(toTop){var onScroll=function(){if(window.scrollY>600)toTop.classList.add('is-visible');else toTop.classList.remove('is-visible');};window.addEventListener('scroll',onScroll,{passive:true});onScroll();toTop.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});}
+})();
+</script>
+<script src="../assets/js/insights-new-edition.js?v=20260717" defer></script>
+<script src="../assets/js/sv-navigation.js?v=20260717" defer></script>
+</body>
+</html>

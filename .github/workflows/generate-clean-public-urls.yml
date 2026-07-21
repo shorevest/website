@@ -1,0 +1,52 @@
+name: Generate clean public URLs
+
+on:
+  push:
+    branches:
+      - feature/clean-public-urls
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Restore files outside the public URL migration
+        run: |
+          git checkout origin/main -- \
+            assets/email/welcome-template.html \
+            assets/email/welcome-template-cn.html \
+            assets/js/employee-portal/views-cdd-publisher.js \
+            templates/media-coverage/media-coverage-print.html
+
+      - name: Generate clean routes
+        run: node scripts/generate-clean-public-urls.js
+
+      - name: Check generated changes
+        run: git diff --check
+
+      - name: Commit generated pages
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No generated changes to commit."
+            exit 0
+          fi
+          git commit -m "Generate clean public URL pages"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

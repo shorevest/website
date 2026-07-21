@@ -227,7 +227,7 @@
     }
 
     try {
-      const response = await fetch('insights.html');
+      const response = await fetch('/insights/');
       if (response.ok) {
         const markup = await response.text();
         const doc = new DOMParser().parseFromString(markup, 'text/html');
