@@ -17,6 +17,48 @@
     document.head.appendChild(scrollFix);
   }
 
+  // Chrome 150 on macOS can deliver wheel events without moving the root
+  // scroller. For that exact browser/version only, take control of vertical
+  // wheel input and apply the delta directly. Other browsers keep native scrolling.
+  var userAgent = navigator.userAgent || '';
+  var needsMacChrome150WheelFix = /Macintosh/.test(userAgent) &&
+    /Chrome\/150\./.test(userAgent) &&
+    !/(Edg|OPR)\//.test(userAgent);
+
+  if (document.body && document.body.classList.contains('homepage') && needsMacChrome150WheelFix) {
+    function normalizedWheelDelta(event) {
+      if (event.deltaMode === 1) return event.deltaY * 16;
+      if (event.deltaMode === 2) return event.deltaY * window.innerHeight;
+      return event.deltaY;
+    }
+
+    function scrollableAncestorCanMove(target, deltaY) {
+      var node = target instanceof Element ? target : null;
+      while (node && node !== document.body && node !== document.documentElement) {
+        var style = window.getComputedStyle(node);
+        if (/(auto|scroll)/.test(style.overflowY) && node.scrollHeight > node.clientHeight + 1) {
+          var canMoveDown = deltaY > 0 && node.scrollTop + node.clientHeight < node.scrollHeight - 1;
+          var canMoveUp = deltaY < 0 && node.scrollTop > 1;
+          if (canMoveDown || canMoveUp) return true;
+        }
+        node = node.parentElement;
+      }
+      return false;
+    }
+
+    document.addEventListener('wheel', function (event) {
+      if (!event.deltaY || event.ctrlKey) return;
+      if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
+
+      var target = event.target instanceof Element ? event.target : null;
+      if (target && target.closest('.sv-mobile-menu.is-open')) return;
+      if (scrollableAncestorCanMove(target, event.deltaY)) return;
+
+      event.preventDefault();
+      window.scrollBy(0, normalizedWheelDelta(event));
+    }, { passive: false, capture: true });
+  }
+
   function isCareersHref(href) {
     if (!href) return false;
     return /^(?:\.\.\/)?careers\.html(?:[?#].*)?$/i.test(href) ||
