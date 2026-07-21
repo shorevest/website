@@ -8,6 +8,7 @@ on:
       - 'scripts/add-insight-social-metadata.cjs'
       - 'assets/js/site-config.js'
       - 'assets/js/sv-navigation.js'
+      - 'assets/js/insights-new-edition.js'
       - '*.html'
       - '**/*.html'
       - 'sitemap.xml'
@@ -41,9 +42,10 @@ jobs:
       - name: Normalize source URLs and publication exclusions
         run: node scripts/normalize-public-site.cjs
 
-      - name: Refresh media archive asset version
+      - name: Refresh public asset versions
         run: |
           sed -i 's/press-page.js?v=20260711-page-size-3/press-page.js?v=20260722-margin-final/g' media.html media_cn.html
+          grep -rl 'insights-new-edition.js?v=20260722-linkedin-target' --include='*.html' . | xargs -r sed -i 's/insights-new-edition.js?v=20260722-linkedin-target/insights-new-edition.js?v=20260722-linkedin-working/g'
 
       - name: Generate clean routes
         run: node scripts/generate-clean-public-urls.js
@@ -89,9 +91,10 @@ jobs:
       - name: Normalize source URLs and publication exclusions
         run: node scripts/normalize-public-site.cjs
 
-      - name: Refresh media archive asset version
+      - name: Refresh public asset versions
         run: |
           sed -i 's/press-page.js?v=20260711-page-size-3/press-page.js?v=20260722-margin-final/g' media.html media_cn.html
+          grep -rl 'insights-new-edition.js?v=20260722-linkedin-target' --include='*.html' . | xargs -r sed -i 's/insights-new-edition.js?v=20260722-linkedin-target/insights-new-edition.js?v=20260722-linkedin-working/g'
 
       - name: Generate clean routes
         run: node scripts/generate-clean-public-urls.js
