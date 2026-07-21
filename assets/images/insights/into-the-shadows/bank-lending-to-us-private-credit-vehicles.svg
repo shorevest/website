@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="680" viewBox="0 0 1200 680" role="img" aria-label="Bank Lending to US Private Credit Vehicles">
+<style>text{font-family:DIN 2014, Barlow, Arial, Helvetica, sans-serif;fill:#222222}.title{font-size:28px;font-weight:700}.axis{font-size:14px;fill:#666666}.label{font-size:14px;font-weight:600}.small{font-size:12px;fill:#666666}.cell{font-size:14px}.head{font-size:14px;font-weight:700}.boxhead{font-size:14px;font-weight:700}.boxtext{font-size:12px}</style>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text class="title" x="600.0" y="45" text-anchor="middle">Bank Lending to US Private Credit Vehicles</text>
+<line x1="105" y1="570.0" x2="1155" y2="570.0" stroke="#d9d9d9" stroke-width="1"/><text class="axis" x="87" y="575.0" text-anchor="end">0</text>
+<line x1="105" y1="489.2" x2="1155" y2="489.2" stroke="#d9d9d9" stroke-width="1"/><text class="axis" x="87" y="494.2" text-anchor="end">10</text>
+<line x1="105" y1="408.3" x2="1155" y2="408.3" stroke="#d9d9d9" stroke-width="1"/><text class="axis" x="87" y="413.3" text-anchor="end">20</text>
+<line x1="105" y1="327.5" x2="1155" y2="327.5" stroke="#d9d9d9" stroke-width="1"/><text class="axis" x="87" y="332.5" text-anchor="end">30</text>
+<line x1="105" y1="246.7" x2="1155" y2="246.7" stroke="#d9d9d9" stroke-width="1"/><text class="axis" x="87" y="251.7" text-anchor="end">40</text>
+<line x1="105" y1="165.8" x2="1155" y2="165.8" stroke="#d9d9d9" stroke-width="1"/><text class="axis" x="87" y="170.8" text-anchor="end">50</text>
+<line x1="105" y1="85.0" x2="1155" y2="85.0" stroke="#d9d9d9" stroke-width="1"/><text class="axis" x="87" y="90.0" text-anchor="end">60</text>
+<text class="axis" x="105.0" y="600" text-anchor="middle">2013</text><text class="axis" x="200.5" y="600" text-anchor="middle">2014</text><text class="axis" x="295.9" y="600" text-anchor="middle">2015</text><text class="axis" x="391.4" y="600" text-anchor="middle">2016</text><text class="axis" x="486.8" y="600" text-anchor="middle">2017</text><text class="axis" x="582.3" y="600" text-anchor="middle">2018</text><text class="axis" x="677.7" y="600" text-anchor="middle">2019</text><text class="axis" x="773.2" y="600" text-anchor="middle">2020</text><text class="axis" x="868.6" y="600" text-anchor="middle">2021</text><text class="axis" x="964.1" y="600" text-anchor="middle">2022</text><text class="axis" x="1059.5" y="600" text-anchor="middle">2023</text><text class="axis" x="1155.0" y="600" text-anchor="middle">2024</text>
+<text class="label" transform="translate(30 327.5) rotate(-90)" text-anchor="middle">US$ Billions</text>
+<polyline points="105.0,529.6 200.5,521.5 295.9,513.4 391.4,497.2 486.8,481.1 582.3,473.0 677.7,432.6 773.2,416.4 868.6,392.2 964.1,206.2 1059.5,198.2 1155.0,125.4" fill="none" stroke="#c00000" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+<line x1="105" y1="638" x2="160" y2="638" stroke="#c00000" stroke-width="5"/><text class="label" x="170" y="643">Loans to BDCs</text>
+<polyline points="105.0,553.8 200.5,545.8 295.9,521.5 391.4,497.2 486.8,464.9 582.3,456.8 677.7,424.5 773.2,400.2 868.6,376.0 964.1,319.4 1059.5,295.2 1155.0,254.8" fill="none" stroke="#ed6a2c" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+<line x1="505" y1="638" x2="560" y2="638" stroke="#ed6a2c" stroke-width="5"/><text class="label" x="570" y="643">Loans to Private Debt Funds</text>
+<text class="small" x="105" y="670">Source: US Federal Reserve</text>
+</svg>
