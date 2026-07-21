@@ -20,9 +20,13 @@ source = source
     "const EXCLUDED_CDD_SOURCE = '__no_excluded_cdd_source__.html';"
   )
   .replace(
-    /assert\(\/<span class="cdd-stat__num">20<\\\/span><span class="cdd-stat__label">Issues in archive\/\.test\(insightsIndex\), 'Insights issue count is not 20'\);/,
-    "assert(/<span class=\"cdd-stat__num\">21<\\/span><span class=\"cdd-stat__label\">Issues in archive/.test(insightsIndex), 'Insights issue count is not 21');"
+    'assert(/<span class="cdd-stat__num">20<\\/span><span class="cdd-stat__label">Issues in archive/.test(insightsIndex), \'Insights issue count is not 20\');',
+    'assert(/<span class="cdd-stat__num">21<\\/span><span class="cdd-stat__label">Issues in archive/.test(insightsIndex), \'Insights issue count is not 21\');'
   );
+
+if (source.includes("Insights issue count is not 20")) {
+  throw new Error('Unable to patch the legacy 20-issue archive assertion.');
+}
 
 fs.writeFileSync(temporaryPath, source);
 const run = spawnSync(process.execPath, [temporaryPath, ...process.argv.slice(2)], {
