@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - feature/clean-public-urls
+      - hotfix/clean-url-asset-paths
 
 permissions:
   contents: write
@@ -48,5 +49,5 @@ jobs:
             echo "No generated changes to commit."
             exit 0
           fi
-          git commit -m "Generate clean public URL pages"
+          git commit -m "Regenerate clean URL pages with fixed asset paths"
           git push origin "HEAD:${GITHUB_REF_NAME}"
