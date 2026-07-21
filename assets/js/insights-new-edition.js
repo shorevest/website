@@ -121,7 +121,7 @@
 
     var link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = '/assets/css/cdd-article-figures.css?v=20260722-cdd-hierarchy-sources-v2';
+    link.href = '/assets/css/cdd-article-figures.css?v=20260722-v9i3-figure-panel-v3';
     link.setAttribute('data-cdd-figure-styles', 'true');
     document.head.appendChild(link);
   }
