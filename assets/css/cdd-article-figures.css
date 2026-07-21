@@ -9,6 +9,13 @@ body.cdd-print-layout .cdd-figure {
   box-shadow: none;
 }
 
+body.cdd-article-page .cdd-figure__media,
+body.cdd-print-layout .cdd-figure__media {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+}
+
 body.cdd-article-page .cdd-figure img,
 body.cdd-print-layout .cdd-figure img {
   display: block;
@@ -33,6 +40,13 @@ body.cdd-print-layout .cdd-figure figcaption {
   font-style: normal;
   font-weight: 500;
   line-height: 1.55;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+body.cdd-article-page .cdd-figure__expand,
+body.cdd-print-layout .cdd-figure__expand {
+  display: none;
 }
 
 /* v9i3 figures sit inside a genuine editorial panel. The panel owns the
@@ -61,6 +75,120 @@ body.cdd-article-page[data-article-source*="china-debt-dynamics-v9i3"] .cdd-figu
   border-top: 1px solid var(--sv-border-light, rgba(216, 206, 176, 0.55));
   color: var(--sv-muted, #6E7169);
   font-size: 12px;
+  line-height: 1.5;
+}
+
+/* Full-size figure viewer. The inline diagram is a clean responsive preview;
+   detailed labels are read in a dedicated pan surface instead of forcing the
+   article itself into a horizontal scroller. */
+body.cdd-figure-viewer-open {
+  overflow: hidden;
+}
+
+.cdd-figure-viewer[hidden] {
+  display: none !important;
+}
+
+.cdd-figure-viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(24, 37, 36, 0.82);
+}
+
+.cdd-figure-viewer__panel {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  width: min(1400px, 96vw);
+  height: min(900px, 94vh);
+  height: min(900px, 94dvh);
+  min-height: 0;
+  background: var(--sv-ivory, #FCF9F1);
+  border: 1px solid rgba(216, 206, 176, 0.9);
+  box-shadow: 0 18px 54px rgba(24, 37, 36, 0.28);
+}
+
+.cdd-figure-viewer__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  min-height: 56px;
+  padding: 0 18px 0 20px;
+  border-bottom: 1px solid rgba(216, 206, 176, 0.9);
+}
+
+.cdd-figure-viewer__label,
+.cdd-figure-viewer__caption {
+  margin: 0;
+  font-family: var(--sv-font, "DIN 2014", "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif);
+}
+
+.cdd-figure-viewer__label {
+  color: var(--sv-ink, #182524);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.cdd-figure-viewer__close {
+  appearance: none;
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid rgba(216, 206, 176, 0.9);
+  border-radius: 0;
+  background: transparent;
+  color: var(--sv-ink, #182524);
+  cursor: pointer;
+  font-family: var(--sv-font, "DIN 2014", "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cdd-figure-viewer__close:hover,
+.cdd-figure-viewer__close:focus-visible {
+  border-color: var(--sv-cinnabar, #C93B2A);
+  color: var(--sv-cinnabar, #C93B2A);
+  outline: none;
+}
+
+.cdd-figure-viewer__viewport {
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  padding: 24px;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  background: #F1EBDD;
+  outline: none;
+}
+
+.cdd-figure-viewer__image {
+  display: block;
+  width: auto;
+  min-width: 960px;
+  max-width: none;
+  height: auto;
+  margin: 0 auto;
+  border: 1px solid rgba(216, 206, 176, 0.9);
+  background: var(--sv-ivory, #FCF9F1);
+}
+
+.cdd-figure-viewer__caption {
+  padding: 14px 20px 16px;
+  border-top: 1px solid rgba(216, 206, 176, 0.9);
+  color: var(--sv-muted, #6E7169);
+  font-size: 12px;
+  font-weight: 500;
   line-height: 1.5;
 }
 
@@ -164,15 +292,49 @@ body.cdd-article-page .cdd-source-note__copy {
 
 @media (max-width: 700px) {
   body.cdd-article-page .cdd-figure {
-    overflow-x: auto;
-    overscroll-behavior-inline: contain;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
+    width: 100%;
+    max-width: 100%;
+    overflow: visible;
   }
 
   body.cdd-article-page .cdd-figure img,
   body.cdd-article-page .cdd-figure figcaption {
-    min-width: 760px;
+    width: 100%;
+    min-width: 0 !important;
+    max-width: 100%;
+  }
+
+  body.cdd-article-page .cdd-figure figcaption {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  body.cdd-article-page .cdd-figure__expand {
+    appearance: none;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    width: 100%;
+    min-height: 42px;
+    padding: 0 12px;
+    border: 1px solid var(--sv-border-light-strong, rgba(216, 206, 176, 0.9));
+    border-top: 0;
+    border-radius: 0;
+    background: rgba(241, 235, 221, 0.58);
+    color: var(--sv-cinnabar-d, #9F2F24);
+    cursor: pointer;
+    font-family: var(--sv-font, "DIN 2014", "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif);
+    font-size: 10.5px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  body.cdd-article-page .cdd-figure__expand:focus-visible {
+    outline: 2px solid var(--sv-cinnabar, #C93B2A);
+    outline-offset: -3px;
   }
 
   body.cdd-article-page[data-article-source*="china-debt-dynamics-v9i3"] .cdd-figure {
@@ -183,11 +345,52 @@ body.cdd-article-page .cdd-source-note__copy {
   }
 
   body.cdd-article-page[data-article-source*="china-debt-dynamics-v9i3"] .cdd-figure img {
-    min-width: 720px;
+    min-width: 0;
+  }
+
+  body.cdd-article-page[data-article-source*="china-debt-dynamics-v9i3"] .cdd-figure__expand {
+    border-right: 0;
+    border-bottom: 0;
+    border-left: 0;
   }
 
   body.cdd-article-page[data-article-source*="china-debt-dynamics-v9i3"] .cdd-figure figcaption {
     min-width: 0;
+  }
+
+  .cdd-figure-viewer {
+    align-items: stretch;
+    justify-content: stretch;
+    padding: 0;
+  }
+
+  .cdd-figure-viewer__panel {
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    border: 0;
+    box-shadow: none;
+  }
+
+  .cdd-figure-viewer__toolbar {
+    min-height: 54px;
+    padding: 0 14px 0 16px;
+  }
+
+  .cdd-figure-viewer__viewport {
+    padding: 16px;
+  }
+
+  .cdd-figure-viewer__image {
+    min-width: 900px;
+    margin: 0;
+  }
+
+  .cdd-figure-viewer__caption {
+    max-height: 22vh;
+    max-height: 22dvh;
+    overflow: auto;
+    padding: 12px 16px 14px;
   }
 
   body.cdd-article-page .cdd-body > h2.cdd-part-label {
@@ -246,5 +449,10 @@ body.cdd-article-page .cdd-source-note__copy {
     padding: 8px 0 0;
     border-left: 0;
     border-top: 1px solid rgba(24, 37, 36, 0.2);
+  }
+
+  body.cdd-print-layout .cdd-figure__expand,
+  .cdd-figure-viewer {
+    display: none !important;
   }
 }

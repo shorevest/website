@@ -7,6 +7,7 @@
   'use strict';
 
   var SITE_ORIGIN = 'https://shorevest.com';
+  var activeFigureTrigger = null;
 
   function cleanInsightPath(pathname) {
     var path = String(pathname || '').replace(/\/index\.html$/i, '/');
@@ -121,9 +122,114 @@
 
     var link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = '/assets/css/cdd-article-figures.css?v=20260722-v9i3-figure-panel-v3';
+    link.href = '/assets/css/cdd-article-figures.css?v=20260722-mobile-figure-viewer-v2';
     link.setAttribute('data-cdd-figure-styles', 'true');
     document.head.appendChild(link);
+  }
+
+  function ensureFigureViewer() {
+    var existing = document.querySelector('.cdd-figure-viewer');
+    if (existing) return existing;
+
+    var viewer = document.createElement('div');
+    viewer.className = 'cdd-figure-viewer';
+    viewer.hidden = true;
+    viewer.setAttribute('role', 'dialog');
+    viewer.setAttribute('aria-modal', 'true');
+    viewer.setAttribute('aria-label', 'Full-size diagram');
+    viewer.innerHTML =
+      '<div class="cdd-figure-viewer__panel">' +
+        '<div class="cdd-figure-viewer__toolbar">' +
+          '<p class="cdd-figure-viewer__label">Full diagram</p>' +
+          '<button class="cdd-figure-viewer__close" type="button" aria-label="Close full-size diagram">Close</button>' +
+        '</div>' +
+        '<div class="cdd-figure-viewer__viewport" tabindex="0">' +
+          '<img class="cdd-figure-viewer__image" alt="">' +
+        '</div>' +
+        '<p class="cdd-figure-viewer__caption"></p>' +
+      '</div>';
+
+    function closeViewer() {
+      viewer.classList.remove('is-open');
+      viewer.hidden = true;
+      document.body.classList.remove('cdd-figure-viewer-open');
+      if (activeFigureTrigger && typeof activeFigureTrigger.focus === 'function') {
+        activeFigureTrigger.focus();
+      }
+      activeFigureTrigger = null;
+    }
+
+    viewer.querySelector('.cdd-figure-viewer__close').addEventListener('click', closeViewer);
+    viewer.addEventListener('click', function (event) {
+      if (event.target === viewer) closeViewer();
+    });
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' && !viewer.hidden) closeViewer();
+    });
+
+    document.body.appendChild(viewer);
+    return viewer;
+  }
+
+  function openFigureViewer(img, caption, trigger) {
+    if (!img) return;
+
+    var viewer = ensureFigureViewer();
+    var viewerImage = viewer.querySelector('.cdd-figure-viewer__image');
+    var viewerCaption = viewer.querySelector('.cdd-figure-viewer__caption');
+    var viewport = viewer.querySelector('.cdd-figure-viewer__viewport');
+    var closeButton = viewer.querySelector('.cdd-figure-viewer__close');
+    var captionText = caption ? caption.textContent.trim() : '';
+
+    activeFigureTrigger = trigger;
+    viewerImage.src = img.currentSrc || img.src;
+    viewerImage.alt = img.alt || captionText || 'Diagram';
+    viewerCaption.textContent = captionText;
+    viewerCaption.hidden = !captionText;
+    viewer.hidden = false;
+    viewer.classList.add('is-open');
+    document.body.classList.add('cdd-figure-viewer-open');
+    viewport.scrollLeft = 0;
+    viewport.scrollTop = 0;
+    closeButton.focus();
+  }
+
+  function upgradeFigure(figure) {
+    if (!figure || figure.dataset.cddFigureReady === 'true') return;
+
+    var img = Array.from(figure.children).find(function (child) {
+      return child.tagName === 'IMG';
+    }) || figure.querySelector('img');
+    if (!img) return;
+
+    var caption = figure.querySelector('figcaption');
+    var media = document.createElement('div');
+    media.className = 'cdd-figure__media';
+    figure.insertBefore(media, img);
+    media.appendChild(img);
+
+    var button = document.createElement('button');
+    button.className = 'cdd-figure__expand';
+    button.type = 'button';
+    button.innerHTML = '<span>View full diagram</span><span aria-hidden="true">↗</span>';
+    button.setAttribute('aria-label', 'View full diagram' + (img.alt ? ': ' + img.alt : ''));
+    button.addEventListener('click', function () {
+      openFigureViewer(img, caption, button);
+    });
+    media.appendChild(button);
+
+    figure.dataset.cddFigureReady = 'true';
+  }
+
+  function upgradeFigures(root) {
+    if (!root || root.nodeType !== 1) return;
+
+    var figures = [];
+    if (root.matches && root.matches('.cdd-figure')) figures.push(root);
+    if (root.querySelectorAll) {
+      figures = figures.concat(Array.from(root.querySelectorAll('.cdd-figure')));
+    }
+    figures.forEach(upgradeFigure);
   }
 
   function upgradeSourceEntry(entry) {
@@ -152,6 +258,8 @@
 
     var article = document.querySelector('[data-cdd-body]');
     if (!article) return;
+
+    upgradeFigures(article);
 
     var headings = Array.from(article.children).filter(function (element) {
       return element.tagName === 'H2';
@@ -189,12 +297,16 @@
     installFigureStyles();
     installGuaranteedClickFallback();
     upgradeLinkedInShare(document.body);
+    upgradeFigures(document.body);
     enhanceCddStructure();
 
     if (!('MutationObserver' in window)) return;
     new MutationObserver(function (mutations) {
       mutations.forEach(function (mutation) {
-        Array.from(mutation.addedNodes).forEach(upgradeLinkedInShare);
+        Array.from(mutation.addedNodes).forEach(function (node) {
+          upgradeLinkedInShare(node);
+          upgradeFigures(node);
+        });
       });
       enhanceCddStructure();
     }).observe(document.body, { childList: true, subtree: true });
