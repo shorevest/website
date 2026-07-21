@@ -150,7 +150,7 @@
 </footer>
 <script>document.querySelector('.sv-burger')?.addEventListener('click',function(){var open=this.getAttribute('aria-expanded')==='true';this.setAttribute('aria-expanded',String(!open));document.getElementById('sv-mobile-menu')?.classList.toggle('is-open',!open);});</script>
 <script>(function(){var links=document.querySelectorAll('.careers-pagenav a[href^="#"]');if(!links.length||!('IntersectionObserver' in window))return;var map=new Map();links.forEach(function(a){var s=document.querySelector(a.getAttribute('href'));if(s)map.set(s,a);});var current=null;var io=new IntersectionObserver(function(entries){entries.forEach(function(e){if(!e.isIntersecting)return;var link=map.get(e.target);if(!link||link===current)return;if(current){current.classList.remove('is-current');current.removeAttribute('aria-current');}current=link;current.classList.add('is-current');current.setAttribute('aria-current','true');});},{rootMargin:'-45% 0px -50% 0px'});map.forEach(function(_,s){io.observe(s);});})();</script>
-<script src="../assets/js/insights-new-edition.js?v=20260717" defer></script>
+<script src="../assets/js/insights-new-edition.js?v=20260721-linkedin-share" defer></script>
 <script src="../assets/js/sv-navigation.js?v=20260717" defer></script>
 </body>
 </html>
