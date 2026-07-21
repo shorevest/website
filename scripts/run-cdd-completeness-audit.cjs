@@ -7,6 +7,7 @@ const { spawnSync } = require('child_process');
 const ROOT = path.resolve(__dirname, '..');
 const AUDIT = path.join(__dirname, 'audit-cdd-completeness.cjs');
 const REPORT = path.join(ROOT, 'cdd-completeness-report.json');
+const MANIFEST = path.join(ROOT, 'assets', 'data', 'clean-url-manifest.json');
 
 const run = spawnSync(process.execPath, [AUDIT], {
   cwd: ROOT,
@@ -48,6 +49,35 @@ for (const issue of report.issues || []) {
     const full = `${issue.route}: ${message}`;
     return retained.includes(full);
   });
+}
+
+if (!fs.existsSync(MANIFEST)) {
+  retained.push('/insights/: clean URL manifest is missing');
+} else {
+  const manifest = JSON.parse(fs.readFileSync(MANIFEST, 'utf8'));
+  const publicIssues = (manifest.routes || []).filter(item =>
+    item.indexable === true &&
+    /^\/insights\/china-debt-dynamics\/v\d+i\d+\/$/i.test(item.route)
+  );
+
+  for (const item of publicIssues) {
+    const destination = path.join(ROOT, item.destination || '');
+    let problem = '';
+    if (!item.destination || !fs.existsSync(destination)) {
+      problem = 'indexable article has no generated destination';
+    } else {
+      const html = fs.readFileSync(destination, 'utf8');
+      if (/<meta\b[^>]*name=["']robots["'][^>]*content=["'][^"']*noindex/i.test(html)) {
+        problem = 'indexable article contains a noindex directive';
+      }
+    }
+
+    if (!problem) continue;
+    const full = `${item.route}: ${problem}`;
+    retained.push(full);
+    const issue = (report.issues || []).find(entry => entry.route === item.route);
+    if (issue) issue.errors.push(problem);
+  }
 }
 
 report.errors = retained;
