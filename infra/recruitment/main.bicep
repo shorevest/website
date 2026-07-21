@@ -300,7 +300,7 @@ resource blobData 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
     principalId: mi.properties.principalId
     principalType: 'ServicePrincipal'
     roleDefinitionId: subscriptionResourceId(
-      'Microsoft.Authorization/roleDefinitions'
+      'Microsoft.Authorization/roleDefinitions',
       'ba92f5b4-2d11-453d-a403-e96b0029c9fe'
     )
   }
@@ -314,7 +314,7 @@ resource kvSecrets 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
     principalId: mi.properties.principalId
     principalType: 'ServicePrincipal'
     roleDefinitionId: subscriptionResourceId(
-      'Microsoft.Authorization/roleDefinitions'
+      'Microsoft.Authorization/roleDefinitions',
       '4633458b-17de-408a-b874-0445c86b69e6c'
     )
   }
