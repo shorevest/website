@@ -24,6 +24,14 @@ jobs:
         with:
           node-version: '24'
 
+      - name: Restore files outside the public URL migration
+        run: |
+          git checkout origin/main -- \
+            assets/email/welcome-template.html \
+            assets/email/welcome-template-cn.html \
+            assets/js/employee-portal/views-cdd-publisher.js \
+            templates/media-coverage/media-coverage-print.html
+
       - name: Generate clean routes
         run: node scripts/generate-clean-public-urls.js
 
