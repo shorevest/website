@@ -122,7 +122,7 @@
 
     var link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = '/assets/css/cdd-article-figures.css?v=20260722-mobile-figure-viewer-v2';
+    link.href = '/assets/css/cdd-article-figures-mobile.css?v=20260722-v9i3-gutter-v1';
     link.setAttribute('data-cdd-figure-styles', 'true');
     document.head.appendChild(link);
   }
