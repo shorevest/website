@@ -61,7 +61,8 @@ function isPublicHtml(absolute) {
 }
 
 function stripExistingFaviconLinks(html) {
-  return html.replace(/^[ \t]*<link\b[^>]*>\s*\r?\n?/gim, tag => {
+  let output = html.replace(/^[ \t]*<!--\s*ShoreVest favicon:[\s\S]*?-->\s*\r?\n?/gim, '');
+  output = output.replace(/^[ \t]*<link\b[^>]*>\s*\r?\n?/gim, tag => {
     const match = tag.match(/\brel\s*=\s*(["'])(.*?)\1/i);
     if (!match) return tag;
     const rels = match[2].toLowerCase().trim().split(/\s+/).filter(Boolean);
@@ -74,6 +75,7 @@ function stripExistingFaviconLinks(html) {
     );
     return faviconRel ? '' : tag;
   });
+  return output.replace(/(<meta\b[^>]*\bname=(["'])viewport\2[^>]*>)[ \t]*(?:\r?\n[ \t]*)+/i, '$1\n');
 }
 
 function refreshGuardVersion(html) {
@@ -83,9 +85,9 @@ function refreshGuardVersion(html) {
 }
 
 function insertFaviconBlock(html) {
-  const viewport = /<meta\b[^>]*\bname=(["'])viewport\1[^>]*>\s*/i;
+  const viewport = /<meta\b[^>]*\bname=(["'])viewport\1[^>]*>/i;
   if (viewport.test(html)) {
-    return html.replace(viewport, match => `${match}\n${FAVICON_BLOCK}\n`);
+    return html.replace(viewport, match => `${match}\n${FAVICON_BLOCK}`);
   }
   if (/<\/head>/i.test(html)) {
     return html.replace(/<\/head>/i, `${FAVICON_BLOCK}\n</head>`);
