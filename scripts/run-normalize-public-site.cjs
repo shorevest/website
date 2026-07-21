@@ -20,6 +20,10 @@ source = source
     "const EXCLUDED_CDD_SOURCE = '__no_excluded_cdd_source__.html';"
   )
   .replace(
+    "if (rel === EXCLUDED_CDD_SOURCE || rel === 'insights/china-debt-dynamics/v7i4/index.html') {",
+    "if (rel === EXCLUDED_CDD_SOURCE || rel === '__no_excluded_cdd_generated_route__.html') {"
+  )
+  .replace(
     `  output = output
     .replace(/(<span class="cdd-stat__num">)21(<\\/span><span class="cdd-stat__label">Issues in archive)/g, '$120$2')
     .replace(/(<span data-cdd-arc-count>)21(<\\/span> articles)/g, '$120$2');
@@ -31,8 +35,12 @@ source = source
     'assert(/<span class="cdd-stat__num">21<\\/span><span class="cdd-stat__label">Issues in archive/.test(insightsIndex), \'Insights issue count is not 21\');'
   );
 
-if (source.includes("Insights issue count is not 20") || source.includes("'$120$2'")) {
-  throw new Error('Unable to patch the legacy 20-issue archive policy.');
+if (
+  source.includes("Insights issue count is not 20") ||
+  source.includes("'$120$2'") ||
+  source.includes("rel === 'insights/china-debt-dynamics/v7i4/index.html'")
+) {
+  throw new Error('Unable to patch the legacy v7i4 exclusion policy.');
 }
 
 fs.writeFileSync(temporaryPath, source);
