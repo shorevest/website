@@ -121,9 +121,30 @@
 
     var link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = '/assets/css/cdd-article-figures.css?v=20260722-cdd-structure';
+    link.href = '/assets/css/cdd-article-figures.css?v=20260722-cdd-hierarchy-sources-v2';
     link.setAttribute('data-cdd-figure-styles', 'true');
     document.head.appendChild(link);
+  }
+
+  function upgradeSourceEntry(entry) {
+    if (!entry || entry.querySelector('.cdd-source-note__copy')) return;
+
+    var text = entry.textContent.trim();
+    var match = text.match(/^\[(\d+)\]\s*([\s\S]*)$/);
+    if (!match) return;
+
+    entry.classList.add('cdd-source-note');
+    entry.textContent = '';
+
+    var index = document.createElement('span');
+    index.className = 'cdd-source-note__index';
+    index.textContent = '[' + match[1] + ']';
+
+    var copy = document.createElement('span');
+    copy.className = 'cdd-source-note__copy';
+    copy.textContent = match[2];
+
+    entry.append(index, copy);
   }
 
   function enhanceCddStructure() {
@@ -140,6 +161,7 @@
       var next = heading.nextElementSibling;
       if (next && next.tagName === 'H2') {
         heading.classList.add('cdd-part-label');
+        next.classList.add('cdd-section-heading');
       }
     });
 
@@ -153,25 +175,11 @@
     var node = sourcesHeading.nextElementSibling;
     while (node && node.tagName !== 'H2') {
       if (node.tagName === 'P') {
-        node.classList.add('cdd-source-note');
-
-        if (!node.querySelector('.cdd-source-note__index')) {
-          var text = node.textContent.trim();
-          var match = text.match(/^\[(\d+)\]\s*([\s\S]*)$/);
-          if (match) {
-            node.textContent = '';
-
-            var index = document.createElement('span');
-            index.className = 'cdd-source-note__index';
-            index.textContent = '[' + match[1] + ']';
-
-            var copy = document.createElement('span');
-            copy.className = 'cdd-source-note__copy';
-            copy.textContent = match[2];
-
-            node.append(index, copy);
-          }
-        }
+        upgradeSourceEntry(node);
+      } else if (node.tagName === 'UL' || node.tagName === 'OL') {
+        node.classList.add('cdd-sources-list');
+        node.setAttribute('aria-label', 'Sources and notes');
+        Array.from(node.children).forEach(upgradeSourceEntry);
       }
       node = node.nextElementSibling;
     }
