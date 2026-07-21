@@ -17,6 +17,18 @@
     document.head.appendChild(scrollFix);
   }
 
+  // Keep the current desktop navigation item visibly selected after page load.
+  if (document.body && document.body.classList.contains('homepage') && !document.getElementById('sv-active-nav-indicator')) {
+    var activeNavStyle = document.createElement('style');
+    activeNavStyle.id = 'sv-active-nav-indicator';
+    activeNavStyle.textContent = [
+      'body.homepage .sv-nav a[aria-current="page"]::after {',
+      '  transform: scaleX(1) !important;',
+      '}'
+    ].join('\n');
+    document.head.appendChild(activeNavStyle);
+  }
+
   // Chrome 150 on macOS can deliver wheel events without moving the root
   // scroller. For that exact browser/version only, take control of vertical
   // wheel input and apply the delta directly. Other browsers keep native scrolling.
