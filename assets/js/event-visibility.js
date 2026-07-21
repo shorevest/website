@@ -90,3 +90,22 @@
     sortVisibleEvents: sortVisibleEvents
   };
 }));
+
+/* Keep the temporary Media archive notice aligned with the inner content
+   column used by the header and event ledgers. */
+(function () {
+  function alignMediaArchiveNotice() {
+    var notice = document.querySelector('#archive .pr-archive-hold');
+    if (!notice) return;
+    notice.style.marginInlineStart = window.innerWidth >= 900
+      ? 'clamp(44px, 4vw, 64px)'
+      : '0';
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', alignMediaArchiveNotice);
+  } else {
+    alignMediaArchiveNotice();
+  }
+  window.addEventListener('resize', alignMediaArchiveNotice, { passive: true });
+}());

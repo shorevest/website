@@ -1,6 +1,27 @@
 name: Recruitment Functions CI
 on:
   pull_request:
+    paths:
+      - '.github/workflows/recruitment-functions.yml'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'scripts/validate-recruitment-roles.js'
+      - 'scripts/generate-clean-public-urls.js'
+      - 'services/recruitment-functions/**'
+      - 'api/recruitment/**'
+      - 'infra/recruitment/**'
+      - 'assets/data/recruitment/**'
+      - 'assets/js/recruitment-*.js'
+      - 'assets/js/site-config.js'
+      - 'assets/css/recruitment-application.css'
+      - 'careers.html'
+      - 'careers_cn.html'
+      - 'careers/**'
+      - 'cn/careers/**'
+      - 'sitemap.xml'
+      - '_headers'
+      - 'tests/recruitment*.test.js'
+      - 'tests/security-headers.test.js'
   workflow_dispatch:
 jobs:
   validate:
@@ -11,7 +32,8 @@ jobs:
         with:
           node-version: '20'
       - run: npm ci
-      - run: npm ci
+      - name: Install recruitment function dependencies
+        run: npm install --ignore-scripts --no-audit --no-fund --package-lock=false
         working-directory: services/recruitment-functions
       - run: npm run validate:recruitment
       - run: npm run check:recruitment
@@ -19,6 +41,8 @@ jobs:
       - run: npm run check:security
       - run: npm run check:functions
       - run: npm run test:functions
-      - run: az bicep build --file infra/recruitment/main.bicep
-      - run: az bicep build --file infra/recruitment/main.bicep --stdout >/dev/null
+      - name: Compile recruitment Bicep
+        run: az bicep build --file infra/recruitment/main.bicep
+      - name: Lint recruitment Bicep
+        run: az bicep build --file infra/recruitment/main.bicep --stdout >/dev/null
       - run: git diff --check

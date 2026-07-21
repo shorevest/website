@@ -131,11 +131,10 @@ function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
 
-function expectedCanonical(item) {
-  if (item.disabled && item.redirectTarget) {
-    return new URL(item.redirectTarget, SITE_ORIGIN).href;
-  }
-  return `${SITE_ORIGIN}${item.route}`;
+function canonicalHref(html) {
+  const match = html.match(/<link\s+rel=["']canonical["'][^>]*href=["']([^"']+)["'][^>]*>/i) ||
+    html.match(/<link\s+href=["']([^"']+)["'][^>]*rel=["']canonical["'][^>]*>/i);
+  return match ? match[1] : null;
 }
 
 function validateArticles() {
@@ -146,18 +145,28 @@ function validateArticles() {
   );
   const indexableArticles = articleRoutes.filter(item => item.indexable);
   const cddArticles = indexableArticles.filter(item => item.route.startsWith('/insights/'));
-  const mediaArticles = indexableArticles.filter(item => item.route.startsWith('/media/'));
+  const mediaArticles = articleRoutes.filter(item => item.route.startsWith('/media/'));
+  const disabledMediaArticles = mediaArticles.filter(item => item.disabled);
 
   for (const item of articleRoutes) {
     const abs = path.join(ROOT, item.destination);
     assert(fs.existsSync(abs), `Missing article destination: ${item.destination}`);
     const html = fs.readFileSync(abs, 'utf8');
-    const canonical = `<link rel="canonical" href="${expectedCanonical(item)}">`;
-    assert(html.includes(canonical), `Incorrect canonical URL in ${item.destination}`);
     assert(/<title>[^<]+<\/title>/i.test(html), `Missing title in ${item.destination}`);
     assert(!/href=["']\/media-[^"']+\/["']/i.test(html), `Legacy media route remains in ${item.destination}`);
     assert(!/function\s+\w+\(u\)\{return\s+u\+\(u\.indexOf\(["']\?["']\)/.test(html), `Unguarded t helper remains in ${item.destination}`);
     assert(!/if\s*\(\s*\w+\.origin\s*===\s*location\.origin\s*&&\s*!\w+\.searchParams\.get\(["']t["']\)/.test(html), `Unguarded t propagation remains in ${item.destination}`);
+
+    if (item.disabled) {
+      const expectedCanonical = new URL(item.redirectTarget, SITE_ORIGIN).href;
+      assert(/<meta[^>]+name=["']robots["'][^>]+content=["'][^"']*noindex/i.test(html), `Disabled article is indexable: ${item.destination}`);
+      assert(canonicalHref(html) === expectedCanonical, `Incorrect disabled-route canonical in ${item.destination}`);
+      assert(html.includes(`content="${SITE_ORIGIN}${item.route}"`), `Disabled-route marker missing in ${item.destination}`);
+      assert(html.includes(item.redirectTarget), `Disabled-route target missing in ${item.destination}`);
+      continue;
+    }
+
+    assert(canonicalHref(html) === `${SITE_ORIGIN}${item.route}`, `Incorrect canonical URL in ${item.destination}`);
 
     if (item.route.startsWith('/insights/china-debt-dynamics/') && item.route !== EXCLUDED_CDD_ROUTE) {
       const sourceMatch = html.match(/data-article-source=["']([^"']+)["']/i);
@@ -180,9 +189,12 @@ function validateArticles() {
   for (const item of indexableArticles) {
     assert(sitemap.includes(`<loc>${SITE_ORIGIN}${item.route}</loc>`), `Sitemap is missing ${item.route}`);
   }
+  for (const item of articleRoutes.filter(item => !item.indexable)) {
+    assert(!sitemap.includes(`<loc>${SITE_ORIGIN}${item.route}</loc>`), `Non-indexable article remains in sitemap: ${item.route}`);
+  }
   assert(!sitemap.includes(`${SITE_ORIGIN}${EXCLUDED_CDD_ROUTE}`), 'Excluded CDD 36 route remains in sitemap.xml');
 
-  console.log(`Validated ${cddArticles.length} China Debt Dynamics articles and ${mediaArticles.length} media article pages.`);
+  console.log(`Validated ${cddArticles.length} published China Debt Dynamics articles and ${mediaArticles.length} media article routes (${disabledMediaArticles.length} intentionally redirected while the archive is hidden).`);
 }
 
 normalizeFiles();

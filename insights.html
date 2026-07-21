@@ -24,7 +24,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <script>document.write('<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260717-header-unify">');</script>
 <script>document.write('<link rel="stylesheet" href="assets/css/insights-rebuild.css?v=20260717-mobile-polish">');</script>
-<script>(function(){var T=window.__SVT;function tk(u){return u+(u.indexOf('?')>-1?'&':'?')+'t='+T;}var s=document.createElement('script');s.src=tk('assets/js/image-slot.js');document.head.appendChild(s);})();</script>
+<script>(function(){var T=window.__SVT;function tk(u){return T?u+(u.indexOf('?')>-1?'&':'?')+'t='+T:u;}var s=document.createElement('script');s.src=tk('assets/js/image-slot.js');document.head.appendChild(s);})();</script>
 <link rel="icon" href="assets/favicon-cinnabar.ico?v=20260717" sizes="any">
 <link rel="shortcut icon" href="assets/favicon-cinnabar.ico?v=20260717">
 <link rel="icon" href="assets/favicon-cinnabar.svg?v=20260717" type="image/svg+xml">
@@ -119,7 +119,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 
       <!-- 3 · Quiet stat block -->
       <div class="cdd-stats">
-        <div class="cdd-stat"><span class="cdd-stat__num">21</span><span class="cdd-stat__label">Issues in archive</span></div>
+        <div class="cdd-stat"><span class="cdd-stat__num">20</span><span class="cdd-stat__label">Issues in archive</span></div>
         <div class="cdd-stat"><span class="cdd-stat__num">2018</span><span class="cdd-stat__label">Published since</span></div>
         <div class="cdd-stat"><span class="cdd-stat__num">3</span><span class="cdd-stat__label">Themes covered</span></div>
         <div class="cdd-stat"><span class="cdd-stat__num">English</span><span class="cdd-stat__label">Publication language</span></div>
@@ -138,7 +138,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
             <svg class="cdd-arc__search-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
             <input type="search" class="cdd-arc__search-input" data-cdd-arc-search placeholder="Search the archive" aria-label="Search articles by title or topic" autocomplete="off">
           </div>
-          <p class="cdd-arc__count"><span data-cdd-arc-count>21</span> articles</p>
+          <p class="cdd-arc__count"><span data-cdd-arc-count>20</span> articles</p>
         </div>
       </div>
 
@@ -318,21 +318,6 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
             </article>
 
             <div class="cdd-arc__year"><span>2023</span></div>
-            <article class="cdd-arc__row" data-topic="policy" data-href="/insights/china-debt-dynamics/v7i4/" tabindex="0" role="link" aria-label="Beijings Strategy for Dealing With Local Government Debt: No Bailouts, but a Helping Hand — read article">
-              <div class="cdd-arc__meta">
-                <span class="cdd-arc__chip-issue">7.4</span>
-                <span class="cdd-arc__date">Dec 2023</span>
-              </div>
-              <span class="cdd-arc__cat">Policy</span>
-              <div class="cdd-arc__body">
-                <h3 class="cdd-arc__row-title">Beijing’s Strategy for Dealing With Local Government Debt: No Bailouts, but a Helping Hand</h3>
-                <p class="cdd-arc__excerpt">Local-government debt relief is assessed through policy discipline, refinancing tools, and creditor implications.</p>
-              </div>
-              <div class="cdd-arc__actions">
-                <a class="cdd-arc__read" href="/insights/china-debt-dynamics/v7i4/">Read <span aria-hidden="true">→</span></a>
-                <a class="cdd-arc__pdf" href="/insights/china-debt-dynamics/print/?source=assets/data/china-debt-dynamics-v7i4.json&pdf=1" target="_blank" rel="noopener">PDF</a>
-              </div>
-            </article>
             <article class="cdd-arc__row" data-topic="policy" data-href="/insights/china-debt-dynamics/v7i3/" tabindex="0" role="link" aria-label="Wheres the Stimulus? Parsing Beijings Lackluster Response to Growth — read article">
               <div class="cdd-arc__meta">
                 <span class="cdd-arc__chip-issue">7.3</span>
@@ -583,7 +568,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 13V3M8 3L3.5 7.5M8 3l4.5 4.5" stroke="currentColor" stroke-width="1.5"/></svg>
 </button>
 
-<script>(function(){var T=window.__SVT;function tk(u){return u+(u.indexOf("?")>-1?"&":"?")+"t="+T;}var s=document.createElement("script");s.src=tk("assets/js/cdd-archive.js");document.head.appendChild(s);})();</script>
+<script>(function(){var T=window.__SVT;function tk(u){return T?u+(u.indexOf('?')>-1?'&':'?')+'t='+T:u;}var s=document.createElement("script");s.src=tk("assets/js/cdd-archive.js");document.head.appendChild(s);})();</script>
 <script>
 (function(){
   var burger=document.querySelector('.sv-burger'); var menu=document.getElementById('sv-mobile-menu');
@@ -592,7 +577,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   if(toTop){var onScroll=function(){if(window.scrollY>600)toTop.classList.add('is-visible');else toTop.classList.remove('is-visible');};window.addEventListener('scroll',onScroll,{passive:true});onScroll();toTop.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});}
 })();
 </script>
-<script src="assets/js/insights-new-edition.js?v=20260722-linkedin-target" defer></script>
+<script src="assets/js/insights-new-edition.js?v=20260722-linkedin-working" defer></script>
 <script src="assets/js/sv-navigation.js?v=20260717" defer></script>
 </body>
 </html>

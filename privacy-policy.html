@@ -8,7 +8,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   var T=window.__SVT;
   function tok(u){try{var url=new URL(u,document.baseURI);if(T&&url.origin===location.origin&&!url.searchParams.get('t')){url.searchParams.set('t',T);return url.href;}return u;}catch(e){return u;}}
   window.__svTok=tok;
-  (function(){var _f=window.fetch;if(_f){window.fetch=function(i,n){try{var u;if(typeof i==='string'){u=new URL(i,document.baseURI);if(u.origin===location.origin&&!u.searchParams.get('t')){u.searchParams.set('t',T);i=u.href;}}else if(i&&i.url){u=new URL(i.url,document.baseURI);if(u.origin===location.origin&&!u.searchParams.get('t')){u.searchParams.set('t',T);i=new Request(u.href,i);}}}catch(e){}return _f.call(this,i,n);};}var _o=window.XMLHttpRequest&&window.XMLHttpRequest.prototype.open;if(_o){window.XMLHttpRequest.prototype.open=function(m,u){try{var x=new URL(u,document.baseURI);if(x.origin===location.origin&&!x.searchParams.get('t')){x.searchParams.set('t',T);u=x.href;}}catch(e){}return _o.apply(this,[m,u].concat([].slice.call(arguments,2)));};}})();
+  (function(){var _f=window.fetch;if(_f){window.fetch=function(i,n){try{var u;if(typeof i==='string'){u=new URL(i,document.baseURI);if(T&&u.origin===location.origin&&!u.searchParams.get('t')){u.searchParams.set('t',T);i=u.href;}}else if(i&&i.url){u=new URL(i.url,document.baseURI);if(T&&u.origin===location.origin&&!u.searchParams.get('t')){u.searchParams.set('t',T);i=new Request(u.href,i);}}}catch(e){}return _f.call(this,i,n);};}var _o=window.XMLHttpRequest&&window.XMLHttpRequest.prototype.open;if(_o){window.XMLHttpRequest.prototype.open=function(m,u){try{var x=new URL(u,document.baseURI);if(T&&x.origin===location.origin&&!x.searchParams.get('t')){x.searchParams.set('t',T);u=x.href;}}catch(e){}return _o.apply(this,[m,u].concat([].slice.call(arguments,2)));};}})();
   function fixEl(el){
     if(el.nodeType!==1)return;
     if(el.hasAttribute('data-svsrc')&&!el.__sd){el.__sd=1;el.setAttribute('src',tok(el.getAttribute('data-svsrc')));}
@@ -308,7 +308,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   }
 })();
 </script>
-<script src="assets/js/insights-new-edition.js?v=20260722-linkedin-target" defer></script>
+<script src="assets/js/insights-new-edition.js?v=20260722-linkedin-working" defer></script>
 <script src="assets/js/sv-navigation.js?v=20260717" defer></script>
 </body>
 </html>
