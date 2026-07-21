@@ -25,20 +25,6 @@
     );
   }
 
-  function hideOpenRoles(doc) {
-    if (!doc) return;
-
-    var section = doc.getElementById('open-roles');
-    if (section) section.hidden = true;
-
-    var links = doc.querySelectorAll('a[href="#open-roles"]');
-    Array.prototype.forEach.call(links, function (link) {
-      var navItem = link.closest ? link.closest('li') : null;
-      if (navItem) navItem.hidden = true;
-      else link.hidden = true;
-    });
-  }
-
   function localized(role, field, locale) {
     return role && role[field] && typeof role[field][locale] === 'string'
       ? role[field][locale]
@@ -144,10 +130,9 @@
     var doc = win.document;
     if (!doc) return Promise.resolve(0);
 
-    if (!flagEnabled(win)) {
-      hideOpenRoles(doc);
-      return Promise.resolve(0);
-    }
+    // Keep the Open Roles section and its empty-state message visible when
+    // listings are disabled; only skip loading individual role cards.
+    if (!flagEnabled(win)) return Promise.resolve(0);
 
     if (!doc.querySelector('[data-role-list="open-roles"]') || typeof win.fetch !== 'function') {
       return Promise.resolve(0);
@@ -171,7 +156,6 @@
   return {
     initRoleList: initRoleList,
     renderRolesFromManifest: renderRolesFromManifest,
-    hideOpenRoles: hideOpenRoles,
     isSafeDetailPath: isSafeDetailPath,
     MANIFEST_PATH: MANIFEST_PATH
   };

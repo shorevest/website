@@ -3,6 +3,7 @@ name: Generate clean public URLs
 on:
   push:
     branches:
+      - main
       - feature/clean-public-urls
       - hotfix/clean-url-asset-paths
 
@@ -26,6 +27,7 @@ jobs:
           node-version: '24'
 
       - name: Restore files outside the public URL migration
+        if: github.ref_name != 'main'
         run: |
           git checkout origin/main -- \
             assets/email/welcome-template.html \
@@ -49,5 +51,5 @@ jobs:
             echo "No generated changes to commit."
             exit 0
           fi
-          git commit -m "Regenerate clean URL pages with fixed asset paths"
+          git commit -m "Regenerate clean URL pages"
           git push origin "HEAD:${GITHUB_REF_NAME}"
