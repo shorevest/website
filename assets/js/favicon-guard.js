@@ -1,5 +1,19 @@
 (function () {
-  var VERSION = "20260721-google-search";
+  var VERSION = "20260721-clean-urls";
+
+  function removeEmptyLegacyToken() {
+    try {
+      var url = new URL(window.location.href);
+      if (!url.searchParams.has("t") || url.searchParams.get("t")) return;
+      url.searchParams.delete("t");
+      var cleanUrl = url.pathname + url.search + url.hash;
+      window.history.replaceState(window.history.state, "", cleanUrl);
+    } catch (_) {
+      // Leave the current URL untouched if the browser cannot rewrite it safely.
+    }
+  }
+
+  removeEmptyLegacyToken();
 
   // Resolve the site base from this script's own URL so shared assets work
   // whether the site is served from the domain root or a subpath
