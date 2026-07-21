@@ -8,6 +8,7 @@ const { execFileSync } = require('child_process');
 const ROOT = path.resolve(__dirname, '..');
 const SITE_ORIGIN = 'https://shorevest.com';
 const MANIFEST_PATH = path.join(ROOT, 'assets', 'data', 'clean-url-manifest.json');
+const SITE_CONFIG = require(path.join(ROOT, 'assets', 'js', 'site-config.js'));
 
 function trackedFiles() {
   return execFileSync('git', ['ls-files'], { cwd: ROOT, encoding: 'utf8' })
@@ -95,8 +96,38 @@ function choosePrimarySource(route, sources) {
   return sources[0];
 }
 
+function isCareerRoleRoute(route) {
+  return /^\/(?:cn\/)?careers\/[^/]+\/$/i.test(route);
+}
+
+function isMediaArticleRoute(route) {
+  return /^\/media\/[^/]+\/$/i.test(route);
+}
+
+function disabledRouteState(route) {
+  if (SITE_CONFIG.careersOpenRolesEnabled !== true && isCareerRoleRoute(route)) {
+    return {
+      reason: 'careers-disabled',
+      redirectTarget: route.startsWith('/cn/') ? '/cn/careers/#open-roles' : '/careers/#open-roles'
+    };
+  }
+  if (SITE_CONFIG.mediaArchiveEnabled !== true && isMediaArticleRoute(route)) {
+    return { reason: 'media-archive-disabled', redirectTarget: '/media/' };
+  }
+  return null;
+}
+
 function escapeRegExp(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 function buildReplacementPairs(sourceToRoute) {
@@ -123,11 +154,31 @@ function rewriteRuntimeUrlBases(content) {
   return content.replace(/new URL\(([^,\n]+),\s*location\.href\)/g, 'new URL($1,document.baseURI)');
 }
 
+function rewriteLegacyPortalHref(value, currentFile) {
+  if (!value) return null;
+  const splitAt = value.search(/[?#]/);
+  const pathname = splitAt === -1 ? value : value.slice(0, splitAt);
+  const suffix = splitAt === -1 ? '' : value.slice(splitAt);
+  const normalized = pathname
+    .replace(/^https:\/\/shorevest\.com/i, '')
+    .replace(/^https:\/\/shorevest\.github\.io\/website/i, '')
+    .replace(/^\.?\//, '/');
+
+  if (!/^\/(?:cn\/)?investor-portal\/index\/?$/i.test(normalized)) return null;
+  const chineseFile = /^cn\//i.test(currentFile) || /_cn\.html$/i.test(currentFile);
+  const target = chineseFile || /^\/cn\//i.test(normalized)
+    ? '/cn/investor-portal/'
+    : '/investor-portal/';
+  return /^https?:\/\//i.test(value) ? `${SITE_ORIGIN}${target}${suffix}` : `${target}${suffix}`;
+}
+
 function rewriteHtmlAttributes(content, currentFile, sourceToRoute) {
   const currentDir = path.posix.dirname(currentFile);
   const attributePattern = /(\b(?:href|action|data-href|content)\s*=\s*)(["'])([^"']*)\2/gi;
 
   return content.replace(attributePattern, (match, prefix, quote, value) => {
+    const fixedPortalHref = rewriteLegacyPortalHref(value, currentFile);
+    if (fixedPortalHref) return `${prefix}${quote}${fixedPortalHref}${quote}`;
     if (!value || /^(?:#|mailto:|tel:|javascript:|data:)/i.test(value)) return match;
 
     let legacyPath = null;
@@ -170,6 +221,13 @@ function ensureBaseHref(html) {
   return html.replace(/<head(\s[^>]*)?>/i, match => `${match}\n<base href="/">`);
 }
 
+function ensureNoindex(html) {
+  const robotsPattern = /<meta\s+name=["']robots["'][^>]*>/i;
+  const tag = '<meta name="robots" content="noindex, nofollow, noarchive">';
+  if (robotsPattern.test(html)) return html.replace(robotsPattern, tag);
+  return html.replace(/<\/head>/i, `  ${tag}\n</head>`);
+}
+
 function setCanonicalRoute(html, route) {
   const absolute = `${SITE_ORIGIN}${route}`;
   if (/<link\s+rel=["']canonical["'][^>]*>/i.test(html)) {
@@ -182,6 +240,42 @@ function setCanonicalRoute(html, route) {
     html = html.replace(/<meta\s+property=["']og:url["'][^>]*>/i, `<meta property="og:url" content="${absolute}">`);
   }
   return html;
+}
+
+function buildDisabledRoutePage(item) {
+  const chinese = item.route.startsWith('/cn/');
+  const targetAbsolute = new URL(item.redirectTarget, SITE_ORIGIN).href;
+  const title = item.reason === 'media-archive-disabled'
+    ? (chinese ? '媒体资料库更新中 | 新岸资本' : 'Media Archive Update | ShoreVest')
+    : (chinese ? '目前暂无开放职位 | 新岸资本' : 'No Current Vacancy | ShoreVest');
+  const heading = item.reason === 'media-archive-disabled'
+    ? (chinese ? '更新后的媒体资料库即将上线。' : 'Updated archive coming soon.')
+    : (chinese ? '目前暂无该开放职位。' : 'This role is not currently open.');
+  const linkText = item.reason === 'media-archive-disabled'
+    ? (chinese ? '返回媒体页面' : 'Return to Media')
+    : (chinese ? '查看人才招聘页面' : 'View Careers');
+
+  return `<!doctype html>
+<html lang="${chinese ? 'zh-CN' : 'en'}">
+<head>
+<base href="/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta http-equiv="refresh" content="0; url=${escapeHtml(item.redirectTarget)}">
+<meta name="sv-disabled-route" content="${escapeHtml(`${SITE_ORIGIN}${item.route}`)}">
+<title>${escapeHtml(title)}</title>
+<link rel="canonical" href="${escapeHtml(targetAbsolute)}">
+<script>window.location.replace(${JSON.stringify(item.redirectTarget)});</script>
+</head>
+<body>
+<main>
+<h1>${escapeHtml(heading)}</h1>
+<p><a href="${escapeHtml(item.redirectTarget)}">${escapeHtml(linkText)}</a></p>
+</main>
+</body>
+</html>
+`;
 }
 
 function isPublicTextFile(rel) {
@@ -253,10 +347,20 @@ function main() {
   for (const [route, sources] of grouped.entries()) {
     const source = choosePrimarySource(route, sources);
     const original = fs.readFileSync(path.join(ROOT, source), 'utf8');
-    const indexable = !/<meta[^>]+name=["']robots["'][^>]+content=["'][^"']*noindex/i.test(original) &&
+    const disabledState = disabledRouteState(route);
+    const indexable = !disabledState &&
+      !/<meta[^>]+name=["']robots["'][^>]+content=["'][^"']*noindex/i.test(original) &&
       !route.includes('/investor-portal/') &&
       route !== '/insights/china-debt-dynamics/print/';
-    primaryRoutes.push({ source, route, destination: destinationForRoute(route), indexable });
+    primaryRoutes.push({
+      source,
+      route,
+      destination: destinationForRoute(route),
+      indexable,
+      disabled: !!disabledState,
+      reason: disabledState ? disabledState.reason : null,
+      redirectTarget: disabledState ? disabledState.redirectTarget : null
+    });
   }
 
   const currentDestinations = new Set(primaryRoutes.map(item => item.destination));
@@ -278,10 +382,19 @@ function main() {
     if (/\.html$/i.test(rel)) rewritten = rewriteHtmlAttributes(rewritten, rel, sourceToRoute);
     rewritten = rewriteKnownUrls(rewritten, replacementPairs);
     if (/\.html$/i.test(rel)) rewritten = rewriteRuntimeUrlBases(rewritten);
+    const sourceRoute = sourceToRoute.get(rel);
+    if (sourceRoute && disabledRouteState(sourceRoute) && /\.html$/i.test(rel)) {
+      rewritten = ensureNoindex(rewritten);
+    }
     writeIfChanged(rel, rewritten);
   }
 
   for (const item of primaryRoutes) {
+    if (item.disabled) {
+      writeIfChanged(item.destination, buildDisabledRoutePage(item));
+      continue;
+    }
+
     const sourceAbs = path.join(ROOT, item.source);
     let html = fs.readFileSync(sourceAbs, 'utf8');
     html = rewriteHtmlAttributes(html, item.source, sourceToRoute);
@@ -297,7 +410,7 @@ function main() {
   const manifest = {
     generatedBy: 'scripts/generate-clean-public-urls.js',
     siteOrigin: SITE_ORIGIN,
-    note: 'Legacy .html files remain available for compatibility. Internal navigation and canonical URLs use the clean routes.',
+    note: 'Legacy .html files remain for compatibility but disabled routes are noindex. Generated clean routes respect public feature flags.',
     routes: primaryRoutes.sort((a, b) => a.route.localeCompare(b.route))
   };
   writeIfChanged(path.relative(ROOT, MANIFEST_PATH), `${JSON.stringify(manifest, null, 2)}\n`);
@@ -306,7 +419,16 @@ function main() {
     if (!fileExists(item.destination)) throw new Error(`Missing generated destination: ${item.destination}`);
     const html = fs.readFileSync(path.join(ROOT, item.destination), 'utf8');
     if (!/<base\s+href="\/">/i.test(html)) throw new Error(`Missing base href in ${item.destination}`);
-    if (!html.includes(`${SITE_ORIGIN}${item.route}`)) throw new Error(`Missing clean canonical URL in ${item.destination}`);
+
+    if (item.disabled) {
+      if (!/<meta[^>]+name=["']robots["'][^>]+content=["'][^"']*noindex/i.test(html)) {
+        throw new Error(`Disabled route is indexable: ${item.destination}`);
+      }
+      if (!html.includes(item.redirectTarget)) throw new Error(`Disabled route target missing in ${item.destination}`);
+    } else if (!html.includes(`${SITE_ORIGIN}${item.route}`)) {
+      throw new Error(`Missing clean canonical URL in ${item.destination}`);
+    }
+
     if (/new URL\(([^,\n]+),\s*location\.href\)/.test(html)) throw new Error(`Runtime URL still ignores base href in ${item.destination}`);
     const localHtmlLinks = [...html.matchAll(/(?:href|action|data-href)=["']([^"']+)["']/gi)]
       .map(match => match[1])
@@ -316,8 +438,14 @@ function main() {
 
   const sitemap = fs.readFileSync(path.join(ROOT, 'sitemap.xml'), 'utf8');
   if (/\.html(?:<|\?|#)/i.test(sitemap)) throw new Error('sitemap.xml still contains .html URLs');
+  for (const item of primaryRoutes.filter(route => route.disabled)) {
+    if (sitemap.includes(`<loc>${SITE_ORIGIN}${item.route}</loc>`)) {
+      throw new Error(`Disabled route remains in sitemap: ${item.route}`);
+    }
+  }
 
-  console.log(`Prepared ${primaryRoutes.length} clean public routes.`);
+  const disabledCount = primaryRoutes.filter(item => item.disabled).length;
+  console.log(`Prepared ${primaryRoutes.length} clean public routes (${disabledCount} temporarily disabled).`);
 }
 
 main();
