@@ -8,6 +8,7 @@ on:
       - 'assets/data/clean-url-manifest.json'
       - 'assets/js/**'
       - 'scripts/generate-clean-public-urls.js'
+      - 'scripts/normalize-current-page-fragments.cjs'
       - 'scripts/audit-public-links.cjs'
       - '.github/workflows/public-link-audit.yml'
   workflow_dispatch:
@@ -31,6 +32,9 @@ jobs:
 
       - name: Generate clean public routes
         run: node scripts/generate-clean-public-urls.js
+
+      - name: Normalize same-page section links
+        run: node scripts/normalize-current-page-fragments.cjs
 
       - name: Audit public links and buttons
         shell: bash
