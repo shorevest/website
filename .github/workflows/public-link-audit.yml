@@ -1,0 +1,36 @@
+name: Public link audit
+
+on:
+  pull_request:
+    paths:
+      - '*.html'
+      - '**/*.html'
+      - 'assets/data/clean-url-manifest.json'
+      - 'assets/js/**'
+      - 'scripts/generate-clean-public-urls.js'
+      - 'scripts/audit-public-links.cjs'
+      - '.github/workflows/public-link-audit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Generate clean public routes
+        run: node scripts/generate-clean-public-urls.js
+
+      - name: Audit public links and buttons
+        run: node scripts/audit-public-links.cjs
