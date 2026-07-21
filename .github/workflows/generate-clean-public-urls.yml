@@ -38,6 +38,39 @@ jobs:
       - name: Generate clean routes
         run: node scripts/generate-clean-public-urls.js
 
+      - name: Remove legacy empty t query parameters
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const { execFileSync } = require('child_process');
+
+          const files = execFileSync('git', ['ls-files', '*.html', '*.js'], { encoding: 'utf8' })
+            .split(/\r?\n/)
+            .filter(Boolean);
+
+          for (const file of files) {
+            let content = fs.readFileSync(file, 'utf8');
+            const before = content;
+
+            content = content.replace(
+              /if\s*\(\s*url\.origin\s*===\s*location\.origin\s*&&\s*!url\.searchParams\.get\((['"])t\1\)\s*\)/g,
+              "if(T&&url.origin===location.origin&&!url.searchParams.get('t'))"
+            );
+
+            content = content.replace(
+              /if\s*\(\s*!url\.searchParams\.get\((['"])t\1\)\s*\)\s*url\.searchParams\.set\((['"])t\2,\s*T\s*\);/g,
+              "if(T&&!url.searchParams.get('t'))url.searchParams.set('t',T);"
+            );
+
+            content = content
+              .replace(/&t='\+window\.__SVT\+'/g, '')
+              .replace(/\?t='\+window\.__SVT\+'/g, '');
+
+            if (content !== before) fs.writeFileSync(file, content);
+          }
+          NODE
+
       - name: Check generated changes
         run: git diff --check
 
