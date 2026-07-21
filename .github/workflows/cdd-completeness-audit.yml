@@ -1,0 +1,51 @@
+name: China Debt Dynamics completeness audit
+
+on:
+  pull_request:
+    paths:
+      - 'china-debt-dynamics-*.html'
+      - 'insights.html'
+      - 'insights/**/*.html'
+      - 'assets/data/china-debt-dynamics-*.json'
+      - 'assets/images/insights/**'
+      - 'assets/js/cdd-article-template.js'
+      - 'scripts/audit-cdd-completeness.cjs'
+      - 'assets/data/clean-url-manifest.json'
+      - '.github/workflows/cdd-completeness-audit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Generate clean public routes
+        run: node scripts/generate-clean-public-urls.js
+
+      - name: Audit issue completeness and figures
+        shell: bash
+        run: |
+          set -o pipefail
+          node scripts/audit-cdd-completeness.cjs 2>&1 | tee cdd-completeness-audit.txt
+
+      - name: Upload audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cdd-completeness-report
+          path: |
+            cdd-completeness-report.json
+            cdd-completeness-audit.txt
+          if-no-files-found: error
