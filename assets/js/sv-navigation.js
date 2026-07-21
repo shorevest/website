@@ -1,6 +1,22 @@
 (function () {
   var CAREERS_HREF = 'https://shorevest.github.io/website/careers/?t=';
 
+  // Chrome can fail to chain wheel scrolling from homepage content to the root
+  // scroller when the homepage applies overscroll-behavior:none to every element
+  // and overflow-x:hidden to body. Restore normal scroll chaining while keeping
+  // horizontal overflow clipped. Scoped to the homepage only.
+  if (document.body && document.body.classList.contains('homepage') && !document.getElementById('sv-home-scroll-fix')) {
+    var scrollFix = document.createElement('style');
+    scrollFix.id = 'sv-home-scroll-fix';
+    scrollFix.textContent = [
+      'html,',
+      'body.homepage,',
+      'body.homepage * { overscroll-behavior: auto !important; }',
+      'body.homepage { overflow-x: clip !important; }'
+    ].join('\n');
+    document.head.appendChild(scrollFix);
+  }
+
   function isCareersHref(href) {
     if (!href) return false;
     return /^(?:\.\.\/)?careers\.html(?:[?#].*)?$/i.test(href) ||
