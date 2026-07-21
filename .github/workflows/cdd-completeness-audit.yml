@@ -9,6 +9,7 @@ on:
       - 'assets/data/china-debt-dynamics-*.json'
       - 'assets/images/insights/**'
       - 'assets/js/cdd-article-template.js'
+      - 'scripts/normalize-cdd-publication.cjs'
       - 'scripts/audit-cdd-completeness.cjs'
       - 'assets/data/clean-url-manifest.json'
       - '.github/workflows/cdd-completeness-audit.yml'
@@ -30,6 +31,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '24'
+
+      - name: Normalize China Debt Dynamics sources
+        run: node scripts/normalize-cdd-publication.cjs
 
       - name: Generate clean public routes
         run: node scripts/generate-clean-public-urls.js
