@@ -1,11 +1,8 @@
 /* Insights navigation and article-sharing compatibility.
  *
- * The Insights / 洞察 link intentionally uses the same standard navigation
- * treatment as every other primary nav item on both English and Chinese pages.
- *
- * China Debt Dynamics articles build their share menu asynchronously. Replace
- * the LinkedIn popup button with a normal external link and derive the target
- * from the article itself, never from preview, tracking or homepage state.
+ * China Debt Dynamics articles build their share menu asynchronously. Make the
+ * LinkedIn option work even if the menu appears after page load or a browser
+ * blocks scripted popups. The exact clean ShoreVest article URL is always used.
  */
 (function () {
   'use strict';
@@ -47,6 +44,25 @@
     return SITE_ORIGIN + '/insights/';
   }
 
+  function getLinkedInShareUrl() {
+    return 'https://www.linkedin.com/sharing/share-offsite/?url=' +
+      encodeURIComponent(getExactArticleUrl());
+  }
+
+  function isLinkedInItem(item) {
+    return item &&
+      item.classList &&
+      item.classList.contains('cdd-share__item') &&
+      item.textContent.trim().toLowerCase() === 'linkedin';
+  }
+
+  function closeShareMenu() {
+    var menu = document.querySelector('[data-cdd-share-menu], .cdd-share__menu');
+    if (menu) menu.classList.remove('is-open');
+    var toggle = document.querySelector('[data-cdd-share-toggle]');
+    if (toggle) toggle.setAttribute('aria-expanded', 'false');
+  }
+
   function upgradeLinkedInShare(root) {
     if (!root || root.nodeType !== 1) return;
 
@@ -57,32 +73,52 @@
     }
 
     candidates.forEach(function (item) {
-      if (item.tagName !== 'BUTTON' || item.textContent.trim().toLowerCase() !== 'linkedin') return;
+      if (!isLinkedInItem(item)) return;
 
       var articleUrl = getExactArticleUrl();
+      var shareUrl = getLinkedInShareUrl();
+
+      if (item.tagName === 'A') {
+        item.href = shareUrl;
+        item.target = '_blank';
+        item.rel = 'noopener noreferrer';
+        item.setAttribute('data-share-url', articleUrl);
+        return;
+      }
+
       var link = document.createElement('a');
       link.className = item.className;
       link.textContent = item.textContent;
-      link.href = 'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(articleUrl);
+      link.href = shareUrl;
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
       link.setAttribute('role', 'menuitem');
       link.setAttribute('aria-label', 'Share this insight on LinkedIn');
       link.setAttribute('data-share-url', articleUrl);
       link.style.textDecoration = 'none';
-
-      link.addEventListener('click', function () {
-        var menu = link.closest('.cdd-share__menu');
-        if (menu) menu.classList.remove('is-open');
-        var toggle = document.querySelector('[data-cdd-share-toggle]');
-        if (toggle) toggle.setAttribute('aria-expanded', 'false');
-      });
-
+      link.addEventListener('click', closeShareMenu);
       item.replaceWith(link);
     });
   }
 
+  function installGuaranteedClickFallback() {
+    document.addEventListener('click', function (event) {
+      var item = event.target && event.target.closest
+        ? event.target.closest('.cdd-share__item')
+        : null;
+      if (!isLinkedInItem(item) || item.tagName === 'A') return;
+
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      closeShareMenu();
+
+      /* A direct navigation cannot be blocked as a popup. */
+      window.location.assign(getLinkedInShareUrl());
+    }, true);
+  }
+
   function start() {
+    installGuaranteedClickFallback();
     upgradeLinkedInShare(document.body);
 
     if (!('MutationObserver' in window)) return;
