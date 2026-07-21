@@ -4,13 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, follow">
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>ShoreVest | Careers</title>
   <link rel="canonical" href="https://shorevest.com/careers/">
   <meta http-equiv="refresh" content="0; url=/careers/">
   <script>
     (function () {
-      var target = '/careers/' + window.location.search + window.location.hash;
-      window.location.replace(target);
+      var target = new URL('/careers/', window.location.origin);
+      target.search = window.location.search;
+      target.hash = window.location.hash;
+      window.location.replace(target.href);
     })();
   </script>
 </head>
