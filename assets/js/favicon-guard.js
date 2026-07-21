@@ -1,5 +1,5 @@
 (function () {
-  var VERSION = "20260722-favicon-cache-bust";
+  var VERSION = "20260722-google-search-refresh";
 
   function removeEmptyLegacyToken() {
     try {
@@ -24,9 +24,10 @@
   }
 
   var ICONS = [
+    { rel: "icon", href: base + "favicon.ico", sizes: "48x48" },
+    { rel: "shortcut icon", href: base + "favicon.ico" },
     { rel: "icon", href: base + "assets/favicon-shorevest-20260722.svg", type: "image/svg+xml", sizes: "any" },
     { rel: "icon", href: base + "assets/favicon-shorevest-20260722.ico", sizes: "any" },
-    { rel: "shortcut icon", href: base + "assets/favicon-shorevest-20260722.ico" },
     { rel: "icon", href: base + "assets/favicon-shorevest-20260722-32x32.png", type: "image/png", sizes: "32x32" },
     { rel: "icon", href: base + "assets/favicon-shorevest-20260722-16x16.png", type: "image/png", sizes: "16x16" },
     { rel: "apple-touch-icon", href: base + "assets/apple-touch-icon-shorevest-20260722.png", sizes: "180x180" },
@@ -40,9 +41,7 @@
   function ensureFavicons() {
     if (!document.head) return;
 
-    // Remove every previous favicon declaration, not only ones added by this
-    // script. Safari can otherwise keep selecting a cached retired icon from
-    // duplicate link tags even when a newer declaration is present.
+    // Keep one consistent icon set after navigation or browser page restoration.
     var existing = document.head.querySelectorAll(
       'link[rel~="icon"], link[rel="shortcut icon"], link[rel="apple-touch-icon"], link[rel="mask-icon"], link[rel="manifest"]'
     );
