@@ -1,7 +1,7 @@
 (function () {
-  var VERSION = "20260717";
+  var VERSION = "20260721-cn-copy";
 
-  // Resolve the site base from this script's own URL so favicons work
+  // Resolve the site base from this script's own URL so shared assets work
   // whether the site is served from the domain root or a subpath
   // (e.g. GitHub Pages project sites).
   var script = document.currentScript;
@@ -40,10 +40,26 @@
     });
   }
 
+  function ensureChineseCopyOverrides() {
+    if (!document.head) return;
+    var language = (document.documentElement.getAttribute("lang") || "").toLowerCase();
+    var chinesePage = language.indexOf("zh") === 0 || /_cn(?:\.html)?(?:$|[?#])/.test(location.pathname);
+    if (!chinesePage || document.querySelector('script[data-sv-cn-copy="true"]')) return;
+
+    var copyScript = document.createElement("script");
+    copyScript.src = base + "assets/js/chinese-copy-overrides.js?v=" + VERSION;
+    copyScript.defer = true;
+    copyScript.setAttribute("data-sv-cn-copy", "true");
+    document.head.appendChild(copyScript);
+  }
+
   ensureFavicons();
+  ensureChineseCopyOverrides();
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", ensureFavicons);
+    document.addEventListener("DOMContentLoaded", ensureChineseCopyOverrides);
   }
   window.addEventListener("pageshow", ensureFavicons);
+  window.addEventListener("pageshow", ensureChineseCopyOverrides);
   document.addEventListener("visibilitychange", ensureFavicons);
 })();
