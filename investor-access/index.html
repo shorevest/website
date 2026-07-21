@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+<base href="/">
+<script>
+try{window.addEventListener('error',function(e){if(e&&typeof e.message==='string'&&e.message.indexOf('ResizeObserver loop')!==-1){e.stopImmediatePropagation();e.preventDefault();}},true);}catch(_){}
+window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
+(function(){
+  var T=window.__SVT;
+  function tok(u){try{var url=new URL(u,location.href);if(url.origin===location.origin&&!url.searchParams.get('t')){url.searchParams.set('t',T);return url.href;}return u;}catch(e){return u;}}
+  window.__svTok=tok;
+  (function(){var _f=window.fetch;if(_f){window.fetch=function(i,n){try{var u;if(typeof i==='string'){u=new URL(i,location.href);if(u.origin===location.origin&&!u.searchParams.get('t')){u.searchParams.set('t',T);i=u.href;}}else if(i&&i.url){u=new URL(i.url,location.href);if(u.origin===location.origin&&!u.searchParams.get('t')){u.searchParams.set('t',T);i=new Request(u.href,i);}}}catch(e){}return _f.call(this,i,n);};}var _o=window.XMLHttpRequest&&window.XMLHttpRequest.prototype.open;if(_o){window.XMLHttpRequest.prototype.open=function(m,u){try{var x=new URL(u,location.href);if(x.origin===location.origin&&!x.searchParams.get('t')){x.searchParams.set('t',T);u=x.href;}}catch(e){}return _o.apply(this,[m,u].concat([].slice.call(arguments,2)));};}})();
+  function fixEl(el){
+    if(el.nodeType!==1)return;
+    if(el.hasAttribute('data-svsrc')&&!el.__sd){el.__sd=1;el.setAttribute('src',tok(el.getAttribute('data-svsrc')));}
+    if(el.hasAttribute('data-svsrcset')&&!el.__ss){el.__ss=1;el.setAttribute('srcset',el.getAttribute('data-svsrcset').split(',').map(function(p){var q=p.trim().split(/\s+/);if(q[0])q[0]=tok(q[0]);return q.join(' ');}).join(', '));}
+    if(el.tagName==='IMG'){var s=el.getAttribute('src');if(s){var ts=tok(s);if(ts!==s)el.setAttribute('src',ts);}}
+  }
+  function scan(root){if(!root||root.nodeType!==1)return;fixEl(root);if(root.querySelectorAll){var n=root.querySelectorAll('img,source,[data-svsrc],[data-svsrcset]');for(var i=0;i<n.length;i++)fixEl(n[i]);}}
+  new MutationObserver(function(ms){for(var j=0;j<ms.length;j++){var a=ms[j].addedNodes;for(var i=0;i<a.length;i++)scan(a[i]);}}).observe(document.documentElement,{childList:true,subtree:true});
+  if(document.readyState!=='loading')scan(document.body);else document.addEventListener('DOMContentLoaded',function(){scan(document.body);});
+  document.addEventListener('click',function(e){var t=e.target;var a=t&&t.closest?t.closest('a[href]'):null;if(!a)return;var h=a.getAttribute('href');if(!h||h.charAt(0)==='#'||/^(mailto:|tel:|javascript:|https?:|\/\/)/i.test(h))return;var url;try{url=new URL(h,location.href);}catch(_){return;}if(url.origin!==location.origin)return;e.preventDefault();if(!url.searchParams.get('t'))url.searchParams.set('t',T);window.location.href=url.href;},true);
+})();
+</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ShoreVest | Investor Access</title>
+  <!--svstripped-->
+  <!--svstripped-->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <style>
+    .investor-access-page .investor-attestation {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      margin: 30px 0 0;
+      padding: 18px 20px;
+      border: 1px solid var(--legal-rule-color);
+      background: rgba(250, 246, 238, 0.42);
+    }
+
+    .investor-access-page .investor-attestation input {
+      width: 22px;
+      height: 22px;
+      flex: 0 0 auto;
+      margin: 2px 0 0;
+      accent-color: var(--sv-qing-dark, #1e4040);
+    }
+
+    .investor-access-page .investor-attestation label {
+      margin: 0;
+      font-family: var(--sv-type-sans);
+      font-size: 14px;
+      line-height: 1.62;
+      color: #24331e;
+    }
+
+    .investor-access-page .investor-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .investor-access-page .investor-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      box-sizing: border-box;
+      border: 1px solid rgba(30, 64, 64, 0.42);
+      padding: 0 22px;
+      background: transparent;
+      color: var(--sv-qing-dark, #1e4040);
+      cursor: pointer;
+      font-family: var(--sv-type-sans);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      line-height: 1.35;
+      text-align: center;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition:
+        background-color 180ms ease,
+        border-color 180ms ease,
+        color 180ms ease,
+        transform 180ms ease;
+    }
+
+    .investor-access-page .investor-button:hover,
+    .investor-access-page .investor-button:focus-visible {
+      border-color: var(--sv-qing-dark, #1e4040);
+      background: var(--sv-qing-dark, #1e4040);
+      color: var(--sv-xuan-light, #faf6ee);
+      transform: translateY(-1px);
+    }
+
+    .investor-access-page .investor-button--primary {
+      border-color: var(--sv-qing-dark, #1e4040);
+      background: var(--sv-qing-dark, #1e4040);
+      color: var(--sv-xuan-light, #faf6ee);
+    }
+
+    .investor-access-page .investor-button--primary:hover,
+    .investor-access-page .investor-button--primary:focus-visible {
+      border-color: var(--sv-ink-green-dark, #0f2206);
+      background: var(--sv-ink-green-dark, #0f2206);
+    }
+
+    .investor-access-page .investor-button:disabled {
+      border-color: rgba(30, 64, 64, 0.16);
+      background: rgba(216, 206, 176, 0.42);
+      color: rgba(30, 64, 64, 0.48);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .investor-access-page [hidden] {
+      display: none !important;
+    }
+
+    @media (max-width: 620px) {
+      .investor-access-page .investor-attestation {
+        padding: 16px;
+      }
+
+      .investor-access-page .investor-actions {
+        flex-direction: column;
+      }
+
+      .investor-access-page .investor-button {
+        width: 100%;
+      }
+    }
+  </style>
+
+<script>document.write('<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260717-header-unify&t='+window.__SVT+'">');</script>
+<script>document.write('<link rel="stylesheet" href="assets/css/legal-rebuild.css?v=20260703-legal-home-chrome&t='+window.__SVT+'">');</script>
+<link rel="icon" href="assets/favicon-cinnabar.ico?v=20260717" sizes="any">
+<link rel="shortcut icon" href="assets/favicon-cinnabar.ico?v=20260717">
+<link rel="icon" href="assets/favicon-cinnabar.svg?v=20260717" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-cinnabar-32x32.png?v=20260717">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-cinnabar-16x16.png?v=20260717">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon-cinnabar.png?v=20260717">
+<link rel="manifest" href="site.webmanifest?v=20260717">
+
+<link rel="canonical" href="https://shorevest.com/investor-access/">
+<link rel="alternate" hreflang="en" href="https://shorevest.com/investor-access/">
+<link rel="alternate" hreflang="zh-Hans" href="https://shorevest.com/cn/investor-access/">
+<meta property="og:title" content="ShoreVest | Investor Access">
+<meta property="og:description" content="ShoreVest | Investor Access">
+<meta property="og:url" content="https://shorevest.com/investor-access/">
+<meta property="og:locale" content="en_US">
+<script src="assets/js/favicon-guard.js?v=20260717" defer></script>
+</head>
+<body id="top" class="homepage investor-access-page legal-page">
+<!-- ============================================================ A · HEADER -->
+<header class="sv-header">
+  <div class="sv-header__inner">
+    <a class="sv-header__logo" href="/" aria-label="ShoreVest — home">
+      <img src="assets/brand/sv-lockup-fc-dark.png" alt="ShoreVest" width="172" height="41" loading="eager" decoding="async" fetchpriority="high">
+    </a>
+    <nav class="sv-nav" aria-label="Primary">
+      <ul>
+        <li><a href="/firm/">Firm</a></li>
+        <li><a href="/strategy/">Strategy</a></li>
+        <li><a href="/insights/">Insights</a></li>
+        <li><a href="/media/">Media</a></li>
+        <li><a href="/team/">Team</a></li>
+        <li><a href="/careers/">Careers</a></li>
+      </ul>
+    </nav>
+    <div class="sv-utils">
+      <a class="sv-lang" href="/cn/investor-access/"><span class="on">EN</span><span class="sep">|</span>中文</a>
+      <a class="sv-util-btn" href="/investor-portal/">Investor Portal</a>
+      <a class="sv-util-btn sv-util-btn--cta" href="/contact/">Contact</a>
+    </div>
+    <button class="sv-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="sv-mobile-menu">
+      <span></span>
+    </button>
+  </div>
+</header>
+
+<div class="sv-mobile-menu" id="sv-mobile-menu">
+  <nav aria-label="Mobile">
+    <ul>
+      <li><a href="/firm/">Firm</a></li>
+      <li><a href="/strategy/">Strategy</a></li>
+      <li><a href="/insights/">Insights</a></li>
+      <li><a href="/media/">Media</a></li>
+      <li><a href="/team/">Team</a></li>
+        <li><a href="/careers/">Careers</a></li>
+    </ul>
+    <div class="sv-mobile-utils">
+      <a class="sv-util-btn" href="/cn/investor-access/">中文</a>
+      <a class="sv-util-btn" href="/investor-portal/">Investor Portal</a>
+      <a class="sv-util-btn sv-util-btn--cta" href="/contact/">Contact</a>
+    </div>
+  </nav>
+</div>
+
+  <main id="content" class="legal-main legal-page__main" aria-labelledby="investor-access-title">
+    <article class="sv-container legal-page__content legal-container legal-content legal-document__content">
+      <header class="legal-page__intro-block">
+        <p class="legal-page__kicker">Legal Notice</p>
+        <h1 id="investor-access-title">Investor Access</h1>
+        <p class="effective-date muted"><strong>Effective Date:</strong> 8 April 2026</p>
+      </header>
+
+      <section class="section" id="investor-eligibility" aria-labelledby="investor-eligibility-title">
+        <h2 id="investor-eligibility-title">1. Eligibility confirmation</h2>
+        <p>Access to ShoreVest investor materials is restricted to qualified institutional and eligible investors.</p>
+        <p>Eligible investor classifications may include:</p>
+        <ul aria-label="Eligible investor classifications">
+          <li>Institutional investors</li>
+          <li>Professional investors</li>
+          <li>Qualified purchasers or equivalent classifications</li>
+        </ul>
+        <p>By proceeding, you confirm that you meet applicable eligibility requirements in your jurisdiction and are permitted to access such materials.</p>
+
+        <div class="investor-attestation">
+          <input type="checkbox" id="attestation-checkbox" />
+          <label for="attestation-checkbox">
+            I confirm that I am an eligible investor and agree to the
+            <a href="/investor-access/terms/">Investor Access / Portal Terms</a>.
+          </label>
+        </div>
+
+        <div class="investor-actions">
+          <button class="investor-button investor-button--primary" type="button" id="attestation-proceed" disabled>
+            Confirm and Continue
+          </button>
+          <a class="investor-button" href="/">
+            I do not meet these criteria
+          </a>
+        </div>
+      </section>
+
+      <section class="section" id="investor-portal" aria-labelledby="secure-portal-title" tabindex="-1" hidden>
+        <h2 id="secure-portal-title">Secure portal access</h2>
+        <p>Approved investors may access ShoreVest's secure investor portal hosted via iDeals.</p>
+        <p>Access is restricted to authorized users. If you have not been granted access, please contact your ShoreVest representative.</p>
+
+        <div class="investor-actions">
+          <a class="investor-button investor-button--primary" href="https://www.idealsvdr.com/" target="_blank" rel="noopener noreferrer" aria-label="Proceed to Investor Portal">
+            PROCEED TO INVESTOR PORTAL
+          </a>
+          <a class="investor-button" href="/">
+            RETURN TO WEBSITE
+          </a>
+        </div>
+      </section>
+    </article>
+  </main>
+
+<!-- ============================================================ I · FOOTER -->
+<footer class="sv-footer" aria-label="Site footer">
+  <div class="sv-footer__inner">
+    <div class="sv-footer__top">
+      <div>
+        <a class="sv-footer__logo" href="/" aria-label="ShoreVest — home">
+          <!-- Dark footer → FullColor_Light variant (ivory wordmark, reads on teal). -->
+          <img src="assets/brand/sv-lockup-fc-light.png" alt="ShoreVest" width="200" height="48" loading="eager" decoding="async" fetchpriority="high">
+        </a>
+        <p class="sv-footer__offices">
+          Guangzhou · Shanghai · Beijing · Hong Kong<br>
+          <a href="/contact/">General inquiries</a>
+        </p>
+      </div>
+      <nav class="sv-footer__nav" aria-label="Footer">
+        <a href="/firm/">Firm</a>
+        <a href="/strategy/">Strategy</a>
+        <a href="/insights/">Insights</a>
+        <a href="/media/">Media</a>
+        <a href="/team/">Team</a>
+        <a href="/careers/">Careers</a>
+        <a href="/contact/">Contact</a>
+        <a href="/insights/#archive">China Debt Dynamics</a>
+        <span class="sv-footer__access" role="group" aria-label="Access">
+          <span class="sv-footer__access-label">Access</span>
+          <a href="/investor-portal/">Investor Portal</a>
+        </span>
+      </nav>
+      <div class="sv-footer__social" aria-label="Follow ShoreVest">
+        <a class="sv-footer__social-link" href="https://www.linkedin.com/company/shorevest-partners/" target="_blank" rel="noopener noreferrer" aria-label="Follow ShoreVest Partners on LinkedIn">
+          <svg class="sv-footer__social-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+            <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V8.98h3.42v1.57h.05c.48-.9 1.64-1.85 3.37-1.85 3.61 0 4.27 2.37 4.27 5.46v6.29ZM5.32 7.42a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12Zm1.78 13.03H3.54V8.98H7.1v11.47ZM22.23 0H1.76C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.76 24h20.47c.97 0 1.77-.77 1.77-1.72V1.72C24 .77 23.2 0 22.23 0Z"/>
+          </svg>
+          <span>LinkedIn</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="sv-footer__legal">
+      <p>ShoreVest Partners and its affiliates provide investment management services to institutional investors. This website is for informational purposes only and does not constitute an offer to sell or a solicitation of an offer to buy any security or investment product, nor investment, legal, or tax advice.</p>
+      <p>Past performance is not indicative of future results. Investments in private credit and private debt involve risk, including the possible loss of principal. Figures shown are approximate and subject to change.</p>
+    </div>
+
+    <div class="sv-footer__bottom">
+      <div class="sv-footer__links">
+        <a href="/privacy-policy/">Privacy Policy</a>
+        <a href="/cookie-notice/">Cookie Notice</a>
+        <a href="/terms-of-use/">Terms of Use</a>
+        <a href="/important-information/">Important Information</a>
+        <a href="/legal-notices-disclaimers/">Legal Notices &amp; Disclaimers</a>
+      </div>
+      <p class="sv-footer__copy">© 2026 ShoreVest Partners. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<button class="sv-totop" type="button" aria-label="Back to top">
+  <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 13V3M8 3L3.5 7.5M8 3l4.5 4.5" stroke="currentColor" stroke-width="1.5"/></svg>
+</button>
+
+  <script>
+    (function () {
+      const eligibility = document.getElementById("investor-eligibility");
+      const portal = document.getElementById("investor-portal");
+      const checkbox = document.getElementById("attestation-checkbox");
+      const proceed = document.getElementById("attestation-proceed");
+
+      if (!eligibility || !portal || !checkbox || !proceed) return;
+
+      checkbox.addEventListener("change", () => {
+        proceed.disabled = !checkbox.checked;
+      });
+
+      proceed.addEventListener("click", () => {
+        if (!checkbox.checked) return;
+
+        eligibility.hidden = true;
+        portal.hidden = false;
+        portal.focus({ preventScroll: true });
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    })();
+  </script>
+  
+<script>
+(function(){
+  // Mobile menu toggle
+  var burger = document.querySelector('.sv-burger');
+  var menu = document.getElementById('sv-mobile-menu');
+  if (burger && menu) {
+    burger.addEventListener('click', function(){
+      var open = menu.classList.toggle('is-open');
+      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    });
+    menu.addEventListener('click', function(e){ if (e.target.closest('a')) { menu.classList.remove('is-open'); burger.setAttribute('aria-expanded','false'); } });
+  }
+  // Scroll-to-top
+  var toTop = document.querySelector('.sv-totop');
+  if (toTop) {
+    var onScroll = function(){ if (window.scrollY > 600) toTop.classList.add('is-visible'); else toTop.classList.remove('is-visible'); };
+    window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+    toTop.addEventListener('click', function(){ window.scrollTo({ top: 0, behavior: 'smooth' }); });
+  }
+})();
+</script>
+<script src="assets/js/insights-new-edition.js?v=20260717" defer></script>
+<script src="assets/js/sv-navigation.js?v=20260717" defer></script>
+</body>
+</html>
