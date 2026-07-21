@@ -2,6 +2,7 @@
    MEDIA PAGE — temporary archive holding state
    The historical article archive is intentionally removed while
    the section is being reviewed and refreshed.
+   Cache version refreshed 2026-07-22.
    ============================================================ */
 (function () {
   "use strict";
