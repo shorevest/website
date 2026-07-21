@@ -181,18 +181,18 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
             <label for="cp-message">Inquiry summary</label>
             <textarea id="cp-message" name="message" rows="5" placeholder="Brief description only. No confidential deal materials." required></textarea>
           </div>
-          <button class="cp-form__submit" type="submit">Send inquiry <span aria-hidden="true">→</span></button>
-          <p class="cp-form__consent">By submitting this form, you acknowledge that ShoreVest Partners may collect and process your personal information in accordance with applicable privacy laws.</p>
+          <button class="cp-form__submit" type="submit">Open email <span aria-hidden="true">→</span></button>
+          <p class="cp-form__consent">Submitting opens your email application. Your inquiry is not sent to ShoreVest until you review and send the email.</p>
         </form>
       </div>
 
       <aside class="cp-offices-col" aria-label="Our offices">
         <p class="cp-offices__label">Our offices</p>
         <div class="cp-offices">
-          <div class="cp-office"><img class="cp-office__photo" src="assets/img/offices/gz.jpg" decoding="async" alt="Guangzhou" loading="eager" fetchpriority="high"><span class="cp-office__city">Guangzhou</span><span class="cp-office__note">By appointment</span></div>
-          <div class="cp-office"><img class="cp-office__photo" src="assets/img/offices/sh.jpg" decoding="async" alt="Shanghai" loading="eager" fetchpriority="high"><span class="cp-office__city">Shanghai</span><span class="cp-office__note">By appointment</span></div>
-          <div class="cp-office"><img class="cp-office__photo" src="assets/img/offices/bj.jpg" decoding="async" alt="Beijing" loading="eager" fetchpriority="high"><span class="cp-office__city">Beijing</span><span class="cp-office__note">By appointment</span></div>
-          <div class="cp-office"><img class="cp-office__photo" src="assets/img/offices/hk.jpg" decoding="async" alt="Hong Kong" loading="eager" fetchpriority="high"><span class="cp-office__city">Hong Kong</span><span class="cp-office__note">By appointment</span></div>
+          <div class="cp-office"><img class="cp-office__photo" src="assets/img/offices/gz.jpg" decoding="async" alt="Guangzhou" loading="lazy"><span class="cp-office__city">Guangzhou</span><span class="cp-office__note">By appointment</span></div>
+          <div class="cp-office"><img class="cp-office__photo" src="assets/img/offices/sh.jpg" decoding="async" alt="Shanghai" loading="lazy"><span class="cp-office__city">Shanghai</span><span class="cp-office__note">By appointment</span></div>
+          <div class="cp-office"><img class="cp-office__photo" src="assets/img/offices/bj.jpg" decoding="async" alt="Beijing" loading="lazy"><span class="cp-office__city">Beijing</span><span class="cp-office__note">By appointment</span></div>
+          <div class="cp-office"><img class="cp-office__photo" src="assets/img/offices/hk.jpg" decoding="async" alt="Hong Kong" loading="lazy"><span class="cp-office__city">Hong Kong</span><span class="cp-office__note">By appointment</span></div>
         </div>
         <p class="cp-offices__foot">All meetings are by prior arrangement. Please use the form or routes above to ensure your inquiry reaches the right team.</p>
       </aside>
@@ -311,11 +311,20 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
         if(f.type==='email'&&val&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)){setError(f,'Please enter a valid email address.');if(!firstInvalid)firstInvalid=f;return;}
       });
       if(firstInvalid){firstInvalid.focus();return;}
-      var ok=document.createElement('div');
-      ok.className='cp-form__success';ok.setAttribute('role','status');ok.setAttribute('tabindex','-1');
-      ok.innerHTML='<p class="cp-form__success-title">Thank you \u2014 your inquiry has been received.</p><p class="cp-form__success-body">A member of the ShoreVest team will respond to confirmed inquiries by email. All submissions are treated as confidential.</p>';
-      form.replaceWith(ok);
-      try{ok.focus();}catch(_){}
+      var typeField=form.querySelector('[name="inquiry_type"]');
+      var nameField=form.querySelector('[name="full_name"]');
+      var companyField=form.querySelector('[name="company"]');
+      var emailField=form.querySelector('[name="email"]');
+      var phoneField=form.querySelector('[name="phone"]');
+      var messageField=form.querySelector('[name="message"]');
+      var typeValue=typeField?typeField.value:'general';
+      var typeLabel=typeField&&typeField.options[typeField.selectedIndex]?typeField.options[typeField.selectedIndex].text:typeValue;
+      var fullName=nameField?(nameField.value||'').trim():'';
+      var chinese=document.documentElement.lang&&document.documentElement.lang.toLowerCase().indexOf('zh')===0;
+      var recipient=typeValue==='media'?'media@shorevest.com':'inquiries@shorevest.com';
+      var subject=chinese?'新岸资本网站查询 - '+typeLabel+(fullName?' - '+fullName:''):'ShoreVest website inquiry - '+typeLabel+(fullName?' - '+fullName:'');
+      var lines=chinese?['查询类别：'+typeLabel,'姓名：'+fullName,'公司 / 机构：'+(companyField?(companyField.value||'').trim():''),'商务电邮：'+(emailField?(emailField.value||'').trim():''),'电话：'+(phoneField?(phoneField.value||'').trim():''),'','查询摘要：',messageField?(messageField.value||'').trim():'']:['Inquiry type: '+typeLabel,'Full name: '+fullName,'Firm / institution: '+(companyField?(companyField.value||'').trim():''),'Business email: '+(emailField?(emailField.value||'').trim():''),'Phone: '+(phoneField?(phoneField.value||'').trim():''),'','Inquiry summary:',messageField?(messageField.value||'').trim():''];
+      window.location.href='mailto:'+recipient+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(lines.join('\n'));
     });
   }
 })();
