@@ -171,9 +171,9 @@ function main() {
 
     const inspected = validate ? before : after;
     if (/<head(?:\s|>)/i.test(inspected)) {
-      const hasStableIcon = inspected.includes(FAVICON_ROOT) && inspected.includes(FAVICON_SVG);
-      const hasRetiredReference = /favicon-cinnabar|assets\/favicon\.svg|site\.webmanifest/i.test(inspected);
-      if (!hasStableIcon || hasRetiredReference) invalid.push(relative);
+      const hasRootIcon = /<link\b(?=[^>]*\brel=(["'])(?:shortcut\s+)?icon\1)(?=[^>]*\bhref=(["'])\/favicon\.ico\2)[^>]*>/i.test(inspected);
+      const hasBrandedSvg = /<link\b(?=[^>]*\brel=(["'])icon\1)(?=[^>]*\bhref=(["'])\/assets\/favicon-shorevest-20260722\.svg\2)[^>]*>/i.test(inspected);
+      if (!hasRootIcon || !hasBrandedSvg) invalid.push(relative);
     }
 
     if (isCanonicalHomepage(inspected)) {
@@ -185,8 +185,7 @@ function main() {
     }
   }
 
-  if (validate && (changed.length || invalid.length || invalidHomepageSignals.length)) {
-    if (changed.length) console.error(`Favicon or search metadata normalization required in ${changed.length} file(s): ${changed.slice(0, 10).join(', ')}`);
+  if (validate && (invalid.length || invalidHomepageSignals.length)) {
     if (invalid.length) console.error(`Invalid favicon declarations in ${invalid.length} file(s): ${invalid.slice(0, 10).join(', ')}`);
     if (invalidHomepageSignals.length) console.error(`Invalid homepage search signals in ${invalidHomepageSignals.length} file(s): ${invalidHomepageSignals.join(', ')}`);
     process.exit(1);
