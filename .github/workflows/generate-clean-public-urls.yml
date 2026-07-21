@@ -6,6 +6,8 @@ on:
       - 'scripts/generate-clean-public-urls.js'
       - 'scripts/normalize-current-page-fragments.cjs'
       - 'scripts/normalize-public-site.cjs'
+      - 'scripts/run-normalize-public-site.cjs'
+      - 'scripts/normalize-cdd-publication.cjs'
       - 'scripts/normalize-favicons.cjs'
       - 'scripts/add-insight-social-metadata.cjs'
       - 'assets/js/site-config.js'
@@ -50,7 +52,10 @@ jobs:
           node-version: '24'
 
       - name: Normalize source URLs and publication exclusions
-        run: node scripts/normalize-public-site.cjs
+        run: node scripts/run-normalize-public-site.cjs
+
+      - name: Normalize China Debt Dynamics publication files
+        run: node scripts/normalize-cdd-publication.cjs
 
       - name: Refresh public asset versions
         run: |
@@ -69,7 +74,7 @@ jobs:
         run: node scripts/add-insight-social-metadata.cjs
 
       - name: Normalize and validate every public article
-        run: node scripts/normalize-public-site.cjs --validate
+        run: node scripts/run-normalize-public-site.cjs --validate
 
       - name: Validate Insight LinkedIn metadata
         run: node scripts/add-insight-social-metadata.cjs --validate
@@ -110,7 +115,10 @@ jobs:
             templates/media-coverage/media-coverage-print.html
 
       - name: Normalize source URLs and publication exclusions
-        run: node scripts/normalize-public-site.cjs
+        run: node scripts/run-normalize-public-site.cjs
+
+      - name: Normalize China Debt Dynamics publication files
+        run: node scripts/normalize-cdd-publication.cjs
 
       - name: Refresh public asset versions
         run: |
@@ -129,7 +137,7 @@ jobs:
         run: node scripts/add-insight-social-metadata.cjs
 
       - name: Normalize and validate every public article
-        run: node scripts/normalize-public-site.cjs --validate
+        run: node scripts/run-normalize-public-site.cjs --validate
 
       - name: Validate Insight LinkedIn metadata
         run: node scripts/add-insight-social-metadata.cjs --validate
