@@ -32,5 +32,18 @@ resource blobData 'Microsoft.Authorization/roleAssignments@2022-04-01' = { name:
 // Key Vault Secrets User permits reading only configured secret values, not vault administration.
 resource kvSecrets 'Microsoft.Authorization/roleAssignments@2022-04-01' = { name: guid(vault.id, mi.id, 'kv-secrets-user') scope: vault properties: { principalId: mi.properties.principalId principalType: 'ServicePrincipal' roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions','4633458b-17de-408a-b874-0445c86b69e6c') } }
 // Optional paid Defender for Storage must be explicitly enabled by parameter.
-resource defender 'Microsoft.Security/defenderForStorageSettings@2022-12-01-preview' = if (enableDefenderForStorage) { name: '${cvStorage.name}/current' properties: { isEnabled: true malwareScanning: { onUpload: { isEnabled: true capGBPerMonth: 500 } scanResultsEventGridTopicResourceId: topic.id } } }
+resource defender 'Microsoft.Security/defenderForStorageSettings@2022-12-01-preview' = if (enableDefenderForStorage) {
+  name: 'current'
+  scope: cvStorage
+  properties: {
+    isEnabled: true
+    malwareScanning: {
+      onUpload: {
+        isEnabled: true
+        capGBPerMonth: 500
+      }
+      scanResultsEventGridTopicResourceId: topic.id
+    }
+  }
+}
 output functionAppName string = fn.name
