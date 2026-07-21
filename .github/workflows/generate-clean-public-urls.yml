@@ -19,7 +19,6 @@ on:
       - main
       - feature/clean-public-urls
       - hotfix/clean-url-asset-paths
-      - fix/public-article-audit
   workflow_dispatch:
 
 permissions:
@@ -112,23 +111,15 @@ jobs:
       - name: Check generated changes
         run: git diff --check
 
-      - name: Commit article audit fixes only
+      - name: Commit generated pages
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add \
-            scripts/normalize-public-site.cjs \
-            insights.html \
-            insights/index.html \
-            'china-debt-dynamics*.html' \
-            'insights/china-debt-dynamics/**/index.html' \
-            media.html \
-            assets/data/clean-url-manifest.json \
-            sitemap.xml
+          git add -A
           if git diff --cached --quiet; then
-            echo "No article audit changes to commit."
+            echo "No generated changes to commit."
             exit 0
           fi
-          git commit -m "Correct and validate all public article routes"
+          git commit -m "Regenerate and validate public article pages"
           git push origin "HEAD:${GITHUB_REF_NAME}"
