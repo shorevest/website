@@ -25,13 +25,11 @@
       .toLowerCase()
       .indexOf("zh") === 0;
 
-    /* Explicitly use the same page shell as the event ledgers. This avoids
-       the archive notice drifting outside the standard desktop and mobile
-       margins even if another stylesheet changes the generic shell rules. */
+    /* Match the standard site container exactly. */
     shell.style.width = "100%";
-    shell.style.maxWidth = "1280px";
+    shell.style.maxWidth = "var(--page-max, 1684px)";
     shell.style.marginInline = "auto";
-    shell.style.paddingInline = "clamp(24px, 5vw, 48px)";
+    shell.style.paddingInline = "var(--pad-x, clamp(24px, 8.9vw, 182px))";
     shell.style.boxSizing = "border-box";
 
     shell.innerHTML = isChinese
