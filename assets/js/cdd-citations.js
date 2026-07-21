@@ -1,11 +1,11 @@
 /* China Debt Dynamics inline citation treatment.
- * Converts manuscript-style markers such as [7] into accessible superscript
- * links and ties them to the matching entry in Sources and Notes.
+ * Converts manuscript-style markers such as [7] into visible, accessible
+ * superscript links and ties them to the matching Sources and Notes entry.
  */
 (function () {
   'use strict';
 
-  var STYLE_URL = '/assets/css/cdd-citations.css?v=20260722-inline-citations-v1';
+  var STYLE_URL = '/assets/css/cdd-citations.css?v=20260722-inline-citations-v2';
   var observer = null;
   var scheduled = false;
 
@@ -27,9 +27,7 @@
 
   function sourceNumber(entry) {
     if (!entry) return '';
-    if (entry.dataset && entry.dataset.cddSourceNumber) {
-      return entry.dataset.cddSourceNumber;
-    }
+    if (entry.dataset && entry.dataset.cddSourceNumber) return entry.dataset.cddSourceNumber;
 
     var index = entry.querySelector && entry.querySelector('.cdd-source-note__index');
     var text = index ? index.textContent : entry.textContent;
@@ -71,7 +69,7 @@
     entry.classList.add('cdd-source-note');
     entry.dataset.cddSourceNumber = number;
     entry.id = 'cdd-source-' + number;
-    if (index.textContent !== number + '.') index.textContent = number + '.';
+    index.textContent = number + '.';
 
     return {
       number: number,
@@ -80,7 +78,7 @@
     };
   }
 
-  function collectSources(article, sourcesHeading) {
+  function collectSources(sourcesHeading) {
     var sources = {};
     var node = sourcesHeading.nextElementSibling;
 
@@ -142,7 +140,7 @@
 
         var link = document.createElement('a');
         link.href = '#' + source.id;
-        link.textContent = source.number;
+        link.textContent = '[' + source.number + ']';
         link.setAttribute('aria-label', 'View source ' + source.number);
         link.setAttribute('data-cdd-citation', source.number);
         if (source.title) link.title = 'Source ' + source.number + ': ' + source.title;
@@ -172,14 +170,12 @@
     });
     if (!sourcesHeading) return;
 
-    var sources = collectSources(article, sourcesHeading);
+    var sources = collectSources(sourcesHeading);
     if (!Object.keys(sources).length) return;
 
     var node = article.firstElementChild;
     while (node && node !== sourcesHeading) {
-      if (node.matches('p, ul, ol, blockquote, figcaption')) {
-        replaceCitationMarkers(node, sources);
-      }
+      if (node.tagName !== 'H2') replaceCitationMarkers(node, sources);
       node = node.nextElementSibling;
     }
   }

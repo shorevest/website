@@ -37,7 +37,7 @@
   function loadCitationEnhancer() {
     if (document.querySelector('script[data-cdd-citations]')) return;
     var script = document.createElement('script');
-    script.src = withToken('/assets/js/cdd-citations.js?v=20260722-inline-citations-v1');
+    script.src = withToken('/assets/js/cdd-citations.js?v=20260722-inline-citations-v2');
     script.async = false;
     script.setAttribute('data-cdd-citations', 'true');
     document.head.appendChild(script);
@@ -49,8 +49,8 @@
     var file = (location.pathname.split("/").pop() || "").toLowerCase();
     var idx = ISSUES.findIndex(function (it) { return it.file.toLowerCase() === file; });
     if (idx === -1) return;
-    var newer = idx > 0 ? ISSUES[idx - 1] : null;            // more recent
-    var older = idx < ISSUES.length - 1 ? ISSUES[idx + 1] : null; // earlier
+    var newer = idx > 0 ? ISSUES[idx - 1] : null;
+    var older = idx < ISSUES.length - 1 ? ISSUES[idx + 1] : null;
 
     var nav = document.createElement("nav");
     nav.className = "cdd-pager";
@@ -90,6 +90,5 @@
   loadCitationEnhancer();
   if (document.readyState !== "loading") build();
   else document.addEventListener("DOMContentLoaded", build);
-  // The article body is injected async; rebuild shortly after load as a safety.
   window.addEventListener("load", function () { setTimeout(build, 300); });
 })();
