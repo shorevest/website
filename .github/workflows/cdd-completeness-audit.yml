@@ -11,6 +11,7 @@ on:
       - 'assets/js/cdd-article-template.js'
       - 'scripts/normalize-cdd-publication.cjs'
       - 'scripts/audit-cdd-completeness.cjs'
+      - 'scripts/run-cdd-completeness-audit.cjs'
       - 'assets/data/clean-url-manifest.json'
       - '.github/workflows/cdd-completeness-audit.yml'
   workflow_dispatch:
@@ -42,7 +43,7 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          node scripts/audit-cdd-completeness.cjs 2>&1 | tee cdd-completeness-audit.txt
+          node scripts/run-cdd-completeness-audit.cjs 2>&1 | tee cdd-completeness-audit.txt
 
       - name: Upload audit report
         if: always()
