@@ -394,7 +394,7 @@
       "source": "china-debt-dynamics-v7i4.html",
       "route": "/insights/china-debt-dynamics/v7i4/",
       "destination": "insights/china-debt-dynamics/v7i4/index.html",
-      "indexable": false,
+      "indexable": true,
       "disabled": false,
       "reason": null,
       "redirectTarget": null
