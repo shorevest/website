@@ -18,6 +18,7 @@ on:
       - main
       - feature/clean-public-urls
       - hotfix/clean-url-asset-paths
+      - qa/validate-all-public-articles-v2
   workflow_dispatch:
 
 permissions:
