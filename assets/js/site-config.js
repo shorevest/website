@@ -1,4 +1,4 @@
-/* ==========================================================================
+/* ========================================================================== 
    ShoreVest public website — source configuration
    One small, reversible source of truth for cross-cutting public-site options.
 
@@ -24,7 +24,7 @@
 
   var SITE_CONFIG = {
     showShoreVestOnePublicLink: false,
-    careersOpenRolesEnabled: true
+    careersOpenRolesEnabled: false
   };
 
   root.SHOREVEST_SITE_CONFIG = SITE_CONFIG;
