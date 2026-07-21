@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'scripts/generate-clean-public-urls.js'
+      - 'scripts/normalize-public-site.cjs'
       - 'assets/js/site-config.js'
       - 'assets/js/sv-navigation.js'
       - '*.html'
@@ -36,45 +37,14 @@ jobs:
         with:
           node-version: '24'
 
-      - name: Generate and validate clean routes
+      - name: Normalize source URLs and publication exclusions
+        run: node scripts/normalize-public-site.cjs
+
+      - name: Generate clean routes
         run: node scripts/generate-clean-public-urls.js
 
-      - name: Normalize generated script references
-        shell: bash
-        run: |
-          node <<'NODE'
-          const fs = require('fs');
-          const { execFileSync } = require('child_process');
-
-          const files = execFileSync('git', ['ls-files', '*.html', '*.js'], { encoding: 'utf8' })
-            .split(/\r?\n/)
-            .filter(Boolean);
-
-          for (const file of files) {
-            let content = fs.readFileSync(file, 'utf8');
-            const before = content;
-
-            content = content.replace(
-              /if\s*\(\s*url\.origin\s*===\s*location\.origin\s*&&\s*!url\.searchParams\.get\((['"])t\1\)\s*\)/g,
-              "if(T&&url.origin===location.origin&&!url.searchParams.get('t'))"
-            );
-
-            content = content.replace(
-              /if\s*\(\s*!url\.searchParams\.get\((['"])t\1\)\s*\)\s*url\.searchParams\.set\((['"])t\2,\s*T\s*\);/g,
-              "if(T&&!url.searchParams.get('t'))url.searchParams.set('t',T);"
-            );
-
-            content = content
-              .replace(/&t='\+window\.__SVT\+'/g, '')
-              .replace(/\?t='\+window\.__SVT\+'/g, '')
-              .replace(
-                /assets\/js\/insights-new-edition\.js\?v=20260717/g,
-                'assets/js/insights-new-edition.js?v=20260721-linkedin-share'
-              );
-
-            if (content !== before) fs.writeFileSync(file, content);
-          }
-          NODE
+      - name: Normalize and validate every public article
+        run: node scripts/normalize-public-site.cjs --validate
 
       - name: Check generated changes
         run: git diff --check
@@ -105,45 +75,14 @@ jobs:
             assets/js/employee-portal/views-cdd-publisher.js \
             templates/media-coverage/media-coverage-print.html
 
-      - name: Generate and validate clean routes
+      - name: Normalize source URLs and publication exclusions
+        run: node scripts/normalize-public-site.cjs
+
+      - name: Generate clean routes
         run: node scripts/generate-clean-public-urls.js
 
-      - name: Normalize generated script references
-        shell: bash
-        run: |
-          node <<'NODE'
-          const fs = require('fs');
-          const { execFileSync } = require('child_process');
-
-          const files = execFileSync('git', ['ls-files', '*.html', '*.js'], { encoding: 'utf8' })
-            .split(/\r?\n/)
-            .filter(Boolean);
-
-          for (const file of files) {
-            let content = fs.readFileSync(file, 'utf8');
-            const before = content;
-
-            content = content.replace(
-              /if\s*\(\s*url\.origin\s*===\s*location\.origin\s*&&\s*!url\.searchParams\.get\((['"])t\1\)\s*\)/g,
-              "if(T&&url.origin===location.origin&&!url.searchParams.get('t'))"
-            );
-
-            content = content.replace(
-              /if\s*\(\s*!url\.searchParams\.get\((['"])t\1\)\s*\)\s*url\.searchParams\.set\((['"])t\2,\s*T\s*\);/g,
-              "if(T&&!url.searchParams.get('t'))url.searchParams.set('t',T);"
-            );
-
-            content = content
-              .replace(/&t='\+window\.__SVT\+'/g, '')
-              .replace(/\?t='\+window\.__SVT\+'/g, '')
-              .replace(
-                /assets\/js\/insights-new-edition\.js\?v=[^"']+/g,
-                'assets/js/insights-new-edition.js?v=20260722-linkedin-target'
-              );
-
-            if (content !== before) fs.writeFileSync(file, content);
-          }
-          NODE
+      - name: Normalize and validate every public article
+        run: node scripts/normalize-public-site.cjs --validate
 
       - name: Check generated changes
         run: git diff --check
@@ -158,5 +97,5 @@ jobs:
             echo "No generated changes to commit."
             exit 0
           fi
-          git commit -m "Regenerate clean URL pages"
+          git commit -m "Regenerate and validate public article pages"
           git push origin "HEAD:${GITHUB_REF_NAME}"
