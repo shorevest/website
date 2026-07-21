@@ -5,6 +5,14 @@
     .toLowerCase()
     .startsWith("zh");
 
+  const hideIncompleteFunctionsGroup = () => {
+    const group = document.querySelector(".group--risk-finance-people");
+    if (!group) return;
+
+    group.hidden = true;
+    group.setAttribute("aria-hidden", "true");
+  };
+
   const getProfilesPerRow = (grid) => {
     const width = window.innerWidth;
     if (width <= TABLET_BREAKPOINT) return 1;
@@ -220,6 +228,7 @@
   };
 
   const initAllGrids = () => {
+    hideIncompleteFunctionsGroup();
     const grids = Array.from(document.querySelectorAll("[data-team-grid]"));
     grids.forEach(initGrid);
     initPortraitPrivacy();
