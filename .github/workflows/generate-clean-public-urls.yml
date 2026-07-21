@@ -99,3 +99,5 @@ jobs:
           fi
           git commit -m "Regenerate and validate public article pages"
           git push origin "HEAD:${GITHUB_REF_NAME}"
+
+# This branch exists only to run the complete article validation job.
