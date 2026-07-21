@@ -80,7 +80,7 @@
 
       if (item.tagName === 'A') {
         item.href = shareUrl;
-        item.target = '_blank';
+        item.target = '_self';
         item.rel = 'noopener noreferrer';
         item.setAttribute('data-share-url', articleUrl);
         return;
@@ -90,13 +90,12 @@
       link.className = item.className;
       link.textContent = item.textContent;
       link.href = shareUrl;
-      link.target = '_blank';
+      link.target = '_self';
       link.rel = 'noopener noreferrer';
       link.setAttribute('role', 'menuitem');
       link.setAttribute('aria-label', 'Share this insight on LinkedIn');
       link.setAttribute('data-share-url', articleUrl);
       link.style.textDecoration = 'none';
-      link.addEventListener('click', closeShareMenu);
       item.replaceWith(link);
     });
   }
@@ -106,13 +105,13 @@
       var item = event.target && event.target.closest
         ? event.target.closest('.cdd-share__item')
         : null;
-      if (!isLinkedInItem(item) || item.tagName === 'A') return;
+      if (!isLinkedInItem(item)) return;
 
       event.preventDefault();
       event.stopImmediatePropagation();
       closeShareMenu();
 
-      /* A direct navigation cannot be blocked as a popup. */
+      /* Same-tab navigation is not subject to popup or new-window blocking. */
       window.location.assign(getLinkedInShareUrl());
     }, true);
   }
