@@ -11,7 +11,8 @@ jobs:
         with:
           node-version: '20'
       - run: npm ci
-      - run: npm ci
+      - name: Install recruitment function dependencies
+        run: npm install --ignore-scripts --no-audit --no-fund --package-lock=false
         working-directory: services/recruitment-functions
       - run: npm run validate:recruitment
       - run: npm run check:recruitment
