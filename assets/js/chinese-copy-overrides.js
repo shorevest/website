@@ -313,7 +313,7 @@
     var relativePath = location.pathname;
     var basePath = base.pathname;
     if (relativePath.indexOf(basePath) === 0) relativePath = relativePath.slice(basePath.length);
-    relativePath = relativePath.replace(/index_cn\.html$/, "index.html").replace(/_cn\.html$/, ".html");
+    relativePath = relativePath.replace(/index_cn\.html$/, "/").replace(/_cn\.html$/, ".html");
     return new URL(relativePath.replace(/^\//, "") + location.search, base).href;
   }
 
