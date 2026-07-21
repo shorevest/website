@@ -116,7 +116,19 @@
     }, true);
   }
 
+  function installFigureStyles() {
+    if (!document.body || !document.body.classList.contains('cdd-article-page')) return;
+    if (document.querySelector('link[data-cdd-figure-styles]')) return;
+
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = '/assets/css/cdd-article-figures.css?v=20260722-into-the-shadows';
+    link.setAttribute('data-cdd-figure-styles', 'true');
+    document.head.appendChild(link);
+  }
+
   function start() {
+    installFigureStyles();
     installGuaranteedClickFallback();
     upgradeLinkedInShare(document.body);
 
