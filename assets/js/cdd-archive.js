@@ -37,6 +37,40 @@
     });
   });
 
+  /* GitHub Pages has no subscription backend. Open a complete, reviewable
+     subscription request rather than submitting to a nonexistent page anchor. */
+  const subscriptionForm = document.querySelector('.research-sub__form');
+  if (subscriptionForm) {
+    const recipient = 'inquiries@shorevest.com';
+    subscriptionForm.setAttribute('action', 'mailto:' + recipient);
+    subscriptionForm.setAttribute('method', 'post');
+    subscriptionForm.setAttribute('enctype', 'text/plain');
+
+    subscriptionForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      if (typeof subscriptionForm.reportValidity === 'function' && !subscriptionForm.reportValidity()) {
+        return;
+      }
+
+      const nameField = subscriptionForm.querySelector('[name="name"]');
+      const emailField = subscriptionForm.querySelector('[name="email"]');
+      const name = nameField ? nameField.value.trim() : '';
+      const email = emailField ? emailField.value.trim() : '';
+      const isChinese = (document.documentElement.lang || '').toLowerCase().indexOf('zh') === 0;
+      const subject = isChinese
+        ? '订阅新岸资本《中国债务动态》'
+        : 'Subscribe to ShoreVest China Debt Dynamics';
+      const body = isChinese
+        ? ['您好，', '', '请将我加入《中国债务动态》更新名单。', '', '姓名：' + name, '电邮：' + email].join('\n')
+        : ['Hello,', '', 'Please add me to the China Debt Dynamics update list.', '', 'Name: ' + name, 'Email: ' + email].join('\n');
+
+      window.location.href = 'mailto:' + recipient +
+        '?subject=' + encodeURIComponent(subject) +
+        '&body=' + encodeURIComponent(body);
+    });
+  }
+
   // Cache each row's searchable text once (title + excerpt + category).
   rows.forEach((row) => {
     row.dataset.cddArcText = (row.textContent || '').toLowerCase().replace(/\s+/g, ' ').trim();
