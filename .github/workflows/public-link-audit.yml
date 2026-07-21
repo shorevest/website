@@ -33,4 +33,15 @@ jobs:
         run: node scripts/generate-clean-public-urls.js
 
       - name: Audit public links and buttons
-        run: node scripts/audit-public-links.cjs
+        shell: bash
+        run: |
+          set -o pipefail
+          node scripts/audit-public-links.cjs 2>&1 | tee public-link-audit.txt
+
+      - name: Upload audit results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-link-audit
+          path: public-link-audit.txt
+          if-no-files-found: error
