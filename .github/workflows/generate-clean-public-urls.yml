@@ -65,7 +65,11 @@ jobs:
 
             content = content
               .replace(/&t='\+window\.__SVT\+'/g, '')
-              .replace(/\?t='\+window\.__SVT\+'/g, '');
+              .replace(/\?t='\+window\.__SVT\+'/g, '')
+              .replace(
+                /assets\/js\/insights-new-edition\.js\?v=20260717/g,
+                'assets/js/insights-new-edition.js?v=20260721-linkedin-share'
+              );
 
             if (content !== before) fs.writeFileSync(file, content);
           }
