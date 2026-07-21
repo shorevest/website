@@ -44,3 +44,5 @@ jobs:
 
       - name: Audit article metadata and archive consistency
         run: node scripts/audit-cdd-content.cjs
+
+# QA trigger: run the complete article-content audit against the current public archive.
