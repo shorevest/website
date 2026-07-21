@@ -41,6 +41,10 @@ jobs:
       - name: Normalize source URLs and publication exclusions
         run: node scripts/normalize-public-site.cjs
 
+      - name: Refresh media archive asset version
+        run: |
+          sed -i 's/press-page.js?v=20260711-page-size-3/press-page.js?v=20260722-margin-final/g' media.html media_cn.html
+
       - name: Generate clean routes
         run: node scripts/generate-clean-public-urls.js
 
@@ -84,6 +88,10 @@ jobs:
 
       - name: Normalize source URLs and publication exclusions
         run: node scripts/normalize-public-site.cjs
+
+      - name: Refresh media archive asset version
+        run: |
+          sed -i 's/press-page.js?v=20260711-page-size-3/press-page.js?v=20260722-margin-final/g' media.html media_cn.html
 
       - name: Generate clean routes
         run: node scripts/generate-clean-public-urls.js
