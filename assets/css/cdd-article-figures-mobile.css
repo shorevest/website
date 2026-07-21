@@ -1,0 +1,25 @@
+@import url("/assets/css/cdd-article-figures.css?v=20260722-mobile-figure-viewer-v2");
+
+/* Mobile refinement for the v9i3 editorial figure panels.
+   Keep the panel visibly inset from the reading-column edge and give the
+   chart, expansion control and caption a calmer amount of breathing room. */
+@media (max-width: 700px) {
+  body.cdd-article-page[data-article-source*="china-debt-dynamics-v9i3"] .cdd-figure {
+    width: calc(100% - 32px);
+    max-width: calc(100% - 32px);
+    margin: 40px auto 48px;
+    padding: 16px 16px 14px;
+  }
+
+  body.cdd-article-page[data-article-source*="china-debt-dynamics-v9i3"] .cdd-figure__media,
+  body.cdd-article-page[data-article-source*="china-debt-dynamics-v9i3"] .cdd-figure img,
+  body.cdd-article-page[data-article-source*="china-debt-dynamics-v9i3"] .cdd-figure figcaption {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  body.cdd-article-page[data-article-source*="china-debt-dynamics-v9i3"] .cdd-figure__expand {
+    padding-right: 14px;
+  }
+}
