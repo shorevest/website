@@ -44,19 +44,13 @@
                 var u;
                 if (typeof i === "string") {
                   u = new URL(i,document.baseURI);
-                  if (
-                    u.origin === location.origin &&
-                    !u.searchParams.get("t")
-                  ) {
+                  if(T&&u.origin===location.origin&&!u.searchParams.get('t')) {
                     u.searchParams.set("t", T);
                     i = u.href;
                   }
                 } else if (i && i.url) {
                   u = new URL(i.url,document.baseURI);
-                  if (
-                    u.origin === location.origin &&
-                    !u.searchParams.get("t")
-                  ) {
+                  if(T&&u.origin===location.origin&&!u.searchParams.get('t')) {
                     u.searchParams.set("t", T);
                     i = new Request(u.href, i);
                   }
@@ -71,7 +65,7 @@
             window.XMLHttpRequest.prototype.open = function (m, u) {
               try {
                 var x = new URL(u,document.baseURI);
-                if (x.origin === location.origin && !x.searchParams.get("t")) {
+                if(T&&x.origin===location.origin&&!x.searchParams.get('t')) {
                   x.searchParams.set("t", T);
                   u = x.href;
                 }

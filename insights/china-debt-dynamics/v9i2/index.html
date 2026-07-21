@@ -9,7 +9,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   var T=window.__SVT;
   function tok(u){try{var url=new URL(u,document.baseURI);if(T&&url.origin===location.origin&&!url.searchParams.get('t')){url.searchParams.set('t',T);return url.href;}return u;}catch(e){return u;}}
   window.__svTok=tok;
-  (function(){var _f=window.fetch;if(_f){window.fetch=function(i,n){try{var u;if(typeof i==='string'){u=new URL(i,document.baseURI);if(u.origin===location.origin&&!u.searchParams.get('t')){u.searchParams.set('t',T);i=u.href;}}else if(i&&i.url){u=new URL(i.url,document.baseURI);if(u.origin===location.origin&&!u.searchParams.get('t')){u.searchParams.set('t',T);i=new Request(u.href,i);}}}catch(e){}return _f.call(this,i,n);};}var _o=window.XMLHttpRequest&&window.XMLHttpRequest.prototype.open;if(_o){window.XMLHttpRequest.prototype.open=function(m,u){try{var x=new URL(u,document.baseURI);if(x.origin===location.origin&&!x.searchParams.get('t')){x.searchParams.set('t',T);u=x.href;}}catch(e){}return _o.apply(this,[m,u].concat([].slice.call(arguments,2)));};}})();
+  (function(){var _f=window.fetch;if(_f){window.fetch=function(i,n){try{var u;if(typeof i==='string'){u=new URL(i,document.baseURI);if(T&&u.origin===location.origin&&!u.searchParams.get('t')){u.searchParams.set('t',T);i=u.href;}}else if(i&&i.url){u=new URL(i.url,document.baseURI);if(T&&u.origin===location.origin&&!u.searchParams.get('t')){u.searchParams.set('t',T);i=new Request(u.href,i);}}}catch(e){}return _f.call(this,i,n);};}var _o=window.XMLHttpRequest&&window.XMLHttpRequest.prototype.open;if(_o){window.XMLHttpRequest.prototype.open=function(m,u){try{var x=new URL(u,document.baseURI);if(T&&x.origin===location.origin&&!x.searchParams.get('t')){x.searchParams.set('t',T);u=x.href;}}catch(e){}return _o.apply(this,[m,u].concat([].slice.call(arguments,2)));};}})();
   function fixEl(el){
     if(el.nodeType!==1)return;
     if(el.hasAttribute('data-svsrc')&&!el.__sd){el.__sd=1;el.setAttribute('src',tok(el.getAttribute('data-svsrc')));}
@@ -45,6 +45,17 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 <link rel="manifest" href="site.webmanifest?v=20260717">
 <script src="assets/js/favicon-guard.js?v=20260717" defer></script>
   <link rel="canonical" href="https://shorevest.com/insights/china-debt-dynamics/v9i2/">
+  <meta name="description" content="As global markets are buffeted by geopolitical and trade-policy volatility, China may offer a comparatively resilient, uncorrelated harbor for investors focused on private credit and local dislocation.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="ShoreVest">
+  <meta property="og:title" content="China: An Uncorrelated Harbor in a Stormy World">
+  <meta property="og:description" content="As global markets are buffeted by geopolitical and trade-policy volatility, China may offer a comparatively resilient, uncorrelated harbor for investors focused on private credit and local dislocation.">
+  <meta property="og:url" content="https://shorevest.com/insights/china-debt-dynamics/v9i2/">
+  <meta property="og:image" content="https://shorevest.com/assets/brand/sv-lockup-fc-dark.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="China: An Uncorrelated Harbor in a Stormy World">
+  <meta name="twitter:description" content="As global markets are buffeted by geopolitical and trade-policy volatility, China may offer a comparatively resilient, uncorrelated harbor for investors focused on private credit and local dislocation.">
+  <meta name="twitter:image" content="https://shorevest.com/assets/brand/sv-lockup-fc-dark.png">
 </head>
   <body
     class="homepage insights-page cdd-article-page"
@@ -200,7 +211,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 13V3M8 3L3.5 7.5M8 3l4.5 4.5" stroke="currentColor" stroke-width="1.5"/></svg>
 </button>
 
-<script>(function(){var T=window.__SVT;function tk(u){return u+(u.indexOf("?")>-1?"&":"?")+"t="+T;}["assets/js/cdd-article-template.js","assets/js/cdd-issue-pager.js"].forEach(function(u){var s=document.createElement("script");s.src=tk(u);document.head.appendChild(s);});})();</script>
+<script>(function(){var T=window.__SVT;function tk(u){return T?u+(u.indexOf('?')>-1?'&':'?')+'t='+T:u;}["assets/js/cdd-article-template.js","assets/js/cdd-issue-pager.js"].forEach(function(u){var s=document.createElement("script");s.src=tk(u);document.head.appendChild(s);});})();</script>
 <script>
 (function(){
   var burger=document.querySelector('.sv-burger'); var menu=document.getElementById('sv-mobile-menu');
