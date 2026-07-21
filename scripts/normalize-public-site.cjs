@@ -9,6 +9,7 @@ const ROOT = path.resolve(__dirname, '..');
 const SITE_ORIGIN = 'https://shorevest.com';
 const EXCLUDED_CDD_ROUTE = '/insights/china-debt-dynamics/v7i4/';
 const EXCLUDED_CDD_SOURCE = 'china-debt-dynamics-v7i4.html';
+const PUBLIC_NAV_VERSION = '20260722-public-hotfix';
 const validate = process.argv.includes('--validate');
 
 function trackedFiles(...patterns) {
@@ -80,6 +81,13 @@ function normalizeTokenPlumbing(content) {
     .replace(/\?t="\+window\.__SVT\+"/g, '');
 }
 
+function normalizePublicScriptVersions(content) {
+  return content.replace(
+    /assets\/js\/sv-navigation\.js\?v=[^"'\s<]+/g,
+    `assets/js/sv-navigation.js?v=${PUBLIC_NAV_VERSION}`
+  );
+}
+
 function mediaAliasPairs() {
   return trackedFiles('media-*.html').map(source => {
     const slug = path.basename(source, '.html');
@@ -107,6 +115,7 @@ function normalizeFiles() {
     if (!fs.existsSync(abs)) continue;
     let content = fs.readFileSync(abs, 'utf8');
     content = normalizeTokenPlumbing(content);
+    content = normalizePublicScriptVersions(content);
     content = normalizeMediaAliases(content, pairs);
     if (rel === 'insights.html' || rel === 'insights/index.html') {
       content = removeExcludedCddRow(content);
