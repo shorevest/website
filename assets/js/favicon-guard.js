@@ -110,16 +110,81 @@
     document.head.appendChild(schema);
   }
 
+  function ensureInvestorPortalEmailLogin() {
+    var form = document.getElementById("vdr-login-form");
+    if (!form) return;
+
+    var emailField = form.querySelector('input[name="email"]');
+    if (!emailField) return;
+
+    var formGroup = emailField.closest(".form-group");
+    if (formGroup) {
+      formGroup.hidden = false;
+      formGroup.removeAttribute("hidden");
+      formGroup.removeAttribute("aria-hidden");
+    }
+
+    emailField.disabled = false;
+    emailField.required = true;
+    emailField.type = "email";
+    emailField.autocomplete = "email";
+
+    var language = (document.documentElement.getAttribute("lang") || "").toLowerCase();
+    var isChinese = language.indexOf("zh") === 0 || /(?:^|\/)cn(?:\/|$)|_cn(?:\.html)?(?:$|[?#])/.test(location.pathname);
+    var title = document.querySelector(".ip-signin__title");
+    var note = document.querySelector(".ip-signin__note");
+    if (title) title.textContent = isChinese ? "输入电子邮箱以打开数据室。" : "Enter your email to open the data room.";
+    if (note) note.textContent = isChinese
+      ? "已获授权的投资者将直接进入 ShoreVest iDeals 数据室。"
+      : "Authorized investors are sent directly into the ShoreVest iDeals data room.";
+
+    if (form.getAttribute("data-sv-email-login-ready") === "true") return;
+    form.setAttribute("data-sv-email-login-ready", "true");
+
+    var error = formGroup ? formGroup.querySelector(".error") : null;
+    function clearError() {
+      if (formGroup) formGroup.classList.remove("has-error");
+      if (error) error.textContent = "";
+      emailField.setCustomValidity("");
+    }
+
+    emailField.addEventListener("input", clearError);
+    emailField.addEventListener("change", clearError);
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+
+      var email = emailField.value.trim();
+      var valid = email !== "" && emailField.checkValidity();
+      if (!valid) {
+        if (formGroup) formGroup.classList.add("has-error");
+        if (error) {
+          error.textContent = email === ""
+            ? (isChinese ? "请填写后继续" : "Fill in to continue")
+            : (isChinese ? "请输入有效的电子邮件" : "Enter a valid email");
+        }
+        emailField.focus();
+        return;
+      }
+
+      window.location.href = "https://app.idealsvdr.com/projects/all/documents?email=" + encodeURIComponent(email);
+    }, true);
+  }
+
   ensureFavicons();
   ensureChineseCopyOverrides();
   ensureWebsiteSearchSignals();
+  ensureInvestorPortalEmailLogin();
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", ensureFavicons);
     document.addEventListener("DOMContentLoaded", ensureChineseCopyOverrides);
     document.addEventListener("DOMContentLoaded", ensureWebsiteSearchSignals);
+    document.addEventListener("DOMContentLoaded", ensureInvestorPortalEmailLogin);
   }
   window.addEventListener("pageshow", ensureFavicons);
   window.addEventListener("pageshow", ensureChineseCopyOverrides);
   window.addEventListener("pageshow", ensureWebsiteSearchSignals);
+  window.addEventListener("pageshow", ensureInvestorPortalEmailLogin);
   document.addEventListener("visibilitychange", ensureFavicons);
 })();
