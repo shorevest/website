@@ -1,0 +1,6 @@
+{
+  "purpose": "Force a fresh GitHub Pages deployment after the Media archive layout correction.",
+  "mediaRoute": "/media/",
+  "expectedState": "Archive articles hidden; coming-soon notice aligned to the standard page container.",
+  "requestedAt": "2026-07-22"
+}
