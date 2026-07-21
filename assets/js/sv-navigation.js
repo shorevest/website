@@ -1,5 +1,5 @@
 (function () {
-  var CAREERS_HREF = 'https://shorevest.github.io/website/careers/?t=';
+  var CAREERS_HREF = '/careers/';
 
   // Preserve native vertical scrolling while clipping accidental horizontal
   // overflow from full-bleed page elements.
@@ -32,7 +32,8 @@
     return /^(?:\.\.\/)?careers\.html(?:[?#].*)?$/i.test(href) ||
       /^(?:\.\.\/)?careers\/(?:[?#].*)?$/i.test(href) ||
       /^\/careers\/(?:[?#].*)?$/i.test(href) ||
-      /^https:\/\/shorevest\.com\/careers(?:\.html|\/)?(?:[?#].*)?$/i.test(href);
+      /^https:\/\/shorevest\.com\/careers(?:\.html|\/)?(?:[?#].*)?$/i.test(href) ||
+      /^https:\/\/shorevest\.github\.io\/website\/careers\/(?:[?#].*)?$/i.test(href);
   }
 
   function fixCareersLinks(root) {
