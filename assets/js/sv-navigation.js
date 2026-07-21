@@ -27,6 +27,34 @@
     document.head.appendChild(activeNavStyle);
   }
 
+  function isCareersPage() {
+    return !!(
+      document.body &&
+      (
+        document.body.classList.contains('careers-preview-page') ||
+        document.body.classList.contains('careers-role-page')
+      )
+    );
+  }
+
+  // Careers index pages use a root <base> tag so generated role-detail links
+  // resolve correctly. Without this adjustment, bare fragment links such as
+  // #open-roles resolve to the homepage instead of the current Careers page.
+  function fixCareersHashLinks(root) {
+    if (!isCareersPage()) return;
+
+    var scope = root && root.querySelectorAll ? root : document;
+    var links = scope.querySelectorAll('a[href^="#"]');
+    var currentPath = window.location.pathname || CAREERS_HREF;
+
+    links.forEach(function (link) {
+      var href = link.getAttribute('href');
+      if (/^#[A-Za-z][A-Za-z0-9_:.-]*$/.test(href || '')) {
+        link.setAttribute('href', currentPath + href);
+      }
+    });
+  }
+
   function isCareersHref(href) {
     if (!href) return false;
     return /^(?:\.\.\/)?careers\.html(?:[?#].*)?$/i.test(href) ||
@@ -36,16 +64,23 @@
       /^https:\/\/shorevest\.github\.io\/website\/careers\/(?:[?#].*)?$/i.test(href);
   }
 
+  function cleanCareersHref(href) {
+    var hashIndex = href ? href.indexOf('#') : -1;
+    return CAREERS_HREF + (hashIndex >= 0 ? href.slice(hashIndex) : '');
+  }
+
   function fixCareersLinks(root) {
     var scope = root && root.querySelectorAll ? root : document;
     var links = scope.querySelectorAll('a[href]');
     links.forEach(function (link) {
-      if (isCareersHref(link.getAttribute('href'))) {
-        link.setAttribute('href', CAREERS_HREF);
+      var href = link.getAttribute('href');
+      if (isCareersHref(href)) {
+        link.setAttribute('href', cleanCareersHref(href));
       }
     });
   }
 
+  fixCareersHashLinks(document);
   fixCareersLinks(document);
 
   if (window.MutationObserver) {
@@ -53,8 +88,9 @@
       mutations.forEach(function (mutation) {
         mutation.addedNodes.forEach(function (node) {
           if (node.nodeType !== 1) return;
+          fixCareersHashLinks(node);
           if (node.matches && node.matches('a[href]') && isCareersHref(node.getAttribute('href'))) {
-            node.setAttribute('href', CAREERS_HREF);
+            node.setAttribute('href', cleanCareersHref(node.getAttribute('href')));
           }
           fixCareersLinks(node);
         });
