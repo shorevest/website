@@ -1,7 +1,7 @@
 /* ============================================================
    MEDIA PAGE — temporary archive holding state
-   The article archive is intentionally removed from the rendered
-   page while the section is being refreshed.
+   The historical article archive is intentionally removed while
+   the section is being reviewed and refreshed.
    ============================================================ */
 (function () {
   "use strict";
@@ -25,18 +25,25 @@
       .toLowerCase()
       .indexOf("zh") === 0;
 
-    /* Replace the archive markup completely so no article rows,
-       filters, featured item or load-more control remain visible. */
+    /* Explicitly use the same page shell as the event ledgers. This avoids
+       the archive notice drifting outside the standard desktop and mobile
+       margins even if another stylesheet changes the generic shell rules. */
+    shell.style.width = "100%";
+    shell.style.maxWidth = "1280px";
+    shell.style.marginInline = "auto";
+    shell.style.paddingInline = "clamp(24px, 5vw, 48px)";
+    shell.style.boxSizing = "border-box";
+
     shell.innerHTML = isChinese
-      ? '<div class="pr-section-head"><div class="pr-section-head__l"><h2 class="pr-section-title" id="pr-archive-title">媒体资料库</h2></div></div>' +
-        '<div class="pr-featured pr-archive-coming-soon" role="status" aria-live="polite">' +
-          '<div class="pr-featured__meta"><span class="pr-featured__tag">更新中</span><span class="pr-featured__pub">媒体资料库</span></div>' +
-          '<div class="pr-featured__body"><h3 class="pr-featured__title">即将上线</h3><p class="pr-featured__desc">我们正在更新此部分，更新后的媒体资料库将于近期发布。</p></div>' +
+      ? '<div class="pr-archive-hold" role="status" aria-live="polite" style="width:100%;max-width:760px;box-sizing:border-box;padding-block:clamp(20px,2vw,32px)">' +
+          '<p class="pr-featured__tag" style="margin:0 0 28px">媒体资料库</p>' +
+          '<h2 id="pr-archive-title" style="margin:0 0 28px;max-width:13ch;font:500 clamp(44px,5vw,68px)/1.05 var(--sv-font);letter-spacing:-0.035em;color:var(--sv-ink)">更新后的媒体资料库即将上线。</h2>' +
+          '<p style="margin:0;max-width:68ch;font:400 clamp(17px,1.55vw,21px)/1.65 var(--sv-font);color:var(--sv-ink-2)">我们正在审核并更新历史媒体报道。在相关工作完成之前，媒体资料库中的文章将暂时无法访问。</p>' +
         '</div>'
-      : '<div class="pr-section-head"><div class="pr-section-head__l"><h2 class="pr-section-title" id="pr-archive-title">Media archive</h2></div></div>' +
-        '<div class="pr-featured pr-archive-coming-soon" role="status" aria-live="polite">' +
-          '<div class="pr-featured__meta"><span class="pr-featured__tag">Update</span><span class="pr-featured__pub">Media archive</span></div>' +
-          '<div class="pr-featured__body"><h3 class="pr-featured__title">Coming soon</h3><p class="pr-featured__desc">We are updating this section and will publish the refreshed media archive soon.</p></div>' +
+      : '<div class="pr-archive-hold" role="status" aria-live="polite" style="width:100%;max-width:760px;box-sizing:border-box;padding-block:clamp(20px,2vw,32px)">' +
+          '<p class="pr-featured__tag" style="margin:0 0 28px">Media archive</p>' +
+          '<h2 id="pr-archive-title" style="margin:0 0 28px;max-width:13ch;font:500 clamp(44px,5vw,68px)/1.05 var(--sv-font);letter-spacing:-0.035em;color:var(--sv-ink)">Updated archive coming soon.</h2>' +
+          '<p style="margin:0;max-width:68ch;font:400 clamp(17px,1.55vw,21px)/1.65 var(--sv-font);color:var(--sv-ink-2)">We are reviewing and updating the historical media coverage. Individual archive articles are temporarily unavailable while that work is completed.</p>' +
         '</div>';
 
     var archiveLink = document.querySelector('.sv-hero__cta a[href="#archive"]');
