@@ -38,7 +38,7 @@
   /* ------------------------------------------------------------------------
      Public-site content corrections (22 July 2026)
      ------------------------------------------------------------------------ */
-  var ADA_LINKEDIN_URL = 'https://www.linkedin.com/in/ada-bi-cpa-cga-fcca-6185a218/';
+  var ADA_LINKEDIN_URL = 'https://www.linkedin.com/in/ada-bi-cpa-fcca-6185a218?utm_source=share_via&utm_content=profile&utm_medium=member_ios';
   var SHADOW_BANKING_SOURCE = '/assets/data/china-debt-dynamics-v5i4.json?v=20260722-full-article';
 
   function eachNode(nodes, callback) {
@@ -62,7 +62,7 @@
       var href = link.getAttribute('href') || '';
       var isAda = name && (name.textContent || '').trim().toLowerCase() === 'ada bi';
 
-      if (isAda || /linkedin\.com\/in\/ada-bi-cpa-cga-fcca-6185a218/i.test(href)) {
+      if (isAda || /linkedin\.com\/in\/ada-bi-cpa-(?:cga-)?fcca-6185a218/i.test(href)) {
         link.setAttribute('href', ADA_LINKEDIN_URL);
         link.setAttribute('target', '_blank');
         link.setAttribute('rel', 'noopener noreferrer');
