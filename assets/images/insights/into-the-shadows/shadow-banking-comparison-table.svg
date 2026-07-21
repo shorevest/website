@@ -1,19 +1,95 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="740" viewBox="0 0 1200 740" role="img" aria-label="Comparison of China shadow banking and US private credit"><style>
-text{font-family:"DIN 2014","Barlow",Arial,Helvetica,sans-serif;fill:#182524}
-.eyebrow{font-size:13px;font-weight:700;letter-spacing:2.2px;fill:#C93B2A}
-.title{font-size:30px;font-weight:600;letter-spacing:-.3px}
-.subtitle{font-size:15px;font-weight:400;fill:#6E7169}
-.axis{font-size:13px;font-weight:500;fill:#6E7169}
-.axis-title{font-size:13px;font-weight:700;letter-spacing:1.2px;fill:#6E7169}
-.legend{font-size:14px;font-weight:600}
-.value{font-size:13px;font-weight:700}
-.source{font-size:12px;font-weight:500;fill:#6E7169}
-.table-head{font-size:13px;font-weight:700;letter-spacing:.2px}
-.table-question{font-size:14px;font-weight:600}
-.table-cell{font-size:14px;font-weight:700}
-.box-head{font-size:15px;font-weight:700}
-.box-copy{font-size:12.5px;font-weight:500;fill:#2A302E}
-.box-copy-light{font-size:12.5px;font-weight:500;fill:#FCF9F1}
-.section-head{font-size:22px;font-weight:600}
-.big-number{font-size:54px;font-weight:600;letter-spacing:-1px}
-</style><rect width="1200" height="740" fill="#FCF9F1"/><rect x="64" y="40" width="10" height="10" fill="#C93B2A"/><text x="88" y="51" class="eyebrow">MARKET COMPARISON</text><text x="64" y="94" class="title">China Shadow Banking and US Private Credit</text><text x="64" y="120" class="subtitle">Five characteristics that signal similar system-level risk</text><rect x="64" y="155" width="1136" height="110" fill="#182524"/><rect x="454" y="155" width="180" height="6" fill="#3D7070"/><rect x="634" y="155" width="190" height="6" fill="#C93B2A"/><rect x="824" y="155" width="195" height="6" fill="#7AAFAF"/><rect x="1019" y="155" width="181" height="6" fill="#C89A2E"/><text x="82" y="194" class="table-head" text-anchor="start" style="fill:#FCF9F1"><tspan x="82" dy="0">Risk characteristic</tspan></text><text x="544.0" y="194" class="table-head" text-anchor="middle" style="fill:#FCF9F1"><tspan x="544.0" dy="0">China</tspan><tspan x="544.0" dy="19">pre-pandemic</tspan><tspan x="544.0" dy="19">shadow banking</tspan></text><text x="729.0" y="194" class="table-head" text-anchor="middle" style="fill:#FCF9F1"><tspan x="729.0" dy="0">US post-pandemic</tspan><tspan x="729.0" dy="19">private credit /</tspan><tspan x="729.0" dy="19">shadow banking</tspan></text><text x="921.5" y="194" class="table-head" text-anchor="middle" style="fill:#FCF9F1"><tspan x="921.5" dy="0">China restraint</tspan><tspan x="921.5" dy="19">regulatory or</tspan><tspan x="921.5" dy="19">investor-imposed</tspan></text><text x="1109.5" y="194" class="table-head" text-anchor="middle" style="fill:#FCF9F1"><tspan x="1109.5" dy="0">US restraint</tspan><tspan x="1109.5" dy="19">regulatory or</tspan><tspan x="1109.5" dy="19">investor-imposed</tspan></text><rect x="64" y="265" width="1136" height="88" fill="#FCF9F1"/><line x1="64" y1="265" x2="1200" y2="265" stroke="#D8CEB0" stroke-width="1"/><text x="82" y="299" class="table-question" text-anchor="start"><tspan x="82" dy="0">Trillions of USD AUM growth</tspan><tspan x="82" dy="21">within a few years?</tspan></text><rect x="539.0" y="304" width="10" height="10" fill="#1E4040"/><text x="562.0" y="315" class="table-cell" text-anchor="start" style="fill:#1E4040">Yes</text><rect x="724.0" y="304" width="10" height="10" fill="#9F2F24"/><text x="747.0" y="315" class="table-cell" text-anchor="start" style="fill:#9F2F24">Yes</text><rect x="916.5" y="304" width="10" height="10" fill="#1E4040"/><text x="939.5" y="315" class="table-cell" text-anchor="start" style="fill:#1E4040">Yes</text><rect x="1077.5" y="294" width="64" height="30" fill="none" stroke="#7A6030" stroke-width="1.5"/><text x="1109.5" y="315" class="table-cell" text-anchor="middle" style="fill:#7A6030">TBD</text><rect x="64" y="353" width="1136" height="88" fill="#F1EBDD"/><line x1="64" y1="353" x2="1200" y2="353" stroke="#D8CEB0" stroke-width="1"/><text x="82" y="387" class="table-question" text-anchor="start"><tspan x="82" dy="0">Leverage increasing</tspan><tspan x="82" dy="21">dramatically?</tspan></text><rect x="539.0" y="392" width="10" height="10" fill="#1E4040"/><text x="562.0" y="403" class="table-cell" text-anchor="start" style="fill:#1E4040">Yes</text><rect x="724.0" y="392" width="10" height="10" fill="#9F2F24"/><text x="747.0" y="403" class="table-cell" text-anchor="start" style="fill:#9F2F24">Yes</text><rect x="916.5" y="392" width="10" height="10" fill="#1E4040"/><text x="939.5" y="403" class="table-cell" text-anchor="start" style="fill:#1E4040">Yes</text><rect x="1077.5" y="382" width="64" height="30" fill="none" stroke="#7A6030" stroke-width="1.5"/><text x="1109.5" y="403" class="table-cell" text-anchor="middle" style="fill:#7A6030">TBD</text><rect x="64" y="441" width="1136" height="88" fill="#FCF9F1"/><line x1="64" y1="441" x2="1200" y2="441" stroke="#D8CEB0" stroke-width="1"/><text x="82" y="475" class="table-question" text-anchor="start"><tspan x="82" dy="0">Commercial banks indirectly</tspan><tspan x="82" dy="21">exposed to risk?</tspan></text><rect x="539.0" y="480" width="10" height="10" fill="#1E4040"/><text x="562.0" y="491" class="table-cell" text-anchor="start" style="fill:#1E4040">Yes</text><rect x="724.0" y="480" width="10" height="10" fill="#9F2F24"/><text x="747.0" y="491" class="table-cell" text-anchor="start" style="fill:#9F2F24">Yes</text><rect x="916.5" y="480" width="10" height="10" fill="#1E4040"/><text x="939.5" y="491" class="table-cell" text-anchor="start" style="fill:#1E4040">Yes</text><rect x="1077.5" y="470" width="64" height="30" fill="none" stroke="#7A6030" stroke-width="1.5"/><text x="1109.5" y="491" class="table-cell" text-anchor="middle" style="fill:#7A6030">TBD</text><rect x="64" y="529" width="1136" height="88" fill="#F1EBDD"/><line x1="64" y1="529" x2="1200" y2="529" stroke="#D8CEB0" stroke-width="1"/><text x="82" y="563" class="table-question" text-anchor="start"><tspan x="82" dy="0">Insurance companies indirectly</tspan><tspan x="82" dy="21">exposed to risk?</tspan></text><rect x="539.0" y="568" width="10" height="10" fill="#1E4040"/><text x="562.0" y="579" class="table-cell" text-anchor="start" style="fill:#1E4040">Yes</text><rect x="724.0" y="568" width="10" height="10" fill="#9F2F24"/><text x="747.0" y="579" class="table-cell" text-anchor="start" style="fill:#9F2F24">Yes</text><rect x="916.5" y="568" width="10" height="10" fill="#1E4040"/><text x="939.5" y="579" class="table-cell" text-anchor="start" style="fill:#1E4040">Yes</text><rect x="1077.5" y="558" width="64" height="30" fill="none" stroke="#7A6030" stroke-width="1.5"/><text x="1109.5" y="579" class="table-cell" text-anchor="middle" style="fill:#7A6030">TBD</text><rect x="64" y="617" width="1136" height="88" fill="#FCF9F1"/><line x1="64" y1="617" x2="1200" y2="617" stroke="#D8CEB0" stroke-width="1"/><text x="82" y="651" class="table-question" text-anchor="start"><tspan x="82" dy="0">Large amounts of retail</tspan><tspan x="82" dy="21">investor capital raised?</tspan></text><rect x="539.0" y="656" width="10" height="10" fill="#1E4040"/><text x="562.0" y="667" class="table-cell" text-anchor="start" style="fill:#1E4040">Yes</text><rect x="724.0" y="656" width="10" height="10" fill="#9F2F24"/><text x="747.0" y="667" class="table-cell" text-anchor="start" style="fill:#9F2F24">Yes</text><rect x="916.5" y="656" width="10" height="10" fill="#1E4040"/><text x="939.5" y="667" class="table-cell" text-anchor="start" style="fill:#1E4040">Yes</text><rect x="1077.5" y="646" width="64" height="30" fill="none" stroke="#7A6030" stroke-width="1.5"/><text x="1109.5" y="667" class="table-cell" text-anchor="middle" style="fill:#7A6030">TBD</text><rect x="64" y="155" width="1136" height="550" fill="none" stroke="#182524" stroke-width="1.5"/><line x1="454" y1="155" x2="454" y2="705" stroke="#D8CEB0" stroke-width="1"/><line x1="634" y1="155" x2="634" y2="705" stroke="#D8CEB0" stroke-width="1"/><line x1="824" y1="155" x2="824" y2="705" stroke="#D8CEB0" stroke-width="1"/><line x1="1019" y1="155" x2="1019" y2="705" stroke="#D8CEB0" stroke-width="1"/><text x="64" y="730" class="source">Source: ShoreVest</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="680" viewBox="0 0 1200 680" role="img" aria-label="Comparison of China shadow banking and US private credit" preserveAspectRatio="xMidYMid meet">
+  <style>
+    text{font-family:"DIN 2014","Barlow",Arial,Helvetica,sans-serif;fill:#182524}
+    .eyebrow{font-size:14px;font-weight:700;letter-spacing:2.2px;fill:#C93B2A}
+    .title{font-size:32px;font-weight:600;letter-spacing:-.4px}
+    .subtitle{font-size:16px;font-weight:400;fill:#6E7169}
+    .head{font-size:14.5px;font-weight:700;letter-spacing:.15px;fill:#FCF9F1}
+    .question{font-size:16px;font-weight:600}
+    .cell{font-size:15px;font-weight:700}
+    .source{font-size:12.5px;font-weight:500;fill:#6E7169}
+  </style>
+
+  <rect width="1200" height="680" fill="#FCF9F1"/>
+  <rect x="36" y="25" width="9" height="9" fill="#C93B2A"/>
+  <text x="58" y="34" class="eyebrow">MARKET COMPARISON</text>
+  <text x="36" y="74" class="title">China Shadow Banking and US Private Credit</text>
+  <text x="36" y="101" class="subtitle">Five characteristics that signal similar system-level risk</text>
+
+  <g>
+    <rect x="36" y="130" width="1128" height="96" fill="#182524"/>
+    <rect x="416" y="130" width="187" height="6" fill="#3D7070"/>
+    <rect x="603" y="130" width="187" height="6" fill="#C93B2A"/>
+    <rect x="790" y="130" width="187" height="6" fill="#7AAFAF"/>
+    <rect x="977" y="130" width="187" height="6" fill="#C89A2E"/>
+
+    <text x="54" y="178" class="head">Risk characteristic</text>
+    <text x="509.5" y="166" class="head" text-anchor="middle"><tspan x="509.5">China</tspan><tspan x="509.5" dy="20">pre-pandemic</tspan><tspan x="509.5" dy="20">shadow banking</tspan></text>
+    <text x="696.5" y="166" class="head" text-anchor="middle"><tspan x="696.5">US post-pandemic</tspan><tspan x="696.5" dy="20">private credit /</tspan><tspan x="696.5" dy="20">shadow banking</tspan></text>
+    <text x="883.5" y="166" class="head" text-anchor="middle"><tspan x="883.5">China restraint</tspan><tspan x="883.5" dy="20">regulatory or</tspan><tspan x="883.5" dy="20">investor-imposed</tspan></text>
+    <text x="1070.5" y="166" class="head" text-anchor="middle"><tspan x="1070.5">US restraint</tspan><tspan x="1070.5" dy="20">regulatory or</tspan><tspan x="1070.5" dy="20">investor-imposed</tspan></text>
+  </g>
+
+  <g>
+    <rect x="36" y="226" width="1128" height="82" fill="#FCF9F1"/>
+    <rect x="36" y="308" width="1128" height="82" fill="#F1EBDD"/>
+    <rect x="36" y="390" width="1128" height="82" fill="#FCF9F1"/>
+    <rect x="36" y="472" width="1128" height="82" fill="#F1EBDD"/>
+    <rect x="36" y="554" width="1128" height="82" fill="#FCF9F1"/>
+
+    <g stroke="#D8CEB0" stroke-width="1">
+      <line x1="36" y1="226" x2="1164" y2="226"/>
+      <line x1="36" y1="308" x2="1164" y2="308"/>
+      <line x1="36" y1="390" x2="1164" y2="390"/>
+      <line x1="36" y1="472" x2="1164" y2="472"/>
+      <line x1="36" y1="554" x2="1164" y2="554"/>
+    </g>
+
+    <text x="54" y="258" class="question"><tspan x="54">Trillions of USD AUM growth</tspan><tspan x="54" dy="22">within a few years?</tspan></text>
+    <text x="54" y="340" class="question"><tspan x="54">Leverage increasing</tspan><tspan x="54" dy="22">dramatically?</tspan></text>
+    <text x="54" y="422" class="question"><tspan x="54">Commercial banks indirectly</tspan><tspan x="54" dy="22">exposed to risk?</tspan></text>
+    <text x="54" y="504" class="question"><tspan x="54">Insurance companies indirectly</tspan><tspan x="54" dy="22">exposed to risk?</tspan></text>
+    <text x="54" y="586" class="question"><tspan x="54">Large amounts of retail</tspan><tspan x="54" dy="22">investor capital raised?</tspan></text>
+  </g>
+
+  <g class="cell">
+    <g fill="#1E4040">
+      <rect x="480" y="262" width="10" height="10"/><text x="501" y="272" fill="#1E4040">Yes</text>
+      <rect x="480" y="344" width="10" height="10"/><text x="501" y="354" fill="#1E4040">Yes</text>
+      <rect x="480" y="426" width="10" height="10"/><text x="501" y="436" fill="#1E4040">Yes</text>
+      <rect x="480" y="508" width="10" height="10"/><text x="501" y="518" fill="#1E4040">Yes</text>
+      <rect x="480" y="590" width="10" height="10"/><text x="501" y="600" fill="#1E4040">Yes</text>
+    </g>
+    <g fill="#9F2F24">
+      <rect x="667" y="262" width="10" height="10"/><text x="688" y="272" fill="#9F2F24">Yes</text>
+      <rect x="667" y="344" width="10" height="10"/><text x="688" y="354" fill="#9F2F24">Yes</text>
+      <rect x="667" y="426" width="10" height="10"/><text x="688" y="436" fill="#9F2F24">Yes</text>
+      <rect x="667" y="508" width="10" height="10"/><text x="688" y="518" fill="#9F2F24">Yes</text>
+      <rect x="667" y="590" width="10" height="10"/><text x="688" y="600" fill="#9F2F24">Yes</text>
+    </g>
+    <g fill="#1E4040">
+      <rect x="854" y="262" width="10" height="10"/><text x="875" y="272" fill="#1E4040">Yes</text>
+      <rect x="854" y="344" width="10" height="10"/><text x="875" y="354" fill="#1E4040">Yes</text>
+      <rect x="854" y="426" width="10" height="10"/><text x="875" y="436" fill="#1E4040">Yes</text>
+      <rect x="854" y="508" width="10" height="10"/><text x="875" y="518" fill="#1E4040">Yes</text>
+      <rect x="854" y="590" width="10" height="10"/><text x="875" y="600" fill="#1E4040">Yes</text>
+    </g>
+    <g fill="none" stroke="#7A6030" stroke-width="1.5">
+      <rect x="1042.5" y="252" width="56" height="28"/><rect x="1042.5" y="334" width="56" height="28"/>
+      <rect x="1042.5" y="416" width="56" height="28"/><rect x="1042.5" y="498" width="56" height="28"/>
+      <rect x="1042.5" y="580" width="56" height="28"/>
+    </g>
+    <g fill="#7A6030" text-anchor="middle">
+      <text x="1070.5" y="271">TBD</text><text x="1070.5" y="353">TBD</text><text x="1070.5" y="435">TBD</text><text x="1070.5" y="517">TBD</text><text x="1070.5" y="599">TBD</text>
+    </g>
+  </g>
+
+  <g fill="none" stroke="#D8CEB0" stroke-width="1">
+    <line x1="416" y1="130" x2="416" y2="636"/>
+    <line x1="603" y1="130" x2="603" y2="636"/>
+    <line x1="790" y1="130" x2="790" y2="636"/>
+    <line x1="977" y1="130" x2="977" y2="636"/>
+  </g>
+  <rect x="36" y="130" width="1128" height="506" fill="none" stroke="#182524" stroke-width="1.5"/>
+  <text x="36" y="665" class="source">Source: ShoreVest</text>
+</svg>
