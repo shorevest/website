@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650" role="img" aria-label="More than 500 new US direct lending managers since the GFC">
+<style>text{font-family:DIN 2014, Barlow, Arial, Helvetica, sans-serif;fill:#222222}.title{font-size:28px;font-weight:700}.axis{font-size:14px;fill:#666666}.label{font-size:14px;font-weight:600}.small{font-size:12px;fill:#666666}.cell{font-size:14px}.head{font-size:14px;font-weight:700}.boxhead{font-size:14px;font-weight:700}.boxtext{font-size:12px}</style>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text class="title" x="600.0" y="42" text-anchor="middle">&gt;500 New Managers Enter US Direct Lending Since GFC</text>
+<line x1="90" y1="560.0" x2="1165" y2="560.0" stroke="#d9d9d9"/><text class="axis" x="75" y="565.0" text-anchor="end">0</text>
+<line x1="90" y1="500.0" x2="1165" y2="500.0" stroke="#d9d9d9"/><text class="axis" x="75" y="505.0" text-anchor="end">10</text>
+<line x1="90" y1="440.0" x2="1165" y2="440.0" stroke="#d9d9d9"/><text class="axis" x="75" y="445.0" text-anchor="end">20</text>
+<line x1="90" y1="380.0" x2="1165" y2="380.0" stroke="#d9d9d9"/><text class="axis" x="75" y="385.0" text-anchor="end">30</text>
+<line x1="90" y1="320.0" x2="1165" y2="320.0" stroke="#d9d9d9"/><text class="axis" x="75" y="325.0" text-anchor="end">40</text>
+<line x1="90" y1="260.0" x2="1165" y2="260.0" stroke="#d9d9d9"/><text class="axis" x="75" y="265.0" text-anchor="end">50</text>
+<line x1="90" y1="200.0" x2="1165" y2="200.0" stroke="#d9d9d9"/><text class="axis" x="75" y="205.0" text-anchor="end">60</text>
+<line x1="90" y1="140.0" x2="1165" y2="140.0" stroke="#d9d9d9"/><text class="axis" x="75" y="145.0" text-anchor="end">70</text>
+<line x1="90" y1="80.0" x2="1165" y2="80.0" stroke="#d9d9d9"/><text class="axis" x="75" y="85.0" text-anchor="end">80</text>
+<text class="label" transform="translate(28 320.0) rotate(-90)" text-anchor="middle"># of Entrants</text>
+<rect x="105.3" y="548.0" width="23.1" height="12.0" fill="#b91c4b"/><text class="label" x="116.9" y="540.0" text-anchor="middle">2</text><text class="axis" x="116.9" y="585" text-anchor="middle">2004</text>
+<rect x="159.1" y="536.0" width="23.1" height="24.0" fill="#b91c4b"/><text class="label" x="170.6" y="528.0" text-anchor="middle">4</text><text class="axis" x="170.6" y="585" text-anchor="middle">2005</text>
+<rect x="212.8" y="524.0" width="23.1" height="36.0" fill="#b91c4b"/><text class="label" x="224.4" y="516.0" text-anchor="middle">6</text><text class="axis" x="224.4" y="585" text-anchor="middle">2006</text>
+<rect x="266.6" y="530.0" width="23.1" height="30.0" fill="#b91c4b"/><text class="label" x="278.1" y="522.0" text-anchor="middle">5</text><text class="axis" x="278.1" y="585" text-anchor="middle">2007</text>
+<rect x="320.3" y="512.0" width="23.1" height="48.0" fill="#b91c4b"/><text class="label" x="331.9" y="504.0" text-anchor="middle">8</text><text class="axis" x="331.9" y="585" text-anchor="middle">2008</text>
+<rect x="374.1" y="518.0" width="23.1" height="42.0" fill="#b91c4b"/><text class="label" x="385.6" y="510.0" text-anchor="middle">7</text><text class="axis" x="385.6" y="585" text-anchor="middle">2009</text>
+<rect x="427.8" y="488.0" width="23.1" height="72.0" fill="#b91c4b"/><text class="label" x="439.4" y="480.0" text-anchor="middle">12</text><text class="axis" x="439.4" y="585" text-anchor="middle">2010</text>
+<rect x="481.6" y="518.0" width="23.1" height="42.0" fill="#b91c4b"/><text class="label" x="493.1" y="510.0" text-anchor="middle">7</text><text class="axis" x="493.1" y="585" text-anchor="middle">2011</text>
+<rect x="535.3" y="458.0" width="23.1" height="102.0" fill="#b91c4b"/><text class="label" x="546.9" y="450.0" text-anchor="middle">17</text><text class="axis" x="546.9" y="585" text-anchor="middle">2012</text>
+<rect x="589.1" y="326.0" width="23.1" height="234.0" fill="#b91c4b"/><text class="label" x="600.6" y="318.0" text-anchor="middle">39</text><text class="axis" x="600.6" y="585" text-anchor="middle">2013</text>
+<rect x="642.8" y="398.0" width="23.1" height="162.0" fill="#b91c4b"/><text class="label" x="654.4" y="390.0" text-anchor="middle">27</text><text class="axis" x="654.4" y="585" text-anchor="middle">2014</text>
+<rect x="696.6" y="332.0" width="23.1" height="228.0" fill="#b91c4b"/><text class="label" x="708.1" y="324.0" text-anchor="middle">38</text><text class="axis" x="708.1" y="585" text-anchor="middle">2015</text>
+<rect x="750.3" y="314.0" width="23.1" height="246.0" fill="#b91c4b"/><text class="label" x="761.9" y="306.0" text-anchor="middle">41</text><text class="axis" x="761.9" y="585" text-anchor="middle">2016</text>
+<rect x="804.1" y="362.0" width="23.1" height="198.0" fill="#b91c4b"/><text class="label" x="815.6" y="354.0" text-anchor="middle">33</text><text class="axis" x="815.6" y="585" text-anchor="middle">2017</text>
+<rect x="857.8" y="302.0" width="23.1" height="258.0" fill="#b91c4b"/><text class="label" x="869.4" y="294.0" text-anchor="middle">43</text><text class="axis" x="869.4" y="585" text-anchor="middle">2018</text>
+<rect x="911.6" y="350.0" width="23.1" height="210.0" fill="#b91c4b"/><text class="label" x="923.1" y="342.0" text-anchor="middle">35</text><text class="axis" x="923.1" y="585" text-anchor="middle">2019</text>
+<rect x="965.3" y="308.0" width="23.1" height="252.0" fill="#b91c4b"/><text class="label" x="976.9" y="300.0" text-anchor="middle">42</text><text class="axis" x="976.9" y="585" text-anchor="middle">2020</text>
+<rect x="1019.1" y="218.0" width="23.1" height="342.0" fill="#b91c4b"/><text class="label" x="1030.6" y="210.0" text-anchor="middle">57</text><text class="axis" x="1030.6" y="585" text-anchor="middle">2021</text>
+<rect x="1072.8" y="344.0" width="23.1" height="216.0" fill="#b91c4b"/><text class="label" x="1084.4" y="336.0" text-anchor="middle">36</text><text class="axis" x="1084.4" y="585" text-anchor="middle">2022</text>
+<rect x="1126.6" y="128.0" width="23.1" height="432.0" fill="#b91c4b"/><text class="label" x="1138.1" y="120.0" text-anchor="middle">72</text><text class="axis" x="1138.1" y="585" text-anchor="middle">2023</text>
+<text class="small" x="90" y="638">Source: PitchBook</text>
+</svg>
