@@ -21,7 +21,14 @@
 <meta property="og:locale" content="en_US">
 <style>
   @media (min-width: 900px) {
-    #archive .pr-archive-hold { margin-inline-start: clamp(56px, 4vw, 64px); }
+    #archive > .sv-shell {
+      width: 100% !important;
+      max-width: var(--page-max, 1684px) !important;
+      margin-inline: auto !important;
+      padding-inline: var(--pad-x, clamp(24px, 8.9vw, 182px)) !important;
+      box-sizing: border-box !important;
+    }
+    #archive .pr-archive-hold { margin-inline: 0 !important; }
   }
 </style>
 </head>
@@ -49,8 +56,8 @@
 </main>
 <footer class="sv-footer" aria-label="Site footer"><div class="sv-footer__inner"><div class="sv-footer__top"><div><a class="sv-footer__logo" href="/" aria-label="ShoreVest — home"><img src="assets/brand/sv-lockup-fc-light.png" alt="ShoreVest" width="200" height="48" loading="eager" decoding="async"></a><p class="sv-footer__offices">Guangzhou · Shanghai · Beijing · Hong Kong<br><a href="/contact/">General inquiries</a></p></div><nav class="sv-footer__nav" aria-label="Footer"><a href="/firm/">Firm</a><a href="/strategy/">Strategy</a><a href="/insights/">Insights</a><a href="/media/">Media</a><a href="/team/">Team</a><a href="/careers/">Careers</a><a href="/contact/">Contact</a><a href="/insights/#archive">China Debt Dynamics</a><span class="sv-footer__access" role="group" aria-label="Access"><span class="sv-footer__access-label">Access</span><a href="/investor-portal/">Investor Portal</a></span></nav><div class="sv-footer__social" aria-label="Follow ShoreVest"><a class="sv-footer__social-link" href="https://www.linkedin.com/company/shorevest-partners/" target="_blank" rel="noopener noreferrer"><span>LinkedIn</span></a></div></div><div class="sv-footer__legal"><p>ShoreVest Partners and its affiliates provide investment management services to institutional investors. This website is for informational purposes only and does not constitute an offer to sell or a solicitation of an offer to buy any security or investment product, nor investment, legal, or tax advice.</p><p>Past performance is not indicative of future results. Investments in private credit and private debt involve risk, including the possible loss of principal. Figures shown are approximate and subject to change.</p></div><div class="sv-footer__bottom"><div class="sv-footer__links"><a href="/privacy-policy/">Privacy Policy</a><a href="/cookie-notice/">Cookie Notice</a><a href="/terms-of-use/">Terms of Use</a><a href="/important-information/">Important Information</a><a href="/legal-notices-disclaimers/">Legal Notices &amp; Disclaimers</a></div><p class="sv-footer__copy">© 2026 ShoreVest Partners. All rights reserved.</p></div></div></footer>
 <button class="sv-totop" type="button" aria-label="Back to top"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 13V3M8 3L3.5 7.5M8 3l4.5 4.5" stroke="currentColor" stroke-width="1.5"/></svg></button>
-<script src="assets/js/event-visibility.js?v=20260722-media-margin-2"></script>
-<script src="assets/js/press-events.js?v=20260722-media-margin-2"></script>
+<script src="assets/js/event-visibility.js?v=20260722-media-margin-3"></script>
+<script src="assets/js/press-events.js?v=20260722-media-margin-3"></script>
 <script src="assets/js/sv-navigation.js?v=20260722-public-hotfix" defer></script>
 <script>(function(){var burger=document.querySelector('.sv-burger');var menu=document.getElementById('sv-mobile-menu');if(burger&&menu){burger.addEventListener('click',function(){var open=menu.classList.toggle('is-open');burger.setAttribute('aria-expanded',open?'true':'false');});}var toTop=document.querySelector('.sv-totop');if(toTop){var onScroll=function(){toTop.classList.toggle('is-visible',window.scrollY>600);};window.addEventListener('scroll',onScroll,{passive:true});onScroll();toTop.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});}})();</script>
 </body>
