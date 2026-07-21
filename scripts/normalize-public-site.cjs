@@ -9,6 +9,7 @@ const ROOT = path.resolve(__dirname, '..');
 const SITE_ORIGIN = 'https://shorevest.com';
 const EXCLUDED_CDD_ROUTE = '/insights/china-debt-dynamics/v7i4/';
 const EXCLUDED_CDD_SOURCE = 'china-debt-dynamics-v7i4.html';
+const PUBLIC_NAV_VERSION = '20260722-public-hotfix';
 const validate = process.argv.includes('--validate');
 
 function trackedFiles(...patterns) {
@@ -80,6 +81,13 @@ function normalizeTokenPlumbing(content) {
     .replace(/\?t="\+window\.__SVT\+"/g, '');
 }
 
+function normalizePublicScriptVersions(content) {
+  return content.replace(
+    /assets\/js\/sv-navigation\.js\?v=[^"'\s<]+/g,
+    `assets/js/sv-navigation.js?v=${PUBLIC_NAV_VERSION}`
+  );
+}
+
 function mediaAliasPairs() {
   return trackedFiles('media-*.html').map(source => {
     const slug = path.basename(source, '.html');
@@ -107,6 +115,7 @@ function normalizeFiles() {
     if (!fs.existsSync(abs)) continue;
     let content = fs.readFileSync(abs, 'utf8');
     content = normalizeTokenPlumbing(content);
+    content = normalizePublicScriptVersions(content);
     content = normalizeMediaAliases(content, pairs);
     if (rel === 'insights.html' || rel === 'insights/index.html') {
       content = removeExcludedCddRow(content);
@@ -120,6 +129,13 @@ function normalizeFiles() {
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
+}
+
+function expectedCanonical(item) {
+  if (item.disabled && item.redirectTarget) {
+    return new URL(item.redirectTarget, SITE_ORIGIN).href;
+  }
+  return `${SITE_ORIGIN}${item.route}`;
 }
 
 function validateArticles() {
@@ -136,7 +152,7 @@ function validateArticles() {
     const abs = path.join(ROOT, item.destination);
     assert(fs.existsSync(abs), `Missing article destination: ${item.destination}`);
     const html = fs.readFileSync(abs, 'utf8');
-    const canonical = `<link rel="canonical" href="${SITE_ORIGIN}${item.route}">`;
+    const canonical = `<link rel="canonical" href="${expectedCanonical(item)}">`;
     assert(html.includes(canonical), `Incorrect canonical URL in ${item.destination}`);
     assert(/<title>[^<]+<\/title>/i.test(html), `Missing title in ${item.destination}`);
     assert(!/href=["']\/media-[^"']+\/["']/i.test(html), `Legacy media route remains in ${item.destination}`);
