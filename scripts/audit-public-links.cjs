@@ -29,7 +29,7 @@ function idsIn(html) {
 
 function attributesIn(html) {
   const found = [];
-  const pattern = /\b(href|data-href|action)\s*=\s*(["'])(.*?)\2/gi;
+  const pattern = /(?:^|[\s<])(href|data-href|action)\s*=\s*(["'])(.*?)\2/gi;
   let match;
   while ((match = pattern.exec(html))) {
     found.push({ attribute: match[1].toLowerCase(), value: decodeAttribute(match[3]) });
@@ -37,11 +37,23 @@ function attributesIn(html) {
   return found;
 }
 
+function attributeFromTag(tag, name) {
+  const match = new RegExp(`\\b${name}\\s*=\\s*(["'])(.*?)\\1`, 'i').exec(tag);
+  return match ? decodeAttribute(match[2]) : '';
+}
+
 function localFileForPath(pathname) {
   const rel = pathname.replace(/^\//, '');
   if (!rel) return 'index.html';
   if (pathname.endsWith('/')) return `${rel}index.html`;
   return rel;
+}
+
+function counterpartRoute(route, routeMap) {
+  const candidate = route.startsWith('/cn/')
+    ? (route === '/cn/' ? '/' : route.replace(/^\/cn/, ''))
+    : (route === '/' ? '/cn/' : `/cn${route}`);
+  return routeMap.has(candidate) ? candidate : null;
 }
 
 function fail(errors, page, attribute, value, reason) {
@@ -59,6 +71,7 @@ const pageCache = new Map();
 const errors = [];
 let checkedLinks = 0;
 let checkedPages = 0;
+let checkedButtons = 0;
 
 for (const item of routes) {
   if (!item.destination || !exists(item.destination)) {
@@ -159,6 +172,28 @@ for (const item of routes) {
       fail(errors, item.route, 'target', '_blank', 'is missing rel="noopener"');
     }
   }
+
+  const counterpart = counterpartRoute(item.route, routeMap);
+  if (counterpart) {
+    const languageLinks = [...page.html.matchAll(/<a\b[^>]*\bclass=["'][^"']*\bsv-lang\b[^"']*["'][^>]*>/gi)];
+    for (const match of languageLinks) {
+      const href = attributeFromTag(match[0], 'href');
+      let pathname = '';
+      try {
+        pathname = new URL(href, baseUrl).pathname;
+      } catch (_) {}
+      if (pathname !== counterpart) {
+        fail(errors, item.route, 'language href', href, `should point to ${counterpart}`);
+      }
+    }
+  }
+
+  for (const match of page.html.matchAll(/<button\b([^>]*)>/gi)) {
+    checkedButtons += 1;
+    if (!/\btype\s*=\s*["'](?:button|submit|reset)["']/i.test(match[1])) {
+      fail(errors, item.route, 'button', match[0].slice(0, 120), 'is missing an explicit type');
+    }
+  }
 }
 
 if (errors.length) {
@@ -167,4 +202,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`Public link audit passed: ${checkedLinks} destinations across ${checkedPages} generated pages.`);
+console.log(`Public link audit passed: ${checkedLinks} destinations and ${checkedButtons} buttons across ${checkedPages} generated pages.`);
