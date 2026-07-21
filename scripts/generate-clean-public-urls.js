@@ -119,6 +119,48 @@ function rewriteKnownUrls(content, pairs) {
   return output;
 }
 
+function rewriteHtmlAttributes(content, currentFile, sourceToRoute) {
+  const currentDir = path.posix.dirname(currentFile);
+  const attributePattern = /(\b(?:href|action|data-href|content)\s*=\s*)(["'])([^"']*)\2/gi;
+
+  return content.replace(attributePattern, (match, prefix, quote, value) => {
+    if (!value || /^(?:#|mailto:|tel:|javascript:|data:)/i.test(value)) return match;
+
+    let legacyPath = null;
+    let suffix = '';
+    let wasAbsolute = false;
+
+    try {
+      if (/^https?:\/\//i.test(value)) {
+        const url = new URL(value);
+        const isShoreVest = url.origin === SITE_ORIGIN ||
+          (url.origin === 'https://shorevest.github.io' && url.pathname.startsWith('/website/'));
+        if (!isShoreVest) return match;
+        wasAbsolute = true;
+        legacyPath = url.origin === SITE_ORIGIN
+          ? url.pathname.replace(/^\//, '')
+          : url.pathname.replace(/^\/website\//, '');
+        suffix = `${url.search}${url.hash}`;
+      } else {
+        const splitAt = value.search(/[?#]/);
+        const pathname = splitAt === -1 ? value : value.slice(0, splitAt);
+        suffix = splitAt === -1 ? '' : value.slice(splitAt);
+        if (pathname.startsWith('//')) return match;
+        legacyPath = pathname.startsWith('/')
+          ? pathname.replace(/^\//, '')
+          : path.posix.normalize(path.posix.join(currentDir, pathname));
+      }
+    } catch (_) {
+      return match;
+    }
+
+    if (!sourceToRoute.has(legacyPath)) return match;
+    const route = sourceToRoute.get(legacyPath);
+    const replacement = wasAbsolute ? `${SITE_ORIGIN}${route}${suffix}` : `${route}${suffix}`;
+    return `${prefix}${quote}${replacement}${quote}`;
+  });
+}
+
 function ensureBaseHref(html) {
   if (/<base\s+href=["']\/["'][^>]*>/i.test(html)) return html;
   return html.replace(/<head(\s[^>]*)?>/i, match => `${match}\n<base href="/">`);
@@ -228,13 +270,16 @@ function main() {
   for (const rel of tracked.filter(isPublicTextFile)) {
     const abs = path.join(ROOT, rel);
     if (!fs.existsSync(abs)) continue;
-    const rewritten = rewriteKnownUrls(fs.readFileSync(abs, 'utf8'), replacementPairs);
+    let rewritten = fs.readFileSync(abs, 'utf8');
+    if (/\.html$/i.test(rel)) rewritten = rewriteHtmlAttributes(rewritten, rel, sourceToRoute);
+    rewritten = rewriteKnownUrls(rewritten, replacementPairs);
     writeIfChanged(rel, rewritten);
   }
 
   for (const item of primaryRoutes) {
     const sourceAbs = path.join(ROOT, item.source);
     let html = fs.readFileSync(sourceAbs, 'utf8');
+    html = rewriteHtmlAttributes(html, item.source, sourceToRoute);
     html = rewriteKnownUrls(html, replacementPairs);
     html = ensureBaseHref(html);
     html = setCanonicalRoute(html, item.route);
@@ -256,6 +301,10 @@ function main() {
     const html = fs.readFileSync(path.join(ROOT, item.destination), 'utf8');
     if (!/<base\s+href="\/">/i.test(html)) throw new Error(`Missing base href in ${item.destination}`);
     if (!html.includes(`${SITE_ORIGIN}${item.route}`)) throw new Error(`Missing clean canonical URL in ${item.destination}`);
+    const localHtmlLinks = [...html.matchAll(/(?:href|action|data-href)=["']([^"']+)["']/gi)]
+      .map(match => match[1])
+      .filter(value => !/^https?:\/\//i.test(value) && /\.html(?:[?#]|$)/i.test(value));
+    if (localHtmlLinks.length) throw new Error(`Legacy .html link remains in ${item.destination}: ${localHtmlLinks[0]}`);
   }
 
   const sitemap = fs.readFileSync(path.join(ROOT, 'sitemap.xml'), 'utf8');
