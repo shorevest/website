@@ -44,7 +44,27 @@ jobs:
         run: node scripts/generate-clean-public-urls.js
 
       - name: Normalize and validate every public article
-        run: node scripts/normalize-public-site.cjs --validate
+        id: article_validation
+        continue-on-error: true
+        shell: bash
+        run: node scripts/normalize-public-site.cjs --validate > article-validation.log 2>&1
+
+      - name: Upload article validation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: article-validation-report
+          path: article-validation.log
+          if-no-files-found: error
+
+      - name: Report article validation result
+        if: always()
+        shell: bash
+        run: |
+          cat article-validation.log
+          if [ "${{ steps.article_validation.outcome }}" != "success" ]; then
+            exit 1
+          fi
 
       - name: Check generated changes
         run: git diff --check
@@ -99,5 +119,3 @@ jobs:
           fi
           git commit -m "Regenerate and validate public article pages"
           git push origin "HEAD:${GITHUB_REF_NAME}"
-
-# This branch exists only to run the complete article validation job.
