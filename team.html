@@ -24,7 +24,7 @@
         if (!T) return;
         function tok(u) {
           try {
-            var url = new URL(u, location.href);
+            var url = new URL(u,document.baseURI);
             if (url.origin === location.origin && !url.searchParams.get("t")) {
               url.searchParams.set("t", T);
               return url.href;
@@ -42,7 +42,7 @@
               try {
                 var u;
                 if (typeof i === "string") {
-                  u = new URL(i, location.href);
+                  u = new URL(i,document.baseURI);
                   if (
                     u.origin === location.origin &&
                     !u.searchParams.get("t")
@@ -51,7 +51,7 @@
                     i = u.href;
                   }
                 } else if (i && i.url) {
-                  u = new URL(i.url, location.href);
+                  u = new URL(i.url,document.baseURI);
                   if (
                     u.origin === location.origin &&
                     !u.searchParams.get("t")
@@ -69,7 +69,7 @@
           if (_o) {
             window.XMLHttpRequest.prototype.open = function (m, u) {
               try {
-                var x = new URL(u, location.href);
+                var x = new URL(u,document.baseURI);
                 if (x.origin === location.origin && !x.searchParams.get("t")) {
                   x.searchParams.set("t", T);
                   u = x.href;
@@ -147,7 +147,7 @@
               return;
             var url;
             try {
-              url = new URL(h, location.href);
+              url = new URL(h,document.baseURI);
             } catch (_) {
               return;
             }
