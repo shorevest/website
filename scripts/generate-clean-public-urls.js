@@ -119,6 +119,10 @@ function rewriteKnownUrls(content, pairs) {
   return output;
 }
 
+function rewriteRuntimeUrlBases(content) {
+  return content.replace(/new URL\(([^,\n]+),\s*location\.href\)/g, 'new URL($1,document.baseURI)');
+}
+
 function rewriteHtmlAttributes(content, currentFile, sourceToRoute) {
   const currentDir = path.posix.dirname(currentFile);
   const attributePattern = /(\b(?:href|action|data-href|content)\s*=\s*)(["'])([^"']*)\2/gi;
@@ -273,6 +277,7 @@ function main() {
     let rewritten = fs.readFileSync(abs, 'utf8');
     if (/\.html$/i.test(rel)) rewritten = rewriteHtmlAttributes(rewritten, rel, sourceToRoute);
     rewritten = rewriteKnownUrls(rewritten, replacementPairs);
+    if (/\.html$/i.test(rel)) rewritten = rewriteRuntimeUrlBases(rewritten);
     writeIfChanged(rel, rewritten);
   }
 
@@ -281,6 +286,7 @@ function main() {
     let html = fs.readFileSync(sourceAbs, 'utf8');
     html = rewriteHtmlAttributes(html, item.source, sourceToRoute);
     html = rewriteKnownUrls(html, replacementPairs);
+    html = rewriteRuntimeUrlBases(html);
     html = ensureBaseHref(html);
     html = setCanonicalRoute(html, item.route);
     writeIfChanged(item.destination, html);
@@ -301,6 +307,7 @@ function main() {
     const html = fs.readFileSync(path.join(ROOT, item.destination), 'utf8');
     if (!/<base\s+href="\/">/i.test(html)) throw new Error(`Missing base href in ${item.destination}`);
     if (!html.includes(`${SITE_ORIGIN}${item.route}`)) throw new Error(`Missing clean canonical URL in ${item.destination}`);
+    if (/new URL\(([^,\n]+),\s*location\.href\)/.test(html)) throw new Error(`Runtime URL still ignores base href in ${item.destination}`);
     const localHtmlLinks = [...html.matchAll(/(?:href|action|data-href)=["']([^"']+)["']/gi)]
       .map(match => match[1])
       .filter(value => !/^https?:\/\//i.test(value) && /\.html(?:[?#]|$)/i.test(value));
