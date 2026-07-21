@@ -1,8 +1,7 @@
-/* Insights navigation and article-sharing compatibility.
+/* Insights navigation, article structure and sharing compatibility.
  *
- * China Debt Dynamics articles build their share menu asynchronously. Make the
- * LinkedIn option work even if the menu appears after page load or a browser
- * blocks scripted popups. The exact clean ShoreVest article URL is always used.
+ * China Debt Dynamics articles build their content and share menu asynchronously.
+ * Keep sharing reliable, then add presentation hooks once article sections exist.
  */
 (function () {
   'use strict';
@@ -122,21 +121,74 @@
 
     var link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = '/assets/css/cdd-article-figures.css?v=20260722-into-the-shadows';
+    link.href = '/assets/css/cdd-article-figures.css?v=20260722-cdd-structure';
     link.setAttribute('data-cdd-figure-styles', 'true');
     document.head.appendChild(link);
+  }
+
+  function enhanceCddStructure() {
+    if (!document.body || !document.body.classList.contains('cdd-article-page')) return;
+
+    var article = document.querySelector('[data-cdd-body]');
+    if (!article) return;
+
+    var headings = Array.from(article.children).filter(function (element) {
+      return element.tagName === 'H2';
+    });
+
+    headings.forEach(function (heading) {
+      var next = heading.nextElementSibling;
+      if (next && next.tagName === 'H2') {
+        heading.classList.add('cdd-part-label');
+      }
+    });
+
+    var sourcesHeading = headings.find(function (heading) {
+      return heading.textContent.trim().toLowerCase() === 'sources and notes';
+    });
+    if (!sourcesHeading) return;
+
+    sourcesHeading.classList.add('cdd-sources-heading');
+
+    var node = sourcesHeading.nextElementSibling;
+    while (node && node.tagName !== 'H2') {
+      if (node.tagName === 'P') {
+        node.classList.add('cdd-source-note');
+
+        if (!node.querySelector('.cdd-source-note__index')) {
+          var text = node.textContent.trim();
+          var match = text.match(/^\[(\d+)\]\s*([\s\S]*)$/);
+          if (match) {
+            node.textContent = '';
+
+            var index = document.createElement('span');
+            index.className = 'cdd-source-note__index';
+            index.textContent = '[' + match[1] + ']';
+
+            var copy = document.createElement('span');
+            copy.className = 'cdd-source-note__copy';
+            copy.textContent = match[2];
+
+            node.append(index, copy);
+          }
+        }
+      }
+      node = node.nextElementSibling;
+    }
   }
 
   function start() {
     installFigureStyles();
     installGuaranteedClickFallback();
     upgradeLinkedInShare(document.body);
+    enhanceCddStructure();
 
     if (!('MutationObserver' in window)) return;
     new MutationObserver(function (mutations) {
       mutations.forEach(function (mutation) {
         Array.from(mutation.addedNodes).forEach(upgradeLinkedInShare);
       });
+      enhanceCddStructure();
     }).observe(document.body, { childList: true, subtree: true });
   }
 
