@@ -5,10 +5,18 @@ on:
     paths:
       - 'scripts/generate-clean-public-urls.js'
       - 'scripts/normalize-public-site.cjs'
+      - 'scripts/normalize-favicons.cjs'
       - 'scripts/add-insight-social-metadata.cjs'
       - 'assets/js/site-config.js'
       - 'assets/js/sv-navigation.js'
       - 'assets/js/insights-new-edition.js'
+      - 'assets/js/favicon-guard.js'
+      - 'assets/favicon-shorevest-20260722.svg'
+      - 'assets/favicon-shorevest-20260722.ico'
+      - 'assets/favicon-shorevest-20260722-32x32.png'
+      - 'assets/favicon-shorevest-20260722-16x16.png'
+      - 'assets/apple-touch-icon-shorevest-20260722.png'
+      - 'site-20260722.webmanifest'
       - '*.html'
       - '**/*.html'
       - 'sitemap.xml'
@@ -19,6 +27,7 @@ on:
       - main
       - feature/clean-public-urls
       - hotfix/clean-url-asset-paths
+      - hotfix/favicon-cache
   workflow_dispatch:
 
 permissions:
@@ -60,6 +69,12 @@ jobs:
 
       - name: Validate Insight LinkedIn metadata
         run: node scripts/add-insight-social-metadata.cjs --validate
+
+      - name: Normalize favicon declarations
+        run: node scripts/normalize-favicons.cjs
+
+      - name: Validate favicon declarations
+        run: node scripts/normalize-favicons.cjs --validate
 
       - name: Check generated changes
         run: git diff --check
@@ -111,6 +126,12 @@ jobs:
 
       - name: Validate Insight LinkedIn metadata
         run: node scripts/add-insight-social-metadata.cjs --validate
+
+      - name: Normalize favicon declarations
+        run: node scripts/normalize-favicons.cjs
+
+      - name: Validate favicon declarations
+        run: node scripts/normalize-favicons.cjs --validate
 
       - name: Check generated changes
         run: git diff --check
