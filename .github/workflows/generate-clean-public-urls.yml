@@ -5,6 +5,7 @@ on:
     paths:
       - 'scripts/generate-clean-public-urls.js'
       - 'scripts/normalize-public-site.cjs'
+      - 'scripts/add-insight-social-metadata.cjs'
       - 'assets/js/site-config.js'
       - 'assets/js/sv-navigation.js'
       - '*.html'
@@ -43,8 +44,14 @@ jobs:
       - name: Generate clean routes
         run: node scripts/generate-clean-public-urls.js
 
+      - name: Add exact LinkedIn metadata to Insight articles
+        run: node scripts/add-insight-social-metadata.cjs
+
       - name: Normalize and validate every public article
         run: node scripts/normalize-public-site.cjs --validate
+
+      - name: Validate Insight LinkedIn metadata
+        run: node scripts/add-insight-social-metadata.cjs --validate
 
       - name: Check generated changes
         run: git diff --check
@@ -81,8 +88,14 @@ jobs:
       - name: Generate clean routes
         run: node scripts/generate-clean-public-urls.js
 
+      - name: Add exact LinkedIn metadata to Insight articles
+        run: node scripts/add-insight-social-metadata.cjs
+
       - name: Normalize and validate every public article
         run: node scripts/normalize-public-site.cjs --validate
+
+      - name: Validate Insight LinkedIn metadata
+        run: node scripts/add-insight-social-metadata.cjs --validate
 
       - name: Check generated changes
         run: git diff --check
