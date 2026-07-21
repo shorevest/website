@@ -1,0 +1,40 @@
+/* Shared figure treatment for China Debt Dynamics web and print templates. */
+body.cdd-article-page .cdd-figure,
+body.cdd-print-layout .cdd-figure {
+  margin: 30px 0 34px;
+  width: 100%;
+  max-width: 100%;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+body.cdd-article-page .cdd-figure img,
+body.cdd-print-layout .cdd-figure img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+body.cdd-article-page .cdd-figure figcaption,
+body.cdd-print-layout .cdd-figure figcaption {
+  margin-top: 10px;
+  color: #6e7169;
+  font-family: "DIN 2014", "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  line-height: 1.45;
+}
+
+@media print {
+  body.cdd-print-layout .cdd-figure {
+    margin: 22px 0 26px;
+  }
+
+  body.cdd-print-layout .cdd-figure figcaption {
+    margin-top: 7px;
+    font-size: 10.5px;
+    line-height: 1.35;
+  }
+}
