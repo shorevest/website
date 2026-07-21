@@ -45,7 +45,9 @@ jobs:
       - name: Refresh public asset versions
         run: |
           sed -i 's/press-page.js?v=20260711-page-size-3/press-page.js?v=20260722-margin-final/g' media.html media_cn.html
-          grep -rl 'insights-new-edition.js?v=20260722-linkedin-target' --include='*.html' . | xargs -r sed -i 's/insights-new-edition.js?v=20260722-linkedin-target/insights-new-edition.js?v=20260722-linkedin-working/g'
+          find . -name '*.html' -exec sed -i \
+            -e 's/insights-new-edition.js?v=20260722-linkedin-target/insights-new-edition.js?v=20260722-linkedin-direct-navigation/g' \
+            -e 's/insights-new-edition.js?v=20260722-linkedin-working/insights-new-edition.js?v=20260722-linkedin-direct-navigation/g' {} +
 
       - name: Generate clean routes
         run: node scripts/generate-clean-public-urls.js
@@ -94,7 +96,9 @@ jobs:
       - name: Refresh public asset versions
         run: |
           sed -i 's/press-page.js?v=20260711-page-size-3/press-page.js?v=20260722-margin-final/g' media.html media_cn.html
-          grep -rl 'insights-new-edition.js?v=20260722-linkedin-target' --include='*.html' . | xargs -r sed -i 's/insights-new-edition.js?v=20260722-linkedin-target/insights-new-edition.js?v=20260722-linkedin-working/g'
+          find . -name '*.html' -exec sed -i \
+            -e 's/insights-new-edition.js?v=20260722-linkedin-target/insights-new-edition.js?v=20260722-linkedin-direct-navigation/g' \
+            -e 's/insights-new-edition.js?v=20260722-linkedin-working/insights-new-edition.js?v=20260722-linkedin-direct-navigation/g' {} +
 
       - name: Generate clean routes
         run: node scripts/generate-clean-public-urls.js
