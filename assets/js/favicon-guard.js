@@ -1,5 +1,5 @@
 (function () {
-  var VERSION = "20260721-clean-urls";
+  var VERSION = "20260722-favicon-cache-bust";
 
   function removeEmptyLegacyToken() {
     try {
@@ -16,8 +16,7 @@
   removeEmptyLegacyToken();
 
   // Resolve the site base from this script's own URL so shared assets work
-  // whether the site is served from the domain root or a subpath
-  // (e.g. GitHub Pages project sites).
+  // whether the site is served from the domain root or a GitHub Pages subpath.
   var script = document.currentScript;
   var base = "";
   if (script && script.src) {
@@ -25,13 +24,13 @@
   }
 
   var ICONS = [
-    { rel: "icon", href: base + "assets/favicon-cinnabar.ico?v=" + VERSION, sizes: "any" },
-    { rel: "shortcut icon", href: base + "assets/favicon-cinnabar.ico?v=" + VERSION },
-    { rel: "icon", href: base + "assets/favicon-cinnabar.svg?v=" + VERSION, type: "image/svg+xml" },
-    { rel: "icon", href: base + "assets/favicon-cinnabar-32x32.png?v=" + VERSION, type: "image/png", sizes: "32x32" },
-    { rel: "icon", href: base + "assets/favicon-cinnabar-16x16.png?v=" + VERSION, type: "image/png", sizes: "16x16" },
-    { rel: "apple-touch-icon", href: base + "assets/apple-touch-icon-cinnabar.png?v=" + VERSION, sizes: "180x180" },
-    { rel: "manifest", href: base + "site.webmanifest?v=" + VERSION },
+    { rel: "icon", href: base + "assets/favicon-shorevest-20260722.svg", type: "image/svg+xml", sizes: "any" },
+    { rel: "icon", href: base + "assets/favicon-shorevest-20260722.ico", sizes: "any" },
+    { rel: "shortcut icon", href: base + "assets/favicon-shorevest-20260722.ico" },
+    { rel: "icon", href: base + "assets/favicon-shorevest-20260722-32x32.png", type: "image/png", sizes: "32x32" },
+    { rel: "icon", href: base + "assets/favicon-shorevest-20260722-16x16.png", type: "image/png", sizes: "16x16" },
+    { rel: "apple-touch-icon", href: base + "assets/apple-touch-icon-shorevest-20260722.png", sizes: "180x180" },
+    { rel: "manifest", href: base + "site-20260722.webmanifest" }
   ];
 
   function setAttr(el, key, value) {
@@ -40,8 +39,14 @@
 
   function ensureFavicons() {
     if (!document.head) return;
-    var old = document.head.querySelectorAll('link[data-sv-favicon-guard="true"]');
-    for (var i = 0; i < old.length; i += 1) old[i].remove();
+
+    // Remove every previous favicon declaration, not only ones added by this
+    // script. Safari can otherwise keep selecting a cached retired icon from
+    // duplicate link tags even when a newer declaration is present.
+    var existing = document.head.querySelectorAll(
+      'link[rel~="icon"], link[rel="shortcut icon"], link[rel="apple-touch-icon"], link[rel="mask-icon"], link[rel="manifest"]'
+    );
+    for (var i = 0; i < existing.length; i += 1) existing[i].remove();
 
     ICONS.forEach(function (icon) {
       var link = document.createElement("link");
