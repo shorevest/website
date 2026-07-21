@@ -185,20 +185,22 @@
     }, 900);
   }
 
-  whenDocumentReady(function () {
-    fixAdaLinkedIn(document);
-    ensureFullShadowBankingArticle();
+  if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+    whenDocumentReady(function () {
+      fixAdaLinkedIn(document);
+      ensureFullShadowBankingArticle();
 
-    if (window.MutationObserver) {
-      new MutationObserver(function (mutations) {
-        mutations.forEach(function (mutation) {
-          eachNode(mutation.addedNodes, function (node) {
-            if (node.nodeType === 1) fixAdaLinkedIn(node);
+      if (window.MutationObserver) {
+        new MutationObserver(function (mutations) {
+          mutations.forEach(function (mutation) {
+            eachNode(mutation.addedNodes, function (node) {
+              if (node.nodeType === 1) fixAdaLinkedIn(node);
+            });
           });
-        });
-      }).observe(document.documentElement, { childList: true, subtree: true });
-    }
-  });
+        }).observe(document.documentElement, { childList: true, subtree: true });
+      }
+    });
+  }
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = SITE_CONFIG;
