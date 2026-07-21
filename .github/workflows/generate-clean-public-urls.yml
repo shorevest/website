@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'scripts/generate-clean-public-urls.js'
+      - 'scripts/normalize-current-page-fragments.cjs'
       - 'scripts/normalize-public-site.cjs'
       - 'scripts/normalize-favicons.cjs'
       - 'scripts/add-insight-social-metadata.cjs'
@@ -61,6 +62,9 @@ jobs:
       - name: Generate clean routes
         run: node scripts/generate-clean-public-urls.js
 
+      - name: Normalize same-page section links
+        run: node scripts/normalize-current-page-fragments.cjs
+
       - name: Add exact LinkedIn metadata to Insight articles
         run: node scripts/add-insight-social-metadata.cjs
 
@@ -117,6 +121,9 @@ jobs:
 
       - name: Generate clean routes
         run: node scripts/generate-clean-public-urls.js
+
+      - name: Normalize same-page section links
+        run: node scripts/normalize-current-page-fragments.cjs
 
       - name: Add exact LinkedIn metadata to Insight articles
         run: node scripts/add-insight-social-metadata.cjs
