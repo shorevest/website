@@ -1,18 +1,20 @@
 name: Apply Chinese copy corrections
 
 on:
-  push:
+  pull_request:
     branches:
-      - agent/correct-chinese-sitewide
-    paths:
-      - .github/scripts/apply_chinese_corrections.py
-      - .github/workflows/apply-chinese-corrections.yml
+      - main
+    types:
+      - opened
+      - reopened
+      - synchronize
 
 permissions:
   contents: write
 
 jobs:
   apply:
+    if: github.head_ref == 'agent/correct-chinese-sitewide'
     runs-on: ubuntu-latest
     steps:
       - name: Check out correction branch
