@@ -1,1 +1,66 @@
-'use strict';const{SCAN_RESULTS:S}=require('../../../../api/recruitment/core/constants');const TYPE='Microsoft.Security.MalwareScanningResult';function parseBlob(uri){const u=new URL(uri);const [container,...rest]=u.pathname.slice(1).split('/');return{account:u.hostname.split('.')[0],container,path:rest.join('/')}}function normalizeEventGridEvent(e,cfg){if(!e||e.eventType!==TYPE)throw Error('wrong event type');const d=e.data||{};const blobUri=d.blobUri||d.blobUrl||d.blobURL;if(!e.id||!blobUri)throw Error('malformed event');const b=parseBlob(blobUri);if(cfg.uploadStorageAccountName&&b.account!==cfg.uploadStorageAccountName)throw Error('wrong storage account');if(b.container!==cfg.quarantineContainer)throw Error('wrong container');const m=b.path.match(/^recruitment\/\d{4}\/([^/]+)\/(SV-APP-\d{4}-\d{6})\/(SV-FILE-\d{8})\.[A-Za-z0-9]+$/);if(!m)throw Error('malformed blob path');const raw=d.scanResultType||d.scanResult||d.resultType||d.scanResultDetails?.scanResultType;const map={'No threats found':S.Clean,'Malicious':S.Malicious,'Not Scanned':S.Unsupported,'Error':S.ScanFailed,'Scan timed out':S.Timeout};if(!map[raw])throw Error('unknown scan result');return{eventId:e.id,fileReference:m[3],applicationReference:m[2],blobPath:b.path,result:map[raw],scannedAtUtc:d.scanFinishedTimeUtc||d.scanCompletionTimeUtc||e.eventTime,blobETag:d.blobETag||d.eTag,sha256:d.sha256||d.scanResultDetails?.sha256||null};}module.exports={normalizeEventGridEvent,TYPE};
+'use strict';
+
+const { SCAN_RESULTS } = require('../../../../api/recruitment/core/constants');
+
+const TYPE = 'Microsoft.Security.MalwareScanningResult';
+const APP_PATTERN = 'SV-APP-[0-9]{4}-[0-9A-F]{16}';
+const FILE_PATTERN = 'SV-FILE-[0-9A-F]{16}';
+const PATH_RE = new RegExp(`^recruitment/(\\d{4})/([^/]+)/(${APP_PATTERN})/(${FILE_PATTERN})\\.([A-Za-z0-9]+)$`);
+
+function parseBlob(uri) {
+  const parsed = new URL(uri);
+  const [container, ...rest] = parsed.pathname.slice(1).split('/');
+  return { account: parsed.hostname.split('.')[0], container, path: rest.join('/') };
+}
+
+function normalizeResult(rawValue) {
+  const resultMap = {
+    'No threats found': SCAN_RESULTS.Clean,
+    Malicious: SCAN_RESULTS.Malicious,
+    'Not Scanned': SCAN_RESULTS.Unsupported,
+    Error: SCAN_RESULTS.ScanFailed,
+    Failed: SCAN_RESULTS.ScanFailed,
+    Timeout: SCAN_RESULTS.Timeout,
+    'Scan timed out': SCAN_RESULTS.Timeout
+  };
+  return resultMap[rawValue];
+}
+
+function normalizeEventGridEvent(event, config) {
+  if (!event || event.eventType !== TYPE) throw new Error('wrong event type');
+  if (event.dataVersion && event.dataVersion !== '1.0') throw new Error('unsupported data version');
+  if (event.metadataVersion && String(event.metadataVersion) !== '1') throw new Error('unsupported metadata version');
+
+  const data = event.data || {};
+  const blobUri = data.blobUri || data.blobUrl || data.blobURL;
+  if (!event.id || !blobUri) throw new Error('malformed event');
+
+  const blob = parseBlob(blobUri);
+  if (config.uploadStorageAccountName && blob.account !== config.uploadStorageAccountName) throw new Error('wrong storage account');
+  if (blob.container !== config.quarantineContainer) throw new Error('wrong container');
+
+  const match = blob.path.match(PATH_RE);
+  if (!match) throw new Error('malformed blob path');
+
+  const rawResult = data.scanResultType || data.scanResult || data.resultType || data.scanResultDetails?.scanResultType;
+  const result = normalizeResult(rawResult);
+  if (!result) throw new Error('unknown scan result');
+
+  const scannedAtUtc = data.scanFinishedTimeUtc || data.scanCompletionTimeUtc || event.eventTime;
+  if (!scannedAtUtc || Number.isNaN(Date.parse(scannedAtUtc))) throw new Error('malformed scan time');
+
+  return {
+    eventId: event.id,
+    correlationId: data.correlationId || event.correlationId || null,
+    roleId: match[2],
+    applicationReference: match[3],
+    fileReference: match[4],
+    blobPath: blob.path,
+    blobETag: data.blobETag || data.eTag || data.blobEtag,
+    sha256: data.sha256 || data.scanResultDetails?.sha256 || null,
+    result,
+    scannedAtUtc
+  };
+}
+
+module.exports = { normalizeEventGridEvent, TYPE, PATH_RE };

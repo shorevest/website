@@ -30,3 +30,19 @@ Deploy prerequisites are approved Azure names, networking/private access, Key Va
 
 ## Unresolved decisions and Phase 2B.2
 Production rate-limit thresholds remain unresolved pending approval. Phase 2B.2 will implement SharePoint projection, Power Automate notifications, and HR-facing private links. This phase deliberately uses a no-external-delivery outbox worker that leaves events pending.
+
+## Phase 2B.1A deployability notes
+
+Phase 2B.1A keeps `RECRUITMENT_API_ENABLED=false` by default and does not publish roles, add an application form, deploy code, or configure SharePoint/Power Automate delivery.
+
+Reference format is authoritative across generation, Blob paths, Event Grid parsing, and tests:
+
+- `SV-APP-{YYYY}-{16 uppercase hexadecimal characters}`
+- `SV-FILE-{16 uppercase hexadecimal characters}`
+- `recruitment/{year}/{roleId}/{applicationReference}/{fileReference}.{extension}`
+
+Production launch still requires an approved bot-verification provider. Local and test environments may use an explicit test bypass, but production must not enable the recruitment API with a bypass verifier.
+
+The undeployed infrastructure scaffold uses authenticated public service endpoints for dev/test storage reachability while disabling anonymous Blob access and Shared Key access. Production launch requires the approved networking mode before enabling applications; that may be the full private endpoint/VNet path or another reviewed design that preserves Defender scan-result delivery to Event Grid.
+
+The outbox worker intentionally uses a no-delivery lifecycle in this phase. It can claim events and record retryable attempts with backoff, but it must not mark events delivered until Phase 2B.2 provides the projection destination.

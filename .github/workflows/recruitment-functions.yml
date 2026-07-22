@@ -1,4 +1,5 @@
 name: Recruitment Functions CI
+
 on:
   pull_request:
     paths:
@@ -23,6 +24,7 @@ on:
       - 'tests/recruitment*.test.js'
       - 'tests/security-headers.test.js'
   workflow_dispatch:
+
 jobs:
   validate:
     runs-on: ubuntu-latest
