@@ -13,7 +13,7 @@ const {
 const { createDeps, flows } = require('../appFactory');
 const { normalizeEventGridEvent } = require('../lib/eventGrid');
 
-async function httpFlow(req, context, flow) {
+async function httpFlow(req, context, flow, options = {}) {
   const config = loadConfig();
   if (!config.apiEnabled) return unavailable(req, config);
   if (req.method !== 'POST') {
@@ -42,7 +42,9 @@ async function httpFlow(req, context, flow) {
   }
 
   const trustedContext = requestContext(req);
-  parsed.body._requestContext = trustedContext;
+  if (options.attachRequestContext === true) {
+    parsed.body._requestContext = trustedContext;
+  }
 
   try {
     const dependencies = createDeps(config, trustedContext);
@@ -66,7 +68,7 @@ app.http('initiateApplication', {
   methods: ['POST'],
   authLevel: 'anonymous',
   route: 'recruitment/applications/initiate',
-  handler: (req, context) => httpFlow(req, context, flows.initiateApplication)
+  handler: (req, context) => httpFlow(req, context, flows.initiateApplication, { attachRequestContext: true })
 });
 
 app.http('completeUpload', {
@@ -74,6 +76,13 @@ app.http('completeUpload', {
   authLevel: 'anonymous',
   route: 'recruitment/applications/complete',
   handler: (req, context) => httpFlow(req, context, flows.completeUpload)
+});
+
+app.http('finalizeApplication', {
+  methods: ['POST'],
+  authLevel: 'anonymous',
+  route: 'recruitment/applications/finalize',
+  handler: (req, context) => httpFlow(req, context, flows.finalizeApplication)
 });
 
 app.eventGrid('defenderScanResult', {
