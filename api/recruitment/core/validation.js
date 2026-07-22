@@ -18,7 +18,10 @@ const OPTIONAL_TEXT_FIELDS = ['telephone', 'currentLocation', 'linkedinUrl', 'co
 const REQUIRED_CANDIDATE_FIELDS = ['fullName', 'email'];
 const CANDIDATE_FIELDS = new Set([...REQUIRED_CANDIDATE_FIELDS, ...OPTIONAL_TEXT_FIELDS]);
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-const UNSAFE_FILENAME_CHARACTERS = /[\u0000-\u001f\u007f\u202a-\u202e\u2066-\u2069]/;
+const BIDI_CONTROL_CHARACTERS = /[\u202a-\u202e\u2066-\u2069]/;
+const UNSAFE_SINGLE_LINE_CHARACTERS = /[\u0000-\u001f\u007f\u202a-\u202e\u2066-\u2069]/;
+const UNSAFE_MULTILINE_CHARACTERS = /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f\u202a-\u202e\u2066-\u2069]/;
+const UNSAFE_FILENAME_CHARACTERS = UNSAFE_SINGLE_LINE_CHARACTERS;
 
 function safeEqual(a, b) {
   const left = Buffer.from(String(a || ''));
@@ -35,6 +38,20 @@ function normalizeEmail(value) {
 
 function validEmail(value) {
   return typeof value === 'string' && value.length <= LIMITS.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+function validSingleLineText(value, maximum, required = false) {
+  if (typeof value !== 'string' || value.length > maximum || UNSAFE_SINGLE_LINE_CHARACTERS.test(value)) {
+    return false;
+  }
+  return required ? Boolean(value.trim()) : true;
+}
+
+function validMultilineText(value, maximum) {
+  return typeof value === 'string' &&
+    value.length <= maximum &&
+    !UNSAFE_MULTILINE_CHARACTERS.test(value) &&
+    !BIDI_CONTROL_CHARACTERS.test(value);
 }
 
 function validLinkedInUrl(value) {
@@ -121,6 +138,11 @@ function candidate(candidateInput, privacyAccepted) {
     if (typeof candidateInput[key] === 'string' && candidateInput[key].length > limit) fields.push(key);
   }
 
+  if (!validSingleLineText(candidateInput.fullName || '', LIMITS.fullName, true)) fields.push('fullName');
+  if (!validSingleLineText(candidateInput.telephone || '', LIMITS.telephone)) fields.push('telephone');
+  if (!validSingleLineText(candidateInput.currentLocation || '', LIMITS.currentLocation)) fields.push('currentLocation');
+  if (!validMultilineText(candidateInput.coverNote || '', LIMITS.coverNote)) fields.push('coverNote');
+
   const email = normalizeEmail(candidateInput.email);
   if (!validEmail(email)) fields.push('email');
 
@@ -174,10 +196,15 @@ function fileMeta(fileInput, cv) {
 
 module.exports = {
   LIMITS,
+  BIDI_CONTROL_CHARACTERS,
+  UNSAFE_SINGLE_LINE_CHARACTERS,
+  UNSAFE_MULTILINE_CHARACTERS,
   UNSAFE_FILENAME_CHARACTERS,
   safeEqual,
   normalizeEmail,
   validEmail,
+  validSingleLineText,
+  validMultilineText,
   validLinkedInUrl,
   validOriginalFileName,
   validIsoTimestamp,
