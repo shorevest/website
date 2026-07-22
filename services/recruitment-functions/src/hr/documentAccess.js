@@ -39,12 +39,19 @@ async function accessCleanDocument(req, config, dependencies) {
   if (!application.finalizedAtUtc || application.candidateSubmissionStatus !== 'Submitted') {
     return response(409, 'APPLICATION_NOT_FINALIZED');
   }
-  if (file.technicalStatus !== 'Ready' || file.scanResult !== 'Clean' || !file.cleanBlobPath) {
+  if (file.technicalStatus !== 'Ready' || file.scanResult !== 'Clean' || !file.cleanBlobPath || !file.expectedHash) {
     return response(409, 'DOCUMENT_NOT_READY');
   }
 
-  const properties = await dependencies.storage.properties(config.cleanContainer, file.cleanBlobPath);
-  if (!properties || properties.sizeBytes !== file.sizeBytes || properties.contentType !== file.declaredMimeType) {
+  const verified = await dependencies.storage.verify({
+    container: config.cleanContainer,
+    path: file.cleanBlobPath,
+    expectedSizeBytes: file.sizeBytes,
+    expectedContentType: file.declaredMimeType,
+    expectedHash: file.expectedHash,
+    maxBytes: file.sizeBytes
+  });
+  if (!verified?.ok) {
     return response(409, 'CLEAN_DOCUMENT_MISMATCH');
   }
 
@@ -62,7 +69,8 @@ async function accessCleanDocument(req, config, dependencies) {
       applicationReference,
       fileReference,
       principalObjectId: authorization.principal.objectId,
-      expiresAtUtc
+      expiresAtUtc,
+      verifiedSha256: verified.sha256
     });
   }
 
