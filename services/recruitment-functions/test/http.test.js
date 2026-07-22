@@ -109,6 +109,7 @@ test('enabled production API fails configuration validation without launch contr
   assert.ok(shape.invalid.includes('rateLimit.enabled'));
   assert.ok(shape.invalid.includes('botVerification.mode'));
   assert.ok(shape.invalid.includes('outboxDelivery.enabled'));
+  assert.ok(shape.invalid.includes('hrAccess.enabled'));
 });
 
 test('enabled delivery fails without SharePoint, mailbox and template approval', () => {
@@ -133,6 +134,24 @@ test('enabled delivery fails without SharePoint, mailbox and template approval',
   assert.ok(shape.invalid.includes('candidateAcknowledgement.templateApproved'));
 });
 
+test('HR access fails closed without platform authentication or a bounded SAS duration', () => {
+  const config = loadConfig({
+    RECRUITMENT_ENVIRONMENT: 'production',
+    RECRUITMENT_ALLOWED_ORIGINS: 'https://shorevest.com',
+    RECRUITMENT_COSMOS_ENDPOINT: 'https://example.documents.azure.com',
+    RECRUITMENT_COSMOS_DATABASE: 'recruitment',
+    RECRUITMENT_STORAGE_ACCOUNT_URL: 'https://example.blob.core.windows.net',
+    RECRUITMENT_KEYVAULT_URL: 'https://example.vault.azure.net',
+    RECRUITMENT_COMPLETION_TOKEN_SECRET_NAME: 'completion',
+    RECRUITMENT_FINGERPRINT_SECRET_NAME: 'fingerprint',
+    RECRUITMENT_HR_ACCESS_ENABLED: 'true',
+    RECRUITMENT_HR_READ_SAS_SECONDS: '301'
+  });
+  const shape = validateConfig(config);
+  assert.ok(shape.invalid.includes('hrAccess.platformAuthenticationEnabled'));
+  assert.ok(shape.invalid.includes('hrAccess.readSasSeconds'));
+});
+
 test('enabled production API validates only when all launch controls are configured', () => {
   const config = loadConfig({
     RECRUITMENT_API_ENABLED: 'true',
@@ -155,7 +174,11 @@ test('enabled production API validates only when all launch controls are configu
     RECRUITMENT_CANDIDATE_ACK_ENABLED: 'true',
     RECRUITMENT_CANDIDATE_ACK_TEMPLATE_APPROVED: 'true',
     RECRUITMENT_CANDIDATE_ACK_MAILBOX: 'hr@shorevest.com',
-    RECRUITMENT_CANDIDATE_ACK_PRIVACY_URL: 'https://shorevest.com/privacy-policy/'
+    RECRUITMENT_CANDIDATE_ACK_PRIVACY_URL: 'https://shorevest.com/privacy-policy/',
+    RECRUITMENT_HR_ACCESS_ENABLED: 'true',
+    RECRUITMENT_PLATFORM_AUTH_ENABLED: 'true',
+    RECRUITMENT_HR_REQUIRED_ROLE: 'Recruitment.HR',
+    RECRUITMENT_HR_READ_SAS_SECONDS: '300'
   });
   assert.deepEqual(validateConfig(config), { ok: true, missing: [], invalid: [] });
 });
