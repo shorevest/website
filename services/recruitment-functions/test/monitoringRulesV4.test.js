@@ -15,17 +15,20 @@ const sourceFiles = [
   'services/recruitment-functions/src/functions/index.js',
   'services/recruitment-functions/src/retention/worker.js',
   'services/recruitment-functions/src/lib/scanDelivery.js',
+  'services/recruitment-functions/src/flows/initiateApplication.js',
   'services/recruitment-functions/src/flows/finalizeApplication.js'
 ].map((file) => fs.readFileSync(path.join(root, file), 'utf8')).join('\n');
 
 const criticalEvents = [
   'recruitment_configuration_invalid',
   'recruitment_outbox_configuration_invalid',
+  'recruitment_scan_event_rejected',
   'recruitment_scan_event_retry_requested',
   'recruitment_retention_configuration_invalid',
   'recruitment_retention_purge_failed',
   'recruitment_retention_idempotency_cleanup_failed',
-  'finalization_outcome_reconciliation_failed'
+  'finalization_outcome_reconciliation_failed',
+  'initiate_abuse_controls_missing'
 ];
 
 test('every monitored critical event is emitted by runtime code', () => {
@@ -48,10 +51,19 @@ test('classic and workspace telemetry normalize to TimeGenerated before union', 
 test('queries return raw matching rows for scheduled-query Count aggregation', () => {
   assert.ok(template.includes('| project TimeGenerated'));
   assert.ok(!template.includes('summarize FailureCount'));
-  assert.equal((template.match(/timeAggregation: 'Count'/g) || []).length, 3);
-  assert.ok(template.includes("threshold: 0"));
-  assert.ok(template.includes("threshold: 5"));
-  assert.ok(template.includes("threshold: 3"));
+  assert.equal((template.match(/timeAggregation: 'Count'/g) || []).length, 4);
+  assert.ok(template.includes('threshold: 0'));
+  assert.ok(template.includes('threshold: 5'));
+  assert.ok(template.includes('threshold: 3'));
+  assert.ok(template.includes('threshold: 20'));
+});
+
+test('security-response alert is recruitment-scoped and contains only status categories', () => {
+  assert.ok(template.includes('var securityResponseSpikeQuery'));
+  assert.ok(template.includes('toint(ResultCodeText) in (401, 403, 429)'));
+  assert.ok(template.includes('RequestName has "recruitment" or RequestUrl has "/recruitment/"'));
+  assert.ok(template.includes("name: 'recruitment-security-response-spike-v4'"));
+  assert.ok(template.includes("windowSize: 'PT10M'"));
 });
 
 test('monitoring queries contain no candidate or document identifiers', () => {
@@ -72,7 +84,7 @@ test('monitoring queries contain no candidate or document identifiers', () => {
 
 test('alert creation remains explicit opt-in and action-group scoped', () => {
   assert.ok(template.includes('param enableAlerts bool = false'));
-  assert.equal((template.match(/if \(enableAlerts\)/g) || []).length, 3);
+  assert.equal((template.match(/if \(enableAlerts\)/g) || []).length, 4);
   assert.ok(template.includes('actionGroupResourceId'));
   assert.ok(!template.includes('/subscriptions/'));
   assert.ok(!template.includes('@shorevest.com'));
@@ -82,4 +94,18 @@ test('v4 rule names are unique from superseded drafts', () => {
   assert.ok(template.includes("name: 'recruitment-critical-processing-failures-v4'"));
   assert.ok(template.includes("name: 'recruitment-repeated-api-failures-v4'"));
   assert.ok(template.includes("name: 'recruitment-readiness-unavailable-v4'"));
+  assert.ok(template.includes("name: 'recruitment-security-response-spike-v4'"));
+});
+
+test('all alert rule IDs are returned only when alerts are enabled', () => {
+  assert.ok(template.includes('output alertRuleIds array = enableAlerts ? ['));
+  for (const resource of [
+    'criticalProcessingFailures.id',
+    'repeatedApiFailures.id',
+    'readinessUnavailable.id',
+    'securityResponseSpike.id'
+  ]) {
+    assert.ok(template.includes(resource));
+  }
+  assert.ok(template.includes('] : []'));
 });
