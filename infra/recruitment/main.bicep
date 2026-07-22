@@ -62,6 +62,7 @@ var quarantineContainerName = 'recruitment-quarantine'
 var cleanContainerName = 'recruitment-clean'
 var storageBlobDataOwnerRoleId = 'b7e6dc6d-f1e8-4753-8033-0f276bb0955b'
 var storageBlobDataContributorRoleId = 'ba92f5b4-2d11-453d-a403-e96b0029c9fe'
+var storageBlobDelegatorRoleId = 'db58b8e5-c6ad-4a2a-8342-4190687cbf4a'
 var cosmosDataContributorRoleId = '00000000-0000-0000-0000-000000000002'
 var keyVaultSecretsUserRoleId = '4633458b-17de-408a-b874-0445c86b69e6c'
 
@@ -298,10 +299,31 @@ resource deployStorageBlobOwner 'Microsoft.Authorization/roleAssignments@2022-04
   }
 }
 
-// Application CV access and user-delegation SAS issuance without storage keys.
-resource cvStorageBlobData 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(cvStorage.id, mi.id, 'recruitment-blob-data')
+// User-delegation key generation is account scoped; Blob data access is restricted
+// to the two recruitment containers rather than the entire storage account.
+resource cvStorageBlobDelegator 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(cvStorage.id, mi.id, 'recruitment-blob-delegator')
   scope: cvStorage
+  properties: {
+    principalId: mi.properties.principalId
+    principalType: 'ServicePrincipal'
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', storageBlobDelegatorRoleId)
+  }
+}
+
+resource quarantineBlobData 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(quarantine.id, mi.id, 'recruitment-quarantine-blob-data')
+  scope: quarantine
+  properties: {
+    principalId: mi.properties.principalId
+    principalType: 'ServicePrincipal'
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', storageBlobDataContributorRoleId)
+  }
+}
+
+resource cleanBlobData 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(clean.id, mi.id, 'recruitment-clean-blob-data')
+  scope: clean
   properties: {
     principalId: mi.properties.principalId
     principalType: 'ServicePrincipal'
@@ -488,7 +510,9 @@ resource fn 'Microsoft.Web/sites@2024-04-01' = {
   dependsOn: [
     deploymentPackages
     deployStorageBlobOwner
-    cvStorageBlobData
+    cvStorageBlobDelegator
+    quarantineBlobData
+    cleanBlobData
     cosmosData
     kvSecrets
   ]
