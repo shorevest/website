@@ -52,24 +52,34 @@ async function runRetentionPurge(config, dependencies, context) {
   });
   let purged = 0;
   for (const application of batch) {
+    let destructiveStarted = false;
+    const guardedStorage = {
+      async delete(container, path) {
+        destructiveStarted = true;
+        return dependencies.storage.delete(container, path);
+      }
+    };
     try {
-      await dependencies.retention.purge(application, dependencies.storage, {
+      await dependencies.retention.purge(application, guardedStorage, {
         quarantine: config.quarantineContainer,
         clean: config.cleanContainer
       });
       purged += 1;
     } catch (error) {
-      const retryAtUtc = new Date(Date.now() + config.retention.retrySeconds * 1000).toISOString();
-      try {
-        await dependencies.retention.release(
-          application,
-          error.code || 'RETENTION_PURGE_FAILED',
-          retryAtUtc
-        );
-      } catch (_) {}
+      if (!destructiveStarted) {
+        const retryAtUtc = new Date(Date.now() + config.retention.retrySeconds * 1000).toISOString();
+        try {
+          await dependencies.retention.release(
+            application,
+            error.code || 'RETENTION_PURGE_FAILED',
+            retryAtUtc
+          );
+        } catch (_) {}
+      }
       context?.warn?.('recruitment_retention_purge_failed', {
         applicationReference: application.applicationReference,
-        code: error.code || 'RETENTION_PURGE_FAILED'
+        code: error.code || 'RETENTION_PURGE_FAILED',
+        destructiveStarted
       });
     }
   }
