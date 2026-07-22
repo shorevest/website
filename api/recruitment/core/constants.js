@@ -38,6 +38,7 @@ const HIRING_STAGES = Object.freeze({
 
 const NOTIFICATION_EVENTS = Object.freeze({
   ApplicationReceived: 'ApplicationReceived',
+  CandidateAcknowledgementRequested: 'CandidateAcknowledgementRequested',
   DocumentsReady: 'DocumentsReady',
   ManualReviewRequired: 'ManualReviewRequired',
   MaliciousFileDetected: 'MaliciousFileDetected',
