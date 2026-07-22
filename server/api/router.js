@@ -75,6 +75,16 @@ function buildRoutes() {
     ['GET', /^\/api\/approvals\/(?<id>[^/]+)$/, async ({ app, params }) => ({ package: app.services.approvals.get(params.id) }) ],
     ['POST', /^\/api\/approvals\/(?<id>[^/]+)\/decide$/, async ({ app, user, params, body }) => ({ package: app.services.approvals.decide(user, params.id, body) }) ],
 
+    // Investment Toolbox — IC Deck QC
+    ['GET', /^\/api\/investment\/deals$/, async ({ app }) => ({ deals: app.services.investmentQc.listDeals() }) ],
+    ['GET', /^\/api\/investment\/deals\/(?<id>[^/]+)$/, async ({ app, params }) => app.services.investmentQc.getDeal(params.id) ],
+    ['POST', /^\/api\/investment\/deals\/(?<id>[^/]+)\/qc-runs$/, async ({ app, user, params, body }) => app.services.investmentQc.runQc(user, params.id, body) ],
+    ['GET', /^\/api\/investment\/qc-runs\/(?<id>[^/]+)$/, async ({ app, params }) => app.services.investmentQc.getRun(params.id) ],
+    ['POST', /^\/api\/investment\/qc-runs\/(?<id>[^/]+)\/assign$/, async ({ app, user, params, body }) => ({ item: app.services.investmentQc.assignForReview(user, params.id, body) }) ],
+    ['POST', /^\/api\/investment\/findings\/(?<id>[^/]+)\/resolve$/, async ({ app, user, params, body }) => ({ finding: app.services.investmentQc.resolveFinding(user, params.id, body) }) ],
+    ['POST', /^\/api\/investment\/decks\/(?<id>[^/]+)\/reingest$/, async ({ app, user, params }) => app.services.investmentQc.ingestDeck(user, params.id) ],
+    ['POST', /^\/api\/investment\/models\/(?<id>[^/]+)\/reingest$/, async ({ app, user, params }) => app.services.investmentQc.ingestModel(user, params.id) ],
+
     // Audit
     ['GET', /^\/api\/audit-events$/, async ({ app, query }) => ({ events: query.objectId ? app.repos.auditFor(query.objectType, query.objectId) : app.services.audit.recent(Number(query.limit) || 200) }) ],
   ];
@@ -111,6 +121,7 @@ function workspaceSummary(app) {
     { key: 'relationships', name: 'Relationships', maturity: 'read_update', description: 'Durable relationship records shared with Outreach.', records: repos.relationships.count(), dependencies: ['Salesforce'] },
     { key: 'my-work', name: 'My Work', maturity: 'functioning', description: 'Shared queue of what depends on you.', records: repos.workspaceItems.count(), dependencies: [] },
     { key: 'approvals', name: 'Approvals', maturity: 'functioning', description: 'Shared approval queue. Approval and execution are separate.', records: repos.approvalPackages.count(), dependencies: ['Power Automate'] },
+    { key: 'investment-qc', name: 'IC Deck QC', maturity: 'functioning', description: 'Reconcile a deal deck against its Excel model and flag every figure before IC.', records: repos.deals.count(), dependencies: ['SharePoint'] },
     { key: 'meetings', name: 'Meetings', maturity: 'shell', description: 'Meeting context and notes. Not connected yet.', records: 0, dependencies: ['Microsoft Graph'] },
     { key: 'diligence', name: 'Diligence & Requests', maturity: 'shell', description: 'Diligence cases and material requests. Not connected yet.', records: repos.opportunities.count(), dependencies: ['SharePoint'] },
     { key: 'investor-intel', name: 'Investor Intelligence', maturity: 'shell', description: 'Vendor signals and enrichment. Suggestions only.', records: 0, dependencies: ['VendorSignal'] },

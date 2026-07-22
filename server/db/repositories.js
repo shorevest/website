@@ -8,7 +8,7 @@
  * Booleans are stored as 0/1 integers in SQLite and mapped here.
  */
 
-const BOOL_COLUMNS = new Set(['active', 'restricted', 'approved']);
+const BOOL_COLUMNS = new Set(['active', 'restricted', 'approved', 'is_current']);
 
 function toRow(obj) {
   const row = {};
@@ -121,6 +121,15 @@ class Repositories {
     this.auditEvents = new Table(db, 'audit_events');
     this.connectorSync = new Table(db, 'connector_sync');
     this.executionKeys = new Table(db, 'execution_keys');
+
+    // Investment Toolbox — IC Deck QC.
+    this.deals = new Table(db, 'deals');
+    this.dealModels = new Table(db, 'deal_models');
+    this.modelMetrics = new Table(db, 'model_metrics');
+    this.decks = new Table(db, 'decks');
+    this.deckFigures = new Table(db, 'deck_figures');
+    this.qcRuns = new Table(db, 'qc_runs');
+    this.qcFindings = new Table(db, 'qc_findings');
   }
 
   /** Run fn inside a transaction; rolls back on throw. */

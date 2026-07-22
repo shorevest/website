@@ -65,6 +65,8 @@ th { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: v
 .step.active { background: var(--red); color: #fff; }
 .drawer-actions { display: flex; gap: 6px; }
 code.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; background: #f0ebe1; padding: 1px 5px; border-radius: 4px; }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.bad { color: var(--stop); font-weight: 600; }
 .maturity-tag { font-size: 10px; text-transform: uppercase; letter-spacing: .06em; padding: 1px 6px; border-radius: 4px; background: #efe8dc; color: var(--muted); }
 .maturity-tag.functioning { background: #e7f3ec; color: var(--ok); }
 .maturity-tag.shell { background: #eef0f3; color: var(--wait); }

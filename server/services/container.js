@@ -15,6 +15,7 @@ const { ExecutionGuard } = require('./executionGuard');
 const { OutreachService } = require('./outreach');
 const { ApprovalsService } = require('./approvals');
 const { WorkItemsService } = require('./workItems');
+const { InvestmentQcService } = require('./investmentQc');
 
 function createApp(config, { clock } = {}) {
   const realClock = clock || { nowIso: () => new Date().toISOString() };
@@ -31,6 +32,7 @@ function createApp(config, { clock } = {}) {
     outreach: new OutreachService(ctx),
     approvals: new ApprovalsService(ctx),
     workItems: new WorkItemsService(ctx),
+    investmentQc: new InvestmentQcService(ctx),
     audit: ctx.audit,
   };
 

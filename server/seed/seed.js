@@ -13,6 +13,7 @@
 
 const crypto = require('node:crypto');
 const { seededId } = require('../domain/ids');
+const { seedInvestment } = require('./seedInvestment');
 
 const MODIFIERS = ['Red', 'Snow', 'River', 'Peregrine', 'Black', 'Grey', 'Sea', 'Golden', 'Silver', 'Amber', 'Coastal', 'Northern', 'Arctic', 'Copper', 'Cedar', 'Storm', 'Autumn', 'Marsh', 'Ivory', 'Slate', 'Ember', 'Dawn'];
 const ANIMALS = ['Fox', 'Leopard', 'Otter', 'Falcon', 'Bear', 'Wolf', 'Turtle', 'Eagle', 'Heron', 'Marten', 'Lynx', 'Osprey', 'Badger', 'Hare', 'Stoat', 'Puffin', 'Ibis', 'Kestrel', 'Raven', 'Seal'];
@@ -46,7 +47,10 @@ function seed(app, { reset = true } = {}) {
   const now = '2026-07-01T09:00:00.000Z'; // fixed timestamp for determinism
 
   if (reset) resetAll(repos);
-  if (repos.users.count() > 0) return summary(repos); // already seeded
+  if (repos.users.count() > 0) {
+    seedInvestment(app, now); // idempotent; populates on a migrated-but-seeded DB
+    return summary(repos);
+  }
 
   repos.transaction(() => {
     // ── Users (synthetic internal staff / senders) ───────────────────────
@@ -159,11 +163,15 @@ function seed(app, { reset = true } = {}) {
     app.ctx.audit.record({ actorId: seededId('usr', 'operator'), action: 'seed_loaded', objectType: 'system', objectId: 'seed', newState: 'loaded', source: 'seed' });
   });
 
+  // Investment Toolbox seed runs outside the transaction above: a QC run opens
+  // its own transaction, which cannot nest inside SQLite's single-level BEGIN.
+  seedInvestment(app, now);
+
   return summary(repos);
 }
 
 function resetAll(repos) {
-  const tables = ['responses', 'messages', 'execution_requests', 'execution_keys', 'approval_decisions', 'approval_packages', 'draft_versions', 'draft_group_members', 'draft_groups', 'record_proposals', 'audience_members', 'audiences', 'saved_searches', 'workspace_items', 'tasks', 'relationships', 'opportunities', 'signatures', 'delivery_policies', 'people', 'institutions', 'connector_sync', 'audit_events', 'users'];
+  const tables = ['qc_findings', 'qc_runs', 'deck_figures', 'decks', 'model_metrics', 'deal_models', 'deals', 'responses', 'messages', 'execution_requests', 'execution_keys', 'approval_decisions', 'approval_packages', 'draft_versions', 'draft_group_members', 'draft_groups', 'record_proposals', 'audience_members', 'audiences', 'saved_searches', 'workspace_items', 'tasks', 'relationships', 'opportunities', 'signatures', 'delivery_policies', 'people', 'institutions', 'connector_sync', 'audit_events', 'users'];
   for (const t of tables) repos.db.exec(`DELETE FROM ${t};`);
 }
 
