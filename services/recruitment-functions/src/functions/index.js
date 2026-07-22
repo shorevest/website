@@ -20,9 +20,26 @@ const {
   runIdempotencyCleanup
 } = require('../retention/worker');
 
+function configurationUnavailable(req, config, context, operation) {
+  const shape = validateConfig(config);
+  if (shape.ok) return null;
+  context?.error?.('recruitment_configuration_invalid', {
+    operation,
+    missingCount: shape.missing.length,
+    invalidCount: shape.invalid.length
+  });
+  return {
+    status: 503,
+    headers: withCors(req, config),
+    jsonBody: { success: false, errorCode: 'SUBMISSION_FAILED' }
+  };
+}
+
 async function httpFlow(req, context, flow, options = {}) {
   const config = loadConfig();
   if (!config.apiEnabled) return unavailable(req, config);
+  const invalidConfiguration = configurationUnavailable(req, config, context, 'public-api');
+  if (invalidConfiguration) return invalidConfiguration;
   if (req.method !== 'POST') {
     return {
       status: 405,
@@ -216,6 +233,14 @@ app.timer('outboxWorker', {
       context.log('recruitment_outbox_delivery_disabled');
       return;
     }
+    const shape = validateConfig(config);
+    if (!shape.ok) {
+      context.error('recruitment_outbox_configuration_invalid', {
+        missingCount: shape.missing.length,
+        invalidCount: shape.invalid.length
+      });
+      return;
+    }
 
     const dependencies = createDeps(config);
     if (!dependencies.outboxDispatcher || typeof dependencies.outboxDispatcher.deliver !== 'function') {
@@ -278,3 +303,8 @@ app.http('health', {
     };
   }
 });
+
+module.exports = {
+  configurationUnavailable,
+  httpFlow
+};
