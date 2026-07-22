@@ -1,16 +1,17 @@
 @charset "utf-8";
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700&display=swap");
 
 /*
  * Chinese-page typography authority.
  *
  * Every visible text element on a Chinese route uses one family only:
- * Noto Sans SC. This intentionally includes retained English words, labels,
+ * Noto Serif SC. This intentionally includes retained English words, labels,
  * buttons, form controls, legal copy, careers pages, and investor-portal UI.
  * Image-based ShoreVest lockups are unaffected.
  */
 
 :root.sv-cn-font-unified[lang^="zh"] {
-  --sv-cn-unified-font: "Noto Sans SC", sans-serif;
+  --sv-cn-unified-font: "Noto Serif SC", serif;
 
   --sv-font: var(--sv-cn-unified-font);
   --sv-serif: var(--sv-cn-unified-font);
@@ -37,5 +38,12 @@
  */
 html.sv-cn-font-unified.sv-cn-font-unified.sv-cn-font-unified.sv-cn-font-unified.sv-cn-font-unified.sv-cn-font-unified.sv-cn-font-unified.sv-cn-font-unified[lang^="zh"] body,
 html.sv-cn-font-unified.sv-cn-font-unified.sv-cn-font-unified.sv-cn-font-unified.sv-cn-font-unified.sv-cn-font-unified.sv-cn-font-unified.sv-cn-font-unified[lang^="zh"] body * {
-  font-family: "Noto Sans SC", sans-serif !important;
+  font-family: "Noto Serif SC", serif !important;
+}
+
+/* Fallback for Chinese templates that load this sheet directly rather than
+ * through the shared site guard. */
+html[lang^="zh"] body,
+html[lang^="zh"] body * {
+  font-family: "Noto Serif SC", serif !important;
 }
