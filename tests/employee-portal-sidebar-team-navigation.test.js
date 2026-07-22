@@ -32,10 +32,11 @@ vm.runInNewContext(source, { self: browser, Array, Object, String }, {
 const nav = persona.nav;
 const labels = nav.map((item) => item.sep || item.label);
 const indexOf = (label) => labels.indexOf(label);
+const groups = Array.from(nav.filter((item) => item.sep), (item) => item.sep);
 
-assert.deepStrictEqual(
-  nav.filter((item) => item.sep).map((item) => item.sep),
-  ['Your work', 'Client Solutions / IR', 'Investment', 'Firm & Operations'],
+assert.strictEqual(
+  JSON.stringify(groups),
+  JSON.stringify(['Your work', 'Client Solutions / IR', 'Investment', 'Firm & Operations']),
   'sidebar groups should be ordered by team'
 );
 
