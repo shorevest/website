@@ -47,6 +47,7 @@ const requiredRecruitmentSettings = [
   'RECRUITMENT_BOT_VERIFICATION_MODE',
   'RECRUITMENT_BOT_VERIFICATION_SECRET_NAME',
   'RECRUITMENT_BOT_VERIFICATION_HOSTNAME',
+  'RECRUITMENT_BOT_VERIFICATION_ACTION',
   'RECRUITMENT_BOT_VERIFICATION_ENDPOINT',
   'RECRUITMENT_OUTBOX_DELIVERY_ENABLED',
   'RECRUITMENT_OUTBOX_LEASE_SECONDS',
@@ -118,9 +119,19 @@ test('runtime settings v2 references resources by name and contains no tenant-sp
   assert.ok(!template.includes('accountKey'));
 });
 
-test('runtime settings v2 keeps exact ShoreVest public origins and restricted role names', () => {
+test('runtime settings v2 keeps exact ShoreVest origins, Turnstile constraints and role names', () => {
   assert.ok(template.includes("RECRUITMENT_ALLOWED_ORIGINS: 'https://shorevest.com,https://www.shorevest.com'"));
+  assert.ok(template.includes("param botVerificationHostnames string = 'shorevest.com,www.shorevest.com'"));
+  assert.ok(template.includes("param botVerificationAction string = 'recruitment-application'"));
+  assert.ok(template.includes('RECRUITMENT_BOT_VERIFICATION_HOSTNAME: botVerificationHostnames'));
+  assert.ok(template.includes('RECRUITMENT_BOT_VERIFICATION_ACTION: botVerificationAction'));
   assert.ok(template.includes("RECRUITMENT_HR_REQUIRED_ROLE: 'Recruitment.HR'"));
   assert.ok(template.includes("RECRUITMENT_RETENTION_ADMIN_ROLE: 'Recruitment.RetentionAdmin'"));
   assert.ok(template.includes("RECRUITMENT_HR_READ_SAS_SECONDS: '300'"));
+});
+
+test('runtime settings v2 cannot silently fall back to the single apex hostname', () => {
+  assert.ok(!template.includes("param botVerificationHostname string = 'shorevest.com'"));
+  assert.ok(!template.includes('RECRUITMENT_BOT_VERIFICATION_HOSTNAME: botVerificationHostname'));
+  assert.ok(template.includes('RECRUITMENT_BOT_VERIFICATION_ACTION'));
 });
