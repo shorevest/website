@@ -29,6 +29,11 @@ test('dynamic form fields receive programmatic labels and hint relationships', (
   assert.ok(source.includes("control.setAttribute('aria-label', label.textContent.trim())"));
 });
 
+test('body-level drawers are included in field hardening', () => {
+  assert.ok(source.includes(".at-workspace .fld, .drawer .fld"));
+  assert.ok(source.includes("observer.observe(body, { childList: true, subtree: true })"));
+});
+
 test('active tabs and data tables expose navigation and header semantics', () => {
   assert.ok(source.includes("tab.setAttribute('aria-current', 'page')"));
   assert.ok(source.includes("th.setAttribute('scope', 'col')"));
@@ -44,10 +49,10 @@ test('visually disabled controls are genuinely disabled', () => {
   assert.ok(source.includes("button.setAttribute('aria-disabled', 'true')"));
 });
 
-test('the hardening survives full routed-view replacement', () => {
+test('the hardening survives routed-view and drawer replacement', () => {
   assert.ok(source.includes('MutationObserver'));
   assert.ok(source.includes("root.addEventListener('svops:render'"));
-  assert.ok(source.includes("observer.observe(mount, { childList: true, subtree: true })"));
+  assert.ok(source.includes("harden(root.document)"));
 });
 
 test('the hardening performs no data or network action', () => {
