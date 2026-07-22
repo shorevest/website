@@ -296,6 +296,7 @@
   };
 
   const initAllGrids = () => {
+    if (isChinesePage) document.body.classList.add("team-page--cn");
     applyEditorialSectionIntroStyles();
     hideIncompleteFunctionsGroup();
     const grids = Array.from(document.querySelectorAll("[data-team-grid]"));
