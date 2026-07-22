@@ -1,0 +1,28 @@
+/* ShoreVest One — Asset Tracing Phase 1B controls */
+.at-phase1b-panel { margin-top: 18px; }
+.at-panel-copy { margin: 0 0 14px; color: var(--ops-muted); font: 400 13px/1.55 var(--ops-font); }
+.at-phase1b-actions { margin-top: 4px; }
+.at-finding-review-list { display: grid; gap: 10px; }
+.at-finding-review {
+  display: flex; align-items: center; justify-content: space-between; gap: 18px;
+  padding: 13px 0; border-bottom: 1px solid var(--ops-hairline);
+}
+.at-finding-review:last-child { border-bottom: 0; }
+.at-finding-review__copy { min-width: 0; }
+.at-finding-review__title { margin: 0 0 3px; color: var(--ops-black); font: 700 13.5px/1.35 var(--ops-font); }
+.at-finding-review__meta { margin: 0; color: var(--ops-faint); font: 400 11.5px/1.4 var(--ops-font); }
+.at-approval-gate { display: grid; gap: 8px; }
+.at-approval-gate__item {
+  display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 8px; align-items: start;
+  padding: 9px 10px; border: 1px solid var(--ops-hairline); background: var(--ops-white);
+  color: var(--ops-body); font: 500 12.5px/1.4 var(--ops-font);
+}
+.at-approval-gate__mark { font-weight: 700; text-align: center; }
+.at-approval-gate__item.is-pass .at-approval-gate__mark { color: var(--st-ready); }
+.at-approval-gate__item.is-open { border-color: rgba(201, 59, 42, 0.32); background: #FBF1EF; }
+.at-approval-gate__item.is-open .at-approval-gate__mark { color: var(--ops-red-dark); }
+@media (max-width: 760px) {
+  .at-finding-review { align-items: flex-start; flex-direction: column; }
+  .at-finding-review .ops-actions { width: 100%; }
+  .at-finding-review .btn { flex: 1; }
+}

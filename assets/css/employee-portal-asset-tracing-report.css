@@ -1,0 +1,22 @@
+/* ShoreVest One — Asset Tracing source lineage and print view */
+.at-lineage-list { display: grid; gap: 12px; }
+.at-lineage-item { padding: 14px 0; border-bottom: 1px solid var(--ops-hairline); }
+.at-lineage-item:last-child { border-bottom: 0; }
+.at-lineage-item h3 { margin: 0 0 5px; color: var(--ops-black); font: 700 14px/1.35 var(--ops-font); }
+.at-lineage-item p { margin: 0 0 8px; color: var(--ops-body); font: 400 13px/1.55 var(--ops-font); }
+.at-lineage-citations { margin: 0; padding-left: 20px; color: var(--ops-muted); font: 400 12px/1.5 var(--ops-font); }
+.at-lineage-citations li { margin: 3px 0; }
+.at-lineage-missing { color: var(--ops-red-dark); }
+@media print {
+  body.svops { background: #fff; }
+  .ops-sidebar, .ops-topbar, .ops-appbar, .ops-demo-note, .ops-scrim,
+  .at-pagehead, .at-casebar, .at-tabs, .at-report-actions,
+  .at-case > .notice, .at-report-panel > .notice { display: none !important; }
+  .ops-shell, .ops-main { display: block; min-height: 0; }
+  .ops-main__content, .ops-content { max-width: none; width: 100%; padding: 0; }
+  .ops-panel { border: 0; box-shadow: none; padding: 0; page-break-inside: avoid; }
+  .ops-panel__head { margin-top: 22px; }
+  .at-report { border: 0; box-shadow: none; }
+  .tblwrap { overflow: visible; border-color: #bbb; }
+  .tbl th { position: static; }
+}
