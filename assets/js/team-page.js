@@ -5,24 +5,6 @@
     .toLowerCase()
     .startsWith("zh");
 
-  const markWidePlatformSummary = () => {
-    document.querySelectorAll(".group__summary").forEach((summary) => {
-      const text = (summary.textContent || "")
-        .replace(/\s+/g, " ")
-        .trim()
-        .toLowerCase();
-      const isOnshorePlatformSummary =
-        text.includes("onshore asset-servicing and resolution platform") ||
-        (text.includes("本地执行") && text.includes("回收"));
-
-      if (!isOnshorePlatformSummary) return;
-
-      summary.classList.add("group__summary--wide");
-      const head = summary.closest(".group__head");
-      if (head) head.classList.add("group__head--wide-summary");
-    });
-  };
-
   const applyEditorialSectionIntroStyles = () => {
     if (document.getElementById("team-section-intro-editorial-styles")) return;
 
@@ -30,23 +12,18 @@
     style.id = "team-section-intro-editorial-styles";
     style.textContent = `
       html body.team-page-v2 .group__head {
-        grid-template-columns: minmax(250px, max-content) minmax(360px, 640px) !important;
+        grid-template-columns: minmax(230px, max-content) minmax(420px, 700px) !important;
         justify-content: space-between !important;
         align-items: end !important;
-        gap: clamp(28px, 4vw, 64px) !important;
+        gap: clamp(28px, 3.5vw, 56px) !important;
         padding-bottom: clamp(18px, 2vw, 24px) !important;
         border-bottom: 1px solid var(--tr-border) !important;
       }
 
-      html body.team-page-v2 .group__head.group__head--wide-summary {
-        grid-template-columns: minmax(210px, max-content) minmax(440px, 760px) !important;
-        gap: clamp(22px, 3vw, 46px) !important;
-      }
-
       html body.team-page-v2 .group__summary {
         box-sizing: border-box;
-        width: min(100%, 640px) !important;
-        max-width: 640px !important;
+        width: min(100%, 700px) !important;
+        max-width: 700px !important;
         justify-self: end !important;
         align-self: end !important;
         margin: 0 !important;
@@ -62,11 +39,6 @@
         text-wrap: pretty;
       }
 
-      html body.team-page-v2 .group__summary.group__summary--wide {
-        width: min(100%, 760px) !important;
-        max-width: 760px !important;
-      }
-
       html body.team-page-v2.team-page--cn .group__summary {
         letter-spacing: 0.06em !important;
         text-transform: none !important;
@@ -74,27 +46,20 @@
 
       @media (max-width: 900px) {
         html body.team-page-v2 .group__head {
-          grid-template-columns: minmax(220px, 0.8fr) minmax(320px, 1.2fr) !important;
-          gap: 28px !important;
-        }
-
-        html body.team-page-v2 .group__head.group__head--wide-summary {
-          grid-template-columns: minmax(180px, 0.65fr) minmax(360px, 1.35fr) !important;
-          gap: 24px !important;
+          grid-template-columns: minmax(210px, 0.75fr) minmax(360px, 1.25fr) !important;
+          gap: 26px !important;
         }
       }
 
       @media (max-width: 760px) {
-        html body.team-page-v2 .group__head,
-        html body.team-page-v2 .group__head.group__head--wide-summary {
+        html body.team-page-v2 .group__head {
           grid-template-columns: 1fr !important;
           align-items: start !important;
           gap: 16px !important;
           padding-bottom: 20px !important;
         }
 
-        html body.team-page-v2 .group__summary,
-        html body.team-page-v2 .group__summary.group__summary--wide {
+        html body.team-page-v2 .group__summary {
           width: 100% !important;
           max-width: none !important;
           justify-self: stretch !important;
@@ -332,7 +297,6 @@
 
   const initAllGrids = () => {
     if (isChinesePage) document.body.classList.add("team-page--cn");
-    markWidePlatformSummary();
     applyEditorialSectionIntroStyles();
     hideIncompleteFunctionsGroup();
     const grids = Array.from(document.querySelectorAll("[data-team-grid]"));
