@@ -39,8 +39,11 @@ param fingerprintSecretName string = 'recruitment-fingerprint-key'
 @description('Key Vault Turnstile secret name.')
 param botVerificationSecretName string = 'recruitment-turnstile-secret'
 
-@description('Expected Turnstile hostname.')
-param botVerificationHostname string = 'shorevest.com'
+@description('Comma-separated Turnstile token hostnames. This set must exactly match the allowed-origin hostnames.')
+param botVerificationHostnames string = 'shorevest.com,www.shorevest.com'
+
+@description('Expected Turnstile widget action for candidate application submission.')
+param botVerificationAction string = 'recruitment-application'
 
 @minValue(1)
 param rateLimitCount int = 5
@@ -187,7 +190,8 @@ resource appSettings 'Microsoft.Web/sites/config@2024-04-01' = {
     RECRUITMENT_RATE_LIMIT_WINDOW_SECONDS: string(rateLimitWindowSeconds)
     RECRUITMENT_BOT_VERIFICATION_MODE: 'turnstile'
     RECRUITMENT_BOT_VERIFICATION_SECRET_NAME: botVerificationSecretName
-    RECRUITMENT_BOT_VERIFICATION_HOSTNAME: botVerificationHostname
+    RECRUITMENT_BOT_VERIFICATION_HOSTNAME: botVerificationHostnames
+    RECRUITMENT_BOT_VERIFICATION_ACTION: botVerificationAction
     RECRUITMENT_OUTBOX_DELIVERY_ENABLED: string(outboxDeliveryEnabled)
     RECRUITMENT_OUTBOX_LEASE_SECONDS: string(outboxLeaseSeconds)
     RECRUITMENT_OUTBOX_RETRY_SECONDS: string(outboxRetrySeconds)
