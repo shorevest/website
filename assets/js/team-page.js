@@ -5,6 +5,46 @@
     .toLowerCase()
     .startsWith("zh");
 
+  const applyEditorialSectionIntroStyles = () => {
+    if (document.getElementById("team-section-intro-editorial-styles")) return;
+
+    const style = document.createElement("style");
+    style.id = "team-section-intro-editorial-styles";
+    style.textContent = `
+      html body.team-page-v2 .group__head {
+        align-items: start !important;
+        gap: clamp(24px, 4.5vw, 64px) !important;
+      }
+
+      html body.team-page-v2 .group__summary {
+        align-self: start !important;
+        margin: 0 !important;
+        max-width: 64ch !important;
+        padding: clamp(16px, 1.6vw, 22px) 0 0 !important;
+        border: 0 !important;
+        border-top: 1px solid var(--tr-border) !important;
+        font: 500 clamp(18px, 1.55vw, 22px) / 1.42 var(--tr-font) !important;
+        letter-spacing: -0.012em !important;
+        color: var(--tr-ink) !important;
+        text-wrap: pretty;
+      }
+
+      @media (max-width: 760px) {
+        html body.team-page-v2 .group__head {
+          gap: 18px !important;
+        }
+
+        html body.team-page-v2 .group__summary {
+          max-width: none !important;
+          padding-top: 16px !important;
+          font-size: clamp(17px, 5vw, 20px) !important;
+          line-height: 1.45 !important;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  };
+
   const hideIncompleteFunctionsGroup = () => {
     const group = document.querySelector(".group--risk-finance-people");
     if (!group) return;
@@ -170,7 +210,6 @@
     });
   };
 
-
   const initPortraitPrivacy = () => {
     const photos = document.querySelectorAll(
       ".team-profile__photo, .team-profile__photo img",
@@ -202,8 +241,8 @@
       (event) => {
         const key = event.key ? event.key.toLowerCase() : "";
         const isPrintScreen = key === "printscreen";
-        const isSaveOrPrint = (event.metaKey || event.ctrlKey) &&
-          (key === "s" || key === "p");
+        const isSaveOrPrint =
+          (event.metaKey || event.ctrlKey) && (key === "s" || key === "p");
 
         if (!isPrintScreen && !isSaveOrPrint) return;
         showPrivacyShield();
@@ -228,6 +267,7 @@
   };
 
   const initAllGrids = () => {
+    applyEditorialSectionIntroStyles();
     hideIncompleteFunctionsGroup();
     const grids = Array.from(document.querySelectorAll("[data-team-grid]"));
     grids.forEach(initGrid);
