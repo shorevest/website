@@ -1,0 +1,125 @@
+/* ShoreVest One — Asset Tracing usability guidance */
+.at-queue-help {
+  margin: -2px 0 14px;
+  color: var(--ops-muted);
+  font: 400 12.5px/1.5 var(--ops-font);
+}
+
+.at-row-action {
+  display: inline-block;
+  margin-top: 7px;
+  color: var(--ops-red-dark);
+  font: 700 10px/1.2 var(--ops-font);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.at-tab[data-step] {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.at-tab[data-step]::before {
+  content: attr(data-step);
+  width: 19px;
+  height: 19px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--ops-rule);
+  border-radius: 50%;
+  background: var(--ops-white);
+  color: var(--ops-faint);
+  font: 700 9px/1 var(--ops-font);
+}
+
+.at-tab.is-complete::before {
+  content: '✓';
+  border-color: var(--st-ready);
+  color: var(--st-ready);
+}
+
+.at-tab.is-active::before {
+  border-color: var(--ops-red);
+  color: var(--ops-red-dark);
+}
+
+.at-guidance {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin: -2px 0 18px;
+  padding: 16px 18px;
+  border: 1px solid var(--ops-hairline);
+  border-left: 3px solid var(--ops-red);
+  background: var(--ops-white);
+}
+
+.at-guidance__copy { min-width: 0; }
+.at-guidance__kicker {
+  margin: 0 0 4px;
+  color: var(--ops-red-dark);
+  font: 700 9.5px/1.2 var(--ops-font);
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+.at-guidance h2 {
+  margin: 0 0 4px;
+  color: var(--ops-black);
+  font: 700 15px/1.3 var(--ops-font);
+}
+.at-guidance p:not(.at-guidance__kicker) {
+  margin: 0;
+  max-width: 72ch;
+  color: var(--ops-muted);
+  font: 400 12.5px/1.5 var(--ops-font);
+}
+.at-guidance__action { flex: 0 0 auto; }
+.at-guidance__here {
+  flex: 0 0 auto;
+  max-width: 210px;
+  color: var(--ops-muted);
+  font: 600 11.5px/1.4 var(--ops-font);
+  text-align: right;
+}
+
+.at-required {
+  margin-left: 7px;
+  color: var(--ops-red-dark);
+  font: 700 8.5px/1 var(--ops-font);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.at-usability-hint { margin-top: 6px !important; }
+
+.at-form-status {
+  margin: 2px 0 12px;
+  color: var(--ops-muted);
+  font: 600 11.5px/1.4 var(--ops-font);
+}
+.at-form-status.is-ready { color: var(--st-ready); }
+
+.drawer button[aria-disabled='true'] {
+  opacity: .48;
+  cursor: not-allowed;
+}
+
+@media (max-width: 900px) {
+  .at-guidance { align-items: flex-start; }
+}
+
+@media (max-width: 760px) {
+  .at-guidance {
+    display: block;
+    margin-top: -4px;
+    padding: 14px 15px;
+  }
+  .at-guidance__action { margin-top: 12px; width: 100%; justify-content: center; }
+  .at-guidance__here { display: block; max-width: none; margin-top: 9px; text-align: left; }
+  .at-tab[data-step] { gap: 5px; padding-left: 10px; padding-right: 10px; }
+  .at-tab[data-step]::before { width: 18px; height: 18px; }
+  .at-row-action { display: block; }
+}
