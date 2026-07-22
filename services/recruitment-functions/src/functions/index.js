@@ -2,6 +2,7 @@
 
 const { app } = require('@azure/functions');
 const { loadConfig, validateConfig } = require('../lib/config');
+const { createReadinessProbe } = require('../lib/readiness');
 const {
   originAllowed,
   withCors,
@@ -19,6 +20,8 @@ const {
   runRetentionPurge,
   runIdempotencyCleanup
 } = require('../retention/worker');
+
+const readinessProbe = createReadinessProbe();
 
 function configurationUnavailable(req, config, context, operation) {
   const shape = validateConfig(config);
@@ -292,14 +295,22 @@ app.http('health', {
   handler: async (req) => {
     const config = loadConfig();
     const shape = validateConfig(config);
-    return {
-      status: shape.ok ? 200 : 503,
-      headers: withCors(req, config),
-      jsonBody: {
-        ok: shape.ok,
+    let result;
+    try {
+      const dependencies = shape.ok ? createDeps(config) : null;
+      result = await readinessProbe(config, dependencies);
+    } catch (_) {
+      result = {
+        ok: false,
         runtime: 'active',
-        configuration: shape.ok ? 'valid' : 'invalid'
-      }
+        configuration: shape.ok ? 'valid' : 'invalid',
+        dependencies: shape.ok ? 'unavailable' : 'not-checked'
+      };
+    }
+    return {
+      status: result.ok ? 200 : 503,
+      headers: withCors(req, config),
+      jsonBody: result
     };
   }
 });
