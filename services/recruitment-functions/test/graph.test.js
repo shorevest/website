@@ -4,6 +4,7 @@ const test = require('node:test');
 const assert = require('node:assert');
 const {
   GRAPH_SCOPE,
+  IMMUTABLE_ID_PREFERENCE,
   GraphDeliveryError,
   escapeFilterString,
   createGraphAdapter
@@ -33,7 +34,7 @@ function credential() {
   };
 }
 
-test('filter values escape SharePoint OData quotes', () => {
+test('filter values escape OData quotes', () => {
   assert.equal(escapeFilterString("APP-'1"), "APP-''1");
 });
 
@@ -99,7 +100,60 @@ test('duplicate SharePoint projection targets fail permanently', async () => {
   );
 });
 
-test('candidate mail uses the configured mailbox and has no attachments', async () => {
+test('acknowledgement drafts carry a deterministic extended property and immutable id preference', async () => {
+  const calls = [];
+  const graph = createGraphAdapter({
+    credential: credential(),
+    fetchImpl: async (url, options) => {
+      calls.push({ url, options });
+      return response(201, { id: 'immutable-draft-id', isDraft: true });
+    }
+  });
+
+  const draft = await graph.createDraftMessage(
+    'hr@shorevest.com',
+    {
+      subject: 'Application received',
+      body: { contentType: 'Text', content: 'Received.' },
+      toRecipients: [{ emailAddress: { address: 'candidate@example.com' } }]
+    },
+    {
+      id: 'String {guid} Name ShoreVestApplicationReference',
+      value: 'SV-APP-2026-ABC123'
+    }
+  );
+
+  assert.equal(draft.id, 'immutable-draft-id');
+  assert.ok(calls[0].url.endsWith('/users/hr%40shorevest.com/messages'));
+  assert.equal(calls[0].options.headers.Prefer, IMMUTABLE_ID_PREFERENCE);
+  const payload = JSON.parse(calls[0].options.body);
+  assert.equal(payload.singleValueExtendedProperties[0].value, 'SV-APP-2026-ABC123');
+  assert.equal(payload.attachments, undefined);
+});
+
+test('acknowledgement reconciliation searches by the extended property', async () => {
+  const calls = [];
+  const graph = createGraphAdapter({
+    credential: credential(),
+    fetchImpl: async (url, options) => {
+      calls.push({ url, options });
+      return response(200, { value: [{ id: 'message-1', isDraft: false, sentDateTime: '2026-07-22T00:02:00Z' }] });
+    }
+  });
+
+  const found = await graph.findMessagesByExtendedProperty(
+    'hr@shorevest.com',
+    'String {guid} Name ShoreVestApplicationReference',
+    "SV-APP-'1"
+  );
+  assert.equal(found.length, 1);
+  assert.equal(found[0].isDraft, false);
+  assert.ok(calls[0].url.includes('singleValueExtendedProperties%2FAny'));
+  assert.ok(calls[0].url.includes('SV-APP-%27%271'));
+  assert.equal(calls[0].options.headers.Prefer, IMMUTABLE_ID_PREFERENCE);
+});
+
+test('draft send uses the immutable message id and no message body', async () => {
   const calls = [];
   const graph = createGraphAdapter({
     credential: credential(),
@@ -109,16 +163,18 @@ test('candidate mail uses the configured mailbox and has no attachments', async 
     }
   });
 
-  await graph.sendMail('hr@shorevest.com', {
-    subject: 'Application received',
-    body: { contentType: 'Text', content: 'Received.' },
-    toRecipients: [{ emailAddress: { address: 'candidate@example.com' } }]
-  });
+  await graph.sendDraftMessage('hr@shorevest.com', 'immutable/id');
+  assert.ok(calls[0].url.endsWith('/users/hr%40shorevest.com/messages/immutable%2Fid/send'));
+  assert.equal(calls[0].options.method, 'POST');
+  assert.equal(calls[0].options.body, undefined);
+});
 
-  assert.ok(calls[0].url.endsWith('/users/hr%40shorevest.com/sendMail'));
-  const payload = JSON.parse(calls[0].options.body);
-  assert.equal(payload.saveToSentItems, true);
-  assert.equal(payload.message.attachments, undefined);
+test('missing checkpointed message returns null rather than creating a replacement', async () => {
+  const graph = createGraphAdapter({
+    credential: credential(),
+    fetchImpl: async () => response(404, { error: { code: 'ErrorItemNotFound' } })
+  });
+  assert.equal(await graph.getMessage('hr@shorevest.com', 'missing'), null);
 });
 
 test('Graph throttling is retryable and preserves Retry-After', async () => {
