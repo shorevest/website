@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-portal-build="20260723b">
+<html lang="en" data-portal-build="20260723c">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,14 +11,14 @@
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
   <!-- Typography is DIN 2014, loaded from local installed faces (no external
        font provider). See @font-face in employee-portal.css. -->
-  <link rel="stylesheet" href="../assets/css/employee-portal.css?v=20260723b" />
-  <link rel="stylesheet" href="../assets/css/employee-portal-home-guided.css?v=20260723b" />
-  <link rel="stylesheet" href="../assets/css/employee-portal-home-dashboard-widgets.css?v=20260723b" />
-  <link rel="stylesheet" href="../assets/css/employee-portal-travel-calendar.css?v=20260723b" />
-  <link rel="stylesheet" href="../assets/css/employee-portal-asset-tracing.css?v=20260723b" />
-  <link rel="stylesheet" href="../assets/css/employee-portal-asset-tracing-phase1b.css?v=20260723b" />
-  <link rel="stylesheet" href="../assets/css/employee-portal-asset-tracing-report.css?v=20260723b" />
-  <link rel="stylesheet" href="../assets/css/employee-portal-asset-tracing-usability.css?v=20260723b" />
+  <link rel="stylesheet" href="../assets/css/employee-portal.css?v=20260723c" />
+  <link rel="stylesheet" href="../assets/css/employee-portal-home-guided.css?v=20260723c" />
+  <link rel="stylesheet" href="../assets/css/employee-portal-home-dashboard-widgets.css?v=20260723c" />
+  <link rel="stylesheet" href="../assets/css/employee-portal-travel-calendar.css?v=20260723c" />
+  <link rel="stylesheet" href="../assets/css/employee-portal-asset-tracing.css?v=20260723c" />
+  <link rel="stylesheet" href="../assets/css/employee-portal-asset-tracing-phase1b.css?v=20260723c" />
+  <link rel="stylesheet" href="../assets/css/employee-portal-asset-tracing-report.css?v=20260723c" />
+  <link rel="stylesheet" href="../assets/css/employee-portal-asset-tracing-usability.css?v=20260723c" />
   <link rel="icon" href="../assets/favicon-cinnabar.ico?v=20260717" sizes="any">
   <link rel="shortcut icon" href="../assets/favicon-cinnabar.ico?v=20260717">
   <link rel="icon" href="../assets/favicon-cinnabar.svg?v=20260717" type="image/svg+xml">
@@ -48,57 +48,59 @@
 
   <!-- Loaded first so a failed or partially cached startup never leaves a blank
        screen. It performs no network or data action. -->
-  <script src="../assets/js/employee-portal/boot-guard.js?v=20260723b"></script>
+  <script src="../assets/js/employee-portal/boot-guard.js?v=20260723c"></script>
 
   <!-- Deployment configuration (placeholders only — see file header). -->
-  <script src="../assets/js/employee-portal/portal-config.js?v=20260723b"></script>
-  <script src="../assets/js/employee-portal/travel-calendar-config.js?v=20260723b"></script>
+  <script src="../assets/js/employee-portal/portal-config.js?v=20260723c"></script>
+  <script src="../assets/js/employee-portal/travel-calendar-config.js?v=20260723c"></script>
   <!-- Microsoft Entra ID sign-in library (MSAL.js), vendored locally so it is
        served from 'self' and needs no external script source. Only exercised
        when portal-config.js sets mode:"production" with a real tenant/client;
        in demo mode it loads but is never invoked. See
        docs/employee-portal/ENTRA_ID_SETUP.md. -->
-  <script src="../assets/js/vendor/msal-browser-3.30.0.min.js?v=20260723b"></script>
+  <script src="../assets/js/vendor/msal-browser-3.30.0.min.js?v=20260723c"></script>
   <!-- Pure rules engine (also exercised by the Node test suite). -->
-  <script src="../assets/js/employee-portal/rules.js?v=20260723b"></script>
+  <script src="../assets/js/employee-portal/rules.js?v=20260723c"></script>
   <!-- Role (persona) configuration: identity, navigation, Home data. -->
-  <script src="../assets/js/employee-portal/personas.js?v=20260723b"></script>
+  <script src="../assets/js/employee-portal/personas.js?v=20260723c"></script>
   <!-- Synthetic Asset Tracing schema, fixtures and browser-local store. -->
-  <script src="../assets/js/employee-portal/asset-tracing.js?v=20260723b"></script>
-  <script src="../assets/js/employee-portal/asset-tracing-phase1b.js?v=20260723b"></script>
+  <script src="../assets/js/employee-portal/asset-tracing.js?v=20260723c"></script>
+  <script src="../assets/js/employee-portal/asset-tracing-phase1b.js?v=20260723c"></script>
   <!-- File sniffing, CSV parsing, minimal XLSX reader. -->
-  <script src="../assets/js/employee-portal/files.js?v=20260723b"></script>
+  <script src="../assets/js/employee-portal/files.js?v=20260723c"></script>
   <!-- Preview-mode workflow store (Dataverse entity contract). -->
-  <script src="../assets/js/employee-portal/store.js?v=20260723b"></script>
+  <script src="../assets/js/employee-portal/store.js?v=20260723c"></script>
   <!-- Entra ID / Dataverse / SharePoint / Power Automate / Salesforce /
        Office Scripts adapters with fail-closed placeholders. -->
-  <script src="../assets/js/employee-portal/integrations.js?v=20260723b"></script>
-  <!-- Signed-in user's dedicated Outlook Travel calendar. -->
-  <script src="../assets/js/employee-portal/travel-calendar.js?v=20260723b"></script>
+  <script src="../assets/js/employee-portal/integrations.js?v=20260723c"></script>
+  <!-- Signed-in user's dedicated Outlook Travel calendar. The following demo-only
+       stability layer prevents synthetic relative dates from retriggering Home. -->
+  <script src="../assets/js/employee-portal/travel-calendar.js?v=20260723c"></script>
+  <script src="../assets/js/employee-portal/travel-calendar-demo-stability.js?v=20260723c"></script>
   <!-- UI primitives shared by all views. -->
-  <script src="../assets/js/employee-portal/ui.js?v=20260723b"></script>
+  <script src="../assets/js/employee-portal/ui.js?v=20260723c"></script>
   <!-- Preview processing engine (pipeline, workbook, execution). -->
-  <script src="../assets/js/employee-portal/workflow.js?v=20260723b"></script>
+  <script src="../assets/js/employee-portal/workflow.js?v=20260723c"></script>
   <!-- Views -->
-  <script src="../assets/js/employee-portal/views-home.js?v=20260723b"></script>
-  <script src="../assets/js/employee-portal/views-asset-tracing.js?v=20260723b"></script>
-  <script src="../assets/js/employee-portal/views-asset-tracing-phase1b.js?v=20260723b"></script>
-  <script src="../assets/js/employee-portal/views-asset-tracing-report.js?v=20260723b"></script>
-  <script src="../assets/js/employee-portal/asset-tracing-interactions.js?v=20260723b"></script>
-  <script src="../assets/js/employee-portal/views-home-guided.js?v=20260723b"></script>
-  <script src="../assets/js/employee-portal/views-home-dashboard-widgets.js?v=20260723b"></script>
-  <script src="../assets/js/employee-portal/views-home-travel-location.js?v=20260723b"></script>
-  <script src="../assets/js/employee-portal/views-process.js?v=20260723b"></script>
-  <script src="../assets/js/employee-portal/views-review.js?v=20260723b"></script>
-  <script src="../assets/js/employee-portal/views-admin.js?v=20260723b"></script>
-  <script src="../assets/js/employee-portal/views-outreach.js?v=20260723b"></script>
-  <script src="../assets/js/employee-portal/views-outreach-refresh.js?v=20260723b"></script>
-  <script src="../assets/js/employee-portal/views-hr.js?v=20260723b"></script>
-  <script src="../assets/js/employee-portal/views-media.js?v=20260723b"></script>
+  <script src="../assets/js/employee-portal/views-home.js?v=20260723c"></script>
+  <script src="../assets/js/employee-portal/views-asset-tracing.js?v=20260723c"></script>
+  <script src="../assets/js/employee-portal/views-asset-tracing-phase1b.js?v=20260723c"></script>
+  <script src="../assets/js/employee-portal/views-asset-tracing-report.js?v=20260723c"></script>
+  <script src="../assets/js/employee-portal/asset-tracing-interactions.js?v=20260723c"></script>
+  <script src="../assets/js/employee-portal/views-home-guided.js?v=20260723c"></script>
+  <script src="../assets/js/employee-portal/views-home-dashboard-widgets.js?v=20260723c"></script>
+  <script src="../assets/js/employee-portal/views-home-travel-location.js?v=20260723c"></script>
+  <script src="../assets/js/employee-portal/views-process.js?v=20260723c"></script>
+  <script src="../assets/js/employee-portal/views-review.js?v=20260723c"></script>
+  <script src="../assets/js/employee-portal/views-admin.js?v=20260723c"></script>
+  <script src="../assets/js/employee-portal/views-outreach.js?v=20260723c"></script>
+  <script src="../assets/js/employee-portal/views-outreach-refresh.js?v=20260723c"></script>
+  <script src="../assets/js/employee-portal/views-hr.js?v=20260723c"></script>
+  <script src="../assets/js/employee-portal/views-media.js?v=20260723c"></script>
   <!-- Shell registers first on DOMContentLoaded; progressive enhancement layers
        register afterwards so they cannot interfere with initial login rendering. -->
-  <script src="../assets/js/employee-portal/app.js?v=20260723b"></script>
-  <script src="../assets/js/employee-portal/asset-tracing-accessibility.js?v=20260723b"></script>
-  <script src="../assets/js/employee-portal/asset-tracing-usability.js?v=20260723b"></script>
+  <script src="../assets/js/employee-portal/app.js?v=20260723c"></script>
+  <script src="../assets/js/employee-portal/asset-tracing-accessibility.js?v=20260723c"></script>
+  <script src="../assets/js/employee-portal/asset-tracing-usability.js?v=20260723c"></script>
 </body>
 </html>
