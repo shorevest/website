@@ -81,6 +81,7 @@ function createDeps(config = loadConfig(), requestContext = {}) {
     retention,
     storage,
     sas: storage,
+    secretProvider,
     tokens: createTokenAdapter(secretProvider, config.completionTokenSecretName),
     fingerprints,
     rateLimiter: createRateLimiter({
