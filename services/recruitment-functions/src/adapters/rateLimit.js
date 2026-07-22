@@ -24,7 +24,7 @@ function createRateLimiter({
   const container = cosmosClient?.database(databaseId).container('rateLimits');
 
   return {
-    async check(clientSubmissionId) {
+    async check() {
       if (!enabled) return { allowed: true };
       if (!container || !fingerprint || typeof fingerprint.hmac !== 'function') {
         const error = new Error('rate limiter unavailable');
@@ -32,10 +32,13 @@ function createRateLimiter({
         throw error;
       }
 
-      const identity = requestContext.clientIp
-        ? { clientIp: requestContext.clientIp, userAgent: requestContext.userAgent || '' }
-        : { clientSubmissionId: String(clientSubmissionId || '') };
-      const digest = await fingerprint.hmac(JSON.stringify({ scope: 'application-initiate', identity }));
+      const identity = {
+        clientIp: requestContext.clientIp || 'unknown-app-service-client'
+      };
+      const digest = await fingerprint.hmac(JSON.stringify({
+        scope: 'application-initiate',
+        identity
+      }));
       const currentTime = now();
       const nowSeconds = Math.floor(currentTime.getTime() / 1000);
       const windowStart = Math.floor(nowSeconds / windowSeconds) * windowSeconds;
