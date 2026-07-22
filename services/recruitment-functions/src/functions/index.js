@@ -3,6 +3,7 @@
 const { app } = require('@azure/functions');
 const { loadConfig, validateConfig } = require('../lib/config');
 const { createReadinessProbe } = require('../lib/readiness');
+const { safeErrorCode } = require('../lib/logger');
 const {
   originAllowed,
   withCors,
@@ -82,7 +83,7 @@ async function httpFlow(req, context, flow, options = {}) {
       jsonBody: candidate(result)
     };
   } catch (error) {
-    context.error('recruitment_http_failed', { code: error.code });
+    context.error('recruitment_http_failed', { code: safeErrorCode(error) });
     return {
       status: 500,
       headers: withCors(req, config),
@@ -123,7 +124,7 @@ app.http('hrCleanDocumentAccess', {
       const result = await accessCleanDocument(req, config, dependencies);
       return { ...result, headers: withCors(req, config) };
     } catch (error) {
-      context.error('recruitment_hr_document_access_failed', { code: error.code });
+      context.error('recruitment_hr_document_access_failed', { code: safeErrorCode(error) });
       return {
         status: 500,
         headers: withCors(req, config),
@@ -153,7 +154,7 @@ app.http('hrRetentionControl', {
       const result = await updateRetentionControl(req, config, dependencies, parsed.body);
       return { ...result, headers: withCors(req, config) };
     } catch (error) {
-      context.error('recruitment_retention_control_failed', { code: error.code });
+      context.error('recruitment_retention_control_failed', { code: safeErrorCode(error) });
       return {
         status: 500,
         headers: withCors(req, config),
@@ -171,7 +172,9 @@ app.eventGrid('defenderScanResult', {
       const dependencies = createDeps(config);
       return flows.processScanResult(normalized, dependencies);
     } catch (error) {
-      context.warn('recruitment_scan_event_rejected', { reason: error.message });
+      context.warn('recruitment_scan_event_rejected', {
+        code: safeErrorCode(error, 'SCAN_EVENT_REJECTED')
+      });
       return undefined;
     }
   }
@@ -269,7 +272,7 @@ app.timer('outboxWorker', {
         if ((durableEvent.attemptCount || 0) >= config.outboxDelivery.maxAttempts || error.permanent === true) {
           await dependencies.applicationStore.failOutboxEvent(
             durableEvent,
-            error.code || 'DELIVERY_FAILED'
+            safeErrorCode(error, 'DELIVERY_FAILED')
           );
           continue;
         }
@@ -280,7 +283,7 @@ app.timer('outboxWorker', {
         );
         await dependencies.applicationStore.retryOutboxEvent(
           durableEvent,
-          error.code || 'DELIVERY_RETRYABLE',
+          safeErrorCode(error, 'DELIVERY_RETRYABLE'),
           new Date(Date.now() + retryDelay).toISOString()
         );
       }
