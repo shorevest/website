@@ -23,6 +23,7 @@ function loadConfig(env = process.env) {
     allowedOrigins: origins,
     requireOrigin: env.RECRUITMENT_REQUIRE_ORIGIN == null ? production : bool(env.RECRUITMENT_REQUIRE_ORIGIN),
     maxBodyBytes: positiveInteger(env.RECRUITMENT_MAX_BODY_BYTES, 65536),
+    managedIdentityClientId: env.RECRUITMENT_MANAGED_IDENTITY_CLIENT_ID || env.AZURE_CLIENT_ID,
     cosmosEndpoint: env.RECRUITMENT_COSMOS_ENDPOINT,
     cosmosDatabase: env.RECRUITMENT_COSMOS_DATABASE,
     storageAccountUrl: env.RECRUITMENT_STORAGE_ACCOUNT_URL,
@@ -70,6 +71,7 @@ function validateConfig(config) {
   }
 
   if (config.apiEnabled) {
+    if (!config.managedIdentityClientId) missing.push('managedIdentityClientId');
     if (config.rateLimit?.enabled !== true) invalid.push('rateLimit.enabled');
     if (config.botVerification?.mode !== 'turnstile') invalid.push('botVerification.mode');
     if (!config.botVerification?.secretName) missing.push('botVerification.secretName');
