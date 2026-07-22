@@ -56,25 +56,48 @@ function principalObjectId(principal) {
   ])[0] || null;
 }
 
-function authorizeHr(req, config) {
-  if (config?.hrAccess?.enabled !== true) {
-    return { ok: false, status: 503, errorCode: 'HR_ACCESS_DISABLED' };
-  }
+function authorizedPrincipal(req, requiredRole, errors) {
   const principal = parseClientPrincipal(req);
   if (!principal) {
-    return { ok: false, status: 401, errorCode: 'AUTHENTICATION_REQUIRED' };
+    return { ok: false, status: 401, errorCode: errors.authentication };
   }
-  const requiredRole = config.hrAccess.requiredRole;
-  if (!requiredRole || !principalRoles(principal).includes(requiredRole)) {
-    return { ok: false, status: 403, errorCode: 'HR_ROLE_REQUIRED' };
+  const roles = principalRoles(principal);
+  if (!requiredRole || !roles.includes(requiredRole)) {
+    return { ok: false, status: 403, errorCode: errors.role };
   }
   return {
     ok: true,
     principal: {
       objectId: principalObjectId(principal),
-      roles: principalRoles(principal)
+      roles
     }
   };
+}
+
+function authorizeHr(req, config) {
+  if (config?.hrAccess?.enabled !== true) {
+    return { ok: false, status: 503, errorCode: 'HR_ACCESS_DISABLED' };
+  }
+  if (config.hrAccess.platformAuthenticationEnabled !== true) {
+    return { ok: false, status: 503, errorCode: 'HR_AUTH_CONFIGURATION_INVALID' };
+  }
+  return authorizedPrincipal(req, config.hrAccess.requiredRole, {
+    authentication: 'AUTHENTICATION_REQUIRED',
+    role: 'HR_ROLE_REQUIRED'
+  });
+}
+
+function authorizeRetentionAdmin(req, config) {
+  if (config?.retention?.enabled !== true) {
+    return { ok: false, status: 503, errorCode: 'RETENTION_DISABLED' };
+  }
+  if (config.retention.platformAuthenticationEnabled !== true) {
+    return { ok: false, status: 503, errorCode: 'RETENTION_AUTH_CONFIGURATION_INVALID' };
+  }
+  return authorizedPrincipal(req, config.retention.adminRole, {
+    authentication: 'AUTHENTICATION_REQUIRED',
+    role: 'RETENTION_ADMIN_ROLE_REQUIRED'
+  });
 }
 
 module.exports = {
@@ -83,5 +106,6 @@ module.exports = {
   claimValues,
   principalRoles,
   principalObjectId,
-  authorizeHr
+  authorizeHr,
+  authorizeRetentionAdmin
 };
