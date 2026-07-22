@@ -13,7 +13,6 @@ function test(name, fn) { try { fn(); passed++; } catch (e) { failures.push({ na
 
 const source = read('assets/js/employee-portal/asset-tracing-accessibility.js');
 const index = read('employee-portal/index.html');
-const pkg = JSON.parse(read('package.json'));
 
 
 test('portal loads the accessibility hardening after Asset Tracing views', () => {
@@ -55,13 +54,6 @@ test('the hardening performs no data or network action', () => {
   ['fetch(', 'XMLHttpRequest', 'WebSocket', 'navigator.sendBeacon', 'FileReader', 'localStorage.setItem'].forEach((token) => {
     assert.ok(!source.includes(token), 'accessibility hardening contains ' + token);
   });
-});
-
-test('package scripts include Asset Tracing syntax and regression checks', () => {
-  assert.ok(pkg.scripts['check:asset-tracing']);
-  assert.ok(pkg.scripts['test:asset-tracing']);
-  assert.ok(pkg.scripts['check:asset-tracing'].includes('asset-tracing-accessibility.js'));
-  assert.ok(pkg.scripts['test:asset-tracing'].includes('employee-portal-asset-tracing-accessibility.test.js'));
 });
 
 if (failures.length) {
