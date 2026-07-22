@@ -22,8 +22,25 @@ function validConfig(patch = {}) {
     graph: { endpoint: 'https://graph.microsoft.com/v1.0' },
     sharePoint: {},
     candidateAcknowledgement: {},
-    hrAccess: { enabled: false },
-    retention: { enabled: false, deletionEnabled: false },
+    hrAccess: {
+      enabled: false,
+      platformAuthenticationEnabled: false,
+      requiredRole: 'Recruitment.HR',
+      readSasSeconds: 300
+    },
+    retention: {
+      enabled: false,
+      deletionEnabled: false,
+      platformAuthenticationEnabled: false,
+      adminRole: 'Recruitment.RetentionAdmin',
+      policyVersion: '',
+      incompleteHours: 48,
+      submittedDays: 365,
+      maliciousDays: 30,
+      batchSize: 10,
+      leaseSeconds: 300,
+      retrySeconds: 900
+    },
     ...patch
   };
 }
@@ -89,6 +106,25 @@ test('enabled API checks Key Vault secrets and enabled delivery checks Graph res
       templateApproved: true,
       mailbox: 'recruitment@example.com',
       privacyNoticeUrl: 'https://shorevest.com/privacy-policy/'
+    },
+    hrAccess: {
+      enabled: true,
+      platformAuthenticationEnabled: true,
+      requiredRole: 'Recruitment.HR',
+      readSasSeconds: 300
+    },
+    retention: {
+      enabled: true,
+      deletionEnabled: true,
+      platformAuthenticationEnabled: true,
+      adminRole: 'Recruitment.RetentionAdmin',
+      policyVersion: 'retention-v1',
+      incompleteHours: 48,
+      submittedDays: 365,
+      maliciousDays: 30,
+      batchSize: 10,
+      leaseSeconds: 300,
+      retrySeconds: 900
     }
   });
 
