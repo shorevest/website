@@ -1,5 +1,6 @@
 'use strict';
 
+const { NOTIFICATION_EVENTS: EVENTS } = require('../../../../api/recruitment/core/constants');
 const { policyForApplication, policyNeedsUpdate } = require('../retention/policy');
 
 const SYSTEM_FIELDS = new Set(['_rid', '_self', '_etag', '_attachments', '_ts']);
@@ -53,6 +54,10 @@ function redactApplication(application, timestamp) {
     retentionPurgedAtUtc: timestamp,
     retentionLeaseOwner: null,
     retentionLeaseExpiresAtUtc: null,
+    retentionNextAttemptAtUtc: null,
+    retentionLastErrorCode: null,
+    idempotencyCleanupPending: Boolean(application.idempotencyKey),
+    idempotencyCleanupLastErrorCode: null,
     legalHold: false,
     aggregateVersion: Number(application.aggregateVersion || 0) + 1,
     lastUpdatedAtUtc: timestamp,
@@ -206,6 +211,7 @@ function createRetentionAdapter({ endpoint, databaseId, credential, client, now 
         AND c.legalHold != true
         AND IS_DEFINED(c.retentionDeleteAfterUtc)
         AND c.retentionDeleteAfterUtc <= @now
+        AND (NOT IS_DEFINED(c.retentionNextAttemptAtUtc) OR c.retentionNextAttemptAtUtc <= @now)
         AND (NOT IS_DEFINED(c.retentionLeaseExpiresAtUtc) OR c.retentionLeaseExpiresAtUtc < @now)`,
       parameters: [
         { name: '@limit', value: limit },
@@ -243,6 +249,8 @@ function createRetentionAdapter({ endpoint, databaseId, credential, client, now 
       retentionControlledByObjectId: principalObjectId || null,
       retentionLeaseOwner: null,
       retentionLeaseExpiresAtUtc: null,
+      retentionNextAttemptAtUtc: null,
+      retentionLastErrorCode: null,
       aggregateVersion: Number(application.aggregateVersion || 0) + 1,
       lastUpdatedAtUtc: timestamp,
       updatedAtUtc: timestamp,
@@ -285,6 +293,53 @@ function createRetentionAdapter({ endpoint, databaseId, credential, client, now 
       retentionNextAttemptAtUtc: retryAtUtc || null,
       retentionLastErrorCode: reason || 'RETENTION_RETRYABLE'
     });
+  }
+
+  async function listIdempotencyCleanupCandidates({ limit }) {
+    const query = {
+      query: `SELECT TOP @limit c.applicationReference FROM c
+        WHERE c.docType = 'application'
+        AND c.retentionState = 'Purged'
+        AND c.idempotencyCleanupPending = true
+        AND IS_DEFINED(c.idempotencyKey)`,
+      parameters: [{ name: '@limit', value: limit }]
+    };
+    const { resources } = await submissions.items.query(query, { maxItemCount: limit }).fetchAll();
+    return (resources || []).map((item) => item.applicationReference).filter(Boolean);
+  }
+
+  async function cleanupIdempotency(applicationReference) {
+    const application = await read(submissions, 'application', applicationReference);
+    if (!application || application.retentionState !== 'Purged') return { status: 'ignored' };
+    if (!application.idempotencyKey || application.idempotencyCleanupPending !== true) {
+      return { status: 'current' };
+    }
+
+    try {
+      await idempotency.item(application.idempotencyKey, application.idempotencyKey).delete();
+    } catch (error) {
+      if (errorCode(error) !== 404) {
+        await replaceApplication(application, {
+          idempotencyCleanupPending: true,
+          idempotencyCleanupLastErrorCode: String(error.code || error.statusCode || 'IDEMPOTENCY_CLEANUP_FAILED'),
+          idempotencyCleanupLastAttemptAtUtc: now().toISOString()
+        });
+        throw error;
+      }
+    }
+
+    const fresh = await read(submissions, 'application', applicationReference);
+    if (!fresh || fresh.retentionState !== 'Purged') return { status: 'conflict' };
+    const cleared = await replaceApplication(fresh, {
+      idempotencyKey: null,
+      idempotencyCleanupPending: false,
+      idempotencyCleanupLastErrorCode: null,
+      idempotencyCleanupCompletedAtUtc: now().toISOString()
+    });
+    if (!cleared) {
+      throw Object.assign(new Error('Idempotency cleanup state changed'), { code: 412 });
+    }
+    return { status: 'completed' };
   }
 
   async function purge(application, storage, containers) {
@@ -332,11 +387,11 @@ function createRetentionAdapter({ endpoint, databaseId, credential, client, now 
     operations.push({
       operationType: 'Create',
       resourceBody: {
-        id: `outbox:RetentionPurged:outbox:${applicationReference}:retention-purged`,
+        id: `outbox:${EVENTS.RetentionPurged}:outbox:${applicationReference}:retention-purged`,
         docType: 'outbox',
         state: 'Pending',
         attemptCount: 0,
-        type: 'RetentionPurged',
+        type: EVENTS.RetentionPurged,
         idempotencyKey: `outbox:${applicationReference}:retention-purged`,
         applicationReference,
         createdAtUtc: timestamp,
@@ -346,20 +401,21 @@ function createRetentionAdapter({ endpoint, databaseId, credential, client, now 
     const response = await submissions.items.batch(operations, applicationReference);
     assertBatch(response);
 
+    let idempotencyCleanup = 'not-required';
     if (freshApplication.idempotencyKey) {
       try {
-        await idempotency
-          .item(freshApplication.idempotencyKey, freshApplication.idempotencyKey)
-          .delete();
-      } catch (error) {
-        if (errorCode(error) !== 404) throw error;
+        const cleanup = await cleanupIdempotency(applicationReference);
+        idempotencyCleanup = cleanup.status;
+      } catch (_) {
+        idempotencyCleanup = 'pending';
       }
     }
     return {
       success: true,
       applicationReference,
       purgedAtUtc: timestamp,
-      filesPurged: freshFiles.length
+      filesPurged: freshFiles.length,
+      idempotencyCleanup
     };
   }
 
@@ -370,6 +426,8 @@ function createRetentionAdapter({ endpoint, databaseId, credential, client, now 
     claimDueBatch,
     updateControls,
     release,
+    listIdempotencyCleanupCandidates,
+    cleanupIdempotency,
     purge
   };
 }
