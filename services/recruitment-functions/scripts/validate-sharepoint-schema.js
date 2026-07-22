@@ -15,7 +15,7 @@ function unique(values, label) {
   if (duplicates.length) fail(`${label} contains duplicates: ${[...new Set(duplicates)].join(', ')}`);
 }
 
-if (schema.schemaVersion !== '1.1') fail('schemaVersion must be 1.1');
+if (schema.schemaVersion !== '1.2') fail('schemaVersion must be 1.2');
 if (schema.documentStorage !== 'azure-blob-only') fail('documentStorage must remain azure-blob-only');
 if (schema.runtimePermission !== 'Lists.SelectedOperations.Selected') {
   fail('runtimePermission must use selected list operations');
@@ -35,6 +35,13 @@ const sharedRetentionColumns = [
   'RetentionState',
   'RetentionPurgedAtUtc',
   'LegalHold'
+];
+const notificationColumns = (prefix) => [
+  `${prefix}NotificationState`,
+  `${prefix}NotificationEventKey`,
+  `${prefix}NotificationSentAtUtc`,
+  `${prefix}NotificationAttemptCount`,
+  `${prefix}NotificationLastErrorCode`
 ];
 
 const requiredColumns = {
@@ -56,6 +63,8 @@ const requiredColumns = {
     'NotificationState',
     'NotificationEventKey',
     'NotificationAttemptCount',
+    ...notificationColumns('ApplicationReceived'),
+    ...notificationColumns('DocumentsReady'),
     ...sharedRetentionColumns,
     'LastUpdatedAtUtc'
   ],
@@ -121,5 +130,11 @@ if (!choices(applicationList, 'TechnicalStatus').has('Deleted')) fail('technical
 if (!choices(applicationList, 'HiringStage').has('Archived')) fail('hiring stage must support Archived');
 if (!choices(applicationList, 'RetentionState').has('Purged')) fail('application retention state must support Purged');
 if (!choices(fileList, 'RetentionState').has('Purged')) fail('file retention state must support Purged');
+if (!choices(applicationList, 'ApplicationReceivedNotificationState').has('Pending')) {
+  fail('application-received notification state must support Pending');
+}
+if (!choices(applicationList, 'DocumentsReadyNotificationState').has('Pending')) {
+  fail('documents-ready notification state must support Pending');
+}
 
 console.log('Recruitment SharePoint schema validation passed.');
