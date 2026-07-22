@@ -63,6 +63,12 @@ function loadConfig(env = process.env) {
       templateApproved: bool(env.RECRUITMENT_CANDIDATE_ACK_TEMPLATE_APPROVED),
       mailbox: env.RECRUITMENT_CANDIDATE_ACK_MAILBOX,
       privacyNoticeUrl: env.RECRUITMENT_CANDIDATE_ACK_PRIVACY_URL || 'https://shorevest.com/privacy-policy/'
+    },
+    hrAccess: {
+      enabled: bool(env.RECRUITMENT_HR_ACCESS_ENABLED),
+      platformAuthenticationEnabled: bool(env.RECRUITMENT_PLATFORM_AUTH_ENABLED),
+      requiredRole: env.RECRUITMENT_HR_REQUIRED_ROLE || 'Recruitment.HR',
+      readSasSeconds: positiveInteger(env.RECRUITMENT_HR_READ_SAS_SECONDS, 300)
     }
   };
 }
@@ -100,12 +106,21 @@ function validateConfig(config) {
     if (!config.candidateAcknowledgement?.privacyNoticeUrl) missing.push('candidateAcknowledgement.privacyNoticeUrl');
   }
 
+  if (config.hrAccess?.enabled === true) {
+    if (config.hrAccess.platformAuthenticationEnabled !== true) invalid.push('hrAccess.platformAuthenticationEnabled');
+    if (!config.hrAccess.requiredRole) missing.push('hrAccess.requiredRole');
+    if (!Number.isInteger(config.hrAccess.readSasSeconds) || config.hrAccess.readSasSeconds < 60 || config.hrAccess.readSasSeconds > 300) {
+      invalid.push('hrAccess.readSasSeconds');
+    }
+  }
+
   if (config.apiEnabled) {
     if (!config.managedIdentityClientId) missing.push('managedIdentityClientId');
     if (config.rateLimit?.enabled !== true) invalid.push('rateLimit.enabled');
     if (config.botVerification?.mode !== 'turnstile') invalid.push('botVerification.mode');
     if (!config.botVerification?.secretName) missing.push('botVerification.secretName');
     if (config.outboxDelivery?.enabled !== true) invalid.push('outboxDelivery.enabled');
+    if (config.hrAccess?.enabled !== true) invalid.push('hrAccess.enabled');
   }
 
   return {
