@@ -22,22 +22,29 @@ function request(role) {
   };
 }
 
+function config(patch = {}) {
+  return {
+    retention: {
+      enabled: true,
+      platformAuthenticationEnabled: true,
+      adminRole: 'Recruitment.RetentionAdmin',
+      ...patch
+    }
+  };
+}
+
 test('retention administration is separately disabled and separately authorized', () => {
-  assert.equal(authorizeRetentionAdmin(request('Recruitment.RetentionAdmin'), {
-    retention: { enabled: false, adminRole: 'Recruitment.RetentionAdmin' }
-  }).errorCode, 'RETENTION_DISABLED');
+  assert.equal(authorizeRetentionAdmin(request('Recruitment.RetentionAdmin'), config({ enabled: false })).errorCode, 'RETENTION_DISABLED');
 
-  assert.equal(authorizeRetentionAdmin(request(null), {
-    retention: { enabled: true, adminRole: 'Recruitment.RetentionAdmin' }
-  }).status, 401);
+  assert.equal(authorizeRetentionAdmin(request('Recruitment.RetentionAdmin'), config({
+    platformAuthenticationEnabled: false
+  })).errorCode, 'RETENTION_AUTH_CONFIGURATION_INVALID');
 
-  assert.equal(authorizeRetentionAdmin(request('Recruitment.HR'), {
-    retention: { enabled: true, adminRole: 'Recruitment.RetentionAdmin' }
-  }).errorCode, 'RETENTION_ADMIN_ROLE_REQUIRED');
+  assert.equal(authorizeRetentionAdmin(request(null), config()).status, 401);
 
-  const allowed = authorizeRetentionAdmin(request('Recruitment.RetentionAdmin'), {
-    retention: { enabled: true, adminRole: 'Recruitment.RetentionAdmin' }
-  });
+  assert.equal(authorizeRetentionAdmin(request('Recruitment.HR'), config()).errorCode, 'RETENTION_ADMIN_ROLE_REQUIRED');
+
+  const allowed = authorizeRetentionAdmin(request('Recruitment.RetentionAdmin'), config());
   assert.equal(allowed.ok, true);
   assert.equal(allowed.principal.objectId, 'object-id');
 });
