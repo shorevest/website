@@ -46,19 +46,36 @@ test('malformed, non-AAD and missing principals are rejected', () => {
   assert.equal(parseClientPrincipal(request({ auth_typ: 'github', claims: [] })), null);
 });
 
-test('HR authorization fails closed when platform authentication is disabled', () => {
-  const result = authorizeHr(request(aadPrincipal([
-    { typ: 'roles', val: 'Recruitment.HR' }
-  ])), {
-    hrAccess: { enabled: false, requiredRole: 'Recruitment.HR' }
+test('HR authorization fails closed when access or platform authentication is disabled', () => {
+  const principal = request(aadPrincipal([{ typ: 'roles', val: 'Recruitment.HR' }]));
+  const disabled = authorizeHr(principal, {
+    hrAccess: {
+      enabled: false,
+      platformAuthenticationEnabled: true,
+      requiredRole: 'Recruitment.HR'
+    }
   });
-  assert.equal(result.status, 503);
-  assert.equal(result.errorCode, 'HR_ACCESS_DISABLED');
+  assert.equal(disabled.status, 503);
+  assert.equal(disabled.errorCode, 'HR_ACCESS_DISABLED');
+
+  const unprotected = authorizeHr(principal, {
+    hrAccess: {
+      enabled: true,
+      platformAuthenticationEnabled: false,
+      requiredRole: 'Recruitment.HR'
+    }
+  });
+  assert.equal(unprotected.status, 503);
+  assert.equal(unprotected.errorCode, 'HR_AUTH_CONFIGURATION_INVALID');
 });
 
 test('HR authorization requires the exact app role', () => {
   const config = {
-    hrAccess: { enabled: true, requiredRole: 'Recruitment.HR' }
+    hrAccess: {
+      enabled: true,
+      platformAuthenticationEnabled: true,
+      requiredRole: 'Recruitment.HR'
+    }
   };
   assert.equal(authorizeHr(request(null), config).status, 401);
   const denied = authorizeHr(request(aadPrincipal([
