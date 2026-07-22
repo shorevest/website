@@ -2,7 +2,7 @@
 
 ## Status
 
-Phase 1 synthetic demonstration scaffold. This is not a production investigative system.
+Phase 1B synthetic demonstration scaffold. This is not a production investigative system.
 
 ## Purpose
 
@@ -15,13 +15,26 @@ The module does not replace an investigator, lawyer, valuer or enforcement speci
 The browser-local prototype supports:
 
 - case intake and decision question
-- named owner and second-person reviewer
+- named owner and separate second-person reviewer
 - subjects, aliases, jurisdictions and identity confidence
 - source metadata and scoped search results
+- explicit jurisdiction-by-jurisdiction research coverage
 - findings with ownership/link type, evidence confidence and source references
+- finding-level second-person review state
+- named next steps and status
 - a 0–3 preliminary lead score with written rationale
-- review checks, audit history and preliminary report preview
+- a hard approval gate that cannot be bypassed through the status selector
+- audit history and preliminary report preview
 - synthetic JSON export for demonstration testing
+
+Approval requires:
+
+1. different named owner and reviewer
+2. at least one source and one finding
+3. a source link on every finding
+4. every finding marked Reviewed
+5. a 0–3 score and written rationale
+6. a stated decision question and scope
 
 ## Data rule
 
@@ -53,9 +66,14 @@ Real case use requires the separately hosted ShoreVest One production foundation
 ## File map
 
 - `assets/js/employee-portal/asset-tracing.js` — schema, constants, synthetic fixtures and browser-local store.
+- `assets/js/employee-portal/asset-tracing-phase1b.js` — research coverage, next steps, finding review and hard approval controls.
 - `assets/js/employee-portal/views-asset-tracing.js` — dashboard, case workspace, source log, findings, review and report preview.
-- `assets/css/employee-portal-asset-tracing.css` — module-specific responsive styles.
-- `tests/employee-portal-asset-tracing.test.js` — static and model-level safety tests.
+- `assets/js/employee-portal/views-asset-tracing-phase1b.js` — Phase 1B planning, review and approval interface.
+- `assets/js/employee-portal/asset-tracing-interactions.js` — keyboard-safe case-list search behaviour.
+- `assets/css/employee-portal-asset-tracing.css` — core module responsive styles.
+- `assets/css/employee-portal-asset-tracing-phase1b.css` — Phase 1B controls and responsive review layout.
+- `tests/employee-portal-asset-tracing.test.js` — core static and model-level safety tests.
+- `tests/employee-portal-asset-tracing-phase1b.test.js` — approval-gate, fresh-state and Phase 1B safety tests.
 
 ## 0–3 screening score
 
@@ -64,13 +82,14 @@ Real case use requires the separately hosted ShoreVest One production foundation
 - **2 — Meaningful:** credible leads requiring targeted verification.
 - **3 — Strong:** confirmed or well-corroborated current asset leads.
 
-The score is a screening output, not a legal, valuation or recoverability opinion. Production approval must require a named reviewer and written rationale.
+The score is a screening output, not a legal, valuation or recoverability opinion. Approval requires a named second-person reviewer and written rationale.
 
 ## Next build sequence
 
-1. Validate the information architecture and report output with the business team using synthetic data.
-2. Add production authentication, server-side authorisation and restricted storage.
-3. Replace browser storage with the production case database and audit service.
-4. Add controlled file ingestion and page-level evidence references.
-5. Add enterprise AI-assisted extraction and cited drafting.
-6. Add approved public-source research workflows and selected licensed connectors.
+1. Review the synthetic workflow and report structure with the business team.
+2. Add source-lineage display to the report preview and a printable internal draft view.
+3. Add production authentication, server-side authorisation and restricted storage.
+4. Replace browser storage with the production case database and audit service.
+5. Add controlled file ingestion and page-level evidence references.
+6. Add enterprise AI-assisted extraction and cited drafting.
+7. Add approved public-source research workflows and selected licensed connectors.
