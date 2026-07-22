@@ -55,15 +55,15 @@ function startServer(overrides = {}) {
 
 function serveStatic(config, url, res) {
   let rel = decodeURIComponent(url.pathname);
-  if (rel === '/' || rel === '') rel = '/index.html';
+  if (rel === '/' || rel === '') rel = '/';
   const filePath = path.join(config.appDir, rel);
   // Prevent path traversal outside appDir.
   if (!filePath.startsWith(config.appDir)) { sendText(res, 403, 'Forbidden'); return; }
   fs.readFile(filePath, (err, data) => {
     if (err) {
-      // SPA fallback: serve index.html for unknown non-file routes.
+      // SPA fallback: serve / for unknown non-file routes.
       if (!path.extname(rel)) {
-        fs.readFile(path.join(config.appDir, 'index.html'), (e2, html) => {
+        fs.readFile(path.join(config.appDir, '/'), (e2, html) => {
           if (e2) { sendText(res, 404, 'Not found'); return; }
           res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
           res.end(html);
