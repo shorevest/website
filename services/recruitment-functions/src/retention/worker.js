@@ -1,7 +1,23 @@
 'use strict';
 
+const { validateConfig } = require('../lib/config');
+
+function configurationReady(config, context, operation) {
+  const shape = validateConfig(config);
+  if (shape.ok) return true;
+  context?.warn?.('recruitment_retention_configuration_invalid', {
+    operation,
+    missingCount: shape.missing.length,
+    invalidCount: shape.invalid.length
+  });
+  return false;
+}
+
 async function runPolicyAssignment(config, dependencies, context) {
   if (config.retention?.enabled !== true) return { assigned: 0, skipped: true };
+  if (!configurationReady(config, context, 'policy-assignment')) {
+    return { assigned: 0, skipped: true, reason: 'CONFIGURATION_INVALID' };
+  }
   const candidates = await dependencies.retention.listPolicyCandidates({
     limit: config.retention.batchSize,
     policyVersion: config.retention.policyVersion
@@ -24,6 +40,9 @@ async function runPolicyAssignment(config, dependencies, context) {
 async function runRetentionPurge(config, dependencies, context) {
   if (config.retention?.enabled !== true || config.retention?.deletionEnabled !== true) {
     return { purged: 0, skipped: true };
+  }
+  if (!configurationReady(config, context, 'purge')) {
+    return { purged: 0, skipped: true, reason: 'CONFIGURATION_INVALID' };
   }
   const now = Date.now();
   const batch = await dependencies.retention.claimDueBatch({
@@ -61,6 +80,9 @@ async function runIdempotencyCleanup(config, dependencies, context) {
   if (config.retention?.enabled !== true || config.retention?.deletionEnabled !== true) {
     return { cleaned: 0, skipped: true };
   }
+  if (!configurationReady(config, context, 'idempotency-cleanup')) {
+    return { cleaned: 0, skipped: true, reason: 'CONFIGURATION_INVALID' };
+  }
   const candidates = await dependencies.retention.listIdempotencyCleanupCandidates({
     limit: config.retention.batchSize
   });
@@ -80,6 +102,7 @@ async function runIdempotencyCleanup(config, dependencies, context) {
 }
 
 module.exports = {
+  configurationReady,
   runPolicyAssignment,
   runRetentionPurge,
   runIdempotencyCleanup
