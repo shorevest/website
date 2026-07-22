@@ -3,6 +3,18 @@
 const GRAPH_SCOPE = 'https://graph.microsoft.com/.default';
 const DEFAULT_ENDPOINT = 'https://graph.microsoft.com/v1.0';
 const IMMUTABLE_ID_PREFERENCE = 'IdType="ImmutableId"';
+const NOTIFICATION_PREFIXES = Object.freeze([
+  '',
+  'ApplicationReceived',
+  'DocumentsReady'
+]);
+const NOTIFICATION_SUFFIXES = Object.freeze([
+  'State',
+  'EventKey',
+  'SentAtUtc',
+  'AttemptCount',
+  'LastErrorCode'
+]);
 
 class GraphDeliveryError extends Error {
   constructor(code, message, options = {}) {
@@ -47,6 +59,36 @@ function graphErrorCode(status) {
 
 function isPermanentStatus(status) {
   return status >= 400 && status < 500 && ![408, 409, 412, 429].includes(status);
+}
+
+function notificationField(prefix, suffix) {
+  return `${prefix}Notification${suffix}`;
+}
+
+function notificationFieldsRequested(fields = {}) {
+  const requested = [];
+  for (const prefix of NOTIFICATION_PREFIXES) {
+    const eventKeyField = notificationField(prefix, 'EventKey');
+    if (!Object.prototype.hasOwnProperty.call(fields, eventKeyField)) continue;
+    for (const suffix of NOTIFICATION_SUFFIXES) {
+      requested.push(notificationField(prefix, suffix));
+    }
+  }
+  return [...new Set(requested)];
+}
+
+function preserveNotificationState(existingFields = {}, proposedFields = {}) {
+  const output = { ...proposedFields };
+  for (const prefix of NOTIFICATION_PREFIXES) {
+    const eventKeyField = notificationField(prefix, 'EventKey');
+    if (!Object.prototype.hasOwnProperty.call(proposedFields, eventKeyField)) continue;
+    const proposedKey = proposedFields[eventKeyField];
+    if (proposedKey == null || existingFields[eventKeyField] !== proposedKey) continue;
+    for (const suffix of NOTIFICATION_SUFFIXES) {
+      delete output[notificationField(prefix, suffix)];
+    }
+  }
+  return output;
 }
 
 async function safeJson(response) {
@@ -125,10 +167,11 @@ function createGraphAdapter({
     return safeJson(response);
   }
 
-  async function findListItem(siteId, listId, fieldName, fieldValue) {
+  async function findListItem(siteId, listId, fieldName, fieldValue, selectFields = []) {
     const filter = `fields/${fieldName} eq '${escapeFilterString(fieldValue)}'`;
+    const selected = [...new Set([fieldName, ...selectFields])];
     const query = new URLSearchParams({
-      '$expand': `fields($select=${fieldName})`,
+      '$expand': `fields($select=${selected.join(',')})`,
       '$filter': filter,
       '$top': '2'
     });
@@ -166,9 +209,17 @@ function createGraphAdapter({
   }
 
   async function upsertListItem({ siteId, listId, keyField, keyValue, fields }) {
-    const existing = await findListItem(siteId, listId, keyField, keyValue);
+    const selectedNotificationFields = notificationFieldsRequested(fields);
+    const existing = await findListItem(
+      siteId,
+      listId,
+      keyField,
+      keyValue,
+      selectedNotificationFields
+    );
     if (existing) {
-      await updateListItem(siteId, listId, existing.id, fields);
+      const replaySafeFields = preserveNotificationState(existing.fields, fields);
+      await updateListItem(siteId, listId, existing.id, replaySafeFields);
       return { itemId: existing.id, created: false };
     }
 
@@ -179,9 +230,16 @@ function createGraphAdapter({
       if (!(error instanceof GraphDeliveryError) || !['GRAPH_CONFLICT', 'GRAPH_REQUEST_FAILED'].includes(error.code)) {
         throw error;
       }
-      const raced = await findListItem(siteId, listId, keyField, keyValue);
+      const raced = await findListItem(
+        siteId,
+        listId,
+        keyField,
+        keyValue,
+        selectedNotificationFields
+      );
       if (!raced) throw error;
-      await updateListItem(siteId, listId, raced.id, fields);
+      const replaySafeFields = preserveNotificationState(raced.fields, fields);
+      await updateListItem(siteId, listId, raced.id, replaySafeFields);
       return { itemId: raced.id, created: false, reconciled: true };
     }
   }
@@ -281,8 +339,13 @@ module.exports = {
   GRAPH_SCOPE,
   DEFAULT_ENDPOINT,
   IMMUTABLE_ID_PREFERENCE,
+  NOTIFICATION_PREFIXES,
+  NOTIFICATION_SUFFIXES,
   GraphDeliveryError,
   escapeFilterString,
   retryAfterMs,
+  notificationField,
+  notificationFieldsRequested,
+  preserveNotificationState,
   createGraphAdapter
 };
