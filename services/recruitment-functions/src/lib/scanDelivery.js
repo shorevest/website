@@ -2,6 +2,7 @@
 
 const { ERROR_CODES } = require('../../../../api/recruitment/core/constants');
 const { normalizeEventGridEvent } = require('./eventGrid');
+const { safeErrorCode } = require('./logger');
 
 const RETRYABLE_RESULTS = new Set([
   ERROR_CODES.INFRASTRUCTURE_RETRYABLE,
@@ -20,7 +21,9 @@ async function deliverDefenderScanEvent({ event, context, config, createDependen
   try {
     normalized = normalizeEventGridEvent(event, config);
   } catch (error) {
-    context?.warn?.('recruitment_scan_event_rejected', { reason: error.message });
+    context?.warn?.('recruitment_scan_event_rejected', {
+      code: safeErrorCode(error, 'SCAN_EVENT_REJECTED')
+    });
     return undefined;
   }
 
