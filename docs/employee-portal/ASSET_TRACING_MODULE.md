@@ -25,6 +25,9 @@ The browser-local prototype supports:
 - a 0–3 preliminary lead score with written rationale
 - a hard approval gate that cannot be bypassed through the status selector
 - audit history and preliminary report preview
+- finding-to-source lineage with stable synthetic source labels
+- a full source register with exact reference/page fields
+- a controlled browser print layout
 - synthetic JSON export for demonstration testing
 
 Approval requires:
@@ -69,11 +72,14 @@ Real case use requires the separately hosted ShoreVest One production foundation
 - `assets/js/employee-portal/asset-tracing-phase1b.js` — research coverage, next steps, finding review and hard approval controls.
 - `assets/js/employee-portal/views-asset-tracing.js` — dashboard, case workspace, source log, findings, review and report preview.
 - `assets/js/employee-portal/views-asset-tracing-phase1b.js` — Phase 1B planning, review and approval interface.
+- `assets/js/employee-portal/views-asset-tracing-report.js` — finding-to-source lineage, source register and print action.
 - `assets/js/employee-portal/asset-tracing-interactions.js` — keyboard-safe case-list search behaviour.
 - `assets/css/employee-portal-asset-tracing.css` — core module responsive styles.
 - `assets/css/employee-portal-asset-tracing-phase1b.css` — Phase 1B controls and responsive review layout.
+- `assets/css/employee-portal-asset-tracing-report.css` — source-lineage and print layout.
 - `tests/employee-portal-asset-tracing.test.js` — core static and model-level safety tests.
 - `tests/employee-portal-asset-tracing-phase1b.test.js` — approval-gate, fresh-state and Phase 1B safety tests.
+- `tests/employee-portal-asset-tracing-report.test.js` — report lineage, print and safety tests.
 
 ## 0–3 screening score
 
@@ -87,9 +93,8 @@ The score is a screening output, not a legal, valuation or recoverability opinio
 ## Next build sequence
 
 1. Review the synthetic workflow and report structure with the business team.
-2. Add source-lineage display to the report preview and a printable internal draft view.
-3. Add production authentication, server-side authorisation and restricted storage.
-4. Replace browser storage with the production case database and audit service.
-5. Add controlled file ingestion and page-level evidence references.
-6. Add enterprise AI-assisted extraction and cited drafting.
-7. Add approved public-source research workflows and selected licensed connectors.
+2. Add production authentication, server-side authorisation and restricted storage.
+3. Replace browser storage with the production case database and audit service.
+4. Add controlled file ingestion and page-level evidence references.
+5. Add enterprise AI-assisted extraction and cited drafting.
+6. Add approved public-source research workflows and selected licensed connectors.
