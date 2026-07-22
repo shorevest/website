@@ -166,7 +166,7 @@
 
   function enhanceNewCaseDrawer() {
     Array.prototype.forEach.call(root.document.querySelectorAll('.drawer'), function (drawer) {
-      var title = text(drawer.querySelector('h1, h2, .drawer__title'));
+      var title = text(drawer.querySelector('h1, h2, h3, .drawer__title'));
       if (title !== 'Create asset-tracing case' || drawer.getAttribute('data-at-usable') === 'true') return;
       drawer.setAttribute('data-at-usable', 'true');
 
@@ -257,7 +257,8 @@
   function schedule() {
     if (scheduled) return;
     scheduled = true;
-    (root.requestAnimationFrame || root.setTimeout)(enhance);
+    if (root.requestAnimationFrame) root.requestAnimationFrame(enhance);
+    else root.setTimeout(enhance, 0);
   }
 
   function start() {
