@@ -1,18 +1,39 @@
 'use strict';
 
+function normalizeHostnames(values, fallback) {
+  const source = Array.isArray(values)
+    ? values
+    : String(fallback || '').split(',');
+  return [...new Set(source
+    .map((value) => String(value || '').trim().toLowerCase().replace(/\.$/, ''))
+    .filter(Boolean))];
+}
+
 function createBotVerifier({
   mode = 'disabled',
   environment = 'production',
   secretProvider,
   secretName,
   endpoint = 'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+  expectedHostnames,
   expectedHostname = '',
+  expectedAction = '',
   fetchImpl = globalThis.fetch
 } = {}) {
+  const allowedHostnames = normalizeHostnames(expectedHostnames, expectedHostname);
+  const requiredAction = String(expectedAction || '').trim();
+
   return {
     async verify(request) {
       if (mode === 'disabled') return { ok: environment !== 'production' && environment !== 'prod' };
-      if (mode !== 'turnstile' || !secretProvider || !secretName || typeof fetchImpl !== 'function') {
+      if (
+        mode !== 'turnstile' ||
+        !secretProvider ||
+        !secretName ||
+        typeof fetchImpl !== 'function' ||
+        allowedHostnames.length === 0 ||
+        !requiredAction
+      ) {
         return { ok: false };
       }
 
@@ -38,7 +59,9 @@ function createBotVerifier({
         if (!response || response.ok !== true) return { ok: false };
         const result = await response.json();
         if (result?.success !== true) return { ok: false };
-        if (expectedHostname && result.hostname !== expectedHostname) return { ok: false };
+        const hostname = String(result.hostname || '').toLowerCase().replace(/\.$/, '');
+        if (!allowedHostnames.includes(hostname)) return { ok: false };
+        if (result.action !== requiredAction) return { ok: false };
         return { ok: true };
       } catch (_) {
         return { ok: false };
@@ -47,4 +70,4 @@ function createBotVerifier({
   };
 }
 
-module.exports = { createBotVerifier };
+module.exports = { normalizeHostnames, createBotVerifier };
