@@ -20,6 +20,8 @@ const {
 } = require('./adapters/secrets');
 const { createBotVerifier } = require('./adapters/bot');
 const { createRateLimiter } = require('./adapters/rateLimit');
+const { createGraphAdapter } = require('./adapters/graph');
+const { createOutboxDispatcher } = require('./outbox/dispatcher');
 
 function createDeps(config = loadConfig(), requestContext = {}) {
   const credentialOptions = config.managedIdentityClientId
@@ -41,6 +43,12 @@ function createDeps(config = loadConfig(), requestContext = {}) {
       clean: config.cleanContainer
     }
   });
+  const graph = config.outboxDelivery.enabled === true
+    ? createGraphAdapter({ credential, endpoint: config.graph.endpoint })
+    : null;
+  const outboxDispatcher = graph
+    ? createOutboxDispatcher({ graph, config })
+    : null;
 
   return {
     ...cosmos,
@@ -66,6 +74,8 @@ function createDeps(config = loadConfig(), requestContext = {}) {
       endpoint: config.botVerification.endpoint,
       expectedHostname: config.botVerification.expectedHostname
     }),
+    graph,
+    outboxDispatcher,
     now: async () => new Date(),
     loadManifest: async () => loadManifest(),
     references: {
