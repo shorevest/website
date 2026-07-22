@@ -53,6 +53,69 @@
     }
   }
 
+  function installEditorialIntroPanels() {
+    if (document.getElementById('sv-editorial-intro-panels')) return;
+
+    var style = document.createElement('style');
+    style.id = 'sv-editorial-intro-panels';
+    style.textContent = [
+      'body.firm-page .fm-open__body,',
+      'body.firm-page .fm-sechead__r,',
+      'body.strategy-page .st-head__r,',
+      'body.strategy-page .sv-exec__head-r {',
+      '  box-sizing: border-box !important;',
+      '  width: min(100%, 640px) !important;',
+      '  max-width: 640px !important;',
+      '  justify-self: end !important;',
+      '  padding: clamp(15px, 1.5vw, 19px) clamp(18px, 2vw, 24px) !important;',
+      '  background: #F2EEE5 !important;',
+      '  border: 0 !important;',
+      '  border-left: 4px solid var(--sv-cinnabar, #C64832) !important;',
+      '  text-align: right !important;',
+      '}',
+      'body.firm-page .fm-open__body p,',
+      'body.firm-page .fm-sechead__r p,',
+      'body.strategy-page .st-head__r p,',
+      'body.strategy-page .sv-exec__head-r p {',
+      '  margin: 0 !important;',
+      '  max-width: none !important;',
+      '  font: 600 clamp(11px, 0.82vw, 12.5px) / 1.55 var(--sv-font) !important;',
+      '  letter-spacing: 0.095em !important;',
+      '  text-transform: uppercase !important;',
+      '  color: var(--sv-oxide, #8F2A20) !important;',
+      '  text-align: right !important;',
+      '  text-wrap: pretty;',
+      '}',
+      'body.firm-page .fm-open__body p + p,',
+      'body.firm-page .fm-sechead__r p + p,',
+      'body.strategy-page .st-head__r p + p,',
+      'body.strategy-page .sv-exec__head-r p + p {',
+      '  margin-top: 10px !important;',
+      '}',
+      'html[lang|="zh"] body.firm-page .fm-open__body p,',
+      'html[lang|="zh"] body.firm-page .fm-sechead__r p,',
+      'html[lang|="zh"] body.strategy-page .st-head__r p,',
+      'html[lang|="zh"] body.strategy-page .sv-exec__head-r p {',
+      '  letter-spacing: 0.055em !important;',
+      '  line-height: 1.8 !important;',
+      '  text-transform: none !important;',
+      '}',
+      '@media (max-width: 900px) {',
+      '  body.firm-page .fm-open__body,',
+      '  body.firm-page .fm-sechead__r,',
+      '  body.strategy-page .st-head__r,',
+      '  body.strategy-page .sv-exec__head-r {',
+      '    width: 100% !important;',
+      '    max-width: none !important;',
+      '    justify-self: stretch !important;',
+      '    padding: 16px 17px !important;',
+      '    text-align: right !important;',
+      '  }',
+      '}'
+    ].join('\n');
+    document.head.appendChild(style);
+  }
+
   function fixAdaLinkedIn(rootNode) {
     var scope = rootNode && rootNode.querySelectorAll ? rootNode : document;
 
@@ -187,6 +250,7 @@
 
   if (typeof window !== 'undefined' && typeof document !== 'undefined') {
     whenDocumentReady(function () {
+      installEditorialIntroPanels();
       fixAdaLinkedIn(document);
       ensureFullShadowBankingArticle();
 
