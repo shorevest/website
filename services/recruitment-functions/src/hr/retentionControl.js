@@ -41,7 +41,10 @@ async function updateRetentionControl(req, config, dependencies, body) {
       principalObjectId: authorization.principal.objectId
     });
   } catch (error) {
-    if (error.code === 'RETENTION_PURGE_IN_PROGRESS' || Number(error.statusCode) === 409) {
+    if (error.code === 'RETENTION_PURGE_IN_PROGRESS' ||
+      Number(error.code) === 412 ||
+      Number(error.statusCode) === 409 ||
+      Number(error.statusCode) === 412) {
       return response(409, 'RETENTION_PURGE_IN_PROGRESS');
     }
     throw error;
