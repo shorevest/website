@@ -33,11 +33,19 @@ async function updateRetentionControl(req, config, dependencies, body) {
     return response(400, validation.errorCode);
   }
 
-  const updated = await dependencies.retention.updateControls({
-    applicationReference,
-    ...validation.control,
-    principalObjectId: authorization.principal.objectId
-  });
+  let updated;
+  try {
+    updated = await dependencies.retention.updateControls({
+      applicationReference,
+      ...validation.control,
+      principalObjectId: authorization.principal.objectId
+    });
+  } catch (error) {
+    if (error.code === 'RETENTION_PURGE_IN_PROGRESS' || Number(error.statusCode) === 409) {
+      return response(409, 'RETENTION_PURGE_IN_PROGRESS');
+    }
+    throw error;
+  }
   if (!updated) {
     return response(404, 'APPLICATION_NOT_FOUND');
   }
