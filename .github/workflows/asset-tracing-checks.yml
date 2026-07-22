@@ -6,8 +6,10 @@ on:
       - 'employee-portal/index.html'
       - 'assets/js/employee-portal/asset-tracing*.js'
       - 'assets/js/employee-portal/views-asset-tracing*.js'
+      - 'assets/js/employee-portal/boot-guard.js'
       - 'assets/css/employee-portal-asset-tracing*.css'
       - 'tests/employee-portal-asset-tracing*.test.js'
+      - 'tests/employee-portal-boot-guard.test.js'
       - 'scripts/qa-asset-tracing-browser.cjs'
       - 'docs/employee-portal/ASSET_TRACING_MODULE.md'
       - '.github/workflows/asset-tracing-checks.yml'
@@ -30,6 +32,7 @@ jobs:
 
       - name: Check JavaScript syntax
         run: |
+          node --check assets/js/employee-portal/boot-guard.js
           node --check assets/js/employee-portal/asset-tracing.js
           node --check assets/js/employee-portal/asset-tracing-phase1b.js
           node --check assets/js/employee-portal/asset-tracing-interactions.js
@@ -42,6 +45,7 @@ jobs:
 
       - name: Run Asset Tracing regression tests
         run: |
+          node tests/employee-portal-boot-guard.test.js
           node tests/employee-portal-asset-tracing.test.js
           node tests/employee-portal-asset-tracing-phase1b.test.js
           node tests/employee-portal-asset-tracing-report.test.js
@@ -61,9 +65,10 @@ jobs:
           SERVER_PID=$!
           trap 'kill $SERVER_PID || true' EXIT
           sleep 1
-          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=5000 \
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=7000 \
             --dump-dom http://127.0.0.1:4174/employee-portal/ \
             > artifacts/asset-tracing-browser/entry-dom.html 2> artifacts/asset-tracing-browser/entry-chrome.log
+          grep -q 'data-portal-build="20260723b"' artifacts/asset-tracing-browser/entry-dom.html
           grep -q 'login__submit' artifacts/asset-tracing-browser/entry-dom.html
 
       - name: Run interactive headless browser smoke test
