@@ -93,8 +93,11 @@ param rateLimitWindowSeconds int = 300
 @minValue(1024)
 param maxBodyBytes int = 65536
 
-@description('Expected Turnstile hostname.')
-param botVerificationHostname string = 'shorevest.com'
+@description('Comma-separated Turnstile token hostnames. This set must exactly match the public-origin hostnames.')
+param botVerificationHostnames string = 'shorevest.com,www.shorevest.com'
+
+@description('Expected Turnstile widget action for candidate application submission.')
+param botVerificationAction string = 'recruitment-application'
 
 @description('Key Vault secret name for completion/finalization token signing.')
 param completionTokenSecretName string = 'recruitment-completion-token-key'
@@ -171,7 +174,8 @@ resource appSettings 'Microsoft.Web/sites/config@2024-04-01' = {
 
     RECRUITMENT_BOT_VERIFICATION_MODE: 'turnstile'
     RECRUITMENT_BOT_VERIFICATION_SECRET_NAME: botVerificationSecretName
-    RECRUITMENT_BOT_VERIFICATION_HOSTNAME: botVerificationHostname
+    RECRUITMENT_BOT_VERIFICATION_HOSTNAME: botVerificationHostnames
+    RECRUITMENT_BOT_VERIFICATION_ACTION: botVerificationAction
     RECRUITMENT_BOT_VERIFICATION_ENDPOINT: 'https://challenges.cloudflare.com/turnstile/v0/siteverify'
 
     RECRUITMENT_OUTBOX_DELIVERY_ENABLED: string(enableOutboxDelivery)
