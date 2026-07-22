@@ -20,4 +20,5 @@ assert.doesNotMatch(renderer.encodeMailto('hr@shorevest.com','Application - Lega
 assert.strictEqual(renderer.hasPreview({ location: { href: 'https://example.com/careers/legal-assistant.html?preview=1' } }), true);
 assert.doesNotMatch(renderer.encodeMailto('hr@shorevest.com','Application - Legal Assistant - [Full Name]','Full name:\nCV attached: Yes / No'),/[ \n\[\]]/);
 assert.strictEqual(renderer.hasPreview({ location: { href: 'https://example.com/careers/legal-assistant.html?preview=true' } }), false);
+const fontLinks=[]; const fontClasses=[]; const fontDoc={documentElement:{lang:'zh-CN',classList:{add:v=>fontClasses.push(v)}},head:{appendChild:v=>fontLinks.push(v)},querySelector:()=>null,createElement:t=>new Element(t)}; assert.strictEqual(renderer.ensureChineseFont(fontDoc),true); assert.deepStrictEqual(fontClasses,['sv-cn-font-unified']); assert.strictEqual(fontLinks.length,1); assert.strictEqual(fontLinks[0].href,'/assets/css/chinese-font-uniform.css?v=20260722-cn-serif-unify'); assert.strictEqual(fontLinks[0].getAttribute('data-sv-cn-font'),'true');
 console.log('recruitment role-detail renderer tests passed');
