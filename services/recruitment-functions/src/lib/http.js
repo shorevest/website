@@ -1,5 +1,7 @@
 'use strict';
 
+const net = require('net');
+
 const SAFE_HEADERS = {
   'X-Content-Type-Options': 'nosniff',
   'Referrer-Policy': 'no-referrer',
@@ -48,16 +50,23 @@ async function readJson(req, config) {
   }
 }
 
-function normalizeForwardedIp(value) {
+function normalizeAppServiceClientIp(value) {
   if (typeof value !== 'string') return '';
-  return value.split(',')[0].trim().slice(0, 128);
+  let candidate = value.split(',')[0].trim().slice(0, 128);
+  if (net.isIP(candidate)) return candidate;
+
+  const bracketed = candidate.match(/^\[([^\]]+)\](?::\d{1,5})?$/);
+  if (bracketed && net.isIP(bracketed[1])) return bracketed[1];
+
+  const ipv4WithPort = candidate.match(/^([^:]+):(\d{1,5})$/);
+  if (ipv4WithPort && net.isIP(ipv4WithPort[1]) === 4) return ipv4WithPort[1];
+  return '';
 }
 
 function requestContext(req) {
-  const clientIp = normalizeForwardedIp(
-    header(req, 'cf-connecting-ip') ||
-    header(req, 'x-azure-clientip') ||
-    header(req, 'x-forwarded-for') ||
+  const clientIp = normalizeAppServiceClientIp(
+    header(req, 'x-client-ip') ||
+    header(req, 'client-ip') ||
     ''
   );
   const userAgent = String(header(req, 'user-agent') || '').slice(0, 512);
@@ -98,7 +107,7 @@ module.exports = {
   originAllowed,
   withCors,
   readJson,
-  normalizeForwardedIp,
+  normalizeAppServiceClientIp,
   requestContext,
   candidate,
   unavailable
