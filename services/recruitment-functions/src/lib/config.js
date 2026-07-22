@@ -49,6 +49,19 @@ function loadConfig(env = process.env) {
       leaseSeconds: positiveInteger(env.RECRUITMENT_OUTBOX_LEASE_SECONDS, 300),
       retrySeconds: positiveInteger(env.RECRUITMENT_OUTBOX_RETRY_SECONDS, 900),
       maxAttempts: positiveInteger(env.RECRUITMENT_OUTBOX_MAX_ATTEMPTS, 10)
+    },
+    graph: {
+      endpoint: env.RECRUITMENT_GRAPH_ENDPOINT || 'https://graph.microsoft.com/v1.0'
+    },
+    sharePoint: {
+      siteId: env.RECRUITMENT_SHAREPOINT_SITE_ID,
+      applicationsListId: env.RECRUITMENT_APPLICATIONS_LIST_ID,
+      filesListId: env.RECRUITMENT_FILES_LIST_ID
+    },
+    candidateAcknowledgement: {
+      enabled: bool(env.RECRUITMENT_CANDIDATE_ACK_ENABLED),
+      mailbox: env.RECRUITMENT_CANDIDATE_ACK_MAILBOX,
+      privacyNoticeUrl: env.RECRUITMENT_CANDIDATE_ACK_PRIVACY_URL || 'https://shorevest.com/privacy-policy/'
     }
   };
 }
@@ -71,9 +84,18 @@ function validateConfig(config) {
   if (!Array.isArray(config.allowedOrigins) || config.allowedOrigins.length === 0) {
     invalid.push('allowedOrigins');
   }
-
   if (!['disabled', 'turnstile'].includes(config.botVerification?.mode)) {
     invalid.push('botVerification.mode');
+  }
+
+  if (config.outboxDelivery?.enabled === true) {
+    if (!config.managedIdentityClientId) missing.push('managedIdentityClientId');
+    if (!config.sharePoint?.siteId) missing.push('sharePoint.siteId');
+    if (!config.sharePoint?.applicationsListId) missing.push('sharePoint.applicationsListId');
+    if (!config.sharePoint?.filesListId) missing.push('sharePoint.filesListId');
+    if (config.candidateAcknowledgement?.enabled !== true) invalid.push('candidateAcknowledgement.enabled');
+    if (!config.candidateAcknowledgement?.mailbox) missing.push('candidateAcknowledgement.mailbox');
+    if (!config.candidateAcknowledgement?.privacyNoticeUrl) missing.push('candidateAcknowledgement.privacyNoticeUrl');
   }
 
   if (config.apiEnabled) {
@@ -84,7 +106,11 @@ function validateConfig(config) {
     if (config.outboxDelivery?.enabled !== true) invalid.push('outboxDelivery.enabled');
   }
 
-  return { ok: missing.length === 0 && invalid.length === 0, missing, invalid };
+  return {
+    ok: missing.length === 0 && invalid.length === 0,
+    missing: [...new Set(missing)],
+    invalid: [...new Set(invalid)]
+  };
 }
 
 module.exports = { bool, positiveInteger, loadConfig, validateConfig };
