@@ -1,0 +1,703 @@
+/* ShoreVest One — Outreach usability refresh. */
+.outreach-page {
+  max-width: 1160px;
+}
+
+.outreach-pagehead {
+  margin-bottom: 0;
+}
+
+.outreach-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 20px 0 24px;
+  padding: 4px;
+  overflow-x: auto;
+  background: var(--ops-white);
+  border: 1px solid var(--ops-hairline);
+  border-radius: 8px;
+  scrollbar-width: thin;
+}
+
+.outreach-nav__link {
+  flex: 0 0 auto;
+  padding: 8px 11px;
+  border-radius: 6px;
+  color: var(--ops-muted);
+  font: 600 12px/1.2 var(--ops-font);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.outreach-nav__link:hover {
+  color: var(--ops-black);
+  background: var(--ops-paper);
+}
+
+.outreach-nav__link.is-active {
+  color: var(--ops-black);
+  background: rgba(201, 59, 42, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(201, 59, 42, 0.14);
+}
+
+.outreach-nav__link:focus-visible,
+.outreach-action-card:focus-visible,
+.outreach-attention__row:focus-visible,
+.outreach-progress__step:focus-visible,
+.outreach-recent__item:focus-visible,
+.outreach-panel__cta:focus-visible,
+.outreach-panel__link:focus-visible {
+  outline: 2px solid var(--ops-red);
+  outline-offset: 2px;
+}
+
+.outreach-focusbar {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 24px;
+  padding: 10px 12px;
+  border-left: 3px solid var(--ops-red);
+  background: var(--ops-white);
+}
+
+.outreach-focusbar__label {
+  flex: 0 0 auto;
+  color: var(--ops-faint);
+  font: 700 9.5px/1.2 var(--ops-font);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.outreach-focusbar__text {
+  color: var(--ops-charcoal);
+  font: 500 13px/1.4 var(--ops-font);
+}
+
+.outreach-section {
+  margin-bottom: 24px;
+}
+
+.outreach-section__title,
+.outreach-panel__title {
+  margin: 0;
+  color: var(--ops-black);
+  font: 700 15px/1.3 var(--ops-font);
+}
+
+.outreach-section__title {
+  margin-bottom: 12px;
+}
+
+.outreach-action-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.outreach-action-card {
+  min-height: 174px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  color: var(--ops-body);
+  background: var(--ops-white);
+  border: 1px solid var(--ops-hairline);
+  border-radius: 8px;
+  text-decoration: none;
+  transition: border-color 140ms ease, transform 140ms ease, box-shadow 140ms ease;
+}
+
+.outreach-action-card:hover {
+  border-color: var(--ops-rule);
+  transform: translateY(-1px);
+  box-shadow: 0 7px 18px rgba(28, 26, 22, 0.06);
+}
+
+.outreach-action-card--primary {
+  border-left: 3px solid var(--ops-red);
+  background: #fffdfb;
+}
+
+.outreach-action-card__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.outreach-action-card__title {
+  margin: 0;
+  color: var(--ops-black);
+  font: 700 16px/1.3 var(--ops-font);
+}
+
+.outreach-action-card__arrow {
+  color: var(--ops-red);
+  font: 500 20px/1 var(--ops-font);
+}
+
+.outreach-action-card__desc {
+  margin: 12px 0 18px;
+  color: var(--ops-muted);
+  font: 400 13.5px/1.55 var(--ops-font);
+}
+
+.outreach-action-card__meta {
+  margin: auto 0 0;
+  color: var(--ops-faint);
+  font: 700 10px/1.3 var(--ops-font);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.outreach-workspace-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.outreach-panel {
+  padding: 20px;
+  background: var(--ops-white);
+  border: 1px solid var(--ops-hairline);
+  border-radius: 8px;
+}
+
+.outreach-panel--wide {
+  margin-bottom: 16px;
+}
+
+.outreach-panel__head {
+  margin-bottom: 14px;
+}
+
+.outreach-panel__head--row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.outreach-panel__sub {
+  margin: 5px 0 0;
+  color: var(--ops-muted);
+  font: 400 12.5px/1.5 var(--ops-font);
+}
+
+.outreach-panel__cta,
+.outreach-panel__link {
+  color: var(--ops-charcoal);
+  font: 700 12px/1.4 var(--ops-font);
+  text-decoration: none;
+}
+
+.outreach-panel__cta {
+  display: inline-flex;
+  margin-top: 15px;
+  color: var(--ops-red-dark);
+}
+
+.outreach-panel__cta:hover,
+.outreach-panel__link:hover {
+  color: var(--ops-red);
+}
+
+.outreach-progress {
+  display: flex;
+  flex-direction: column;
+}
+
+.outreach-progress__step {
+  position: relative;
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: 10px;
+  min-height: 45px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.outreach-progress__step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 13px;
+  top: 28px;
+  bottom: 0;
+  width: 1px;
+  background: var(--ops-hairline);
+}
+
+.outreach-progress__marker {
+  position: relative;
+  z-index: 1;
+  width: 27px;
+  height: 27px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--ops-rule);
+  border-radius: 50%;
+  background: var(--ops-white);
+  color: var(--ops-faint);
+  font: 700 11px/1 var(--ops-font);
+}
+
+.outreach-progress__step--done .outreach-progress__marker {
+  color: var(--st-ready);
+  border-color: #bdd1b8;
+  background: #f4f8f2;
+}
+
+.outreach-progress__step--current .outreach-progress__marker {
+  color: var(--ops-white);
+  border-color: var(--ops-red);
+  background: var(--ops-red);
+}
+
+.outreach-progress__copy {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 4px 0 14px;
+}
+
+.outreach-progress__title {
+  color: var(--ops-charcoal);
+  font: 600 13px/1.4 var(--ops-font);
+}
+
+.outreach-progress__state {
+  color: var(--ops-faint);
+  font: 500 10px/1.4 var(--ops-font);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.outreach-progress__step--current .outreach-progress__title,
+.outreach-progress__step--current .outreach-progress__state {
+  color: var(--ops-red-dark);
+}
+
+.outreach-attention {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--ops-hairline);
+}
+
+.outreach-attention__row {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 12px;
+  gap: 10px;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--ops-hairline);
+  color: inherit;
+  text-decoration: none;
+}
+
+.outreach-attention__row:hover .outreach-attention__label {
+  color: var(--ops-red-dark);
+}
+
+.outreach-attention__count {
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: var(--ops-muted);
+  background: var(--ops-paper);
+  font: 700 12px/1 var(--ops-font);
+}
+
+.outreach-attention__row--warn .outreach-attention__count {
+  color: #7f5f10;
+  background: #fbf5e7;
+}
+
+.outreach-attention__row--block .outreach-attention__count {
+  color: var(--ops-red-dark);
+  background: #fbf1ef;
+}
+
+.outreach-attention__body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.outreach-attention__label {
+  color: var(--ops-charcoal);
+  font: 600 13px/1.35 var(--ops-font);
+}
+
+.outreach-attention__detail {
+  color: var(--ops-muted);
+  font: 400 11.5px/1.45 var(--ops-font);
+}
+
+.outreach-attention__chev {
+  color: var(--ops-faint);
+  font-size: 18px;
+}
+
+.outreach-recent {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 22px;
+}
+
+.outreach-recent__item {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) auto auto;
+  gap: 10px;
+  align-items: center;
+  min-height: 48px;
+  border-top: 1px solid var(--ops-hairline);
+  color: inherit;
+  text-decoration: none;
+}
+
+.outreach-recent__index {
+  color: var(--ops-faint);
+  font: 700 10px/1 var(--ops-font);
+}
+
+.outreach-recent__name {
+  overflow: hidden;
+  color: var(--ops-charcoal);
+  font: 600 12.5px/1.35 var(--ops-font);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.outreach-recent__meta {
+  color: var(--ops-faint);
+  font: 400 11px/1.3 var(--ops-font);
+  white-space: nowrap;
+}
+
+.outreach-recent__open {
+  color: var(--ops-red-dark);
+  font: 700 11px/1.3 var(--ops-font);
+}
+
+.outreach-help,
+.outreach-utilities {
+  margin-top: 16px;
+  background: var(--ops-white);
+  border: 1px solid var(--ops-hairline);
+  border-radius: 8px;
+}
+
+.outreach-help__summary,
+.outreach-utilities__summary {
+  padding: 14px 16px;
+  cursor: pointer;
+  color: var(--ops-charcoal);
+  font: 700 12px/1.4 var(--ops-font);
+}
+
+.outreach-help__summary:focus-visible,
+.outreach-utilities__summary:focus-visible {
+  outline: 2px solid var(--ops-red);
+  outline-offset: 2px;
+}
+
+.outreach-help__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  padding: 0 16px 16px;
+}
+
+.outreach-help__item {
+  padding: 12px;
+  background: var(--ops-paper);
+  border-radius: 6px;
+}
+
+.outreach-help__num {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--ops-red);
+  font: 700 10px/1 var(--ops-font);
+}
+
+.outreach-help__title {
+  display: block;
+  color: var(--ops-black);
+  font: 700 12px/1.3 var(--ops-font);
+}
+
+.outreach-help__text {
+  margin: 5px 0 0;
+  color: var(--ops-muted);
+  font: 400 11.5px/1.45 var(--ops-font);
+}
+
+.outreach-utilities {
+  width: fit-content;
+  margin-top: 12px;
+  background: transparent;
+}
+
+.outreach-utilities .btn {
+  margin: 0 12px 12px;
+}
+
+.outreach-route-progress {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 16px 0 8px;
+  border: 1px solid var(--ops-hairline);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--ops-white);
+}
+
+.outreach-route-progress__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 11px 12px;
+  border-right: 1px solid var(--ops-hairline);
+  color: var(--ops-muted);
+  text-decoration: none;
+}
+
+.outreach-route-progress__item:last-child {
+  border-right: 0;
+}
+
+.outreach-route-progress__num {
+  flex: 0 0 auto;
+  width: 21px;
+  height: 21px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--ops-rule);
+  border-radius: 50%;
+  font: 700 9.5px/1 var(--ops-font);
+}
+
+.outreach-route-progress__label {
+  min-width: 0;
+  overflow: hidden;
+  font: 600 11.5px/1.3 var(--ops-font);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.outreach-route-progress__item--done {
+  color: var(--st-ready);
+  background: #f8faf7;
+}
+
+.outreach-route-progress__item--current {
+  color: var(--ops-red-dark);
+  background: #fff7f5;
+}
+
+.outreach-route-progress__item--current .outreach-route-progress__num {
+  color: var(--ops-white);
+  border-color: var(--ops-red);
+  background: var(--ops-red);
+}
+
+.outreach-page-intro {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  margin: 18px 0 10px;
+}
+
+.outreach-page-intro__title {
+  color: var(--ops-black);
+  font: 700 14px/1.3 var(--ops-font);
+}
+
+.outreach-page-intro__text {
+  color: var(--ops-muted);
+  font: 400 12.5px/1.4 var(--ops-font);
+}
+
+.outreach-legacy-panel {
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+.outreach-page--find > .ops-panel:first-of-type {
+  border-left: 3px solid var(--ops-red);
+}
+
+.outreach-page--find .ops-actions {
+  gap: 7px;
+}
+
+.outreach-page--find .ops-actions .btn--quiet {
+  white-space: normal;
+  text-align: left;
+}
+
+.outreach-page--find .ops-grid--2 .ops-panel p {
+  min-height: 44px;
+  margin: 0;
+  padding: 10px 0;
+  border-top: 1px solid var(--ops-hairline);
+}
+
+.outreach-page--find .ops-grid--2 .ops-panel p:first-of-type {
+  border-top: 0;
+}
+
+.outreach-page--review .ops-grid--3 {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.outreach-page--review .ops-grid--3 .ops-module {
+  min-height: 92px;
+  padding: 13px 12px;
+}
+
+.outreach-page--review .ops-grid--3 .ops-module__num {
+  font-size: 23px;
+}
+
+.outreach-page--review .ops-grid--3 .ops-module__name {
+  font-size: 11px;
+  line-height: 1.3;
+}
+
+.outreach-page--review .ops-panel:has(table) {
+  overflow: hidden;
+}
+
+.outreach-page--review .ops-tablewrap,
+.outreach-page--review .table-wrap,
+.outreach-page--review .ops-panel > div:has(> table) {
+  overflow-x: auto;
+}
+
+.outreach-page--review table {
+  min-width: 980px;
+}
+
+.outreach-page--review td button {
+  margin: 2px 3px 2px 0;
+  padding: 5px 7px;
+  border: 1px solid var(--ops-rule);
+  border-radius: 5px;
+  background: var(--ops-white);
+  color: var(--ops-charcoal);
+  font: 600 10.5px/1 var(--ops-font);
+  cursor: pointer;
+}
+
+.outreach-page--review td button:hover {
+  border-color: var(--ops-charcoal);
+}
+
+.outreach-page--draft .ops-panel,
+.outreach-page--package .ops-panel {
+  max-width: 900px;
+}
+
+@media (max-width: 1040px) {
+  .outreach-action-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .outreach-action-card--primary {
+    grid-column: 1 / -1;
+  }
+
+  .outreach-page--review .ops-grid--3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .outreach-nav {
+    margin-top: 15px;
+  }
+
+  .outreach-focusbar {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .outreach-action-grid,
+  .outreach-workspace-grid,
+  .outreach-recent,
+  .outreach-help__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .outreach-action-card--primary {
+    grid-column: auto;
+  }
+
+  .outreach-action-card {
+    min-height: 0;
+  }
+
+  .outreach-route-progress {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .outreach-route-progress__item:nth-child(2) {
+    border-right: 0;
+  }
+
+  .outreach-route-progress__item:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--ops-hairline);
+  }
+
+  .outreach-page--review .ops-grid--3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .outreach-panel__head--row,
+  .outreach-page-intro {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 460px) {
+  .outreach-page--review .ops-grid--3 {
+    grid-template-columns: 1fr;
+  }
+
+  .outreach-route-progress {
+    grid-template-columns: 1fr;
+  }
+
+  .outreach-route-progress__item,
+  .outreach-route-progress__item:nth-child(2) {
+    border-right: 0;
+    border-bottom: 1px solid var(--ops-hairline);
+  }
+
+  .outreach-route-progress__item:last-child {
+    border-bottom: 0;
+  }
+
+  .outreach-recent__item {
+    grid-template-columns: 22px minmax(0, 1fr) auto;
+  }
+
+  .outreach-recent__meta {
+    display: none;
+  }
+}
