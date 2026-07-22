@@ -97,6 +97,37 @@ param hrRequiredRole string = 'Recruitment.HR'
 @maxValue(300)
 param hrReadSasSeconds int = 300
 
+@description('Retention policy assignment and legal-hold administration enablement.')
+param retentionEnabled bool = false
+
+@description('Destructive retention purge enablement. Must remain false until policy approval and non-production verification.')
+param retentionDeletionEnabled bool = false
+
+@description('Approved immutable retention policy version. Required when retention is enabled.')
+param retentionPolicyVersion string = ''
+
+@description('Required Entra application role for retention and legal-hold administration.')
+param retentionAdminRole string = 'Recruitment.RetentionAdmin'
+
+@minValue(1)
+param retentionIncompleteHours int = 48
+
+@minValue(1)
+param retentionSubmittedDays int = 365
+
+@minValue(1)
+param retentionMaliciousDays int = 30
+
+@minValue(1)
+@maxValue(100)
+param retentionBatchSize int = 10
+
+@minValue(60)
+param retentionLeaseSeconds int = 300
+
+@minValue(60)
+param retentionRetrySeconds int = 900
+
 resource functionApp 'Microsoft.Web/sites@2024-04-01' existing = {
   name: functionAppName
 }
@@ -173,6 +204,16 @@ resource appSettings 'Microsoft.Web/sites/config@2024-04-01' = {
     RECRUITMENT_PLATFORM_AUTH_ENABLED: string(platformAuthenticationEnabled)
     RECRUITMENT_HR_REQUIRED_ROLE: hrRequiredRole
     RECRUITMENT_HR_READ_SAS_SECONDS: string(hrReadSasSeconds)
+    RECRUITMENT_RETENTION_ENABLED: string(retentionEnabled)
+    RECRUITMENT_RETENTION_DELETION_ENABLED: string(retentionDeletionEnabled)
+    RECRUITMENT_RETENTION_POLICY_VERSION: retentionPolicyVersion
+    RECRUITMENT_RETENTION_ADMIN_ROLE: retentionAdminRole
+    RECRUITMENT_RETENTION_INCOMPLETE_HOURS: string(retentionIncompleteHours)
+    RECRUITMENT_RETENTION_SUBMITTED_DAYS: string(retentionSubmittedDays)
+    RECRUITMENT_RETENTION_MALICIOUS_DAYS: string(retentionMaliciousDays)
+    RECRUITMENT_RETENTION_BATCH_SIZE: string(retentionBatchSize)
+    RECRUITMENT_RETENTION_LEASE_SECONDS: string(retentionLeaseSeconds)
+    RECRUITMENT_RETENTION_RETRY_SECONDS: string(retentionRetrySeconds)
   }
 }
 
@@ -180,3 +221,5 @@ output appSettingsId string = appSettings.id
 output publicApiEnabled bool = apiEnabled
 output externalDeliveryEnabled bool = outboxDeliveryEnabled
 output hrDocumentAccessEnabled bool = hrAccessEnabled
+output retentionEnabled bool = retentionEnabled
+output retentionDeletionEnabled bool = retentionDeletionEnabled
