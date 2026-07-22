@@ -15,12 +15,12 @@ const source = read('assets/js/employee-portal/asset-tracing-accessibility.js');
 const index = read('employee-portal/index.html');
 
 
-test('portal loads the accessibility hardening after Asset Tracing views', () => {
+test('portal loads accessibility hardening after the shell registers', () => {
   const viewAt = index.indexOf('employee-portal/views-asset-tracing-report.js');
-  const hardeningAt = index.indexOf('employee-portal/asset-tracing-accessibility.js');
   const appAt = index.indexOf('employee-portal/app.js');
-  assert.ok(viewAt !== -1 && hardeningAt > viewAt, 'hardening loads after Asset Tracing views');
-  assert.ok(appAt !== -1 && hardeningAt < appAt, 'hardening loads before the shell boots');
+  const hardeningAt = index.indexOf('employee-portal/asset-tracing-accessibility.js');
+  assert.ok(viewAt !== -1 && appAt > viewAt, 'shell loads after Asset Tracing views');
+  assert.ok(hardeningAt > appAt, 'hardening registers after the shell startup listener');
 });
 
 test('dynamic form fields receive programmatic labels and hint relationships', () => {
