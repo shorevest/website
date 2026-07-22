@@ -47,6 +47,17 @@ Flex Consumption uses a dedicated private deployment container and user-assigned
 
 `submissions` is partitioned by `/applicationReference` and stores `application`, `file:{fileReference}`, `completion:{fileReference}`, `scan:{eventId}:{fileReference}`, `outbox:{eventType}:{stableEventKey}`, and `cleanup:{fileReference}` documents. Aggregate updates use Cosmos transactional batches in one application partition. `idempotency` is partitioned by `/idempotencyKey` and stores fingerprints, reservations, leases, generations, expiry metadata, and stable result metadata, never SAS URLs, completion-token signatures, full candidate details, or canonical fingerprint plaintext. `rateLimits` is partitioned by `/key` with TTL and stores only HMAC-derived request keys.
 
+## Submission finalization
+
+Upload verification and candidate submission are separate operations:
+
+1. `POST /recruitment/applications/initiate` validates the role, candidate fields, privacy version, file declaration, bot result, and rate limit before issuing one upload URL and an upload-completion token.
+2. The candidate uploads directly to the exact quarantine Blob.
+3. `POST /recruitment/applications/complete` verifies Blob existence, size, content type, file signature, and hash, starts the scan state, and returns a short-lived finalization token.
+4. `POST /recruitment/applications/finalize` requires that finalization token plus explicit privacy and accuracy confirmations.
+
+No `ApplicationReceived` event is produced merely because a file was uploaded. Successful finalization atomically marks the application submitted and creates the idempotent `ApplicationReceived` and `CandidateAcknowledgementRequested` outbox events. Repeated finalization returns the existing result without creating duplicate events.
+
 ## Abuse controls
 
 Production requests require an approved `Origin`. The Function derives client context from trusted request headers, never from candidate JSON. Turnstile verification fails closed on missing tokens, invalid responses, hostname mismatches, network failures, or missing Key Vault configuration. Rate limiting uses a Cosmos-backed fixed window and an HMAC of server-derived request context so raw IP addresses and user-agent strings are not stored.
@@ -76,4 +87,4 @@ Deployment prerequisites are approved Azure names, three populated Key Vault sec
 
 ## Unresolved decisions and Phase 2B.2
 
-Production rate-limit thresholds still require final approval. Phase 2B.2 will implement SharePoint projection, Power Automate notifications, and HR-facing private links. This phase deliberately uses a no-external-delivery outbox worker that leaves events pending.
+Production rate-limit thresholds still require final approval. Phase 2B.2 will implement SharePoint projection, Power Automate notifications, candidate acknowledgement delivery, and HR-facing private links. This phase deliberately uses a no-external-delivery outbox worker that leaves events pending.
