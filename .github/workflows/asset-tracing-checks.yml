@@ -52,12 +52,16 @@ jobs:
           node tests/security-headers.test.js
 
       - name: Run headless browser smoke test
-        run: node scripts/qa-asset-tracing-browser.cjs
+        shell: bash
+        run: |
+          mkdir -p artifacts/asset-tracing-browser
+          set -o pipefail
+          node scripts/qa-asset-tracing-browser.cjs 2>&1 | tee artifacts/asset-tracing-browser/browser-smoke.log
 
-      - name: Upload browser screenshots
+      - name: Upload browser QA artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: asset-tracing-browser-screenshots
-          path: artifacts/asset-tracing-browser/*.png
-          if-no-files-found: warn
+          name: asset-tracing-browser-qa
+          path: artifacts/asset-tracing-browser/*
+          if-no-files-found: error
