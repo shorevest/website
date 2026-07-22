@@ -57,7 +57,30 @@ async function runRetentionPurge(config, dependencies, context) {
   return { purged, examined: batch.length };
 }
 
+async function runIdempotencyCleanup(config, dependencies, context) {
+  if (config.retention?.enabled !== true || config.retention?.deletionEnabled !== true) {
+    return { cleaned: 0, skipped: true };
+  }
+  const candidates = await dependencies.retention.listIdempotencyCleanupCandidates({
+    limit: config.retention.batchSize
+  });
+  let cleaned = 0;
+  for (const applicationReference of candidates) {
+    try {
+      const result = await dependencies.retention.cleanupIdempotency(applicationReference);
+      if (result.status === 'completed' || result.status === 'current') cleaned += 1;
+    } catch (error) {
+      context?.warn?.('recruitment_retention_idempotency_cleanup_failed', {
+        applicationReference,
+        code: error.code || 'IDEMPOTENCY_CLEANUP_FAILED'
+      });
+    }
+  }
+  return { cleaned, examined: candidates.length };
+}
+
 module.exports = {
   runPolicyAssignment,
-  runRetentionPurge
+  runRetentionPurge,
+  runIdempotencyCleanup
 };
