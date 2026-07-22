@@ -35,7 +35,7 @@
         letter-spacing: 0.095em !important;
         text-transform: uppercase !important;
         color: var(--tr-oxblood) !important;
-        text-align: left !important;
+        text-align: right !important;
         text-wrap: pretty;
       }
 
