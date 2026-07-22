@@ -117,13 +117,41 @@ app.timer('quarantineCleanup', {
 app.timer('outboxWorker', {
   schedule: '0 */5 * * * *',
   handler: async (_, context) => {
-    const dependencies = createDeps(loadConfig());
+    const config = loadConfig();
+    if (config.outboxDelivery.enabled !== true) {
+      context.log('recruitment_outbox_delivery_disabled');
+      return;
+    }
+
+    const dependencies = createDeps(config);
+    if (!dependencies.outboxDispatcher || typeof dependencies.outboxDispatcher.deliver !== 'function') {
+      throw Object.assign(new Error('Recruitment outbox dispatcher is not configured'), {
+        code: 'INTERNAL_CONFIGURATION_ERROR'
+      });
+    }
+
+    const now = Date.now();
     const batch = await dependencies.applicationStore.claimOutboxBatch({
       limit: 10,
-      owner: context.invocationId
+      owner: context.invocationId,
+      leaseExpiresAtUtc: new Date(now + config.outboxDelivery.leaseSeconds * 1000).toISOString()
     });
+
     for (const event of batch) {
-      await dependencies.applicationStore.markOutboxAttempt(event, 'Pending');
+      try {
+        const delivery = await dependencies.outboxDispatcher.deliver(event, dependencies);
+        await dependencies.applicationStore.completeOutboxEvent(event, delivery || {});
+      } catch (error) {
+        if ((event.attemptCount || 0) >= config.outboxDelivery.maxAttempts || error.permanent === true) {
+          await dependencies.applicationStore.failOutboxEvent(event, error.code || 'DELIVERY_FAILED');
+          continue;
+        }
+        await dependencies.applicationStore.retryOutboxEvent(
+          event,
+          error.code || 'DELIVERY_RETRYABLE',
+          new Date(Date.now() + config.outboxDelivery.retrySeconds * 1000).toISOString()
+        );
+      }
     }
   }
 });
