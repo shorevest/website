@@ -25,10 +25,14 @@ function createBlobAdapter({
   const quarantine = containers.quarantine || 'recruitment-quarantine';
   const clean = containers.clean || 'recruitment-clean';
 
-  function blob(container, path) {
+  function container(name) {
     if (!service) throw new Error('storage unavailable');
+    return service.getContainerClient(name);
+  }
+
+  function blob(containerName, path) {
     if (!validBlobPath(path)) throw new Error('invalid blob path');
-    return service.getContainerClient(container).getBlockBlobClient(path);
+    return container(containerName).getBlockBlobClient(path);
   }
 
   function accountName() {
@@ -36,10 +40,10 @@ function createBlobAdapter({
     return url.hostname.split('.')[0];
   }
 
-  async function delegationSas({ container, blobPath, permissions, startsOn, expiresOn }) {
+  async function delegationSas({ container: containerName, blobPath, permissions, startsOn, expiresOn }) {
     const key = await service.getUserDelegationKey(startsOn, expiresOn);
     return sdk.generateBlobSASQueryParameters({
-      containerName: container,
+      containerName,
       blobName: blobPath,
       permissions: sdk.BlobSASPermissions.parse(permissions),
       startsOn,
@@ -59,14 +63,14 @@ function createBlobAdapter({
 
   return {
     async issue({
-      container,
+      container: containerName,
       blobPath,
       permissions,
       expiresAtUtc,
       startsAtUtc,
       contentType
     }) {
-      if (container !== quarantine) throw new Error('invalid upload container');
+      if (containerName !== quarantine) throw new Error('invalid upload container');
       if (JSON.stringify(permissions) !== JSON.stringify(['create', 'write'])) {
         throw new Error('invalid sas permissions');
       }
@@ -74,14 +78,14 @@ function createBlobAdapter({
       const startsOn = new Date(startsAtUtc || clock().getTime() - 300000);
       validateWindow(startsOn, expiresOn, 10 * 60 * 1000, 'sas');
       const sas = await delegationSas({
-        container,
+        container: containerName,
         blobPath,
         permissions: 'cw',
         startsOn,
         expiresOn
       });
       return {
-        url: `${blob(container, blobPath).url}?${sas}`,
+        url: `${blob(containerName, blobPath).url}?${sas}`,
         expiresAtUtc: expiresOn.toISOString(),
         method: 'PUT',
         requiredHeaders: {
@@ -91,28 +95,28 @@ function createBlobAdapter({
       };
     },
 
-    async issueRead({ container, blobPath, expiresAtUtc, startsAtUtc }) {
-      if (container !== clean) throw new Error('invalid read container');
+    async issueRead({ container: containerName, blobPath, expiresAtUtc, startsAtUtc }) {
+      if (containerName !== clean) throw new Error('invalid read container');
       const expiresOn = new Date(expiresAtUtc);
       const startsOn = new Date(startsAtUtc || clock().getTime() - 60000);
       validateWindow(startsOn, expiresOn, 5 * 60 * 1000, 'read sas');
       const sas = await delegationSas({
-        container,
+        container: containerName,
         blobPath,
         permissions: 'r',
         startsOn,
         expiresOn
       });
       return {
-        url: `${blob(container, blobPath).url}?${sas}`,
+        url: `${blob(containerName, blobPath).url}?${sas}`,
         expiresAtUtc: expiresOn.toISOString(),
         method: 'GET'
       };
     },
 
-    async properties(container, path) {
+    async properties(containerName, path) {
       try {
-        const properties = await blob(container, path).getProperties();
+        const properties = await blob(containerName, path).getProperties();
         return {
           sizeBytes: properties.contentLength,
           contentType: properties.contentType,
@@ -125,20 +129,20 @@ function createBlobAdapter({
       }
     },
 
-    async read(container, path, { maxBytes }) {
-      const response = await blob(container, path).download(0, maxBytes);
+    async read(containerName, path, { maxBytes }) {
+      const response = await blob(containerName, path).download(0, maxBytes);
       const chunks = [];
       for await (const chunk of response.readableStreamBody) chunks.push(chunk);
       return Buffer.concat(chunks).subarray(0, maxBytes);
     },
 
-    async verify({ container, path, expectedSizeBytes, expectedContentType, expectedHash, maxBytes }) {
-      const properties = await this.properties(container, path);
+    async verify({ container: containerName, path, expectedSizeBytes, expectedContentType, expectedHash, maxBytes }) {
+      const properties = await this.properties(containerName, path);
       if (!properties) return { ok: false, reason: 'missing' };
       if (properties.sizeBytes !== expectedSizeBytes || properties.contentType !== expectedContentType) {
         return { ok: false, reason: 'properties' };
       }
-      const bytes = await this.read(container, path, {
+      const bytes = await this.read(containerName, path, {
         maxBytes: Math.min(maxBytes || expectedSizeBytes, expectedSizeBytes)
       });
       if (bytes.length !== expectedSizeBytes) return { ok: false, reason: 'bounded-read' };
@@ -201,9 +205,9 @@ function createBlobAdapter({
       return { status: 'Succeeded' };
     },
 
-    async delete(container, path) {
+    async delete(containerName, path) {
       try {
-        await blob(container, path).deleteIfExists();
+        await blob(containerName, path).deleteIfExists();
         return true;
       } catch (error) {
         if (error.statusCode === 404) return false;
@@ -212,7 +216,10 @@ function createBlobAdapter({
     },
 
     async health() {
-      await service.getProperties();
+      await Promise.all([
+        container(quarantine).getProperties(),
+        container(clean).getProperties()
+      ]);
       return { ok: true };
     }
   };
