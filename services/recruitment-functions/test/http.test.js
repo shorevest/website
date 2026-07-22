@@ -91,7 +91,7 @@ test('candidate response sanitizes internal fields', () => {
   assert.ok(output.upload.url);
 });
 
-test('enabled production API fails configuration validation without abuse controls and managed identity', () => {
+test('enabled production API fails configuration validation without launch controls', () => {
   const config = loadConfig({
     RECRUITMENT_API_ENABLED: 'true',
     RECRUITMENT_ENVIRONMENT: 'production',
@@ -108,9 +108,10 @@ test('enabled production API fails configuration validation without abuse contro
   assert.ok(shape.missing.includes('managedIdentityClientId'));
   assert.ok(shape.invalid.includes('rateLimit.enabled'));
   assert.ok(shape.invalid.includes('botVerification.mode'));
+  assert.ok(shape.invalid.includes('outboxDelivery.enabled'));
 });
 
-test('enabled production API validates when identity and abuse controls are configured', () => {
+test('enabled production API validates only when identity, abuse controls and delivery are configured', () => {
   const config = loadConfig({
     RECRUITMENT_API_ENABLED: 'true',
     RECRUITMENT_ENVIRONMENT: 'production',
@@ -124,7 +125,8 @@ test('enabled production API validates when identity and abuse controls are conf
     RECRUITMENT_FINGERPRINT_SECRET_NAME: 'fingerprint',
     RECRUITMENT_RATE_LIMIT_ENABLED: 'true',
     RECRUITMENT_BOT_VERIFICATION_MODE: 'turnstile',
-    RECRUITMENT_BOT_VERIFICATION_SECRET_NAME: 'turnstile'
+    RECRUITMENT_BOT_VERIFICATION_SECRET_NAME: 'turnstile',
+    RECRUITMENT_OUTBOX_DELIVERY_ENABLED: 'true'
   });
   assert.deepEqual(validateConfig(config), { ok: true, missing: [], invalid: [] });
 });
