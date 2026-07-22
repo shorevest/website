@@ -15,6 +15,7 @@ function storageFixture() {
   let copied = false;
   let copySourceUrl = null;
   const delegationRequests = [];
+  const containerPropertyReads = [];
 
   const sourceBlob = {
     url: 'https://account.blob.core.windows.net/recruitment-quarantine/source.pdf'
@@ -46,6 +47,10 @@ function storageFixture() {
     },
     getContainerClient(container) {
       return {
+        async getProperties() {
+          containerPropertyReads.push(container);
+          return { etag: `${container}-etag` };
+        },
         getBlockBlobClient() {
           return container === 'recruitment-quarantine' ? sourceBlob : destinationBlob;
         }
@@ -65,13 +70,13 @@ function storageFixture() {
     serviceClient,
     sdkImpl,
     delegationRequests,
+    containerPropertyReads,
     get copySourceUrl() { return copySourceUrl; }
   };
 }
 
-test('clean promotion authorizes the private quarantine source with an internal read SAS', async () => {
-  const fixture = storageFixture();
-  const adapter = createBlobAdapter({
+function adapter(fixture) {
+  return createBlobAdapter({
     accountUrl: 'https://account.blob.core.windows.net',
     containers: {
       quarantine: 'recruitment-quarantine',
@@ -81,8 +86,13 @@ test('clean promotion authorizes the private quarantine source with an internal 
     serviceClient: fixture.serviceClient,
     sdkImpl: fixture.sdkImpl
   });
+}
 
-  const result = await adapter.promoteClean({
+test('clean promotion authorizes the private quarantine source with an internal read SAS', async () => {
+  const fixture = storageFixture();
+  const storage = adapter(fixture);
+
+  const result = await storage.promoteClean({
     sourcePath: 'source.pdf',
     destinationPath: 'source.pdf',
     expectedSizeBytes: fixture.bytes.length,
@@ -104,28 +114,31 @@ test('clean promotion authorizes the private quarantine source with an internal 
 
 test('read SAS rejects excessive or inverted validity windows', async () => {
   const fixture = storageFixture();
-  const adapter = createBlobAdapter({
-    accountUrl: 'https://account.blob.core.windows.net',
-    containers: {
-      quarantine: 'recruitment-quarantine',
-      clean: 'recruitment-clean'
-    },
-    clock: () => new Date('2026-07-22T00:00:00.000Z'),
-    serviceClient: fixture.serviceClient,
-    sdkImpl: fixture.sdkImpl
-  });
+  const storage = adapter(fixture);
 
-  await assert.rejects(() => adapter.issueRead({
+  await assert.rejects(() => storage.issueRead({
     container: 'recruitment-clean',
     blobPath: 'source.pdf',
     startsAtUtc: '2026-07-22T00:00:00.000Z',
     expiresAtUtc: '2026-07-22T00:06:00.000Z'
   }), /expiry too long/);
 
-  await assert.rejects(() => adapter.issueRead({
+  await assert.rejects(() => storage.issueRead({
     container: 'recruitment-clean',
     blobPath: 'source.pdf',
     startsAtUtc: '2026-07-22T00:02:00.000Z',
     expiresAtUtc: '2026-07-22T00:01:00.000Z'
   }), /invalid read sas expiry/);
+});
+
+test('storage readiness reads only the two private container properties', async () => {
+  const fixture = storageFixture();
+  const storage = adapter(fixture);
+
+  assert.deepEqual(await storage.health(), { ok: true });
+  assert.deepEqual(fixture.containerPropertyReads.sort(), [
+    'recruitment-clean',
+    'recruitment-quarantine'
+  ]);
+  assert.equal(typeof fixture.serviceClient.getProperties, 'undefined');
 });
