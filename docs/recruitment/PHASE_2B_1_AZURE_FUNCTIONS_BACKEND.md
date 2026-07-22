@@ -20,6 +20,8 @@ Production configuration is centralized through `infra/recruitment/runtime-setti
 
 The enabled production API fails configuration validation unless all abuse controls, managed identity settings, SharePoint identifiers, approved mailbox settings, Easy Auth confirmation, HR role settings and an approved retention policy version are present. The templates write non-secret settings but deliberately do not create secret values.
 
+Turnstile configuration is coupled to the public website origins. `RECRUITMENT_BOT_VERIFICATION_HOSTNAME` is a comma-separated set that must exactly match the hostnames in `RECRUITMENT_ALLOWED_ORIGINS`; the production default is `shorevest.com,www.shorevest.com`. `RECRUITMENT_BOT_VERIFICATION_ACTION` defaults to `recruitment-application`, and the frontend widget must use that exact action.
+
 ## Functions host and deployment storage
 
 Flex Consumption uses a dedicated private deployment container and user-assigned managed identity authentication. The same identity is explicitly configured for `AzureWebJobsStorage`, so timer coordination, host keys and deployment package access do not rely on storage account keys or connection strings. The identity receives Storage Blob Data Owner only on the dedicated Functions host/deployment storage account.
@@ -30,7 +32,7 @@ Flex Consumption uses a dedicated private deployment container and user-assigned
 
 `idempotency` is partitioned by `/idempotencyKey` and stores fingerprints, reservations, leases, generations, expiry metadata and stable result metadata. It never stores live SAS URLs, signed completion/finalization tokens, full candidate details or canonical fingerprint plaintext.
 
-`rateLimits` is partitioned by `/key` with TTL and stores only HMAC-derived request keys.
+`rateLimits` is partitioned by `/key` with TTL and stores only HMAC-derived request keys. The key is based only on the App Service-overwritten client IP. User agent, candidate data and browser-provided submission IDs do not affect the bucket. Requests without a trusted platform IP share one conservative fallback bucket.
 
 ## Submission finalization
 
@@ -41,11 +43,17 @@ Upload verification and candidate submission are separate operations:
 3. `POST /recruitment/applications/complete` verifies Blob existence, size, content type, bounded bytes, file signature and SHA-256, then starts the scan state and returns a short-lived finalization token.
 4. `POST /recruitment/applications/finalize` requires that token plus explicit privacy and accuracy confirmations.
 
-No HR projection or `ApplicationReceived` notification is produced merely because a file was uploaded or scanned. Successful finalization marks the application submitted and creates idempotent application-received and acknowledgement events. If Defender completed before finalization, the finalization wrapper reconciles a fresh post-finalization Ready, Malicious or Manual Review event.
+No HR projection or `ApplicationReceived` notification is produced merely because a file was uploaded or scanned. Successful finalization marks the application submitted and creates idempotent application-received and acknowledgement events.
+
+Defender and browser callbacks may arrive in either order. If Defender reports while the file is still `SASIssued`, the scan Function returns a retryable outcome and Event Grid redelivers after upload completion. If the scan finishes before candidate finalization, the original Ready, Malicious, Manual Review or cleanup outbox event remains retryable until finalization; it is not completed as deferred. Finalization creates a separate recovery event only for an older missing, failed or previously deferred original record, preventing duplicate outcome notifications.
 
 ## Abuse controls
 
-Production requests require an approved `Origin`. The Function derives client context from trusted request headers, never from candidate JSON. Turnstile verification fails closed on missing tokens, invalid responses, hostname mismatches, network failures or missing Key Vault configuration. Rate limiting uses a Cosmos-backed fixed window and an HMAC of server-derived request context so raw IP addresses and user-agent strings are not stored.
+Production requests require an approved `Origin`. The Function derives client context from App Service-overwritten client-IP headers, never from candidate JSON, `CF-Connecting-IP`, `X-Forwarded-For`, user agent or submission ID.
+
+Turnstile verification fails closed on missing tokens, invalid responses, hostname mismatch, action mismatch, network failure or missing Key Vault configuration. Rate limiting uses a Cosmos-backed fixed window and an HMAC of the trusted platform client identity, so raw IP addresses are not stored.
+
+Application initiation has an additional runtime wrapper that refuses to call the core flow if either the rate limiter or bot verifier is absent, even if a future dependency-wiring change bypasses configuration validation.
 
 ## Blob, SAS and Defender
 
@@ -53,7 +61,7 @@ Upload URLs are user-delegation SAS URLs scoped to one quarantine Blob with crea
 
 HR document access requires a finalized application, a clean Defender result, a Ready file state and another full clean-Blob hash verification. The response contains a five-minute, read-only, single-Blob SAS and no internal Blob path.
 
-Defender for Storage is cost-bearing and remains disabled by default through `enableDefenderForStorage=false`. The Event Grid subscription is deployed separately after the Function endpoint exists and filters only `Microsoft.Security.MalwareScanningResult`.
+Defender for Storage is cost-bearing and remains disabled by default through `enableDefenderForStorage=false`. The Event Grid subscription is deployed separately after the Function endpoint exists and filters only `Microsoft.Security.MalwareScanningResult`. Retryable core outcomes throw from the Event Grid handler so delivery is retried; malformed or permanent rejects are acknowledged with generic error codes and no Blob-path logging.
 
 ## Managed identity roles
 
@@ -68,6 +76,14 @@ The Bicep grants:
 It does not grant subscription Owner, resource-group Contributor, Storage Account Contributor, CV-storage account-wide Blob Data Contributor, storage key listing or broad Key Vault administration.
 
 Microsoft Graph and SharePoint permissions are administrator-managed separately: selected write access to exactly two lists, and mailbox-scoped `Mail.ReadWrite` plus `Mail.Send` for the approved recruitment mailbox.
+
+## HR authorization
+
+App Service Authentication injects the authenticated Entra principal. Clean-document access requires the exact `Recruitment.HR` app role; retention and legal-hold administration require the separate `Recruitment.RetentionAdmin` role. Both routes also require an Entra object ID claim so every privileged operation has an auditable actor.
+
+## SharePoint replay behavior
+
+Projection upserts preserve notification state when the stored `NotificationEventKey` matches the replayed event. A crash after an HR notification is sent therefore cannot reset `Sent` to `Pending`. A genuinely different event key can still initialize a new Pending notification state. Candidate CV bytes and public/reusable document links are never written to SharePoint.
 
 ## Retention
 
@@ -88,10 +104,12 @@ Copy `local.settings.example.json` to local untracked settings only if needed. P
 
 ## Rollout, rollback and health
 
-Deployment prerequisites include approved Azure names, populated Key Vault secrets, a deployed Function package, Easy Auth and app-role configuration, selected SharePoint permissions, mailbox restriction, approved privacy/retention decisions and an explicit decision on paid Defender.
+Deployment prerequisites include approved Azure names, populated Key Vault secrets, a deployed Function package, Easy Auth and app-role configuration, selected SharePoint permissions, mailbox restriction, approved privacy/retention decisions, a Turnstile widget using the exact configured action and an explicit decision on paid Defender.
 
-Rollback is disabling the public API and all delivery/access/deletion settings, stopping Event Grid delivery and reverting the Function package. The health endpoint reports configuration shape only, not resource names, secrets, candidate data or data counts.
+Rollback is disabling the public API and all delivery/access/deletion settings, stopping Event Grid delivery and reverting the Function package.
+
+The health endpoint validates configuration and, when valid, probes Cosmos, both private Blob containers, required Key Vault secrets, the two selected SharePoint lists and the scoped recruitment mailbox. Results are cached briefly and expose only generic `ready` or `unavailable` status, never resource names, secrets, candidate data or dependency-specific errors.
 
 ## Not production-ready yet
 
-Production still requires non-production Azure deployment, end-to-end and failure-injection tests, monitoring/alerts, Power Automate configuration, final HR/Legal/Security approvals, the frontend form and a final enablement review.
+Production still requires a clean rebase onto current `main`, non-production Azure deployment, full automated CI, end-to-end and failure-injection tests, monitoring/alerts, Power Automate configuration, final HR/Legal/Security approvals, the frontend form and a final enablement review.
