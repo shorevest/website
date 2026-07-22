@@ -16,7 +16,10 @@ function createBlobAdapter({
   containers = {},
   clock = () => new Date(),
   serviceClient,
-  sdkImpl
+  sdkImpl,
+  copyPollAttempts = 8,
+  copyPollIntervalMs = 250,
+  delay = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds))
 } = {}) {
   const sdk = sdkImpl || require('@azure/storage-blob');
   const service = serviceClient || (accountUrl && credential
@@ -174,9 +177,37 @@ function createBlobAdapter({
         }).catch(() => ({ ok: false }));
         return result.ok;
       };
+      const pollCopy = async () => {
+        for (let attempt = 0; attempt < copyPollAttempts; attempt += 1) {
+          const properties = await destination.getProperties();
+          if (properties.copyStatus === 'success') {
+            return await valid()
+              ? { status: 'Succeeded' }
+              : { status: 'Failed', reason: 'verification' };
+          }
+          if (['failed', 'aborted'].includes(properties.copyStatus)) {
+            return { status: 'Failed', reason: properties.copyStatus };
+          }
+          if (properties.copyStatus && properties.copyStatus !== 'pending') {
+            return { status: 'Failed', reason: `unexpected-copy-status:${properties.copyStatus}` };
+          }
+          if (attempt + 1 < copyPollAttempts) await delay(copyPollIntervalMs);
+        }
+        return { status: 'Pending' };
+      };
+
       if (await valid()) return { status: 'Succeeded' };
       try {
-        await destination.getProperties();
+        const existing = await destination.getProperties();
+        if (existing.copyStatus === 'pending') return pollCopy();
+        if (existing.copyStatus === 'success') {
+          return await valid()
+            ? { status: 'Succeeded' }
+            : { status: 'Failed', reason: 'verification' };
+        }
+        if (['failed', 'aborted'].includes(existing.copyStatus)) {
+          return { status: 'Failed', reason: existing.copyStatus };
+        }
         return { status: 'Failed', reason: 'conflicting destination' };
       } catch (error) {
         if (error.statusCode !== 404) throw error;
@@ -193,16 +224,7 @@ function createBlobAdapter({
         expiresOn
       });
       await destination.beginCopyFromURL(`${source.url}?${sourceSas}`);
-      for (let attempt = 0; attempt < 8; attempt += 1) {
-        const properties = await destination.getProperties();
-        if (properties.copyStatus === 'success') break;
-        if (['failed', 'aborted'].includes(properties.copyStatus)) {
-          return { status: 'Failed', reason: properties.copyStatus };
-        }
-        await new Promise((resolve) => setTimeout(resolve, 250));
-      }
-      if (!(await valid())) return { status: 'Failed', reason: 'verification' };
-      return { status: 'Succeeded' };
+      return pollCopy();
     },
 
     async delete(containerName, path) {
