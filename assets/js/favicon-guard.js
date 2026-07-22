@@ -1,5 +1,5 @@
 (function () {
-  var VERSION = "20260722-google-search-refresh";
+  var VERSION = "20260722-cn-font-unify";
 
   function removeEmptyLegacyToken() {
     try {
@@ -38,6 +38,11 @@
     if (value) el.setAttribute(key, value);
   }
 
+  function isChinesePage() {
+    var language = (document.documentElement.getAttribute("lang") || "").toLowerCase();
+    return language.indexOf("zh") === 0 || /(?:^|\/)cn(?:\/|$)|_cn(?:\.html)?(?:$|[?#])/.test(location.pathname);
+  }
+
   function ensureFavicons() {
     if (!document.head) return;
 
@@ -59,16 +64,26 @@
   }
 
   function ensureChineseCopyOverrides() {
-    if (!document.head) return;
-    var language = (document.documentElement.getAttribute("lang") || "").toLowerCase();
-    var chinesePage = language.indexOf("zh") === 0 || /_cn(?:\.html)?(?:$|[?#])/.test(location.pathname);
-    if (!chinesePage || document.querySelector('script[data-sv-cn-copy="true"]')) return;
+    if (!document.head || !isChinesePage() || document.querySelector('script[data-sv-cn-copy="true"]')) return;
 
     var copyScript = document.createElement("script");
     copyScript.src = base + "assets/js/chinese-copy-overrides.js?v=" + VERSION;
     copyScript.defer = true;
     copyScript.setAttribute("data-sv-cn-copy", "true");
     document.head.appendChild(copyScript);
+  }
+
+  function ensureChineseFontUniformity() {
+    if (!document.head || !isChinesePage()) return;
+
+    document.documentElement.classList.add("sv-cn-font-unified");
+    if (document.querySelector('link[data-sv-cn-font="true"]')) return;
+
+    var fontStylesheet = document.createElement("link");
+    fontStylesheet.rel = "stylesheet";
+    fontStylesheet.href = base + "assets/css/chinese-font-uniform.css?v=" + VERSION;
+    fontStylesheet.setAttribute("data-sv-cn-font", "true");
+    document.head.appendChild(fontStylesheet);
   }
 
   function isCanonicalHomepage() {
@@ -129,8 +144,7 @@
     emailField.type = "email";
     emailField.autocomplete = "email";
 
-    var language = (document.documentElement.getAttribute("lang") || "").toLowerCase();
-    var isChinese = language.indexOf("zh") === 0 || /(?:^|\/)cn(?:\/|$)|_cn(?:\.html)?(?:$|[?#])/.test(location.pathname);
+    var isChinese = isChinesePage();
     var title = document.querySelector(".ip-signin__title");
     var note = document.querySelector(".ip-signin__note");
     if (title) title.textContent = isChinese ? "输入电子邮箱以打开数据室。" : "Enter your email to open the data room.";
@@ -174,16 +188,19 @@
 
   ensureFavicons();
   ensureChineseCopyOverrides();
+  ensureChineseFontUniformity();
   ensureWebsiteSearchSignals();
   ensureInvestorPortalEmailLogin();
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", ensureFavicons);
     document.addEventListener("DOMContentLoaded", ensureChineseCopyOverrides);
+    document.addEventListener("DOMContentLoaded", ensureChineseFontUniformity);
     document.addEventListener("DOMContentLoaded", ensureWebsiteSearchSignals);
     document.addEventListener("DOMContentLoaded", ensureInvestorPortalEmailLogin);
   }
   window.addEventListener("pageshow", ensureFavicons);
   window.addEventListener("pageshow", ensureChineseCopyOverrides);
+  window.addEventListener("pageshow", ensureChineseFontUniformity);
   window.addEventListener("pageshow", ensureWebsiteSearchSignals);
   window.addEventListener("pageshow", ensureInvestorPortalEmailLogin);
   document.addEventListener("visibilitychange", ensureFavicons);
