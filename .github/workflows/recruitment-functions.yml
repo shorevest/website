@@ -66,7 +66,7 @@ jobs:
       - run: npm run check:functions
       - run: npm run test:functions
       - name: Compile recruitment Bicep
-        run: az bicep build --file infra/recruitment/main.bicep
+        run: npm run bicep:build:recruitment
       - name: Lint recruitment Bicep
-        run: az bicep build --file infra/recruitment/main.bicep --stdout >/dev/null
+        run: npm run bicep:lint:recruitment
       - run: git diff --check
