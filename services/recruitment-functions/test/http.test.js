@@ -6,6 +6,7 @@ const { loadConfig, validateConfig } = require('../src/lib/config');
 const {
   originAllowed,
   readJson,
+  normalizeAppServiceClientIp,
   requestContext,
   candidate,
   unavailable
@@ -15,13 +16,19 @@ function req({
   origin = 'https://shorevest.com',
   contentType = 'application/json',
   body = '{}',
+  clientIp = '',
+  clientIpWithPort = '',
   forwardedFor = '',
+  cloudflareIp = '',
   userAgent = ''
 } = {}) {
   const values = {
     origin,
     'content-type': contentType,
+    'x-client-ip': clientIp,
+    'client-ip': clientIpWithPort,
     'x-forwarded-for': forwardedFor,
+    'cf-connecting-ip': cloudflareIp,
     'user-agent': userAgent
   };
   return {
@@ -63,13 +70,30 @@ test('origin and content validation', async () => {
   assert.equal((await readJson(req({ body: 'x'.repeat(11) }), config)).error.status, 413);
 });
 
-test('request context uses the first proxy address and bounds the user agent', () => {
+test('request context trusts App Service client IP headers and ignores spoofable proxy headers', () => {
   const context = requestContext(req({
-    forwardedFor: '203.0.113.10, 10.0.0.1',
+    clientIp: '203.0.113.10',
+    forwardedFor: '198.51.100.1, 10.0.0.1',
+    cloudflareIp: '192.0.2.1',
     userAgent: 'x'.repeat(600)
   }));
   assert.equal(context.clientIp, '203.0.113.10');
   assert.equal(context.userAgent.length, 512);
+
+  const missingPlatformIp = requestContext(req({
+    forwardedFor: '198.51.100.1',
+    cloudflareIp: '192.0.2.1'
+  }));
+  assert.equal(missingPlatformIp.clientIp, '');
+});
+
+test('App Service client IP normalization accepts valid addresses and strips only a bounded port', () => {
+  assert.equal(normalizeAppServiceClientIp('203.0.113.10'), '203.0.113.10');
+  assert.equal(normalizeAppServiceClientIp('203.0.113.10:443'), '203.0.113.10');
+  assert.equal(normalizeAppServiceClientIp('2001:db8::1'), '2001:db8::1');
+  assert.equal(normalizeAppServiceClientIp('[2001:db8::1]:443'), '2001:db8::1');
+  assert.equal(normalizeAppServiceClientIp('not-an-ip'), '');
+  assert.equal(normalizeAppServiceClientIp('203.0.113.10:999999'), '');
 });
 
 test('candidate response sanitizes internal fields', () => {
