@@ -68,7 +68,7 @@
   /* ── Avatar (approved photo, else restrained initials — never a face) ───── */
   function avatar(user, cls) {
     if (user.photo) {
-      return el('img', { class: 'sv-avatar ' + (cls || ''), src: user.photo, alt: user.name, loading: 'lazy' });
+      return el('img', { class: 'sv-avatar ' + (cls || ''), src: user.photo, alt: user.name, loading: 'eager' });
     }
     return el('span', { class: 'sv-avatar sv-avatar--initials ' + (cls || ''), 'aria-hidden': 'true', text: user.initials || '' });
   }
@@ -83,12 +83,12 @@
      item. Outreach is intentionally excluded: it is a first-class sidebar
      destination (#/outreach and its sub-routes) and highlights its own item. */
   var TOOLS_ROUTES = ['tools', 'process', 'weekly', 'dataquality',
-    'exceptions', 'runs', 'admin', 'monitoring', 'batch'];
+    'exceptions', 'runs', 'admin', 'monitoring', 'batch', 'job-openings', 'media-library'];
 
   var ROUTES = {
     home: 'home', 'my-work': 'myWork', workspace: 'workspace', preview: 'preview',
     tools: 'tools', process: 'process', weekly: 'weekly',
-    dataquality: 'dataquality', outreach: 'outreach', exceptions: 'exceptions',
+    dataquality: 'dataquality', outreach: 'outreach', 'job-openings': 'jobOpenings', 'media-library': 'mediaLibrary', exceptions: 'exceptions',
     runs: 'runs', admin: 'admin', monitoring: 'monitoring', batch: 'batch'
   };
 

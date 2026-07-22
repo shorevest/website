@@ -6,6 +6,11 @@ body.careers-preview-page main {
   font-family: var(--sv-font);
 }
 body.careers-preview-page .careers-hero {
+  /* Match the homepage hero's effective Barlow metrics. Careers pages load the
+     embedded DIN face for later content; if the masthead inherits that face,
+     the hero copy reflows after the font is available and appears to shift on
+     page entry. */
+  --sv-font: "Barlow", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
   background: var(--sv-dark-footer, #20211F);
   color: var(--sv-text-on-dark, #FCF9F1);
   overflow: hidden;
@@ -819,12 +824,13 @@ html[lang="zh-CN"] body.careers-preview-page .careers-hero__meta { font-family: 
     width: 100%;
   }
   body.careers-preview-page .careers-title {
-    max-width: min(100%, 11.5ch);
-    font-size: clamp(36px, 10.8vw, 46px);
-    line-height: 1.03;
+    max-width: 100%;
+    font-size: clamp(34px, 9.6vw, 44px);
+    line-height: 1.08;
+    text-wrap: pretty;
   }
   body.careers-preview-page .careers-hero__body .careers-lede {
-    max-width: min(100%, 36ch);
+    max-width: 100%;
   }
   body.careers-preview-page .careers-hero__body {
     margin-top: clamp(18px, 5vw, 24px);
@@ -847,7 +853,7 @@ html[lang="zh-CN"] body.careers-preview-page .careers-hero__meta { font-family: 
     letter-spacing: .08em;
   }
   body.careers-preview-page .careers-action {
-    width: min(100%, 260px);
+    width: 100%;
     justify-content: space-between;
     min-height: 46px;
     padding-inline: 18px;

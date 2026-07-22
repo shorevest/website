@@ -32,6 +32,12 @@
   font-style: normal; font-weight: 700; font-display: swap;
 }
 
+html,
+body,
+* {
+  overscroll-behavior: none;
+}
+
 :root {
   /* DIN 2014 only — system-ui is the last-resort device fallback. No external font. */
   --ops-font: "DIN 2014", "DIN2014", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -865,6 +871,81 @@ table.tbl { border-collapse: collapse; width: 100%; font: 400 13px/1.45 var(--op
 }
 .workspace-note p { margin: 0; font: 500 13.5px/1.5 var(--ops-font); color: var(--ops-muted); }
 
+/* ── Home overview (motherboard) — selective, links back to My Work ──────── */
+.home--overview { max-width: 780px; }
+
+.home-start { margin-bottom: 26px; }
+.home-start__list { display: grid; gap: 8px; }
+.home-start__item {
+  display: flex; flex-direction: column; gap: 2px;
+  background: var(--ops-white); border: 1px solid var(--ops-hairline);
+  border-left: 3px solid var(--ops-red); border-radius: 7px;
+  padding: 12px 15px; text-decoration: none;
+}
+.home-start__item:hover { border-color: var(--ops-rule); box-shadow: 0 1px 0 rgba(28, 26, 22, 0.04); }
+.home-start__item:focus-visible { outline: 2px solid var(--ops-red); outline-offset: 2px; }
+.home-start__label { font: 600 14px/1.4 var(--ops-font); color: var(--ops-black); }
+.home-start__sub { font: 400 12.5px/1.4 var(--ops-font); color: var(--ops-muted); }
+
+.home-attention { margin-bottom: 8px; }
+.home-attention .home-section { margin-bottom: 22px; }
+
+.home-summary { display: flex; flex-direction: column; border-top: 1px solid var(--ops-hairline); }
+.home-summary__item {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 14px;
+  padding: 11px 4px; border-bottom: 1px solid var(--ops-hairline); text-decoration: none;
+}
+.home-summary__item:hover { background: rgba(28, 26, 22, 0.03); }
+.home-summary__item:focus-visible { outline: 2px solid var(--ops-red); outline-offset: -2px; }
+.home-summary__text { font: 500 14px/1.45 var(--ops-font); color: var(--ops-charcoal); min-width: 0; }
+.home-summary__item:hover .home-summary__text { color: var(--ops-black); }
+.home-summary__meta {
+  flex: 0 0 auto; font: 400 11.5px/1.4 var(--ops-font); color: var(--ops-faint); white-space: nowrap;
+}
+.home-summary--quiet .home-summary__text { color: var(--ops-muted); font-weight: 400; }
+
+.home-recent { margin-top: 22px; padding-top: 4px; }
+.home-empty {
+  background: var(--ops-panel); border: 1px solid var(--ops-hairline); border-radius: 8px;
+  padding: 22px 24px; margin-bottom: 22px;
+}
+.home-empty__title { margin: 0 0 4px; font: 700 15px/1.4 var(--ops-font); color: var(--ops-black); }
+.home-empty__sub { margin: 0; font: 400 13.5px/1.5 var(--ops-font); color: var(--ops-muted); }
+
+.home-tomywork { margin-top: 26px; padding-top: 16px; border-top: 1px solid var(--ops-hairline); }
+.home-tomywork__link { font: 600 13px/1.4 var(--ops-font); color: var(--ops-red-dark); text-decoration: none; }
+.home-tomywork__link:hover { text-decoration: underline; text-underline-offset: 2px; }
+
+/* ── My Work cards (full queue) ──────────────────────────────────────────── */
+.mywork-view__heading { display: flex; align-items: baseline; gap: 9px; }
+.mywork-view__count {
+  font: 700 11px/1 var(--ops-font); color: var(--ops-white); background: var(--ops-faint);
+  border-radius: 10px; padding: 3px 8px; min-width: 20px; text-align: center;
+}
+.mywork-view__count:empty { display: none; }
+
+.mywork-item--done { border-left: 3px solid var(--st-ready); }
+.mywork-item--resolved { background: var(--ops-panel); }
+.mywork-item__resolved { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+
+.mywork-chips { display: flex; flex-wrap: wrap; gap: 6px 8px; margin: 8px 0 10px; }
+.mywork-chip {
+  display: inline-flex; align-items: baseline; gap: 5px;
+  background: var(--ops-paper); border: 1px solid var(--ops-hairline); border-radius: 5px;
+  padding: 3px 8px;
+}
+.mywork-chip__k { font: 700 9px/1.4 var(--ops-font); letter-spacing: 0.07em; text-transform: uppercase; color: var(--ops-faint); }
+.mywork-chip__v { font: 500 12px/1.4 var(--ops-font); color: var(--ops-charcoal); }
+.mywork-chip--owner .mywork-chip__v { color: var(--ops-red-dark); }
+.mywork-chip--waiting { background: #FBF6EA; border-color: #EADFC2; }
+.mywork-chip--due { background: #FBF1EF; border-color: #EAD3CE; }
+.mywork-chip--due .mywork-chip__v { color: var(--ops-red-dark); }
+
+.mywork-item__status { margin: 0 0 4px; font: 600 12.5px/1.5 var(--ops-font); color: var(--ops-muted); }
+.mywork-item__next { margin: 0; font: 400 13px/1.5 var(--ops-font); color: var(--ops-body); }
+.mywork-item__next-k { font-weight: 700; color: var(--ops-charcoal); }
+.mywork-item__actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+
 /* ── Responsive (desktop priority; mobile usable for review) ─────────────── */
 @media (max-width: 900px) {
   /* Sidebar becomes an accessible drawer; collapse state is ignored here. */
@@ -907,6 +988,9 @@ table.tbl { border-collapse: collapse; width: 100%; font: 400 13px/1.45 var(--op
   .home-lists { grid-template-columns: 1fr; }
   .home-secondary { grid-template-columns: 1fr; }
   .home-synthdate { margin-left: 0; width: 100%; }
+  .home-summary__item { flex-direction: column; gap: 3px; }
+  .home-summary__meta { white-space: normal; }
+  .mywork-item__actions .btn { flex: 1 1 auto; text-align: center; }
   .focus-card { padding: 20px 18px 18px; }
   .home-card__actions .btn { flex: 1 1 auto; }
   .steps { flex-direction: column; }
@@ -919,4 +1003,17 @@ table.tbl { border-collapse: collapse; width: 100%; font: 400 13px/1.45 var(--op
   .ops-sidebar, .ops-topbar, .ops-appbar, .ops-demo-note, .btn { display: none !important; }
   .ops-shell { grid-template-columns: 1fr; }
   body.svops { background: #fff; }
+}
+
+/* ── CDD publisher tool ─────────────────────────────────────────────────── */
+.cdd-tool__panel .fld { margin-bottom: 16px; }
+.cdd-tool__row { display: grid; gap: 12px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.cdd-tool textarea { min-height: 96px; resize: vertical; }
+.cdd-tool__actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+.cdd-tool__output { margin-top: 22px; }
+.cdd-tool__download { margin: 0 10px 10px 0; }
+.cdd-tool__code {
+  background: var(--ops-black); color: #f8f3ea; border-radius: 12px;
+  margin: 16px 0 0; padding: 16px; overflow: auto; max-height: 420px;
+  font: 400 12px/1.55 ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 }

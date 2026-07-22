@@ -18,7 +18,7 @@
   };
   const siteHref = relativeSiteHref;
 
-  const path = window.location.pathname.split('/').pop() || 'home.html';
+  const path = window.location.pathname.split('/').pop() || '/';
   const localeSuffix = /_cn\.html$/i.test(path) ? 'cn' : 'en';
   const isChinesePath = localeSuffix !== 'en';
 
@@ -28,9 +28,9 @@
   const siteConfig = window.SHOREVEST_SITE_CONFIG || {};
   const showShoreVestOne = siteConfig.showShoreVestOnePublicLink === true;
   const shoreVestOneLinkEn = showShoreVestOne
-    ? `\n          <a href="${siteHref('employee-portal/index.html')}" target="_blank" rel="noopener">ShoreVest One</a>` : '';
+    ? `\n          <a href="${siteHref('employee-portal/')}" target="_blank" rel="noopener">ShoreVest One</a>` : '';
   const shoreVestOneLinkCn = showShoreVestOne
-    ? `\n          <a href="${siteHref('employee-portal/index.html')}" target="_blank" rel="noopener">ShoreVest One</a>` : '';
+    ? `\n          <a href="${siteHref('employee-portal/')}" target="_blank" rel="noopener">ShoreVest One</a>` : '';
 
   /* Footer brand lock-up uses a static SVG wordmark with PNG fallback. */
 
@@ -38,23 +38,23 @@
   <div class="sv-footer__inner">
     <div class="sv-footer__top">
       <div>
-        <a class="sv-footer__logo" href="${siteHref('home.html')}" aria-label="ShoreVest — home">
-          <img src="${siteHref('assets/brand/sv-lockup-fc-light.png')}" alt="ShoreVest" width="200" height="48" />
+        <a class="sv-footer__logo" href="${siteHref('/')}" aria-label="ShoreVest — home">
+          <img src="${siteHref('assets/brand/sv-lockup-fc-light.png')}" alt="ShoreVest" width="200" height="48"  loading="eager" decoding="async" fetchpriority="high" />
         </a>
-        <p class="sv-footer__offices">Guangzhou &middot; Shanghai &middot; Beijing &middot; Hong Kong<br /><a href="${siteHref('contact.html')}">General inquiries</a></p>
+        <p class="sv-footer__offices">Guangzhou &middot; Shanghai &middot; Beijing &middot; Hong Kong<br /><a href="${siteHref('/contact/')}">General inquiries</a></p>
       </div>
       <nav class="sv-footer__nav" aria-label="Footer">
-        <a href="${siteHref('firm.html')}">Firm</a>
-        <a href="${siteHref('strategy.html')}">Strategy</a>
-        <a href="${siteHref('insights.html')}">Insights</a>
-        <a href="${siteHref('media.html')}">Media</a>
-        <a href="${siteHref('team.html')}">Team</a>
-        <a href="${siteHref('careers.html')}">Careers</a>
-        <a href="${siteHref('contact.html')}">Contact</a>
-        <a href="${siteHref('insights.html')}#archive">China Debt Dynamics</a>
+        <a href="${siteHref('/firm/')}">Firm</a>
+        <a href="${siteHref('/strategy/')}">Strategy</a>
+        <a href="${siteHref('/insights/')}">Insights</a>
+        <a href="${siteHref('/media/')}">Media</a>
+        <a href="${siteHref('/team/')}">Team</a>
+        <a href="${siteHref('careers/')}">Careers</a>
+        <a href="${siteHref('/contact/')}">Contact</a>
+        <a href="${siteHref('/insights/')}#archive">China Debt Dynamics</a>
         <span class="sv-footer__access" role="group" aria-label="Access">
           <span class="sv-footer__access-label">Access</span>
-          <a href="${siteHref('investor-portal/index.html')}">Investor Portal</a>${shoreVestOneLinkEn}
+          <a href="${siteHref('/investor-portal/')}">Investor Portal</a>${shoreVestOneLinkEn}
         </span>
       </nav>
       <div class="sv-footer__social" aria-label="Follow ShoreVest">
@@ -72,11 +72,11 @@
     </div>
     <div class="sv-footer__bottom">
       <div class="sv-footer__links">
-        <a href="${siteHref('privacy-policy.html')}">Privacy Policy</a>
-        <a href="${siteHref('cookie-notice.html')}">Cookie Notice</a>
-        <a href="${siteHref('terms-of-use.html')}">Terms of Use</a>
-        <a href="${siteHref('important-information.html')}">Important Information</a>
-        <a href="${siteHref('legal-notices-disclaimers.html')}">Legal Notices &amp; Disclaimers</a>
+        <a href="${siteHref('/privacy-policy/')}">Privacy Policy</a>
+        <a href="${siteHref('/cookie-notice/')}">Cookie Notice</a>
+        <a href="${siteHref('/terms-of-use/')}">Terms of Use</a>
+        <a href="${siteHref('/important-information/')}">Important Information</a>
+        <a href="${siteHref('/legal-notices-disclaimers/')}">Legal Notices &amp; Disclaimers</a>
       </div>
       <p class="sv-footer__copy">&copy; 2026 ShoreVest Partners. All rights reserved.</p>
     </div>
@@ -86,23 +86,23 @@
   <div class="sv-footer__inner">
     <div class="sv-footer__top">
       <div>
-        <a class="sv-footer__logo" href="${siteHref('home_cn.html')}" aria-label="新岸资本 — 首页">
-          <img src="${siteHref('assets/brand/sv-lockup-fc-light.png')}" alt="ShoreVest 新岸资本" width="200" height="48" />
+        <a class="sv-footer__logo" href="${siteHref('/cn/')}" aria-label="新岸资本 — 首页">
+          <img src="${siteHref('assets/brand/sv-lockup-fc-light.png')}" alt="ShoreVest 新岸资本" width="200" height="48"  loading="eager" decoding="async" fetchpriority="high" />
         </a>
-        <p class="sv-footer__offices">广州 &middot; 上海 &middot; 北京 &middot; 香港<br /><a href="${siteHref('contact_cn.html')}">一般查询</a></p>
+        <p class="sv-footer__offices">广州 &middot; 上海 &middot; 北京 &middot; 香港<br /><a href="${siteHref('/cn/contact/')}">一般查询</a></p>
       </div>
       <nav class="sv-footer__nav" aria-label="页脚导航">
-        <a href="${siteHref('firm_cn.html')}">公司</a>
-        <a href="${siteHref('insights_cn.html')}">洞察</a>
-        <a href="${siteHref('strategy_cn.html')}">策略</a>
-        <a href="${siteHref('media_cn.html')}">媒体</a>
-        <a href="${siteHref('team_cn.html')}">团队</a>
-        <a href="${siteHref('careers_cn.html')}">人才招聘</a>
-        <a href="${siteHref('contact_cn.html')}">联系</a>
-        <a href="${siteHref('insights_cn.html')}#archive">中国债务动态</a>
+        <a href="${siteHref('/cn/firm/')}">公司</a>
+        <a href="${siteHref('/cn/insights/')}">洞察</a>
+        <a href="${siteHref('/cn/strategy/')}">策略</a>
+        <a href="${siteHref('/cn/media/')}">媒体</a>
+        <a href="${siteHref('/cn/team/')}">团队</a>
+        <a href="${siteHref('/cn/careers/')}">人才招聘</a>
+        <a href="${siteHref('/cn/contact/')}">联系</a>
+        <a href="${siteHref('/cn/insights/')}#archive">中国债务动态</a>
         <span class="sv-footer__access" role="group" aria-label="访问">
           <span class="sv-footer__access-label">访问</span>
-          <a href="${siteHref('investor-portal/index_cn.html')}">投资者门户</a>${shoreVestOneLinkCn}
+          <a href="${siteHref('/investor-portal/index/')}">投资者门户</a>${shoreVestOneLinkCn}
         </span>
       </nav>
       <div class="sv-footer__social" aria-label="Follow ShoreVest">
@@ -120,11 +120,11 @@
     </div>
     <div class="sv-footer__bottom">
       <div class="sv-footer__links">
-        <a href="${siteHref('privacy-policy_cn.html')}">隐私政策</a>
-        <a href="${siteHref('cookie-notice_cn.html')}">Cookie 通知</a>
-        <a href="${siteHref('terms-of-use_cn.html')}">使用条款</a>
-        <a href="${siteHref('important-information_cn.html')}">重要信息</a>
-        <a href="${siteHref('legal-notices-disclaimers_cn.html')}">法律声明与免责声明</a>
+        <a href="${siteHref('/cn/privacy-policy/')}">隐私政策</a>
+        <a href="${siteHref('/cn/cookie-notice/')}">Cookie 通知</a>
+        <a href="${siteHref('/cn/terms-of-use/')}">使用条款</a>
+        <a href="${siteHref('/cn/important-information/')}">重要信息</a>
+        <a href="${siteHref('/cn/legal-notices-disclaimers/')}">法律声明与免责声明</a>
       </div>
       <p class="sv-footer__copy">&copy; 2026 ShoreVest Partners. All rights reserved.</p>
     </div>

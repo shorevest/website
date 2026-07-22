@@ -139,13 +139,11 @@ Manual process:
 
 ### URL patterns
 
-- LinkedIn external apply: `https://shorevest.com/careers/apply.html?role={roleId}&source=linkedin`
-- Website apply (EN): `https://shorevest.com/careers/apply.html?role={roleId}&source=website`
-- Website apply (ZH): `https://shorevest.com/careers/apply_cn.html?role={roleId}&source=website`
+Phase 1.1 has no live application URLs. Do not configure LinkedIn or website Apply links until
+Phase 2 provides approved `careers/apply*.html` pages and a secure backend.
 
-Do not create tracking URLs that contain candidate information. Do not add arbitrary campaign
-parameters; only the allowlisted, normalized `source` values are honored (anything else →
-`direct`).
+Do not create tracking URLs that contain candidate information. When Phase 2 restores
+attribution parameters, only allowlisted, normalized `source` values should be honored.
 
 ## 6. Data retention (HR + Legal must approve — not invented here)
 
@@ -174,3 +172,9 @@ rotation · separate test/production environments · no production CVs in local 
   retention decisions.
 - **Legal**: approve the privacy notice and consent wording; complete cross-border/PIPL
   analysis; approve retention.
+
+## Phase 2A direct-upload operations note
+
+Phase 2A defines code contracts only. Do not provision Azure resources from this repository change. Phase 2B must configure private `recruitment-quarantine` and `recruitment-clean` containers, Defender for Storage malware scanning on quarantine uploads, Event Grid delivery to the scan-result function, restricted SharePoint Lists, and production CORS limited to `https://shorevest.com` and `https://www.shorevest.com`.
+
+No storage account names, tenant IDs, SharePoint IDs, secrets, credentials, or email addresses belong in committed code. Use managed identity and environment/key-vault references in the production adapter phase.

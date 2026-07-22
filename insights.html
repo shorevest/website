@@ -6,64 +6,66 @@ try{window.addEventListener('error',function(e){if(e&&typeof e.message==='string
 window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 (function(){
   var T=window.__SVT;
-  function tok(u){try{var url=new URL(u,location.href);if(url.origin===location.origin&&!url.searchParams.get('t')){url.searchParams.set('t',T);return url.href;}return u;}catch(e){return u;}}
+  function tok(u){try{var url=new URL(u,document.baseURI);if(T&&url.origin===location.origin&&!url.searchParams.get('t')){url.searchParams.set('t',T);return url.href;}return u;}catch(e){return u;}}
   window.__svTok=tok;
   function fixEl(el){if(el.nodeType!==1)return;if(el.tagName==='IMG'){var s=el.getAttribute('src');if(s){var ts=tok(s);if(ts!==s)el.setAttribute('src',ts);}}}
   function scan(root){if(!root||root.nodeType!==1)return;fixEl(root);if(root.querySelectorAll){var n=root.querySelectorAll('img');for(var i=0;i<n.length;i++)fixEl(n[i]);}}
   new MutationObserver(function(ms){for(var j=0;j<ms.length;j++){var a=ms[j].addedNodes;for(var i=0;i<a.length;i++)scan(a[i]);}}).observe(document.documentElement,{childList:true,subtree:true});
   if(document.readyState!=='loading')scan(document.body);else document.addEventListener('DOMContentLoaded',function(){scan(document.body);});
-  document.addEventListener('click',function(e){var t=e.target;var a=t&&t.closest?t.closest('a[href]'):null;if(!a)return;var h=a.getAttribute('href');if(!h||h.charAt(0)==='#'||/^(mailto:|tel:|javascript:|https?:|\/\/)/i.test(h))return;var url;try{url=new URL(h,location.href);}catch(_){return;}if(url.origin!==location.origin)return;e.preventDefault();if(!url.searchParams.get('t'))url.searchParams.set('t',T);window.location.href=url.href;},true);
+  document.addEventListener('click',function(e){var t=e.target;var a=t&&t.closest?t.closest('a[href]'):null;if(!a)return;var h=a.getAttribute('href');if(!h||h.charAt(0)==='#'||/^(mailto:|tel:|javascript:|https?:|\/\/)/i.test(h))return;var url;try{url=new URL(h,document.baseURI);}catch(_){return;}if(url.origin!==location.origin)return;e.preventDefault();if(T&&!url.searchParams.get('t'))url.searchParams.set('t',T);window.location.href=url.href;},true);
 })();
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- ShoreVest favicon: the stable root URL gives search engines one canonical icon. -->
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="icon" href="/assets/favicon-shorevest-20260722.svg" type="image/svg+xml" sizes="any">
+<link rel="icon" href="/assets/favicon-shorevest-20260722.ico" sizes="any">
+<link rel="icon" href="/assets/favicon-shorevest-20260722-32x32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="/assets/favicon-shorevest-20260722-16x16.png" type="image/png" sizes="16x16">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon-shorevest-20260722.png" sizes="180x180">
+<link rel="manifest" href="/site-20260722.webmanifest">
 <title>ShoreVest | China Debt Dynamics</title>
 <meta name="description" content="China Debt Dynamics — ShoreVest research on China's private credit markets, policy trajectory, legal frameworks, and creditor recoveries.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
-<script>document.write('<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260717-header-unify&t='+window.__SVT+'">');</script>
-<script>document.write('<link rel="stylesheet" href="assets/css/insights-rebuild.css?v=20260717-mobile-polish&t='+window.__SVT+'">');</script>
-<script>(function(){var T=window.__SVT;function tk(u){return u+(u.indexOf('?')>-1?'&':'?')+'t='+T;}var s=document.createElement('script');s.src=tk('assets/js/image-slot.js');document.head.appendChild(s);})();</script>
-<link rel="icon" href="assets/favicon-cinnabar.ico?v=20260717" sizes="any">
-<link rel="shortcut icon" href="assets/favicon-cinnabar.ico?v=20260717">
-<link rel="icon" href="assets/favicon-cinnabar.svg?v=20260717" type="image/svg+xml">
-<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-cinnabar-32x32.png?v=20260717">
-<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-cinnabar-16x16.png?v=20260717">
-<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon-cinnabar.png?v=20260717">
-<link rel="manifest" href="site.webmanifest?v=20260717">
+<script>document.write('<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260717-header-unify">');</script>
+<script>document.write('<link rel="stylesheet" href="assets/css/insights-rebuild.css?v=20260717-mobile-polish">');</script>
+<script>(function(){var T=window.__SVT;function tk(u){return T?u+(u.indexOf('?')>-1?'&':'?')+'t='+T:u;}var s=document.createElement('script');s.src=tk('assets/js/image-slot.js');document.head.appendChild(s);})();</script>
 <link rel="preload" as="image" href="assets/img/trees/kelsey-he-YlsNl4dVkaA-unsplash.jpg" fetchpriority="high">
 
-<link rel="canonical" href="https://shorevest.com/insights.html">
-<link rel="alternate" hreflang="en" href="https://shorevest.com/insights.html">
-<link rel="alternate" hreflang="zh-Hans" href="https://shorevest.com/insights_cn.html">
+<link rel="canonical" href="https://shorevest.com/insights/">
+<link rel="alternate" hreflang="en" href="https://shorevest.com/insights/">
+<link rel="alternate" hreflang="zh-Hans" href="https://shorevest.com/cn/insights/">
 <meta property="og:title" content="ShoreVest | China Debt Dynamics">
 <meta property="og:description" content="China Debt Dynamics — ShoreVest research on China's private credit markets, policy trajectory, legal frameworks, and creditor recoveries.">
-<meta property="og:url" content="https://shorevest.com/insights.html">
+<meta property="og:url" content="https://shorevest.com/insights/">
 <meta property="og:locale" content="en_US">
-<script src="assets/js/favicon-guard.js?v=20260717" defer></script>
+<script src="assets/js/favicon-guard.js?v=20260722-google-search-refresh" defer></script>
 </head>
 <body id="top" class="homepage insights-page">
 
 <header class="sv-header">
   <div class="sv-header__inner">
-    <a class="sv-header__logo" href="home.html" aria-label="ShoreVest — home">
-      <img src="assets/brand/sv-lockup-fc-dark.png" alt="ShoreVest" width="172" height="41">
+    <a class="sv-header__logo" href="/" aria-label="ShoreVest — home">
+      <img src="assets/brand/sv-lockup-fc-dark.png" alt="ShoreVest" width="172" height="41" loading="eager" decoding="async" fetchpriority="high">
     </a>
     <nav class="sv-nav" aria-label="Primary">
       <ul>
-        <li><a href="firm.html">Firm</a></li>
-        <li><a href="strategy.html">Strategy</a></li>
-        <li><a href="insights.html" aria-current="page">Insights</a></li>
-        <li><a href="media.html">Media</a></li>
-        <li><a href="team.html">Team</a></li>
-        <li><a href="careers.html">Careers</a></li>
+        <li><a href="/firm/">Firm</a></li>
+        <li><a href="/strategy/">Strategy</a></li>
+        <li><a href="/insights/" aria-current="page">Insights</a></li>
+        <li><a href="/media/">Media</a></li>
+        <li><a href="/team/">Team</a></li>
+        <li><a href="/careers/">Careers</a></li>
       </ul>
     </nav>
     <div class="sv-utils">
-      <a class="sv-lang" href="insights_cn.html"><span class="on">EN</span><span class="sep">|</span>中文</a>
-      <a class="sv-util-btn" href="investor-portal/index.html">Investor Portal</a>
-      <a class="sv-util-btn sv-util-btn--cta" href="contact.html">Contact</a>
+      <a class="sv-lang" href="/cn/insights/"><span class="on">EN</span><span class="sep">|</span>中文</a>
+      <a class="sv-util-btn" href="/investor-portal/">Investor Portal</a>
+      <a class="sv-util-btn sv-util-btn--cta" href="/contact/">Contact</a>
     </div>
     <button class="sv-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="sv-mobile-menu">
       <span></span>
@@ -74,17 +76,17 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 <div class="sv-mobile-menu" id="sv-mobile-menu">
   <nav aria-label="Mobile">
     <ul>
-      <li><a href="firm.html">Firm</a></li>
-      <li><a href="strategy.html">Strategy</a></li>
-      <li><a href="insights.html" aria-current="page">Insights</a></li>
-      <li><a href="media.html">Media</a></li>
-      <li><a href="team.html">Team</a></li>
-        <li><a href="careers.html">Careers</a></li>
+      <li><a href="/firm/">Firm</a></li>
+      <li><a href="/strategy/">Strategy</a></li>
+      <li><a href="/insights/" aria-current="page">Insights</a></li>
+      <li><a href="/media/">Media</a></li>
+      <li><a href="/team/">Team</a></li>
+        <li><a href="/careers/">Careers</a></li>
     </ul>
     <div class="sv-mobile-utils">
-      <a class="sv-util-btn" href="insights_cn.html">中文</a>
-      <a class="sv-util-btn" href="investor-portal/index.html">Investor Portal</a>
-      <a class="sv-util-btn sv-util-btn--cta" href="contact.html">Contact</a>
+      <a class="sv-util-btn" href="/cn/insights/">中文</a>
+      <a class="sv-util-btn" href="/investor-portal/">Investor Portal</a>
+      <a class="sv-util-btn sv-util-btn--cta" href="/contact/">Contact</a>
     </div>
   </nav>
 </div>
@@ -107,7 +109,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
           <p class="cdd-hero__panel-label">Featured report</p>
           <p class="cdd-hero__panel-issue">Issue 47 · Volume 10 Issue 2 · 17 July 2026</p>
           <h2 class="cdd-hero__panel-title">The Paradox of High Private Credit Returns in China's Low-rate Environment</h2>
-          <a class="cdd-hero__panel-cta" href="china-debt-dynamics-v10i2.html">Read issue <span aria-hidden="true">→</span></a>
+          <a class="cdd-hero__panel-cta" href="/insights/china-debt-dynamics/v10i2/">Read issue <span aria-hidden="true">→</span></a>
         </div>
       </div>
     </div>
@@ -145,7 +147,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
       <!-- 5 · Research archive ledger, grouped by year -->
       <div class="cdd-arc__list">
 <div class="cdd-arc__year"><span>2026</span></div>
-            <article class="cdd-arc__row cdd-arc__row--featured" data-topic="markets" data-href="china-debt-dynamics-v10i2.html" tabindex="0" role="link" aria-label="The Paradox of High Private Credit Returns in China's Low-rate Environment — read article">
+            <article class="cdd-arc__row cdd-arc__row--featured" data-topic="markets" data-href="/insights/china-debt-dynamics/v10i2/" tabindex="0" role="link" aria-label="The Paradox of High Private Credit Returns in China's Low-rate Environment — read article">
               <span class="cdd-arc__latest-tag">Latest</span>
               <div class="cdd-arc__meta">
                 <span class="cdd-arc__chip-issue">10.2</span>
@@ -157,11 +159,11 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
                 <p class="cdd-arc__excerpt">Low headline rates in China do not necessarily reach creditworthy private companies blocked by rigid screening requirements, creating private credit opportunities.</p>
               </div>
               <div class="cdd-arc__actions">
-                <a class="cdd-arc__read" href="china-debt-dynamics-v10i2.html">Read <span aria-hidden="true">→</span></a>
-                <a class="cdd-arc__pdf" href="china-debt-dynamics-print.html?source=assets/data/china-debt-dynamics-v10i2.json&pdf=1" target="_blank" rel="noopener">PDF</a>
+                <a class="cdd-arc__read" href="/insights/china-debt-dynamics/v10i2/">Read <span aria-hidden="true">→</span></a>
+                <a class="cdd-arc__pdf" href="/insights/china-debt-dynamics/print/?source=assets/data/china-debt-dynamics-v10i2.json&pdf=1" target="_blank" rel="noopener">PDF</a>
               </div>
             </article>
-            <article class="cdd-arc__row" data-topic="markets" data-href="china-debt-dynamics-v10i1.html" tabindex="0" role="link" aria-label="The End of the China Is Uninvestable Myth — read article">
+            <article class="cdd-arc__row" data-topic="markets" data-href="/insights/china-debt-dynamics/v10i1/" tabindex="0" role="link" aria-label="The End of the China Is Uninvestable Myth — read article">
               <div class="cdd-arc__meta">
                 <span class="cdd-arc__chip-issue">10.1</span>
                 <span class="cdd-arc__date">Jan 2026</span>
@@ -172,13 +174,13 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
                 <p class="cdd-arc__excerpt">This edition examines how dislocation has altered market mechanics and where private credit remains investable when underwriting discipline, enforcement…</p>
               </div>
               <div class="cdd-arc__actions">
-                <a class="cdd-arc__read" href="china-debt-dynamics-v10i1.html">Read <span aria-hidden="true">→</span></a>
-                <a class="cdd-arc__pdf" href="china-debt-dynamics-print.html?source=assets/data/china-debt-dynamics-v10i1.json&pdf=1" target="_blank" rel="noopener">PDF</a>
+                <a class="cdd-arc__read" href="/insights/china-debt-dynamics/v10i1/">Read <span aria-hidden="true">→</span></a>
+                <a class="cdd-arc__pdf" href="/insights/china-debt-dynamics/print/?source=assets/data/china-debt-dynamics-v10i1.json&pdf=1" target="_blank" rel="noopener">PDF</a>
               </div>
             </article>
 
             <div class="cdd-arc__year"><span>2025</span></div>
-            <article class="cdd-arc__row" data-topic="policy" data-href="china-debt-dynamics-45-beijings-campaign-against-overcapacity-creates-private-credit-opportunities.html" tabindex="0" role="link" aria-label="Beijings Campaign Against Overcapacity Creates Private Credit Opportunities — read article">
+            <article class="cdd-arc__row" data-topic="policy" data-href="/insights/china-debt-dynamics/v9i4/" tabindex="0" role="link" aria-label="Beijings Campaign Against Overcapacity Creates Private Credit Opportunities — read article">
               <div class="cdd-arc__meta">
                 <span class="cdd-arc__chip-issue">9.4</span>
                 <span class="cdd-arc__date">Sep 2025</span>
@@ -189,11 +191,11 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
                 <p class="cdd-arc__excerpt">Policy-driven capacity reductions can reshape pricing, collateral paths, and opportunities for disciplined private credit investors.</p>
               </div>
               <div class="cdd-arc__actions">
-                <a class="cdd-arc__read" href="china-debt-dynamics-45-beijings-campaign-against-overcapacity-creates-private-credit-opportunities.html">Read <span aria-hidden="true">→</span></a>
-                <a class="cdd-arc__pdf" href="china-debt-dynamics-print.html?source=assets/data/china-debt-dynamics-v9i4.json&pdf=1" target="_blank" rel="noopener">PDF</a>
+                <a class="cdd-arc__read" href="/insights/china-debt-dynamics/v9i4/">Read <span aria-hidden="true">→</span></a>
+                <a class="cdd-arc__pdf" href="/insights/china-debt-dynamics/print/?source=assets/data/china-debt-dynamics-v9i4.json&pdf=1" target="_blank" rel="noopener">PDF</a>
               </div>
             </article>
-            <article class="cdd-arc__row" data-topic="markets" data-href="china-debt-dynamics-into-the-shadows-of-us-private-credit.html" tabindex="0" role="link" aria-label="Into the Shadows of US Private Credit: A China Perspective — read article">
+            <article class="cdd-arc__row" data-topic="markets" data-href="/insights/china-debt-dynamics/v9i3/" tabindex="0" role="link" aria-label="Into the Shadows of US Private Credit: A China Perspective — read article">
               <div class="cdd-arc__meta">
                 <span class="cdd-arc__chip-issue">9.3</span>
                 <span class="cdd-arc__date">Jul 2025</span>
@@ -204,11 +206,11 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
                 <p class="cdd-arc__excerpt">A cross-market comparison of private-credit growth, opacity, risk transfer, and the underwriting lessons visible from China.</p>
               </div>
               <div class="cdd-arc__actions">
-                <a class="cdd-arc__read" href="china-debt-dynamics-into-the-shadows-of-us-private-credit.html">Read <span aria-hidden="true">→</span></a>
-                <a class="cdd-arc__pdf" href="china-debt-dynamics-print.html?source=assets/data/china-debt-dynamics-v9i3.json&pdf=1" target="_blank" rel="noopener">PDF</a>
+                <a class="cdd-arc__read" href="/insights/china-debt-dynamics/v9i3/">Read <span aria-hidden="true">→</span></a>
+                <a class="cdd-arc__pdf" href="/insights/china-debt-dynamics/print/?source=assets/data/china-debt-dynamics-v9i3.json&pdf=1" target="_blank" rel="noopener">PDF</a>
               </div>
             </article>
-            <article class="cdd-arc__row" data-topic="markets" data-href="china-debt-dynamics-v9i2.html" tabindex="0" role="link" aria-label="China: An Uncorrelated Harbor in a Stormy World — read article">
+            <article class="cdd-arc__row" data-topic="markets" data-href="/insights/china-debt-dynamics/v9i2/" tabindex="0" role="link" aria-label="China: An Uncorrelated Harbor in a Stormy World — read article">
               <div class="cdd-arc__meta">
                 <span class="cdd-arc__chip-issue">9.2</span>
                 <span class="cdd-arc__date">Apr 2025</span>
@@ -219,11 +221,11 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
                 <p class="cdd-arc__excerpt">How China credit may behave differently from global risk assets when macro volatility and policy divergence rise.</p>
               </div>
               <div class="cdd-arc__actions">
-                <a class="cdd-arc__read" href="china-debt-dynamics-v9i2.html">Read <span aria-hidden="true">→</span></a>
-                <a class="cdd-arc__pdf" href="china-debt-dynamics-print.html?source=assets/data/china-debt-dynamics-v9i2.json&pdf=1" target="_blank" rel="noopener">PDF</a>
+                <a class="cdd-arc__read" href="/insights/china-debt-dynamics/v9i2/">Read <span aria-hidden="true">→</span></a>
+                <a class="cdd-arc__pdf" href="/insights/china-debt-dynamics/print/?source=assets/data/china-debt-dynamics-v9i2.json&pdf=1" target="_blank" rel="noopener">PDF</a>
               </div>
             </article>
-            <article class="cdd-arc__row" data-topic="structural" data-href="china-debt-dynamics-v9i1.html" tabindex="0" role="link" aria-label="Green Finance: Sowing the Seeds of Chinas Next Wave of NPLs — read article">
+            <article class="cdd-arc__row" data-topic="structural" data-href="/insights/china-debt-dynamics/v9i1/" tabindex="0" role="link" aria-label="Green Finance: Sowing the Seeds of Chinas Next Wave of NPLs — read article">
               <div class="cdd-arc__meta">
                 <span class="cdd-arc__chip-issue">9.1</span>
                 <span class="cdd-arc__date">Jan 2025</span>
@@ -234,14 +236,14 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
                 <p class="cdd-arc__excerpt">Rapid green-credit expansion creates long-duration projects, uneven sponsors, and future nonperforming-loan watch points.</p>
               </div>
               <div class="cdd-arc__actions">
-                <a class="cdd-arc__read" href="china-debt-dynamics-v9i1.html">Read <span aria-hidden="true">→</span></a>
-                <a class="cdd-arc__pdf" href="china-debt-dynamics-print.html?source=assets/data/china-debt-dynamics-v9i1.json&pdf=1" target="_blank" rel="noopener">PDF</a>
+                <a class="cdd-arc__read" href="/insights/china-debt-dynamics/v9i1/">Read <span aria-hidden="true">→</span></a>
+                <a class="cdd-arc__pdf" href="/insights/china-debt-dynamics/print/?source=assets/data/china-debt-dynamics-v9i1.json&pdf=1" target="_blank" rel="noopener">PDF</a>
               </div>
             </article>
 
                         <div class="cdd-arc__year"><span>2024</span></div>
             <!-- QA NOTE: 8.6 "United States of China" is a DRAFT sequencing decision — its PDF cover repeats "Volume 8 Issue 5" (same as "Private Credit in a Reset World Order"). Confirm with ShoreVest before publishing the 8.6 numbering. -->
-            <article class="cdd-arc__row" data-topic="markets" data-href="china-debt-dynamics-v8i5.html" tabindex="0" role="link" aria-label="United States of China — read article">
+            <article class="cdd-arc__row" data-topic="markets" data-href="/insights/china-debt-dynamics/v8i6/" tabindex="0" role="link" aria-label="United States of China — read article">
               <div class="cdd-arc__meta">
                 <span class="cdd-arc__chip-issue">8.6</span>
                 <span class="cdd-arc__date">Dec 2024</span>
@@ -252,11 +254,11 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
                 <p class="cdd-arc__excerpt">Regional differences within China are framed as distinct credit economies with varied policy, collateral, and recovery dynamics.</p>
               </div>
               <div class="cdd-arc__actions">
-                <a class="cdd-arc__read" href="china-debt-dynamics-v8i5.html">Read <span aria-hidden="true">→</span></a>
-                <a class="cdd-arc__pdf" href="china-debt-dynamics-print.html?source=assets/data/china-debt-dynamics-v8i5.json&pdf=1" target="_blank" rel="noopener">PDF</a>
+                <a class="cdd-arc__read" href="/insights/china-debt-dynamics/v8i6/">Read <span aria-hidden="true">→</span></a>
+                <a class="cdd-arc__pdf" href="/insights/china-debt-dynamics/print/?source=assets/data/china-debt-dynamics-v8i5.json&pdf=1" target="_blank" rel="noopener">PDF</a>
               </div>
             </article>
-            <article class="cdd-arc__row" data-topic="markets" data-href="china-debt-dynamics-v8i3.html" tabindex="0" role="link" aria-label="Private Credit in a Reset World Order — read article">
+            <article class="cdd-arc__row" data-topic="markets" data-href="/insights/china-debt-dynamics/v8i5/" tabindex="0" role="link" aria-label="Private Credit in a Reset World Order — read article">
               <div class="cdd-arc__meta">
                 <span class="cdd-arc__chip-issue">8.5</span>
                 <span class="cdd-arc__date">Nov 2024</span>
@@ -267,11 +269,11 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
                 <p class="cdd-arc__excerpt">A look at private credit after rate, liquidity, and geopolitical resets changed relative value and risk selection.</p>
               </div>
               <div class="cdd-arc__actions">
-                <a class="cdd-arc__read" href="china-debt-dynamics-v8i3.html">Read <span aria-hidden="true">→</span></a>
-                <a class="cdd-arc__pdf" href="china-debt-dynamics-print.html?source=assets/data/china-debt-dynamics-v8i3.json&pdf=1" target="_blank" rel="noopener">PDF</a>
+                <a class="cdd-arc__read" href="/insights/china-debt-dynamics/v8i5/">Read <span aria-hidden="true">→</span></a>
+                <a class="cdd-arc__pdf" href="/insights/china-debt-dynamics/print/?source=assets/data/china-debt-dynamics-v8i3.json&pdf=1" target="_blank" rel="noopener">PDF</a>
               </div>
             </article>
-            <article class="cdd-arc__row" data-topic="structural" data-href="china-debt-dynamics-v8i4.html" tabindex="0" role="link" aria-label="Quantifying Chinas NPL Market — read article">
+            <article class="cdd-arc__row" data-topic="structural" data-href="/insights/china-debt-dynamics/v8i4/" tabindex="0" role="link" aria-label="Quantifying Chinas NPL Market — read article">
               <div class="cdd-arc__meta">
                 <span class="cdd-arc__chip-issue">8.4</span>
                 <span class="cdd-arc__date">Oct 2024</span>
@@ -282,26 +284,26 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
                 <p class="cdd-arc__excerpt">Sizing China’s nonperforming-loan opportunity set across banks, AMCs, collateral pools, and disposal channels.</p>
               </div>
               <div class="cdd-arc__actions">
-                <a class="cdd-arc__read" href="china-debt-dynamics-v8i4.html">Read <span aria-hidden="true">→</span></a>
-                <a class="cdd-arc__pdf" href="china-debt-dynamics-print.html?source=assets/data/china-debt-dynamics-v8i4.json&pdf=1" target="_blank" rel="noopener">PDF</a>
+                <a class="cdd-arc__read" href="/insights/china-debt-dynamics/v8i4/">Read <span aria-hidden="true">→</span></a>
+                <a class="cdd-arc__pdf" href="/insights/china-debt-dynamics/print/?source=assets/data/china-debt-dynamics-v8i4.json&pdf=1" target="_blank" rel="noopener">PDF</a>
               </div>
             </article>
-            <article class="cdd-arc__row" data-topic="policy" data-href="china-debt-dynamics-v8i1.html" tabindex="0" role="link" aria-label="Bailing Out the Banks: The Hidden Significance of Beijing Property Support Measures — read article">
+            <article class="cdd-arc__row" data-topic="policy" data-href="/insights/china-debt-dynamics/v8i3/" tabindex="0" role="link" aria-label="Bailing Out the Banks: The Hidden Significance of Beijing’s Property Support Measures — read article">
               <div class="cdd-arc__meta">
                 <span class="cdd-arc__chip-issue">8.3</span>
                 <span class="cdd-arc__date">Jul 2024</span>
               </div>
               <span class="cdd-arc__cat">Policy</span>
               <div class="cdd-arc__body">
-                <h3 class="cdd-arc__row-title">Bailing Out the Banks: The Hidden Significance of Beijing Property Support Measures</h3>
+                <h3 class="cdd-arc__row-title">Bailing Out the Banks: The Hidden Significance of Beijing’s Property Support Measures</h3>
                 <p class="cdd-arc__excerpt">Property support is read through bank balance-sheet stability, creditor recoveries, and the pace of NPL recognition.</p>
               </div>
               <div class="cdd-arc__actions">
-                <a class="cdd-arc__read" href="china-debt-dynamics-v8i1.html">Read <span aria-hidden="true">→</span></a>
-                <a class="cdd-arc__pdf" href="china-debt-dynamics-print.html?source=assets/data/china-debt-dynamics-v8i1.json&pdf=1" target="_blank" rel="noopener">PDF</a>
+                <a class="cdd-arc__read" href="/insights/china-debt-dynamics/v8i3/">Read <span aria-hidden="true">→</span></a>
+                <a class="cdd-arc__pdf" href="/insights/china-debt-dynamics/print/?source=assets/data/china-debt-dynamics-v8i1.json&pdf=1" target="_blank" rel="noopener">PDF</a>
               </div>
             </article>
-            <article class="cdd-arc__row" data-topic="policy" data-href="china-debt-dynamics-v8i2.html" tabindex="0" role="link" aria-label="China Refocuses on Financial Risk and Ramps Up NPL Disposals — read article">
+            <article class="cdd-arc__row" data-topic="policy" data-href="/insights/china-debt-dynamics/v8i2/" tabindex="0" role="link" aria-label="China Refocuses on Financial Risk and Ramps Up NPL Disposals — read article">
               <div class="cdd-arc__meta">
                 <span class="cdd-arc__chip-issue">8.2</span>
                 <span class="cdd-arc__date">Mar 2024</span>
@@ -312,13 +314,13 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
                 <p class="cdd-arc__excerpt">Regulatory emphasis on financial risk is linked to faster disposal channels and broader distressed-credit supply.</p>
               </div>
               <div class="cdd-arc__actions">
-                <a class="cdd-arc__read" href="china-debt-dynamics-v8i2.html">Read <span aria-hidden="true">→</span></a>
-                <a class="cdd-arc__pdf" href="china-debt-dynamics-print.html?source=assets/data/china-debt-dynamics-v8i2.json&pdf=1" target="_blank" rel="noopener">PDF</a>
+                <a class="cdd-arc__read" href="/insights/china-debt-dynamics/v8i2/">Read <span aria-hidden="true">→</span></a>
+                <a class="cdd-arc__pdf" href="/insights/china-debt-dynamics/print/?source=assets/data/china-debt-dynamics-v8i2.json&pdf=1" target="_blank" rel="noopener">PDF</a>
               </div>
             </article>
 
             <div class="cdd-arc__year"><span>2023</span></div>
-            <article class="cdd-arc__row" data-topic="policy" data-href="china-debt-dynamics-v7i4.html" tabindex="0" role="link" aria-label="Beijings Strategy for Dealing With Local Government Debt: No Bailouts, but a Helping Hand — read article">
+            <article class="cdd-arc__row" data-topic="policy" data-href="/insights/china-debt-dynamics/v7i4/" tabindex="0" role="link" aria-label="Beijing’s Strategy for Dealing With Local Government Debt: No Bailouts, but a Helping Hand — read article">
               <div class="cdd-arc__meta">
                 <span class="cdd-arc__chip-issue">7.4</span>
                 <span class="cdd-arc__date">Dec 2023</span>
@@ -326,14 +328,14 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
               <span class="cdd-arc__cat">Policy</span>
               <div class="cdd-arc__body">
                 <h3 class="cdd-arc__row-title">Beijing’s Strategy for Dealing With Local Government Debt: No Bailouts, but a Helping Hand</h3>
-                <p class="cdd-arc__excerpt">Local-government debt relief is assessed through policy discipline, refinancing tools, and creditor implications.</p>
+                <p class="cdd-arc__excerpt">Beijing’s approach combines refinancing, asset sales, and targeted liquidity while avoiding a blanket bailout of local governments and their financing vehicles.</p>
               </div>
               <div class="cdd-arc__actions">
-                <a class="cdd-arc__read" href="china-debt-dynamics-v7i4.html">Read <span aria-hidden="true">→</span></a>
-                <a class="cdd-arc__pdf" href="china-debt-dynamics-print.html?source=assets/data/china-debt-dynamics-v7i4.json&pdf=1" target="_blank" rel="noopener">PDF</a>
+                <a class="cdd-arc__read" href="/insights/china-debt-dynamics/v7i4/">Read <span aria-hidden="true">→</span></a>
+                <a class="cdd-arc__pdf" href="/insights/china-debt-dynamics/print/?source=assets/data/china-debt-dynamics-v7i4.json&amp;pdf=1" target="_blank" rel="noopener">PDF</a>
               </div>
             </article>
-            <article class="cdd-arc__row" data-topic="policy" data-href="china-debt-dynamics-v7i3.html" tabindex="0" role="link" aria-label="Wheres the Stimulus? Parsing Beijings Lackluster Response to Growth — read article">
+            <article class="cdd-arc__row" data-topic="policy" data-href="/insights/china-debt-dynamics/v7i3/" tabindex="0" role="link" aria-label="Wheres the Stimulus? Parsing Beijings Lackluster Response to Growth — read article">
               <div class="cdd-arc__meta">
                 <span class="cdd-arc__chip-issue">7.3</span>
                 <span class="cdd-arc__date">Oct 2023</span>
@@ -344,11 +346,11 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
                 <p class="cdd-arc__excerpt">Beijing’s measured stimulus response highlights policy constraints and implications for growth-sensitive credit exposures.</p>
               </div>
               <div class="cdd-arc__actions">
-                <a class="cdd-arc__read" href="china-debt-dynamics-v7i3.html">Read <span aria-hidden="true">→</span></a>
-                <a class="cdd-arc__pdf" href="china-debt-dynamics-print.html?source=assets/data/china-debt-dynamics-v7i3.json&pdf=1" target="_blank" rel="noopener">PDF</a>
+                <a class="cdd-arc__read" href="/insights/china-debt-dynamics/v7i3/">Read <span aria-hidden="true">→</span></a>
+                <a class="cdd-arc__pdf" href="/insights/china-debt-dynamics/print/?source=assets/data/china-debt-dynamics-v7i3.json&pdf=1" target="_blank" rel="noopener">PDF</a>
               </div>
             </article>
-            <article class="cdd-arc__row" data-topic="markets" data-href="china-debt-dynamics-v7i2.html" tabindex="0" role="link" aria-label="Bank Exposure to Developers: A Challenge but Not a Risk — read article">
+            <article class="cdd-arc__row" data-topic="markets" data-href="/insights/china-debt-dynamics/v7i2/" tabindex="0" role="link" aria-label="Bank Exposure to Developers: A Challenge but Not a Risk — read article">
               <div class="cdd-arc__meta">
                 <span class="cdd-arc__chip-issue">7.2</span>
                 <span class="cdd-arc__date">Jun 2023</span>
@@ -359,11 +361,11 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
                 <p class="cdd-arc__excerpt">Developer exposure pressures bank earnings and asset quality but may not translate into systemic banking risk.</p>
               </div>
               <div class="cdd-arc__actions">
-                <a class="cdd-arc__read" href="china-debt-dynamics-v7i2.html">Read <span aria-hidden="true">→</span></a>
-                <a class="cdd-arc__pdf" href="china-debt-dynamics-print.html?source=assets/data/china-debt-dynamics-v7i2.json&pdf=1" target="_blank" rel="noopener">PDF</a>
+                <a class="cdd-arc__read" href="/insights/china-debt-dynamics/v7i2/">Read <span aria-hidden="true">→</span></a>
+                <a class="cdd-arc__pdf" href="/insights/china-debt-dynamics/print/?source=assets/data/china-debt-dynamics-v7i2.json&pdf=1" target="_blank" rel="noopener">PDF</a>
               </div>
             </article>
-            <article class="cdd-arc__row" data-topic="policy" data-href="china-debt-dynamics-v7i1.html" tabindex="0" role="link" aria-label="New Regulations Set to Accelerate NPL Disposals — read article">
+            <article class="cdd-arc__row" data-topic="policy" data-href="/insights/china-debt-dynamics/v7i1/" tabindex="0" role="link" aria-label="New Regulations Set to Accelerate NPL Disposals — read article">
               <div class="cdd-arc__meta">
                 <span class="cdd-arc__chip-issue">7.1</span>
                 <span class="cdd-arc__date">Mar 2023</span>
@@ -374,13 +376,13 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
                 <p class="cdd-arc__excerpt">New rules are expected to broaden transfer channels and speed the cleanup of nonperforming bank assets.</p>
               </div>
               <div class="cdd-arc__actions">
-                <a class="cdd-arc__read" href="china-debt-dynamics-v7i1.html">Read <span aria-hidden="true">→</span></a>
-                <a class="cdd-arc__pdf" href="china-debt-dynamics-print.html?source=assets/data/china-debt-dynamics-v7i1.json&pdf=1" target="_blank" rel="noopener">PDF</a>
+                <a class="cdd-arc__read" href="/insights/china-debt-dynamics/v7i1/">Read <span aria-hidden="true">→</span></a>
+                <a class="cdd-arc__pdf" href="/insights/china-debt-dynamics/print/?source=assets/data/china-debt-dynamics-v7i1.json&pdf=1" target="_blank" rel="noopener">PDF</a>
               </div>
             </article>
 
             <div class="cdd-arc__year"><span>2022</span></div>
-            <article class="cdd-arc__row" data-topic="policy" data-href="china-debt-dynamics-v6i3.html" tabindex="0" role="link" aria-label="Chinas Property Support Measures: Rescue, not Reflation — read article">
+            <article class="cdd-arc__row" data-topic="policy" data-href="/insights/china-debt-dynamics/v6i3/" tabindex="0" role="link" aria-label="Chinas Property Support Measures: Rescue, not Reflation — read article">
               <div class="cdd-arc__meta">
                 <span class="cdd-arc__chip-issue">6.3</span>
                 <span class="cdd-arc__date">Dec 2022</span>
@@ -391,13 +393,13 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
                 <p class="cdd-arc__excerpt">Property measures are positioned as targeted rescue tools rather than a broad reflation of housing demand.</p>
               </div>
               <div class="cdd-arc__actions">
-                <a class="cdd-arc__read" href="china-debt-dynamics-v6i3.html">Read <span aria-hidden="true">→</span></a>
-                <a class="cdd-arc__pdf" href="china-debt-dynamics-print.html?source=assets/data/china-debt-dynamics-v6i3.json&pdf=1" target="_blank" rel="noopener">PDF</a>
+                <a class="cdd-arc__read" href="/insights/china-debt-dynamics/v6i3/">Read <span aria-hidden="true">→</span></a>
+                <a class="cdd-arc__pdf" href="/insights/china-debt-dynamics/print/?source=assets/data/china-debt-dynamics-v6i3.json&pdf=1" target="_blank" rel="noopener">PDF</a>
               </div>
             </article>
 
             <div class="cdd-arc__year"><span>2021</span></div>
-            <article class="cdd-arc__row" data-topic="markets" data-href="china-debt-dynamics-v5i7.html" tabindex="0" role="link" aria-label="Evergrande: A Result of China Deleveraging and What Next — read article">
+            <article class="cdd-arc__row" data-topic="markets" data-href="/insights/china-debt-dynamics/v5i7/" tabindex="0" role="link" aria-label="Evergrande: A Result of China Deleveraging and What Next — read article">
               <div class="cdd-arc__meta">
                 <span class="cdd-arc__chip-issue">5.7</span>
                 <span class="cdd-arc__date">Sep 2021</span>
@@ -408,11 +410,11 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
                 <p class="cdd-arc__excerpt">Evergrande is analyzed as an outcome of deleveraging policy and a test case for creditor resolution paths.</p>
               </div>
               <div class="cdd-arc__actions">
-                <a class="cdd-arc__read" href="china-debt-dynamics-v5i7.html">Read <span aria-hidden="true">→</span></a>
-                <a class="cdd-arc__pdf" href="china-debt-dynamics-print.html?source=assets/data/china-debt-dynamics-v5i7.json&pdf=1" target="_blank" rel="noopener">PDF</a>
+                <a class="cdd-arc__read" href="/insights/china-debt-dynamics/v5i7/">Read <span aria-hidden="true">→</span></a>
+                <a class="cdd-arc__pdf" href="/insights/china-debt-dynamics/print/?source=assets/data/china-debt-dynamics-v5i7.json&pdf=1" target="_blank" rel="noopener">PDF</a>
               </div>
             </article>
-            <article class="cdd-arc__row" data-topic="structural" data-href="china-debt-dynamics-v5i4.html" tabindex="0" role="link" aria-label="Sustained Shadow Banking Contraction Creating Private Credit Opportunities — read article">
+            <article class="cdd-arc__row" data-topic="structural" data-href="/insights/china-debt-dynamics/v5i4/" tabindex="0" role="link" aria-label="Sustained Shadow Banking Contraction Creating Private Credit Opportunities — read article">
               <div class="cdd-arc__meta">
                 <span class="cdd-arc__chip-issue">5.4</span>
                 <span class="cdd-arc__date">Apr 2021</span>
@@ -423,13 +425,13 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
                 <p class="cdd-arc__excerpt">The contraction of shadow-bank financing opens private-credit niches for borrowers still backed by real collateral.</p>
               </div>
               <div class="cdd-arc__actions">
-                <a class="cdd-arc__read" href="china-debt-dynamics-v5i4.html">Read <span aria-hidden="true">→</span></a>
-                <a class="cdd-arc__pdf" href="china-debt-dynamics-print.html?source=assets/data/china-debt-dynamics-v5i4.json&pdf=1" target="_blank" rel="noopener">PDF</a>
+                <a class="cdd-arc__read" href="/insights/china-debt-dynamics/v5i4/">Read <span aria-hidden="true">→</span></a>
+                <a class="cdd-arc__pdf" href="/insights/china-debt-dynamics/print/?source=assets/data/china-debt-dynamics-v5i4.json&pdf=1" target="_blank" rel="noopener">PDF</a>
               </div>
             </article>
 
             <div class="cdd-arc__year"><span>2020</span></div>
-            <article class="cdd-arc__row" data-topic="structural" data-href="china-debt-dynamics-v4i4.html" tabindex="0" role="link" aria-label="Dealing With a Coming Surge in Nonperforming Loans — read article">
+            <article class="cdd-arc__row" data-topic="structural" data-href="/insights/china-debt-dynamics/v4i4/" tabindex="0" role="link" aria-label="Dealing With a Coming Surge in Nonperforming Loans — read article">
               <div class="cdd-arc__meta">
                 <span class="cdd-arc__chip-issue">4.4</span>
                 <span class="cdd-arc__date">Oct 2020</span>
@@ -440,13 +442,13 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
                 <p class="cdd-arc__excerpt">A forward look at NPL formation, bank disposal pressure, and recovery strategies during a credit downcycle.</p>
               </div>
               <div class="cdd-arc__actions">
-                <a class="cdd-arc__read" href="china-debt-dynamics-v4i4.html">Read <span aria-hidden="true">→</span></a>
-                <a class="cdd-arc__pdf" href="china-debt-dynamics-print.html?source=assets/data/china-debt-dynamics-v4i4.json&pdf=1" target="_blank" rel="noopener">PDF</a>
+                <a class="cdd-arc__read" href="/insights/china-debt-dynamics/v4i4/">Read <span aria-hidden="true">→</span></a>
+                <a class="cdd-arc__pdf" href="/insights/china-debt-dynamics/print/?source=assets/data/china-debt-dynamics-v4i4.json&pdf=1" target="_blank" rel="noopener">PDF</a>
               </div>
             </article>
 
             <div class="cdd-arc__year"><span>2019</span></div>
-            <article class="cdd-arc__row" data-topic="structural" data-href="china-debt-dynamics-v3i5.html" tabindex="0" role="link" aria-label="A Look at the Tools Being Deployed to Help Chinas Banks Dispose of Their NPLs — read article">
+            <article class="cdd-arc__row" data-topic="structural" data-href="/insights/china-debt-dynamics/v3i5/" tabindex="0" role="link" aria-label="A Look at the Tools Being Deployed to Help Chinas Banks Dispose of Their NPLs — read article">
               <div class="cdd-arc__meta">
                 <span class="cdd-arc__chip-issue">3.5</span>
                 <span class="cdd-arc__date">Oct 2019</span>
@@ -457,13 +459,13 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
                 <p class="cdd-arc__excerpt">An overview of legal, regulatory, and market mechanisms banks use to transfer or resolve bad assets.</p>
               </div>
               <div class="cdd-arc__actions">
-                <a class="cdd-arc__read" href="china-debt-dynamics-v3i5.html">Read <span aria-hidden="true">→</span></a>
-                <a class="cdd-arc__pdf" href="china-debt-dynamics-print.html?source=assets/data/china-debt-dynamics-v3i5.json&pdf=1" target="_blank" rel="noopener">PDF</a>
+                <a class="cdd-arc__read" href="/insights/china-debt-dynamics/v3i5/">Read <span aria-hidden="true">→</span></a>
+                <a class="cdd-arc__pdf" href="/insights/china-debt-dynamics/print/?source=assets/data/china-debt-dynamics-v3i5.json&pdf=1" target="_blank" rel="noopener">PDF</a>
               </div>
             </article>
 
             <div class="cdd-arc__year"><span>2018</span></div>
-            <article class="cdd-arc__row" data-topic="policy" data-href="china-debt-dynamics-v2i4.html" tabindex="0" role="link" aria-label="Disclose and Dispose: Stricter Accounting Requirements to Push Up NPLs Further — read article">
+            <article class="cdd-arc__row" data-topic="policy" data-href="/insights/china-debt-dynamics/v2i4/" tabindex="0" role="link" aria-label="Disclose and Dispose: Stricter Accounting Requirements to Push Up NPLs Further — read article">
               <div class="cdd-arc__meta">
                 <span class="cdd-arc__chip-issue">2.4</span>
                 <span class="cdd-arc__date">Jul 2018</span>
@@ -474,8 +476,8 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
                 <p class="cdd-arc__excerpt">Tighter recognition standards are expected to reveal more NPLs and encourage faster balance-sheet cleanup.</p>
               </div>
               <div class="cdd-arc__actions">
-                <a class="cdd-arc__read" href="china-debt-dynamics-v2i4.html">Read <span aria-hidden="true">→</span></a>
-                <a class="cdd-arc__pdf" href="china-debt-dynamics-print.html?source=assets/data/china-debt-dynamics-v2i4.json&pdf=1" target="_blank" rel="noopener">PDF</a>
+                <a class="cdd-arc__read" href="/insights/china-debt-dynamics/v2i4/">Read <span aria-hidden="true">→</span></a>
+                <a class="cdd-arc__pdf" href="/insights/china-debt-dynamics/print/?source=assets/data/china-debt-dynamics-v2i4.json&pdf=1" target="_blank" rel="noopener">PDF</a>
               </div>
             </article>
       </div>
@@ -509,7 +511,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
           <h3>Receive China Debt Dynamics directly</h3>
           <p>Quarterly publication updates on China's private credit markets for subscribers.</p>
         </div>
-        <form class="research-sub__form" action="home.html#signup" method="get" aria-label="Subscribe to China Debt Dynamics updates">
+        <form class="research-sub__form" action="/#signup" method="get" aria-label="Subscribe to China Debt Dynamics updates">
           <label class="research-sub__field" for="subscribe-name">
             <input id="subscribe-name" name="name" type="text" autocomplete="name" placeholder="Full name" required>
           </label>
@@ -528,27 +530,27 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   <div class="sv-footer__inner">
     <div class="sv-footer__top">
       <div>
-        <a class="sv-footer__logo" href="home.html" aria-label="ShoreVest — home">
+        <a class="sv-footer__logo" href="/" aria-label="ShoreVest — home">
           <!-- Dark footer → FullColor_Light variant (ivory wordmark, reads on teal). -->
-          <img src="assets/brand/sv-lockup-fc-light.png" alt="ShoreVest" width="200" height="48">
+          <img src="assets/brand/sv-lockup-fc-light.png" alt="ShoreVest" width="200" height="48" loading="eager" decoding="async" fetchpriority="high">
         </a>
         <p class="sv-footer__offices">
           Guangzhou · Shanghai · Beijing · Hong Kong<br>
-          <a href="contact.html">General inquiries</a>
+          <a href="/contact/">General inquiries</a>
         </p>
       </div>
       <nav class="sv-footer__nav" aria-label="Footer">
-        <a href="firm.html">Firm</a>
-        <a href="strategy.html">Strategy</a>
-        <a href="insights.html">Insights</a>
-        <a href="media.html">Media</a>
-        <a href="team.html">Team</a>
-        <a href="careers.html">Careers</a>
-        <a href="contact.html">Contact</a>
-        <a href="insights.html#archive">China Debt Dynamics</a>
+        <a href="/firm/">Firm</a>
+        <a href="/strategy/">Strategy</a>
+        <a href="/insights/">Insights</a>
+        <a href="/media/">Media</a>
+        <a href="/team/">Team</a>
+        <a href="/careers/">Careers</a>
+        <a href="/contact/">Contact</a>
+        <a href="/insights/#archive">China Debt Dynamics</a>
         <span class="sv-footer__access" role="group" aria-label="Access">
           <span class="sv-footer__access-label">Access</span>
-          <a href="investor-portal/index.html">Investor Portal</a>
+          <a href="/investor-portal/">Investor Portal</a>
         </span>
       </nav>
       <div class="sv-footer__social" aria-label="Follow ShoreVest">
@@ -568,11 +570,11 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 
     <div class="sv-footer__bottom">
       <div class="sv-footer__links">
-        <a href="privacy-policy.html">Privacy Policy</a>
-        <a href="cookie-notice.html">Cookie Notice</a>
-        <a href="terms-of-use.html">Terms of Use</a>
-        <a href="important-information.html">Important Information</a>
-        <a href="legal-notices-disclaimers.html">Legal Notices &amp; Disclaimers</a>
+        <a href="/privacy-policy/">Privacy Policy</a>
+        <a href="/cookie-notice/">Cookie Notice</a>
+        <a href="/terms-of-use/">Terms of Use</a>
+        <a href="/important-information/">Important Information</a>
+        <a href="/legal-notices-disclaimers/">Legal Notices &amp; Disclaimers</a>
       </div>
       <p class="sv-footer__copy">© 2026 ShoreVest Partners. All rights reserved.</p>
     </div>
@@ -583,7 +585,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 13V3M8 3L3.5 7.5M8 3l4.5 4.5" stroke="currentColor" stroke-width="1.5"/></svg>
 </button>
 
-<script>(function(){var T=window.__SVT;function tk(u){return u+(u.indexOf("?")>-1?"&":"?")+"t="+T;}var s=document.createElement("script");s.src=tk("assets/js/cdd-archive.js");document.head.appendChild(s);})();</script>
+<script>(function(){var T=window.__SVT;function tk(u){return T?u+(u.indexOf('?')>-1?'&':'?')+'t='+T:u;}var s=document.createElement("script");s.src=tk("assets/js/cdd-archive.js");document.head.appendChild(s);})();</script>
 <script>
 (function(){
   var burger=document.querySelector('.sv-burger'); var menu=document.getElementById('sv-mobile-menu');
@@ -592,7 +594,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   if(toTop){var onScroll=function(){if(window.scrollY>600)toTop.classList.add('is-visible');else toTop.classList.remove('is-visible');};window.addEventListener('scroll',onScroll,{passive:true});onScroll();toTop.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});}
 })();
 </script>
-<script src="assets/js/insights-new-edition.js?v=20260717" defer></script>
-<script src="assets/js/sv-navigation.js?v=20260717" defer></script>
+<script src="assets/js/insights-new-edition.js?v=20260722-linkedin-direct-navigation" defer></script>
+<script src="assets/js/sv-navigation.js?v=20260722-public-hotfix" defer></script>
 </body>
 </html>

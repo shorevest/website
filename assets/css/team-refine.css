@@ -330,7 +330,7 @@ html body.team-page-v2 .team-profile__photo img {
   object-fit: cover !important;
   object-position: center top !important;
   display: block;
-  filter: grayscale(1) contrast(1.02); /* consistent normalized set */
+  filter: contrast(1.02); /* consistent normalized set */
   transition: filter 0.3s ease;
 }
 html body.team-page-v2 .team-profile__photo::before {
@@ -415,7 +415,7 @@ html body.team-page-v2 .team-profile__photo:has(img)::before {
 }
 html body.team-page-v2 .team-profile:hover .team-profile__photo img,
 html body.team-page-v2 .team-profile.is-active .team-profile__photo img {
-  filter: grayscale(0) contrast(1);
+  filter: contrast(1);
 }
 html body.team-page-v2 .team-profile__name {
   margin-top: 16px !important;
@@ -737,7 +737,7 @@ html body.team-page-v2 .team-profile__photo img {
   object-position: center top !important;
   border-radius: 0 !important;
   box-shadow: none !important;
-  filter: grayscale(100%) contrast(1.02);
+  filter: contrast(1.02);
   transition: filter var(--tr-fast);
 }
 
@@ -771,7 +771,7 @@ html body.team-page-v2 .team-profile__photo[data-team-photo="bio-dinny-mcmahon"]
 html body.team-page-v2 .team-profile:hover .team-profile__photo img,
 html body.team-page-v2 .team-profile.is-active .team-profile__photo img,
 html body.team-page-v2 .team-profile:focus-within .team-profile__photo img {
-  filter: grayscale(0) contrast(1);
+  filter: contrast(1);
 }
 
 html body.team-page-v2 .team-profile__name {
@@ -1359,7 +1359,9 @@ html body.team-page-v2 .group {
 
 @media (max-width: 767px) {
   html body.team-page-v2 {
-    --pad-x: clamp(18px, 5.625vw, 22px);
+    /* Match the homepage mobile chrome gutter so the Team header/menu aligns
+       exactly with the homepage at phone widths. */
+    --pad-x: clamp(20px, 5.8vw, 28px);
     --tr-gutter: var(--pad-x);
   }
 
@@ -1534,7 +1536,7 @@ html body.team-page-v2 .team-profile__photo img {
   html body.team-page-v2 .team-groups .team-inner {
     width: 100% !important;
     max-width: var(--sv-chrome-page-max, var(--page-max, 100%)) !important;
-    padding-inline: var(--sv-chrome-pad-x-mobile, var(--pad-x, clamp(18px, 5.625vw, 22px))) !important;
+    padding-inline: var(--sv-chrome-pad-x-mobile, var(--pad-x, clamp(20px, 5.8vw, 28px))) !important;
     box-sizing: border-box !important;
   }
 
@@ -1542,7 +1544,7 @@ html body.team-page-v2 .team-profile__photo img {
   html body.team-page-v2 .team-hero.hero--team .team-hero__proof {
     width: 100% !important;
     margin-inline: 0 !important;
-    padding-inline: var(--sv-chrome-pad-x-mobile, var(--pad-x, clamp(18px, 5.625vw, 22px))) !important;
+    padding-inline: var(--sv-chrome-pad-x-mobile, var(--pad-x, clamp(20px, 5.8vw, 28px))) !important;
   }
 }
 
@@ -1569,4 +1571,11 @@ html body.team-page-v2 .team-profile__photo img {
 html body.team-page-v2 .team-profile__photo img.team-profile__img--john-zoom {
   transform: scale(1.1);
   transform-origin: center top;
+}
+
+@media (max-width: 390px) {
+  html body.team-page-v2 {
+    --pad-x: clamp(18px, 5.6vw, 22px);
+    --tr-gutter: var(--pad-x);
+  }
 }

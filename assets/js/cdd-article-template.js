@@ -37,15 +37,16 @@
   const findingCount = (data.keyFindings || []).length;
 
   if (isPrint) {
-    meta.innerHTML = `<span>${data.series}</span><span>${data.volumeIssue}</span><span>Published ${data.published}</span><span>${data.edition}</span>`;
+    const bits = [data.series, data.volumeIssue, data.published ? `Published ${data.published}` : ''];
+    meta.innerHTML = bits.filter(Boolean).map((b) => `<span>${b}</span>`).join('');
   } else {
-    const bits = [`Published ${data.published}`, `${readMins} min read`];
+    const bits = [data.published ? `Published ${data.published}` : '', `${readMins} min read`].filter(Boolean);
     if (findingCount) bits.push(`${findingCount} key finding${findingCount > 1 ? 's' : ''}`);
     meta.innerHTML = bits.map((b) => `<span>${b}</span>`).join('');
   }
-  title.textContent = data.title;
-  dek.textContent = data.dek;
-  document.title = `${data.title} | ShoreVest`;
+  title.textContent = safeText(data.title);
+  dek.textContent = safeText(data.dek);
+  document.title = `${safeText(data.title) || 'China Debt Dynamics'} | ShoreVest`;
 
   const pdfHref = typeof data.pdf === 'string' ? data.pdf.trim() : '';
   const pdfLink = document.querySelector('.cdd-actions a[href*="china-debt-dynamics-print"]');
@@ -62,13 +63,13 @@
   (data.sections || []).forEach((section) => {
     if (section.heading) {
       const h2 = document.createElement('h2');
-      h2.textContent = section.heading;
+      h2.textContent = safeText(section.heading);
       body.appendChild(h2);
     }
 
     (section.paragraphs || []).forEach((paragraph) => {
       const p = document.createElement('p');
-      p.textContent = paragraph;
+      p.textContent = safeText(paragraph);
       body.appendChild(p);
     });
 
@@ -76,17 +77,34 @@
       const ul = document.createElement('ul');
       section.bullets.forEach((item) => {
         const li = document.createElement('li');
-        li.textContent = item;
+        li.textContent = safeText(item);
         ul.appendChild(li);
       });
       body.appendChild(ul);
     }
+
+    (section.images || []).forEach((image) => {
+      if (!image || !image.src) return;
+      const figure = document.createElement('figure');
+      figure.className = 'cdd-figure';
+      const img = document.createElement('img');
+      img.src = safeText(image.src);
+      img.alt = safeText(image.alt || image.caption || '');
+      img.loading = 'lazy';
+      figure.appendChild(img);
+      if (image.caption) {
+        const caption = document.createElement('figcaption');
+        caption.textContent = safeText(image.caption);
+        figure.appendChild(caption);
+      }
+      body.appendChild(figure);
+    });
   });
 
   findings.innerHTML = '';
   (data.keyFindings || []).forEach((finding) => {
     const li = document.createElement('li');
-    li.textContent = finding;
+    li.textContent = safeText(finding);
     findings.appendChild(li);
   });
 
@@ -102,8 +120,8 @@
     if (findingsRow) findingsRow.hidden = true;
   }
 
-  disclaimer.textContent = data.disclaimer;
-  copyright.textContent = data.copyright;
+  disclaimer.textContent = safeText(data.disclaimer);
+  copyright.textContent = safeText(data.copyright);
 
   if (!isPrint) enhanceScreenLayout();
 
@@ -125,10 +143,30 @@
   }
 
   if (shouldAutoPrint) {
+    await waitForPrintAssets();
     requestAnimationFrame(() => {
       setTimeout(() => window.print(), 120);
     });
   }
+  async function waitForPrintAssets() {
+    if (!isPrint) return;
+
+    const fontPromise = document.fonts && document.fonts.ready
+      ? document.fonts.ready.catch(() => {})
+      : Promise.resolve();
+
+    const imagePromises = Array.from(document.images || []).map((img) => {
+      if (img.complete) return Promise.resolve();
+      return new Promise((resolve) => {
+        img.addEventListener('load', resolve, { once: true });
+        img.addEventListener('error', resolve, { once: true });
+      });
+    });
+
+    await Promise.all([fontPromise, ...imagePromises]);
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  }
+
 
   function issueHrefFromSource(src) {
     if (!src) return '';
@@ -154,7 +192,6 @@
       series: 'China Debt Dynamics',
       volumeIssue: issue,
       published,
-      edition: archive.category ? `${archive.category} Edition` : 'ShoreVest Insights',
       title: titleText,
       dek: archive.excerpt || 'Read the latest China Debt Dynamics issue from ShoreVest.',
       keyFindings: [],
@@ -190,7 +227,7 @@
     }
 
     try {
-      const response = await fetch('insights.html');
+      const response = await fetch('/insights/');
       if (response.ok) {
         const markup = await response.text();
         const doc = new DOMParser().parseFromString(markup, 'text/html');
@@ -207,11 +244,14 @@
     return {};
   }
 
+  function safeText(value) {
+    return value == null ? '' : String(value);
+  }
+
   function readArchiveRow(row) {
     return {
       issue: row.querySelector('.cdd-arc__chip-issue')?.textContent.trim() || '',
       date: row.querySelector('.cdd-arc__date')?.textContent.trim() || '',
-      category: row.querySelector('.cdd-arc__cat')?.textContent.trim() || '',
       title: row.querySelector('.cdd-arc__row-title')?.textContent.trim() || '',
       excerpt: row.querySelector('.cdd-arc__excerpt')?.textContent.trim() || '',
       pdf: row.querySelector('.cdd-arc__pdf')?.getAttribute('href') || ''
@@ -254,13 +294,6 @@
       tl.append(np, right);
     }
 
-    // Edition kicker above the title.
-    if (data.edition && !document.querySelector('.cdd-edition-kicker')) {
-      const k = document.createElement('p');
-      k.className = 'cdd-edition-kicker';
-      k.textContent = data.edition;
-      title.parentNode.insertBefore(k, title);
-    }
 
     // Drop cap on the opening paragraph (wrap the first letter for reliable
     // rendering across browsers, print, and capture tools).

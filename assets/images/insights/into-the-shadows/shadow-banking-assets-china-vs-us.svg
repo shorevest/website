@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="680" viewBox="0 0 1200 680" role="img" aria-label="Shadow Banking Assets: China vs. US">
+
+<style>
+text{font-family:"DIN 2014","Barlow",Arial,Helvetica,sans-serif;fill:#182524}
+.eyebrow{font-size:13px;font-weight:700;letter-spacing:2.2px;fill:#C93B2A}
+.title{font-size:30px;font-weight:600;letter-spacing:-.3px}
+.subtitle{font-size:15px;font-weight:400;fill:#6E7169}
+.axis{font-size:13px;font-weight:500;fill:#6E7169}
+.axis-title{font-size:13px;font-weight:700;letter-spacing:1.2px;fill:#6E7169}
+.legend{font-size:14px;font-weight:600}
+.value{font-size:13px;font-weight:700}
+.source{font-size:12px;font-weight:500;fill:#6E7169}
+.table-head{font-size:13px;font-weight:700;letter-spacing:.2px}
+.table-question{font-size:14px;font-weight:600}
+.table-cell{font-size:14px;font-weight:700}
+.box-head{font-size:15px;font-weight:700}
+.box-copy{font-size:12.5px;font-weight:500;fill:#2A302E}
+.box-copy-light{font-size:12.5px;font-weight:500;fill:#FCF9F1}
+.section-head{font-size:22px;font-weight:600}
+.big-number{font-size:54px;font-weight:600;letter-spacing:-1px}
+</style>
+
+<rect width="1200" height="680" fill="#FCF9F1"/>
+<rect x="64" y="40" width="10" height="10" fill="#C93B2A"/>
+<text x="88" y="51" class="eyebrow">MARKET SCALE · US$ TRILLIONS</text>
+<text x="64" y="94" class="title">Shadow Banking Assets: China vs. US</text>
+<text x="64" y="120" class="subtitle">Diverging credit cycles since China’s 2017–18 regulatory clampdown</text>
+<rect x="286.4" y="150" width="144.3" height="405" fill="#F1EBDD" opacity=".82"/>
+<text x="358.57142857142856" y="170" class="axis-title" text-anchor="middle">2017–18 CLAMPDOWN</text>
+<line x1="100" y1="555.0" x2="1110" y2="555.0" stroke="#D8CEB0" stroke-opacity=".72" stroke-width="1"/>
+<text x="84" y="560.0" class="axis" text-anchor="end">0</text>
+<line x1="100" y1="474.0" x2="1110" y2="474.0" stroke="#D8CEB0" stroke-opacity=".72" stroke-width="1"/>
+<text x="84" y="479.0" class="axis" text-anchor="end">10</text>
+<line x1="100" y1="393.0" x2="1110" y2="393.0" stroke="#D8CEB0" stroke-opacity=".72" stroke-width="1"/>
+<text x="84" y="398.0" class="axis" text-anchor="end">20</text>
+<line x1="100" y1="312.0" x2="1110" y2="312.0" stroke="#D8CEB0" stroke-opacity=".72" stroke-width="1"/>
+<text x="84" y="317.0" class="axis" text-anchor="end">30</text>
+<line x1="100" y1="231.0" x2="1110" y2="231.0" stroke="#D8CEB0" stroke-opacity=".72" stroke-width="1"/>
+<text x="84" y="236.0" class="axis" text-anchor="end">40</text>
+<line x1="100" y1="150.0" x2="1110" y2="150.0" stroke="#D8CEB0" stroke-opacity=".72" stroke-width="1"/>
+<text x="84" y="155.0" class="axis" text-anchor="end">50</text>
+<text x="100.0" y="584" class="axis" text-anchor="middle">2016</text>
+<text x="244.28571428571428" y="584" class="axis" text-anchor="middle">2017</text>
+<text x="388.57142857142856" y="584" class="axis" text-anchor="middle">2018</text>
+<text x="532.8571428571429" y="584" class="axis" text-anchor="middle">2019</text>
+<text x="677.1428571428571" y="584" class="axis" text-anchor="middle">2020</text>
+<text x="821.4285714285714" y="584" class="axis" text-anchor="middle">2021</text>
+<text x="965.7142857142857" y="584" class="axis" text-anchor="middle">2022</text>
+<text x="1110.0" y="584" class="axis" text-anchor="middle">2023</text>
+<text class="axis-title" x="0" y="0" text-anchor="middle" transform="translate(32 352.5) rotate(-90)">US$ TRILLIONS</text>
+<polyline points="100.0,490.2 244.3,496.7 388.6,529.9 532.9,530.7 677.1,531.5 821.4,534.8 965.7,536.4 1110.0,537.2" fill="none" stroke="#3D7070" stroke-width="5" stroke-linejoin="miter" stroke-linecap="square"/>
+<rect x="96.0" y="486.2" width="8" height="8" fill="#FCF9F1" stroke="#3D7070" stroke-width="3"/>
+<rect x="240.3" y="492.7" width="8" height="8" fill="#FCF9F1" stroke="#3D7070" stroke-width="3"/>
+<rect x="384.6" y="525.9" width="8" height="8" fill="#FCF9F1" stroke="#3D7070" stroke-width="3"/>
+<rect x="528.9" y="526.7" width="8" height="8" fill="#FCF9F1" stroke="#3D7070" stroke-width="3"/>
+<rect x="673.1" y="527.5" width="8" height="8" fill="#FCF9F1" stroke="#3D7070" stroke-width="3"/>
+<rect x="817.4" y="530.8" width="8" height="8" fill="#FCF9F1" stroke="#3D7070" stroke-width="3"/>
+<rect x="961.7" y="532.4" width="8" height="8" fill="#FCF9F1" stroke="#3D7070" stroke-width="3"/>
+<rect x="1106.0" y="533.2" width="8" height="8" fill="#FCF9F1" stroke="#3D7070" stroke-width="3"/>
+<polyline points="100.0,332.2 244.3,305.5 388.6,310.4 532.9,271.5 677.1,239.1 821.4,188.9 965.7,234.2 1110.0,186.4" fill="none" stroke="#C93B2A" stroke-width="5" stroke-linejoin="miter" stroke-linecap="square"/>
+<rect x="96.0" y="328.2" width="8" height="8" fill="#FCF9F1" stroke="#C93B2A" stroke-width="3"/>
+<rect x="240.3" y="301.5" width="8" height="8" fill="#FCF9F1" stroke="#C93B2A" stroke-width="3"/>
+<rect x="384.6" y="306.4" width="8" height="8" fill="#FCF9F1" stroke="#C93B2A" stroke-width="3"/>
+<rect x="528.9" y="267.5" width="8" height="8" fill="#FCF9F1" stroke="#C93B2A" stroke-width="3"/>
+<rect x="673.1" y="235.1" width="8" height="8" fill="#FCF9F1" stroke="#C93B2A" stroke-width="3"/>
+<rect x="817.4" y="184.9" width="8" height="8" fill="#FCF9F1" stroke="#C93B2A" stroke-width="3"/>
+<rect x="961.7" y="230.2" width="8" height="8" fill="#FCF9F1" stroke="#C93B2A" stroke-width="3"/>
+<rect x="1106.0" y="182.4" width="8" height="8" fill="#FCF9F1" stroke="#C93B2A" stroke-width="3"/>
+<line x1="760" y1="64" x2="805" y2="64" stroke="#3D7070" stroke-width="5"/>
+<text x="818" y="69" class="legend">China shadow banking AUM</text>
+<line x1="760" y1="94" x2="805" y2="94" stroke="#C93B2A" stroke-width="5"/>
+<text x="818" y="99" class="legend">US shadow banking (OFI) AUM</text>
+<text x="1098.0" y="172.45" class="value" text-anchor="end" style="fill:#9F2F24">45.5</text>
+<text x="1098.0" y="523.18" class="value" text-anchor="end" style="fill:#1E4040">2.2</text>
+<text x="64" y="640" class="source">Source: People’s Bank of China and Financial Stability Board</text>
+<line x1="64" y1="612" x2="1136" y2="612" stroke="#D8CEB0" stroke-width="1"/>
+</svg>

@@ -8,6 +8,13 @@
    ========================================================================== */
 
 :root {
+  --p-page-width: 210mm;
+  --p-page-margin-x: 16mm;
+  --p-page-margin-top: 17mm;
+  --p-page-margin-continued-top: 14mm;
+  --p-print-top-rule-height: 0;
+  --p-page-margin-bottom: 18mm;
+  --p-printable-width: calc(var(--p-page-width) - (var(--p-page-margin-x) * 2));
   --p-cinnabar: #C93B2A;
   --p-cinnabar-d: #9F2F24;
   --p-ink: #182524;
@@ -20,24 +27,34 @@
   --p-cn: "Noto Serif SC", serif;
 }
 
-* { box-sizing: border-box; }
+* { box-sizing: border-box; overscroll-behavior: none; }
 
-@page { size: A4; margin: 17mm 16mm 18mm; }
+html, body { overscroll-behavior: none; }
+
+@page { size: A4; margin: 0; }
 
 html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 
 body.cdd-print-layout {
-  margin: 0; padding: 32px 16px 56px;
+  margin: 0; padding: 0 16px 56px;
+  overflow-x: hidden;
   background: #E7E4DC;                 /* screen backdrop only */
   color: var(--p-ink-2);
   font-family: var(--p-font);
   font-size: 16px; line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
-body.cdd-print-layout .wrap { width: 860px; max-width: none; margin-inline: auto; }
+@media screen {
+  body.cdd-print-layout .wrap {
+    width: min(var(--p-page-width), calc(100vw - 32px));
+    max-width: none;
+    margin-inline: auto;
+  }
+}
+body.cdd-print-layout .wrap { max-width: none; margin-inline: auto; }
 
 /* ---- Running header strip (publication nameplate + screen toolbar) ---- */
-.cdd-print-layout .cdd-topline { max-width: 860px; margin: 0 auto 14px; padding: 0 4px; }
+.cdd-print-layout .cdd-topline { max-width: var(--p-page-width); margin: 0 auto 14px; padding: 32px 4px 0; }
 .cdd-print-layout .cdd-topline__inner {
   display: flex; align-items: center; justify-content: space-between; gap: 24px;
 }
@@ -67,10 +84,29 @@ body.cdd-print-layout .wrap { width: 860px; max-width: none; margin-inline: auto
 
 /* ---- The sheet ---- */
 .cdd-print-layout .cdd-print-shell {
+  overflow: hidden;
   background: var(--p-paper);
-  border-top: 3px solid var(--p-cinnabar);
+  position: relative;
+  border-top: 0;
   box-shadow: 0 1px 0 var(--p-line), 0 18px 50px rgba(20, 30, 28, 0.14);
-  padding: clamp(40px, 6vw, 64px) clamp(34px, 6vw, 60px) clamp(44px, 6vw, 60px);
+  padding: var(--p-page-margin-top) var(--p-page-margin-x) var(--p-page-margin-bottom);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+/* The absolute pseudo-element is positioned from the shell content box in
+   print engines, so pull it through the horizontal page padding to the sheet edge. */
+.cdd-print-layout .cdd-print-shell::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  right: auto;
+  width: var(--p-page-width);
+  transform: translateX(-50%);
+  height: var(--p-print-top-rule-height);
+  background: transparent;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 
 /* ---- Masthead ---- */
@@ -115,7 +151,7 @@ body.cdd-print-layout .wrap { width: 860px; max-width: none; margin-inline: auto
   margin: 0 0 12px; font: 600 11px/1.3 var(--p-font); letter-spacing: 0.14em;
   text-transform: uppercase; color: var(--p-muted);
 }
-.cdd-print-layout .cdd-sidecard ul { list-style: none; margin: 0; padding: 0; columns: 2; column-gap: 40px; }
+.cdd-print-layout .cdd-sidecard ul { list-style: none; margin: 0; padding: 0; columns: 1; }
 .cdd-print-layout .cdd-sidecard ul li {
   position: relative; padding: 0 0 12px 18px; margin: 0; break-inside: avoid;
   font: 400 13px/1.5 var(--p-font); color: var(--p-ink-2);
@@ -171,24 +207,105 @@ body.cdd-print-layout .wrap { width: 860px; max-width: none; margin-inline: auto
    PRINT
    ========================================================================== */
 @media print {
+  @page { size: A4; margin: 17mm 0 18mm; }
+
   /*
      Export only the white document area: the beige browser-preview backdrop,
      toolbar/nameplate strip, and screen shadow are intentionally removed for
-     print-ready PDFs while the sheet padding and A4 page proportions remain
-     governed by the base template and @page rule above.
+     print-ready PDFs. Browser print engines disagree on cloned element padding
+     across fragmented pages (especially Safari versus Chromium), so the page
+     box owns vertical insets and the A4 shell owns horizontal insets. This keeps
+     second and later PDF pages from starting too close to the top edge while
+     preserving the same content width as the on-screen A4/PDF preview.
   */
+  html,
   body.cdd-print-layout {
+    width: var(--p-page-width);
+    min-width: var(--p-page-width);
+    margin: 0 auto;
     padding: 0;
     background: var(--p-paper);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
   .cdd-print-layout .cdd-topline,
   .cdd-print-layout .cdd-print-hide,
   .cdd-print-layout .cdd-topline__tools { display: none !important; }
+  /* Browser print/PDF engines can still apply an unprintable-area inset even
+     when @page margin is zero. Anchor an oversized fixed rule to the page box
+     itself so the cinnabar line reaches the visible PDF edges in Preview. */
+  body.cdd-print-layout::before {
+    content: "";
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    left: -100mm;
+    width: calc(100vw + 200mm);
+    height: var(--p-print-top-rule-height);
+    background: transparent;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
   .cdd-print-layout .wrap { width: auto; max-width: none; }
   .cdd-print-layout .cdd-print-shell {
+    position: relative;
     box-shadow: none;
+    background: var(--p-paper);
+    width: var(--p-page-width);
+    min-height: calc(297mm - var(--p-page-margin-top) - var(--p-page-margin-bottom));
+    margin: 0 auto;
+    overflow: visible;
+    border-top: 0;
+    padding: 0 var(--p-page-margin-x);
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
   }
+  /* Repeat the same padding escape in print output so saved PDFs reach both page edges. */
+  .cdd-print-layout .cdd-print-shell::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    right: auto;
+    display: block;
+    width: var(--p-page-width);
+    transform: translateX(-50%);
+    height: var(--p-print-top-rule-height);
+    background: transparent;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /*
+     Keep print typography independent of each browser's print viewport. Safari
+     and Chromium resolve vw/clamp() differently in print preview, which changes
+     text metrics and can turn the same article into a different page count.
+  */
+  .cdd-print-layout .cdd-title {
+    font-size: 38px;
+    font-kerning: normal;
+    line-height: 1.1;
+    text-wrap: normal;
+  }
+  .cdd-print-layout .cdd-dek {
+    font-size: 17px;
+    line-height: 1.55;
+    text-wrap: normal;
+  }
+  .cdd-print-layout .cdd-body > h2 {
+    font-size: 21px;
+    font-kerning: normal;
+    line-height: 1.2;
+    text-wrap: normal;
+  }
+
   .cdd-print-layout .cdd-body > h2 { break-after: avoid; }
+
+  .cdd-print-layout .cdd-body > h2 {
+    margin-top: 26px;
+    padding-top: 18px;
+    border-top: 1px solid var(--p-line);
+  }
   .cdd-print-layout .cdd-disclaimer { break-inside: avoid; }
 }
 
@@ -203,3 +320,45 @@ body.cdd-print-layout .wrap { width: 860px; max-width: none; margin-inline: auto
    cdd-article-template.js; suppress it so it cannot render unstyled. */
 .cdd-print-layout .sv-back-to-top,
 .cdd-print-layout .back-to-top { display: none !important; }
+
+/* Safari's print compositor can treat a physically sized body as a shrink-to-fit
+   page, while Chromium prints the same CDD sheet at the CSS page size declared
+   above. Anchor the Safari print canvas to the page origin and make the A4 sheet
+   the only physical-width element so Save as PDF matches Chromium's geometry.
+   The print page margins for Safari are injected from the template after user-
+   agent detection; Safari does not reliably clone the shell's top/bottom padding
+   across fragmented PDF pages, so the browser page box owns vertical whitespace
+   there while this sheet keeps Chromium's horizontal content geometry. */
+@media print {
+  html.cdd-print-safari,
+  html.cdd-print-safari body.cdd-print-layout {
+    width: auto;
+    min-width: 0;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+  }
+
+  html.cdd-print-safari body.cdd-print-layout {
+    display: block;
+  }
+
+  html.cdd-print-safari .cdd-print-layout .cdd-print-shell {
+    left: 0;
+    right: auto;
+    margin-left: 0;
+    margin-right: 0;
+    max-width: var(--p-page-width);
+    min-height: calc(297mm - var(--p-page-margin-top) - var(--p-page-margin-bottom));
+    padding-top: 0;
+    padding-bottom: 0;
+    transform: none;
+  }
+
+  html.cdd-print-safari .cdd-print-layout .cdd-print-shell::before {
+    left: 0;
+    width: var(--p-page-width);
+    transform: none;
+  }
+}

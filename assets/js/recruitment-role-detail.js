@@ -1,274 +1,31 @@
-(function (root, factory) {
-  if (typeof module === 'object' && module.exports) {
-    module.exports = factory();
-  } else {
-    root.ShoreVestRecruitmentRoleDetail = factory();
-  }
-})(typeof window !== 'undefined' ? window : globalThis, function () {
+(function (root, factory) { if (typeof module === 'object' && module.exports) module.exports = factory(); else root.ShoreVestRecruitmentRoleDetail = factory(); })(typeof window !== 'undefined' ? window : globalThis, function () {
   'use strict';
-
-  // Role-detail pages live in /careers/, so the shared manifest is one directory up.
-  // A page may override this with data-recruitment-manifest for other locations.
   var DEFAULT_MANIFEST_PATH = '../assets/data/recruitment/roles.v1.json';
   var SUPPORTED_LOCALES = { en: true, 'zh-CN': true };
-  var ACTIVE_STATUSES = { active: true };
-  var CLOSED_STATUSES = { closed: true, archived: true };
-
   var STRINGS = {
-    en: {
-      eyebrow: 'Careers',
-      overview: 'Role Overview',
-      responsibilities: 'Responsibilities',
-      requirements: 'Requirements',
-      preferred: 'Preferred Qualifications',
-      reportingLine: 'Reporting Line',
-      deadline: 'Application Deadline',
-      applicationStatus: 'Application Status',
-      apply: 'Apply for this role',
-      disabled: 'Applications are not currently being accepted for this position.',
-      closed: 'This position is no longer accepting applications.',
-      notFound: 'This position could not be found.',
-      unavailable: 'Role information could not be loaded. Please try again later.',
-      backToCareers: 'View all roles',
-      privacyNote: 'ShoreVest processes recruitment information in line with its recruitment privacy notice. Recruiting communications take place only through official ShoreVest channels, and ShoreVest never asks candidates to make a payment.',
-      employmentType: { 'Full-time': 'Full-time', 'Part-time': 'Part-time', Internship: 'Internship', Contract: 'Contract' },
-      applyPage: 'apply.html'
-    },
-    'zh-CN': {
-      eyebrow: '人才招聘',
-      overview: '职位概述',
-      responsibilities: '工作职责',
-      requirements: '任职要求',
-      preferred: '优先条件',
-      reportingLine: '汇报关系',
-      deadline: '申请截止日期',
-      applicationStatus: '申请状态',
-      apply: '申请该职位',
-      disabled: '该职位目前暂不接受申请。',
-      closed: '该职位已停止接受申请。',
-      notFound: '未能找到该职位。',
-      unavailable: '暂时无法加载职位信息，请稍后再试。',
-      backToCareers: '查看所有职位',
-      privacyNote: 'ShoreVest 依据其招聘隐私声明处理招聘信息。招聘沟通仅通过 ShoreVest 官方渠道进行，ShoreVest 绝不会要求候选人支付任何费用。',
-      employmentType: { 'Full-time': '全职', 'Part-time': '兼职', Internship: '实习', Contract: '合同制' },
-      applyPage: 'apply_cn.html'
-    }
+    en: { eyebrow:'Careers', overview:'Role Overview', responsibilities:'Key Responsibilities', required:'Required Qualifications', preferred:'Preferred Qualifications', reportingLine:'Reporting Line', targetStartDate:'Target Start Date', recruitmentStatus:'Recruitment Status', closed:'Applications are closed for this role.', notFound:'This position could not be found.', unavailable:'Role information could not be loaded. Please try again later.', back:'Back to Open Roles', previewLabel:'Draft preview', previewText:'This unpublished role is visible only because the URL includes preview=1. Preview links are a convenience for authorised internal review, not an access-control system.', applicationsNotOpen:'Applications are not yet open for this role.' },
+    'zh-CN': { eyebrow:'人才招聘', overview:'职位概述', responsibilities:'主要职责', required:'任职要求', preferred:'优先条件', reportingLine:'汇报关系', targetStartDate:'目标到岗时间', recruitmentStatus:'招聘状态', closed:'该职位已停止接受申请。', notFound:'未能找到该职位。', unavailable:'暂时无法加载职位信息，请稍后再试。', back:'返回招聘职位', previewLabel:'草稿预览', previewText:'由于网址包含 preview=1，当前显示未发布职位内容。预览链接仅便于授权内部审核，并非访问控制机制。', applicationsNotOpen:'该职位暂未开放申请。' }
   };
-
-  function getLocale(doc) {
-    var lang = doc && doc.documentElement ? doc.documentElement.lang : '';
-    return SUPPORTED_LOCALES[lang] ? lang : null;
-  }
-
-  function isValidRoleId(roleId) {
-    return typeof roleId === 'string' && /^[a-z0-9][a-z0-9-]{2,80}$/.test(roleId);
-  }
-
-  function findRole(manifest, roleId) {
-    if (!manifest || !Array.isArray(manifest.roles)) return null;
-    for (var i = 0; i < manifest.roles.length; i += 1) {
-      if (manifest.roles[i] && manifest.roles[i].roleId === roleId) return manifest.roles[i];
-    }
-    return null;
-  }
-
-  function deadlineHasPassed(value) {
-    if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}/.test(value)) return false;
-    var iso = /^\d{4}-\d{2}-\d{2}$/.test(value) ? value + 'T23:59:59Z' : value;
-    var time = Date.parse(iso);
-    return !isNaN(time) && time < Date.now();
-  }
-
-  function el(doc, tag, className, text) {
-    var node = doc.createElement(tag);
-    if (className) node.className = className;
-    if (typeof text === 'string' && text !== '') node.textContent = text;
-    return node;
-  }
-
-  function appendList(doc, parent, heading, items) {
-    if (!Array.isArray(items)) return;
-    var clean = items.filter(function (item) { return typeof item === 'string' && item.trim() !== ''; });
-    if (!clean.length) return;
-    parent.appendChild(el(doc, 'h3', null, heading));
-    var list = el(doc, 'ul', 'careers-list');
-    clean.forEach(function (item) { list.appendChild(el(doc, 'li', null, item)); });
-    parent.appendChild(list);
-  }
-
-  // Render a single neutral status message (used for not-found, unavailable, closed).
-  function renderStatusOnly(doc, hero, body, strings, message) {
-    hero.replaceChildren(
-      el(doc, 'p', 'careers-eyebrow', strings.eyebrow),
-      el(doc, 'h1', 'careers-title', strings.eyebrow)
-    );
-    var copy = el(doc, 'div', 'careers-copy' + (strings === STRINGS['zh-CN'] ? ' careers-copy--cn' : ''));
-    copy.appendChild(el(doc, 'p', 'careers-pending', message));
-    var back = el(doc, 'a', 'sv-textlink', strings.backToCareers);
-    back.href = strings === STRINGS['zh-CN'] ? '../careers_cn.html' : '../careers.html';
-    copy.appendChild(back);
-    var wrap = el(doc, 'div', 'sv-shell careers-two-col');
-    var head = el(doc, 'div');
-    head.appendChild(el(doc, 'h2', 'careers-h2', strings.eyebrow));
-    wrap.appendChild(head);
-    wrap.appendChild(copy);
-    body.replaceChildren(wrap);
-  }
-
-  function buildMeta(role, localized, strings) {
-    var parts = [];
-    if (typeof localized.team === 'string' && localized.team.trim()) parts.push(localized.team);
-    if (typeof localized.location === 'string' && localized.location.trim()) parts.push(localized.location);
-    var employmentLabel = strings.employmentType[role.employmentType];
-    if (employmentLabel) parts.push(employmentLabel);
-    return parts.join(' · ');
-  }
-
-  function renderRole(doc, hero, body, strings, locale, role, localized) {
-    var isCn = locale === 'zh-CN';
-    var status = role.status;
-    var closed = Object.prototype.hasOwnProperty.call(CLOSED_STATUSES, status);
-    var active = Object.prototype.hasOwnProperty.call(ACTIVE_STATUSES, status);
-    // Applications open only when the role is active, enabled, and the deadline has not passed.
-    var applyOpen = active && role.applicationEnabled === true && !deadlineHasPassed(role.applicationDeadline);
-
-    // --- Hero -------------------------------------------------------------------------
-    var heroChildren = [
-      el(doc, 'p', 'careers-eyebrow', strings.eyebrow),
-      el(doc, 'h1', 'careers-title', localized.title)
-    ];
-    var meta = buildMeta(role, localized, strings);
-    if (meta) heroChildren.push(el(doc, 'p', 'careers-hero__meta', meta));
-    hero.replaceChildren.apply(hero, heroChildren);
-
-    // --- Body -------------------------------------------------------------------------
-    var wrap = el(doc, 'div', 'sv-shell careers-two-col');
-    var head = el(doc, 'div');
-    head.appendChild(el(doc, 'h2', 'careers-h2', strings.overview));
-    wrap.appendChild(head);
-
-    var copy = el(doc, 'div', 'careers-copy' + (isCn ? ' careers-copy--cn' : ''));
-
-    if (typeof localized.summary === 'string' && localized.summary.trim()) {
-      copy.appendChild(el(doc, 'p', null, localized.summary));
-    }
-
-    appendList(doc, copy, strings.responsibilities, localized.responsibilities);
-    appendList(doc, copy, strings.requirements, localized.requirements);
-    appendList(doc, copy, strings.preferred, localized.preferredQualifications);
-
-    // Reporting line: only when present and explicitly approved.
-    if (role.reportingLine && role.reportingLine.approved === true && role.reportingLine.locales && role.reportingLine.locales[locale]) {
-      copy.appendChild(el(doc, 'h3', null, strings.reportingLine));
-      copy.appendChild(el(doc, 'p', null, role.reportingLine.locales[locale]));
-    }
-
-    // Deadline: only when present.
-    if (typeof role.applicationDeadline === 'string' && role.applicationDeadline.trim()) {
-      copy.appendChild(el(doc, 'h3', null, strings.deadline));
-      copy.appendChild(el(doc, 'p', null, role.applicationDeadline.slice(0, 10)));
-    }
-
-    // Application status + apply control or neutral message.
-    copy.appendChild(el(doc, 'h3', null, strings.applicationStatus));
-    if (closed) {
-      copy.appendChild(el(doc, 'p', 'careers-pending', strings.closed));
-    } else if (applyOpen) {
-      var apply = el(doc, 'a', 'careers-action', strings.apply);
-      apply.href = strings.applyPage + '?role=' + encodeURIComponent(role.roleId) + '&source=website';
-      copy.appendChild(apply);
-    } else {
-      copy.appendChild(el(doc, 'p', 'careers-pending', strings.disabled));
-    }
-
-    copy.appendChild(el(doc, 'p', 'careers-meta-note', strings.privacyNote));
-
-    wrap.appendChild(copy);
-    body.replaceChildren(wrap);
-  }
-
-  // Pure render entry point. Returns a short status string for testing.
-  function renderRoleDetail(doc, manifest, options) {
-    options = options || {};
-    var hero = doc.querySelector('[data-role-detail="hero"]');
-    var body = doc.querySelector('[data-role-detail="body"]');
-    var locale = options.locale || getLocale(doc);
-    if (!hero || !body || !locale) return 'no-target';
-    var strings = STRINGS[locale];
-
-    var roleId = options.roleId;
-    if (!isValidRoleId(roleId)) {
-      renderStatusOnly(doc, hero, body, strings, strings.notFound);
-      return 'invalid-role';
-    }
-    if (manifest === null || manifest === undefined) {
-      renderStatusOnly(doc, hero, body, strings, strings.unavailable);
-      return 'unavailable';
-    }
-    var role = findRole(manifest, roleId);
-    if (!role) {
-      renderStatusOnly(doc, hero, body, strings, strings.notFound);
-      return 'not-found';
-    }
-    var localized = role.locales ? role.locales[locale] : null;
-    if (!localized || typeof localized.title !== 'string' || localized.title.trim() === '') {
-      renderStatusOnly(doc, hero, body, strings, strings.notFound);
-      return 'missing-locale';
-    }
-    // Draft roles are not publicly viewable through a direct URL.
-    if (role.status === 'draft') {
-      renderStatusOnly(doc, hero, body, strings, strings.notFound);
-      return 'draft';
-    }
-    renderRole(doc, hero, body, strings, locale, role, localized);
-    if (Object.prototype.hasOwnProperty.call(CLOSED_STATUSES, role.status)) return 'closed';
-    if (role.applicationEnabled === true && !deadlineHasPassed(role.applicationDeadline)) return 'apply-open';
-    return 'disabled';
-  }
-
-  function getRoleId(doc) {
-    var body = doc.body;
-    return body ? body.getAttribute('data-recruitment-role-id') : null;
-  }
-
-  function getManifestPath(doc) {
-    var body = doc.body;
-    var override = body ? body.getAttribute('data-recruitment-manifest') : null;
-    return override || DEFAULT_MANIFEST_PATH;
-  }
-
-  function initRoleDetail(win) {
-    var doc = win.document;
-    if (!doc || !doc.querySelector('[data-role-detail="hero"]')) return Promise.resolve('no-target');
-    var roleId = getRoleId(doc);
-    var locale = getLocale(doc);
-    if (!locale) return Promise.resolve('no-locale');
-    if (typeof win.fetch !== 'function') {
-      renderRoleDetail(doc, null, { roleId: roleId, locale: locale });
-      return Promise.resolve('no-fetch');
-    }
-    return win.fetch(getManifestPath(doc), { credentials: 'same-origin' })
-      .then(function (response) {
-        if (!response || !response.ok) throw new Error('Manifest unavailable');
-        return response.json();
-      })
-      .then(function (manifest) {
-        return renderRoleDetail(doc, manifest, { roleId: roleId, locale: locale });
-      })
-      .catch(function () {
-        return renderRoleDetail(doc, null, { roleId: roleId, locale: locale });
-      });
-  }
-
-  if (typeof window !== 'undefined' && window.document) {
-    initRoleDetail(window);
-  }
-
-  return {
-    initRoleDetail: initRoleDetail,
-    renderRoleDetail: renderRoleDetail,
-    isValidRoleId: isValidRoleId,
-    deadlineHasPassed: deadlineHasPassed,
-    DEFAULT_MANIFEST_PATH: DEFAULT_MANIFEST_PATH
-  };
+  function getLocale(doc){var l=doc&&doc.documentElement?doc.documentElement.lang:'';return SUPPORTED_LOCALES[l]?l:null;}
+  function flagEnabled(win){return !!(win&&win.SHOREVEST_SITE_CONFIG&&win.SHOREVEST_SITE_CONFIG.careersOpenRolesEnabled===true);}
+  function hasPreview(win){try{return !!(win&&win.location&&new URL(win.location.href).searchParams.get('preview')==='1');}catch(e){return false;}}
+  function isValidRoleId(id){return typeof id==='string'&&/^[a-z0-9][a-z0-9-]{2,80}$/.test(id);}
+  function findRole(manifest, slug){return manifest&&Array.isArray(manifest.roles)?manifest.roles.find(function(r){return r&&(r.slug===slug||r.id===slug);})||null:null;}
+  function t(role, field, locale){return role[field]&&role[field][locale]||'';}
+  function el(doc, tag, cls, text){var n=doc.createElement(tag); if(cls)n.className=cls; if(typeof text==='string')n.textContent=text; return n;}
+  function appendList(doc,parent,heading,items){items=Array.isArray(items)?items.filter(Boolean):[]; if(!items.length)return; parent.appendChild(el(doc,'h3',null,heading)); var ol=el(doc,'ol','careers-list'); items.forEach(function(x){ol.appendChild(el(doc,'li',null,x));}); parent.appendChild(ol);}
+  function appendPreviewParam(href, preview){return preview ? href + (href.indexOf('?')===-1?'?':'&') + 'preview=1' : href;}
+  function backHref(locale){return locale==='zh-CN'?'../cn/careers/#open-roles':'../careers/#open-roles';}
+  function updateLanguageLinks(doc, preview){ if(!preview)return; Array.prototype.forEach.call(doc.querySelectorAll ? doc.querySelectorAll('a.sv-lang, .sv-mobile-utils a[href$=".html"], link[rel="alternate"]') : [], function(a){ var href=a.getAttribute('href'); if(href && /careers\/.+\.html$|^[a-z0-9-]+(?:_cn)?\.html$/i.test(href) && href.indexOf('preview=1')===-1){ a.setAttribute('href', appendPreviewParam(href, true)); } }); }
+  function renderStatusOnly(doc, hero, body, strings, locale, msg){hero.replaceChildren(el(doc,'p','careers-eyebrow',strings.eyebrow),el(doc,'h1','careers-title',strings.eyebrow)); var wrap=el(doc,'div','sv-shell careers-two-col'); wrap.appendChild(el(doc,'div')); var copy=el(doc,'div','careers-copy'+(locale==='zh-CN'?' careers-copy--cn':'')); copy.appendChild(el(doc,'p','careers-pending',msg)); var a=el(doc,'a','sv-textlink',strings.back); a.href=backHref(locale); copy.appendChild(a); wrap.appendChild(copy); body.replaceChildren(wrap);}
+  function encodeMailto(address, subject, body){ return 'mailto:' + encodeURIComponent(address).replace(/%40/g,'@') + '?subject=' + encodeURIComponent(subject||'') + '&body=' + encodeURIComponent(body||''); }
+  function renderApplicationSection(doc, copy, role, strings, preview, manifest){ if(role.status==='closed'){ copy.appendChild(el(doc,'p','careers-pending',strings.closed)); } if(role.status==='draft'&&preview){ copy.appendChild(el(doc,'p','careers-pending',strings.applicationsNotOpen)); } var container=el(doc,'div','careers-application-insertion-point'); container.setAttribute('data-job-application-section','email-only'); var cfg=manifest&&manifest.emailApplication; var appCopy=role.emailApplicationCopy&&role.emailApplicationCopy[doc.documentElement.lang]; if(role.status==='published'&&cfg&&cfg.enabled===true&&cfg.address&&appCopy){ container.appendChild(el(doc,'h3',null,appCopy.heading)); container.appendChild(el(doc,'p',null,appCopy.copy)); var a=el(doc,'a','sv-util-btn sv-util-btn--cta',appCopy.button); a.href=encodeMailto(cfg.address,appCopy.subject,appCopy.body); container.appendChild(a); } copy.appendChild(container); }
+  function createPreviewNotice(doc, strings){ var section=el(doc,'section','careers-section careers-section--band'); section.setAttribute('data-recruitment-preview','true'); var shell=el(doc,'div','sv-shell'); var note=el(doc,'div','careers-preview-note'); note.appendChild(el(doc,'strong',null,strings.previewLabel)); note.appendChild(el(doc,'p',null,strings.previewText)); shell.appendChild(note); section.appendChild(shell); return section; }
+  function renderRole(doc, hero, body, strings, locale, role, preview, manifest){ hero.replaceChildren(el(doc,'p','careers-eyebrow',strings.eyebrow),el(doc,'h1','careers-title',t(role,'title',locale)),el(doc,'p','careers-hero__meta',[t(role,'department',locale),t(role,'location',locale),t(role,'employmentType',locale)].filter(Boolean).join(' · '))); var frag=[]; if(role.status==='draft'&&preview){ frag.push(createPreviewNotice(doc, strings)); }
+    var wrap=el(doc,'div','sv-shell careers-two-col'); var head=el(doc,'div'); head.appendChild(el(doc,'h2','careers-h2',strings.overview)); wrap.appendChild(head); var copy=el(doc,'div','careers-copy'+(locale==='zh-CN'?' careers-copy--cn':'')); copy.appendChild(el(doc,'p',null,t(role,'roleOverview',locale))); [['reportingLine',strings.reportingLine],['targetStartDate',strings.targetStartDate]].forEach(function(pair){copy.appendChild(el(doc,'h3',null,pair[1])); copy.appendChild(el(doc,'p',null,t(role,pair[0],locale)));}); appendList(doc,copy,strings.responsibilities,role.responsibilities&&role.responsibilities[locale]); appendList(doc,copy,strings.required,role.requiredQualifications&&role.requiredQualifications[locale]); appendList(doc,copy,strings.preferred,role.preferredQualifications&&role.preferredQualifications[locale]); copy.appendChild(el(doc,'h3',null,strings.recruitmentStatus)); copy.appendChild(el(doc,'p',null,t(role,'recruitmentStatus',locale))); var back=el(doc,'a','sv-textlink',strings.back); back.href=backHref(locale); copy.appendChild(back); renderApplicationSection(doc, copy, role, strings, preview, manifest); wrap.appendChild(copy); var section=el(doc,'section','careers-section'); section.appendChild(wrap); frag.push(section); body.replaceChildren.apply(body,frag); }
+  function renderRoleDetail(doc, manifest, options){options=options||{}; var hero=doc.querySelector('[data-role-detail="hero"]'), body=doc.querySelector('[data-role-detail="body"]'), locale=options.locale||getLocale(doc), preview=options.preview===true; if(!hero||!body||!locale)return'no-target'; var strings=STRINGS[locale], id=options.roleId; if(!isValidRoleId(id)){renderStatusOnly(doc,hero,body,strings,locale,strings.notFound);return'invalid-role';} if(manifest==null){renderStatusOnly(doc,hero,body,strings,locale,strings.unavailable);return'unavailable';} var role=findRole(manifest,id); if(!role||role.status==='draft'&&!preview){renderStatusOnly(doc,hero,body,strings,locale,strings.notFound);return role&&role.status==='draft'?'draft':'not-found';} renderRole(doc,hero,body,strings,locale,role,preview,manifest); return role.status+(role.status==='draft'&&preview?'-preview':''); }
+  function getRoleId(doc){return doc.body?doc.body.getAttribute('data-recruitment-role-id'):null;}
+  function initRoleDetail(win){var doc=win.document, preview=hasPreview(win); if(!doc||!doc.querySelector('[data-role-detail="hero"]')||(!flagEnabled(win)&&!preview)||typeof win.fetch!=='function')return Promise.resolve('disabled'); updateLanguageLinks(doc, preview); return win.fetch(DEFAULT_MANIFEST_PATH,{credentials:'same-origin'}).then(function(r){if(!r||!r.ok)throw new Error('Manifest unavailable');return r.json();}).then(function(m){return renderRoleDetail(doc,m,{roleId:getRoleId(doc),locale:getLocale(doc),preview:preview});}).catch(function(){return renderRoleDetail(doc,null,{roleId:getRoleId(doc),locale:getLocale(doc),preview:preview});});}
+  if(typeof window!=='undefined'&&window.document)initRoleDetail(window);
+  return {initRoleDetail:initRoleDetail,renderRoleDetail:renderRoleDetail,isValidRoleId:isValidRoleId,hasPreview:hasPreview,encodeMailto:encodeMailto,DEFAULT_MANIFEST_PATH:DEFAULT_MANIFEST_PATH};
 });

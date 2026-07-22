@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<base href="/">
+<script>
+try{window.addEventListener('error',function(e){if(e&&typeof e.message==='string'&&e.message.indexOf('ResizeObserver loop')!==-1){e.stopImmediatePropagation();e.preventDefault();}},true);}catch(_){}
+window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
+(function(){
+  var T=window.__SVT;
+  function tok(u){try{var url=new URL(u,document.baseURI);if(T&&url.origin===location.origin&&!url.searchParams.get('t')){url.searchParams.set('t',T);return url.href;}return u;}catch(e){return u;}}
+  window.__svTok=tok;
+  (function(){var _f=window.fetch;if(_f){window.fetch=function(i,n){try{var u;if(typeof i==='string'){u=new URL(i,document.baseURI);if(T&&u.origin===location.origin&&!u.searchParams.get('t')){u.searchParams.set('t',T);i=u.href;}}else if(i&&i.url){u=new URL(i.url,document.baseURI);if(T&&u.origin===location.origin&&!u.searchParams.get('t')){u.searchParams.set('t',T);i=new Request(u.href,i);}}}catch(e){}return _f.call(this,i,n);};}var _o=window.XMLHttpRequest&&window.XMLHttpRequest.prototype.open;if(_o){window.XMLHttpRequest.prototype.open=function(m,u){try{var x=new URL(u,document.baseURI);if(T&&x.origin===location.origin&&!x.searchParams.get('t')){x.searchParams.set('t',T);u=x.href;}}catch(e){}return _o.apply(this,[m,u].concat([].slice.call(arguments,2)));};}})();
+  function fixEl(el){if(el.nodeType!==1)return;if(el.hasAttribute('data-svsrc')&&!el.__sd){el.__sd=1;el.setAttribute('src',tok(el.getAttribute('data-svsrc')));}if(el.tagName==='IMG'){var s=el.getAttribute('src');if(s){var ts=tok(s);if(ts!==s)el.setAttribute('src',ts);}}}
+  function scan(root){if(!root||root.nodeType!==1)return;fixEl(root);if(root.querySelectorAll){var n=root.querySelectorAll('img,[data-svsrc]');for(var i=0;i<n.length;i++)fixEl(n[i]);}}
+  new MutationObserver(function(ms){for(var j=0;j<ms.length;j++){var a=ms[j].addedNodes;for(var i=0;i<a.length;i++)scan(a[i]);}}).observe(document.documentElement,{childList:true,subtree:true});
+  if(document.readyState!=='loading')scan(document.body);else document.addEventListener('DOMContentLoaded',function(){scan(document.body);});
+  document.addEventListener('click',function(e){var t=e.target;var a=t&&t.closest?t.closest('a[href]'):null;if(!a)return;var h=a.getAttribute('href');if(!h||h.charAt(0)==='#'||/^(mailto:|tel:|javascript:|https?:|\/\/)/i.test(h))return;var url;try{url=new URL(h,document.baseURI);}catch(_){return;}if(url.origin!==location.origin)return;e.preventDefault();if(T&&!url.searchParams.get('t'))url.searchParams.set('t',T);window.location.href=url.href;},true);
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- ShoreVest favicon: the stable root URL gives search engines one canonical icon. -->
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="icon" href="/assets/favicon-shorevest-20260722.svg" type="image/svg+xml" sizes="any">
+<link rel="icon" href="/assets/favicon-shorevest-20260722.ico" sizes="any">
+<link rel="icon" href="/assets/favicon-shorevest-20260722-32x32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="/assets/favicon-shorevest-20260722-16x16.png" type="image/png" sizes="16x16">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon-shorevest-20260722.png" sizes="180x180">
+<link rel="manifest" href="/site-20260722.webmanifest">
+<title>新岸资本 | 媒体</title>
+<meta name="description" content="第三方媒体报道、访谈、专题讨论及评论，呈现新岸资本（ShoreVest）在中国私募信贷、困境债务及重组领域的工作。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<script>document.write('<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260717-header-unify">');</script>
+<script>document.write('<link rel="stylesheet" href="assets/css/press-rebuild.css?v=20260717-mobile-polish">');</script>
+<script>document.write('<link rel="stylesheet" href="assets/css/chinese-latin-typography.css">');</script>
+<style>
+  body.homepage {
+    --sv-font: "DIN 2014", "Barlow", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+    --sv-serif: "DIN 2014", "Barlow", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+    --sv-cn: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  }
+  /* External English article titles + publication names keep a Latin face. */
+  body.press-page [lang="en"] { font-family: "DIN 2014","Barlow",system-ui,sans-serif; }
+</style>
+<link rel="preload" as="image" href="assets/img/media-hero-fii-priority.svg" fetchpriority="high">
+
+<link rel="canonical" href="https://shorevest.com/cn/media/">
+<link rel="alternate" hreflang="zh-Hans" href="https://shorevest.com/cn/media/">
+<link rel="alternate" hreflang="en" href="https://shorevest.com/media/">
+<meta property="og:title" content="新岸资本 | 媒体">
+<meta property="og:description" content="第三方媒体报道、访谈、专题讨论及评论，呈现新岸资本（ShoreVest）在中国私募信贷、困境债务及重组领域的工作。">
+<meta property="og:url" content="https://shorevest.com/cn/media/">
+<meta property="og:locale" content="zh_CN">
+<script src="assets/js/favicon-guard.js?v=20260722-google-search-refresh" defer></script>
+</head>
+<body id="top" class="homepage press-page">
+
+<!-- ============================================================ A · HEADER -->
+<header class="sv-header">
+  <div class="sv-header__inner">
+    <a class="sv-header__logo" href="/cn/" aria-label="新岸资本 — 首页">
+      <img src="assets/brand/sv-lockup-fc-dark.png" alt="ShoreVest 新岸资本" width="172" height="41" loading="eager" decoding="async" fetchpriority="high">
+    </a>
+    <nav class="sv-nav" aria-label="主导航">
+      <ul>
+        <li><a href="/cn/firm/">公司</a></li>
+        <li><a href="/cn/strategy/">策略</a></li>
+        <li><a href="/cn/insights/">洞察</a></li>
+        <li><a href="/cn/media/" aria-current="page">媒体</a></li>
+        <li><a href="/cn/team/">团队</a></li>
+        <li><a href="/cn/careers/">人才招聘</a></li>
+      </ul>
+    </nav>
+    <div class="sv-utils">
+      <a class="sv-lang" href="/media/">EN<span class="sep">|</span><span class="on">中文</span></a>
+      <a class="sv-util-btn" href="/cn/investor-portal/">投资者门户</a>
+      <a class="sv-util-btn sv-util-btn--cta" href="/cn/contact/">联系</a>
+    </div>
+    <button class="sv-burger" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="sv-mobile-menu">
+      <span></span>
+    </button>
+  </div>
+</header>
+
+<div class="sv-mobile-menu" id="sv-mobile-menu">
+  <nav aria-label="移动导航">
+    <ul>
+      <li><a href="/cn/firm/">公司</a></li>
+      <li><a href="/cn/strategy/">策略</a></li>
+      <li><a href="/cn/insights/">洞察</a></li>
+      <li><a href="/cn/media/" aria-current="page">媒体</a></li>
+      <li><a href="/cn/team/">团队</a></li>
+        <li><a href="/cn/careers/">人才招聘</a></li>
+    </ul>
+    <div class="sv-mobile-utils">
+      <a class="sv-util-btn" href="/media/">EN</a>
+      <a class="sv-util-btn" href="/cn/investor-portal/">投资者门户</a>
+      <a class="sv-util-btn sv-util-btn--cta" href="/cn/contact/">联系</a>
+    </div>
+  </nav>
+</div>
+
+<main id="content">
+
+  <!-- 1 · AUTHORITY OPENING — same layered hero system as the homepage -->
+  <section class="sv-hero media-hero" id="media" data-screen-label="媒体" aria-labelledby="pr-h1">
+    <div class="sv-hero__inner">
+      <div class="sv-hero__main">
+        <p class="sv-hero__label">第三方报道</p>
+        <h1 class="sv-hero__headline" id="pr-h1">媒体</h1>
+        <p class="sv-hero__body">国际媒体与行业论坛长期关注新岸资本跨越中国信贷周期的工作。档案涵盖中国私募信贷、困境债务、重组及相关市场动态。</p>
+        <div class="sv-hero__cta">
+          <a href="/cn/media/#upcoming" class="sv-textlink">即将活动<span aria-hidden="true">→</span></a>
+          <a href="/cn/media/#archive" class="sv-textlink">浏览媒体档案<span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+      <div class="sv-hero__field">
+        <div class="sv-hero__image"><img src="assets/img/media-hero-fii-priority.svg" alt="新岸资本在会议专题讨论现场" width="2000" height="1334" loading="eager" decoding="async" fetchpriority="high"></div>
+        <aside class="sv-hero__panel" aria-label="媒体报道摘要">
+          <p class="sv-hero__panel-label">报道概览</p>
+          <dl>
+            <div class="sv-hero__panel-row">
+              <dt>档案</dt>
+              <dd>2016 年至今</dd>
+            </div>
+            <div class="sv-hero__panel-row">
+              <dt>见于</dt>
+              <dd lang="en">Bloomberg · Reuters · The Economist · Nikkei Asia · SCMP</dd>
+            </div>
+            <div class="sv-hero__panel-row">
+              <dt>形式</dt>
+              <dd>访谈 · 专题讨论 · 播客 · 评论</dd>
+            </div>
+          </dl>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 · UPCOMING EVENTS -->
+  <section class="pr-events" id="upcoming" data-screen-label="即将活动" aria-labelledby="pr-upcoming-title">
+    <div class="sv-shell">
+      <div class="pr-section-head">
+        <div class="pr-section-head__l">
+          <h2 class="pr-section-title" id="pr-upcoming-title">即将活动</h2>
+          <p class="pr-section-sub">与新岸资本关注市场及投资者社群相关的会议、专题讨论及投资者活动。</p>
+        </div>
+        <div class="pr-section-head__r">
+          <div class="pr-inquiry">
+            <p class="pr-inquiry__label">媒体查询</p>
+            <a href="mailto:media@shorevest.com" lang="en">media@shorevest.com</a>
+          </div>
+        </div>
+      </div>
+      <div class="pr-events__table" role="table" aria-label="即将公开活动" data-events-list="upcoming">
+        <article class="pr-event-row" role="row" data-start-date="2026-09-08" data-end-date="2026-09-09" data-time-zone="Asia/Shanghai">
+          <time class="pr-event-date" datetime="2026-09-08">2026 年 9 月 8–9 日</time>
+          <span class="pr-event-type">峰会</span>
+          <span class="pr-event-title">
+            <span class="pr-event-status">即将举行</span>
+            <span lang="en">APAC Family Office Investment Summit</span>
+            <small>面向亚太地区家族办公室及机构投资者的投资峰会。</small>
+          </span>
+          <span class="pr-event-location">上海</span>
+          <a class="pr-event-link" href="https://apacfamilysummit.com/" target="_blank" rel="noopener noreferrer" aria-label="查看 APAC Family Office Investment Summit 活动页面">查看 <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="pr-event-row" role="row" data-start-date="2026-09-18" data-end-date="2026-09-18" data-time-zone="Asia/Hong_Kong">
+          <time class="pr-event-date" datetime="2026-09-18">2026 年 9 月 18 日</time>
+          <span class="pr-event-type">投资者活动</span>
+          <span class="pr-event-title">
+            <span class="pr-event-status">即将举行</span>
+            <span>新岸资本 2026 年度投资者大会</span>
+            <small>新岸资本面向投资者及受邀嘉宾举行的年度会议。</small>
+          </span>
+          <span class="pr-event-location">广州</span>
+          <span class="pr-event-link pr-event-link--plain">仅限受邀</span>
+        </article>
+        <article class="pr-event-row" role="row" data-start-date="2026-09-28" data-end-date="2026-10-01" data-time-zone="Asia/Singapore">
+          <time class="pr-event-date" datetime="2026-09-28">2026 年 9 月 28 日–10 月 1 日</time>
+          <span class="pr-event-type">会议</span>
+          <span class="pr-event-title">
+            <span class="pr-event-status">即将举行</span>
+            <span lang="en">SuperReturn Asia 2026</span>
+            <small>聚焦亚太市场的领先私募资本会议。</small>
+          </span>
+          <span class="pr-event-location">新加坡</span>
+          <a class="pr-event-link" href="https://informaconnect.com/superreturnasia/" target="_blank" rel="noopener noreferrer" aria-label="查看 SuperReturn Asia 2026 活动页面">查看 <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="pr-event-row" role="row" data-start-date="2026-10-15" data-end-date="2026-10-16" data-time-zone="Asia/Hong_Kong">
+          <time class="pr-event-date" datetime="2026-10-15">2026 年 10 月 15–16 日</time>
+          <span class="pr-event-type">论坛</span>
+          <span class="pr-event-title">
+            <span lang="en">World Family Office Forum | Asia 2026</span>
+            <small>面向家族办公室及投资专业人士的区域论坛。</small>
+          </span>
+          <span class="pr-event-location">香港</span>
+          <a class="pr-event-link" href="https://asia.worldfamilyofficeforum.com/" target="_blank" rel="noopener noreferrer" aria-label="查看 World Family Office Forum Asia 2026 活动页面">查看 <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="pr-event-row" role="row" data-start-date="2026-10-15" data-end-date="2026-10-15" data-time-zone="Asia/Hong_Kong">
+          <time class="pr-event-date" datetime="2026-10-15">2026 年 10 月 15 日</time>
+          <span class="pr-event-type">峰会</span>
+          <span class="pr-event-title">
+            <span lang="en">Caproasia Family Office Summit Hong Kong 2026</span>
+            <small>面向家族办公室负责人、投资专业人士及财富管理机构的区域峰会。</small>
+          </span>
+          <span class="pr-event-location">香港</span>
+          <a class="pr-event-link" href="https://my.caproasia.com/the-2026-family-office-summit/" target="_blank" rel="noopener noreferrer" aria-label="查看 Caproasia Family Office Summit Hong Kong 2026 活动页面">查看 <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="pr-event-row" role="row" data-start-date="2026-10-26" data-end-date="2026-10-29" data-time-zone="Asia/Riyadh">
+          <time class="pr-event-date" datetime="2026-10-26">2026 年 10 月 26–29 日</time>
+          <span class="pr-event-type">会议</span>
+          <span class="pr-event-title">
+            <span lang="en">FII 10th Edition 2026</span>
+            <small>Future Investment Initiative 举办的第十届全球投资会议。</small>
+          </span>
+          <span class="pr-event-location">利雅得</span>
+          <a class="pr-event-link" href="https://fii-institute.org/conference/fii-10th-edition/" target="_blank" rel="noopener noreferrer" aria-label="查看 FII 10th Edition 2026 活动页面">查看 <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="pr-event-row" role="row" data-start-date="2026-11-05" data-end-date="2026-11-05" data-time-zone="Asia/Singapore">
+          <time class="pr-event-date" datetime="2026-11-05">2026 年 11 月 5 日</time>
+          <span class="pr-event-type">峰会</span>
+          <span class="pr-event-title">
+            <span lang="en">Caproasia Family Office Summit Singapore 2026</span>
+            <small>面向家族办公室负责人、投资专业人士及财富管理机构的区域峰会。</small>
+          </span>
+          <span class="pr-event-location">新加坡</span>
+          <a class="pr-event-link" href="https://my.caproasia.com/the-2026-family-office-summit/" target="_blank" rel="noopener noreferrer" aria-label="查看 Caproasia Family Office Summit Singapore 2026 活动页面">查看 <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="pr-event-row" role="row" data-start-date="2026-11-10" data-end-date="2026-11-11" data-time-zone="Europe/London">
+          <time class="pr-event-date" datetime="2026-11-10">2026 年 11 月 10–11 日</time>
+          <span class="pr-event-type">峰会</span>
+          <span class="pr-event-title">
+            <span lang="en">Alea Global Family Office Summit 2026</span>
+            <small>面向全球家族办公室负责人、投资者及顾问的峰会。</small>
+          </span>
+          <span class="pr-event-location">伦敦</span>
+        </article>
+        <p class="pr-events__empty" id="pr-events-empty" hidden>目前暂无即将举行的公开活动。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 · PREVIOUS EVENTS -->
+  <section class="pr-events pr-events--past" id="past" data-screen-label="往期活动" aria-labelledby="pr-past-title">
+    <div class="sv-shell">
+      <div class="pr-section-head">
+        <div class="pr-section-head__l">
+          <h2 class="pr-section-title" id="pr-past-title">往期活动</h2>
+          <p class="pr-section-sub">往期行业活动长期保留于此。如活动产生了相关报道，条目将链接至对应内容。</p>
+        </div>
+      </div>
+      <div class="pr-events__table" role="table" aria-label="往期公开活动" data-events-list="past">
+        <article class="pr-event-row pr-event-row--past" role="row" data-start-date="2026-06-24" data-end-date="2026-06-25" data-time-zone="Asia/Singapore">
+          <time class="pr-event-date" datetime="2026-06-24">2026 年 6 月 24–25 日</time>
+          <span class="pr-event-type">专题讨论</span>
+          <span class="pr-event-title">
+            <span lang="en">PDI APAC Forum</span>
+            <small>关于亚洲困境债务与特殊机会的论坛专题讨论。</small>
+          </span>
+          <span class="pr-event-location">新加坡</span>
+          <a class="pr-event-link pr-event-link--post" href="https://www.linkedin.com/posts/shorevest-partners_pdi-asian-privatecredit-activity-7477857736379031552-1dRs" target="_blank" rel="noopener noreferrer" aria-label="在 LinkedIn 查看新岸资本对 PDI APAC Forum 的回顾">回顾 <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="pr-event-row pr-event-row--past" role="row" data-start-date="2026-06-15" data-end-date="2026-06-17" data-time-zone="Europe/Amsterdam">
+          <time class="pr-event-date" datetime="2026-06-15">2026 年 6 月 15–17 日</time>
+          <span class="pr-event-type">会议</span>
+          <span class="pr-event-title">
+            <span lang="en">SuperReturn Emerging Markets</span>
+            <small>涵盖新兴市场私募资本与信贷主题的会议。</small>
+          </span>
+          <span class="pr-event-location">阿姆斯特丹</span>
+          <a class="pr-event-link pr-event-link--post" href="https://www.linkedin.com/posts/shorevest-partners_emergingmarkets-privatecredit-uncorrelated-activity-7473668678174154754-BwaO" target="_blank" rel="noopener noreferrer" aria-label="在 LinkedIn 查看新岸资本对 SuperReturn Emerging Markets 的回顾" data-linkedin-embed="https://www.linkedin.com/embed/feed/update/urn:li:share:7473668676995469312?collapsed=1">回顾 <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="pr-event-row pr-event-row--past" role="row" data-start-date="2026-06-10" data-end-date="2026-06-10" data-time-zone="Asia/Hong_Kong">
+          <time class="pr-event-date" datetime="2026-06-10">2026 年 6 月 10 日</time>
+          <span class="pr-event-type">会议</span>
+          <span class="pr-event-title">
+            <span lang="en">Bloomberg Invest Hong Kong</span>
+            <small>彭博在香港举办的投资会议。</small>
+          </span>
+          <span class="pr-event-location">香港</span>
+          <a class="pr-event-link pr-event-link--post" href="https://www.linkedin.com/posts/shorevest-partners_privatecredit-asiaprivatecredit-chinaprivatecredit-activity-7443141209809862659-14J4" target="_blank" rel="noopener noreferrer" aria-label="在 LinkedIn 查看新岸资本对 Bloomberg Invest Hong Kong 的回顾">回顾 <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="pr-event-row pr-event-row--past" role="row" data-start-date="2025-11-06" data-end-date="2025-11-06" data-time-zone="Asia/Hong_Kong" hidden>
+          <time class="pr-event-date" datetime="2025-11-06">2025 年 11 月 6 日</time>
+          <span class="pr-event-type">专题讨论</span>
+          <span class="pr-event-title">
+            <span><span lang="en">FII Institute Priority</span> 私募信贷专题讨论</span>
+            <small>探讨信贷周期风险，以及全球投资者如何评估中国市场结构。</small>
+          </span>
+          <span class="pr-event-location">利雅得</span>
+          <a class="pr-event-link pr-event-link--post" href="https://www.youtube.com/watch?v=t9BHji_UQlA" target="_blank" rel="noopener noreferrer">观看 <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="pr-event-row pr-event-row--past" role="row" data-start-date="2019-10-30" data-end-date="2019-10-30" data-time-zone="America/Los_Angeles" hidden>
+          <time class="pr-event-date" datetime="2019-10-30">2019 年 10 月 30 日</time>
+          <span class="pr-event-type">圆桌会议</span>
+          <span class="pr-event-title">
+            <span><span lang="en">Asia Society</span> 中国债务市场高层圆桌会议</span>
+            <small>关于贸易政策趋势对中国债务状况及不良贷款市场影响的闭门高层圆桌会议。</small>
+          </span>
+          <span class="pr-event-location"></span>
+          <a class="pr-event-link pr-event-link--post" href="https://asiasociety.org/northern-california/executive-roundtable-benjamin-fanger-and-howard-chao" target="_blank" rel="noopener noreferrer" aria-label="查看 Asia Society 圆桌会议页面">查看 <span aria-hidden="true">→</span></a>
+        </article>
+        <div class="pr-events__more"><button class="pr-events__more-btn" type="button" aria-expanded="false" data-more-label="查看更多（2）" data-fewer-label="收起">查看更多（2）</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 · MEDIA ARCHIVE -->
+  <section class="pr-archive" id="archive" data-screen-label="媒体档案" aria-labelledby="pr-archive-title">
+    <div class="sv-shell">
+      <div class="pr-section-head">
+        <div class="pr-section-head__l">
+          <h2 class="pr-section-title" id="pr-archive-title">报道与活动</h2>
+        </div>
+      </div>
+
+      <!-- Featured lead -->
+      <a class="pr-featured" href="https://www.youtube.com/watch?v=t9BHji_UQlA" target="_blank" rel="noopener noreferrer">
+        <div class="pr-featured__meta">
+          <span class="pr-featured__tag">精选</span>
+          <span class="pr-featured__pub" lang="en">FII Institute</span>
+          <span class="pr-featured__date">2025 年 11 月 6 日 · 专题讨论</span>
+        </div>
+        <div class="pr-featured__body">
+          <h3 class="pr-featured__title">FII Institute Priority 专题讨论上的私募信贷市场对话</h3>
+          <p class="pr-featured__desc">对话探讨了信贷周期风险，以及全球投资者如何评估中国市场结构。</p>
+          <span class="pr-featured__read">观看专题讨论 <span>→</span></span>
+        </div>
+      </a>
+
+      <!-- Toolbar -->
+      <div class="pr-toolbar" aria-label="媒体档案控制项">
+        <div class="pr-toolbar__meta">
+          <p class="pr-toolbar__label">完整档案</p>
+          <p class="pr-toolbar__count" id="press-results-count" aria-live="polite">显示 21 项中的 3 项</p>
+        </div>
+        <div class="pr-filters" id="press-filters" aria-label="媒体档案筛选">
+          <div class="pr-filter-group">
+            <label class="pr-filter-label" for="press-year-select">年份</label>
+            <select class="pr-filter-select" id="press-year-select" aria-label="按年份筛选">
+              <option value="All">所有年份</option>
+            </select>
+          </div>
+          <div class="pr-filter-group">
+            <label class="pr-filter-label" for="press-publication-select">出版机构</label>
+            <select class="pr-filter-select" id="press-publication-select" aria-label="按出版机构筛选">
+              <option value="All">所有出版机构</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <section class="press-list" id="press-archive" aria-label="新岸资本媒体档案">
+        <article class="press-row" data-type-label="PANEL">
+          <a href="https://www.youtube.com/watch?v=t9BHji_UQlA" target="_blank" rel="noopener noreferrer"><span class="press-publication" lang="en">FII Institute</span>
+            <span class="press-row__content"><span class="press-type-line"><span class="press-tag">专题讨论</span></span>
+            <span class="press-headline" lang="en">Private credit market discussion</span>
+            <span class="press-row__summary">专题讨论评估了信贷环境与投资者布局；完整视频可在 YouTube 观看。</span></span>
+            <span class="press-row__meta">
+              <time class="press-date" datetime="2025-11-06">2025 年 11 月 6 日</time>
+            </span></a>
+        </article>
+        <article class="press-row" data-type-label="SPONSORED CONTENT">
+          <a class="press-row__item press-row__item--archived" href="/media/private-debt-investor-shorevest-partners-on-the-case-for-china/" aria-label="Open archived third-party coverage page"><span class="press-publication" lang="en">Private Debt Investor</span>
+            <span class="press-row__content"><span class="press-type-line"><span class="press-tag">赞助内容</span></span>
+            <span class="press-headline" lang="en">ShoreVest Partners on the case for China</span>
+            <span class="press-row__summary">赞助访谈，回应关于中国私募信贷的常见误解，并强调经验丰富的本地执行的重要性。</span></span>
+            <span class="press-row__meta">
+              <time class="press-date" datetime="2025-06-02">2025 年 6 月 2 日</time>
+            </span></a>
+        </article>
+        <article class="press-row" data-type-label="ARTICLE" hidden>
+          <a href="https://www.business.hsbc.com/en-gb/insights/market-and-regulatory-insights/finding-opportunities-in-chinese-property" target="_blank" rel="noopener noreferrer"><span class="press-publication" lang="en">HSBC</span>
+            <span class="press-row__content"><span class="press-type-line"><span class="press-tag">文章</span></span>
+            <span class="press-headline" lang="en">Finding opportunities in Chinese property</span>
+            <span class="press-row__summary">探讨中国房地产下行带来的机会，包括基础现金流健康、抵押品充足的困境资产。</span></span>
+            <span class="press-row__meta">
+              <time class="press-date" datetime="2024-10-02">2024 年 10 月 2 日</time>
+            </span></a>
+        </article>
+        <article class="press-row" data-type-label="PODCAST">
+          <div class="press-row__item press-row__item--inactive"><span class="press-publication" lang="en">The Economist</span>
+            <span class="press-row__content"><span class="press-type-line"><span class="press-tag">播客</span></span>
+            <span class="press-headline" lang="en">The Economist speaks with ShoreVest on China's financial system and distressed debt</span>
+            <span class="press-row__summary">Money Talks 系列节目之一；收听需订阅《经济学人》。</span></span>
+            <span class="press-row__meta">
+              <time class="press-date" datetime="2024-02-14">2024 年 2 月 14 日</time>
+            </span></div>
+        </article>
+        <article class="press-row" data-type-label="PODCAST" hidden>
+          <a href="https://porticoadvisers.com/2022/07/14/ben-fanger/" target="_blank" rel="noopener noreferrer"><span class="press-publication" lang="en">Portico Advisers</span>
+            <span class="press-row__content"><span class="press-type-line"><span class="press-tag">播客</span></span>
+            <span class="press-headline" lang="en">Ben Fanger on distressed debt in China</span>
+            <span class="press-row__summary">话题包括不良贷款、特殊机会及本地执行的要求。</span></span>
+            <span class="press-row__meta">
+              <time class="press-date" datetime="2022-07-14">2022 年 7 月 14 日</time>
+            </span></a>
+        </article>
+        <article class="press-row" data-type-label="PODCAST" hidden>
+          <a href="https://podcasts.apple.com/us/podcast/ben-fanger-on-distressed-debt-in-china/id1519258360?i=1000569858021" target="_blank" rel="noopener noreferrer"><span class="press-publication" lang="en">Apple Podcasts</span>
+            <span class="press-row__content"><span class="press-type-line"><span class="press-tag">播客</span></span>
+            <span class="press-headline" lang="en">Ben Fanger on distressed debt in China</span>
+            <span class="press-row__summary">话题包括抵押品、法律可执行性及本地执行。</span></span>
+            <span class="press-row__meta">
+              <time class="press-date" datetime="2022-06-09">2022 年 6 月 9 日</time>
+            </span></a>
+        </article>
+        <article class="press-row" data-type-label="PODCAST" hidden>
+          <a href="https://www.cfunds.io/s1e8-capital-radio-benjamin-fanger-founding-partner-of-shorevest-partners/" target="_blank" rel="noopener noreferrer"><span class="press-publication" lang="en">C*Funds</span>
+            <span class="press-row__content"><span class="press-type-line"><span class="press-tag">播客</span></span>
+            <span class="press-headline" lang="en">Capital Radio — Benjamin Fanger, Founding Partner of ShoreVest Partners</span>
+            <span class="press-row__summary">涵盖公司在中国私募信贷及困境债务投资方面的方法。</span></span>
+            <span class="press-row__meta">
+              <time class="press-date" datetime="2021-12-14">2021 年 12 月 14 日</time>
+            </span></a>
+        </article>
+        <article class="press-row" data-type-label="ARTICLE" hidden>
+          <a class="press-row__item press-row__item--archived" href="/media/pensions-investments-few-foreign-investors-positioned-for-china-npls/" aria-label="Open archived third-party coverage page"><span class="press-publication" lang="en">Pensions &amp; Investments</span>
+            <span class="press-row__content"><span class="press-type-line"><span class="press-tag">文章</span></span>
+            <span class="press-headline" lang="en">Few foreign investors positioned for China NPLs</span>
+            <span class="press-row__summary">引述新岸资本关于参与中国信贷市场的观点。</span></span>
+            <span class="press-row__meta">
+              <time class="press-date" datetime="2021-10-18">2021 年 10 月 18 日</time>
+            </span></a>
+        </article>
+        <article class="press-row" data-type-label="ARTICLE" hidden>
+          <div class="press-row__item press-row__item--inactive"><span class="press-publication">AllAboutAlpha</span>
+            <span class="press-row__content"><span class="press-type-line"><span class="press-tag">文章</span></span>
+            <span class="press-headline" lang="en">A comparative analysis of Chinese private debt</span>
+            <span class="press-row__summary">收录为背景资料，说明中国信贷相对于更广泛私募债务市场的评估方式。</span></span>
+            <span class="press-row__meta">
+              <time class="press-date" datetime="2021-05-13">2021 年 5 月 13 日</time>
+            </span></div>
+        </article>
+        <article class="press-row" data-type-label="ARTICLE" hidden>
+          <a href="https://www.investmentmagazine.com.au/2021/03/benjamin-fanger-the-credit-crunch-happening-in-china-defaults-and-the-efficient-allocation/" target="_blank" rel="noopener noreferrer"><span class="press-publication">Investment Briefing</span>
+            <span class="press-row__content"><span class="press-type-line"><span class="press-tag">文章</span></span>
+            <span class="press-headline" lang="en">The credit crunch happening in China: defaults and the efficient allocation</span>
+            <span class="press-row__summary">探讨违约上升如何重塑中国的融资环境。</span></span>
+            <span class="press-row__meta">
+              <time class="press-date" datetime="2021-04-28">2021 年 4 月 28 日</time>
+            </span></a>
+        </article>
+        <article class="press-row" data-type-label="PODCAST">
+          <div class="press-row__item press-row__item--inactive"><span class="press-publication" lang="en">Reuters</span>
+            <span class="press-row__content"><span class="press-type-line"><span class="press-tag">播客</span></span>
+            <span class="press-headline" lang="en">The Exchange: China's bad debt opportunity</span>
+            <span class="press-row__summary">探讨以抵押品为主导的执行的重要性；完整音频可于来源处收听。</span></span>
+            <span class="press-row__meta">
+              <time class="press-date" datetime="2020-09-15">2020 年 9 月 15 日</time>
+            </span></div>
+        </article>
+        <article class="press-row" data-type-label="WEBINAR" hidden>
+          <div class="press-row__item press-row__item--inactive"><span class="press-publication">AIM Summit</span>
+            <span class="press-row__content"><span class="press-type-line"><span class="press-tag">网络研讨会</span></span>
+            <span class="press-headline" lang="en">Unique post-COVID-19 dynamics in private credit (Europe &amp; Asia)</span>
+            <span class="press-row__summary">比较 2020 年欧亚两地的市场错位与资金配置环境。</span></span>
+            <span class="press-row__meta">
+              <time class="press-date" datetime="2020-07-08">2020 年 7 月 8 日</time>
+            </span></div>
+        </article>
+        <article class="press-row" data-type-label="WEBINAR" hidden>
+          <div class="press-row__item press-row__item--inactive"><span class="press-publication">Debtwire</span>
+            <span class="press-row__content"><span class="press-type-line"><span class="press-tag">网络研讨会</span></span>
+            <span class="press-headline" lang="en">The new global NPL markets</span>
+            <span class="press-row__summary">提供背景，说明在信贷普遍承压时期，中国不良贷款如何与其他困境信贷市场一同被讨论。</span></span>
+            <span class="press-row__meta">
+              <time class="press-date" datetime="2020-06-04">2020 年 6 月 4 日</time>
+            </span></div>
+        </article>
+        <article class="press-row" data-type-label="PODCAST" hidden>
+          <a href="https://www.investmentmagazine.com.au/2020/05/ben-fanger-special-situations-recovery-rates-and-chinese-distressed-debt-2/" target="_blank" rel="noopener noreferrer"><span class="press-publication">Investment Magazine</span>
+            <span class="press-row__content"><span class="press-type-line"><span class="press-tag">播客</span></span>
+            <span class="press-headline" lang="en">Ben Fanger: special situations, recovery rates and Chinese distressed debt</span>
+            <span class="press-row__summary">收录原因在于其聚焦回收与流程纪律如何影响困境信贷结果。</span></span>
+            <span class="press-row__meta">
+              <time class="press-date" datetime="2020-05-17">2020 年 5 月 17 日</time>
+            </span></a>
+        </article>
+        <article class="press-row" data-type-label="WEBINAR" hidden>
+          <div class="press-row__item press-row__item--inactive"><span class="press-publication">ShoreVest</span>
+            <span class="press-row__content"><span class="press-type-line"><span class="press-tag">网络研讨会</span></span>
+            <span class="press-headline" lang="en">China's credit environment in the wake of COVID-19</span>
+            <span class="press-row__summary">疫情最初数月录制的投资者简报。</span></span>
+            <span class="press-row__meta">
+              <time class="press-date" datetime="2020-05-07">2020 年 5 月 7 日</time>
+            </span></div>
+        </article>
+        <article class="press-row" data-type-label="ARTICLE" hidden>
+          <div class="press-row__item press-row__item--inactive"><span class="press-publication" lang="en">Reorg</span>
+            <span class="press-row__content"><span class="press-type-line"><span class="press-tag">文章</span></span>
+            <span class="press-headline" lang="en">China NPL investors call the US-China trade deal a positive development</span>
+            <span class="press-row__summary">投资者对协议表示欢迎，同时指出其难以消除中国不良贷款投资的核心障碍。</span></span>
+            <span class="press-row__meta">
+              <time class="press-date" datetime="2020-01-17">2020 年 1 月 17 日</time>
+            </span></div>
+        </article>
+        <article class="press-row" data-type-label="PRESS COVERAGE" hidden>
+          <div class="press-row__item press-row__item--inactive"><span class="press-publication" lang="en">Bloomberg</span>
+            <span class="press-row__content"><span class="press-type-line"><span class="press-tag">媒体报道</span></span>
+            <span class="press-headline" lang="en">U.S. firms could win a lucrative role in cleaning up China's bad debt</span>
+            <span class="press-row__summary">关于市场向外国参与者开放的早期报道。</span></span>
+            <span class="press-row__meta">
+              <time class="press-date" datetime="2020-01-16">2020 年 1 月 16 日</time>
+            </span></div>
+        </article>
+        <article class="press-row" data-type-label="ROUNDTABLE" hidden>
+          <a href="https://asiasociety.org/northern-california/executive-roundtable-benjamin-fanger-and-howard-chao" target="_blank" rel="noopener noreferrer"><span class="press-publication" lang="en">Asia Society</span>
+            <span class="press-row__content"><span class="press-type-line"><span class="press-tag">圆桌会议</span></span>
+            <span class="press-headline" lang="en">Executive Roundtable on China debt markets</span>
+            <span class="press-row__summary">亚洲协会北加州分会举办闭门高层圆桌会议，探讨影响中国债务状况及该国不良贷款市场的贸易政策趋势。</span></span>
+            <span class="press-row__meta">
+              <time class="press-date" datetime="2019-10-30">2019 年 10 月 30 日</time>
+            </span></a>
+        </article>
+        <article class="press-row" data-type-label="ARTICLE" hidden>
+          <div class="press-row__item press-row__item--inactive"><span class="press-publication" lang="en">The Economist</span>
+            <span class="press-row__content"><span class="press-type-line"><span class="press-tag">文章</span></span>
+            <span class="press-headline" lang="en">As China's debt soars, the market for buying bad loans revs up</span>
+            <span class="press-row__summary">收录为中国不良贷款投资市场发展的早期第三方背景。</span></span>
+            <span class="press-row__meta">
+              <time class="press-date" datetime="2019-01-17">2019 年 1 月 17 日</time>
+            </span></div>
+        </article>
+        <article class="press-row" data-type-label="OPINION" hidden>
+          <div class="press-row__item press-row__item--inactive"><span class="press-publication" lang="en">Nikkei Asia</span>
+            <span class="press-row__content"><span class="press-type-line"><span class="press-tag">评论</span></span>
+            <span class="press-headline" lang="en">China debt 'could prompt $7.7 trillion asset sale'</span>
+            <span class="press-row__summary">关于中国债务负担可能引发的资产出售规模。</span></span>
+            <span class="press-row__meta">
+              <time class="press-date" datetime="2017-06-01">2017 年 6 月 1 日</time>
+            </span></div>
+        </article>
+        <article class="press-row" data-type-label="ARTICLE" hidden>
+          <div class="press-row__item press-row__item--inactive"><span class="press-publication" lang="en">The Economist</span>
+            <span class="press-row__content"><span class="press-type-line"><span class="press-tag">文章</span></span>
+            <span class="press-headline" lang="en">Breaking bad</span>
+            <span class="press-row__summary">报道信贷周期较早阶段的中国不良贷款市场；收录为历史背景，反映房地产行业承压之前不良贷款处置的讨论方式。</span></span>
+            <span class="press-row__meta">
+              <time class="press-date" datetime="2016-05-07">2016 年 5 月 7 日</time>
+            </span></div>
+        </article>
+      </section>
+
+      <div class="pr-more-wrap">
+        <button class="pr-more" id="press-more-btn" type="button" aria-controls="press-archive">载入更多</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · DISCLOSURES -->
+  <section class="pr-disclosures" aria-labelledby="pr-disclosures-heading">
+    <div class="pr-disclosures__inner">
+      <p class="pr-disclosures__label" id="pr-disclosures-heading">披露事项</p>
+      <p class="pr-disclosures__body">本页所引用的第三方媒体报道及外部评论仅供信息参考。新岸资本（ShoreVest Partners）不认可亦不对外部出版物的内容负责。相关报道不构成投资建议或投资招揽。外部来源链接可能需要订阅或注册方可浏览。第三方所表达的观点不一定反映新岸资本的观点。</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============================================================ FOOTER -->
+<footer class="sv-footer" aria-label="网站页脚">
+  <div class="sv-footer__inner">
+    <div class="sv-footer__top">
+      <div>
+        <a class="sv-footer__logo" href="/cn/" aria-label="新岸资本 — 首页">
+          <img src="assets/brand/sv-lockup-fc-light.png" alt="ShoreVest 新岸资本" width="200" height="48" loading="eager" decoding="async" fetchpriority="high">
+        </a>
+        <p class="sv-footer__offices">
+          广州 · 上海 · 北京 · 香港<br>
+          <a href="/cn/contact/">一般咨询</a>
+        </p>
+      </div>
+      <nav class="sv-footer__nav" aria-label="页脚导航">
+        <a href="/cn/firm/">公司</a>
+        <a href="/cn/strategy/">策略</a>
+        <a href="/cn/insights/">洞察</a>
+        <a href="/cn/media/">媒体</a>
+        <a href="/cn/team/">团队</a>
+        <a href="/cn/careers/">人才招聘</a>
+        <a href="/cn/contact/">联系</a>
+        <a href="/cn/insights/#archive">中国债务动态</a>
+        <span class="sv-footer__access" role="group" aria-label="访问">
+          <span class="sv-footer__access-label">入口</span>
+          <a href="/cn/investor-portal/">投资者门户</a>
+        </span>
+      </nav>
+      <div class="sv-footer__social" aria-label="Follow ShoreVest">
+        <a class="sv-footer__social-link" href="https://www.linkedin.com/company/shorevest-partners/" target="_blank" rel="noopener noreferrer" aria-label="Follow ShoreVest Partners on LinkedIn">
+          <svg class="sv-footer__social-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+            <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V8.98h3.42v1.57h.05c.48-.9 1.64-1.85 3.37-1.85 3.61 0 4.27 2.37 4.27 5.46v6.29ZM5.32 7.42a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12Zm1.78 13.03H3.54V8.98H7.1v11.47ZM22.23 0H1.76C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.76 24h20.47c.97 0 1.77-.77 1.77-1.72V1.72C24 .77 23.2 0 22.23 0Z"/>
+          </svg>
+          <span>LinkedIn</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="sv-footer__legal">
+      <p>新岸资本（ShoreVest Partners）及其关联机构向机构投资者提供投资管理服务。本网站仅供信息参考，不构成出售任何证券或投资产品的要约，或购买任何证券或投资产品的要约邀请，亦不构成投资、法律或税务建议。</p>
+      <p>过往表现并不预示未来结果。私募信贷与私募债务投资涉及风险，包括可能损失本金。所示数据均为近似值，可能发生变动。</p>
+    </div>
+
+    <div class="sv-footer__bottom">
+      <div class="sv-footer__links">
+        <a href="/cn/privacy-policy/">隐私政策</a>
+        <a href="/cn/cookie-notice/">Cookie 通知</a>
+        <a href="/cn/terms-of-use/">使用条款</a>
+        <a href="/cn/important-information/">重要信息</a>
+        <a href="/cn/legal-notices-disclaimers/">法律声明与免责声明</a>
+      </div>
+      <p class="sv-footer__copy">© 2026 ShoreVest Partners. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<button class="sv-totop" type="button" aria-label="返回顶部">
+  <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 13V3M8 3L3.5 7.5M8 3l4.5 4.5" stroke="currentColor" stroke-width="1.5"/></svg>
+</button>
+
+<script>(function(){var T=window.__SVT;function tk(u){return T?u+(u.indexOf('?')>-1?'&':'?')+'t='+T:u;}var s=document.createElement("script");s.src=tk("assets/js/press-page.js?v=20260722-margin-final");document.head.appendChild(s);})();</script>
+<script>
+(function(){
+  var burger=document.querySelector('.sv-burger'); var menu=document.getElementById('sv-mobile-menu');
+  if(burger&&menu){burger.addEventListener('click',function(){var open=menu.classList.toggle('is-open');burger.setAttribute('aria-expanded',open?'true':'false');burger.setAttribute('aria-label',open?'关闭菜单':'打开菜单');});menu.addEventListener('click',function(e){if(e.target.closest('a')){menu.classList.remove('is-open');burger.setAttribute('aria-expanded','false');}});}
+  var toTop=document.querySelector('.sv-totop');
+  if(toTop){var onScroll=function(){if(window.scrollY>600)toTop.classList.add('is-visible');else toTop.classList.remove('is-visible');};window.addEventListener('scroll',onScroll,{passive:true});onScroll();toTop.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});}
+})();
+</script>
+<script>
+(function(){
+  // 即将活动：结束后的活动自动隐藏（应移入下方“往期活动”），默认展示前 3
+  // 项，其余通过“查看更多”展开。往期活动为静态长期记录，仅接管其展开按钮。
+  var INITIAL_UPCOMING_VISIBLE = 3;
+  function hasEnded(endDate, today){
+    today = today || new Date();
+    var todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    var end = new Date(endDate + "T23:59:59");
+    return end < todayDate;
+  }
+  function applyEventFilter(today){
+    var table = document.querySelector('.pr-events__table[data-events-list="upcoming"]');
+    var emptyEl = document.getElementById('pr-events-empty');
+    if (!table) return;
+    var rows = table.querySelectorAll('.pr-event-row[data-end-date]');
+    var oldMore = table.querySelector('.pr-events__more');
+    if (oldMore) oldMore.parentNode.removeChild(oldMore);
+    var upcomingRows = [];
+    for (var i = 0; i < rows.length; i++){
+      var ended = hasEnded(rows[i].getAttribute('data-end-date'), today);
+      rows[i].hidden = ended;
+      if (!ended) upcomingRows.push(rows[i]);
+    }
+    var collapsed = [];
+    for (var j = INITIAL_UPCOMING_VISIBLE; j < upcomingRows.length; j++){
+      upcomingRows[j].hidden = true;
+      collapsed.push(upcomingRows[j]);
+    }
+    if (collapsed.length){
+      var wrap = document.createElement('div');
+      wrap.className = 'pr-events__more';
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'pr-events__more-btn';
+      btn.setAttribute('aria-expanded', 'false');
+      var moreLabel = '查看更多（' + collapsed.length + '）';
+      btn.textContent = moreLabel;
+      btn.addEventListener('click', function(){
+        var expanded = btn.getAttribute('aria-expanded') === 'true';
+        for (var k = 0; k < collapsed.length; k++){ collapsed[k].hidden = expanded; }
+        btn.setAttribute('aria-expanded', String(!expanded));
+        btn.textContent = expanded ? moreLabel : '收起';
+      });
+      wrap.appendChild(btn);
+      table.insertBefore(wrap, emptyEl);
+    }
+    if (emptyEl) emptyEl.hidden = upcomingRows.length > 0;
+  }
+  function initPastToggle(){
+    var table = document.querySelector('.pr-events__table[data-events-list="past"]');
+    if (!table) return;
+    var btn = table.querySelector('.pr-events__more-btn');
+    if (!btn) return;
+    var hiddenRows = table.querySelectorAll('.pr-event-row[hidden]');
+    if (!hiddenRows.length){ btn.parentNode.hidden = true; return; }
+    btn.addEventListener('click', function(){
+      var expanded = btn.getAttribute('aria-expanded') === 'true';
+      for (var i = 0; i < hiddenRows.length; i++){ hiddenRows[i].hidden = expanded; }
+      btn.setAttribute('aria-expanded', String(!expanded));
+      btn.textContent = expanded ? btn.getAttribute('data-more-label') : btn.getAttribute('data-fewer-label');
+    });
+  }
+  window.__svApplyEventFilter = applyEventFilter;
+  function init(){ applyEventFilter(); initPastToggle(); }
+  if (document.readyState !== 'loading') init();
+  else document.addEventListener('DOMContentLoaded', init);
+})();
+</script>
+<script src="assets/js/insights-new-edition.js?v=20260722-linkedin-direct-navigation" defer></script>
+<script src="assets/js/sv-navigation.js?v=20260722-public-hotfix" defer></script>
+</body>
+</html>

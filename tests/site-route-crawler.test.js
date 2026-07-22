@@ -46,6 +46,33 @@ function attrs(tag) {
 function tags(html, name) {
   return [...html.matchAll(new RegExp(`<${name}\\b[^>]*>`, 'gi'))].map((m) => m[0]);
 }
+function hasFragmentTarget(html, id) {
+  const escaped = id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return new RegExp(`\\bid\\s*=\\s*(?:"${escaped}"|'${escaped}')`, 'i').test(html) ||
+    new RegExp(`\\bname\\s*=\\s*(?:"${escaped}"|'${escaped}')`, 'i').test(html);
+}
+function isKnownInteractiveButton(tag) {
+  const a = attrs(tag);
+  const className = a.class || '';
+  return Boolean(
+    a.type === 'submit' ||
+    /\sdata-print-action(?:[=\s>])/.test(tag) ||
+    /\sdata-carousel-prev(?:[=\s>])/.test(tag) ||
+    /\sdata-carousel-next(?:[=\s>])/.test(tag) ||
+    /\sdata-cdd-arc-reset(?:[=\s>])/.test(tag) ||
+    /\sdata-application-submit(?:[=\s>])/.test(tag) ||
+    a.id === 'attestation-proceed' ||
+    className.split(/\s+/).some((name) => [
+      'sv-burger',
+      'sv-totop',
+      'back-to-top',
+      'team-profile__bio-toggle',
+      'pr-more',
+      'pr-events__more-btn',
+      'cdd-arc__chip',
+    ].includes(name))
+  );
+}
 function resolveInternal(from, url) {
   if (!url || externalSchemes.test(url)) return null;
   const clean = url.split('#')[0].split('?')[0];
@@ -84,6 +111,9 @@ for (const page of pages) {
       if (!raw) continue;
       if (tagName === 'a') {
         assert.notStrictEqual(raw, '#', `${page} must not contain placeholder link ${tag}`);
+        if (raw.charAt(0) === '#') {
+          assert(hasFragmentTarget(html, decodeURIComponent(raw.slice(1))), `${page} anchor click target must exist for ${raw}`);
+        }
         internalLinkCount += resolveInternal(page, raw) ? 1 : 0;
       }
       const rel = resolveInternal(page, raw);
@@ -92,6 +122,15 @@ for (const page of pages) {
       assert(fs.existsSync(target), `${page} references missing internal target ${raw} -> ${rel}`);
       if (rel.endsWith('.html')) discoveredPages.add(rel);
     }
+  }
+
+  for (const button of tags(html, 'button')) {
+    const a = attrs(button);
+    assert(a.type, `${page} button should declare an explicit type: ${button}`);
+    if (a['aria-controls']) {
+      assert(hasFragmentTarget(html, a['aria-controls']), `${page} button aria-controls target must exist for ${a['aria-controls']}`);
+    }
+    assert(isKnownInteractiveButton(button), `${page} button should map to a known click handler or submit flow: ${button}`);
   }
 }
 

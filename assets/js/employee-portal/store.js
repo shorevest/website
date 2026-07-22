@@ -52,12 +52,12 @@
       sp('Weekly Outreach and Coverage Snapshot',
          'Generates the ShoreVest Weekly Outreach and Coverage Snapshot from approved source data.',
          { processType: 'Weekly Reporting' }),
-      sp('Kelvin Asia Conference Outreach',
+      sp('Snow Leopard Asia Conference Outreach',
          'Conference contact list processed for Asia coverage; review workbook output.',
-         { processType: 'Outreach Preparation', coverageOwner: 'Kelvin', region: 'Asia' }),
-      sp('John Ex-Asia Reconnect List',
+         { processType: 'Outreach Preparation', coverageOwner: 'Snow Leopard', region: 'Asia' }),
+      sp('Grey Wolf Ex-Asia Reconnect List',
          'Reconnect list processed for Ex-Asia coverage; review workbook output.',
-         { processType: 'Outreach Preparation', coverageOwner: 'John', region: 'Ex-Asia' }),
+         { processType: 'Outreach Preparation', coverageOwner: 'Grey Wolf', region: 'Ex-Asia' }),
       sp('Existing Contact Reconnect',
          'Keeps rows that match existing Salesforce Contacts for reconnection review.',
          { processType: 'Outreach Preparation', treatExistingContacts: 'include' }),
@@ -84,8 +84,8 @@
     }
     return [
       cfg('owners', JSON.stringify([
-        { name: 'Kelvin', regions: ['Asia'] },
-        { name: 'John', regions: ['Ex-Asia'] }
+        { name: 'Snow Leopard', regions: ['Asia'] },
+        { name: 'Grey Wolf', regions: ['Ex-Asia'] }
       ]), 'Coverage'),
       cfg('regions', JSON.stringify(['Asia', 'Ex-Asia', 'Europe', 'North America', 'Middle East']), 'Coverage'),
       cfg('funds', JSON.stringify(['Fund II', 'Fund III']), 'Funds'),
@@ -126,15 +126,15 @@
       label: 'DEMONSTRATION DATA — synthetic records, not Salesforce',
       contacts: [
         { id: 'DEMO-C-001', name: 'Demo Contact One', email: 'existing.contact@demo-institution.crm',
-          accountId: 'DEMO-A-001', accountName: 'Demo Institution One', owner: 'Kelvin' },
+          accountId: 'DEMO-A-001', accountName: 'Demo Institution One', owner: 'Snow Leopard' },
         { id: 'DEMO-C-002', name: 'Demo Contact Two', email: 'ambiguous@demo-institution.crm',
-          accountId: 'DEMO-A-002', accountName: 'Demo Institution Two', owner: 'John' },
+          accountId: 'DEMO-A-002', accountName: 'Demo Institution Two', owner: 'Grey Wolf' },
         { id: 'DEMO-C-003', name: 'Demo Contact Two B', email: 'ambiguous@demo-institution.crm',
-          accountId: 'DEMO-A-003', accountName: 'Demo Institution Three', owner: 'Kelvin' },
+          accountId: 'DEMO-A-003', accountName: 'Demo Institution Three', owner: 'Snow Leopard' },
         { id: 'DEMO-C-004', name: 'Demo Blocked Contact', email: 'blocked.account@demo-institution.crm',
-          accountId: 'DEMO-ACCT-BLOCKED', accountName: 'Demo Blocked Institution', owner: 'John' },
+          accountId: 'DEMO-ACCT-BLOCKED', accountName: 'Demo Blocked Institution', owner: 'Grey Wolf' },
         { id: 'DEMO-C-005', name: 'Demo Live Process', email: 'live.process@demo-institution.crm',
-          accountId: 'DEMO-A-005', accountName: 'Demo Institution Five', owner: 'Kelvin' }
+          accountId: 'DEMO-A-005', accountName: 'Demo Institution Five', owner: 'Snow Leopard' }
       ],
       liveProcessEmails: ['live.process@demo-institution.crm']
     };
@@ -154,6 +154,7 @@
       alerts: [],
       errorLogs: [],
       connections: null,    /* cached pre-flight results */
+      jobOpenings: [],       /* HR-created recruitment-opening drafts (demo only) */
       lastEndToEndTest: null
     };
   }
@@ -465,6 +466,46 @@
     return out;
   }
 
+
+  /* ── HR job openings (demonstration only) ──────────────────────────────── */
+
+  function getJobOpenings() {
+    return (load().jobOpenings || []).slice().sort(function (a, b) {
+      return String(b.updatedAt || b.createdAt).localeCompare(String(a.updatedAt || a.createdAt));
+    });
+  }
+
+  function createJobOpening(input, user) {
+    var s = load();
+    if (!s.jobOpenings) s.jobOpenings = [];
+    var record = Object.assign({
+      jobOpeningId: uid('JOB'),
+      status: 'draft',
+      applicationEnabled: false,
+      createdAt: nowIso(),
+      createdBy: user || 'Unknown',
+      updatedAt: nowIso(),
+      updatedBy: user || 'Unknown'
+    }, input || {});
+    s.jobOpenings.unshift(record);
+    audit({ eventType: 'JobOpeningCreated', newValue: JSON.stringify(record), performedBy: user,
+      reason: 'HR created a draft job opening in ShoreVest One.' });
+    save();
+    return record;
+  }
+
+  function updateJobOpening(id, patch, user) {
+    var s = load();
+    var opening = (s.jobOpenings || []).filter(function (j) { return j.jobOpeningId === id; })[0];
+    if (!opening) return null;
+    var before = JSON.stringify(opening);
+    Object.assign(opening, patch || {}, { updatedAt: nowIso(), updatedBy: user || 'Unknown' });
+    audit({ eventType: 'JobOpeningUpdated', previousValue: before, newValue: JSON.stringify(opening), performedBy: user,
+      reason: 'HR updated a draft job opening in ShoreVest One.' });
+    save();
+    return opening;
+  }
+
   /* ── Alerts and error logs (monitoring) ────────────────────────────────── */
 
   function addAlert(alert) {
@@ -529,6 +570,9 @@
     finishExecution: finishExecution,
     processedHashes: processedHashes,
     previousBatchEmails: previousBatchEmails,
+    getJobOpenings: getJobOpenings,
+    createJobOpening: createJobOpening,
+    updateJobOpening: updateJobOpening,
     addAlert: addAlert,
     getAlerts: getAlerts,
     acknowledgeAlert: acknowledgeAlert,

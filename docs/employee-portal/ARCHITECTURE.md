@@ -30,7 +30,7 @@ application.
 | `assets/js/employee-portal/integrations.js` | Adapters for Entra ID, Dataverse, SharePoint, Power Automate, Salesforce, Office Scripts — fail-closed, with pre-flight checks. |
 | `assets/js/employee-portal/ui.js` | Small DOM helpers and the view registry. |
 | `assets/js/employee-portal/workflow.js` | Demonstration processing engine: the executable specification of the Power Automate `processBatch` flow (stages, workbook, approvals, idempotent execution). |
-| `assets/js/employee-portal/views-*.js` | Process a List wizard, Review Exceptions, Previous Runs, Administration, Monitoring, and the reporting modules. |
+| `assets/js/employee-portal/views-*.js` | Process a List wizard, Review Exceptions, Previous Runs, Administration, Monitoring, reporting modules, HR drafts, and the website media library tool. |
 | `assets/js/employee-portal/app.js` | Application shell: authentication gate, navigation, hash router, dashboard. |
 | `tests/employee-portal-rules.test.js` | Node test suite (`node tests/employee-portal-rules.test.js`). |
 
@@ -119,6 +119,19 @@ Administrator · Management/Auditor. The capability matrix is in `rules.js`
 (`PERMISSIONS`); every UI surface and action gate checks a capability, never a
 role name. Employees see only their own batches; Administration and Monitoring
 are hidden unless the role permits them.
+
+## Website media library tool
+
+The Tools hub includes **Website Media Library**, a demonstration-only staging
+workflow for public-site media candidates. Administrators can choose an image or
+PDF, add title/alt text/intended use/rights/source metadata, and run suitability
+checks before a candidate can be staged. The checks cover approved formats, file
+size, accessibility text, intended placement, rights confirmation, image
+resolution, and obvious sensitive markers such as confidential/draft/password
+labels. Staged records are stored in the demo configuration key
+`siteMediaLibrary` with audit events; removing a candidate is also audited. The
+tool does not publish files or modify public website assets until a deployment
+backed publishing service is connected.
 
 ## Generated workbook
 

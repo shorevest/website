@@ -41,9 +41,9 @@
 
   // Official lockup artwork (transparent PNGs cut from the brand files).
   // The legacy shorevest-lockup.svg carries the wrong Chinese face — do not use it.
-  const buildBrandLockup = () => `<img class="brand-lockup-svg brand-lockup-svg--dark" src="${LOADER_BRAND_PNG_PATH}" alt="ShoreVest 新岸資本" /><img class="brand-lockup-svg brand-lockup-svg--light" src="${LOADER_BRAND_LIGHT_PNG_PATH}" alt="" aria-hidden="true" />`;
+  const buildBrandLockup = () => `<img class="brand-lockup-svg brand-lockup-svg--dark" src="${LOADER_BRAND_PNG_PATH}" alt="ShoreVest 新岸資本"  loading="eager" decoding="async" fetchpriority="high" /><img class="brand-lockup-svg brand-lockup-svg--light" src="${LOADER_BRAND_LIGHT_PNG_PATH}" alt="" aria-hidden="true"  loading="eager" decoding="async" fetchpriority="high" />`;
 
-  const buildLoaderBrandLockup = () => `<img class="site-loader-logo" src="${LOADER_BRAND_PNG_PATH}" alt="ShoreVest 新岸資本" />`;
+  const buildLoaderBrandLockup = () => `<img class="site-loader-logo" src="${LOADER_BRAND_PNG_PATH}" alt="ShoreVest 新岸資本"  loading="eager" decoding="async" fetchpriority="high" />`;
 
   // Loader tree mark — "Ink-in" (approved option F): the outline reveals
   // first, then inks into the solid badge. Two mask-rendered layers in the
@@ -53,7 +53,7 @@
 
   const pathname = window.location.pathname;
   const isInvestorPortalPath = /\/investor-portal(?:\.html|\/|\/index(?:_cn)?\.html)?$/i.test(pathname);
-  const path = isInvestorPortalPath ? 'investor-portal' : (pathname.split('/').pop() || 'home.html');
+  const path = isInvestorPortalPath ? 'investor-portal' : (pathname.split('/').pop() || '/');
   const localeSuffixMatch = path.match(/[-_](cn)\.html$/i);
   const localeSuffix = localeSuffixMatch ? localeSuffixMatch[1].toLowerCase() : 'en';
 
@@ -146,8 +146,8 @@
     return match && basePages.includes(match[1]) ? match[1] : 'index';
   })();
   const localeHrefs = {
-    en: localeBase === 'investor-portal' ? pageHref('investor-portal/index.html') : localizedPageHref(localeBase, 'en'),
-    cn: localeBase === 'investor-portal' ? pageHref('investor-portal/index_cn.html') : localizedPageHref(localeBase, 'cn')
+    en: localeBase === 'investor-portal' ? pageHref('/investor-portal/') : localizedPageHref(localeBase, 'en'),
+    cn: localeBase === 'investor-portal' ? pageHref('/investor-portal/index/') : localizedPageHref(localeBase, 'cn')
   };
 
   const renderLanguageSelector = (contextClass = '') => {
@@ -167,37 +167,37 @@
   const localized = {
     en: {
       navClass: 'nav--en',
-      home: pageHref('home.html'),
+      home: pageHref('/'),
       wordmark: '\u65b0\u5cb8\u8cc7\u672c',
       navItems: [
-        { href: pageHref('firm.html'), label: 'Firm' },
-        { href: pageHref('strategy.html'), label: 'Strategy' },
-        { href: pageHref('insights.html'), label: 'Insights' },
-        { href: pageHref('media.html'), label: 'Media' },
-        { href: pageHref('team.html'), label: 'Team' },
-        { href: pageHref('careers.html'), label: 'Careers' }
+        { href: pageHref('/firm/'), label: 'Firm' },
+        { href: pageHref('/strategy/'), label: 'Strategy' },
+        { href: pageHref('/insights/'), label: 'Insights' },
+        { href: pageHref('/media/'), label: 'Media' },
+        { href: pageHref('/team/'), label: 'Team' },
+        { href: pageHref('careers/'), label: 'Careers' }
       ],
-      investorPortalHref: pageHref('investor-portal/index.html'),
+      investorPortalHref: pageHref('/investor-portal/'),
       investorPortalLabel: 'Investor portal',
-      headerCtaHref: pageHref('contact.html'),
+      headerCtaHref: pageHref('/contact/'),
       headerCtaLabel: 'Contact',
       mobileAriaLabel: 'Site navigation'
     },
     cn: {
       navClass: 'nav--cn nav--sc',
-      home: pageHref('home_cn.html'),
+      home: pageHref('/cn/'),
       wordmark: '新岸資本',
       navItems: [
-        { href: pageHref('firm_cn.html'), label: '公司' },
-        { href: pageHref('strategy_cn.html'), label: '策略' },
-        { href: pageHref('insights_cn.html'), label: '洞察' },
-        { href: pageHref('media_cn.html'), label: '媒体' },
-        { href: pageHref('team_cn.html'), label: '团队' },
-        { href: pageHref('careers_cn.html'), label: '人才招聘' }
+        { href: pageHref('/cn/firm/'), label: '公司' },
+        { href: pageHref('/cn/strategy/'), label: '策略' },
+        { href: pageHref('/cn/insights/'), label: '洞察' },
+        { href: pageHref('/cn/media/'), label: '媒体' },
+        { href: pageHref('/cn/team/'), label: '团队' },
+        { href: pageHref('/cn/careers/'), label: '人才招聘' }
       ],
-      investorPortalHref: pageHref('investor-portal/index_cn.html'),
+      investorPortalHref: pageHref('/investor-portal/index/'),
       investorPortalLabel: '投资者门户',
-      headerCtaHref: pageHref('contact_cn.html'),
+      headerCtaHref: pageHref('/cn/contact/'),
       headerCtaLabel: '联系',
       mobileAriaLabel: '网站导航'
     }
@@ -229,7 +229,7 @@
   mount.innerHTML = `<header class="sv-header">
   <div class="sv-header__inner">
     <a class="sv-header__logo" href="${locale.home}" aria-label="${localeSuffix === 'en' ? 'ShoreVest — home' : '新岸资本 — 首页'}">
-      <img src="${assetHref('assets/brand/sv-lockup-fc-dark.png')}" alt="ShoreVest" width="172" height="41" />
+      <img src="${assetHref('assets/brand/sv-lockup-fc-dark.png')}" alt="ShoreVest" width="172" height="41"  loading="eager" decoding="async" fetchpriority="high" />
     </a>
     <nav class="sv-nav" aria-label="${localeSuffix === 'en' ? 'Primary' : '主导航'}">
       <ul>${navItems.map((item, i) => `<li><a href="${item.href}"${item.external ? ' target="_blank" rel="noopener noreferrer"' : ''}${navBases[i] === localeBase ? ' aria-current="page"' : ''}>${item.label}</a></li>`).join('')}</ul>
@@ -463,12 +463,12 @@
   annotateChinesePageText();
 
   const activeMap = {
-    firm: ['firm.html', 'firm_cn.html', pageHref('firm.html'), pageHref('firm_cn.html')],
-    strategy: ['strategy.html', 'strategy_cn.html', pageHref('strategy.html'), pageHref('strategy_cn.html')],
-    insights: ['insights.html', 'insights_cn.html', pageHref('insights.html'), pageHref('insights_cn.html')],
-    media: ['media.html', 'media_cn.html', pageHref('media.html'), pageHref('media_cn.html')],
-    team: ['team.html', 'team_cn.html', pageHref('team.html'), pageHref('team_cn.html')],
-    investor: [pageHref('investor-portal/index.html'), 'investor-portal', 'investor-access.html', 'investor-access_cn.html', pageHref('investor-access.html'), pageHref('investor-access_cn.html')]
+    firm: ['/firm/', '/cn/firm/', pageHref('/firm/'), pageHref('/cn/firm/')],
+    strategy: ['/strategy/', '/cn/strategy/', pageHref('/strategy/'), pageHref('/cn/strategy/')],
+    insights: ['/insights/', '/cn/insights/', pageHref('/insights/'), pageHref('/cn/insights/')],
+    media: ['/media/', '/cn/media/', pageHref('/media/'), pageHref('/cn/media/')],
+    team: ['/team/', '/cn/team/', pageHref('/team/'), pageHref('/cn/team/')],
+    investor: [pageHref('/investor-portal/'), 'investor-portal', '/investor-access/', '/cn/investor-access/', pageHref('/investor-access/'), pageHref('/cn/investor-access/')]
   };
 
   const inferActiveSection = (currentPath) => {
@@ -498,7 +498,7 @@
     });
   };
 
-  if (['contact.html', 'contact_cn.html'].includes(path)) {
+  if (['/contact/', '/cn/contact/'].includes(path)) {
     // Keep the desktop top bar structurally identical to the homepage. The
     // Contact CTA is intentionally not marked active in .nav__right, because
     // the homepage has no active CTA class there and the button row must not
