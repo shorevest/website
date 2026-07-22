@@ -1,0 +1,123 @@
+/* ShoreVest One - dashboard overview widgets */
+.dashboard-widgets {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0 0 32px;
+}
+
+.dashboard-widget {
+  min-width: 0;
+  min-height: 154px;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  background: var(--ops-white);
+  border: 1px solid var(--ops-hairline);
+  color: var(--ops-body);
+  text-decoration: none;
+}
+
+.dashboard-widget__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 13px;
+}
+
+.dashboard-widget__eyebrow {
+  font: 700 9.5px/1.2 var(--ops-font);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--ops-faint);
+}
+
+.dashboard-widget__select {
+  max-width: 124px;
+  padding: 4px 24px 4px 7px;
+  border: 1px solid var(--ops-hairline);
+  border-radius: 4px;
+  background: var(--ops-panel);
+  color: var(--ops-charcoal);
+  font: 500 11.5px/1.3 var(--ops-font);
+}
+
+.dashboard-widget__select:focus-visible,
+.dashboard-widget--link:focus-visible,
+.dashboard-widget--meeting:focus-visible {
+  outline: 2px solid var(--ops-red);
+  outline-offset: 2px;
+}
+
+.dashboard-widget__big {
+  margin-top: auto;
+  font: 700 28px/1.05 var(--ops-font);
+  letter-spacing: -0.02em;
+  color: var(--ops-black);
+}
+
+.dashboard-widget__line {
+  margin-top: 5px;
+  font: 500 12.5px/1.4 var(--ops-font);
+  color: var(--ops-charcoal);
+}
+
+.dashboard-widget__small {
+  margin-top: 2px;
+  font: 400 11px/1.4 var(--ops-font);
+  color: var(--ops-muted);
+}
+
+.dashboard-widget__source {
+  margin-top: 3px;
+  font: 400 10px/1.35 var(--ops-font);
+  color: var(--ops-faint);
+}
+
+.dashboard-widget__place {
+  font: 500 11.5px/1.3 var(--ops-font);
+  color: var(--ops-muted);
+}
+
+.dashboard-widget__open {
+  font: 600 11px/1.3 var(--ops-font);
+  color: var(--ops-red-dark);
+}
+
+.dashboard-widget--link:hover,
+.dashboard-widget--meeting:hover {
+  border-color: var(--ops-rule);
+  background: var(--ops-panel);
+}
+
+.dashboard-widget--meeting {
+  border-top: 3px solid var(--ops-red);
+  padding-top: 14px;
+}
+
+.dashboard-widget--meeting:hover {
+  border-top-color: var(--ops-red);
+}
+
+.dashboard-widget__meeting-title {
+  margin-top: auto;
+  font: 700 15px/1.35 var(--ops-font);
+  color: var(--ops-black);
+}
+
+@media (max-width: 1080px) {
+  .dashboard-widgets {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .dashboard-widgets {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-widget {
+    min-height: 138px;
+  }
+}
