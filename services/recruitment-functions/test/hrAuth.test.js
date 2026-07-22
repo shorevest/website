@@ -31,6 +31,16 @@ function aadPrincipal(claims = []) {
   };
 }
 
+function config() {
+  return {
+    hrAccess: {
+      enabled: true,
+      platformAuthenticationEnabled: true,
+      requiredRole: 'Recruitment.HR'
+    }
+  };
+}
+
 test('valid Easy Auth principal exposes roles and object id', () => {
   const principal = parseClientPrincipal(request(aadPrincipal([
     { typ: 'roles', val: 'Recruitment.HR' },
@@ -47,7 +57,10 @@ test('malformed, non-AAD and missing principals are rejected', () => {
 });
 
 test('HR authorization fails closed when access or platform authentication is disabled', () => {
-  const principal = request(aadPrincipal([{ typ: 'roles', val: 'Recruitment.HR' }]));
+  const principal = request(aadPrincipal([
+    { typ: 'roles', val: 'Recruitment.HR' },
+    { typ: 'oid', val: 'object-id' }
+  ]));
   const disabled = authorizeHr(principal, {
     hrAccess: {
       enabled: false,
@@ -69,25 +82,25 @@ test('HR authorization fails closed when access or platform authentication is di
   assert.equal(unprotected.errorCode, 'HR_AUTH_CONFIGURATION_INVALID');
 });
 
-test('HR authorization requires the exact app role', () => {
-  const config = {
-    hrAccess: {
-      enabled: true,
-      platformAuthenticationEnabled: true,
-      requiredRole: 'Recruitment.HR'
-    }
-  };
-  assert.equal(authorizeHr(request(null), config).status, 401);
+test('HR authorization requires the exact app role and an auditable object id', () => {
+  assert.equal(authorizeHr(request(null), config()).status, 401);
   const denied = authorizeHr(request(aadPrincipal([
-    { typ: 'roles', val: 'Recruitment.Reader' }
-  ])), config);
+    { typ: 'roles', val: 'Recruitment.Reader' },
+    { typ: 'oid', val: 'object-id' }
+  ])), config());
   assert.equal(denied.status, 403);
   assert.equal(denied.errorCode, 'HR_ROLE_REQUIRED');
+
+  const missingObjectId = authorizeHr(request(aadPrincipal([
+    { typ: 'roles', val: 'Recruitment.HR' }
+  ])), config());
+  assert.equal(missingObjectId.status, 403);
+  assert.equal(missingObjectId.errorCode, 'HR_PRINCIPAL_OBJECT_ID_REQUIRED');
 
   const allowed = authorizeHr(request(aadPrincipal([
     { typ: 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role', val: 'Recruitment.HR' },
     { typ: 'http://schemas.microsoft.com/identity/claims/objectidentifier', val: 'object-id' }
-  ])), config);
+  ])), config());
   assert.equal(allowed.ok, true);
   assert.equal(allowed.principal.objectId, 'object-id');
 });
