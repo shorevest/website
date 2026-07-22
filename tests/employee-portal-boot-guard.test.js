@@ -14,11 +14,13 @@ function test(name, fn) { try { fn(); passed++; } catch (e) { failures.push({ na
 const index = read('employee-portal/index.html');
 const guard = read('assets/js/employee-portal/boot-guard.js');
 
-test('entry page exposes a unique build marker and cache-busts portal assets', () => {
-  assert.ok(index.includes('data-portal-build="20260723b"'));
+test('entry page exposes one build marker and cache-busts every portal asset with it', () => {
+  const marker = index.match(/data-portal-build="([^"]+)"/);
+  assert.ok(marker && marker[1], 'entry page is missing its portal build marker');
+  const buildKey = marker[1];
   const portalRefs = index.match(/(?:assets\/css\/employee-portal[^"']+|assets\/js\/employee-portal[^"']+|assets\/js\/vendor\/msal-browser[^"']+)/g) || [];
   assert.ok(portalRefs.length > 20, 'expected full portal asset list');
-  portalRefs.forEach((ref) => assert.ok(ref.includes('v=20260723b'), 'stale portal asset key: ' + ref));
+  portalRefs.forEach((ref) => assert.ok(ref.includes('v=' + buildKey), 'stale portal asset key: ' + ref));
 });
 
 test('startup guard loads before configuration and application code', () => {
