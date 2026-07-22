@@ -17,7 +17,8 @@ Use two separate permission contexts:
    - Uses `Lists.SelectedOperations.Selected` with write access granted only to:
      - `RecruitmentApplications`
      - `RecruitmentFiles`
-   - Uses the minimum approved Microsoft Graph mail permission, restricted to the designated recruitment mailbox through Exchange Online application access controls.
+   - Uses Microsoft Graph application permissions `Mail.ReadWrite` and `Mail.Send`, restricted to the designated recruitment mailbox through Exchange Online application access controls.
+   - Must not have unrestricted access to employee, investor, shared, or executive mailboxes.
 
 The runtime list permission is recorded in `infra/recruitment/sharepoint-lists.v1.json`. The list contract is validated in CI.
 
@@ -60,12 +61,29 @@ Before enabling candidate acknowledgements:
 
 - approve the English and Chinese wording;
 - set `RECRUITMENT_CANDIDATE_ACK_TEMPLATE_APPROVED=true`;
-- restrict the managed identity's Graph mail access to the approved recruitment mailbox;
+- consent `Mail.ReadWrite` and `Mail.Send` for the managed identity;
+- restrict both permissions to the approved recruitment mailbox through Exchange Online application access controls;
+- verify that the identity cannot read or send from any other mailbox;
 - verify the mailbox records sent messages;
 - confirm the privacy notice URL in `RECRUITMENT_CANDIDATE_ACK_PRIVACY_URL`;
 - test duplicate-delivery recovery before production.
 
 The acknowledgement contains no attachments, CV links, clean Blob URLs, internal SharePoint links, or reusable SAS URLs.
+
+### Recoverable delivery sequence
+
+Candidate acknowledgement delivery uses a recoverable draft workflow rather than a direct fire-and-forget `sendMail` call:
+
+1. Search the recruitment mailbox for a message carrying the deterministic ShoreVest application-reference extended property.
+2. If a matching sent message exists, reconcile the outbox event as delivered without sending again.
+3. If no message exists, create a draft tagged with that extended property.
+4. Persist the draft's immutable Microsoft Graph message ID to the Cosmos outbox event using the current ETag.
+5. Send that exact draft.
+6. Mark the outbox event complete using the checkpointed ETag.
+
+If the process crashes before the checkpoint, the next run adopts the tagged draft. If it crashes after the checkpoint, the next run reuses the immutable message ID. If it crashes after send but before the outbox completion write, the next run finds the sent message and completes without sending a duplicate.
+
+More than one mailbox message with the same ShoreVest application-reference property is treated as a permanent reconciliation failure requiring administrator review. A missing checkpointed message is not silently replaced with a new draft.
 
 ## Runtime settings
 
@@ -106,6 +124,7 @@ Before enabling delivery, verify:
 - SharePoint items contain metadata only;
 - the candidate mailbox is the only mailbox accessible to the identity;
 - a repeated application projection updates the existing item instead of creating a duplicate;
-- a repeated candidate acknowledgement event is reconciled without sending a duplicate;
-- failed Graph calls remain retryable and preserve the outbox lease state;
+- a crash before, during, and after candidate mail send does not create a duplicate acknowledgement;
+- failed Graph calls remain retryable and preserve the checkpointed outbox ETag;
+- the mailbox extended-property search returns at most one message for each application reference;
 - all three enablement settings remain false in the production deployment template until final approval.
