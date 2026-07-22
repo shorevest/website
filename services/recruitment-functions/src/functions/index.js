@@ -14,7 +14,11 @@ const { createDeps, flows } = require('../appFactory');
 const { normalizeEventGridEvent } = require('../lib/eventGrid');
 const { accessCleanDocument } = require('../hr/documentAccess');
 const { updateRetentionControl } = require('../hr/retentionControl');
-const { runPolicyAssignment, runRetentionPurge } = require('../retention/worker');
+const {
+  runPolicyAssignment,
+  runRetentionPurge,
+  runIdempotencyCleanup
+} = require('../retention/worker');
 
 async function httpFlow(req, context, flow, options = {}) {
   const config = loadConfig();
@@ -97,10 +101,7 @@ app.http('hrCleanDocumentAccess', {
     try {
       const dependencies = createDeps(config);
       const result = await accessCleanDocument(req, config, dependencies);
-      return {
-        ...result,
-        headers: withCors(req, config)
-      };
+      return { ...result, headers: withCors(req, config) };
     } catch (error) {
       context.error('recruitment_hr_document_access_failed', { code: error.code });
       return {
@@ -192,6 +193,18 @@ app.timer('retentionPurge', {
       return;
     }
     await runRetentionPurge(config, createDeps(config), context);
+  }
+});
+
+app.timer('retentionIdempotencyCleanup', {
+  schedule: '0 55 * * * *',
+  handler: async (_, context) => {
+    const config = loadConfig();
+    if (config.retention.enabled !== true || config.retention.deletionEnabled !== true) {
+      context.log('recruitment_retention_cleanup_disabled');
+      return;
+    }
+    await runIdempotencyCleanup(config, createDeps(config), context);
   }
 });
 
