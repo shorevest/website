@@ -247,14 +247,18 @@ function createRetentionAdapter({ endpoint, databaseId, credential, client, now 
   async function updateControls({ applicationReference, legalHold, retentionDeleteAfterUtc, reason, principalObjectId }) {
     const application = await read(submissions, 'application', applicationReference);
     if (!application || application.retentionState === 'Purged') return null;
+    const currentTime = now();
     if (application.retentionState === 'Processing') {
-      throw retentionError(
-        'RETENTION_PURGE_IN_PROGRESS',
-        'Retention controls cannot change while purge owns the application lease'
-      );
+      const leaseExpiry = Date.parse(application.retentionLeaseExpiresAtUtc || '');
+      if (!Number.isFinite(leaseExpiry) || leaseExpiry > currentTime.getTime()) {
+        throw retentionError(
+          'RETENTION_PURGE_IN_PROGRESS',
+          'Retention controls cannot change while purge owns the application lease'
+        );
+      }
     }
     const files = await filesFor(applicationReference);
-    const timestamp = now().toISOString();
+    const timestamp = currentTime.toISOString();
     const deadline = retentionDeleteAfterUtc || application.retentionDeleteAfterUtc || null;
     const nextApplication = {
       ...stripSystemFields(application),
