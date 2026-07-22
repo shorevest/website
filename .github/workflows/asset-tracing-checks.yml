@@ -51,10 +51,22 @@ jobs:
           node tests/employee-portal-phase2b.test.js
           node tests/security-headers.test.js
 
-      - name: Run headless browser smoke test
+      - name: Render login entry in Chrome
         shell: bash
         run: |
           mkdir -p artifacts/asset-tracing-browser
+          python3 -m http.server 4174 --bind 127.0.0.1 > artifacts/asset-tracing-browser/entry-server.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill $SERVER_PID || true' EXIT
+          sleep 1
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=5000 \
+            --dump-dom http://127.0.0.1:4174/employee-portal/ \
+            > artifacts/asset-tracing-browser/entry-dom.html 2> artifacts/asset-tracing-browser/entry-chrome.log
+          grep -q 'login__submit' artifacts/asset-tracing-browser/entry-dom.html
+
+      - name: Run interactive headless browser smoke test
+        shell: bash
+        run: |
           set -o pipefail
           node scripts/qa-asset-tracing-browser.cjs 2>&1 | tee artifacts/asset-tracing-browser/browser-smoke.log
 
