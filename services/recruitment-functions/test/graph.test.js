@@ -7,6 +7,8 @@ const {
   IMMUTABLE_ID_PREFERENCE,
   GraphDeliveryError,
   escapeFilterString,
+  notificationFieldsRequested,
+  preserveNotificationState,
   createGraphAdapter
 } = require('../src/adapters/graph');
 
@@ -64,13 +66,45 @@ test('list upsert creates when no indexed item exists', async () => {
   assert.ok(auth.scopes.every((scope) => scope === GRAPH_SCOPE));
 });
 
+test('list creation retains pending notification fields', async () => {
+  const calls = [];
+  const graph = createGraphAdapter({
+    credential: credential(),
+    fetchImpl: async (url, options) => {
+      calls.push({ url, options });
+      if (options.method === 'GET') return response(200, { value: [] });
+      return response(201, { id: '42' });
+    }
+  });
+
+  await graph.upsertListItem({
+    siteId: 'site',
+    listId: 'applications',
+    keyField: 'ApplicationReference',
+    keyValue: 'APP-1',
+    fields: {
+      ApplicationReference: 'APP-1',
+      ApplicationReceivedNotificationState: 'Pending',
+      ApplicationReceivedNotificationEventKey: 'event-1',
+      ApplicationReceivedNotificationSentAtUtc: null,
+      ApplicationReceivedNotificationAttemptCount: 0,
+      ApplicationReceivedNotificationLastErrorCode: null
+    }
+  });
+
+  const payload = JSON.parse(calls[1].options.body).fields;
+  assert.equal(payload.ApplicationReceivedNotificationState, 'Pending');
+  assert.equal(payload.ApplicationReceivedNotificationEventKey, 'event-1');
+  assert.equal(payload.ApplicationReceivedNotificationAttemptCount, 0);
+});
+
 test('list upsert patches an existing item', async () => {
   const calls = [];
   const graph = createGraphAdapter({
     credential: credential(),
     fetchImpl: async (url, options) => {
       calls.push({ url, options });
-      if (options.method === 'GET') return response(200, { value: [{ id: '7' }] });
+      if (options.method === 'GET') return response(200, { value: [{ id: '7', fields: {} }] });
       return response(200, { ApplicationReference: 'APP-1' });
     }
   });
@@ -86,6 +120,158 @@ test('list upsert patches an existing item', async () => {
   assert.deepEqual(result, { itemId: '7', created: false });
   assert.equal(calls[1].options.method, 'PATCH');
   assert.ok(calls[1].url.endsWith('/items/7/fields'));
+});
+
+test('notification field discovery requests only recognized state machines', () => {
+  assert.deepEqual(notificationFieldsRequested({
+    ApplicationReceivedNotificationEventKey: 'event-1',
+    DocumentsReadyNotificationEventKey: 'event-2',
+    CandidateName: 'Candidate',
+    FakeNotificationEventKey: 'unsafe'
+  }), [
+    'ApplicationReceivedNotificationState',
+    'ApplicationReceivedNotificationEventKey',
+    'ApplicationReceivedNotificationSentAtUtc',
+    'ApplicationReceivedNotificationAttemptCount',
+    'ApplicationReceivedNotificationLastErrorCode',
+    'DocumentsReadyNotificationState',
+    'DocumentsReadyNotificationEventKey',
+    'DocumentsReadyNotificationSentAtUtc',
+    'DocumentsReadyNotificationAttemptCount',
+    'DocumentsReadyNotificationLastErrorCode'
+  ]);
+});
+
+test('notification replay preserves Sent state for the same event key', async () => {
+  const calls = [];
+  const graph = createGraphAdapter({
+    credential: credential(),
+    fetchImpl: async (url, options) => {
+      calls.push({ url, options });
+      if (options.method === 'GET') {
+        return response(200, {
+          value: [{
+            id: '7',
+            fields: {
+              ApplicationReference: 'APP-1',
+              NotificationState: 'Sent',
+              NotificationEventKey: 'event-1',
+              NotificationSentAtUtc: '2026-07-23T00:10:00.000Z',
+              NotificationAttemptCount: 1,
+              NotificationLastErrorCode: null,
+              ApplicationReceivedNotificationState: 'Sent',
+              ApplicationReceivedNotificationEventKey: 'event-1',
+              ApplicationReceivedNotificationSentAtUtc: '2026-07-23T00:10:00.000Z',
+              ApplicationReceivedNotificationAttemptCount: 1,
+              ApplicationReceivedNotificationLastErrorCode: null
+            }
+          }]
+        });
+      }
+      return response(200, {});
+    }
+  });
+
+  await graph.upsertListItem({
+    siteId: 'site',
+    listId: 'applications',
+    keyField: 'ApplicationReference',
+    keyValue: 'APP-1',
+    fields: {
+      TechnicalStatus: 'Ready',
+      NotificationState: 'Pending',
+      NotificationEventKey: 'event-1',
+      NotificationSentAtUtc: null,
+      NotificationAttemptCount: 0,
+      NotificationLastErrorCode: null,
+      ApplicationReceivedNotificationState: 'Pending',
+      ApplicationReceivedNotificationEventKey: 'event-1',
+      ApplicationReceivedNotificationSentAtUtc: null,
+      ApplicationReceivedNotificationAttemptCount: 0,
+      ApplicationReceivedNotificationLastErrorCode: null
+    }
+  });
+
+  assert.ok(calls[0].url.includes('ApplicationReceivedNotificationEventKey'));
+  assert.ok(calls[0].url.includes('NotificationEventKey'));
+  const patch = JSON.parse(calls[1].options.body);
+  assert.deepEqual(patch, { TechnicalStatus: 'Ready' });
+});
+
+test('a different notification event key creates a new Pending state', async () => {
+  const calls = [];
+  const graph = createGraphAdapter({
+    credential: credential(),
+    fetchImpl: async (url, options) => {
+      calls.push({ url, options });
+      if (options.method === 'GET') {
+        return response(200, {
+          value: [{
+            id: '7',
+            fields: {
+              ApplicationReference: 'APP-1',
+              DocumentsReadyNotificationState: 'Sent',
+              DocumentsReadyNotificationEventKey: 'old-event',
+              DocumentsReadyNotificationSentAtUtc: '2026-07-23T00:10:00.000Z',
+              DocumentsReadyNotificationAttemptCount: 1,
+              DocumentsReadyNotificationLastErrorCode: null
+            }
+          }]
+        });
+      }
+      return response(200, {});
+    }
+  });
+
+  await graph.upsertListItem({
+    siteId: 'site',
+    listId: 'applications',
+    keyField: 'ApplicationReference',
+    keyValue: 'APP-1',
+    fields: {
+      TechnicalStatus: 'Ready',
+      DocumentsReadyNotificationState: 'Pending',
+      DocumentsReadyNotificationEventKey: 'new-event',
+      DocumentsReadyNotificationSentAtUtc: null,
+      DocumentsReadyNotificationAttemptCount: 0,
+      DocumentsReadyNotificationLastErrorCode: null
+    }
+  });
+
+  const patch = JSON.parse(calls[1].options.body);
+  assert.equal(patch.TechnicalStatus, 'Ready');
+  assert.equal(patch.DocumentsReadyNotificationState, 'Pending');
+  assert.equal(patch.DocumentsReadyNotificationEventKey, 'new-event');
+  assert.equal(patch.DocumentsReadyNotificationAttemptCount, 0);
+});
+
+test('notification preservation helper leaves purge clears and new events intact', () => {
+  assert.deepEqual(preserveNotificationState({
+    NotificationState: 'Sent',
+    NotificationEventKey: 'event-1'
+  }, {
+    NotificationState: null,
+    NotificationEventKey: null,
+    NotificationSentAtUtc: null,
+    NotificationAttemptCount: null,
+    NotificationLastErrorCode: null,
+    TechnicalStatus: 'Deleted'
+  }), {
+    NotificationState: null,
+    NotificationEventKey: null,
+    NotificationSentAtUtc: null,
+    NotificationAttemptCount: null,
+    NotificationLastErrorCode: null,
+    TechnicalStatus: 'Deleted'
+  });
+
+  assert.equal(preserveNotificationState({
+    NotificationState: 'Sent',
+    NotificationEventKey: 'event-1'
+  }, {
+    NotificationState: 'Pending',
+    NotificationEventKey: 'event-2'
+  }).NotificationState, 'Pending');
 });
 
 test('duplicate SharePoint projection targets fail permanently', async () => {
