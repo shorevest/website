@@ -12,6 +12,9 @@ const PROJECTION_EVENTS = new Set([
   EVENTS.QuarantineCleanupRequired
 ]);
 
+const ACKNOWLEDGEMENT_PROPERTY_ID =
+  'String {61d91fcb-ec61-4f51-9a2d-2d6f3307d8bd} Name ShoreVestApplicationReference';
+
 function deliveryError(code, message, permanent = false) {
   return Object.assign(new Error(message), { code, permanent });
 }
@@ -156,8 +159,32 @@ function acknowledgementMessage(application, config) {
   };
 }
 
+function classifyAcknowledgementMessages(messages) {
+  const items = Array.isArray(messages) ? messages : [];
+  if (items.length > 1) {
+    throw deliveryError(
+      'CANDIDATE_ACKNOWLEDGEMENT_DUPLICATE_STATE',
+      'Multiple mailbox messages have the same application acknowledgement key',
+      true
+    );
+  }
+  const message = items[0] || null;
+  return {
+    message,
+    sent: Boolean(message && (message.isDraft === false || message.sentDateTime)),
+    draft: Boolean(message && message.isDraft === true)
+  };
+}
+
 function createOutboxDispatcher({ graph, config } = {}) {
-  if (!graph || typeof graph.upsertListItem !== 'function' || typeof graph.sendMail !== 'function') {
+  const requiredGraphMethods = [
+    'upsertListItem',
+    'findMessagesByExtendedProperty',
+    'getMessage',
+    'createDraftMessage',
+    'sendDraftMessage'
+  ];
+  if (!graph || requiredGraphMethods.some((method) => typeof graph[method] !== 'function')) {
     throw deliveryError('GRAPH_ADAPTER_MISSING', 'Microsoft Graph adapter is not configured', true);
   }
 
@@ -226,15 +253,82 @@ function createOutboxDispatcher({ graph, config } = {}) {
     if (acknowledgement.enabled !== true || acknowledgement.templateApproved !== true) {
       throw deliveryError('CANDIDATE_ACKNOWLEDGEMENT_DISABLED', 'Candidate acknowledgement is not approved and enabled', true);
     }
+    if (!dependencies.outboxCheckpoint || typeof dependencies.outboxCheckpoint.checkpoint !== 'function') {
+      throw deliveryError('OUTBOX_CHECKPOINT_MISSING', 'Outbox checkpoint store is not configured', true);
+    }
+
     const application = await loadApplication(event, dependencies);
     if (!application.finalizedAtUtc || application.candidateSubmissionStatus !== 'Submitted') {
       throw deliveryError('APPLICATION_NOT_FINALIZED', 'Candidate acknowledgement requires a finalized application', true);
     }
-    await graph.sendMail(
-      acknowledgement.mailbox,
-      acknowledgementMessage(application, acknowledgement)
+
+    const mailbox = acknowledgement.mailbox;
+    const reference = application.applicationReference;
+    let activeEvent = event;
+    let mailboxState = classifyAcknowledgementMessages(
+      await graph.findMessagesByExtendedProperty(mailbox, ACKNOWLEDGEMENT_PROPERTY_ID, reference)
     );
-    return { deliveryReference: `mail:${application.applicationReference}` };
+
+    if (mailboxState.sent) {
+      return {
+        deliveryReference: `mail:${mailboxState.message.id}`,
+        event: activeEvent,
+        reconciled: true
+      };
+    }
+
+    const checkpointedId = activeEvent.deliveryCheckpoint?.draftMessageId;
+    let draft = mailboxState.draft ? mailboxState.message : null;
+
+    if (checkpointedId) {
+      const checkpointedMessage = await graph.getMessage(mailbox, checkpointedId);
+      if (checkpointedMessage && (checkpointedMessage.isDraft === false || checkpointedMessage.sentDateTime)) {
+        return {
+          deliveryReference: `mail:${checkpointedMessage.id}`,
+          event: activeEvent,
+          reconciled: true
+        };
+      }
+      if (checkpointedMessage?.isDraft === true) {
+        draft = checkpointedMessage;
+      } else if (!draft) {
+        throw deliveryError(
+          'CANDIDATE_ACKNOWLEDGEMENT_STATE_UNCERTAIN',
+          'The checkpointed acknowledgement message could not be reconciled'
+        );
+      }
+    }
+
+    if (!draft) {
+      draft = await graph.createDraftMessage(
+        mailbox,
+        acknowledgementMessage(application, acknowledgement),
+        { id: ACKNOWLEDGEMENT_PROPERTY_ID, value: reference }
+      );
+    }
+    if (!draft?.id) {
+      throw deliveryError('CANDIDATE_ACKNOWLEDGEMENT_DRAFT_INVALID', 'Microsoft Graph did not return a draft id');
+    }
+
+    if (checkpointedId !== draft.id) {
+      activeEvent = await dependencies.outboxCheckpoint.checkpoint(activeEvent, {
+        draftMessageId: draft.id,
+        extendedPropertyId: ACKNOWLEDGEMENT_PROPERTY_ID,
+        extendedPropertyValue: reference
+      });
+    }
+
+    try {
+      await graph.sendDraftMessage(mailbox, draft.id);
+    } catch (error) {
+      error.event = activeEvent;
+      throw error;
+    }
+
+    return {
+      deliveryReference: `mail:${draft.id}`,
+      event: activeEvent
+    };
   }
 
   async function deliver(event, dependencies) {
@@ -255,9 +349,11 @@ function createOutboxDispatcher({ graph, config } = {}) {
 
 module.exports = {
   PROJECTION_EVENTS,
+  ACKNOWLEDGEMENT_PROPERTY_ID,
   compactFields,
   applicationFields,
   fileFields,
   acknowledgementMessage,
+  classifyAcknowledgementMessages,
   createOutboxDispatcher
 };
