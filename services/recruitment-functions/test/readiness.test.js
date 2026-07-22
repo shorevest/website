@@ -17,7 +17,12 @@ function validConfig(patch = {}) {
     completionTokenSecretName: 'completion',
     fingerprintSecretName: 'fingerprint',
     rateLimit: { enabled: true },
-    botVerification: { mode: 'turnstile', secretName: 'turnstile' },
+    botVerification: {
+      mode: 'turnstile',
+      secretName: 'turnstile',
+      expectedHostnames: ['shorevest.com'],
+      expectedAction: 'recruitment-application'
+    },
     outboxDelivery: { enabled: false },
     graph: { endpoint: 'https://graph.microsoft.com/v1.0' },
     sharePoint: {},
@@ -153,6 +158,30 @@ test('enabled API checks Key Vault secrets and enabled delivery checks Graph res
     mailbox: 'recruitment@example.com'
   });
   assert.equal(result.ok, true);
+});
+
+test('readiness refuses an enabled API when Turnstile constraints drift from the allowed origin', async () => {
+  let dependencyCalls = 0;
+  const probe = createReadinessProbe();
+  const result = await probe(validConfig({
+    apiEnabled: true,
+    botVerification: {
+      mode: 'turnstile',
+      secretName: 'turnstile',
+      expectedHostnames: ['www.shorevest.com'],
+      expectedAction: 'recruitment-application'
+    }
+  }), {
+    async health() {
+      dependencyCalls += 1;
+      return { ok: true };
+    }
+  });
+
+  assert.equal(result.ok, false);
+  assert.equal(result.configuration, 'invalid');
+  assert.equal(result.dependencies, 'not-checked');
+  assert.equal(dependencyCalls, 0);
 });
 
 test('readiness caches failures without exposing the failing dependency', async () => {
