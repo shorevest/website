@@ -6,9 +6,11 @@ const {
   NOTIFICATION_EVENTS: EVENTS
 } = require('../../../api/recruitment/core/constants');
 const {
+  ACKNOWLEDGEMENT_PROPERTY_ID,
   applicationFields,
   fileFields,
   acknowledgementMessage,
+  classifyAcknowledgementMessages,
   createOutboxDispatcher
 } = require('../src/outbox/dispatcher');
 
@@ -89,6 +91,68 @@ function config() {
   };
 }
 
+function graphStub(overrides = {}) {
+  return {
+    async upsertListItem() {
+      return { itemId: '1', created: true };
+    },
+    async findMessagesByExtendedProperty() {
+      return [];
+    },
+    async getMessage() {
+      return null;
+    },
+    async createDraftMessage() {
+      return { id: 'draft-1', isDraft: true };
+    },
+    async sendDraftMessage() {
+      return { accepted: true };
+    },
+    ...overrides
+  };
+}
+
+function event(patch = {}) {
+  return {
+    id: 'outbox:CandidateAcknowledgementRequested:outbox:app:ack',
+    _etag: 'etag-1',
+    type: EVENTS.CandidateAcknowledgementRequested,
+    applicationReference: 'SV-APP-2026-ABC123',
+    idempotencyKey: 'outbox:app:ack',
+    attemptCount: 1,
+    state: 'Processing',
+    ...patch
+  };
+}
+
+function dependencies(patch = {}) {
+  return {
+    applicationStore: {
+      async getApplication() {
+        return application();
+      },
+      async getFile() {
+        return file();
+      }
+    },
+    projectionReader: {
+      async getFilesForApplication() {
+        return [file()];
+      }
+    },
+    outboxCheckpoint: {
+      async checkpoint(current, checkpoint) {
+        return {
+          ...current,
+          _etag: 'etag-2',
+          deliveryCheckpoint: checkpoint
+        };
+      }
+    },
+    ...patch
+  };
+}
+
 test('application projection marks only approved HR notifications pending', () => {
   const received = applicationFields(application(), {
     type: EVENTS.ApplicationReceived,
@@ -115,37 +179,27 @@ test('file projection contains metadata but no document bytes or public URL', ()
 
 test('projection upserts the application and every file in the application partition', async () => {
   const upserts = [];
-  const graph = {
-    async upsertListItem(input) {
-      upserts.push(input);
-      return { itemId: String(upserts.length), created: true };
-    },
-    async sendMail() {
-      throw new Error('mail not expected');
-    }
-  };
-  const dispatcher = createOutboxDispatcher({ graph, config: config() });
-  const dependencies = {
-    applicationStore: {
-      async getApplication() {
-        return application();
-      },
-      async getFile() {
-        return file();
+  const dispatcher = createOutboxDispatcher({
+    graph: graphStub({
+      async upsertListItem(input) {
+        upserts.push(input);
+        return { itemId: String(upserts.length), created: true };
       }
-    },
-    projectionReader: {
-      async getFilesForApplication() {
-        return [file(), file({ fileReference: 'SV-FILE-SECOND', filePurpose: 'SupportingDocument' })];
-      }
-    }
-  };
+    }),
+    config: config()
+  });
 
   const result = await dispatcher.deliver({
     type: EVENTS.ApplicationReceived,
     applicationReference: 'SV-APP-2026-ABC123',
     idempotencyKey: 'outbox:application:received'
-  }, dependencies);
+  }, dependencies({
+    projectionReader: {
+      async getFilesForApplication() {
+        return [file(), file({ fileReference: 'SV-FILE-SECOND', filePurpose: 'SupportingDocument' })];
+      }
+    }
+  }));
 
   assert.equal(upserts.length, 3);
   assert.equal(upserts[0].keyField, 'ApplicationReference');
@@ -158,13 +212,12 @@ test('file-specific events do not query unrelated application files', async () =
   let projectionReads = 0;
   let upserts = 0;
   const dispatcher = createOutboxDispatcher({
-    graph: {
+    graph: graphStub({
       async upsertListItem() {
         upserts += 1;
         return { itemId: String(upserts), created: false };
-      },
-      async sendMail() {}
-    },
+      }
+    }),
     config: config()
   });
 
@@ -173,7 +226,7 @@ test('file-specific events do not query unrelated application files', async () =
     applicationReference: 'SV-APP-2026-ABC123',
     fileReference: 'SV-FILE-ABC12345',
     idempotencyKey: 'outbox:file:malicious'
-  }, {
+  }, dependencies({
     applicationStore: {
       async getApplication() {
         return application({ technicalStatus: 'Blocked' });
@@ -188,7 +241,7 @@ test('file-specific events do not query unrelated application files', async () =
         return [];
       }
     }
-  });
+  }));
 
   assert.equal(upserts, 2);
   assert.equal(projectionReads, 0);
@@ -207,16 +260,19 @@ test('acknowledgement message is bilingual, contains fraud wording and no attach
   assert.ok(chinese.body.content.includes('不会在招聘过程中要求候选人付款'));
 });
 
+test('duplicate acknowledgement message state fails permanently', () => {
+  assert.throws(
+    () => classifyAcknowledgementMessages([
+      { id: 'one', isDraft: false },
+      { id: 'two', isDraft: true }
+    ]),
+    (error) => error.code === 'CANDIDATE_ACKNOWLEDGEMENT_DUPLICATE_STATE' && error.permanent === true
+  );
+});
+
 test('candidate acknowledgement remains blocked without explicit template approval', async () => {
   const dispatcher = createOutboxDispatcher({
-    graph: {
-      async upsertListItem() {
-        return { itemId: '1' };
-      },
-      async sendMail() {
-        throw new Error('should not send');
-      }
-    },
+    graph: graphStub(),
     config: {
       ...config(),
       candidateAcknowledgement: {
@@ -227,48 +283,188 @@ test('candidate acknowledgement remains blocked without explicit template approv
   });
 
   await assert.rejects(
-    () => dispatcher.deliver({
-      type: EVENTS.CandidateAcknowledgementRequested,
-      applicationReference: 'SV-APP-2026-ABC123'
-    }, {
-      applicationStore: {
-        async getApplication() {
-          return application();
-        }
-      }
-    }),
+    () => dispatcher.deliver(event(), dependencies()),
     (error) => error.code === 'CANDIDATE_ACKNOWLEDGEMENT_DISABLED' && error.permanent === true
   );
 });
 
-test('approved candidate acknowledgement sends through the configured recruitment mailbox', async () => {
-  const sent = [];
+test('new acknowledgement draft is checkpointed before it is sent', async () => {
+  const order = [];
   const dispatcher = createOutboxDispatcher({
-    graph: {
-      async upsertListItem() {
-        return { itemId: '1' };
+    graph: graphStub({
+      async createDraftMessage(mailbox, message, property) {
+        order.push('draft');
+        assert.equal(mailbox, 'hr@shorevest.com');
+        assert.equal(message.toRecipients[0].emailAddress.address, 'candidate@example.com');
+        assert.equal(message.attachments, undefined);
+        assert.equal(property.id, ACKNOWLEDGEMENT_PROPERTY_ID);
+        assert.equal(property.value, 'SV-APP-2026-ABC123');
+        return { id: 'immutable-draft-1', isDraft: true };
       },
-      async sendMail(mailbox, message) {
-        sent.push({ mailbox, message });
+      async sendDraftMessage(mailbox, messageId) {
+        order.push('send');
+        assert.equal(mailbox, 'hr@shorevest.com');
+        assert.equal(messageId, 'immutable-draft-1');
       }
-    },
+    }),
     config: config()
   });
 
-  const result = await dispatcher.deliver({
-    type: EVENTS.CandidateAcknowledgementRequested,
-    applicationReference: 'SV-APP-2026-ABC123'
-  }, {
-    applicationStore: {
-      async getApplication() {
-        return application();
+  const result = await dispatcher.deliver(event(), dependencies({
+    outboxCheckpoint: {
+      async checkpoint(current, checkpoint) {
+        order.push('checkpoint');
+        assert.equal(checkpoint.draftMessageId, 'immutable-draft-1');
+        return { ...current, _etag: 'etag-2', deliveryCheckpoint: checkpoint };
       }
     }
+  }));
+
+  assert.deepEqual(order, ['draft', 'checkpoint', 'send']);
+  assert.equal(result.deliveryReference, 'mail:immutable-draft-1');
+  assert.equal(result.event._etag, 'etag-2');
+});
+
+test('retry reconciles an already-sent acknowledgement without creating or sending', async () => {
+  let drafts = 0;
+  let sends = 0;
+  let checkpoints = 0;
+  const dispatcher = createOutboxDispatcher({
+    graph: graphStub({
+      async findMessagesByExtendedProperty() {
+        return [{ id: 'immutable-sent-1', isDraft: false, sentDateTime: '2026-07-22T00:02:00Z' }];
+      },
+      async createDraftMessage() {
+        drafts += 1;
+      },
+      async sendDraftMessage() {
+        sends += 1;
+      }
+    }),
+    config: config()
   });
 
-  assert.equal(sent.length, 1);
-  assert.equal(sent[0].mailbox, 'hr@shorevest.com');
-  assert.equal(sent[0].message.toRecipients[0].emailAddress.address, 'candidate@example.com');
-  assert.equal(sent[0].message.attachments, undefined);
-  assert.equal(result.deliveryReference, 'mail:SV-APP-2026-ABC123');
+  const result = await dispatcher.deliver(event(), dependencies({
+    outboxCheckpoint: {
+      async checkpoint() {
+        checkpoints += 1;
+      }
+    }
+  }));
+
+  assert.equal(result.deliveryReference, 'mail:immutable-sent-1');
+  assert.equal(result.reconciled, true);
+  assert.equal(drafts, 0);
+  assert.equal(sends, 0);
+  assert.equal(checkpoints, 0);
+});
+
+test('retry adopts an existing tagged draft and checkpoints it before sending', async () => {
+  let creates = 0;
+  let checkpointed;
+  let sent;
+  const dispatcher = createOutboxDispatcher({
+    graph: graphStub({
+      async findMessagesByExtendedProperty() {
+        return [{ id: 'existing-draft', isDraft: true }];
+      },
+      async createDraftMessage() {
+        creates += 1;
+      },
+      async sendDraftMessage(_, id) {
+        sent = id;
+      }
+    }),
+    config: config()
+  });
+
+  await dispatcher.deliver(event(), dependencies({
+    outboxCheckpoint: {
+      async checkpoint(current, checkpoint) {
+        checkpointed = checkpoint.draftMessageId;
+        return { ...current, _etag: 'etag-2', deliveryCheckpoint: checkpoint };
+      }
+    }
+  }));
+
+  assert.equal(creates, 0);
+  assert.equal(checkpointed, 'existing-draft');
+  assert.equal(sent, 'existing-draft');
+});
+
+test('checkpointed draft is reused directly', async () => {
+  let searches = 0;
+  let creates = 0;
+  let sent;
+  const dispatcher = createOutboxDispatcher({
+    graph: graphStub({
+      async findMessagesByExtendedProperty() {
+        searches += 1;
+        return [];
+      },
+      async getMessage(_, id) {
+        return { id, isDraft: true };
+      },
+      async createDraftMessage() {
+        creates += 1;
+      },
+      async sendDraftMessage(_, id) {
+        sent = id;
+      }
+    }),
+    config: config()
+  });
+
+  const current = event({
+    deliveryCheckpoint: { draftMessageId: 'checkpointed-draft' }
+  });
+  await dispatcher.deliver(current, dependencies());
+
+  assert.equal(searches, 1);
+  assert.equal(creates, 0);
+  assert.equal(sent, 'checkpointed-draft');
+});
+
+test('missing checkpointed message does not create a replacement', async () => {
+  let creates = 0;
+  const dispatcher = createOutboxDispatcher({
+    graph: graphStub({
+      async getMessage() {
+        return null;
+      },
+      async createDraftMessage() {
+        creates += 1;
+      }
+    }),
+    config: config()
+  });
+
+  await assert.rejects(
+    () => dispatcher.deliver(event({
+      deliveryCheckpoint: { draftMessageId: 'missing-draft' }
+    }), dependencies()),
+    (error) => error.code === 'CANDIDATE_ACKNOWLEDGEMENT_STATE_UNCERTAIN' && error.permanent !== true
+  );
+  assert.equal(creates, 0);
+});
+
+test('send failure carries the checkpointed event for a safe retry', async () => {
+  const dispatcher = createOutboxDispatcher({
+    graph: graphStub({
+      async sendDraftMessage() {
+        throw Object.assign(new Error('Graph unavailable'), {
+          code: 'GRAPH_UNAVAILABLE',
+          retryAfterMs: 3000
+        });
+      }
+    }),
+    config: config()
+  });
+
+  await assert.rejects(
+    () => dispatcher.deliver(event(), dependencies()),
+    (error) => error.code === 'GRAPH_UNAVAILABLE' &&
+      error.event?._etag === 'etag-2' &&
+      error.event?.deliveryCheckpoint?.draftMessageId === 'draft-1'
+  );
 });
