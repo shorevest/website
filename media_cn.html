@@ -6,26 +6,35 @@ try{window.addEventListener('error',function(e){if(e&&typeof e.message==='string
 window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 (function(){
   var T=window.__SVT;
-  function tok(u){try{var url=new URL(u,location.href);if(url.origin===location.origin&&!url.searchParams.get('t')){url.searchParams.set('t',T);return url.href;}return u;}catch(e){return u;}}
+  function tok(u){try{var url=new URL(u,document.baseURI);if(T&&url.origin===location.origin&&!url.searchParams.get('t')){url.searchParams.set('t',T);return url.href;}return u;}catch(e){return u;}}
   window.__svTok=tok;
-  (function(){var _f=window.fetch;if(_f){window.fetch=function(i,n){try{var u;if(typeof i==='string'){u=new URL(i,location.href);if(u.origin===location.origin&&!u.searchParams.get('t')){u.searchParams.set('t',T);i=u.href;}}else if(i&&i.url){u=new URL(i.url,location.href);if(u.origin===location.origin&&!u.searchParams.get('t')){u.searchParams.set('t',T);i=new Request(u.href,i);}}}catch(e){}return _f.call(this,i,n);};}var _o=window.XMLHttpRequest&&window.XMLHttpRequest.prototype.open;if(_o){window.XMLHttpRequest.prototype.open=function(m,u){try{var x=new URL(u,location.href);if(x.origin===location.origin&&!x.searchParams.get('t')){x.searchParams.set('t',T);u=x.href;}}catch(e){}return _o.apply(this,[m,u].concat([].slice.call(arguments,2)));};}})();
+  (function(){var _f=window.fetch;if(_f){window.fetch=function(i,n){try{var u;if(typeof i==='string'){u=new URL(i,document.baseURI);if(T&&u.origin===location.origin&&!u.searchParams.get('t')){u.searchParams.set('t',T);i=u.href;}}else if(i&&i.url){u=new URL(i.url,document.baseURI);if(T&&u.origin===location.origin&&!u.searchParams.get('t')){u.searchParams.set('t',T);i=new Request(u.href,i);}}}catch(e){}return _f.call(this,i,n);};}var _o=window.XMLHttpRequest&&window.XMLHttpRequest.prototype.open;if(_o){window.XMLHttpRequest.prototype.open=function(m,u){try{var x=new URL(u,document.baseURI);if(T&&x.origin===location.origin&&!x.searchParams.get('t')){x.searchParams.set('t',T);u=x.href;}}catch(e){}return _o.apply(this,[m,u].concat([].slice.call(arguments,2)));};}})();
   function fixEl(el){if(el.nodeType!==1)return;if(el.hasAttribute('data-svsrc')&&!el.__sd){el.__sd=1;el.setAttribute('src',tok(el.getAttribute('data-svsrc')));}if(el.tagName==='IMG'){var s=el.getAttribute('src');if(s){var ts=tok(s);if(ts!==s)el.setAttribute('src',ts);}}}
   function scan(root){if(!root||root.nodeType!==1)return;fixEl(root);if(root.querySelectorAll){var n=root.querySelectorAll('img,[data-svsrc]');for(var i=0;i<n.length;i++)fixEl(n[i]);}}
   new MutationObserver(function(ms){for(var j=0;j<ms.length;j++){var a=ms[j].addedNodes;for(var i=0;i<a.length;i++)scan(a[i]);}}).observe(document.documentElement,{childList:true,subtree:true});
   if(document.readyState!=='loading')scan(document.body);else document.addEventListener('DOMContentLoaded',function(){scan(document.body);});
-  document.addEventListener('click',function(e){var t=e.target;var a=t&&t.closest?t.closest('a[href]'):null;if(!a)return;var h=a.getAttribute('href');if(!h||h.charAt(0)==='#'||/^(mailto:|tel:|javascript:|https?:|\/\/)/i.test(h))return;var url;try{url=new URL(h,location.href);}catch(_){return;}if(url.origin!==location.origin)return;e.preventDefault();if(!url.searchParams.get('t'))url.searchParams.set('t',T);window.location.href=url.href;},true);
+  document.addEventListener('click',function(e){var t=e.target;var a=t&&t.closest?t.closest('a[href]'):null;if(!a)return;var h=a.getAttribute('href');if(!h||h.charAt(0)==='#'||/^(mailto:|tel:|javascript:|https?:|\/\/)/i.test(h))return;var url;try{url=new URL(h,document.baseURI);}catch(_){return;}if(url.origin!==location.origin)return;e.preventDefault();if(T&&!url.searchParams.get('t'))url.searchParams.set('t',T);window.location.href=url.href;},true);
 })();
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- ShoreVest favicon: the stable root URL gives search engines one canonical icon. -->
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="icon" href="/assets/favicon-shorevest-20260722.svg" type="image/svg+xml" sizes="any">
+<link rel="icon" href="/assets/favicon-shorevest-20260722.ico" sizes="any">
+<link rel="icon" href="/assets/favicon-shorevest-20260722-32x32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="/assets/favicon-shorevest-20260722-16x16.png" type="image/png" sizes="16x16">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon-shorevest-20260722.png" sizes="180x180">
+<link rel="manifest" href="/site-20260722.webmanifest">
 <title>新岸资本 | 媒体</title>
 <meta name="description" content="第三方媒体报道、访谈、专题讨论及评论，呈现新岸资本（ShoreVest）在中国私募信贷、困境债务及重组领域的工作。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
-<script>document.write('<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260717-header-unify&t='+window.__SVT+'">');</script>
-<script>document.write('<link rel="stylesheet" href="assets/css/press-rebuild.css?v=20260717-mobile-polish&t='+window.__SVT+'">');</script>
-<script>document.write('<link rel="stylesheet" href="assets/css/chinese-latin-typography.css?t='+window.__SVT+'">');</script>
+<script>document.write('<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260717-header-unify">');</script>
+<script>document.write('<link rel="stylesheet" href="assets/css/press-rebuild.css?v=20260717-mobile-polish">');</script>
+<script>document.write('<link rel="stylesheet" href="assets/css/chinese-latin-typography.css">');</script>
 <style>
   body.homepage {
     --sv-font: "DIN 2014", "Barlow", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
@@ -35,46 +44,39 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   /* External English article titles + publication names keep a Latin face. */
   body.press-page [lang="en"] { font-family: "DIN 2014","Barlow",system-ui,sans-serif; }
 </style>
-<link rel="icon" href="assets/favicon-cinnabar.ico?v=20260717" sizes="any">
-<link rel="shortcut icon" href="assets/favicon-cinnabar.ico?v=20260717">
-<link rel="icon" href="assets/favicon-cinnabar.svg?v=20260717" type="image/svg+xml">
-<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-cinnabar-32x32.png?v=20260717">
-<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-cinnabar-16x16.png?v=20260717">
-<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon-cinnabar.png?v=20260717">
-<link rel="manifest" href="site.webmanifest?v=20260717">
 <link rel="preload" as="image" href="assets/img/media-hero-fii-priority.svg" fetchpriority="high">
 
-<link rel="canonical" href="https://shorevest.com/media_cn.html">
-<link rel="alternate" hreflang="zh-Hans" href="https://shorevest.com/media_cn.html">
-<link rel="alternate" hreflang="en" href="https://shorevest.com/media.html">
+<link rel="canonical" href="https://shorevest.com/cn/media/">
+<link rel="alternate" hreflang="zh-Hans" href="https://shorevest.com/cn/media/">
+<link rel="alternate" hreflang="en" href="https://shorevest.com/media/">
 <meta property="og:title" content="新岸资本 | 媒体">
 <meta property="og:description" content="第三方媒体报道、访谈、专题讨论及评论，呈现新岸资本（ShoreVest）在中国私募信贷、困境债务及重组领域的工作。">
-<meta property="og:url" content="https://shorevest.com/media_cn.html">
+<meta property="og:url" content="https://shorevest.com/cn/media/">
 <meta property="og:locale" content="zh_CN">
-<script src="assets/js/favicon-guard.js?v=20260717" defer></script>
+<script src="assets/js/favicon-guard.js?v=20260722-google-search-refresh" defer></script>
 </head>
 <body id="top" class="homepage press-page">
 
 <!-- ============================================================ A · HEADER -->
 <header class="sv-header">
   <div class="sv-header__inner">
-    <a class="sv-header__logo" href="home_cn.html" aria-label="新岸资本 — 首页">
+    <a class="sv-header__logo" href="/cn/" aria-label="新岸资本 — 首页">
       <img src="assets/brand/sv-lockup-fc-dark.png" alt="ShoreVest 新岸资本" width="172" height="41" loading="eager" decoding="async" fetchpriority="high">
     </a>
     <nav class="sv-nav" aria-label="主导航">
       <ul>
-        <li><a href="firm_cn.html">公司</a></li>
-        <li><a href="strategy_cn.html">策略</a></li>
-        <li><a href="insights_cn.html">洞察</a></li>
-        <li><a href="media_cn.html" aria-current="page">媒体</a></li>
-        <li><a href="team_cn.html">团队</a></li>
-        <li><a href="careers_cn.html">人才招聘</a></li>
+        <li><a href="/cn/firm/">公司</a></li>
+        <li><a href="/cn/strategy/">策略</a></li>
+        <li><a href="/cn/insights/">洞察</a></li>
+        <li><a href="/cn/media/" aria-current="page">媒体</a></li>
+        <li><a href="/cn/team/">团队</a></li>
+        <li><a href="/cn/careers/">人才招聘</a></li>
       </ul>
     </nav>
     <div class="sv-utils">
-      <a class="sv-lang" href="media.html">EN<span class="sep">|</span><span class="on">中文</span></a>
-      <a class="sv-util-btn" href="investor-portal/index_cn.html">投资者门户</a>
-      <a class="sv-util-btn sv-util-btn--cta" href="contact_cn.html">联系</a>
+      <a class="sv-lang" href="/media/">EN<span class="sep">|</span><span class="on">中文</span></a>
+      <a class="sv-util-btn" href="/cn/investor-portal/">投资者门户</a>
+      <a class="sv-util-btn sv-util-btn--cta" href="/cn/contact/">联系</a>
     </div>
     <button class="sv-burger" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="sv-mobile-menu">
       <span></span>
@@ -85,17 +87,17 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 <div class="sv-mobile-menu" id="sv-mobile-menu">
   <nav aria-label="移动导航">
     <ul>
-      <li><a href="firm_cn.html">公司</a></li>
-      <li><a href="strategy_cn.html">策略</a></li>
-      <li><a href="insights_cn.html">洞察</a></li>
-      <li><a href="media_cn.html" aria-current="page">媒体</a></li>
-      <li><a href="team_cn.html">团队</a></li>
-        <li><a href="careers_cn.html">人才招聘</a></li>
+      <li><a href="/cn/firm/">公司</a></li>
+      <li><a href="/cn/strategy/">策略</a></li>
+      <li><a href="/cn/insights/">洞察</a></li>
+      <li><a href="/cn/media/" aria-current="page">媒体</a></li>
+      <li><a href="/cn/team/">团队</a></li>
+        <li><a href="/cn/careers/">人才招聘</a></li>
     </ul>
     <div class="sv-mobile-utils">
-      <a class="sv-util-btn" href="media.html">EN</a>
-      <a class="sv-util-btn" href="investor-portal/index_cn.html">投资者门户</a>
-      <a class="sv-util-btn sv-util-btn--cta" href="contact_cn.html">联系</a>
+      <a class="sv-util-btn" href="/media/">EN</a>
+      <a class="sv-util-btn" href="/cn/investor-portal/">投资者门户</a>
+      <a class="sv-util-btn sv-util-btn--cta" href="/cn/contact/">联系</a>
     </div>
   </nav>
 </div>
@@ -361,7 +363,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
             </span></a>
         </article>
         <article class="press-row" data-type-label="SPONSORED CONTENT">
-          <a class="press-row__item press-row__item--archived" href="media-private-debt-investor-shorevest-partners-on-the-case-for-china.html" aria-label="Open archived third-party coverage page"><span class="press-publication" lang="en">Private Debt Investor</span>
+          <a class="press-row__item press-row__item--archived" href="/media/private-debt-investor-shorevest-partners-on-the-case-for-china/" aria-label="Open archived third-party coverage page"><span class="press-publication" lang="en">Private Debt Investor</span>
             <span class="press-row__content"><span class="press-type-line"><span class="press-tag">赞助内容</span></span>
             <span class="press-headline" lang="en">ShoreVest Partners on the case for China</span>
             <span class="press-row__summary">赞助访谈，回应关于中国私募信贷的常见误解，并强调经验丰富的本地执行的重要性。</span></span>
@@ -415,7 +417,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
             </span></a>
         </article>
         <article class="press-row" data-type-label="ARTICLE" hidden>
-          <a class="press-row__item press-row__item--archived" href="media-pensions-investments-few-foreign-investors-positioned-for-china-npls.html" aria-label="Open archived third-party coverage page"><span class="press-publication" lang="en">Pensions &amp; Investments</span>
+          <a class="press-row__item press-row__item--archived" href="/media/pensions-investments-few-foreign-investors-positioned-for-china-npls/" aria-label="Open archived third-party coverage page"><span class="press-publication" lang="en">Pensions &amp; Investments</span>
             <span class="press-row__content"><span class="press-type-line"><span class="press-tag">文章</span></span>
             <span class="press-headline" lang="en">Few foreign investors positioned for China NPLs</span>
             <span class="press-row__summary">引述新岸资本关于参与中国信贷市场的观点。</span></span>
@@ -563,26 +565,26 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   <div class="sv-footer__inner">
     <div class="sv-footer__top">
       <div>
-        <a class="sv-footer__logo" href="home_cn.html" aria-label="新岸资本 — 首页">
+        <a class="sv-footer__logo" href="/cn/" aria-label="新岸资本 — 首页">
           <img src="assets/brand/sv-lockup-fc-light.png" alt="ShoreVest 新岸资本" width="200" height="48" loading="eager" decoding="async" fetchpriority="high">
         </a>
         <p class="sv-footer__offices">
           广州 · 上海 · 北京 · 香港<br>
-          <a href="contact_cn.html">一般咨询</a>
+          <a href="/cn/contact/">一般咨询</a>
         </p>
       </div>
       <nav class="sv-footer__nav" aria-label="页脚导航">
-        <a href="firm_cn.html">公司</a>
-        <a href="strategy_cn.html">策略</a>
-        <a href="insights_cn.html">洞察</a>
-        <a href="media_cn.html">媒体</a>
-        <a href="team_cn.html">团队</a>
-        <a href="careers_cn.html">人才招聘</a>
-        <a href="contact_cn.html">联系</a>
-        <a href="insights_cn.html#archive">中国债务动态</a>
+        <a href="/cn/firm/">公司</a>
+        <a href="/cn/strategy/">策略</a>
+        <a href="/cn/insights/">洞察</a>
+        <a href="/cn/media/">媒体</a>
+        <a href="/cn/team/">团队</a>
+        <a href="/cn/careers/">人才招聘</a>
+        <a href="/cn/contact/">联系</a>
+        <a href="/cn/insights/#archive">中国债务动态</a>
         <span class="sv-footer__access" role="group" aria-label="访问">
           <span class="sv-footer__access-label">入口</span>
-          <a href="investor-portal/index_cn.html">投资者门户</a>
+          <a href="/cn/investor-portal/">投资者门户</a>
         </span>
       </nav>
       <div class="sv-footer__social" aria-label="Follow ShoreVest">
@@ -602,11 +604,11 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 
     <div class="sv-footer__bottom">
       <div class="sv-footer__links">
-        <a href="privacy-policy_cn.html">隐私政策</a>
-        <a href="cookie-notice_cn.html">Cookie 通知</a>
-        <a href="terms-of-use_cn.html">使用条款</a>
-        <a href="important-information_cn.html">重要信息</a>
-        <a href="legal-notices-disclaimers_cn.html">法律声明与免责声明</a>
+        <a href="/cn/privacy-policy/">隐私政策</a>
+        <a href="/cn/cookie-notice/">Cookie 通知</a>
+        <a href="/cn/terms-of-use/">使用条款</a>
+        <a href="/cn/important-information/">重要信息</a>
+        <a href="/cn/legal-notices-disclaimers/">法律声明与免责声明</a>
       </div>
       <p class="sv-footer__copy">© 2026 ShoreVest Partners. All rights reserved.</p>
     </div>
@@ -617,7 +619,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 13V3M8 3L3.5 7.5M8 3l4.5 4.5" stroke="currentColor" stroke-width="1.5"/></svg>
 </button>
 
-<script>(function(){var T=window.__SVT;function tk(u){return u+(u.indexOf("?")>-1?"&":"?")+"t="+T;}var s=document.createElement("script");s.src=tk("assets/js/press-page.js?v=20260711-page-size-3");document.head.appendChild(s);})();</script>
+<script>(function(){var T=window.__SVT;function tk(u){return T?u+(u.indexOf('?')>-1?'&':'?')+'t='+T:u;}var s=document.createElement("script");s.src=tk("assets/js/press-page.js?v=20260722-margin-final");document.head.appendChild(s);})();</script>
 <script>
 (function(){
   var burger=document.querySelector('.sv-burger'); var menu=document.getElementById('sv-mobile-menu');
@@ -695,7 +697,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   else document.addEventListener('DOMContentLoaded', init);
 })();
 </script>
-<script src="assets/js/insights-new-edition.js?v=20260717" defer></script>
-<script src="assets/js/sv-navigation.js?v=20260717" defer></script>
+<script src="assets/js/insights-new-edition.js?v=20260722-linkedin-direct-navigation" defer></script>
+<script src="assets/js/sv-navigation.js?v=20260722-public-hotfix" defer></script>
 </body>
 </html>

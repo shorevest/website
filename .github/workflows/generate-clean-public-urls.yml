@@ -1,0 +1,165 @@
+name: Generate clean public URLs
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/generate-clean-public-urls.js'
+      - 'scripts/normalize-current-page-fragments.cjs'
+      - 'scripts/normalize-public-site.cjs'
+      - 'scripts/run-normalize-public-site.cjs'
+      - 'scripts/normalize-cdd-publication.cjs'
+      - 'scripts/normalize-favicons.cjs'
+      - 'scripts/add-insight-social-metadata.cjs'
+      - 'assets/js/site-config.js'
+      - 'assets/js/sv-navigation.js'
+      - 'assets/js/insights-new-edition.js'
+      - 'assets/js/favicon-guard.js'
+      - 'assets/favicon-shorevest-20260722.svg'
+      - 'assets/favicon-shorevest-20260722.ico'
+      - 'assets/favicon-shorevest-20260722-32x32.png'
+      - 'assets/favicon-shorevest-20260722-16x16.png'
+      - 'assets/apple-touch-icon-shorevest-20260722.png'
+      - 'site-20260722.webmanifest'
+      - '*.html'
+      - '**/*.html'
+      - 'sitemap.xml'
+      - 'assets/data/clean-url-manifest.json'
+      - '.github/workflows/generate-clean-public-urls.yml'
+  push:
+    branches:
+      - main
+      - feature/clean-public-urls
+      - hotfix/clean-url-asset-paths
+      - hotfix/favicon-cache
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    if: github.event_name != 'push' && github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out pull request
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Normalize source URLs and publication exclusions
+        run: node scripts/run-normalize-public-site.cjs
+
+      - name: Normalize China Debt Dynamics publication files
+        run: node scripts/normalize-cdd-publication.cjs
+
+      - name: Refresh public asset versions
+        run: |
+          sed -i 's/press-page.js?v=20260711-page-size-3/press-page.js?v=20260722-margin-final/g' media.html media_cn.html
+          find . -name '*.html' -exec sed -i \
+            -e 's/insights-new-edition.js?v=20260722-linkedin-target/insights-new-edition.js?v=20260722-linkedin-direct-navigation/g' \
+            -e 's/insights-new-edition.js?v=20260722-linkedin-working/insights-new-edition.js?v=20260722-linkedin-direct-navigation/g' {} +
+
+      - name: Generate clean routes
+        run: node scripts/generate-clean-public-urls.js
+
+      - name: Normalize same-page section links
+        run: node scripts/normalize-current-page-fragments.cjs
+
+      - name: Add exact LinkedIn metadata to Insight articles
+        run: node scripts/add-insight-social-metadata.cjs
+
+      - name: Normalize and validate every public article
+        run: node scripts/run-normalize-public-site.cjs --validate
+
+      - name: Validate Insight LinkedIn metadata
+        run: node scripts/add-insight-social-metadata.cjs --validate
+
+      - name: Normalize favicon declarations
+        run: node scripts/normalize-favicons.cjs
+
+      - name: Validate favicon declarations
+        run: node scripts/normalize-favicons.cjs --validate
+
+      - name: Check generated changes
+        run: git diff --check
+
+  generate:
+    if: github.event_name == 'push' && github.actor != 'github-actions[bot]'
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Restore files outside the public URL migration
+        if: github.ref_name != 'main'
+        run: |
+          git checkout origin/main -- \
+            assets/email/welcome-template.html \
+            assets/email/welcome-template-cn.html \
+            assets/js/employee-portal/views-cdd-publisher.js \
+            templates/media-coverage/media-coverage-print.html
+
+      - name: Normalize source URLs and publication exclusions
+        run: node scripts/run-normalize-public-site.cjs
+
+      - name: Normalize China Debt Dynamics publication files
+        run: node scripts/normalize-cdd-publication.cjs
+
+      - name: Refresh public asset versions
+        run: |
+          sed -i 's/press-page.js?v=20260711-page-size-3/press-page.js?v=20260722-margin-final/g' media.html media_cn.html
+          find . -name '*.html' -exec sed -i \
+            -e 's/insights-new-edition.js?v=20260722-linkedin-target/insights-new-edition.js?v=20260722-linkedin-direct-navigation/g' \
+            -e 's/insights-new-edition.js?v=20260722-linkedin-working/insights-new-edition.js?v=20260722-linkedin-direct-navigation/g' {} +
+
+      - name: Generate clean routes
+        run: node scripts/generate-clean-public-urls.js
+
+      - name: Normalize same-page section links
+        run: node scripts/normalize-current-page-fragments.cjs
+
+      - name: Add exact LinkedIn metadata to Insight articles
+        run: node scripts/add-insight-social-metadata.cjs
+
+      - name: Normalize and validate every public article
+        run: node scripts/run-normalize-public-site.cjs --validate
+
+      - name: Validate Insight LinkedIn metadata
+        run: node scripts/add-insight-social-metadata.cjs --validate
+
+      - name: Normalize favicon declarations
+        run: node scripts/normalize-favicons.cjs
+
+      - name: Validate favicon declarations
+        run: node scripts/normalize-favicons.cjs --validate
+
+      - name: Check generated changes
+        run: git diff --check
+
+      - name: Commit generated pages
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No generated changes to commit."
+            exit 0
+          fi
+          git commit -m "Regenerate and validate public article pages"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

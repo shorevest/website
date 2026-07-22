@@ -33,6 +33,12 @@ venv/
 *.tmp
 *.bak
 *.orig
+
+# ShoreVest One application runtime database (never commit workflow state)
+server/.data/
+*.db
+*.db-wal
+*.db-shm
 coverage/
 playwright-report/
 test-results/

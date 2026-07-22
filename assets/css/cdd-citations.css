@@ -1,0 +1,70 @@
+/* Polished inline source references for China Debt Dynamics. */
+body.cdd-article-page .cdd-inline-citation {
+  display: inline-block;
+  position: relative;
+  top: -0.42em;
+  margin-left: 0.14em;
+  font-family: var(--sv-font, "DIN 2014", "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif);
+  font-size: 0.72em;
+  font-weight: 700;
+  line-height: 1;
+  vertical-align: baseline;
+  white-space: nowrap;
+}
+
+body.cdd-article-page .cdd-inline-citation a {
+  display: inline-block;
+  padding: 0 0.04em;
+  border-bottom: 1px solid transparent;
+  color: var(--sv-cinnabar, #C93B2A) !important;
+  text-decoration: none !important;
+  transition: border-color 140ms ease, color 140ms ease;
+}
+
+body.cdd-article-page .cdd-inline-citation a:hover,
+body.cdd-article-page .cdd-inline-citation a:focus-visible {
+  border-bottom-color: currentColor;
+  color: var(--sv-cinnabar-d, #9F2F24) !important;
+  outline: none;
+}
+
+body.cdd-article-page .cdd-source-note {
+  scroll-margin-top: 96px;
+  transition: background-color 220ms ease;
+}
+
+body.cdd-article-page .cdd-source-note:target {
+  background: rgba(201, 59, 42, 0.07);
+}
+
+body.cdd-article-page .cdd-source-note__index {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 700px) {
+  body.cdd-article-page .cdd-inline-citation {
+    top: -0.38em;
+    margin-left: 0.12em;
+    font-size: 0.74em;
+  }
+
+  body.cdd-article-page .cdd-source-note {
+    scroll-margin-top: 76px;
+  }
+}
+
+@media print {
+  body.cdd-print-layout .cdd-inline-citation,
+  body.cdd-article-page .cdd-inline-citation {
+    top: -0.36em;
+    margin-left: 0.1em;
+    color: inherit;
+  }
+
+  body.cdd-print-layout .cdd-inline-citation a,
+  body.cdd-article-page .cdd-inline-citation a {
+    border: 0;
+    color: inherit !important;
+    text-decoration: none !important;
+  }
+}

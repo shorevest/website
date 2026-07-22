@@ -6,3 +6,5 @@
 User-agent: *
 Allow: /
 Disallow: /employee-portal/
+
+Sitemap: https://shorevest.com/sitemap.xml

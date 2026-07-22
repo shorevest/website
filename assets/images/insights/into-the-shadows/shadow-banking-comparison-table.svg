@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="680" viewBox="0 0 1200 680" role="img" aria-label="Comparison of China shadow banking and US private credit" preserveAspectRatio="xMidYMid meet">
+  <style>
+    text{font-family:"DIN 2014","Barlow",Arial,Helvetica,sans-serif;fill:#182524}
+    .eyebrow{font-size:14px;font-weight:700;letter-spacing:2.2px;fill:#C93B2A}
+    .title{font-size:32px;font-weight:600;letter-spacing:-.4px}
+    .subtitle{font-size:16px;font-weight:400;fill:#6E7169}
+    .head{font-size:14.5px;font-weight:700;letter-spacing:.15px;fill:#FCF9F1}
+    .question{font-size:16px;font-weight:600}
+    .cell{font-size:15px;font-weight:700}
+    .source{font-size:12.5px;font-weight:500;fill:#6E7169}
+  </style>
+
+  <rect width="1200" height="680" fill="#FCF9F1"/>
+  <rect x="36" y="25" width="9" height="9" fill="#C93B2A"/>
+  <text x="58" y="34" class="eyebrow">MARKET COMPARISON</text>
+  <text x="36" y="74" class="title">China Shadow Banking and US Private Credit</text>
+  <text x="36" y="101" class="subtitle">Five characteristics that signal similar system-level risk</text>
+
+  <g>
+    <rect x="36" y="130" width="1128" height="96" fill="#182524"/>
+    <rect x="416" y="130" width="187" height="6" fill="#3D7070"/>
+    <rect x="603" y="130" width="187" height="6" fill="#C93B2A"/>
+    <rect x="790" y="130" width="187" height="6" fill="#7AAFAF"/>
+    <rect x="977" y="130" width="187" height="6" fill="#C89A2E"/>
+
+    <text x="54" y="178" class="head">Risk characteristic</text>
+    <text x="509.5" y="166" class="head" text-anchor="middle"><tspan x="509.5">China</tspan><tspan x="509.5" dy="20">pre-pandemic</tspan><tspan x="509.5" dy="20">shadow banking</tspan></text>
+    <text x="696.5" y="166" class="head" text-anchor="middle"><tspan x="696.5">US post-pandemic</tspan><tspan x="696.5" dy="20">private credit /</tspan><tspan x="696.5" dy="20">shadow banking</tspan></text>
+    <text x="883.5" y="166" class="head" text-anchor="middle"><tspan x="883.5">China restraint</tspan><tspan x="883.5" dy="20">regulatory or</tspan><tspan x="883.5" dy="20">investor-imposed</tspan></text>
+    <text x="1070.5" y="166" class="head" text-anchor="middle"><tspan x="1070.5">US restraint</tspan><tspan x="1070.5" dy="20">regulatory or</tspan><tspan x="1070.5" dy="20">investor-imposed</tspan></text>
+  </g>
+
+  <g>
+    <rect x="36" y="226" width="1128" height="82" fill="#FCF9F1"/>
+    <rect x="36" y="308" width="1128" height="82" fill="#F1EBDD"/>
+    <rect x="36" y="390" width="1128" height="82" fill="#FCF9F1"/>
+    <rect x="36" y="472" width="1128" height="82" fill="#F1EBDD"/>
+    <rect x="36" y="554" width="1128" height="82" fill="#FCF9F1"/>
+
+    <g stroke="#D8CEB0" stroke-width="1">
+      <line x1="36" y1="226" x2="1164" y2="226"/>
+      <line x1="36" y1="308" x2="1164" y2="308"/>
+      <line x1="36" y1="390" x2="1164" y2="390"/>
+      <line x1="36" y1="472" x2="1164" y2="472"/>
+      <line x1="36" y1="554" x2="1164" y2="554"/>
+    </g>
+
+    <text x="54" y="258" class="question"><tspan x="54">Trillions of USD AUM growth</tspan><tspan x="54" dy="22">within a few years?</tspan></text>
+    <text x="54" y="340" class="question"><tspan x="54">Leverage increasing</tspan><tspan x="54" dy="22">dramatically?</tspan></text>
+    <text x="54" y="422" class="question"><tspan x="54">Commercial banks indirectly</tspan><tspan x="54" dy="22">exposed to risk?</tspan></text>
+    <text x="54" y="504" class="question"><tspan x="54">Insurance companies indirectly</tspan><tspan x="54" dy="22">exposed to risk?</tspan></text>
+    <text x="54" y="586" class="question"><tspan x="54">Large amounts of retail</tspan><tspan x="54" dy="22">investor capital raised?</tspan></text>
+  </g>
+
+  <g class="cell">
+    <g fill="#1E4040">
+      <rect x="480" y="262" width="10" height="10"/><text x="501" y="272" fill="#1E4040">Yes</text>
+      <rect x="480" y="344" width="10" height="10"/><text x="501" y="354" fill="#1E4040">Yes</text>
+      <rect x="480" y="426" width="10" height="10"/><text x="501" y="436" fill="#1E4040">Yes</text>
+      <rect x="480" y="508" width="10" height="10"/><text x="501" y="518" fill="#1E4040">Yes</text>
+      <rect x="480" y="590" width="10" height="10"/><text x="501" y="600" fill="#1E4040">Yes</text>
+    </g>
+    <g fill="#9F2F24">
+      <rect x="667" y="262" width="10" height="10"/><text x="688" y="272" fill="#9F2F24">Yes</text>
+      <rect x="667" y="344" width="10" height="10"/><text x="688" y="354" fill="#9F2F24">Yes</text>
+      <rect x="667" y="426" width="10" height="10"/><text x="688" y="436" fill="#9F2F24">Yes</text>
+      <rect x="667" y="508" width="10" height="10"/><text x="688" y="518" fill="#9F2F24">Yes</text>
+      <rect x="667" y="590" width="10" height="10"/><text x="688" y="600" fill="#9F2F24">Yes</text>
+    </g>
+    <g fill="#1E4040">
+      <rect x="854" y="262" width="10" height="10"/><text x="875" y="272" fill="#1E4040">Yes</text>
+      <rect x="854" y="344" width="10" height="10"/><text x="875" y="354" fill="#1E4040">Yes</text>
+      <rect x="854" y="426" width="10" height="10"/><text x="875" y="436" fill="#1E4040">Yes</text>
+      <rect x="854" y="508" width="10" height="10"/><text x="875" y="518" fill="#1E4040">Yes</text>
+      <rect x="854" y="590" width="10" height="10"/><text x="875" y="600" fill="#1E4040">Yes</text>
+    </g>
+    <g fill="none" stroke="#7A6030" stroke-width="1.5">
+      <rect x="1042.5" y="252" width="56" height="28"/><rect x="1042.5" y="334" width="56" height="28"/>
+      <rect x="1042.5" y="416" width="56" height="28"/><rect x="1042.5" y="498" width="56" height="28"/>
+      <rect x="1042.5" y="580" width="56" height="28"/>
+    </g>
+    <g fill="#7A6030" text-anchor="middle">
+      <text x="1070.5" y="271">TBD</text><text x="1070.5" y="353">TBD</text><text x="1070.5" y="435">TBD</text><text x="1070.5" y="517">TBD</text><text x="1070.5" y="599">TBD</text>
+    </g>
+  </g>
+
+  <g fill="none" stroke="#D8CEB0" stroke-width="1">
+    <line x1="416" y1="130" x2="416" y2="636"/>
+    <line x1="603" y1="130" x2="603" y2="636"/>
+    <line x1="790" y1="130" x2="790" y2="636"/>
+    <line x1="977" y1="130" x2="977" y2="636"/>
+  </g>
+  <rect x="36" y="130" width="1128" height="506" fill="none" stroke="#182524" stroke-width="1.5"/>
+  <text x="36" y="665" class="source">Source: ShoreVest</text>
+</svg>

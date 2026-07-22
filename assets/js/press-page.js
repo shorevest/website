@@ -1,230 +1,71 @@
 /* ============================================================
-   PRESS / MEDIA PAGE — archive controls
-   Progressive enhancement over the server-rendered archive:
-   builds the Year and Publication filters from the rows in the
-   DOM, filters on change, and reveals rows in batches.
-   No external data; the markup is the source of truth.
+   MEDIA PAGE — temporary archive holding state
+   The historical article archive is intentionally removed while
+   the section is being reviewed and refreshed.
+   Cache version refreshed 2026-07-22.
    ============================================================ */
 (function () {
   "use strict";
 
-  var PAGE_SIZE = 3;
-
   function ready(fn) {
-    if (document.readyState !== "loading") {
-      fn();
-    } else {
-      document.addEventListener("DOMContentLoaded", fn);
-    }
+    if (document.readyState !== "loading") fn();
+    else document.addEventListener("DOMContentLoaded", fn);
   }
 
   ready(function () {
-    var archive = document.getElementById("press-archive");
-    if (!archive) return;
-    // Pull approved items from the media queue and inject them into the archive
-    // (by date) BEFORE building the filters, so data-driven items behave exactly
-    // like the curated rows. The approval gate lives in the JSON (status field).
-    injectQueue(archive, function () { runArchive(archive); });
+    var section = document.getElementById("archive");
+    if (!section) return;
+
+    var shell = section.querySelector(".sv-shell");
+    if (!shell) {
+      section.hidden = true;
+      return;
+    }
+
+    var isChinese = (document.documentElement.lang || "")
+      .toLowerCase()
+      .indexOf("zh") === 0;
+
+    /* Match the standard site container exactly. */
+    shell.style.width = "100%";
+    shell.style.maxWidth = "var(--page-max, 1684px)";
+    shell.style.marginInline = "auto";
+    shell.style.paddingInline = "var(--pad-x, clamp(24px, 8.9vw, 182px))";
+    shell.style.boxSizing = "border-box";
+
+    shell.innerHTML = isChinese
+      ? '<div class="pr-archive-hold" role="status" aria-live="polite" style="width:100%;max-width:760px;box-sizing:border-box;padding-block:clamp(20px,2vw,32px)">' +
+          '<p class="pr-featured__tag" style="margin:0 0 28px">媒体资料库</p>' +
+          '<h2 id="pr-archive-title" style="margin:0 0 28px;max-width:13ch;font:500 clamp(44px,5vw,68px)/1.05 var(--sv-font);letter-spacing:-0.035em;color:var(--sv-ink)">更新后的媒体资料库即将上线。</h2>' +
+          '<p style="margin:0;max-width:68ch;font:400 clamp(17px,1.55vw,21px)/1.65 var(--sv-font);color:var(--sv-ink-2)">我们正在审核并更新历史媒体报道。在相关工作完成之前，媒体资料库中的文章将暂时无法访问。</p>' +
+        '</div>'
+      : '<div class="pr-archive-hold" role="status" aria-live="polite" style="width:100%;max-width:760px;box-sizing:border-box;padding-block:clamp(20px,2vw,32px)">' +
+          '<p class="pr-featured__tag" style="margin:0 0 28px">Media archive</p>' +
+          '<h2 id="pr-archive-title" style="margin:0 0 28px;max-width:13ch;font:500 clamp(44px,5vw,68px)/1.05 var(--sv-font);letter-spacing:-0.035em;color:var(--sv-ink)">Updated archive coming soon.</h2>' +
+          '<p style="margin:0;max-width:68ch;font:400 clamp(17px,1.55vw,21px)/1.65 var(--sv-font);color:var(--sv-ink-2)">We are reviewing and updating the historical media coverage. Individual archive articles are temporarily unavailable while that work is completed.</p>' +
+        '</div>';
+
+    var archiveLink = document.querySelector('.sv-hero__cta a[href="#archive"]');
+    if (archiveLink) {
+      archiveLink.innerHTML =
+        (isChinese ? "媒体资料库即将上线" : "Media archive coming soon") +
+        '<span aria-hidden="true">→</span>';
+    }
+
+    var panelRows = document.querySelectorAll(".sv-hero__panel-row");
+    Array.prototype.forEach.call(panelRows, function (row) {
+      var term = row.querySelector("dt");
+      var value = row.querySelector("dd");
+      if (!term || !value) return;
+
+      var label = term.textContent.trim().toLowerCase();
+      if (
+        label === "archive" ||
+        label.indexOf("档案") !== -1 ||
+        label.indexOf("资料") !== -1
+      ) {
+        value.textContent = isChinese ? "即将更新" : "Updating soon";
+      }
+    });
   });
-
-  function esc(s) {
-    return String(s == null ? "" : s)
-      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  }
-
-  function buildRow(item) {
-    var art = document.createElement("article");
-    art.className = "press-row";
-    art.setAttribute("data-type-label", String(item.type || "").toUpperCase());
-    var linkType = item.linkType || (item.url ? "external" : "none");
-    var href = linkType === "pdf" ? item.pdfPath : item.url;
-    var rowLink = href ? document.createElement("a") : document.createElement("div");
-    if (href) {
-      rowLink.href = href;
-      rowLink.target = "_blank";
-      rowLink.rel = linkType === "pdf" ? "noopener" : "noopener noreferrer";
-      rowLink.setAttribute("data-link-type", linkType);
-      if (linkType === "pdf") rowLink.type = "application/pdf";
-    } else {
-      rowLink.className = "press-row__item press-row__item--archived";
-    }
-    rowLink.innerHTML =
-      '<span class="press-publication">' + esc(item.publication) + "</span>" +
-      '<span class="press-row__content"><span class="press-type-line"><span class="press-tag">' + esc(item.type) + "</span></span>" +
-      '<span class="press-headline">' + esc(item.headline) + "</span>" +
-      '<span class="press-row__summary">' + esc(item.summary) + "</span></span>" +
-      '<span class="press-row__meta">' +
-      '<time class="press-date" datetime="' + esc(item.date) + '">' + esc(item.dateDisplay || item.date) + "</time>" +
-      (href && item.buttonLabel ? '<span class="press-row__cta">' + esc(item.buttonLabel) + '</span>' : '') +
-      "</span>";
-    art.appendChild(rowLink);
-    return art;
-  }
-
-  function rowDate(row) {
-    var t = row.querySelector("time.press-date, time");
-    return t ? (t.getAttribute("datetime") || "") : "";
-  }
-
-  function injectQueue(archive, done) {
-    var url = (window.__svTok ? window.__svTok("assets/data/media-queue.json") : "assets/data/media-queue.json");
-    var finished = false;
-    var finish = function () { if (!finished) { finished = true; done(); } };
-    // Never let a missing/failed feed block the curated archive.
-    var guard = setTimeout(finish, 4000);
-    try {
-      fetch(url, { cache: "no-store" })
-        .then(function (r) { return r.ok ? r.json() : { items: [] }; })
-        .then(function (data) {
-          var items = (data && data.items) || [];
-          // APPROVAL GATE: only approved items render.
-          var approved = items.filter(function (it) { return it && it.status === "approved"; });
-          approved.forEach(function (item) {
-            var row = buildRow(item);
-            var d = item.date || "";
-            // Insert in reverse-chronological order among existing rows.
-            var rows = Array.prototype.slice.call(archive.querySelectorAll(".press-row"));
-            var before = null;
-            for (var i = 0; i < rows.length; i++) {
-              if (d > rowDate(rows[i])) { before = rows[i]; break; }
-            }
-            if (before) archive.insertBefore(row, before);
-            else archive.appendChild(row);
-          });
-          clearTimeout(guard); finish();
-        })
-        .catch(function () { clearTimeout(guard); finish(); });
-    } catch (e) { clearTimeout(guard); finish(); }
-  }
-
-  function runArchive(archive) {
-    var isChinese = (document.documentElement.lang || "").toLowerCase().indexOf("zh") === 0;
-
-    var rows = Array.prototype.slice.call(archive.querySelectorAll(".press-row"));
-    if (!rows.length) return;
-
-    var yearSelect = document.getElementById("press-year-select");
-    var pubSelect = document.getElementById("press-publication-select");
-    var countEl = document.getElementById("press-results-count");
-    var moreBtn = document.getElementById("press-more-btn");
-
-    var visibleCount = PAGE_SIZE;
-
-    // ---- Derive year + publication for each row from the DOM ----
-    var data = rows.map(function (row) {
-      var timeEl = row.querySelector("time.press-date, time");
-      var year = "";
-      if (timeEl) {
-        var dt = timeEl.getAttribute("datetime") || timeEl.textContent || "";
-        var match = dt.match(/\d{4}/);
-        year = match ? match[0] : "";
-      }
-      var pubEl = row.querySelector(".press-publication");
-      var pub = pubEl ? pubEl.textContent.trim() : "";
-      return { row: row, year: year, pub: pub };
-    });
-
-    // ---- Populate the filter dropdowns ----
-    function unique(values) {
-      var seen = {};
-      var out = [];
-      values.forEach(function (v) {
-        if (v && !seen[v]) {
-          seen[v] = true;
-          out.push(v);
-        }
-      });
-      return out;
-    }
-
-    function fillSelect(select, options) {
-      if (!select) return;
-      options.forEach(function (value) {
-        var opt = document.createElement("option");
-        opt.value = value;
-        opt.textContent = value;
-        select.appendChild(opt);
-      });
-    }
-
-    var years = unique(
-      data.map(function (d) {
-        return d.year;
-      })
-    ).sort(function (a, b) {
-      return Number(b) - Number(a);
-    });
-
-    var pubs = unique(
-      data.map(function (d) {
-        return d.pub;
-      })
-    ).sort(function (a, b) {
-      return a.localeCompare(b);
-    });
-
-    fillSelect(yearSelect, years);
-    fillSelect(pubSelect, pubs);
-
-    // ---- Filter + paginate ----
-    function currentMatches() {
-      var year = yearSelect ? yearSelect.value : "All";
-      var pub = pubSelect ? pubSelect.value : "All";
-      return data.filter(function (d) {
-        var yearOk = year === "All" || d.year === year;
-        var pubOk = pub === "All" || d.pub === pub;
-        return yearOk && pubOk;
-      });
-    }
-
-    function render() {
-      var matches = currentMatches();
-      var matchSet = matches.map(function (d) {
-        return d.row;
-      });
-
-      data.forEach(function (d) {
-        d.row.hidden = matchSet.indexOf(d.row) === -1;
-      });
-
-      var shown = 0;
-      matches.forEach(function (d, i) {
-        var visible = i < visibleCount;
-        d.row.hidden = !visible;
-        if (visible) shown++;
-      });
-
-      if (countEl) {
-        if (matches.length === 0) {
-          countEl.textContent = isChinese
-            ? "没有符合所选筛选条件的项目。"
-            : "No items match the selected filters.";
-        } else {
-          countEl.textContent = isChinese
-            ? "显示 " + matches.length + " 项中的 " + shown + " 项"
-            : "Showing " + shown + " of " + matches.length;
-        }
-      }
-
-      if (moreBtn) {
-        moreBtn.hidden = shown >= matches.length;
-      }
-    }
-
-    function resetAndRender() {
-      visibleCount = PAGE_SIZE;
-      render();
-    }
-
-    if (yearSelect) yearSelect.addEventListener("change", resetAndRender);
-    if (pubSelect) pubSelect.addEventListener("change", resetAndRender);
-    if (moreBtn) {
-      moreBtn.addEventListener("click", function () {
-        visibleCount += PAGE_SIZE;
-        render();
-      });
-    }
-
-    render();
-  }
 })();

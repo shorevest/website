@@ -24,8 +24,8 @@
         if (!T) return;
         function tok(u) {
           try {
-            var url = new URL(u, location.href);
-            if (url.origin === location.origin && !url.searchParams.get("t")) {
+            var url = new URL(u,document.baseURI);
+            if(T&&url.origin===location.origin&&!url.searchParams.get('t')) {
               url.searchParams.set("t", T);
               return url.href;
             }
@@ -42,20 +42,14 @@
               try {
                 var u;
                 if (typeof i === "string") {
-                  u = new URL(i, location.href);
-                  if (
-                    u.origin === location.origin &&
-                    !u.searchParams.get("t")
-                  ) {
+                  u = new URL(i,document.baseURI);
+                  if(T&&u.origin===location.origin&&!u.searchParams.get('t')) {
                     u.searchParams.set("t", T);
                     i = u.href;
                   }
                 } else if (i && i.url) {
-                  u = new URL(i.url, location.href);
-                  if (
-                    u.origin === location.origin &&
-                    !u.searchParams.get("t")
-                  ) {
+                  u = new URL(i.url,document.baseURI);
+                  if(T&&u.origin===location.origin&&!u.searchParams.get('t')) {
                     u.searchParams.set("t", T);
                     i = new Request(u.href, i);
                   }
@@ -69,8 +63,8 @@
           if (_o) {
             window.XMLHttpRequest.prototype.open = function (m, u) {
               try {
-                var x = new URL(u, location.href);
-                if (x.origin === location.origin && !x.searchParams.get("t")) {
+                var x = new URL(u,document.baseURI);
+                if(T&&x.origin===location.origin&&!x.searchParams.get('t')) {
                   x.searchParams.set("t", T);
                   u = x.href;
                 }
@@ -147,13 +141,13 @@
               return;
             var url;
             try {
-              url = new URL(h, location.href);
+              url = new URL(h,document.baseURI);
             } catch (_) {
               return;
             }
             if (url.origin !== location.origin) return;
             e.preventDefault();
-            if (!url.searchParams.get("t")) url.searchParams.set("t", T);
+            if(T&&!url.searchParams.get('t'))url.searchParams.set('t',T);
             window.location.href = url.href;
           },
           true,
@@ -162,16 +156,18 @@
     </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ShoreVest | Team</title>
+<!-- ShoreVest favicon: the stable root URL gives search engines one canonical icon. -->
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="icon" href="/assets/favicon-shorevest-20260722.svg" type="image/svg+xml" sizes="any">
+<link rel="icon" href="/assets/favicon-shorevest-20260722.ico" sizes="any">
+<link rel="icon" href="/assets/favicon-shorevest-20260722-32x32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="/assets/favicon-shorevest-20260722-16x16.png" type="image/png" sizes="16x16">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon-shorevest-20260722.png" sizes="180x180">
+<link rel="manifest" href="/site-20260722.webmanifest">
+<title>ShoreVest | Team</title>
     <!-- Favicons mirror the homepage so the Team tab displays the ShoreVest mark consistently. -->
-    <link rel="icon" href="assets/favicon-cinnabar.ico?v=20260717" sizes="any">
-    <link rel="shortcut icon" href="assets/favicon-cinnabar.ico?v=20260717">
-    <link rel="icon" href="assets/favicon-cinnabar.svg?v=20260717" type="image/svg+xml">
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-cinnabar-32x32.png?v=20260717">
-    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-cinnabar-16x16.png?v=20260717">
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon-cinnabar.png?v=20260717">
-    <link rel="manifest" href="site.webmanifest?v=20260717">
-    <meta
+<meta
       name="description"
       content="Meet the ShoreVest team across leadership, investment, legal, asset servicing, finance, client solutions and advisory functions in China private credit."
     />
@@ -214,21 +210,21 @@
       fetchpriority="high"
     />
   
-<link rel="canonical" href="https://shorevest.com/team.html">
-<link rel="alternate" hreflang="en" href="https://shorevest.com/team.html">
-<link rel="alternate" hreflang="zh-Hans" href="https://shorevest.com/team_cn.html">
+<link rel="canonical" href="https://shorevest.com/team/">
+<link rel="alternate" hreflang="en" href="https://shorevest.com/team/">
+<link rel="alternate" hreflang="zh-Hans" href="https://shorevest.com/cn/team/">
 <meta property="og:title" content="ShoreVest | Team">
 <meta property="og:description" content="ShoreVest | Team">
-<meta property="og:url" content="https://shorevest.com/team.html">
+<meta property="og:url" content="https://shorevest.com/team/">
 <meta property="og:locale" content="en_US">
-<script src="assets/js/favicon-guard.js?v=20260717" defer></script>
+<script src="assets/js/favicon-guard.js?v=20260722-google-search-refresh" defer></script>
 </head>
   <body class="homepage team-page team-page-v2">
     <header class="sv-header">
       <div class="sv-header__inner">
         <a
           class="sv-header__logo"
-          href="home.html"
+          href="/"
           aria-label="ShoreVest — home"
         >
           <img
@@ -240,22 +236,22 @@
         </a>
         <nav class="sv-nav" aria-label="Primary">
           <ul>
-            <li><a href="firm.html">Firm</a></li>
-            <li><a href="strategy.html">Strategy</a></li>
-            <li><a href="insights.html">Insights</a></li>
-            <li><a href="media.html">Media</a></li>
-            <li><a href="team.html" aria-current="page">Team</a></li>
+            <li><a href="/firm/">Firm</a></li>
+            <li><a href="/strategy/">Strategy</a></li>
+            <li><a href="/insights/">Insights</a></li>
+            <li><a href="/media/">Media</a></li>
+            <li><a href="/team/" aria-current="page">Team</a></li>
             <li><a href="/careers/">Careers</a></li>
           </ul>
         </nav>
         <div class="sv-utils">
-          <a class="sv-lang" href="team_cn.html"
+          <a class="sv-lang" href="/cn/team/"
             ><span class="on">EN</span><span class="sep">|</span>中文</a
           >
-          <a class="sv-util-btn" href="investor-portal/index.html"
+          <a class="sv-util-btn" href="/investor-portal/"
             >Investor Portal</a
           >
-          <a class="sv-util-btn sv-util-btn--cta" href="contact.html"
+          <a class="sv-util-btn sv-util-btn--cta" href="/contact/"
             >Contact</a
           >
         </div>
@@ -274,19 +270,19 @@
     <div class="sv-mobile-menu" id="sv-mobile-menu">
       <nav aria-label="Mobile">
         <ul>
-          <li><a href="firm.html">Firm</a></li>
-          <li><a href="strategy.html">Strategy</a></li>
-          <li><a href="insights.html">Insights</a></li>
-          <li><a href="media.html">Media</a></li>
-          <li><a href="team.html" aria-current="page">Team</a></li>
+          <li><a href="/firm/">Firm</a></li>
+          <li><a href="/strategy/">Strategy</a></li>
+          <li><a href="/insights/">Insights</a></li>
+          <li><a href="/media/">Media</a></li>
+          <li><a href="/team/" aria-current="page">Team</a></li>
           <li><a href="/careers/">Careers</a></li>
         </ul>
         <div class="sv-mobile-utils">
-          <a class="sv-util-btn" href="team_cn.html">中文</a>
-          <a class="sv-util-btn" href="investor-portal/index.html"
+          <a class="sv-util-btn" href="/cn/team/">中文</a>
+          <a class="sv-util-btn" href="/investor-portal/"
             >Investor Portal</a
           >
-          <a class="sv-util-btn sv-util-btn--cta" href="contact.html"
+          <a class="sv-util-btn sv-util-btn--cta" href="/contact/"
             >Contact</a
           >
         </div>
@@ -1369,7 +1365,7 @@
           <div>
             <a
               class="sv-footer__logo"
-              href="home.html"
+              href="/"
               aria-label="ShoreVest — home"
             >
               <img
@@ -1381,21 +1377,21 @@
             </a>
             <p class="sv-footer__offices">
               Guangzhou · Shanghai · Beijing · Hong Kong<br />
-              <a href="contact.html">General inquiries</a>
+              <a href="/contact/">General inquiries</a>
             </p>
           </div>
           <nav class="sv-footer__nav" aria-label="Footer">
-            <a href="firm.html">Firm</a>
-            <a href="strategy.html">Strategy</a>
-            <a href="insights.html">Insights</a>
-            <a href="media.html">Media</a>
-            <a href="team.html">Team</a>
+            <a href="/firm/">Firm</a>
+            <a href="/strategy/">Strategy</a>
+            <a href="/insights/">Insights</a>
+            <a href="/media/">Media</a>
+            <a href="/team/">Team</a>
             <a href="/careers/">Careers</a>
-            <a href="contact.html">Contact</a>
-            <a href="insights.html#archive">China Debt Dynamics</a>
+            <a href="/contact/">Contact</a>
+            <a href="/insights/#archive">China Debt Dynamics</a>
             <span class="sv-footer__access" role="group" aria-label="Access">
               <span class="sv-footer__access-label">Access</span>
-              <a href="investor-portal/index.html">Investor Portal</a>
+              <a href="/investor-portal/">Investor Portal</a>
             </span>
           </nav>
       <div class="sv-footer__social" aria-label="Follow ShoreVest">
@@ -1415,11 +1411,11 @@
 
         <div class="sv-footer__bottom">
           <div class="sv-footer__links">
-            <a href="privacy-policy.html">Privacy Policy</a>
-            <a href="cookie-notice.html">Cookie Notice</a>
-            <a href="terms-of-use.html">Terms of Use</a>
-            <a href="important-information.html">Important Information</a>
-            <a href="legal-notices-disclaimers.html"
+            <a href="/privacy-policy/">Privacy Policy</a>
+            <a href="/cookie-notice/">Cookie Notice</a>
+            <a href="/terms-of-use/">Terms of Use</a>
+            <a href="/important-information/">Important Information</a>
+            <a href="/legal-notices-disclaimers/"
               >Legal Notices &amp; Disclaimers</a
             >
           </div>
@@ -1473,7 +1469,7 @@
         }
       })();
     </script>
-  <script src="assets/js/insights-new-edition.js?v=20260717" defer></script>
-<script src="assets/js/sv-navigation.js?v=20260717" defer></script>
+  <script src="assets/js/insights-new-edition.js?v=20260722-linkedin-direct-navigation" defer></script>
+<script src="assets/js/sv-navigation.js?v=20260722-public-hotfix" defer></script>
 </body>
 </html>

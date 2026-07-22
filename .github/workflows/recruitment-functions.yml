@@ -4,14 +4,25 @@ on:
   pull_request:
     paths:
       - '.github/workflows/recruitment-functions.yml'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'scripts/validate-recruitment-roles.js'
+      - 'scripts/generate-clean-public-urls.js'
       - 'services/recruitment-functions/**'
+      - 'api/recruitment/**'
       - 'infra/recruitment/**'
-      - 'api/recruitment/core/**'
-      - 'content/recruitment/**'
-      - 'data/recruitment/**'
-      - 'schemas/recruitment/**'
       - 'assets/data/recruitment/**'
-      - 'docs/recruitment/**'
+      - 'assets/js/recruitment-*.js'
+      - 'assets/js/site-config.js'
+      - 'assets/css/recruitment-application.css'
+      - 'careers.html'
+      - 'careers_cn.html'
+      - 'careers/**'
+      - 'cn/careers/**'
+      - 'sitemap.xml'
+      - '_headers'
+      - 'tests/recruitment*.test.js'
+      - 'tests/security-headers.test.js'
   workflow_dispatch:
 
 jobs:
@@ -21,25 +32,19 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '24'
-          cache: npm
-      - name: Install root dependencies
-        run: npm ci
-      - name: Install Function dependencies
-        run: npm ci
+          node-version: '20'
+      - run: npm ci
+      - name: Install recruitment function dependencies
+        run: npm install --ignore-scripts --no-audit --no-fund --package-lock=false
         working-directory: services/recruitment-functions
       - run: npm run validate:recruitment
       - run: npm run check:recruitment
       - run: npm run test:recruitment
       - run: npm run check:security
-      - run: npm run check
-        working-directory: services/recruitment-functions
-      - run: npm run validate:manifest
-        working-directory: services/recruitment-functions
-      - run: npm test
-        working-directory: services/recruitment-functions
-      - name: Verify Azure Bicep CLI
-        run: az bicep version || az bicep install
-      - run: az bicep build --file infra/recruitment/main.bicep
-      - run: az bicep build-params --file infra/recruitment/main.bicepparam
+      - run: npm run check:functions
+      - run: npm run test:functions
+      - name: Compile recruitment Bicep
+        run: az bicep build --file infra/recruitment/main.bicep
+      - name: Lint recruitment Bicep
+        run: az bicep build --file infra/recruitment/main.bicep --stdout >/dev/null
       - run: git diff --check

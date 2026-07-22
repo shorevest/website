@@ -1,0 +1,51 @@
+name: Public link audit
+
+on:
+  pull_request:
+    paths:
+      - '*.html'
+      - '**/*.html'
+      - 'assets/data/clean-url-manifest.json'
+      - 'assets/js/**'
+      - 'scripts/generate-clean-public-urls.js'
+      - 'scripts/normalize-current-page-fragments.cjs'
+      - 'scripts/audit-public-links.cjs'
+      - '.github/workflows/public-link-audit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Generate clean public routes
+        run: node scripts/generate-clean-public-urls.js
+
+      - name: Normalize same-page section links
+        run: node scripts/normalize-current-page-fragments.cjs
+
+      - name: Audit public links and buttons
+        shell: bash
+        run: |
+          set -o pipefail
+          node scripts/audit-public-links.cjs 2>&1 | tee public-link-audit.txt
+
+      - name: Upload audit results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-link-audit
+          path: public-link-audit.txt
+          if-no-files-found: error

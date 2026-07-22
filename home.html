@@ -6,7 +6,7 @@ try{window.addEventListener('error',function(e){if(e&&typeof e.message==='string
 window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 (function(){
   var T=window.__SVT;
-  function tok(u){try{var url=new URL(u,location.href);if(url.origin===location.origin&&!url.searchParams.get('t')){url.searchParams.set('t',T);return url.href;}return u;}catch(e){return u;}}
+  function tok(u){try{var url=new URL(u,document.baseURI);if(T&&url.origin===location.origin&&!url.searchParams.get('t')){url.searchParams.set('t',T);return url.href;}return u;}catch(e){return u;}}
   window.__svTok=tok;
   function fixEl(el){
     if(el.nodeType!==1)return;
@@ -15,18 +15,27 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   function scan(root){if(!root||root.nodeType!==1)return;fixEl(root);if(root.querySelectorAll){var n=root.querySelectorAll('img');for(var i=0;i<n.length;i++)fixEl(n[i]);}}
   new MutationObserver(function(ms){for(var j=0;j<ms.length;j++){var a=ms[j].addedNodes;for(var i=0;i<a.length;i++)scan(a[i]);}}).observe(document.documentElement,{childList:true,subtree:true});
   if(document.readyState!=='loading')scan(document.body);else document.addEventListener('DOMContentLoaded',function(){scan(document.body);});
-  document.addEventListener('click',function(e){var t=e.target;var a=t&&t.closest?t.closest('a[href]'):null;if(!a)return;var h=a.getAttribute('href');if(!h||h.charAt(0)==='#'||/^(mailto:|tel:|javascript:|https?:|\/\/)/i.test(h))return;var url;try{url=new URL(h,location.href);}catch(_){return;}if(url.origin!==location.origin)return;e.preventDefault();if(!url.searchParams.get('t'))url.searchParams.set('t',T);window.location.href=url.href;},true);
+  document.addEventListener('click',function(e){var t=e.target;var a=t&&t.closest?t.closest('a[href]'):null;if(!a)return;var h=a.getAttribute('href');if(!h||h.charAt(0)==='#'||/^(mailto:|tel:|javascript:|https?:|\/\/)/i.test(h))return;var url;try{url=new URL(h,document.baseURI);}catch(_){return;}if(url.origin!==location.origin)return;e.preventDefault();if(T&&!url.searchParams.get('t'))url.searchParams.set('t',T);window.location.href=url.href;},true);
 })();
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ShoreVest | China Asset-Backed Private Credit</title>
-<meta name="description" content="ShoreVest is a specialist in private credit, providing solutions for both borrowers and financial institutions across China.">
+<!-- ShoreVest favicon: the stable root URL gives search engines one canonical icon. -->
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="icon" href="/assets/favicon-shorevest-20260722.svg" type="image/svg+xml" sizes="any">
+<link rel="icon" href="/assets/favicon-shorevest-20260722.ico" sizes="any">
+<link rel="icon" href="/assets/favicon-shorevest-20260722-32x32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="/assets/favicon-shorevest-20260722-16x16.png" type="image/png" sizes="16x16">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon-shorevest-20260722.png" sizes="180x180">
+<link rel="manifest" href="/site-20260722.webmanifest">
+<title>ShoreVest Partners | China Asset-Backed Private Credit</title>
+<meta name="description" content="ShoreVest Partners is a specialist in asset-backed private credit in China, providing solutions for borrowers and financial institutions.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <!-- Self-contained homepage: this stylesheet is the single authority (same as EN). -->
-<script>document.write('<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260717-header-unify&t='+window.__SVT+'">');</script>
+<script>document.write('<link rel="stylesheet" href="assets/css/homepage-rebuild.css?v=20260717-header-unify">');</script>
 <!-- Keep the homepage on the DIN/Barlow stack with broad fallbacks for brand glyph coverage. -->
 <style>
   body.homepage {
@@ -35,22 +44,16 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
     --sv-cn: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
   }
 </style>
-<link rel="icon" href="assets/favicon-cinnabar.ico?v=20260717" sizes="any">
-<link rel="shortcut icon" href="assets/favicon-cinnabar.ico?v=20260717">
-<link rel="icon" href="assets/favicon-cinnabar.svg?v=20260717" type="image/svg+xml">
-<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-cinnabar-32x32.png?v=20260717">
-<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-cinnabar-16x16.png?v=20260717">
-<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon-cinnabar.png?v=20260717">
-<link rel="manifest" href="site.webmanifest?v=20260717">
 <link rel="preload" as="image" href="assets/img/trees/home-hero-metasequoia-sq.jpg" fetchpriority="high">
 
-<link rel="canonical" href="https://shorevest.com/home.html">
-<link rel="alternate" hreflang="en" href="https://shorevest.com/home.html">
-<link rel="alternate" hreflang="zh-Hans" href="https://shorevest.com/home_cn.html">
-<meta property="og:title" content="ShoreVest | China Asset-Backed Private Credit">
-<meta property="og:description" content="ShoreVest is a specialist in private credit, providing solutions for both borrowers and financial institutions across China.">
-<meta property="og:url" content="https://shorevest.com/home.html">
+<link rel="canonical" href="https://shorevest.com/">
+<link rel="alternate" hreflang="en" href="https://shorevest.com/">
+<link rel="alternate" hreflang="zh-Hans" href="https://shorevest.com/cn/">
+<meta property="og:title" content="ShoreVest Partners | China Asset-Backed Private Credit">
+<meta property="og:description" content="ShoreVest Partners is a specialist in asset-backed private credit in China, providing solutions for borrowers and financial institutions.">
+<meta property="og:url" content="https://shorevest.com/">
 <meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="ShoreVest">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -62,18 +65,17 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
     "新岸资本"
   ],
   "url": "https://shorevest.com/",
-  "description": "ShoreVest is a specialist in private credit, providing solutions for both borrowers and financial institutions across China.",
-  "foundingDate": "2016",
+  "description": "ShoreVest Partners is a specialist in asset-backed private credit in China, providing solutions for borrowers and financial institutions.",
   "founder": {
     "@type": "Person",
     "name": "Benjamin Fanger"
   },
   "logo": {
     "@type": "ImageObject",
-    "url": "https://shorevest.com/assets/apple-touch-icon-cinnabar.png",
-    "contentUrl": "https://shorevest.com/assets/apple-touch-icon-cinnabar.png",
-    "width": 180,
-    "height": 180
+    "url": "https://shorevest.com/assets/favicon-shorevest-20260722.svg",
+    "contentUrl": "https://shorevest.com/assets/favicon-shorevest-20260722.svg",
+    "width": 512,
+    "height": 512
   },
   "sameAs": [
     "https://www.linkedin.com/company/shorevest-partners/",
@@ -81,31 +83,42 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   ]
 }
 </script>
-<script src="assets/js/favicon-guard.js?v=20260717" defer></script>
+<script type="application/ld+json" data-sv-website-schema="true">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": "https://shorevest.com/#website",
+  "url": "https://shorevest.com/",
+  "name": "ShoreVest",
+  "alternateName": ["ShoreVest Partners", "shorevest.com"],
+  "publisher": { "@id": "https://shorevest.com/#organization" }
+}
+</script>
+<script src="assets/js/favicon-guard.js?v=20260722-google-search-refresh" defer></script>
 </head>
 <body id="top" class="homepage home-page">
 
 <!-- ============================================================ A · HEADER -->
 <header class="sv-header">
   <div class="sv-header__inner">
-    <a class="sv-header__logo" href="home.html" aria-label="ShoreVest — home">
+    <a class="sv-header__logo" href="/" aria-label="ShoreVest — home">
       <!-- Cream header → FullColor_Dark variant (dark-teal wordmark, reads on cream). -->
       <img src="assets/brand/sv-lockup-fc-dark.png" alt="ShoreVest" width="172" height="41" loading="eager" decoding="async" fetchpriority="high">
     </a>
     <nav class="sv-nav" aria-label="Primary">
       <ul>
-        <li><a href="firm.html">Firm</a></li>
-        <li><a href="strategy.html">Strategy</a></li>
-        <li><a href="insights.html">Insights</a></li>
-        <li><a href="media.html">Media</a></li>
-        <li><a href="team.html">Team</a></li>
+        <li><a href="/firm/">Firm</a></li>
+        <li><a href="/strategy/">Strategy</a></li>
+        <li><a href="/insights/">Insights</a></li>
+        <li><a href="/media/">Media</a></li>
+        <li><a href="/team/">Team</a></li>
         <li><a href="/careers/">Careers</a></li>
       </ul>
     </nav>
     <div class="sv-utils">
-      <a class="sv-lang" href="home_cn.html"><span class="on">EN</span><span class="sep">|</span>中文</a>
-      <a class="sv-util-btn" href="investor-portal/index.html">Investor Portal</a>
-      <a class="sv-util-btn sv-util-btn--cta" href="contact.html">Contact</a>
+      <a class="sv-lang" href="/cn/"><span class="on">EN</span><span class="sep">|</span>中文</a>
+      <a class="sv-util-btn" href="/investor-portal/">Investor Portal</a>
+      <a class="sv-util-btn sv-util-btn--cta" href="/contact/">Contact</a>
     </div>
     <button class="sv-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="sv-mobile-menu">
       <span></span>
@@ -116,17 +129,17 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 <div class="sv-mobile-menu" id="sv-mobile-menu">
   <nav aria-label="Mobile">
     <ul>
-      <li><a href="firm.html">Firm</a></li>
-      <li><a href="strategy.html">Strategy</a></li>
-      <li><a href="insights.html">Insights</a></li>
-      <li><a href="media.html">Media</a></li>
-      <li><a href="team.html">Team</a></li>
+      <li><a href="/firm/">Firm</a></li>
+      <li><a href="/strategy/">Strategy</a></li>
+      <li><a href="/insights/">Insights</a></li>
+      <li><a href="/media/">Media</a></li>
+      <li><a href="/team/">Team</a></li>
         <li><a href="/careers/">Careers</a></li>
     </ul>
     <div class="sv-mobile-utils">
-      <a class="sv-util-btn" href="home_cn.html">中文</a>
-      <a class="sv-util-btn" href="investor-portal/index.html">Investor Portal</a>
-      <a class="sv-util-btn sv-util-btn--cta" href="contact.html">Contact</a>
+      <a class="sv-util-btn" href="/cn/">中文</a>
+      <a class="sv-util-btn" href="/investor-portal/">Investor Portal</a>
+      <a class="sv-util-btn sv-util-btn--cta" href="/contact/">Contact</a>
     </div>
   </nav>
 </div>
@@ -143,7 +156,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
       <p class="sv-hero__body">ShoreVest is a specialist in private credit, providing solutions for both borrowers and financial institutions across China.</p>
       <p class="sv-hero__body">In over two decades as a pioneer in the space, ShoreVest's platform combines unparalleled local execution capabilities with international institutional risk management.</p>
       <div class="sv-hero__cta">
-        <a href="strategy.html" class="sv-textlink">Explore our strategy<span aria-hidden="true">→</span></a>
+        <a href="/strategy/" class="sv-textlink">Explore our strategy<span aria-hidden="true">→</span></a>
       </div>
     </div>
     <div class="sv-hero__field">
@@ -166,7 +179,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
         <span>Legal structuring</span>
         <span>Asset servicing</span>
       </div>
-      <a class="sv-textlink home-firm-preview__link" href="firm.html">Learn about the firm <span aria-hidden="true">&rarr;</span></a>
+      <a class="sv-textlink home-firm-preview__link" href="/firm/">Learn about the firm <span aria-hidden="true">&rarr;</span></a>
     </div>
   </div>
 </section>
@@ -178,24 +191,24 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
       <p class="sv-label">Strategy</p>
       <h2 class="sv-h2" id="sv-strategy-title">Credit solutions for complex situations</h2>
       <p>ShoreVest works with borrowers and financial institutions to structure asset-backed credit around downside protection, enforceability and viable paths to recovery.</p>
-      <a href="strategy.html" class="sv-textlink">Explore our strategy<span aria-hidden="true">→</span></a>
+      <a href="/strategy/" class="sv-textlink">Explore our strategy<span aria-hidden="true">→</span></a>
     </div>
     <div class="sv-strategy__rows">
-      <a class="sv-srow" href="strategy.html">
+      <a class="sv-srow" href="/strategy/">
         <span class="sv-srow__content">
           <h3 class="sv-srow__title">Asset&#8209;backed lending</h3>
           <span class="sv-srow__body">Credit structured around collateral, documentation and enforceable recovery paths.</span>
         </span>
         <span class="sv-srow__arrow" aria-hidden="true">→</span>
       </a>
-      <a class="sv-srow" href="strategy.html">
+      <a class="sv-srow" href="/strategy/">
         <span class="sv-srow__content">
           <h3 class="sv-srow__title">Asset restructuring</h3>
           <span class="sv-srow__body">Operational and legal work to stabilize assets and create options for resolution.</span>
         </span>
         <span class="sv-srow__arrow" aria-hidden="true">→</span>
       </a>
-      <a class="sv-srow" href="strategy.html">
+      <a class="sv-srow" href="/strategy/">
         <span class="sv-srow__content">
           <h3 class="sv-srow__title">Debt resolution</h3>
           <span class="sv-srow__body">Disciplined workouts, servicing and exits aligned to institutional underwriting.</span>
@@ -218,7 +231,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
     </div>
 
     <article>
-      <a class="sv-cdd__feature" href="china-debt-dynamics-v10i2.html">
+      <a class="sv-cdd__feature" href="/insights/china-debt-dynamics/v10i2/">
         <div class="sv-cdd__feature-meta">
           <span class="sv-cdd__feature-tag">Featured report</span>
           <span class="sv-cdd__feature-issue">Issue 47 · July 17, 2026</span>
@@ -231,7 +244,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
     </article>
 
     <div class="sv-cdd__foot sv-cdd__foot--compact">
-      <a class="sv-cdd__archive-btn" href="insights.html#archive">View full archive<span aria-hidden="true">→</span></a>
+      <a class="sv-cdd__archive-btn" href="/insights/#archive">View full archive<span aria-hidden="true">→</span></a>
     </div>
   </div>
 </section>
@@ -243,27 +256,27 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   <div class="sv-footer__inner">
     <div class="sv-footer__top">
       <div>
-        <a class="sv-footer__logo" href="home.html" aria-label="ShoreVest — home">
+        <a class="sv-footer__logo" href="/" aria-label="ShoreVest — home">
           <!-- Dark footer → FullColor_Light variant (ivory wordmark, reads on teal). -->
           <img src="assets/brand/sv-lockup-fc-light.png" alt="ShoreVest" width="200" height="48" loading="eager" decoding="async" fetchpriority="high">
         </a>
         <p class="sv-footer__offices">
           Guangzhou · Shanghai · Beijing · Hong Kong<br>
-          <a href="contact.html">General inquiries</a>
+          <a href="/contact/">General inquiries</a>
         </p>
       </div>
       <nav class="sv-footer__nav" aria-label="Footer">
-        <a href="firm.html">Firm</a>
-        <a href="strategy.html">Strategy</a>
-        <a href="insights.html">Insights</a>
-        <a href="media.html">Media</a>
-        <a href="team.html">Team</a>
+        <a href="/firm/">Firm</a>
+        <a href="/strategy/">Strategy</a>
+        <a href="/insights/">Insights</a>
+        <a href="/media/">Media</a>
+        <a href="/team/">Team</a>
         <a href="/careers/">Careers</a>
-        <a href="contact.html">Contact</a>
-        <a href="insights.html#archive">China Debt Dynamics</a>
+        <a href="/contact/">Contact</a>
+        <a href="/insights/#archive">China Debt Dynamics</a>
         <span class="sv-footer__access" role="group" aria-label="Access">
           <span class="sv-footer__access-label">Access</span>
-          <a href="investor-portal/index.html">Investor Portal</a>
+          <a href="/investor-portal/">Investor Portal</a>
         </span>
       </nav>
       <div class="sv-footer__social" aria-label="Follow ShoreVest">
@@ -283,11 +296,11 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 
     <div class="sv-footer__bottom">
       <div class="sv-footer__links">
-        <a href="privacy-policy.html">Privacy Policy</a>
-        <a href="cookie-notice.html">Cookie Notice</a>
-        <a href="terms-of-use.html">Terms of Use</a>
-        <a href="important-information.html">Important Information</a>
-        <a href="legal-notices-disclaimers.html">Legal Notices &amp; Disclaimers</a>
+        <a href="/privacy-policy/">Privacy Policy</a>
+        <a href="/cookie-notice/">Cookie Notice</a>
+        <a href="/terms-of-use/">Terms of Use</a>
+        <a href="/important-information/">Important Information</a>
+        <a href="/legal-notices-disclaimers/">Legal Notices &amp; Disclaimers</a>
       </div>
       <p class="sv-footer__copy">© 2026 ShoreVest Partners. All rights reserved.</p>
     </div>
@@ -321,7 +334,7 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 })();
 </script>
 
-<script src="assets/js/insights-new-edition.js?v=20260717" defer></script>
-<script src="assets/js/sv-navigation.js?v=20260717" defer></script>
+<script src="assets/js/insights-new-edition.js?v=20260722-linkedin-direct-navigation" defer></script>
+<script src="assets/js/sv-navigation.js?v=20260722-public-hotfix" defer></script>
 </body>
 </html>
