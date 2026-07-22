@@ -111,7 +111,29 @@ test('enabled production API fails configuration validation without launch contr
   assert.ok(shape.invalid.includes('outboxDelivery.enabled'));
 });
 
-test('enabled production API validates only when identity, abuse controls and delivery are configured', () => {
+test('enabled delivery fails without SharePoint, mailbox and template approval', () => {
+  const config = loadConfig({
+    RECRUITMENT_ENVIRONMENT: 'production',
+    RECRUITMENT_ALLOWED_ORIGINS: 'https://shorevest.com',
+    RECRUITMENT_MANAGED_IDENTITY_CLIENT_ID: '00000000-0000-0000-0000-000000000001',
+    RECRUITMENT_COSMOS_ENDPOINT: 'https://example.documents.azure.com',
+    RECRUITMENT_COSMOS_DATABASE: 'recruitment',
+    RECRUITMENT_STORAGE_ACCOUNT_URL: 'https://example.blob.core.windows.net',
+    RECRUITMENT_KEYVAULT_URL: 'https://example.vault.azure.net',
+    RECRUITMENT_COMPLETION_TOKEN_SECRET_NAME: 'completion',
+    RECRUITMENT_FINGERPRINT_SECRET_NAME: 'fingerprint',
+    RECRUITMENT_OUTBOX_DELIVERY_ENABLED: 'true'
+  });
+  const shape = validateConfig(config);
+  assert.ok(shape.missing.includes('sharePoint.siteId'));
+  assert.ok(shape.missing.includes('sharePoint.applicationsListId'));
+  assert.ok(shape.missing.includes('sharePoint.filesListId'));
+  assert.ok(shape.missing.includes('candidateAcknowledgement.mailbox'));
+  assert.ok(shape.invalid.includes('candidateAcknowledgement.enabled'));
+  assert.ok(shape.invalid.includes('candidateAcknowledgement.templateApproved'));
+});
+
+test('enabled production API validates only when all launch controls are configured', () => {
   const config = loadConfig({
     RECRUITMENT_API_ENABLED: 'true',
     RECRUITMENT_ENVIRONMENT: 'production',
@@ -126,7 +148,14 @@ test('enabled production API validates only when identity, abuse controls and de
     RECRUITMENT_RATE_LIMIT_ENABLED: 'true',
     RECRUITMENT_BOT_VERIFICATION_MODE: 'turnstile',
     RECRUITMENT_BOT_VERIFICATION_SECRET_NAME: 'turnstile',
-    RECRUITMENT_OUTBOX_DELIVERY_ENABLED: 'true'
+    RECRUITMENT_OUTBOX_DELIVERY_ENABLED: 'true',
+    RECRUITMENT_SHAREPOINT_SITE_ID: 'site-id',
+    RECRUITMENT_APPLICATIONS_LIST_ID: 'applications-list',
+    RECRUITMENT_FILES_LIST_ID: 'files-list',
+    RECRUITMENT_CANDIDATE_ACK_ENABLED: 'true',
+    RECRUITMENT_CANDIDATE_ACK_TEMPLATE_APPROVED: 'true',
+    RECRUITMENT_CANDIDATE_ACK_MAILBOX: 'hr@shorevest.com',
+    RECRUITMENT_CANDIDATE_ACK_PRIVACY_URL: 'https://shorevest.com/privacy-policy/'
   });
   assert.deepEqual(validateConfig(config), { ok: true, missing: [], invalid: [] });
 });
