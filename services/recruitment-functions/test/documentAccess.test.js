@@ -28,6 +28,7 @@ function config() {
     cleanContainer: 'recruitment-clean',
     hrAccess: {
       enabled: true,
+      platformAuthenticationEnabled: true,
       requiredRole: 'Recruitment.HR',
       readSasSeconds: 300
     }
