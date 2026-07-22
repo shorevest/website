@@ -41,6 +41,7 @@ function loadConfig(env = process.env) {
     env.RECRUITMENT_ALLOWED_ORIGINS ||
     (production ? 'https://shorevest.com,https://www.shorevest.com' : '')
   );
+  const approvedOriginHostnames = originHostnames(origins);
 
   return {
     apiEnabled: bool(env.RECRUITMENT_API_ENABLED),
@@ -67,9 +68,12 @@ function loadConfig(env = process.env) {
       mode: (env.RECRUITMENT_BOT_VERIFICATION_MODE || 'disabled').toLowerCase(),
       secretName: env.RECRUITMENT_BOT_VERIFICATION_SECRET_NAME,
       endpoint: env.RECRUITMENT_BOT_VERIFICATION_ENDPOINT || 'https://challenges.cloudflare.com/turnstile/v0/siteverify',
-      expectedHostnames: commaList(env.RECRUITMENT_BOT_VERIFICATION_HOSTNAME)
-        .map((hostname) => hostname.toLowerCase().replace(/\.$/, '')),
-      expectedAction: String(env.RECRUITMENT_BOT_VERIFICATION_ACTION || '').trim()
+      expectedHostnames: commaList(
+        env.RECRUITMENT_BOT_VERIFICATION_HOSTNAME || approvedOriginHostnames.join(',')
+      ).map((hostname) => hostname.toLowerCase().replace(/\.$/, '')),
+      expectedAction: String(
+        env.RECRUITMENT_BOT_VERIFICATION_ACTION || 'recruitment-application'
+      ).trim()
     },
     outboxDelivery: {
       enabled: bool(env.RECRUITMENT_OUTBOX_DELIVERY_ENABLED),
