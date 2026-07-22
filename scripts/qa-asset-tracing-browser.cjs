@@ -66,13 +66,19 @@ function writeQaFiles() {
         var tab = document.querySelector('.at-tab.is-active');
         var report = document.querySelector('.at-report');
         var headers = Array.prototype.slice.call(document.querySelectorAll('.at-report th'));
+        var tabs = Array.prototype.slice.call(document.querySelectorAll('.at-tabs .at-tab'));
+        var guidance = document.querySelector('.at-guidance');
         return tab && tab.getAttribute('aria-current') === 'page' &&
           report && report.getAttribute('aria-label') === 'Preliminary asset screening report preview' &&
-          headers.length && headers.every(function (th) { return th.getAttribute('scope') === 'col'; });
+          headers.length && headers.every(function (th) { return th.getAttribute('scope') === 'col'; }) &&
+          tabs.length === 5 && tabs.every(function (item) { return item.getAttribute('data-step'); }) &&
+          guidance && /Finish the second-person review/.test(guidance.textContent);
       }, function () {
         document.body.dataset.qaActiveTab = 'true';
         document.body.dataset.qaReportLabel = 'true';
         document.body.dataset.qaTableScopes = 'true';
+        document.body.dataset.qaWorkflowSteps = 'true';
+        document.body.dataset.qaGuidance = 'true';
         commonReady('report');
       });
     });
@@ -81,6 +87,11 @@ function writeQaFiles() {
   function openNewCase() {
     location.hash = '#/workspace/asset-tracing';
     waitFor(function () { return document.querySelector('.at-workspace'); }, function () {
+      var queueHelp = document.querySelector('.at-queue-help');
+      var rowActions = document.querySelectorAll('.at-case-panel .at-row-action');
+      if (queueHelp && rowActions.length) {
+        document.body.dataset.qaQueueGuidance = 'true';
+      }
       var button = Array.prototype.slice.call(document.querySelectorAll('button')).filter(function (b) {
         return b.textContent.trim() === 'New case';
       })[0];
@@ -89,13 +100,22 @@ function writeQaFiles() {
       waitFor(function () { return document.querySelector('.drawer'); }, function () {
         waitFor(function () {
           var fields = Array.prototype.slice.call(document.querySelectorAll('.drawer .fld'));
-          return fields.length && fields.every(function (field) {
+          var primary = Array.prototype.slice.call(document.querySelectorAll('.drawer button')).filter(function (b) {
+            return b.textContent.trim() === 'Create case';
+          })[0];
+          var required = Array.prototype.slice.call(document.querySelectorAll('.drawer [aria-required="true"]'));
+          var status = document.querySelector('.drawer .at-form-status');
+          var labelsReady = fields.length && fields.every(function (field) {
             var label = field.querySelector('label');
             var control = field.querySelector('input, select, textarea');
             return !label || !control || (control.id && label.htmlFor === control.id);
           });
+          return labelsReady && required.length === 5 && primary && primary.disabled &&
+            status && /required fields/.test(status.textContent);
         }, function () {
           document.body.dataset.qaLabels = 'true';
+          document.body.dataset.qaRequired = 'true';
+          document.body.dataset.qaBlockedIncomplete = 'true';
           commonReady('newcase');
         });
       });
@@ -166,8 +186,13 @@ function runChrome(chrome, mode, width, height, outputPrefix) {
       assert(dom.includes('data-qa-active-tab="true"'), 'Active report tab lacks aria-current.');
       assert(dom.includes('data-qa-report-label="true"'), 'Report preview lacks its accessible label.');
       assert(dom.includes('data-qa-table-scopes="true"'), 'Report table headers lack column scope.');
+      assert(dom.includes('data-qa-workflow-steps="true"'), 'The five-step workflow did not render.');
+      assert(dom.includes('data-qa-guidance="true"'), 'The recommended next action did not render.');
     } else {
       assert(dom.includes('data-qa-labels="true"'), 'New-case fields are missing programmatic labels.');
+      assert(dom.includes('data-qa-required="true"'), 'Required new-case fields are not marked.');
+      assert(dom.includes('data-qa-blocked-incomplete="true"'), 'Incomplete case submission is not blocked.');
+      assert(dom.includes('data-qa-queue-guidance="true"'), 'The case queue does not explain how to continue.');
     }
 
     const screenshotPath = path.join(ARTIFACT_DIR, outputPrefix + '.png');
