@@ -65,10 +65,18 @@ function authorizedPrincipal(req, requiredRole, errors) {
   if (!requiredRole || !roles.includes(requiredRole)) {
     return { ok: false, status: 403, errorCode: errors.role };
   }
+  const objectId = principalObjectId(principal);
+  if (!objectId) {
+    return {
+      ok: false,
+      status: 403,
+      errorCode: errors.objectId || 'PRINCIPAL_OBJECT_ID_REQUIRED'
+    };
+  }
   return {
     ok: true,
     principal: {
-      objectId: principalObjectId(principal),
+      objectId,
       roles
     }
   };
@@ -83,7 +91,8 @@ function authorizeHr(req, config) {
   }
   return authorizedPrincipal(req, config.hrAccess.requiredRole, {
     authentication: 'AUTHENTICATION_REQUIRED',
-    role: 'HR_ROLE_REQUIRED'
+    role: 'HR_ROLE_REQUIRED',
+    objectId: 'HR_PRINCIPAL_OBJECT_ID_REQUIRED'
   });
 }
 
@@ -96,7 +105,8 @@ function authorizeRetentionAdmin(req, config) {
   }
   return authorizedPrincipal(req, config.retention.adminRole, {
     authentication: 'AUTHENTICATION_REQUIRED',
-    role: 'RETENTION_ADMIN_ROLE_REQUIRED'
+    role: 'RETENTION_ADMIN_ROLE_REQUIRED',
+    objectId: 'RETENTION_PRINCIPAL_OBJECT_ID_REQUIRED'
   });
 }
 
@@ -106,6 +116,7 @@ module.exports = {
   claimValues,
   principalRoles,
   principalObjectId,
+  authorizedPrincipal,
   authorizeHr,
   authorizeRetentionAdmin
 };
