@@ -5,10 +5,11 @@ const { DefaultAzureCredential } = require('@azure/identity');
 const {
   initiateApplication,
   completeUpload,
-  finalizeApplication,
+  finalizeApplication: coreFinalizeApplication,
   processScanResult,
   retryQuarantineCleanup
 } = require('../../../api/recruitment/core/flows');
+const { createFinalizeApplication } = require('./flows/finalizeApplication');
 const { loadConfig } = require('./lib/config');
 const { loadManifest } = require('./lib/manifest');
 const { createCosmosAdapters } = require('./adapters/cosmos');
@@ -26,6 +27,8 @@ const { createBotVerifier } = require('./adapters/bot');
 const { createRateLimiter } = require('./adapters/rateLimit');
 const { createGraphAdapter } = require('./adapters/graph');
 const { createOutboxDispatcher } = require('./outbox/dispatcher');
+
+const finalizeApplication = createFinalizeApplication(coreFinalizeApplication);
 
 function createDeps(config = loadConfig(), requestContext = {}) {
   const credentialOptions = config.managedIdentityClientId
