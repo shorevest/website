@@ -4,13 +4,13 @@ const test = require('node:test');
 const assert = require('node:assert');
 const { authorizeRetentionAdmin } = require('../src/lib/hrAuth');
 
-function request(role) {
+function request(role, objectId = 'object-id') {
   const encoded = role == null ? null : Buffer.from(JSON.stringify({
     auth_typ: 'aad',
     role_typ: 'roles',
     claims: [
       { typ: 'roles', val: role },
-      { typ: 'oid', val: 'object-id' }
+      ...(objectId ? [{ typ: 'oid', val: objectId }] : [])
     ]
   })).toString('base64');
   return {
@@ -43,6 +43,13 @@ test('retention administration is separately disabled and separately authorized'
   assert.equal(authorizeRetentionAdmin(request(null), config()).status, 401);
 
   assert.equal(authorizeRetentionAdmin(request('Recruitment.HR'), config()).errorCode, 'RETENTION_ADMIN_ROLE_REQUIRED');
+
+  const missingObjectId = authorizeRetentionAdmin(
+    request('Recruitment.RetentionAdmin', null),
+    config()
+  );
+  assert.equal(missingObjectId.status, 403);
+  assert.equal(missingObjectId.errorCode, 'RETENTION_PRINCIPAL_OBJECT_ID_REQUIRED');
 
   const allowed = authorizeRetentionAdmin(request('Recruitment.RetentionAdmin'), config());
   assert.equal(allowed.ok, true);
