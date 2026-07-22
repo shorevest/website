@@ -140,16 +140,26 @@ app.timer('outboxWorker', {
     for (const event of batch) {
       try {
         const delivery = await dependencies.outboxDispatcher.deliver(event, dependencies);
-        await dependencies.applicationStore.completeOutboxEvent(event, delivery || {});
+        const durableEvent = delivery?.event || event;
+        await dependencies.applicationStore.completeOutboxEvent(durableEvent, delivery || {});
       } catch (error) {
-        if ((event.attemptCount || 0) >= config.outboxDelivery.maxAttempts || error.permanent === true) {
-          await dependencies.applicationStore.failOutboxEvent(event, error.code || 'DELIVERY_FAILED');
+        const durableEvent = error.event || event;
+        if ((durableEvent.attemptCount || 0) >= config.outboxDelivery.maxAttempts || error.permanent === true) {
+          await dependencies.applicationStore.failOutboxEvent(
+            durableEvent,
+            error.code || 'DELIVERY_FAILED'
+          );
           continue;
         }
+        const providerDelay = Number(error.retryAfterMs || 0);
+        const retryDelay = Math.max(
+          config.outboxDelivery.retrySeconds * 1000,
+          Number.isFinite(providerDelay) ? providerDelay : 0
+        );
         await dependencies.applicationStore.retryOutboxEvent(
-          event,
+          durableEvent,
           error.code || 'DELIVERY_RETRYABLE',
-          new Date(Date.now() + config.outboxDelivery.retrySeconds * 1000).toISOString()
+          new Date(Date.now() + retryDelay).toISOString()
         );
       }
     }
