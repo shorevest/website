@@ -2,7 +2,7 @@
 
 ## Status
 
-Phase 1B synthetic demonstration scaffold. This is not a production investigative system.
+Phase 1B synthetic demonstration scaffold with guided workflow, accessibility hardening and browser QA. This is not a production investigative system.
 
 ## Purpose
 
@@ -29,6 +29,27 @@ The browser-local prototype supports:
 - a full source register with exact reference/page fields
 - a controlled browser print layout
 - synthetic JSON export for demonstration testing
+
+## Guided workflow
+
+Each case shows a simple five-step path:
+
+1. **Overview** — add the subject and confirm the decision being supported.
+2. **Sources** — log the evidence and exact reference.
+3. **Findings** — create conclusions linked to their sources.
+4. **Review** — complete second-person review, score and approval checks.
+5. **Report** — review the source-linked preliminary output.
+
+The case page shows one recommended next action based on the actual missing information. Completed steps receive a visible check mark. The case queue explicitly tells the user to select a row and labels each row with “Open case”.
+
+The new-case drawer:
+
+- marks the five required fields
+- explains each field in plain language
+- identifies the deadline as optional
+- requires a reviewer different from the owner
+- keeps **Create case** disabled until the required information is complete
+- announces how many required fields remain
 
 Approval requires:
 
@@ -74,12 +95,18 @@ Real case use requires the separately hosted ShoreVest One production foundation
 - `assets/js/employee-portal/views-asset-tracing-phase1b.js` — Phase 1B planning, review and approval interface.
 - `assets/js/employee-portal/views-asset-tracing-report.js` — finding-to-source lineage, source register and print action.
 - `assets/js/employee-portal/asset-tracing-interactions.js` — keyboard-safe case-list search behaviour.
+- `assets/js/employee-portal/asset-tracing-accessibility.js` — dynamic labels, table semantics and drawer accessibility.
+- `assets/js/employee-portal/asset-tracing-usability.js` — guided steps, next-action card, clearer queue and case-form validation.
 - `assets/css/employee-portal-asset-tracing.css` — core module responsive styles.
 - `assets/css/employee-portal-asset-tracing-phase1b.css` — Phase 1B controls and responsive review layout.
 - `assets/css/employee-portal-asset-tracing-report.css` — source-lineage and print layout.
+- `assets/css/employee-portal-asset-tracing-usability.css` — workflow guidance and case-form usability styles.
 - `tests/employee-portal-asset-tracing.test.js` — core static and model-level safety tests.
 - `tests/employee-portal-asset-tracing-phase1b.test.js` — approval-gate, fresh-state and Phase 1B safety tests.
 - `tests/employee-portal-asset-tracing-report.test.js` — report lineage, print and safety tests.
+- `tests/employee-portal-asset-tracing-accessibility.test.js` — dynamic accessibility tests.
+- `tests/employee-portal-asset-tracing-usability.test.js` — guided workflow and case-form usability tests.
+- `scripts/qa-asset-tracing-browser.cjs` — desktop and mobile headless-browser workflow QA.
 
 ## 0–3 screening score
 
