@@ -43,6 +43,12 @@ function loadConfig(env = process.env) {
       secretName: env.RECRUITMENT_BOT_VERIFICATION_SECRET_NAME,
       endpoint: env.RECRUITMENT_BOT_VERIFICATION_ENDPOINT || 'https://challenges.cloudflare.com/turnstile/v0/siteverify',
       expectedHostname: env.RECRUITMENT_BOT_VERIFICATION_HOSTNAME || ''
+    },
+    outboxDelivery: {
+      enabled: bool(env.RECRUITMENT_OUTBOX_DELIVERY_ENABLED),
+      leaseSeconds: positiveInteger(env.RECRUITMENT_OUTBOX_LEASE_SECONDS, 300),
+      retrySeconds: positiveInteger(env.RECRUITMENT_OUTBOX_RETRY_SECONDS, 900),
+      maxAttempts: positiveInteger(env.RECRUITMENT_OUTBOX_MAX_ATTEMPTS, 10)
     }
   };
 }
@@ -75,6 +81,7 @@ function validateConfig(config) {
     if (config.rateLimit?.enabled !== true) invalid.push('rateLimit.enabled');
     if (config.botVerification?.mode !== 'turnstile') invalid.push('botVerification.mode');
     if (!config.botVerification?.secretName) missing.push('botVerification.secretName');
+    if (config.outboxDelivery?.enabled !== true) invalid.push('outboxDelivery.enabled');
   }
 
   return { ok: missing.length === 0 && invalid.length === 0, missing, invalid };
