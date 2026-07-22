@@ -110,6 +110,8 @@ test('enabled production API fails configuration validation without launch contr
   assert.ok(shape.invalid.includes('botVerification.mode'));
   assert.ok(shape.invalid.includes('outboxDelivery.enabled'));
   assert.ok(shape.invalid.includes('hrAccess.enabled'));
+  assert.ok(shape.invalid.includes('retention.enabled'));
+  assert.ok(shape.invalid.includes('retention.deletionEnabled'));
 });
 
 test('enabled delivery fails without SharePoint, mailbox and template approval', () => {
@@ -152,6 +154,25 @@ test('HR access fails closed without platform authentication or a bounded SAS du
   assert.ok(shape.invalid.includes('hrAccess.readSasSeconds'));
 });
 
+test('retention fails closed without authentication, policy version or delivery', () => {
+  const config = loadConfig({
+    RECRUITMENT_ENVIRONMENT: 'production',
+    RECRUITMENT_ALLOWED_ORIGINS: 'https://shorevest.com',
+    RECRUITMENT_COSMOS_ENDPOINT: 'https://example.documents.azure.com',
+    RECRUITMENT_COSMOS_DATABASE: 'recruitment',
+    RECRUITMENT_STORAGE_ACCOUNT_URL: 'https://example.blob.core.windows.net',
+    RECRUITMENT_KEYVAULT_URL: 'https://example.vault.azure.net',
+    RECRUITMENT_COMPLETION_TOKEN_SECRET_NAME: 'completion',
+    RECRUITMENT_FINGERPRINT_SECRET_NAME: 'fingerprint',
+    RECRUITMENT_RETENTION_ENABLED: 'true',
+    RECRUITMENT_RETENTION_DELETION_ENABLED: 'true'
+  });
+  const shape = validateConfig(config);
+  assert.ok(shape.invalid.includes('retention.platformAuthenticationEnabled'));
+  assert.ok(shape.missing.includes('retention.policyVersion'));
+  assert.ok(shape.invalid.includes('outboxDelivery.enabled'));
+});
+
 test('enabled production API validates only when all launch controls are configured', () => {
   const config = loadConfig({
     RECRUITMENT_API_ENABLED: 'true',
@@ -178,7 +199,17 @@ test('enabled production API validates only when all launch controls are configu
     RECRUITMENT_HR_ACCESS_ENABLED: 'true',
     RECRUITMENT_PLATFORM_AUTH_ENABLED: 'true',
     RECRUITMENT_HR_REQUIRED_ROLE: 'Recruitment.HR',
-    RECRUITMENT_HR_READ_SAS_SECONDS: '300'
+    RECRUITMENT_HR_READ_SAS_SECONDS: '300',
+    RECRUITMENT_RETENTION_ENABLED: 'true',
+    RECRUITMENT_RETENTION_DELETION_ENABLED: 'true',
+    RECRUITMENT_RETENTION_POLICY_VERSION: 'retention-v1',
+    RECRUITMENT_RETENTION_ADMIN_ROLE: 'Recruitment.RetentionAdmin',
+    RECRUITMENT_RETENTION_INCOMPLETE_HOURS: '48',
+    RECRUITMENT_RETENTION_SUBMITTED_DAYS: '365',
+    RECRUITMENT_RETENTION_MALICIOUS_DAYS: '30',
+    RECRUITMENT_RETENTION_BATCH_SIZE: '10',
+    RECRUITMENT_RETENTION_LEASE_SECONDS: '300',
+    RECRUITMENT_RETENTION_RETRY_SECONDS: '900'
   });
   assert.deepEqual(validateConfig(config), { ok: true, missing: [], invalid: [] });
 });
