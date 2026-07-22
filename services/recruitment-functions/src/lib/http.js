@@ -69,6 +69,7 @@ function candidate(result) {
   const response = { success: true };
   for (const key of [
     'alreadySubmitted',
+    'alreadyFinalized',
     'applicationReference',
     'fileReference',
     'applicationStatus',
@@ -76,6 +77,7 @@ function candidate(result) {
     'status',
     'retryAfterMs',
     'completionToken',
+    'finalizationToken',
     'upload'
   ]) {
     if (result[key] !== undefined) response[key] = result[key];
