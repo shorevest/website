@@ -4,6 +4,7 @@ const { app } = require('@azure/functions');
 const { loadConfig, validateConfig } = require('../lib/config');
 const { createReadinessProbe } = require('../lib/readiness');
 const { safeErrorCode } = require('../lib/logger');
+const { deliverDefenderScanEvent } = require('../lib/scanDelivery');
 const {
   originAllowed,
   withCors,
@@ -13,7 +14,6 @@ const {
   unavailable
 } = require('../lib/http');
 const { createDeps, flows } = require('../appFactory');
-const { normalizeEventGridEvent } = require('../lib/eventGrid');
 const { accessCleanDocument } = require('../hr/documentAccess');
 const { updateRetentionControl } = require('../hr/retentionControl');
 const {
@@ -165,19 +165,13 @@ app.http('hrRetentionControl', {
 });
 
 app.eventGrid('defenderScanResult', {
-  handler: async (event, context) => {
-    const config = loadConfig();
-    try {
-      const normalized = normalizeEventGridEvent(event, config);
-      const dependencies = createDeps(config);
-      return flows.processScanResult(normalized, dependencies);
-    } catch (error) {
-      context.warn('recruitment_scan_event_rejected', {
-        code: safeErrorCode(error, 'SCAN_EVENT_REJECTED')
-      });
-      return undefined;
-    }
-  }
+  handler: async (event, context) => deliverDefenderScanEvent({
+    event,
+    context,
+    config: loadConfig(),
+    createDependencies: createDeps,
+    processScanResult: flows.processScanResult
+  })
 });
 
 app.timer('quarantineCleanup', {
