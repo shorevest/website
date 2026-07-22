@@ -9,7 +9,6 @@ on:
       - 'assets/css/employee-portal-asset-tracing*.css'
       - 'tests/employee-portal-asset-tracing*.test.js'
       - 'docs/employee-portal/ASSET_TRACING_MODULE.md'
-      - 'package.json'
       - '.github/workflows/asset-tracing-checks.yml'
   workflow_dispatch:
 
@@ -29,12 +28,23 @@ jobs:
           node-version: '24'
 
       - name: Check JavaScript syntax
-        run: npm run check:asset-tracing
+        run: |
+          node --check assets/js/employee-portal/asset-tracing.js
+          node --check assets/js/employee-portal/asset-tracing-phase1b.js
+          node --check assets/js/employee-portal/asset-tracing-interactions.js
+          node --check assets/js/employee-portal/asset-tracing-accessibility.js
+          node --check assets/js/employee-portal/views-asset-tracing.js
+          node --check assets/js/employee-portal/views-asset-tracing-phase1b.js
+          node --check assets/js/employee-portal/views-asset-tracing-report.js
 
       - name: Run Asset Tracing regression tests
-        run: npm run test:asset-tracing
+        run: |
+          node tests/employee-portal-asset-tracing.test.js
+          node tests/employee-portal-asset-tracing-phase1b.test.js
+          node tests/employee-portal-asset-tracing-report.test.js
+          node tests/employee-portal-asset-tracing-accessibility.test.js
 
       - name: Re-run portal entry and security checks
         run: |
           node tests/employee-portal-phase2b.test.js
-          npm run check:security
+          node tests/security-headers.test.js
