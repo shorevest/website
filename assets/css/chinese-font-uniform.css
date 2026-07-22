@@ -1,0 +1,41 @@
+@charset "utf-8";
+
+/*
+ * Chinese-page typography authority.
+ *
+ * Every visible text element on a Chinese route uses one family only:
+ * Noto Sans SC. This intentionally includes retained English words, labels,
+ * buttons, form controls, legal copy, careers pages, and investor-portal UI.
+ * Image-based ShoreVest lockups are unaffected.
+ */
+
+:root.sv-cn-font-unified[lang^="zh"] {
+  --sv-cn-unified-font: "Noto Sans SC", sans-serif;
+
+  --sv-font: var(--sv-cn-unified-font);
+  --sv-serif: var(--sv-cn-unified-font);
+  --sv-cn: var(--sv-cn-unified-font);
+
+  --font-din: var(--sv-cn-unified-font);
+  --font-en: var(--sv-cn-unified-font);
+  --font-cn: var(--sv-cn-unified-font);
+  --font-bilingual: var(--sv-cn-unified-font);
+
+  --sv-font-en: var(--sv-cn-unified-font);
+  --sv-font-cn: var(--sv-cn-unified-font);
+  --sv-type-sans: var(--sv-cn-unified-font);
+  --sv-type-cn: var(--sv-cn-unified-font);
+
+  --u-serif: var(--sv-cn-unified-font);
+  --u-din: var(--sv-cn-unified-font);
+}
+
+/*
+ * The repeated root class is deliberate: several legacy/page-specific sheets
+ * use highly specific !important typography rules. This final, Chinese-only
+ * layer must remain the single authority regardless of page template.
+ */
+html.sv-cn-font-unified.sv-cn-font-unified.sv-cn-font-unified.sv-cn-font-unified.sv-cn-font-unified.sv-cn-font-unified.sv-cn-font-unified.sv-cn-font-unified[lang^="zh"] body,
+html.sv-cn-font-unified.sv-cn-font-unified.sv-cn-font-unified.sv-cn-font-unified.sv-cn-font-unified.sv-cn-font-unified.sv-cn-font-unified.sv-cn-font-unified[lang^="zh"] body * {
+  font-family: "Noto Sans SC", sans-serif !important;
+}
