@@ -109,7 +109,7 @@ test('enabled API checks Key Vault secrets and enabled delivery checks Graph res
     candidateAcknowledgement: {
       enabled: true,
       templateApproved: true,
-      mailbox: 'recruitment@example.com',
+      mailbox: 'recruitment@shorevest.com',
       privacyNoticeUrl: 'https://shorevest.com/privacy-policy/'
     },
     hrAccess: {
@@ -155,7 +155,7 @@ test('enabled API checks Key Vault secrets and enabled delivery checks Graph res
     siteId: 'site',
     applicationsListId: 'applications',
     filesListId: 'files',
-    mailbox: 'recruitment@example.com'
+    mailbox: 'recruitment@shorevest.com'
   });
   assert.equal(result.ok, true);
 });
