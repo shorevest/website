@@ -38,8 +38,10 @@ function operationResults(response) {
 }
 
 function assertBatchSuccess(response) {
-  const results = operationResults(response);
-  const failed = results.find((item) => Number(item?.statusCode || 0) < 200 || Number(item?.statusCode || 0) >= 300);
+  const failed = operationResults(response).find((item) => {
+    const status = Number(item?.statusCode || 0);
+    return status < 200 || status >= 300;
+  });
   if (failed) throwCosmos(failed.statusCode, 'Cosmos transactional batch failed');
   const code = Number(response?.code || response?.statusCode || 200);
   if (code < 200 || code >= 300) throwCosmos(code, 'Cosmos transactional batch failed');
@@ -48,6 +50,23 @@ function assertBatchSuccess(response) {
 function ifMatch(etag) {
   if (!etag) throwCosmos(412, 'Missing ETag for conditional write');
   return { accessCondition: { type: 'IfMatch', condition: etag } };
+}
+
+function sameReservation(left, right) {
+  const fields = [
+    'idempotencyKey',
+    'roleId',
+    'clientSubmissionId',
+    'applicationReference',
+    'fileReference',
+    'quarantineBlobPath',
+    'expectedExtension',
+    'expectedSizeBytes',
+    'expectedMimeType',
+    'privacyNoticeVersion',
+    'requestFingerprint'
+  ];
+  return Boolean(left && right && fields.every((field) => left[field] === right[field]));
 }
 
 function outboxDocument(event, applicationReference, nowUtc) {
@@ -84,6 +103,7 @@ function createCosmosAdapters({ endpoint, databaseId, credential, client, now = 
   }
 
   async function conditionalReplace(container, document, partitionKey, patch = {}) {
+    if (!document) return null;
     const replacement = {
       ...stripSystemFields(document),
       ...patch,
@@ -100,69 +120,117 @@ function createCosmosAdapters({ endpoint, databaseId, credential, client, now = 
     }
   }
 
+  async function replaceWithRetry(container, id, partitionKey, buildPatch, attempts = 3) {
+    for (let attempt = 0; attempt < attempts; attempt += 1) {
+      const current = await read(container, id, partitionKey);
+      if (!current) return null;
+      const updated = await conditionalReplace(container, current, partitionKey, buildPatch(current));
+      if (updated) return updated;
+    }
+    throwCosmos(412, 'Conditional update contention');
+  }
+
   const applicationStore = {
     async reserveSubmission(reservation) {
-      const existing = await read(idempotencyContainer, reservation.idempotencyKey, reservation.idempotencyKey);
-      if (existing?.reservation) return clone(existing.reservation);
-      const document = {
-        id: reservation.idempotencyKey,
-        idempotencyKey: reservation.idempotencyKey,
-        docType: 'idempotency',
-        state: 'SubmissionReserved',
-        requestFingerprint: reservation.requestFingerprint,
-        reservation,
-        createdAtUtc: reservation.createdAtUtc || now().toISOString(),
-        updatedAtUtc: now().toISOString()
-      };
-      try {
-        await idempotencyContainer.items.create(document);
-        return clone(reservation);
-      } catch (error) {
-        if (errorCode(error) !== 409) throw error;
-        const raced = await read(idempotencyContainer, reservation.idempotencyKey, reservation.idempotencyKey);
-        if (raced?.requestFingerprint !== reservation.requestFingerprint || !raced?.reservation) {
-          throwCosmos(409, 'Reservation conflict');
+      const key = reservation.idempotencyKey;
+      for (let attempt = 0; attempt < 3; attempt += 1) {
+        const existing = await read(idempotencyContainer, key, key);
+        if (existing) {
+          if (existing.requestFingerprint && existing.requestFingerprint !== reservation.requestFingerprint) {
+            throwCosmos(409, 'Reservation fingerprint conflict');
+          }
+          if (existing.reservation) {
+            if (!sameReservation(existing.reservation, reservation)) {
+              throwCosmos(409, 'Reservation integrity conflict');
+            }
+            return clone(existing.reservation);
+          }
+          const updated = await conditionalReplace(idempotencyContainer, existing, key, {
+            state: 'SubmissionReserved',
+            requestFingerprint: reservation.requestFingerprint,
+            reservation
+          });
+          if (updated) return clone(reservation);
+          continue;
         }
-        return clone(raced.reservation);
+
+        const timestamp = now().toISOString();
+        const document = {
+          id: key,
+          idempotencyKey: key,
+          docType: 'idempotency',
+          state: 'SubmissionReserved',
+          requestFingerprint: reservation.requestFingerprint,
+          reservation,
+          createdAtUtc: reservation.createdAtUtc || timestamp,
+          updatedAtUtc: timestamp
+        };
+        try {
+          await idempotencyContainer.items.create(document);
+          return clone(reservation);
+        } catch (error) {
+          if (errorCode(error) !== 409) throw error;
+        }
       }
+      throwCosmos(412, 'Unable to reserve submission');
     },
 
-    async createInitialRecords({ application, file, idempotencyKey }) {
+    async createInitialRecords({ application, file, idempotencyKey, reservation }) {
       const partitionKey = application.applicationReference;
-      const createdAtUtc = now().toISOString();
-      const operations = [
-        {
-          operationType: 'Create',
-          resourceBody: {
-            id: 'application',
-            docType: 'application',
-            aggregateVersion: 0,
-            ...application,
-            idempotencyKey,
-            createdAtUtc: application.createdAtUtc || createdAtUtc,
-            updatedAtUtc: application.lastUpdatedAtUtc || createdAtUtc
-          }
-        },
-        {
-          operationType: 'Create',
-          resourceBody: {
-            id: `file:${file.fileReference}`,
-            docType: 'file',
-            ...file,
-            createdAtUtc: file.createdAtUtc || createdAtUtc,
-            updatedAtUtc: file.lastUpdatedAtUtc || createdAtUtc
-          }
-        }
-      ];
-      const response = await submissions.items.batch(operations, partitionKey);
-      assertBatchSuccess(response);
-      return { application, file };
+      const timestamp = now().toISOString();
+      const applicationDocument = {
+        id: 'application',
+        docType: 'application',
+        aggregateVersion: 0,
+        ...application,
+        idempotencyKey,
+        createdAtUtc: application.createdAtUtc || timestamp,
+        updatedAtUtc: application.lastUpdatedAtUtc || timestamp
+      };
+      const fileDocument = {
+        id: `file:${file.fileReference}`,
+        docType: 'file',
+        ...file,
+        createdAtUtc: file.createdAtUtc || timestamp,
+        updatedAtUtc: file.lastUpdatedAtUtc || timestamp
+      };
+
+      try {
+        const response = await submissions.items.batch([
+          { operationType: 'Create', resourceBody: applicationDocument },
+          { operationType: 'Create', resourceBody: fileDocument }
+        ], partitionKey);
+        assertBatchSuccess(response);
+        return { application, file };
+      } catch (error) {
+        if (errorCode(error) !== 409) throw error;
+        const existingApplication = await read(submissions, 'application', partitionKey);
+        const existingFile = await read(submissions, `file:${file.fileReference}`, partitionKey);
+        const expected = reservation || await applicationStore.getReservation(idempotencyKey);
+        const valid = expected && existingApplication && existingFile &&
+          existingApplication.roleId === expected.roleId &&
+          existingApplication.idempotencyKey === idempotencyKey &&
+          existingApplication.privacyNoticeVersion === expected.privacyNoticeVersion &&
+          existingApplication.requestFingerprint === expected.requestFingerprint &&
+          existingFile.fileReference === expected.fileReference &&
+          existingFile.applicationReference === expected.applicationReference &&
+          existingFile.quarantineBlobPath === expected.quarantineBlobPath &&
+          existingFile.sizeBytes === expected.expectedSizeBytes &&
+          existingFile.declaredMimeType === expected.expectedMimeType &&
+          existingFile.requestFingerprint === expected.requestFingerprint;
+        if (!valid) throwCosmos(409, 'Initial record integrity conflict');
+        return { application: existingApplication, file: existingFile };
+      }
     },
 
     async commitAggregate({ expectedVersion, application, files, outboxEvents = [] }) {
       if (application.aggregateVersion !== expectedVersion) {
         throwCosmos(412, 'Aggregate version mismatch');
       }
+      if (!application._etag || files.some((file) => !file._etag)) {
+        throwCosmos(412, 'Missing ETag for aggregate write');
+      }
+
       const partitionKey = application.applicationReference;
       const timestamp = now().toISOString();
       const nextApplication = {
@@ -200,15 +268,12 @@ function createCosmosAdapters({ endpoint, databaseId, credential, client, now = 
         });
       }
 
-      if (!application._etag || files.some((file) => !file._etag)) {
-        throwCosmos(412, 'Missing ETag for aggregate write');
-      }
       const response = await submissions.items.batch(operations, partitionKey);
       assertBatchSuccess(response);
       return { application: nextApplication, files: files.map(stripSystemFields) };
     },
 
-    async getApplication(applicationReference) {
+    getApplication(applicationReference) {
       return read(submissions, 'application', applicationReference);
     },
 
@@ -224,9 +289,13 @@ function createCosmosAdapters({ endpoint, databaseId, credential, client, now = 
       return resources[0] || null;
     },
 
+    async getReservation(idempotencyKey) {
+      const document = await read(idempotencyContainer, idempotencyKey, idempotencyKey);
+      return document?.reservation || null;
+    },
+
     async hasOutboxEvent({ applicationReference, idempotencyKey, type }) {
-      const id = `outbox:${type}:${idempotencyKey}`;
-      return Boolean(await read(submissions, id, applicationReference));
+      return Boolean(await read(submissions, `outbox:${type}:${idempotencyKey}`, applicationReference));
     },
 
     async claimCleanupBatch({ limit = 10, owner, leaseExpiresAtUtc }) {
@@ -244,12 +313,12 @@ function createCosmosAdapters({ endpoint, databaseId, credential, client, now = 
       const { resources } = await submissions.items.query(query, { maxItemCount: limit }).fetchAll();
       const claimed = [];
       for (const file of resources) {
-        const replacement = await conditionalReplace(submissions, file, file.applicationReference, {
+        const updated = await conditionalReplace(submissions, file, file.applicationReference, {
           cleanupLeaseOwner: owner,
           cleanupLeaseExpiresAtUtc: leaseExpiresAtUtc,
           cleanupAttemptCount: (file.cleanupAttemptCount || 0) + 1
         });
-        if (replacement) claimed.push(replacement);
+        if (updated) claimed.push(updated);
       }
       return claimed;
     },
@@ -272,7 +341,7 @@ function createCosmosAdapters({ endpoint, databaseId, credential, client, now = 
       const { resources } = await submissions.items.query(query, { maxItemCount: limit }).fetchAll();
       const claimed = [];
       for (const event of resources) {
-        const replacement = await conditionalReplace(submissions, event, event.applicationReference, {
+        const updated = await conditionalReplace(submissions, event, event.applicationReference, {
           state: 'Processing',
           leaseOwner: owner,
           leaseExpiresAtUtc,
@@ -280,12 +349,12 @@ function createCosmosAdapters({ endpoint, databaseId, credential, client, now = 
           lastAttemptAtUtc: timestamp,
           lastErrorCode: null
         });
-        if (replacement) claimed.push(replacement);
+        if (updated) claimed.push(updated);
       }
       return claimed;
     },
 
-    async completeOutboxEvent(event, delivery = {}) {
+    completeOutboxEvent(event, delivery = {}) {
       return conditionalReplace(submissions, event, event.applicationReference, {
         state: 'Completed',
         leaseOwner: null,
@@ -296,23 +365,23 @@ function createCosmosAdapters({ endpoint, databaseId, credential, client, now = 
       });
     },
 
-    async retryOutboxEvent(event, errorCodeValue, nextAttemptAtUtc) {
+    retryOutboxEvent(event, deliveryErrorCode, nextAttemptAtUtc) {
       return conditionalReplace(submissions, event, event.applicationReference, {
         state: 'Pending',
         leaseOwner: null,
         leaseExpiresAtUtc: null,
         nextAttemptAtUtc,
-        lastErrorCode: errorCodeValue || 'DELIVERY_RETRYABLE'
+        lastErrorCode: deliveryErrorCode || 'DELIVERY_RETRYABLE'
       });
     },
 
-    async failOutboxEvent(event, errorCodeValue) {
+    failOutboxEvent(event, deliveryErrorCode) {
       return conditionalReplace(submissions, event, event.applicationReference, {
         state: 'Failed',
         leaseOwner: null,
         leaseExpiresAtUtc: null,
         failedAtUtc: now().toISOString(),
-        lastErrorCode: errorCodeValue || 'DELIVERY_FAILED'
+        lastErrorCode: deliveryErrorCode || 'DELIVERY_FAILED'
       });
     }
   };
@@ -341,10 +410,10 @@ function createCosmosAdapters({ endpoint, databaseId, credential, client, now = 
       const current = await read(idempotencyContainer, key, key);
       if (!current) return { status: 'in_progress', retryAfterMs: 1000 };
       if (current.requestFingerprint && current.requestFingerprint !== requestFingerprint) return { status: 'conflict' };
-      if (current.state === 'CredentialsIssued') {
+      if (['CredentialsIssued', 'SubmissionReserved', 'CredentialRetryable', 'RetryableFailure'].includes(current.state)) {
         return { status: 'reserved', reservation: current.reservation, record: current };
       }
-      if (current.state === 'CredentialIssuing' && Date.parse(current.leaseExpiresAtUtc) > now().getTime()) {
+      if (['Claimed', 'CredentialIssuing'].includes(current.state) && Date.parse(current.leaseExpiresAtUtc) > now().getTime()) {
         return { status: 'in_progress', retryAfterMs: 1000 };
       }
       const claimed = await conditionalReplace(idempotencyContainer, current, key, {
@@ -363,14 +432,20 @@ function createCosmosAdapters({ endpoint, databaseId, credential, client, now = 
     },
 
     async recordReservation(key, reservation) {
-      const current = await read(idempotencyContainer, key, key);
-      if (!current) throwCosmos(404, 'Missing idempotency record');
-      const updated = await conditionalReplace(idempotencyContainer, current, key, {
-        state: 'SubmissionReserved',
-        reservation,
-        requestFingerprint: reservation.requestFingerprint
+      const updated = await replaceWithRetry(idempotencyContainer, key, key, (current) => {
+        if (current.requestFingerprint && current.requestFingerprint !== reservation.requestFingerprint) {
+          throwCosmos(409, 'Reservation fingerprint conflict');
+        }
+        if (current.reservation && !sameReservation(current.reservation, reservation)) {
+          throwCosmos(409, 'Reservation integrity conflict');
+        }
+        return {
+          state: 'SubmissionReserved',
+          reservation,
+          requestFingerprint: reservation.requestFingerprint
+        };
       });
-      if (!updated) throwCosmos(412, 'Idempotency record changed');
+      if (!updated) throwCosmos(404, 'Missing idempotency record');
       return updated;
     },
 
@@ -393,61 +468,60 @@ function createCosmosAdapters({ endpoint, databaseId, credential, client, now = 
     },
 
     async credentialsIssued(key, result, stableResult) {
-      const current = await read(idempotencyContainer, key, key);
-      if (!current) throwCosmos(404, 'Missing idempotency record');
-      const updated = await conditionalReplace(idempotencyContainer, current, key, {
+      const updated = await replaceWithRetry(idempotencyContainer, key, key, (current) => ({
         state: 'CredentialsIssued',
         result,
         stableResult,
+        leaseOwner: null,
+        leaseExpiresAtUtc: null,
         reservation: {
           ...(current.reservation || {}),
           credentialGeneration: stableResult.credentialGeneration,
           lastCredentialExpiryUtc: stableResult.lastCredentialExpiryUtc,
           reservationState: 'CredentialsIssued'
         }
-      });
-      if (!updated) throwCosmos(412, 'Idempotency record changed');
+      }));
+      if (!updated) throwCosmos(404, 'Missing idempotency record');
       return updated;
     },
 
-    async credentialRetryableFailure(key, reason) {
-      const current = await read(idempotencyContainer, key, key);
-      if (!current) return null;
-      return conditionalReplace(idempotencyContainer, current, key, {
+    credentialRetryableFailure(key, reason) {
+      return replaceWithRetry(idempotencyContainer, key, key, () => ({
         state: 'CredentialRetryable',
         reason,
         leaseOwner: null,
         leaseExpiresAtUtc: null
-      });
+      }));
     },
 
-    async retryableFailure(key, reason) {
-      const current = await read(idempotencyContainer, key, key);
-      if (!current) return null;
-      return conditionalReplace(idempotencyContainer, current, key, {
+    retryableFailure(key, reason) {
+      return replaceWithRetry(idempotencyContainer, key, key, () => ({
         state: 'RetryableFailure',
         reason,
         leaseOwner: null,
         leaseExpiresAtUtc: null
-      });
+      }));
     },
 
-    async permanentFailure(key, reason) {
-      const current = await read(idempotencyContainer, key, key);
-      if (!current) return null;
-      return conditionalReplace(idempotencyContainer, current, key, {
+    permanentFailure(key, reason) {
+      return replaceWithRetry(idempotencyContainer, key, key, () => ({
         state: 'PermanentFailure',
         reason,
         leaseOwner: null,
         leaseExpiresAtUtc: null
-      });
+      }));
     }
   };
+
+  function claimPartitionKey(prefix, key) {
+    if (prefix === 'completion') return key.split(':')[1];
+    return key.split(':')[1];
+  }
 
   function claims(prefix) {
     return {
       async claim(key, ownerOrMetadata, leaseExpiresAtUtc) {
-        const applicationReference = key.split(':')[1];
+        const partitionKey = claimPartitionKey(prefix, key);
         const id = `${prefix}:${key}`;
         const metadata = typeof ownerOrMetadata === 'object'
           ? ownerOrMetadata
@@ -455,7 +529,7 @@ function createCosmosAdapters({ endpoint, databaseId, credential, client, now = 
         const timestamp = now().toISOString();
         const initial = {
           id,
-          applicationReference,
+          applicationReference: partitionKey,
           docType: prefix,
           key,
           state: 'Processing',
@@ -471,15 +545,15 @@ function createCosmosAdapters({ endpoint, databaseId, credential, client, now = 
           if (errorCode(error) !== 409) throw error;
         }
 
-        const current = await read(submissions, id, applicationReference);
+        const current = await read(submissions, id, partitionKey);
         if (current?.state === 'Completed') return { status: 'completed', result: current.result };
         if (current?.state === 'PermanentFailure') return { status: 'permanent_failure', result: current.result };
         if (current?.state === 'Processing' && Date.parse(current.leaseExpiresAtUtc) > now().getTime()) {
           return { status: 'in_progress', retryAfterMs: 1000 };
         }
-        const updated = await conditionalReplace(submissions, current, applicationReference, {
+        const updated = await conditionalReplace(submissions, current, partitionKey, {
           state: 'Processing',
-          attemptCount: (current.attemptCount || 0) + 1,
+          attemptCount: (current?.attemptCount || 0) + 1,
           ...metadata
         });
         return updated
@@ -488,43 +562,38 @@ function createCosmosAdapters({ endpoint, databaseId, credential, client, now = 
       },
 
       async complete(key, result) {
-        const applicationReference = key.split(':')[1];
-        const current = await read(submissions, `${prefix}:${key}`, applicationReference);
-        if (!current) throwCosmos(404, 'Missing claim record');
-        const updated = await conditionalReplace(submissions, current, applicationReference, {
+        const partitionKey = claimPartitionKey(prefix, key);
+        const id = `${prefix}:${key}`;
+        const updated = await replaceWithRetry(submissions, id, partitionKey, () => ({
           state: 'Completed',
           result,
           completedAtUtc: now().toISOString(),
           leaseOwner: null,
           leaseExpiresAtUtc: null
-        });
-        if (!updated) throwCosmos(412, 'Claim record changed');
+        }));
+        if (!updated) throwCosmos(404, 'Missing claim record');
         return updated;
       },
 
-      async retryableFailure(key, reason) {
-        const applicationReference = key.split(':')[1];
-        const current = await read(submissions, `${prefix}:${key}`, applicationReference);
-        if (!current) return null;
-        return conditionalReplace(submissions, current, applicationReference, {
+      retryableFailure(key, reason) {
+        const partitionKey = claimPartitionKey(prefix, key);
+        return replaceWithRetry(submissions, `${prefix}:${key}`, partitionKey, () => ({
           state: 'RetryableFailure',
           reason,
           leaseOwner: null,
           leaseExpiresAtUtc: null
-        });
+        }));
       },
 
-      async permanentFailure(key, reason) {
-        const applicationReference = key.split(':')[1];
-        const current = await read(submissions, `${prefix}:${key}`, applicationReference);
-        if (!current) return null;
-        return conditionalReplace(submissions, current, applicationReference, {
+      permanentFailure(key, reason) {
+        const partitionKey = claimPartitionKey(prefix, key);
+        return replaceWithRetry(submissions, `${prefix}:${key}`, partitionKey, () => ({
           state: 'PermanentFailure',
           reason,
           result: { success: false, errorCode: reason },
           leaseOwner: null,
           leaseExpiresAtUtc: null
-        });
+        }));
       }
     };
   }
@@ -547,5 +616,6 @@ module.exports = {
   mapCosmosError,
   stripSystemFields,
   assertBatchSuccess,
-  outboxDocument
+  outboxDocument,
+  sameReservation
 };
