@@ -2,6 +2,7 @@
 
 const test = require('node:test');
 const assert = require('node:assert');
+const { loadConfig } = require('../src/lib/config');
 const {
   runPolicyAssignment,
   runRetentionPurge,
@@ -14,6 +15,44 @@ function context() {
     warnings: [],
     warn(event, fields) {
       this.warnings.push({ event, fields });
+    }
+  };
+}
+
+function validConfig(overrides = {}) {
+  const config = loadConfig({
+    RECRUITMENT_API_ENABLED: 'false',
+    RECRUITMENT_ENVIRONMENT: 'production',
+    RECRUITMENT_ALLOWED_ORIGINS: 'https://shorevest.com',
+    RECRUITMENT_MANAGED_IDENTITY_CLIENT_ID: '00000000-0000-0000-0000-000000000001',
+    RECRUITMENT_COSMOS_ENDPOINT: 'https://example.documents.azure.com',
+    RECRUITMENT_COSMOS_DATABASE: 'recruitment',
+    RECRUITMENT_STORAGE_ACCOUNT_URL: 'https://example.blob.core.windows.net',
+    RECRUITMENT_KEYVAULT_URL: 'https://example.vault.azure.net',
+    RECRUITMENT_COMPLETION_TOKEN_SECRET_NAME: 'completion',
+    RECRUITMENT_FINGERPRINT_SECRET_NAME: 'fingerprint',
+    RECRUITMENT_OUTBOX_DELIVERY_ENABLED: 'true',
+    RECRUITMENT_SHAREPOINT_SITE_ID: 'site-id',
+    RECRUITMENT_APPLICATIONS_LIST_ID: 'applications-list',
+    RECRUITMENT_FILES_LIST_ID: 'files-list',
+    RECRUITMENT_CANDIDATE_ACK_ENABLED: 'true',
+    RECRUITMENT_CANDIDATE_ACK_TEMPLATE_APPROVED: 'true',
+    RECRUITMENT_CANDIDATE_ACK_MAILBOX: 'hr@shorevest.com',
+    RECRUITMENT_PLATFORM_AUTH_ENABLED: 'true',
+    RECRUITMENT_RETENTION_ENABLED: 'true',
+    RECRUITMENT_RETENTION_DELETION_ENABLED: 'true',
+    RECRUITMENT_RETENTION_POLICY_VERSION: 'retention-v1',
+    RECRUITMENT_RETENTION_ADMIN_ROLE: 'Recruitment.RetentionAdmin',
+    RECRUITMENT_RETENTION_BATCH_SIZE: '10',
+    RECRUITMENT_RETENTION_LEASE_SECONDS: '900',
+    RECRUITMENT_RETENTION_RETRY_SECONDS: '3600'
+  });
+  return {
+    ...config,
+    ...overrides,
+    retention: {
+      ...config.retention,
+      ...(overrides.retention || {})
     }
   };
 }
@@ -47,16 +86,50 @@ test('retention workers do nothing while the feature is disabled', async () => {
   assert.equal(called, false);
 });
 
+test('retention workers refuse invalid enabled configuration before durable work', async () => {
+  let called = false;
+  const dependencies = {
+    retention: {
+      async listPolicyCandidates() { called = true; },
+      async claimDueBatch() { called = true; },
+      async listIdempotencyCleanupCandidates() { called = true; }
+    }
+  };
+  const invalid = {
+    retention: {
+      enabled: true,
+      deletionEnabled: true,
+      policyVersion: '',
+      batchSize: 10,
+      leaseSeconds: 300,
+      retrySeconds: 900
+    },
+    outboxDelivery: { enabled: false }
+  };
+
+  assert.deepEqual(await runPolicyAssignment(invalid, dependencies, context()), {
+    assigned: 0,
+    skipped: true,
+    reason: 'CONFIGURATION_INVALID'
+  });
+  assert.deepEqual(await runRetentionPurge(invalid, dependencies, context()), {
+    purged: 0,
+    skipped: true,
+    reason: 'CONFIGURATION_INVALID'
+  });
+  assert.deepEqual(await runIdempotencyCleanup(invalid, dependencies, context()), {
+    cleaned: 0,
+    skipped: true,
+    reason: 'CONFIGURATION_INVALID'
+  });
+  assert.equal(called, false);
+});
+
 test('policy assignment processes each candidate independently', async () => {
   const assigned = [];
   const ctx = context();
-  const result = await runPolicyAssignment({
-    retention: {
-      enabled: true,
-      policyVersion: 'retention-v1',
-      batchSize: 10
-    }
-  }, {
+  const config = validConfig();
+  const result = await runPolicyAssignment(config, {
     retention: {
       async listPolicyCandidates(input) {
         assert.deepEqual(input, { limit: 10, policyVersion: 'retention-v1' });
@@ -80,17 +153,11 @@ test('purge claims due applications and deletes each independently', async () =>
   const purged = [];
   const released = [];
   const ctx = context();
-  const config = {
+  const config = validConfig({
     quarantineContainer: 'recruitment-quarantine',
     cleanContainer: 'recruitment-clean',
-    retention: {
-      enabled: true,
-      deletionEnabled: true,
-      batchSize: 5,
-      leaseSeconds: 900,
-      retrySeconds: 3600
-    }
-  };
+    retention: { batchSize: 5 }
+  });
   const result = await runRetentionPurge(config, {
     storage: {},
     retention: {
@@ -131,13 +198,7 @@ test('purge claims due applications and deletes each independently', async () =>
 test('idempotency cleanup retries each purged application independently', async () => {
   const cleaned = [];
   const ctx = context();
-  const result = await runIdempotencyCleanup({
-    retention: {
-      enabled: true,
-      deletionEnabled: true,
-      batchSize: 10
-    }
-  }, {
+  const result = await runIdempotencyCleanup(validConfig(), {
     retention: {
       async listIdempotencyCleanupCandidates(input) {
         assert.deepEqual(input, { limit: 10 });
