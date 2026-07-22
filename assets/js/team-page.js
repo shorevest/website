@@ -5,6 +5,24 @@
     .toLowerCase()
     .startsWith("zh");
 
+  const markWidePlatformSummary = () => {
+    document.querySelectorAll(".group__summary").forEach((summary) => {
+      const text = (summary.textContent || "")
+        .replace(/\s+/g, " ")
+        .trim()
+        .toLowerCase();
+      const isOnshorePlatformSummary =
+        text.includes("onshore asset-servicing and resolution platform") ||
+        (text.includes("本地执行") && text.includes("回收"));
+
+      if (!isOnshorePlatformSummary) return;
+
+      summary.classList.add("group__summary--wide");
+      const head = summary.closest(".group__head");
+      if (head) head.classList.add("group__head--wide-summary");
+    });
+  };
+
   const applyEditorialSectionIntroStyles = () => {
     if (document.getElementById("team-section-intro-editorial-styles")) return;
 
@@ -18,6 +36,11 @@
         gap: clamp(28px, 4vw, 64px) !important;
         padding-bottom: clamp(18px, 2vw, 24px) !important;
         border-bottom: 1px solid var(--tr-border) !important;
+      }
+
+      html body.team-page-v2 .group__head.group__head--wide-summary {
+        grid-template-columns: minmax(210px, max-content) minmax(440px, 760px) !important;
+        gap: clamp(22px, 3vw, 46px) !important;
       }
 
       html body.team-page-v2 .group__summary {
@@ -39,6 +62,11 @@
         text-wrap: pretty;
       }
 
+      html body.team-page-v2 .group__summary.group__summary--wide {
+        width: min(100%, 760px) !important;
+        max-width: 760px !important;
+      }
+
       html body.team-page-v2.team-page--cn .group__summary {
         letter-spacing: 0.06em !important;
         text-transform: none !important;
@@ -49,17 +77,24 @@
           grid-template-columns: minmax(220px, 0.8fr) minmax(320px, 1.2fr) !important;
           gap: 28px !important;
         }
+
+        html body.team-page-v2 .group__head.group__head--wide-summary {
+          grid-template-columns: minmax(180px, 0.65fr) minmax(360px, 1.35fr) !important;
+          gap: 24px !important;
+        }
       }
 
       @media (max-width: 760px) {
-        html body.team-page-v2 .group__head {
+        html body.team-page-v2 .group__head,
+        html body.team-page-v2 .group__head.group__head--wide-summary {
           grid-template-columns: 1fr !important;
           align-items: start !important;
           gap: 16px !important;
           padding-bottom: 20px !important;
         }
 
-        html body.team-page-v2 .group__summary {
+        html body.team-page-v2 .group__summary,
+        html body.team-page-v2 .group__summary.group__summary--wide {
           width: 100% !important;
           max-width: none !important;
           justify-self: stretch !important;
@@ -297,6 +332,7 @@
 
   const initAllGrids = () => {
     if (isChinesePage) document.body.classList.add("team-page--cn");
+    markWidePlatformSummary();
     applyEditorialSectionIntroStyles();
     hideIncompleteFunctionsGroup();
     const grids = Array.from(document.querySelectorAll("[data-team-grid]"));
