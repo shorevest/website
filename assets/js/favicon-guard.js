@@ -1,5 +1,5 @@
 (function () {
-  var VERSION = "20260722-cn-font-unify";
+  var VERSION = "20260722-cn-serif-unify";
 
   function removeEmptyLegacyToken() {
     try {
