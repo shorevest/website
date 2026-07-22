@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.1",
+  "schemaVersion": "1.2",
   "documentStorage": "azure-blob-only",
   "runtimePermission": "Lists.SelectedOperations.Selected",
   "lists": [
@@ -58,6 +58,16 @@
         { "name": "NotificationSentAtUtc", "type": "dateTime", "required": false, "format": "dateTime" },
         { "name": "NotificationAttemptCount", "type": "number", "required": false, "decimalPlaces": 0 },
         { "name": "NotificationLastErrorCode", "type": "text", "required": false },
+        { "name": "ApplicationReceivedNotificationState", "type": "choice", "required": false, "choices": ["Pending", "Sending", "Sent", "Failed"] },
+        { "name": "ApplicationReceivedNotificationEventKey", "type": "text", "required": false },
+        { "name": "ApplicationReceivedNotificationSentAtUtc", "type": "dateTime", "required": false, "format": "dateTime" },
+        { "name": "ApplicationReceivedNotificationAttemptCount", "type": "number", "required": false, "decimalPlaces": 0 },
+        { "name": "ApplicationReceivedNotificationLastErrorCode", "type": "text", "required": false },
+        { "name": "DocumentsReadyNotificationState", "type": "choice", "required": false, "choices": ["Pending", "Sending", "Sent", "Failed"] },
+        { "name": "DocumentsReadyNotificationEventKey", "type": "text", "required": false },
+        { "name": "DocumentsReadyNotificationSentAtUtc", "type": "dateTime", "required": false, "format": "dateTime" },
+        { "name": "DocumentsReadyNotificationAttemptCount", "type": "number", "required": false, "decimalPlaces": 0 },
+        { "name": "DocumentsReadyNotificationLastErrorCode", "type": "text", "required": false },
         { "name": "LastUpdatedAtUtc", "type": "dateTime", "required": true, "format": "dateTime" }
       ]
     },
