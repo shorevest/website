@@ -13,6 +13,7 @@ const { loadConfig } = require('./lib/config');
 const { loadManifest } = require('./lib/manifest');
 const { createCosmosAdapters } = require('./adapters/cosmos');
 const { createProjectionReader } = require('./adapters/projectionReader');
+const { createOutboxCheckpointStore } = require('./adapters/outboxCheckpoint');
 const { createBlobAdapter } = require('./adapters/blob');
 const {
   createSecretProvider,
@@ -41,6 +42,11 @@ function createDeps(config = loadConfig(), requestContext = {}) {
     databaseId: config.cosmosDatabase,
     credential
   });
+  const outboxCheckpoint = createOutboxCheckpointStore({
+    endpoint: config.cosmosEndpoint,
+    databaseId: config.cosmosDatabase,
+    credential
+  });
   const storage = createBlobAdapter({
     accountUrl: config.storageAccountUrl,
     credential,
@@ -59,6 +65,7 @@ function createDeps(config = loadConfig(), requestContext = {}) {
   return {
     ...cosmos,
     projectionReader,
+    outboxCheckpoint,
     storage,
     sas: storage,
     tokens: createTokenAdapter(secretProvider, config.completionTokenSecretName),
