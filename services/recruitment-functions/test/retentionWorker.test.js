@@ -4,7 +4,8 @@ const test = require('node:test');
 const assert = require('node:assert');
 const {
   runPolicyAssignment,
-  runRetentionPurge
+  runRetentionPurge,
+  runIdempotencyCleanup
 } = require('../src/retention/worker');
 
 function context() {
@@ -21,12 +22,9 @@ test('retention workers do nothing while the feature is disabled', async () => {
   let called = false;
   const dependencies = {
     retention: {
-      async listPolicyCandidates() {
-        called = true;
-      },
-      async claimDueBatch() {
-        called = true;
-      }
+      async listPolicyCandidates() { called = true; },
+      async claimDueBatch() { called = true; },
+      async listIdempotencyCleanupCandidates() { called = true; }
     }
   };
 
@@ -38,6 +36,12 @@ test('retention workers do nothing while the feature is disabled', async () => {
     retention: { enabled: true, deletionEnabled: false }
   }, dependencies, context()), {
     purged: 0,
+    skipped: true
+  });
+  assert.deepEqual(await runIdempotencyCleanup({
+    retention: { enabled: true, deletionEnabled: false }
+  }, dependencies, context()), {
+    cleaned: 0,
     skipped: true
   });
   assert.equal(called, false);
@@ -122,4 +126,35 @@ test('purge claims due applications and deletes each independently', async () =>
   assert.ok(Date.parse(released[0].retryAtUtc) > Date.now());
   assert.deepEqual(result, { purged: 1, examined: 2 });
   assert.equal(ctx.warnings.length, 1);
+});
+
+test('idempotency cleanup retries each purged application independently', async () => {
+  const cleaned = [];
+  const ctx = context();
+  const result = await runIdempotencyCleanup({
+    retention: {
+      enabled: true,
+      deletionEnabled: true,
+      batchSize: 10
+    }
+  }, {
+    retention: {
+      async listIdempotencyCleanupCandidates(input) {
+        assert.deepEqual(input, { limit: 10 });
+        return ['APP-1', 'APP-2', 'APP-3'];
+      },
+      async cleanupIdempotency(reference) {
+        if (reference === 'APP-2') {
+          throw Object.assign(new Error('Cosmos unavailable'), { code: 'COSMOS_UNAVAILABLE' });
+        }
+        cleaned.push(reference);
+        return { status: reference === 'APP-3' ? 'current' : 'completed' };
+      }
+    }
+  }, ctx);
+
+  assert.deepEqual(cleaned, ['APP-1', 'APP-3']);
+  assert.deepEqual(result, { cleaned: 2, examined: 3 });
+  assert.equal(ctx.warnings.length, 1);
+  assert.equal(ctx.warnings[0].fields.applicationReference, 'APP-2');
 });
