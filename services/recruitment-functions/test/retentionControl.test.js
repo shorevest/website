@@ -30,6 +30,7 @@ function config() {
   return {
     retention: {
       enabled: true,
+      platformAuthenticationEnabled: true,
       adminRole: 'Recruitment.RetentionAdmin'
     }
   };
