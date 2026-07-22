@@ -36,6 +36,19 @@ function removeTag(html, pattern) {
   return html.replace(pattern, '');
 }
 
+function absoluteUrl(value) {
+  const raw = String(value || '').trim();
+  if (!raw) return DEFAULT_IMAGE;
+  if (/^https:\/\//i.test(raw)) return raw;
+  return `${SITE_ORIGIN}/${raw.replace(/^\//, '')}`;
+}
+
+function imageType(url) {
+  if (/\.png(?:[?#]|$)/i.test(url)) return 'image/png';
+  if (/\.webp(?:[?#]|$)/i.test(url)) return 'image/webp';
+  return 'image/jpeg';
+}
+
 function metadataFor(file, html) {
   const canonical = extract(html, /<link\s+rel=["']canonical["'][^>]*href=["']([^"']+)["'][^>]*>/i);
   if (!canonical || !canonical.startsWith(`${SITE_ORIGIN}/insights/china-debt-dynamics/`)) {
@@ -55,31 +68,47 @@ function metadataFor(file, html) {
   const documentTitle = extract(html, /<title>([\s\S]*?)<\/title>/i).replace(/\s*\|\s*ShoreVest\s*$/i, '');
   const title = String(data.title || documentTitle || 'China Debt Dynamics').trim();
   const description = String(data.dek || 'Read China Debt Dynamics from ShoreVest.').trim();
+  const image = absoluteUrl(data.socialImage);
+  const imageWidth = Number(data.socialImageWidth) || null;
+  const imageHeight = Number(data.socialImageHeight) || null;
+  const imageAlt = String(data.socialImageAlt || `${title} | ShoreVest`).trim();
 
-  return { canonical, title, description };
+  return { canonical, title, description, image, imageWidth, imageHeight, imageAlt };
 }
 
 function metadataBlock(meta) {
-  return [
+  const lines = [
     `  <meta name="description" content="${escapeHtml(meta.description)}">`,
     '  <meta property="og:type" content="article">',
     '  <meta property="og:site_name" content="ShoreVest">',
     `  <meta property="og:title" content="${escapeHtml(meta.title)}">`,
     `  <meta property="og:description" content="${escapeHtml(meta.description)}">`,
     `  <meta property="og:url" content="${escapeHtml(meta.canonical)}">`,
-    `  <meta property="og:image" content="${escapeHtml(DEFAULT_IMAGE)}">`,
+    `  <meta property="og:image" content="${escapeHtml(meta.image)}">`,
+    `  <meta property="og:image:secure_url" content="${escapeHtml(meta.image)}">`,
+    `  <meta property="og:image:type" content="${imageType(meta.image)}">`
+  ];
+
+  if (meta.imageWidth) lines.push(`  <meta property="og:image:width" content="${meta.imageWidth}">`);
+  if (meta.imageHeight) lines.push(`  <meta property="og:image:height" content="${meta.imageHeight}">`);
+
+  lines.push(
+    `  <meta property="og:image:alt" content="${escapeHtml(meta.imageAlt)}">`,
     '  <meta name="twitter:card" content="summary_large_image">',
     `  <meta name="twitter:title" content="${escapeHtml(meta.title)}">`,
     `  <meta name="twitter:description" content="${escapeHtml(meta.description)}">`,
-    `  <meta name="twitter:image" content="${escapeHtml(DEFAULT_IMAGE)}">`
-  ].join('\n');
+    `  <meta name="twitter:image" content="${escapeHtml(meta.image)}">`,
+    `  <meta name="twitter:image:alt" content="${escapeHtml(meta.imageAlt)}">`
+  );
+
+  return lines.join('\n');
 }
 
 function stripExistingMetadata(html) {
   const patterns = [
     /\s*<meta\s+name=["']description["'][^>]*>\s*/gi,
-    /\s*<meta\s+property=["']og:(?:type|site_name|title|description|url|image)["'][^>]*>\s*/gi,
-    /\s*<meta\s+name=["']twitter:(?:card|title|description|image)["'][^>]*>\s*/gi
+    /\s*<meta\s+property=["']og:(?:type|site_name|title|description|url|image(?::(?:secure_url|type|width|height|alt))?)["'][^>]*>\s*/gi,
+    /\s*<meta\s+name=["']twitter:(?:card|title|description|image(?::alt)?)["'][^>]*>\s*/gi
   ];
   return patterns.reduce(removeTag, html);
 }
@@ -88,7 +117,8 @@ function validate(file, html, meta) {
   const checks = [
     ['og:title', new RegExp(`<meta\\s+property=["']og:title["'][^>]*content=["']${escapeRegExp(escapeHtml(meta.title))}["']`, 'i')],
     ['og:description', new RegExp(`<meta\\s+property=["']og:description["'][^>]*content=["']${escapeRegExp(escapeHtml(meta.description))}["']`, 'i')],
-    ['og:url', new RegExp(`<meta\\s+property=["']og:url["'][^>]*content=["']${escapeRegExp(meta.canonical)}["']`, 'i')]
+    ['og:url', new RegExp(`<meta\\s+property=["']og:url["'][^>]*content=["']${escapeRegExp(meta.canonical)}["']`, 'i')],
+    ['og:image', new RegExp(`<meta\\s+property=["']og:image["'][^>]*content=["']${escapeRegExp(meta.image)}["']`, 'i')]
   ];
   for (const [label, pattern] of checks) {
     if (!pattern.test(html)) throw new Error(`${label} mismatch: ${path.relative(ROOT, file)}`);
