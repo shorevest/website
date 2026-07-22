@@ -1,8 +1,6 @@
 'use strict';
 
-const {
-  NOTIFICATION_EVENTS: EVENTS
-} = require('../../../../api/recruitment/core/constants');
+const { NOTIFICATION_EVENTS: EVENTS } = require('../../../../api/recruitment/core/constants');
 
 const PROJECTION_EVENTS = new Set([
   EVENTS.ApplicationReceived,
@@ -134,11 +132,10 @@ function acknowledgementMessage(application, config) {
   const reference = application.applicationReference;
   const role = application.roleTitle;
   const name = application.candidateName;
-
   const chinese = application.locale === 'zh-CN';
   const subject = chinese
     ? `ShoreVest 已收到您的申请 - ${role} - ${reference}`
-    : `ShoreVest application received - ${role} - ${reference}`;
+    : `Application received by ShoreVest - ${role} - ${reference}`;
   const content = chinese
     ? [
       `${name}，您好：`,
@@ -173,15 +170,8 @@ function acknowledgementMessage(application, config) {
 
   return {
     subject: boundedText(subject, 255),
-    body: {
-      contentType: 'Text',
-      content
-    },
-    toRecipients: [{
-      emailAddress: {
-        address: application.candidateEmail
-      }
-    }]
+    body: { contentType: 'Text', content },
+    toRecipients: [{ emailAddress: { address: application.candidateEmail } }]
   };
 }
 
@@ -245,8 +235,14 @@ function createOutboxDispatcher({ graph, config } = {}) {
 
   async function project(event, dependencies) {
     const application = await loadApplication(event, dependencies);
+    if (!application.finalizedAtUtc || application.candidateSubmissionStatus !== 'Submitted' && application.candidateSubmissionStatus !== 'Deleted') {
+      return {
+        deliveryReference: `deferred:${event.type}:${application.applicationReference}`,
+        skipped: true,
+        reason: 'APPLICATION_NOT_FINALIZED'
+      };
+    }
     const files = await loadFiles(event, dependencies);
-
     const applicationItem = await graph.upsertListItem({
       siteId: sharePoint.siteId,
       listId: sharePoint.applicationsListId,
@@ -254,7 +250,6 @@ function createOutboxDispatcher({ graph, config } = {}) {
       keyValue: application.applicationReference,
       fields: applicationFields(application, event)
     });
-
     const fileItems = [];
     for (const file of files) {
       const projected = await graph.upsertListItem({
@@ -266,7 +261,6 @@ function createOutboxDispatcher({ graph, config } = {}) {
       });
       fileItems.push(projected);
     }
-
     return {
       deliveryReference: [
         `application:${applicationItem.itemId}`,
@@ -282,7 +276,6 @@ function createOutboxDispatcher({ graph, config } = {}) {
     if (!dependencies.outboxCheckpoint || typeof dependencies.outboxCheckpoint.checkpoint !== 'function') {
       throw deliveryError('OUTBOX_CHECKPOINT_MISSING', 'Outbox checkpoint store is not configured', true);
     }
-
     const application = await loadApplication(event, dependencies);
     if (!application.finalizedAtUtc || application.candidateSubmissionStatus !== 'Submitted') {
       throw deliveryError('APPLICATION_NOT_FINALIZED', 'Candidate acknowledgement requires a finalized application', true);
@@ -294,26 +287,16 @@ function createOutboxDispatcher({ graph, config } = {}) {
     const mailboxState = classifyAcknowledgementMessages(
       await graph.findMessagesByExtendedProperty(mailbox, ACKNOWLEDGEMENT_PROPERTY_ID, reference)
     );
-
     if (mailboxState.sent) {
-      return {
-        deliveryReference: `mail:${mailboxState.message.id}`,
-        event: activeEvent,
-        reconciled: true
-      };
+      return { deliveryReference: `mail:${mailboxState.message.id}`, event: activeEvent, reconciled: true };
     }
 
     const checkpointedId = activeEvent.deliveryCheckpoint?.draftMessageId;
     let draft = mailboxState.draft ? mailboxState.message : null;
-
     if (checkpointedId) {
       const checkpointedMessage = await graph.getMessage(mailbox, checkpointedId);
       if (checkpointedMessage && (checkpointedMessage.isDraft === false || checkpointedMessage.sentDateTime)) {
-        return {
-          deliveryReference: `mail:${checkpointedMessage.id}`,
-          event: activeEvent,
-          reconciled: true
-        };
+        return { deliveryReference: `mail:${checkpointedMessage.id}`, event: activeEvent, reconciled: true };
       }
       if (checkpointedMessage?.isDraft === true) {
         draft = checkpointedMessage;
@@ -335,7 +318,6 @@ function createOutboxDispatcher({ graph, config } = {}) {
     if (!draft?.id) {
       throw deliveryError('CANDIDATE_ACKNOWLEDGEMENT_DRAFT_INVALID', 'Microsoft Graph did not return a draft id');
     }
-
     if (checkpointedId !== draft.id) {
       activeEvent = await dependencies.outboxCheckpoint.checkpoint(activeEvent, {
         draftMessageId: draft.id,
@@ -343,30 +325,21 @@ function createOutboxDispatcher({ graph, config } = {}) {
         extendedPropertyValue: reference
       });
     }
-
     try {
       await graph.sendDraftMessage(mailbox, draft.id);
     } catch (error) {
       error.event = activeEvent;
       throw error;
     }
-
-    return {
-      deliveryReference: `mail:${draft.id}`,
-      event: activeEvent
-    };
+    return { deliveryReference: `mail:${draft.id}`, event: activeEvent };
   }
 
   async function deliver(event, dependencies) {
     if (!event || typeof event.type !== 'string' || typeof event.applicationReference !== 'string') {
       throw deliveryError('OUTBOX_EVENT_INVALID', 'Outbox event is invalid', true);
     }
-    if (event.type === EVENTS.CandidateAcknowledgementRequested) {
-      return acknowledge(event, dependencies);
-    }
-    if (PROJECTION_EVENTS.has(event.type)) {
-      return project(event, dependencies);
-    }
+    if (event.type === EVENTS.CandidateAcknowledgementRequested) return acknowledge(event, dependencies);
+    if (PROJECTION_EVENTS.has(event.type)) return project(event, dependencies);
     throw deliveryError('OUTBOX_EVENT_UNSUPPORTED', `Unsupported recruitment outbox event: ${event.type}`, true);
   }
 
