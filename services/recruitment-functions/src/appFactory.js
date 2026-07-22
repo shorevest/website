@@ -14,6 +14,7 @@ const { loadManifest } = require('./lib/manifest');
 const { createCosmosAdapters } = require('./adapters/cosmos');
 const { createProjectionReader } = require('./adapters/projectionReader');
 const { createOutboxCheckpointStore } = require('./adapters/outboxCheckpoint');
+const { secureIdempotencyAdapter } = require('./adapters/idempotencySecurity');
 const { createBlobAdapter } = require('./adapters/blob');
 const {
   createSecretProvider,
@@ -64,6 +65,7 @@ function createDeps(config = loadConfig(), requestContext = {}) {
 
   return {
     ...cosmos,
+    idempotency: secureIdempotencyAdapter(cosmos.idempotency),
     projectionReader,
     outboxCheckpoint,
     storage,
