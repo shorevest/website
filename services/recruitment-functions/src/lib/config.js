@@ -34,6 +34,30 @@ function sameStringSet(left, right) {
   return [...new Set(left || [])].sort().join('\n') === [...new Set(right || [])].sort().join('\n');
 }
 
+function validShoreVestMailbox(value) {
+  if (typeof value !== 'string' || value.length > 254 || /[\s<>\r\n]/.test(value)) return false;
+  const match = value.match(/^([^@]+)@([^@]+)$/);
+  if (!match || !/^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+$/.test(match[1])) return false;
+  return match[2].toLowerCase() === 'shorevest.com';
+}
+
+function validPrivacyNoticeUrl(value) {
+  if (typeof value !== 'string' || value.length > 500) return false;
+  try {
+    const parsed = new URL(value);
+    const hostname = parsed.hostname.toLowerCase().replace(/\.$/, '');
+    return parsed.protocol === 'https:' &&
+      !parsed.username &&
+      !parsed.password &&
+      ['shorevest.com', 'www.shorevest.com'].includes(hostname) &&
+      ['/privacy-policy', '/privacy-policy/'].includes(parsed.pathname) &&
+      !parsed.search &&
+      !parsed.hash;
+  } catch (_) {
+    return false;
+  }
+}
+
 function loadConfig(env = process.env) {
   const environment = env.RECRUITMENT_ENVIRONMENT || 'production';
   const production = environment === 'production' || environment === 'prod';
@@ -92,8 +116,10 @@ function loadConfig(env = process.env) {
     candidateAcknowledgement: {
       enabled: bool(env.RECRUITMENT_CANDIDATE_ACK_ENABLED),
       templateApproved: bool(env.RECRUITMENT_CANDIDATE_ACK_TEMPLATE_APPROVED),
-      mailbox: env.RECRUITMENT_CANDIDATE_ACK_MAILBOX,
-      privacyNoticeUrl: env.RECRUITMENT_CANDIDATE_ACK_PRIVACY_URL || 'https://shorevest.com/privacy-policy/'
+      mailbox: String(env.RECRUITMENT_CANDIDATE_ACK_MAILBOX || '').trim(),
+      privacyNoticeUrl: String(
+        env.RECRUITMENT_CANDIDATE_ACK_PRIVACY_URL || 'https://shorevest.com/privacy-policy/'
+      ).trim()
     },
     hrAccess: {
       enabled: bool(env.RECRUITMENT_HR_ACCESS_ENABLED),
@@ -147,7 +173,13 @@ function validateConfig(config) {
     if (config.candidateAcknowledgement?.enabled !== true) invalid.push('candidateAcknowledgement.enabled');
     if (config.candidateAcknowledgement?.templateApproved !== true) invalid.push('candidateAcknowledgement.templateApproved');
     if (!config.candidateAcknowledgement?.mailbox) missing.push('candidateAcknowledgement.mailbox');
+    else if (!validShoreVestMailbox(config.candidateAcknowledgement.mailbox)) {
+      invalid.push('candidateAcknowledgement.mailbox');
+    }
     if (!config.candidateAcknowledgement?.privacyNoticeUrl) missing.push('candidateAcknowledgement.privacyNoticeUrl');
+    else if (!validPrivacyNoticeUrl(config.candidateAcknowledgement.privacyNoticeUrl)) {
+      invalid.push('candidateAcknowledgement.privacyNoticeUrl');
+    }
   }
 
   if (config.hrAccess?.enabled === true) {
@@ -204,6 +236,8 @@ module.exports = {
   commaList,
   originHostnames,
   sameStringSet,
+  validShoreVestMailbox,
+  validPrivacyNoticeUrl,
   loadConfig,
   validateConfig
 };
