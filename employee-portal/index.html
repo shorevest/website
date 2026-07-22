@@ -41,6 +41,12 @@
 
   <!-- Deployment configuration (placeholders only — see file header). -->
   <script src="../assets/js/employee-portal/portal-config.js?v=20260703"></script>
+  <!-- Microsoft Entra ID sign-in library (MSAL.js), vendored locally so it is
+       served from 'self' and needs no external script source. Only exercised
+       when portal-config.js sets mode:"production" with a real tenant/client;
+       in demo mode it loads but is never invoked. See
+       docs/employee-portal/ENTRA_ID_SETUP.md. -->
+  <script src="../assets/js/vendor/msal-browser-3.30.0.min.js?v=20260722"></script>
   <!-- Pure rules engine (also exercised by the Node test suite). -->
   <script src="../assets/js/employee-portal/rules.js?v=20260703"></script>
   <!-- Role (persona) configuration: identity, navigation, Home data. -->

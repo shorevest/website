@@ -1,7 +1,12 @@
 # Security headers for static-host deployments (Netlify / Cloudflare Pages compatible).
 # Keep this file at the publish root so every page and asset receives the baseline policy.
+#
+# login.microsoftonline.com is allowed in connect-src and frame-src so the
+# ShoreVest One sign-in (Microsoft Entra ID / MSAL.js, under /employee-portal/)
+# can reach the token endpoint and perform silent token renewal. Public pages
+# never call it. See docs/employee-portal/ENTRA_ID_SETUP.md.
 /*
-  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self'; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://www.linkedin.com; media-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://login.microsoftonline.com; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://www.linkedin.com https://login.microsoftonline.com; media-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
   Referrer-Policy: strict-origin-when-cross-origin
