@@ -177,6 +177,44 @@ test('missing checkpointed message returns null rather than creating a replaceme
   assert.equal(await graph.getMessage('hr@shorevest.com', 'missing'), null);
 });
 
+test('Graph readiness verifies both selected lists and the scoped mailbox', async () => {
+  const calls = [];
+  const graph = createGraphAdapter({
+    credential: credential(),
+    fetchImpl: async (url, options) => {
+      calls.push({ url, options });
+      return response(200, { id: 'ok', value: [] });
+    }
+  });
+
+  assert.deepEqual(await graph.health({
+    siteId: 'site-id',
+    applicationsListId: 'applications-list',
+    filesListId: 'files-list',
+    mailbox: 'recruitment@shorevest.com'
+  }), { ok: true });
+
+  assert.equal(calls.length, 3);
+  assert.ok(calls.some((call) => call.url.includes('/sites/site-id/lists/applications-list')));
+  assert.ok(calls.some((call) => call.url.includes('/sites/site-id/lists/files-list')));
+  assert.ok(calls.some((call) => call.url.includes('/users/recruitment%40shorevest.com/messages')));
+  assert.ok(calls.every((call) => call.options.signal !== undefined || typeof AbortSignal.timeout !== 'function'));
+});
+
+test('Graph readiness fails permanently when required resource identifiers are missing', async () => {
+  const graph = createGraphAdapter({
+    credential: credential(),
+    fetchImpl: async () => response(200, {})
+  });
+
+  await assert.rejects(
+    () => graph.health({ siteId: 'site-id' }),
+    (error) => error instanceof GraphDeliveryError &&
+      error.code === 'GRAPH_HEALTH_CONFIGURATION_INVALID' &&
+      error.permanent === true
+  );
+});
+
 test('Graph throttling is retryable and preserves Retry-After', async () => {
   const graph = createGraphAdapter({
     credential: credential(),
