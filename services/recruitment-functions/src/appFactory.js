@@ -21,7 +21,10 @@ const { createBotVerifier } = require('./adapters/bot');
 const { createRateLimiter } = require('./adapters/rateLimit');
 
 function createDeps(config = loadConfig(), requestContext = {}) {
-  const credential = new DefaultAzureCredential();
+  const credentialOptions = config.managedIdentityClientId
+    ? { managedIdentityClientId: config.managedIdentityClientId }
+    : {};
+  const credential = new DefaultAzureCredential(credentialOptions);
   const secretProvider = createSecretProvider({ vaultUrl: config.keyVaultUrl, credential });
   const fingerprints = createFingerprintAdapter(secretProvider, config.fingerprintSecretName);
   const cosmos = createCosmosAdapters({
