@@ -60,6 +60,7 @@ function loadConfig(env = process.env) {
     },
     candidateAcknowledgement: {
       enabled: bool(env.RECRUITMENT_CANDIDATE_ACK_ENABLED),
+      templateApproved: bool(env.RECRUITMENT_CANDIDATE_ACK_TEMPLATE_APPROVED),
       mailbox: env.RECRUITMENT_CANDIDATE_ACK_MAILBOX,
       privacyNoticeUrl: env.RECRUITMENT_CANDIDATE_ACK_PRIVACY_URL || 'https://shorevest.com/privacy-policy/'
     }
@@ -94,6 +95,7 @@ function validateConfig(config) {
     if (!config.sharePoint?.applicationsListId) missing.push('sharePoint.applicationsListId');
     if (!config.sharePoint?.filesListId) missing.push('sharePoint.filesListId');
     if (config.candidateAcknowledgement?.enabled !== true) invalid.push('candidateAcknowledgement.enabled');
+    if (config.candidateAcknowledgement?.templateApproved !== true) invalid.push('candidateAcknowledgement.templateApproved');
     if (!config.candidateAcknowledgement?.mailbox) missing.push('candidateAcknowledgement.mailbox');
     if (!config.candidateAcknowledgement?.privacyNoticeUrl) missing.push('candidateAcknowledgement.privacyNoticeUrl');
   }
