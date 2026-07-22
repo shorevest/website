@@ -115,7 +115,8 @@ function createDeps(config = loadConfig(), requestContext = {}) {
       secretProvider,
       secretName: config.botVerification.secretName,
       endpoint: config.botVerification.endpoint,
-      expectedHostname: config.botVerification.expectedHostname
+      expectedHostnames: config.botVerification.expectedHostnames,
+      expectedAction: config.botVerification.expectedAction
     }),
     graph,
     outboxDispatcher,
