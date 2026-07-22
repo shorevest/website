@@ -54,10 +54,14 @@
     ];
   }
 
-  function readState(root) {
+  function readState(root, A) {
     if (!root.localStorage) throw new Error('Browser-local demonstration storage is unavailable.');
     var raw = root.localStorage.getItem(STORAGE_KEY);
-    if (!raw) throw new Error('Asset-tracing demonstration state is unavailable. Reset the demo and try again.');
+    if (!raw) {
+      var seeded = { version: A.version || 1, cases: A.listCases ? A.listCases() : clone(A.fixtures || []) };
+      writeState(root, seeded);
+      return seeded;
+    }
     var state = JSON.parse(raw);
     if (!state || !Array.isArray(state.cases)) throw new Error('Asset-tracing demonstration state is invalid.');
     return state;
@@ -67,8 +71,8 @@
     root.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   }
 
-  function mutateCase(root, caseId, actor, action, detail, updater) {
-    var state = readState(root);
+  function mutateCase(root, A, caseId, actor, action, detail, updater) {
+    var state = readState(root, A);
     var item = state.cases.filter(function (c) { return c.id === caseId; })[0];
     if (!item) throw new Error('Case not found.');
     updater(item);
@@ -93,7 +97,7 @@
     };
 
     A.addCoverage = function (caseId, payload, actor) {
-      return mutateCase(root, caseId, actor, 'Research coverage updated', payload.jurisdiction, function (item) {
+      return mutateCase(root, A, caseId, actor, 'Research coverage updated', payload.jurisdiction, function (item) {
         var jurisdiction = required(payload.jurisdiction, 'Jurisdiction');
         var existing = (item.coverage || []).filter(function (x) { return normaliseName(x.jurisdiction) === normaliseName(jurisdiction); })[0];
         var next = {
@@ -109,7 +113,7 @@
     };
 
     A.addNextStep = function (caseId, payload, actor) {
-      return mutateCase(root, caseId, actor, 'Next step added', payload.action, function (item) {
+      return mutateCase(root, A, caseId, actor, 'Next step added', payload.action, function (item) {
         item.nextSteps = item.nextSteps || [];
         item.nextSteps.push({
           id: makeId('next'),
@@ -122,7 +126,7 @@
 
     A.setFindingReview = function (caseId, findingId, state, actor) {
       if (state !== 'Reviewed' && state !== 'Needs review') throw new Error('Invalid finding review state.');
-      return mutateCase(root, caseId, actor, 'Finding review updated', state, function (item) {
+      return mutateCase(root, A, caseId, actor, 'Finding review updated', state, function (item) {
         var finding = (item.findings || []).filter(function (f) { return f.id === findingId; })[0];
         if (!finding) throw new Error('Finding not found.');
         if (!finding.sourceIds || !finding.sourceIds.length) throw new Error('A finding cannot be reviewed without a supporting source.');
