@@ -12,6 +12,7 @@ const {
 const { createFinalizeApplication } = require('./flows/finalizeApplication');
 const { loadConfig } = require('./lib/config');
 const { loadManifest } = require('./lib/manifest');
+const { createStructuredLogger } = require('./lib/logger');
 const { createCosmosAdapters } = require('./adapters/cosmos');
 const { createProjectionReader } = require('./adapters/projectionReader');
 const { createOutboxCheckpointStore } = require('./adapters/outboxCheckpoint');
@@ -115,7 +116,7 @@ function createDeps(config = loadConfig(), requestContext = {}) {
         return crypto.randomUUID();
       }
     },
-    logger: { async log() {} }
+    logger: createStructuredLogger()
   };
 }
 
