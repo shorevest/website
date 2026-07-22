@@ -74,7 +74,7 @@ jobs:
             "https://shorevest.com/employee-portal/?diag=${DIAG}" \
             >> artifacts/live-portal/live-chrome.log 2>&1 || true
 
-      - name: Run WebKit against the live URL
+      - name: Run WebKit through live entry and Asset Tracing
         shell: bash
         run: |
           mkdir -p /tmp/sv-webkit
@@ -94,27 +94,60 @@ jobs:
             page.on('requestfailed', req => messages.push({ type: 'requestfailed', text: req.url() + ' :: ' + (req.failure() && req.failure().errorText) }));
             const url = 'https://shorevest.com/employee-portal/?webkit-diag=' + Date.now();
             let navigationError = null;
+            let clickError = null;
+            let routeError = null;
             try {
               await page.goto(url, { waitUntil: 'networkidle', timeout: 60000 });
-              await page.waitForTimeout(8000);
+              await page.waitForSelector('.login__submit', { timeout: 15000 });
             } catch (err) {
               navigationError = err.stack || err.message;
             }
+            const beforeClickLogin = await page.locator('.login__submit').count() > 0;
+            if (beforeClickLogin) {
+              try {
+                await page.locator('.login__submit').click();
+                await page.waitForTimeout(2500);
+              } catch (err) {
+                clickError = err.stack || err.message;
+              }
+            }
+            const afterClickLogin = await page.locator('.login__submit').count() > 0;
+            const afterClickShell = await page.locator('.ops-shell').count() > 0;
+            const afterClickButtonLoading = await page.locator('.login__submit.is-loading').count() > 0;
+            let sessionValue = null;
+            try { sessionValue = await page.evaluate(() => sessionStorage.getItem('svops.session.v2')); } catch (_) {}
+            if (afterClickShell) {
+              try {
+                await page.evaluate(() => { location.hash = '#/workspace/asset-tracing'; });
+                await page.waitForSelector('.at-workspace', { timeout: 15000 });
+              } catch (err) {
+                routeError = err.stack || err.message;
+              }
+            }
+            await page.waitForTimeout(1000);
             const html = await page.content();
             const result = {
               url,
               navigationError,
+              clickError,
+              routeError,
               title: await page.title(),
-              renderedLogin: await page.locator('.login__submit').count() > 0,
-              renderedShell: await page.locator('.ops-shell').count() > 0,
+              beforeClickLogin,
+              afterClickLogin,
+              afterClickShell,
+              afterClickButtonLoading,
+              assetTracingRendered: await page.locator('.at-workspace').count() > 0,
               renderedRecovery: await page.locator('[data-boot-recovery="true"]').count() > 0,
               stillRenderingLoader: html.includes('Loading ShoreVest One'),
               buildMarker: await page.locator('html').getAttribute('data-portal-build'),
+              hash: await page.evaluate(() => location.hash),
+              sessionWritten: !!sessionValue,
               messages
             };
-            fs.writeFileSync(process.env.GITHUB_WORKSPACE + '/artifacts/live-portal/webkit-result.json', JSON.stringify(result, null, 2) + '\n');
-            fs.writeFileSync(process.env.GITHUB_WORKSPACE + '/artifacts/live-portal/webkit-dom.html', html);
-            await page.screenshot({ path: process.env.GITHUB_WORKSPACE + '/artifacts/live-portal/webkit-page.png', fullPage: true });
+            const out = process.env.GITHUB_WORKSPACE + '/artifacts/live-portal/';
+            fs.writeFileSync(out + 'webkit-result.json', JSON.stringify(result, null, 2) + '\n');
+            fs.writeFileSync(out + 'webkit-dom.html', html);
+            await page.screenshot({ path: out + 'webkit-page.png', fullPage: true });
             console.log(JSON.stringify(result, null, 2));
             await browser.close();
           })().catch(err => {
@@ -142,14 +175,18 @@ jobs:
               'has_boot_guard_reference': 'boot-guard.js' in html,
               'has_app_reference': 'employee-portal/app.js' in html,
               'chrome_rendered_login': 'login__submit' in dom,
-              'chrome_rendered_shell': 'ops-shell' in dom,
-              'chrome_rendered_recovery': 'data-boot-recovery="true"' in dom,
-              'chrome_still_rendering_loader': 'Loading ShoreVest One' in dom,
-              'webkit_rendered_login': webkit.get('renderedLogin'),
-              'webkit_rendered_shell': webkit.get('renderedShell'),
+              'webkit_before_click_login': webkit.get('beforeClickLogin'),
+              'webkit_after_click_login': webkit.get('afterClickLogin'),
+              'webkit_after_click_shell': webkit.get('afterClickShell'),
+              'webkit_button_stuck_loading': webkit.get('afterClickButtonLoading'),
+              'webkit_asset_tracing_rendered': webkit.get('assetTracingRendered'),
+              'webkit_session_written': webkit.get('sessionWritten'),
+              'webkit_hash': webkit.get('hash'),
               'webkit_rendered_recovery': webkit.get('renderedRecovery'),
-              'webkit_still_rendering_loader': webkit.get('stillRenderingLoader'),
               'webkit_build_marker': webkit.get('buildMarker'),
+              'webkit_navigation_error': webkit.get('navigationError'),
+              'webkit_click_error': webkit.get('clickError'),
+              'webkit_route_error': webkit.get('routeError'),
               'webkit_messages': webkit.get('messages', []),
           }
           (root/'summary.json').write_text(json.dumps(result, indent=2) + '\n')
