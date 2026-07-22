@@ -75,10 +75,11 @@ test('ScanPending and later file states continue through the authoritative core 
       }
     };
     const policy = { deleteMaliciousQuarantine: false };
-    const result = await processScanResult(event(), dependencies, policy);
+    const inputEvent = event();
+    const result = await processScanResult(inputEvent, dependencies, policy);
     assert.deepEqual(result, { success: true, technicalStatus });
     assert.equal(calls.length, 1);
-    assert.equal(calls[0].inputEvent, event() === calls[0].inputEvent ? event() : calls[0].inputEvent);
+    assert.equal(calls[0].inputEvent, inputEvent);
     assert.equal(calls[0].dependencies, dependencies);
     assert.equal(calls[0].policy, policy);
   }
