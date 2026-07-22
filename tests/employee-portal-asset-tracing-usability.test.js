@@ -15,12 +15,12 @@ const source = read('assets/js/employee-portal/asset-tracing-usability.js');
 const css = read('assets/css/employee-portal-asset-tracing-usability.css');
 const index = read('employee-portal/index.html');
 
-test('portal loads usability guidance after the Asset Tracing views', () => {
+test('portal loads usability guidance after the shell registers', () => {
   const viewAt = index.indexOf('employee-portal/views-asset-tracing-report.js');
-  const usabilityAt = index.indexOf('employee-portal/asset-tracing-usability.js');
   const appAt = index.indexOf('employee-portal/app.js');
-  assert.ok(viewAt !== -1 && usabilityAt > viewAt);
-  assert.ok(appAt !== -1 && usabilityAt < appAt);
+  const usabilityAt = index.indexOf('employee-portal/asset-tracing-usability.js');
+  assert.ok(viewAt !== -1 && appAt > viewAt);
+  assert.ok(usabilityAt > appAt);
   assert.ok(index.includes('employee-portal-asset-tracing-usability.css'));
 });
 
