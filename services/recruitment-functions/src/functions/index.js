@@ -12,6 +12,7 @@ const {
 } = require('../lib/http');
 const { createDeps, flows } = require('../appFactory');
 const { normalizeEventGridEvent } = require('../lib/eventGrid');
+const { accessCleanDocument } = require('../hr/documentAccess');
 
 async function httpFlow(req, context, flow, options = {}) {
   const config = loadConfig();
@@ -83,6 +84,30 @@ app.http('finalizeApplication', {
   authLevel: 'anonymous',
   route: 'recruitment/applications/finalize',
   handler: (req, context) => httpFlow(req, context, flows.finalizeApplication)
+});
+
+app.http('hrCleanDocumentAccess', {
+  methods: ['GET'],
+  authLevel: 'anonymous',
+  route: 'recruitment/hr/applications/{applicationReference}/files/{fileReference}/access',
+  handler: async (req, context) => {
+    const config = loadConfig();
+    try {
+      const dependencies = createDeps(config);
+      const result = await accessCleanDocument(req, config, dependencies);
+      return {
+        ...result,
+        headers: withCors(req, config)
+      };
+    } catch (error) {
+      context.error('recruitment_hr_document_access_failed', { code: error.code });
+      return {
+        status: 500,
+        headers: withCors(req, config),
+        jsonBody: { success: false, errorCode: 'HR_DOCUMENT_ACCESS_FAILED' }
+      };
+    }
+  }
 });
 
 app.eventGrid('defenderScanResult', {
