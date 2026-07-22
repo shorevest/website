@@ -6,11 +6,12 @@ const {
   initiateApplication: coreInitiateApplication,
   completeUpload,
   finalizeApplication: coreFinalizeApplication,
-  processScanResult,
+  processScanResult: coreProcessScanResult,
   retryQuarantineCleanup
 } = require('../../../api/recruitment/core/flows');
 const { createInitiateApplication } = require('./flows/initiateApplication');
 const { createFinalizeApplication } = require('./flows/finalizeApplication');
+const { createProcessScanResult } = require('./flows/processScanResult');
 const { loadConfig } = require('./lib/config');
 const { loadManifest } = require('./lib/manifest');
 const { createStructuredLogger } = require('./lib/logger');
@@ -34,6 +35,7 @@ const { createFinalizationGatedDispatcher } = require('./outbox/finalizationGate
 
 const initiateApplication = createInitiateApplication(coreInitiateApplication);
 const finalizeApplication = createFinalizeApplication(coreFinalizeApplication);
+const processScanResult = createProcessScanResult(coreProcessScanResult);
 
 function createDeps(config = loadConfig(), requestContext = {}) {
   const credentialOptions = config.managedIdentityClientId
