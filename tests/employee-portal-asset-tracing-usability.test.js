@@ -49,6 +49,7 @@ test('case queue makes row behaviour explicit', () => {
 });
 
 test('new-case drawer marks required fields and prevents incomplete submission', () => {
+  assert.ok(source.includes("drawer.querySelector('h1, h2, h3, .drawer__title')"));
   assert.ok(source.includes("title !== 'Create asset-tracing case'"));
   assert.ok(source.includes("control.setAttribute('aria-required', 'true')"));
   assert.ok(source.includes('primary.disabled = !ready'));
