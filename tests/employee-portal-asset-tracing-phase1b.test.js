@@ -57,6 +57,30 @@ test('approval gate rejects unsourced or unreviewed findings', () => {
   assert.strictEqual(checks.find((c) => c.key === 'review-state').pass, false);
 });
 
+test('first mutation seeds fresh browser-local state automatically', () => {
+  const memory = {};
+  const localStorage = {
+    getItem: (k) => Object.prototype.hasOwnProperty.call(memory, k) ? memory[k] : null,
+    setItem: (k, v) => { memory[k] = v; }
+  };
+  const baseCase = completeCase();
+  baseCase.coverage = [];
+  baseCase.nextSteps = [];
+  baseCase.audit = [];
+  const fake = {
+    version: 1,
+    listCases: () => [JSON.parse(JSON.stringify(baseCase))],
+    getCase: () => JSON.parse(JSON.stringify(baseCase)),
+    updateReview: () => 'saved'
+  };
+  install({ SVAssetTracing: fake, localStorage });
+  const updated = fake.addCoverage('case-test', {
+    jurisdiction: 'Canada', corporate: 'Searched', property: 'Address needed', litigation: 'Not searched'
+  }, 'Alex Morgan');
+  assert.strictEqual(updated.coverage.length, 1);
+  assert.ok(Object.keys(memory).length === 1);
+});
+
 test('wrapped updateReview cannot bypass the hard approval gate', () => {
   const incomplete = completeCase();
   incomplete.findings[0].state = 'Needs review';
