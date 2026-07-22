@@ -91,28 +91,50 @@ Keep these disabled until the lists, permissions, mailbox restriction, and tests
 
 - `RECRUITMENT_OUTBOX_DELIVERY_ENABLED=false`
 - `RECRUITMENT_CANDIDATE_ACK_ENABLED=false`
+- `RECRUITMENT_HR_ACCESS_ENABLED=false`
+- `RECRUITMENT_RETENTION_ENABLED=false`
+- `RECRUITMENT_RETENTION_DELETION_ENABLED=false`
 - `RECRUITMENT_API_ENABLED=false`
 
-The backend configuration validator rejects an enabled API unless abuse controls, SharePoint identifiers, outbox delivery, candidate acknowledgement, mailbox configuration, managed identity, and template approval are all present.
+The backend configuration validator rejects an enabled API unless abuse controls, SharePoint identifiers, outbox delivery, candidate acknowledgement, mailbox configuration, managed identity, HR authorization, and approved retention configuration are all present.
 
 ## Power Automate
 
-Power Automate is limited to two HR notification flows:
+Power Automate is limited to two HR notification flows. They must use separate state columns so one event cannot overwrite the other.
 
-1. New application received.
-2. Documents clean and ready.
+### New application received
 
-Both flows must:
+Use only:
+
+- `ApplicationReceivedNotificationState`
+- `ApplicationReceivedNotificationEventKey`
+- `ApplicationReceivedNotificationSentAtUtc`
+- `ApplicationReceivedNotificationAttemptCount`
+- `ApplicationReceivedNotificationLastErrorCode`
+
+### Documents clean and ready
+
+Use only:
+
+- `DocumentsReadyNotificationState`
+- `DocumentsReadyNotificationEventKey`
+- `DocumentsReadyNotificationSentAtUtc`
+- `DocumentsReadyNotificationAttemptCount`
+- `DocumentsReadyNotificationLastErrorCode`
+
+Each flow must:
 
 - run with trigger concurrency control enabled;
-- process only `NotificationState=Pending`;
-- atomically claim the event by changing `Pending` to `Sending`;
-- use `NotificationEventKey` as the stable event identifier;
+- process only its own `...NotificationState=Pending` field;
+- atomically claim its own state by changing `Pending` to `Sending`;
+- use its own `...NotificationEventKey` as the stable event identifier;
 - finish as `Sent` or `Failed`;
-- increment `NotificationAttemptCount`;
-- write `NotificationSentAtUtc` or `NotificationLastErrorCode`;
+- increment its own attempt count;
+- write its own sent timestamp or last error code;
 - send summary information and internal SharePoint links only;
-- never attach candidate documents or include public/reusable document links.
+- never attach candidate documents or include public or reusable document links.
+
+The legacy generic `Notification*` columns remain only for migration compatibility with the initial application-received flow. New flow configuration must use the event-specific fields above.
 
 ## Verification checklist
 
@@ -124,7 +146,8 @@ Before enabling delivery, verify:
 - SharePoint items contain metadata only;
 - the candidate mailbox is the only mailbox accessible to the identity;
 - a repeated application projection updates the existing item instead of creating a duplicate;
+- the two HR notification flows can both remain pending without overwriting each other;
 - a crash before, during, and after candidate mail send does not create a duplicate acknowledgement;
 - failed Graph calls remain retryable and preserve the checkpointed outbox ETag;
 - the mailbox extended-property search returns at most one message for each application reference;
-- all three enablement settings remain false in the production deployment template until final approval.
+- all enablement settings remain false in the deployment templates until final approval.
