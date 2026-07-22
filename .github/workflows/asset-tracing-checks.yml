@@ -34,6 +34,7 @@ jobs:
           node --check assets/js/employee-portal/asset-tracing-phase1b.js
           node --check assets/js/employee-portal/asset-tracing-interactions.js
           node --check assets/js/employee-portal/asset-tracing-accessibility.js
+          node --check assets/js/employee-portal/asset-tracing-usability.js
           node --check assets/js/employee-portal/views-asset-tracing.js
           node --check assets/js/employee-portal/views-asset-tracing-phase1b.js
           node --check assets/js/employee-portal/views-asset-tracing-report.js
@@ -45,6 +46,7 @@ jobs:
           node tests/employee-portal-asset-tracing-phase1b.test.js
           node tests/employee-portal-asset-tracing-report.test.js
           node tests/employee-portal-asset-tracing-accessibility.test.js
+          node tests/employee-portal-asset-tracing-usability.test.js
 
       - name: Re-run portal entry and security checks
         run: |
