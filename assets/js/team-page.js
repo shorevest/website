@@ -12,33 +12,46 @@
     style.id = "team-section-intro-editorial-styles";
     style.textContent = `
       html body.team-page-v2 .group__head {
+        grid-template-columns: 1fr !important;
         align-items: start !important;
-        gap: clamp(24px, 4.5vw, 64px) !important;
+        gap: clamp(18px, 2vw, 24px) !important;
+        padding-bottom: 0 !important;
+        border-bottom: 0 !important;
       }
 
       html body.team-page-v2 .group__summary {
-        align-self: start !important;
+        box-sizing: border-box;
+        width: 100% !important;
+        max-width: none !important;
+        align-self: stretch !important;
         margin: 0 !important;
-        max-width: 64ch !important;
-        padding: clamp(16px, 1.6vw, 22px) 0 0 !important;
+        padding: clamp(24px, 2.4vw, 32px) clamp(24px, 3vw, 40px) !important;
+        background: var(--tr-parchment) !important;
         border: 0 !important;
-        border-top: 1px solid var(--tr-border) !important;
-        font: 500 clamp(18px, 1.55vw, 22px) / 1.42 var(--tr-font) !important;
-        letter-spacing: -0.012em !important;
-        color: var(--tr-ink) !important;
+        border-left: 5px solid var(--tr-cinnabar) !important;
+        font: 600 clamp(12px, 1vw, 14px) / 1.55 var(--tr-font) !important;
+        letter-spacing: 0.12em !important;
+        text-transform: uppercase !important;
+        color: var(--tr-oxblood) !important;
         text-wrap: pretty;
+      }
+
+      html body.team-page-v2.team-page--cn .group__summary {
+        letter-spacing: 0.08em !important;
+        text-transform: none !important;
       }
 
       @media (max-width: 760px) {
         html body.team-page-v2 .group__head {
-          gap: 18px !important;
+          gap: 16px !important;
         }
 
         html body.team-page-v2 .group__summary {
-          max-width: none !important;
-          padding-top: 16px !important;
-          font-size: clamp(17px, 5vw, 20px) !important;
-          line-height: 1.45 !important;
+          padding: 20px 18px !important;
+          border-left-width: 4px !important;
+          font-size: 11.5px !important;
+          line-height: 1.7 !important;
+          letter-spacing: 0.09em !important;
         }
       }
     `;
