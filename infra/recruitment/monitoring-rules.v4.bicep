@@ -25,11 +25,13 @@ union isfuzzy=true
 | where EventMessage has_any (
     "recruitment_configuration_invalid",
     "recruitment_outbox_configuration_invalid",
+    "recruitment_scan_event_rejected",
     "recruitment_scan_event_retry_requested",
     "recruitment_retention_configuration_invalid",
     "recruitment_retention_purge_failed",
     "recruitment_retention_idempotency_cleanup_failed",
-    "finalization_outcome_reconciliation_failed"
+    "finalization_outcome_reconciliation_failed",
+    "initiate_abuse_controls_missing"
   )
 | project TimeGenerated
 '''
@@ -56,12 +58,23 @@ union isfuzzy=true
 | project TimeGenerated
 '''
 
+var securityResponseSpikeQuery = '''
+union isfuzzy=true
+  (requests
+    | project TimeGenerated = timestamp, RequestName = tostring(name), RequestUrl = tostring(url), ResultCodeText = tostring(resultCode)),
+  (AppRequests
+    | project TimeGenerated, RequestName = tostring(Name), RequestUrl = tostring(Url), ResultCodeText = tostring(ResultCode))
+| where RequestName has "recruitment" or RequestUrl has "/recruitment/"
+| where toint(ResultCodeText) in (401, 403, 429)
+| project TimeGenerated
+'''
+
 resource criticalProcessingFailures 'Microsoft.Insights/scheduledQueryRules@2023-12-01' = if (enableAlerts) {
   name: 'recruitment-critical-processing-failures-v4'
   location: location
   properties: {
     displayName: 'Recruitment critical processing failure'
-    description: 'Alerts on fail-closed configuration, retrying Defender delivery, failed retention purge or finalization reconciliation. Query uses event names and counts only.'
+    description: 'Alerts on fail-closed configuration, rejected or retrying Defender delivery, failed retention purge or finalization reconciliation. Query uses event names and counts only.'
     enabled: true
     severity: 1
     evaluationFrequency: 'PT5M'
@@ -176,8 +189,49 @@ resource readinessUnavailable 'Microsoft.Insights/scheduledQueryRules@2023-12-01
   }
 }
 
+resource securityResponseSpike 'Microsoft.Insights/scheduledQueryRules@2023-12-01' = if (enableAlerts) {
+  name: 'recruitment-security-response-spike-v4'
+  location: location
+  properties: {
+    displayName: 'Recruitment authentication or rate-limit spike'
+    description: 'Alerts when recruitment endpoints produce twenty or more authentication, authorization or rate-limit responses within ten minutes. Query contains request metadata and result codes only.'
+    enabled: true
+    severity: 2
+    evaluationFrequency: 'PT5M'
+    windowSize: 'PT10M'
+    scopes: [
+      insights.id
+    ]
+    targetResourceTypes: [
+      'Microsoft.Insights/components'
+    ]
+    criteria: {
+      allOf: [
+        {
+          query: securityResponseSpikeQuery
+          timeAggregation: 'Count'
+          operator: 'GreaterThanOrEqual'
+          threshold: 20
+          failingPeriods: {
+            numberOfEvaluationPeriods: 1
+            minFailingPeriodsToAlert: 1
+          }
+        }
+      ]
+    }
+    actions: {
+      actionGroups: [
+        actionGroupResourceId
+      ]
+    }
+    autoMitigate: true
+    skipQueryValidation: false
+  }
+}
+
 output alertRuleIds array = enableAlerts ? [
   criticalProcessingFailures.id
   repeatedApiFailures.id
   readinessUnavailable.id
+  securityResponseSpike.id
 ] : []
