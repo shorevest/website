@@ -69,6 +69,19 @@ function loadConfig(env = process.env) {
       platformAuthenticationEnabled: bool(env.RECRUITMENT_PLATFORM_AUTH_ENABLED),
       requiredRole: env.RECRUITMENT_HR_REQUIRED_ROLE || 'Recruitment.HR',
       readSasSeconds: positiveInteger(env.RECRUITMENT_HR_READ_SAS_SECONDS, 300)
+    },
+    retention: {
+      enabled: bool(env.RECRUITMENT_RETENTION_ENABLED),
+      deletionEnabled: bool(env.RECRUITMENT_RETENTION_DELETION_ENABLED),
+      platformAuthenticationEnabled: bool(env.RECRUITMENT_PLATFORM_AUTH_ENABLED),
+      adminRole: env.RECRUITMENT_RETENTION_ADMIN_ROLE || 'Recruitment.RetentionAdmin',
+      policyVersion: env.RECRUITMENT_RETENTION_POLICY_VERSION || '',
+      incompleteHours: positiveInteger(env.RECRUITMENT_RETENTION_INCOMPLETE_HOURS, 48),
+      submittedDays: positiveInteger(env.RECRUITMENT_RETENTION_SUBMITTED_DAYS, 365),
+      maliciousDays: positiveInteger(env.RECRUITMENT_RETENTION_MALICIOUS_DAYS, 30),
+      batchSize: positiveInteger(env.RECRUITMENT_RETENTION_BATCH_SIZE, 10),
+      leaseSeconds: positiveInteger(env.RECRUITMENT_RETENTION_LEASE_SECONDS, 300),
+      retrySeconds: positiveInteger(env.RECRUITMENT_RETENTION_RETRY_SECONDS, 900)
     }
   };
 }
@@ -114,6 +127,21 @@ function validateConfig(config) {
     }
   }
 
+  if (config.retention?.deletionEnabled === true && config.retention?.enabled !== true) {
+    invalid.push('retention.enabled');
+  }
+  if (config.retention?.enabled === true) {
+    if (config.retention.platformAuthenticationEnabled !== true) invalid.push('retention.platformAuthenticationEnabled');
+    if (!config.retention.adminRole) missing.push('retention.adminRole');
+    if (!config.retention.policyVersion) missing.push('retention.policyVersion');
+    for (const key of ['incompleteHours', 'submittedDays', 'maliciousDays', 'batchSize', 'leaseSeconds', 'retrySeconds']) {
+      if (!Number.isInteger(config.retention[key]) || config.retention[key] <= 0) invalid.push(`retention.${key}`);
+    }
+    if (config.retention.deletionEnabled === true && config.outboxDelivery?.enabled !== true) {
+      invalid.push('outboxDelivery.enabled');
+    }
+  }
+
   if (config.apiEnabled) {
     if (!config.managedIdentityClientId) missing.push('managedIdentityClientId');
     if (config.rateLimit?.enabled !== true) invalid.push('rateLimit.enabled');
@@ -121,6 +149,8 @@ function validateConfig(config) {
     if (!config.botVerification?.secretName) missing.push('botVerification.secretName');
     if (config.outboxDelivery?.enabled !== true) invalid.push('outboxDelivery.enabled');
     if (config.hrAccess?.enabled !== true) invalid.push('hrAccess.enabled');
+    if (config.retention?.enabled !== true) invalid.push('retention.enabled');
+    if (config.retention?.deletionEnabled !== true) invalid.push('retention.deletionEnabled');
   }
 
   return {
