@@ -15,9 +15,10 @@ function createBlobAdapter({
   credential,
   containers = {},
   clock = () => new Date(),
-  serviceClient
+  serviceClient,
+  sdkImpl
 } = {}) {
-  const sdk = require('@azure/storage-blob');
+  const sdk = sdkImpl || require('@azure/storage-blob');
   const service = serviceClient || (accountUrl && credential
     ? new sdk.BlobServiceClient(accountUrl, credential)
     : null);
@@ -47,6 +48,15 @@ function createBlobAdapter({
     }, key, accountName()).toString();
   }
 
+  function validateWindow(startsOn, expiresOn, maximumMs, label) {
+    const current = clock();
+    if (!Number.isFinite(startsOn.getTime()) || !Number.isFinite(expiresOn.getTime())) {
+      throw new Error(`invalid ${label} expiry`);
+    }
+    if (expiresOn <= current || startsOn >= expiresOn) throw new Error(`invalid ${label} expiry`);
+    if (expiresOn - current > maximumMs + 1000) throw new Error(`${label} expiry too long`);
+  }
+
   return {
     async issue({
       container,
@@ -62,8 +72,7 @@ function createBlobAdapter({
       }
       const expiresOn = new Date(expiresAtUtc);
       const startsOn = new Date(startsAtUtc || clock().getTime() - 300000);
-      if (!Number.isFinite(expiresOn.getTime()) || expiresOn <= clock()) throw new Error('invalid sas expiry');
-      if (expiresOn - clock() > 10 * 60 * 1000 + 1000) throw new Error('sas expiry too long');
+      validateWindow(startsOn, expiresOn, 10 * 60 * 1000, 'sas');
       const sas = await delegationSas({
         container,
         blobPath,
@@ -86,8 +95,7 @@ function createBlobAdapter({
       if (container !== clean) throw new Error('invalid read container');
       const expiresOn = new Date(expiresAtUtc);
       const startsOn = new Date(startsAtUtc || clock().getTime() - 60000);
-      if (!Number.isFinite(expiresOn.getTime()) || expiresOn <= clock()) throw new Error('invalid sas expiry');
-      if (expiresOn - clock() > 5 * 60 * 1000 + 1000) throw new Error('read sas expiry too long');
+      validateWindow(startsOn, expiresOn, 5 * 60 * 1000, 'read sas');
       const sas = await delegationSas({
         container,
         blobPath,
@@ -147,6 +155,9 @@ function createBlobAdapter({
       expectedContentType,
       expectedHash
     }) {
+      if (sourceContainer !== quarantine || destinationContainer !== clean) {
+        throw new Error('invalid promotion containers');
+      }
       const destination = blob(destinationContainer, destinationPath);
       const valid = async () => {
         const result = await this.verify({
@@ -168,7 +179,16 @@ function createBlobAdapter({
       }
 
       const source = blob(sourceContainer, sourcePath);
-      await destination.beginCopyFromURL(source.url);
+      const startsOn = new Date(clock().getTime() - 60000);
+      const expiresOn = new Date(clock().getTime() + 5 * 60 * 1000);
+      const sourceSas = await delegationSas({
+        container: sourceContainer,
+        blobPath: sourcePath,
+        permissions: 'r',
+        startsOn,
+        expiresOn
+      });
+      await destination.beginCopyFromURL(`${source.url}?${sourceSas}`);
       for (let attempt = 0; attempt < 8; attempt += 1) {
         const properties = await destination.getProperties();
         if (properties.copyStatus === 'success') break;
