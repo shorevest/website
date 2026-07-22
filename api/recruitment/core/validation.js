@@ -18,6 +18,7 @@ const OPTIONAL_TEXT_FIELDS = ['telephone', 'currentLocation', 'linkedinUrl', 'co
 const REQUIRED_CANDIDATE_FIELDS = ['fullName', 'email'];
 const CANDIDATE_FIELDS = new Set([...REQUIRED_CANDIDATE_FIELDS, ...OPTIONAL_TEXT_FIELDS]);
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const UNSAFE_FILENAME_CHARACTERS = /[\u0000-\u001f\u007f\u202a-\u202e\u2066-\u2069]/;
 
 function safeEqual(a, b) {
   const left = Buffer.from(String(a || ''));
@@ -34,6 +35,29 @@ function normalizeEmail(value) {
 
 function validEmail(value) {
   return typeof value === 'string' && value.length <= LIMITS.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+function validLinkedInUrl(value) {
+  if (typeof value !== 'string' || !value.trim()) return true;
+  try {
+    const parsed = new URL(value.trim());
+    const hostname = parsed.hostname.toLowerCase().replace(/\.$/, '');
+    return parsed.protocol === 'https:' &&
+      !parsed.username &&
+      !parsed.password &&
+      (hostname === 'linkedin.com' || hostname.endsWith('.linkedin.com'));
+  } catch (_) {
+    return false;
+  }
+}
+
+function validOriginalFileName(value) {
+  if (typeof value !== 'string') return false;
+  const trimmed = value.trim();
+  return Boolean(trimmed) &&
+    value.length <= LIMITS.originalName &&
+    !hasPathTraversal(value) &&
+    !UNSAFE_FILENAME_CHARACTERS.test(value);
 }
 
 function validIsoTimestamp(value, now) {
@@ -100,10 +124,7 @@ function candidate(candidateInput, privacyAccepted) {
   const email = normalizeEmail(candidateInput.email);
   if (!validEmail(email)) fields.push('email');
 
-  const linkedInUrl = candidateInput.linkedinUrl;
-  if (typeof linkedInUrl === 'string' && linkedInUrl.trim() && (!/^https:\/\//i.test(linkedInUrl.trim()) || !/linkedin\./i.test(linkedInUrl))) {
-    fields.push('linkedinUrl');
-  }
+  if (!validLinkedInUrl(candidateInput.linkedinUrl || '')) fields.push('linkedinUrl');
 
   if (privacyAccepted !== true) fields.push('privacyAccepted');
   if (fields.length) return { ok: false, errorCode: ERROR_CODES.VALIDATION_FAILED, fields: [...new Set(fields)] };
@@ -134,7 +155,7 @@ function request(input, now) {
 function fileMeta(fileInput, cv) {
   if (!fileInput) return { ok: false, errorCode: ERROR_CODES.FILE_MISSING };
   if (typeof fileInput !== 'object' || Array.isArray(fileInput)) return { ok: false, errorCode: ERROR_CODES.VALIDATION_FAILED };
-  if (typeof fileInput.originalName !== 'string' || !fileInput.originalName.trim() || fileInput.originalName.length > LIMITS.originalName || hasPathTraversal(fileInput.originalName)) {
+  if (!validOriginalFileName(fileInput.originalName)) {
     return { ok: false, errorCode: ERROR_CODES.VALIDATION_FAILED };
   }
   if (typeof fileInput.declaredMimeType !== 'string' || !Number.isInteger(fileInput.sizeBytes)) {
@@ -151,4 +172,17 @@ function fileMeta(fileInput, cv) {
   return { ok: true, extension: extension.slice(1) };
 }
 
-module.exports = { LIMITS, safeEqual, normalizeEmail, validEmail, validIsoTimestamp, role, candidate, request, fileMeta };
+module.exports = {
+  LIMITS,
+  UNSAFE_FILENAME_CHARACTERS,
+  safeEqual,
+  normalizeEmail,
+  validEmail,
+  validLinkedInUrl,
+  validOriginalFileName,
+  validIsoTimestamp,
+  role,
+  candidate,
+  request,
+  fileMeta
+};
