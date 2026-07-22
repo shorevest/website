@@ -3,12 +3,13 @@
 const crypto = require('crypto');
 const { DefaultAzureCredential } = require('@azure/identity');
 const {
-  initiateApplication,
+  initiateApplication: coreInitiateApplication,
   completeUpload,
   finalizeApplication: coreFinalizeApplication,
   processScanResult,
   retryQuarantineCleanup
 } = require('../../../api/recruitment/core/flows');
+const { createInitiateApplication } = require('./flows/initiateApplication');
 const { createFinalizeApplication } = require('./flows/finalizeApplication');
 const { loadConfig } = require('./lib/config');
 const { loadManifest } = require('./lib/manifest');
@@ -29,6 +30,7 @@ const { createRateLimiter } = require('./adapters/rateLimit');
 const { createGraphAdapter } = require('./adapters/graph');
 const { createOutboxDispatcher } = require('./outbox/dispatcher');
 
+const initiateApplication = createInitiateApplication(coreInitiateApplication);
 const finalizeApplication = createFinalizeApplication(coreFinalizeApplication);
 
 function createDeps(config = loadConfig(), requestContext = {}) {
