@@ -15,7 +15,7 @@ function unique(values, label) {
   if (duplicates.length) fail(`${label} contains duplicates: ${[...new Set(duplicates)].join(', ')}`);
 }
 
-if (schema.schemaVersion !== '1.0') fail('schemaVersion must be 1.0');
+if (schema.schemaVersion !== '1.1') fail('schemaVersion must be 1.1');
 if (schema.documentStorage !== 'azure-blob-only') fail('documentStorage must remain azure-blob-only');
 if (schema.runtimePermission !== 'Lists.SelectedOperations.Selected') {
   fail('runtimePermission must use selected list operations');
@@ -27,6 +27,15 @@ unique(names, 'list names');
 if (!names.includes('RecruitmentApplications') || !names.includes('RecruitmentFiles')) {
   fail('required lists are RecruitmentApplications and RecruitmentFiles');
 }
+
+const sharedRetentionColumns = [
+  'RetentionCategory',
+  'RetentionPolicyVersion',
+  'RetentionDeleteAfterUtc',
+  'RetentionState',
+  'RetentionPurgedAtUtc',
+  'LegalHold'
+];
 
 const requiredColumns = {
   RecruitmentApplications: [
@@ -47,8 +56,7 @@ const requiredColumns = {
     'NotificationState',
     'NotificationEventKey',
     'NotificationAttemptCount',
-    'RetentionDeleteAfterUtc',
-    'LegalHold',
+    ...sharedRetentionColumns,
     'LastUpdatedAtUtc'
   ],
   RecruitmentFiles: [
@@ -61,8 +69,7 @@ const requiredColumns = {
     'SizeBytes',
     'QuarantineBlobPath',
     'TechnicalStatus',
-    'RetentionDeleteAfterUtc',
-    'LegalHold',
+    ...sharedRetentionColumns,
     'LastUpdatedAtUtc'
   ]
 };
@@ -100,9 +107,19 @@ for (const list of schema.lists) {
   }
 }
 
+function choices(list, columnName) {
+  const column = list.columns.find((item) => item.name === columnName);
+  return new Set(column?.choices || []);
+}
+
 const applicationList = schema.lists.find((list) => list.name === 'RecruitmentApplications');
 const fileList = schema.lists.find((list) => list.name === 'RecruitmentFiles');
 if (!applicationList.indexedFields.includes('CandidateEmail')) fail('CandidateEmail must be indexed');
 if (!fileList.indexedFields.includes('ApplicationReference')) fail('file ApplicationReference must be indexed');
+if (!choices(applicationList, 'CandidateSubmissionStatus').has('Deleted')) fail('application status must support Deleted');
+if (!choices(applicationList, 'TechnicalStatus').has('Deleted')) fail('technical status must support Deleted');
+if (!choices(applicationList, 'HiringStage').has('Archived')) fail('hiring stage must support Archived');
+if (!choices(applicationList, 'RetentionState').has('Purged')) fail('application retention state must support Purged');
+if (!choices(fileList, 'RetentionState').has('Purged')) fail('file retention state must support Purged');
 
 console.log('Recruitment SharePoint schema validation passed.');
