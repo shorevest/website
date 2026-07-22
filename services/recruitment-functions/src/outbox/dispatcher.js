@@ -9,7 +9,8 @@ const PROJECTION_EVENTS = new Set([
   EVENTS.DocumentsReady,
   EVENTS.ManualReviewRequired,
   EVENTS.MaliciousFileDetected,
-  EVENTS.QuarantineCleanupRequired
+  EVENTS.QuarantineCleanupRequired,
+  EVENTS.RetentionPurged
 ]);
 
 const ACKNOWLEDGEMENT_PROPERTY_ID =
@@ -32,7 +33,12 @@ function boundedText(value, maximum) {
   return text.length <= maximum ? text : text.slice(0, maximum);
 }
 
-function applicationFields(application, event) {
+function retentionPurged(record, event) {
+  return event?.type === EVENTS.RetentionPurged || record?.retentionState === 'Purged';
+}
+
+function applicationFields(application, event = {}) {
+  const purged = retentionPurged(application, event);
   const fields = compactFields({
     Title: application.applicationReference,
     ApplicationReference: application.applicationReference,
@@ -42,12 +48,12 @@ function applicationFields(application, event) {
     RoleLocation: application.roleLocation,
     Locale: application.locale,
     Source: application.source,
-    CandidateName: application.candidateName,
-    CandidateEmail: application.candidateEmail,
-    CandidateTelephone: application.candidateTelephone,
-    CandidateLocation: application.candidateLocation,
-    LinkedInUrl: application.linkedInUrl,
-    CoverNote: application.coverNote,
+    CandidateName: purged ? '[deleted]' : application.candidateName,
+    CandidateEmail: purged ? '[deleted]' : application.candidateEmail,
+    CandidateTelephone: purged ? null : application.candidateTelephone,
+    CandidateLocation: purged ? null : application.candidateLocation,
+    LinkedInUrl: purged ? null : application.linkedInUrl,
+    CoverNote: purged ? null : application.coverNote,
     PrivacyNoticeVersion: application.privacyNoticeVersion,
     PrivacyAcceptedAtUtc: application.privacyAcceptedAtUtc,
     InitiatedAtUtc: application.initiatedAtUtc,
@@ -62,6 +68,12 @@ function applicationFields(application, event) {
     ReadyFileCount: application.readyFileCount,
     RequiresManualReview: application.requiresManualReview,
     RetentionReviewDate: application.retentionReviewDate,
+    RetentionCategory: application.retentionCategory,
+    RetentionPolicyVersion: application.retentionPolicyVersion,
+    RetentionDeleteAfterUtc: application.retentionDeleteAfterUtc,
+    RetentionState: application.retentionState,
+    RetentionPurgedAtUtc: application.retentionPurgedAtUtc,
+    LegalHold: application.legalHold,
     LastUpdatedAtUtc: application.lastUpdatedAtUtc
   });
 
@@ -72,23 +84,31 @@ function applicationFields(application, event) {
     fields.NotificationAttemptCount = 0;
     fields.NotificationLastErrorCode = null;
   }
+  if (purged) {
+    fields.NotificationState = null;
+    fields.NotificationEventKey = null;
+    fields.NotificationSentAtUtc = null;
+    fields.NotificationAttemptCount = null;
+    fields.NotificationLastErrorCode = null;
+  }
   return fields;
 }
 
-function fileFields(file) {
+function fileFields(file, event = {}) {
+  const purged = retentionPurged(file, event);
   return compactFields({
     Title: file.fileReference,
     FileReference: file.fileReference,
     ApplicationReference: file.applicationReference,
     FilePurpose: file.filePurpose,
-    OriginalFileName: file.originalFileName,
+    OriginalFileName: purged ? '[deleted]' : file.originalFileName,
     DeclaredMimeType: file.declaredMimeType,
     DetectedFileType: file.detectedFileType,
     SizeBytes: file.sizeBytes,
-    ExpectedHash: file.expectedHash,
-    QuarantineBlobPath: file.quarantineBlobPath,
-    CleanBlobPath: file.cleanBlobPath,
-    QuarantineRemovalPending: file.quarantineRemovalPending,
+    ExpectedHash: purged ? null : file.expectedHash,
+    QuarantineBlobPath: purged ? null : file.quarantineBlobPath,
+    CleanBlobPath: purged ? null : file.cleanBlobPath,
+    QuarantineRemovalPending: purged ? false : file.quarantineRemovalPending,
     TechnicalStatus: file.technicalStatus,
     ScanResult: file.scanResult,
     ScanEventId: file.scanEventId,
@@ -98,6 +118,12 @@ function fileFields(file) {
     ReadyAtUtc: file.readyAtUtc,
     QuarantineRemovedAtUtc: file.quarantineRemovedAtUtc,
     RetentionReviewDate: file.retentionReviewDate,
+    RetentionCategory: file.retentionCategory,
+    RetentionPolicyVersion: file.retentionPolicyVersion,
+    RetentionDeleteAfterUtc: file.retentionDeleteAfterUtc,
+    RetentionState: file.retentionState,
+    RetentionPurgedAtUtc: file.retentionPurgedAtUtc,
+    LegalHold: file.legalHold,
     LastUpdatedAtUtc: file.lastUpdatedAtUtc
   });
 }
@@ -236,7 +262,7 @@ function createOutboxDispatcher({ graph, config } = {}) {
         listId: sharePoint.filesListId,
         keyField: 'FileReference',
         keyValue: file.fileReference,
-        fields: fileFields(file)
+        fields: fileFields(file, event)
       });
       fileItems.push(projected);
     }
@@ -265,7 +291,7 @@ function createOutboxDispatcher({ graph, config } = {}) {
     const mailbox = acknowledgement.mailbox;
     const reference = application.applicationReference;
     let activeEvent = event;
-    let mailboxState = classifyAcknowledgementMessages(
+    const mailboxState = classifyAcknowledgementMessages(
       await graph.findMessagesByExtendedProperty(mailbox, ACKNOWLEDGEMENT_PROPERTY_ID, reference)
     );
 
