@@ -544,6 +544,17 @@ table.tbl { border-collapse: collapse; width: 100%; font: 400 13px/1.45 var(--op
 
 .login__notice { margin: 18px 0 0; font: 400 12.5px/1.5 var(--ops-font); color: var(--ops-muted); }
 
+.login__error {
+  margin: 0 0 20px;
+  padding: 12px 14px;
+  border: 1px solid var(--ops-red, #b3121f);
+  border-left-width: 3px;
+  border-radius: 4px;
+  background: rgba(179, 18, 31, 0.06);
+  font: 500 13px/1.5 var(--ops-font);
+  color: var(--ops-red, #b3121f);
+}
+
 @media (max-width: 900px) {
   .login { padding: 28px 18px; align-items: flex-start; }
   .login__frame { grid-template-columns: 1fr; max-width: 460px; }

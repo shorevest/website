@@ -44,9 +44,34 @@
       } catch (e) { /* ignore */ }
     } else {
       var acct = I.EntraAuth.getAccount();
-      if (acct) { SVOps.state.user = acct; return acct; }
+      if (acct) { SVOps.state.user = buildEntraUser(acct); return SVOps.state.user; }
     }
     return null;
+  }
+
+  /* Restrained initials from a display name — never more than two letters. */
+  function initialsFrom(name) {
+    var parts = (name || '').trim().split(/\s+/).filter(Boolean);
+    if (!parts.length) return '';
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  }
+
+  /* Build the workspace user for a signed-in Entra account. The account is
+     stamped onto the single full-workspace profile so every section stays
+     reachable; per-role navigation is a documented later step (see
+     docs/employee-portal/ENTRA_ID_SETUP.md). Role claims from the token are
+     carried on entraRoles for display and future permission mapping. */
+  function buildEntraUser(acct) {
+    var base = DEMO_USERS[0];
+    return Object.assign({}, base, {
+      name: acct.name || base.name,
+      firstName: ((acct.name || '').split(/\s+/)[0]) || base.firstName,
+      username: acct.username || base.username,
+      photo: null,
+      initials: initialsFrom(acct.name) || base.initials,
+      entraRoles: acct.roles || []
+    });
   }
 
   function signInDemo(u) {
@@ -55,6 +80,18 @@
     I.EntraAuth.signIn(u);
     location.hash = '#/home';
     render();
+  }
+
+  /* Production sign-in: hand off to Microsoft Entra ID. signIn() redirects the
+     browser away, so on success this promise never resolves; only failures
+     (e.g. the MSAL library did not load) return here to re-surface the error. */
+  function signInEntra(btn) {
+    if (btn) { btn.classList.add('is-loading'); btn.disabled = true; }
+    I.EntraAuth.signIn().catch(function (e) {
+      if (btn) { btn.classList.remove('is-loading'); btn.disabled = false; }
+      render();
+      if (root.console) root.console.error(e);
+    });
   }
 
   function signOut() {
@@ -387,7 +424,24 @@
     right.appendChild(el('h1', { class: 'login__h', text: 'Enter ShoreVest One' }));
 
     if (!demo) {
-      right.appendChild(el('p', { class: 'login__instr', text: 'Production sign-in is configured through Microsoft Entra ID for authorised deployments.' }));
+      right.appendChild(el('p', { class: 'login__instr', text: 'Sign in with your ShoreVest Microsoft account to enter ShoreVest One. Access is limited to ShoreVest tenant accounts; multi-factor authentication and Conditional Access are enforced by Microsoft Entra ID.' }));
+
+      var initErr = I.EntraAuth.error && I.EntraAuth.error();
+      if (initErr) {
+        right.appendChild(el('p', { class: 'login__error', role: 'alert', text: initErr }));
+      }
+
+      var msBtn = el('button', { class: 'login__submit', type: 'button' }, [
+        el('span', { class: 'login__submit-label', text: 'Sign in with Microsoft' }),
+        el('span', { class: 'login__submit-spinner', 'aria-hidden': 'true' })
+      ]);
+      msBtn.addEventListener('click', function () {
+        if (msBtn.classList.contains('is-loading')) return;
+        signInEntra(msBtn);
+      });
+      right.appendChild(msBtn);
+      right.appendChild(el('p', { class: 'login__notice', text: 'You will be redirected to Microsoft to authenticate.' }));
+
       frame.appendChild(right); wrap.appendChild(frame); return wrap;
     }
 
