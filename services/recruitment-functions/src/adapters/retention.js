@@ -35,6 +35,10 @@ function assertBatch(response) {
   }
 }
 
+function retentionError(code, message, permanent = false) {
+  return Object.assign(new Error(message), { code, permanent });
+}
+
 function redactApplication(application, timestamp) {
   return {
     ...stripSystemFields(application),
@@ -138,6 +142,7 @@ function createRetentionAdapter({ endpoint, databaseId, credential, client, now 
   async function applyPolicy(applicationReference, config) {
     const application = await read(submissions, 'application', applicationReference);
     if (!application || application.retentionState === 'Purged') return { status: 'ignored' };
+    if (application.retentionState === 'Processing') return { status: 'in_progress' };
     const policy = policyForApplication(application, config);
     if (!policy || !policyNeedsUpdate(application, policy)) return { status: 'current' };
     const files = await filesFor(applicationReference);
@@ -207,12 +212,18 @@ function createRetentionAdapter({ endpoint, databaseId, credential, client, now 
     const query = {
       query: `SELECT TOP @limit * FROM c
         WHERE c.docType = 'application'
-        AND c.retentionState = 'Active'
+        AND (
+          c.retentionState = 'Active'
+          OR (
+            c.retentionState = 'Processing'
+            AND IS_DEFINED(c.retentionLeaseExpiresAtUtc)
+            AND c.retentionLeaseExpiresAtUtc < @now
+          )
+        )
         AND c.legalHold != true
         AND IS_DEFINED(c.retentionDeleteAfterUtc)
         AND c.retentionDeleteAfterUtc <= @now
-        AND (NOT IS_DEFINED(c.retentionNextAttemptAtUtc) OR c.retentionNextAttemptAtUtc <= @now)
-        AND (NOT IS_DEFINED(c.retentionLeaseExpiresAtUtc) OR c.retentionLeaseExpiresAtUtc < @now)`,
+        AND (NOT IS_DEFINED(c.retentionNextAttemptAtUtc) OR c.retentionNextAttemptAtUtc <= @now)`,
       parameters: [
         { name: '@limit', value: limit },
         { name: '@now', value: timestamp }
@@ -236,6 +247,12 @@ function createRetentionAdapter({ endpoint, databaseId, credential, client, now 
   async function updateControls({ applicationReference, legalHold, retentionDeleteAfterUtc, reason, principalObjectId }) {
     const application = await read(submissions, 'application', applicationReference);
     if (!application || application.retentionState === 'Purged') return null;
+    if (application.retentionState === 'Processing') {
+      throw retentionError(
+        'RETENTION_PURGE_IN_PROGRESS',
+        'Retention controls cannot change while purge owns the application lease'
+      );
+    }
     const files = await filesFor(applicationReference);
     const timestamp = now().toISOString();
     const deadline = retentionDeleteAfterUtc || application.retentionDeleteAfterUtc || null;
@@ -344,15 +361,21 @@ function createRetentionAdapter({ endpoint, databaseId, credential, client, now 
 
   async function purge(application, storage, containers) {
     const applicationReference = application.applicationReference;
-    const files = await filesFor(applicationReference);
-    if (application.legalHold === true || files.some((file) => file.legalHold === true)) {
-      const error = new Error('Legal hold prevents retention purge');
-      error.code = 'LEGAL_HOLD_ACTIVE';
-      error.permanent = true;
-      throw error;
+    const freshApplication = await read(submissions, 'application', applicationReference);
+    const freshFiles = await filesFor(applicationReference);
+    const leaseExpiry = Date.parse(freshApplication?.retentionLeaseExpiresAtUtc || '');
+    if (!freshApplication ||
+      freshApplication.retentionState !== 'Processing' ||
+      freshApplication.retentionLeaseOwner !== application.retentionLeaseOwner ||
+      !Number.isFinite(leaseExpiry) ||
+      leaseExpiry <= now().getTime()) {
+      throw retentionError('RETENTION_LEASE_INVALID', 'Retention purge lease is not current');
+    }
+    if (freshApplication.legalHold === true || freshFiles.some((file) => file.legalHold === true)) {
+      throw retentionError('LEGAL_HOLD_ACTIVE', 'Legal hold prevents retention purge', true);
     }
 
-    for (const file of files) {
+    for (const file of freshFiles) {
       if (file.quarantineBlobPath) {
         await storage.delete(containers.quarantine, file.quarantineBlobPath);
       }
@@ -361,13 +384,6 @@ function createRetentionAdapter({ endpoint, databaseId, credential, client, now 
       }
     }
 
-    const freshApplication = await read(submissions, 'application', applicationReference);
-    const freshFiles = await filesFor(applicationReference);
-    if (!freshApplication || freshApplication.legalHold === true || freshFiles.some((file) => file.legalHold === true)) {
-      const error = new Error('Retention state changed before purge commit');
-      error.code = 'RETENTION_STATE_CHANGED';
-      throw error;
-    }
     const timestamp = now().toISOString();
     const redactedApplication = redactApplication(freshApplication, timestamp);
     const operations = [{
