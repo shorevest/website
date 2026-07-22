@@ -2,8 +2,8 @@
    ShoreVest One — Asset Tracing accessibility hardening
 
    Applies progressive accessibility attributes after the synthetic workspace is
-   rendered. The underlying portal replaces routed content on navigation, so the
-   hardening is intentionally idempotent and runs after each DOM replacement.
+   rendered. The portal replaces routed content and mounts drawers directly under
+   document.body, so the hardening is idempotent and observes both surfaces.
 
    This file changes presentation semantics only. It does not read files, call a
    network service, transmit data or alter the Asset Tracing case model.
@@ -43,7 +43,9 @@
     var node = scope && scope.querySelectorAll ? scope : root.document;
     if (!node) return;
 
-    Array.prototype.forEach.call(node.querySelectorAll('.at-workspace .fld'), setFieldLabel);
+    /* Asset Tracing fields live either in the routed workspace or in a body-level
+       drawer created by the shared UI primitive. */
+    Array.prototype.forEach.call(node.querySelectorAll('.at-workspace .fld, .drawer .fld'), setFieldLabel);
 
     Array.prototype.forEach.call(node.querySelectorAll('.at-tabs .at-tab'), function (tab) {
       if (tab.classList.contains('is-active')) tab.setAttribute('aria-current', 'page');
@@ -77,15 +79,15 @@
   }
 
   function observe() {
-    var mount = root.document && root.document.getElementById('svops-root');
-    if (!mount || !root.MutationObserver) {
+    var body = root.document && root.document.body;
+    if (!body || !root.MutationObserver) {
       harden(root.document);
       return;
     }
 
-    harden(mount);
-    var observer = new root.MutationObserver(function () { harden(mount); });
-    observer.observe(mount, { childList: true, subtree: true });
+    harden(root.document);
+    var observer = new root.MutationObserver(function () { harden(root.document); });
+    observer.observe(body, { childList: true, subtree: true });
   }
 
   if (root.document) {
