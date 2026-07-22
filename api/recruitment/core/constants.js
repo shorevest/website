@@ -42,7 +42,8 @@ const NOTIFICATION_EVENTS = Object.freeze({
   DocumentsReady: 'DocumentsReady',
   ManualReviewRequired: 'ManualReviewRequired',
   MaliciousFileDetected: 'MaliciousFileDetected',
-  QuarantineCleanupRequired: 'QuarantineCleanupRequired'
+  QuarantineCleanupRequired: 'QuarantineCleanupRequired',
+  RetentionPurged: 'RetentionPurged'
 });
 
 const SCAN_RESULTS = Object.freeze({
