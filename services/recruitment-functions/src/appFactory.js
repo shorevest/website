@@ -17,6 +17,7 @@ const { createStructuredLogger } = require('./lib/logger');
 const { createCosmosAdapters } = require('./adapters/cosmos');
 const { createProjectionReader } = require('./adapters/projectionReader');
 const { createOutboxCheckpointStore } = require('./adapters/outboxCheckpoint');
+const { createOutboxReader } = require('./adapters/outboxReader');
 const { secureIdempotencyAdapter } = require('./adapters/idempotencySecurity');
 const { createRetentionAdapter } = require('./adapters/retention');
 const { createBlobAdapter } = require('./adapters/blob');
@@ -29,6 +30,7 @@ const { createBotVerifier } = require('./adapters/bot');
 const { createRateLimiter } = require('./adapters/rateLimit');
 const { createGraphAdapter } = require('./adapters/graph');
 const { createOutboxDispatcher } = require('./outbox/dispatcher');
+const { createFinalizationGatedDispatcher } = require('./outbox/finalizationGate');
 
 const initiateApplication = createInitiateApplication(coreInitiateApplication);
 const finalizeApplication = createFinalizeApplication(coreFinalizeApplication);
@@ -55,6 +57,11 @@ function createDeps(config = loadConfig(), requestContext = {}) {
     databaseId: config.cosmosDatabase,
     credential
   });
+  const outboxReader = createOutboxReader({
+    endpoint: config.cosmosEndpoint,
+    databaseId: config.cosmosDatabase,
+    credential
+  });
   const retention = createRetentionAdapter({
     endpoint: config.cosmosEndpoint,
     databaseId: config.cosmosDatabase,
@@ -71,8 +78,11 @@ function createDeps(config = loadConfig(), requestContext = {}) {
   const graph = config.outboxDelivery.enabled === true
     ? createGraphAdapter({ credential, endpoint: config.graph.endpoint })
     : null;
-  const outboxDispatcher = graph
+  const baseOutboxDispatcher = graph
     ? createOutboxDispatcher({ graph, config })
+    : null;
+  const outboxDispatcher = baseOutboxDispatcher
+    ? createFinalizationGatedDispatcher(baseOutboxDispatcher)
     : null;
 
   return {
@@ -80,6 +90,7 @@ function createDeps(config = loadConfig(), requestContext = {}) {
     idempotency: secureIdempotencyAdapter(cosmos.idempotency),
     projectionReader,
     outboxCheckpoint,
+    outboxReader,
     retention,
     storage,
     sas: storage,
