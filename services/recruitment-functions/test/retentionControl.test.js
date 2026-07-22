@@ -139,6 +139,28 @@ test('legal hold changes record the administrator and reason', async () => {
   assert.equal(deps.logs[0].event, 'retention_control_updated');
 });
 
+test('active purge lease returns conflict instead of changing legal hold', async () => {
+  const result = await updateRetentionControl(
+    principalRequest(),
+    config(),
+    dependencies({
+      retention: {
+        async updateControls() {
+          throw Object.assign(new Error('purge in progress'), {
+            code: 'RETENTION_PURGE_IN_PROGRESS'
+          });
+        }
+      }
+    }),
+    {
+      legalHold: true,
+      reason: 'Legal preservation request received during deletion processing.'
+    }
+  );
+  assert.equal(result.status, 409);
+  assert.equal(result.jsonBody.errorCode, 'RETENTION_PURGE_IN_PROGRESS');
+});
+
 test('missing applications return not found', async () => {
   const result = await updateRetentionControl(
     principalRequest(),
