@@ -2,224 +2,209 @@
 'use strict';
 
 /*
- * Headless browser smoke test for the synthetic ShoreVest One Asset Tracing
- * workspace. Uses only Node built-ins and the Chrome DevTools Protocol.
- *
- * It serves the checked-out repository locally, enters the demo profile, opens
- * Asset Tracing, checks routed views and accessibility semantics, verifies
- * desktop/mobile overflow, and writes two screenshots for CI review.
+ * Headless Chrome smoke test for the synthetic ShoreVest One Asset Tracing
+ * workspace. Uses only Node built-ins plus the Chrome binary available on the
+ * GitHub runner. No production source file is changed at runtime.
  */
 
 const fs = require('fs');
-const http = require('http');
 const os = require('os');
 const path = require('path');
 const { spawn, spawnSync } = require('child_process');
 
 const ROOT = path.join(__dirname, '..');
+const PORT = 4173;
 const ARTIFACT_DIR = path.join(ROOT, 'artifacts', 'asset-tracing-browser');
-const HTTP_PORT = 4173;
-const DEVTOOLS_PORT = 9229;
+const QA_HTML = path.join(ROOT, 'employee-portal', '__qa-asset-tracing.html');
+const QA_JS = path.join(ROOT, 'employee-portal', '__qa-asset-tracing.js');
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
 
-function mime(file) {
-  const ext = path.extname(file).toLowerCase();
-  return {
-    '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
-    '.css': 'text/css; charset=utf-8', '.json': 'application/json; charset=utf-8',
-    '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg',
-    '.jpeg': 'image/jpeg', '.ico': 'image/x-icon', '.webmanifest': 'application/manifest+json'
-  }[ext] || 'application/octet-stream';
+function findExecutable(candidates) {
+  for (const candidate of candidates.filter(Boolean)) {
+    const found = spawnSync('which', [candidate], { encoding: 'utf8' });
+    if (found.status === 0 && found.stdout.trim()) return found.stdout.trim();
+  }
+  return null;
 }
 
-function startServer() {
-  const server = http.createServer((req, res) => {
-    const raw = decodeURIComponent((req.url || '/').split('?')[0]);
-    let relative = raw.replace(/^\/+/, '');
-    if (!relative || relative.endsWith('/')) relative += 'index.html';
-    const resolved = path.resolve(ROOT, relative);
-    if (!resolved.startsWith(ROOT + path.sep)) {
-      res.writeHead(403); res.end('Forbidden'); return;
+function writeQaFiles() {
+  const source = fs.readFileSync(path.join(ROOT, 'employee-portal', 'index.html'), 'utf8');
+  const html = source.replace('</body>', '  <script src="./__qa-asset-tracing.js"></script>\n</body>');
+  fs.writeFileSync(QA_HTML, html);
+  fs.writeFileSync(QA_JS, `
+(function () {
+  'use strict';
+  var mode = new URLSearchParams(location.search).get('qa') || 'report';
+  var errors = 0;
+  window.addEventListener('error', function () { errors += 1; });
+  window.addEventListener('unhandledrejection', function () { errors += 1; });
+
+  function waitFor(test, done, attempts) {
+    var left = attempts == null ? 200 : attempts;
+    if (test()) { done(); return; }
+    if (left <= 0) {
+      document.body.dataset.qaReady = 'timeout';
+      document.body.dataset.qaErrors = String(errors + 1);
+      return;
     }
-    fs.readFile(resolved, (err, data) => {
-      if (err) { res.writeHead(404); res.end('Not found'); return; }
-      res.writeHead(200, { 'Content-Type': mime(resolved), 'Cache-Control': 'no-store' });
-      res.end(data);
-    });
-  });
-  return new Promise((resolve, reject) => {
-    server.once('error', reject);
-    server.listen(HTTP_PORT, '127.0.0.1', () => resolve(server));
-  });
-}
-
-function findChrome() {
-  const candidates = [process.env.CHROME_BIN, 'google-chrome', 'google-chrome-stable', 'chromium', 'chromium-browser'].filter(Boolean);
-  for (const candidate of candidates) {
-    const result = spawnSync('which', [candidate], { encoding: 'utf8' });
-    if (result.status === 0 && result.stdout.trim()) return result.stdout.trim();
+    setTimeout(function () { waitFor(test, done, left - 1); }, 40);
   }
-  throw new Error('Chrome/Chromium executable not found on this runner.');
-}
 
-async function waitForJson(url, timeoutMs = 15000) {
-  const started = Date.now();
-  let last;
-  while (Date.now() - started < timeoutMs) {
-    try {
-      const response = await fetch(url);
-      if (response.ok) return await response.json();
-      last = new Error('HTTP ' + response.status);
-    } catch (err) { last = err; }
-    await new Promise((resolve) => setTimeout(resolve, 150));
+  function commonReady(name) {
+    document.body.dataset.qaReady = name;
+    document.body.dataset.qaOverflow = String(document.documentElement.scrollWidth > window.innerWidth + 1);
+    document.body.dataset.qaErrors = String(errors);
   }
-  throw new Error('Timed out waiting for ' + url + ': ' + (last ? last.message : 'unknown error'));
-}
 
-function connectCdp(url) {
-  return new Promise((resolve, reject) => {
-    const socket = new WebSocket(url);
-    const pending = new Map();
-    let id = 0;
-    const listeners = new Map();
-
-    socket.addEventListener('open', () => {
-      resolve({
-        send(method, params = {}) {
-          return new Promise((res, rej) => {
-            id += 1;
-            pending.set(id, { res, rej });
-            socket.send(JSON.stringify({ id, method, params }));
-          });
-        },
-        on(method, fn) {
-          const list = listeners.get(method) || [];
-          list.push(fn); listeners.set(method, list);
-        },
-        close() { socket.close(); }
+  function openReport() {
+    location.hash = '#/workspace/asset-tracing/case-lanternfish/report';
+    waitFor(function () { return document.querySelector('.at-report'); }, function () {
+      waitFor(function () {
+        var tab = document.querySelector('.at-tab.is-active');
+        var report = document.querySelector('.at-report');
+        var headers = Array.prototype.slice.call(document.querySelectorAll('.at-report th'));
+        return tab && tab.getAttribute('aria-current') === 'page' &&
+          report && report.getAttribute('aria-label') === 'Preliminary asset screening report preview' &&
+          headers.length && headers.every(function (th) { return th.getAttribute('scope') === 'col'; });
+      }, function () {
+        document.body.dataset.qaActiveTab = 'true';
+        document.body.dataset.qaReportLabel = 'true';
+        document.body.dataset.qaTableScopes = 'true';
+        commonReady('report');
       });
     });
-    socket.addEventListener('error', () => reject(new Error('Chrome DevTools WebSocket failed.')));
-    socket.addEventListener('message', (event) => {
-      const message = JSON.parse(event.data);
-      if (message.id && pending.has(message.id)) {
-        const item = pending.get(message.id); pending.delete(message.id);
-        if (message.error) item.rej(new Error(message.error.message));
-        else item.res(message.result || {});
-        return;
-      }
-      const list = listeners.get(message.method) || [];
-      list.forEach((fn) => fn(message.params || {}));
+  }
+
+  function openNewCase() {
+    location.hash = '#/workspace/asset-tracing';
+    waitFor(function () { return document.querySelector('.at-workspace'); }, function () {
+      var button = Array.prototype.slice.call(document.querySelectorAll('button')).filter(function (b) {
+        return b.textContent.trim() === 'New case';
+      })[0];
+      if (!button) { commonReady('missing-new-case'); return; }
+      button.click();
+      waitFor(function () { return document.querySelector('.drawer'); }, function () {
+        waitFor(function () {
+          var fields = Array.prototype.slice.call(document.querySelectorAll('.drawer .fld'));
+          return fields.length && fields.every(function (field) {
+            var label = field.querySelector('label');
+            var control = field.querySelector('input, select, textarea');
+            return !label || !control || (control.id && label.htmlFor === control.id);
+          });
+        }, function () {
+          document.body.dataset.qaLabels = 'true';
+          commonReady('newcase');
+        });
+      });
     });
+  }
+
+  function enter() {
+    waitFor(function () { return document.querySelector('.login__submit'); }, function () {
+      document.querySelector('.login__submit').click();
+      waitFor(function () { return document.querySelector('.ops-shell'); }, function () {
+        if (mode === 'newcase') openNewCase();
+        else openReport();
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', enter);
+  else enter();
+})();
+`);
+}
+
+function waitForServer(url, timeoutMs = 10000) {
+  const started = Date.now();
+  return new Promise((resolve, reject) => {
+    function poll() {
+      fetch(url).then((response) => {
+        if (response.ok) resolve();
+        else if (Date.now() - started >= timeoutMs) reject(new Error('Local QA server returned HTTP ' + response.status));
+        else setTimeout(poll, 100);
+      }).catch((error) => {
+        if (Date.now() - started >= timeoutMs) reject(error);
+        else setTimeout(poll, 100);
+      });
+    }
+    poll();
   });
 }
 
-async function evaluate(cdp, expression) {
-  const result = await cdp.send('Runtime.evaluate', { expression, returnByValue: true, awaitPromise: true });
-  if (result.exceptionDetails) throw new Error('Browser evaluation failed: ' + (result.exceptionDetails.text || expression));
-  return result.result ? result.result.value : undefined;
-}
-
-async function waitFor(cdp, expression, label, timeoutMs = 12000) {
-  const started = Date.now();
-  while (Date.now() - started < timeoutMs) {
-    if (await evaluate(cdp, 'Boolean(' + expression + ')')) return;
-    await new Promise((resolve) => setTimeout(resolve, 100));
-  }
-  throw new Error('Timed out waiting for ' + label + '.');
-}
-
-async function screenshot(cdp, filename) {
-  const shot = await cdp.send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: true, fromSurface: true });
-  fs.mkdirSync(ARTIFACT_DIR, { recursive: true });
-  fs.writeFileSync(path.join(ARTIFACT_DIR, filename), Buffer.from(shot.data, 'base64'));
-}
-
-async function run() {
-  const server = await startServer();
-  const chromePath = findChrome();
-  const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'sv-asset-tracing-chrome-'));
-  const chrome = spawn(chromePath, [
+function chromeArgs(profile, width, height) {
+  return [
     '--headless=new', '--no-sandbox', '--disable-gpu', '--hide-scrollbars',
     '--disable-background-networking', '--disable-component-update',
     '--disable-default-apps', '--disable-extensions', '--disable-sync',
     '--metrics-recording-only', '--no-first-run',
-    '--remote-debugging-port=' + DEVTOOLS_PORT,
-    '--user-data-dir=' + profile,
-    'about:blank'
-  ], { stdio: ['ignore', 'ignore', 'pipe'] });
+    '--run-all-compositor-stages-before-draw', '--virtual-time-budget=10000',
+    '--window-size=' + width + ',' + height,
+    '--user-data-dir=' + profile
+  ];
+}
 
-  let stderr = '';
-  chrome.stderr.on('data', (chunk) => { stderr += String(chunk); });
+function runChrome(chrome, mode, width, height, outputPrefix) {
+  const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'sv-at-qa-'));
+  const url = 'http://127.0.0.1:' + PORT + '/employee-portal/__qa-asset-tracing.html?qa=' + mode;
+  try {
+    const dump = spawnSync(chrome, chromeArgs(profile, width, height).concat(['--dump-dom', url]), {
+      encoding: 'utf8', timeout: 35000, maxBuffer: 10 * 1024 * 1024
+    });
+    fs.writeFileSync(path.join(ARTIFACT_DIR, outputPrefix + '-chrome.log'), dump.stderr || '');
+    fs.writeFileSync(path.join(ARTIFACT_DIR, outputPrefix + '-dom.html'), dump.stdout || '');
+    assert(dump.status === 0, outputPrefix + ' Chrome DOM run failed with exit code ' + dump.status + '.');
+
+    const dom = dump.stdout || '';
+    assert(dom.includes('data-qa-ready="' + mode + '"'), outputPrefix + ' did not reach the expected ' + mode + ' state.');
+    assert(dom.includes('data-qa-overflow="false"'), outputPrefix + ' has horizontal overflow.');
+    assert(dom.includes('data-qa-errors="0"'), outputPrefix + ' recorded a browser error.');
+    if (mode === 'report') {
+      assert(dom.includes('data-qa-active-tab="true"'), 'Active report tab lacks aria-current.');
+      assert(dom.includes('data-qa-report-label="true"'), 'Report preview lacks its accessible label.');
+      assert(dom.includes('data-qa-table-scopes="true"'), 'Report table headers lack column scope.');
+    } else {
+      assert(dom.includes('data-qa-labels="true"'), 'New-case fields are missing programmatic labels.');
+    }
+
+    const screenshotPath = path.join(ARTIFACT_DIR, outputPrefix + '.png');
+    const shot = spawnSync(chrome, chromeArgs(profile, width, height).concat([
+      '--screenshot=' + screenshotPath, url
+    ]), { encoding: 'utf8', timeout: 35000, maxBuffer: 5 * 1024 * 1024 });
+    fs.appendFileSync(path.join(ARTIFACT_DIR, outputPrefix + '-chrome.log'), shot.stderr || '');
+    assert(shot.status === 0 && fs.existsSync(screenshotPath), outputPrefix + ' screenshot was not created.');
+  } finally {
+    fs.rmSync(profile, { recursive: true, force: true });
+  }
+}
+
+async function run() {
+  fs.mkdirSync(ARTIFACT_DIR, { recursive: true });
+  const chrome = findExecutable([process.env.CHROME_BIN, 'google-chrome', 'google-chrome-stable', 'chromium', 'chromium-browser']);
+  const python = findExecutable(['python3', 'python']);
+  assert(chrome, 'Chrome/Chromium executable not found.');
+  assert(python, 'Python executable not found for the local static server.');
+
+  writeQaFiles();
+  const serverLog = fs.openSync(path.join(ARTIFACT_DIR, 'server.log'), 'w');
+  const server = spawn(python, ['-m', 'http.server', String(PORT), '--bind', '127.0.0.1'], {
+    cwd: ROOT, stdio: ['ignore', serverLog, serverLog]
+  });
 
   try {
-    await waitForJson('http://127.0.0.1:' + DEVTOOLS_PORT + '/json/version');
-    const pages = await waitForJson('http://127.0.0.1:' + DEVTOOLS_PORT + '/json/list');
-    assert(pages.length && pages[0].webSocketDebuggerUrl, 'No Chrome page target was available.');
-    const cdp = await connectCdp(pages[0].webSocketDebuggerUrl);
-    const browserErrors = [];
-
-    cdp.on('Runtime.exceptionThrown', (event) => {
-      const detail = event.exceptionDetails || {};
-      browserErrors.push(detail.text || 'Unhandled browser exception');
-    });
-    cdp.on('Log.entryAdded', (event) => {
-      const entry = event.entry || {};
-      if (entry.level === 'error') browserErrors.push(entry.text || 'Browser log error');
-    });
-
-    await cdp.send('Page.enable');
-    await cdp.send('Runtime.enable');
-    await cdp.send('Log.enable');
-    await cdp.send('Emulation.setDeviceMetricsOverride', { width: 1440, height: 1000, deviceScaleFactor: 1, mobile: false });
-    await cdp.send('Page.navigate', { url: 'http://127.0.0.1:' + HTTP_PORT + '/employee-portal/' });
-
-    await waitFor(cdp, "document.querySelector('.login__submit')", 'the ShoreVest One demo entry');
-    await evaluate(cdp, "document.querySelector('.login__submit').click(); true");
-    await waitFor(cdp, "document.querySelector('.ops-shell')", 'the signed-in ShoreVest One shell');
-
-    await evaluate(cdp, "location.hash = '#/workspace/asset-tracing'; true");
-    await waitFor(cdp, "document.querySelector('.at-workspace')", 'the Asset Tracing case queue');
-
-    assert(await evaluate(cdp, "Boolean(document.querySelector('a[href=\"#/workspace/asset-tracing\"]'))"), 'Asset Tracing navigation link is missing.');
-    assert((await evaluate(cdp, "document.querySelectorAll('.at-workspace table.tbl tbody tr').length")) >= 3, 'Synthetic case fixtures did not render.');
-
-    await evaluate(cdp, "Array.from(document.querySelectorAll('button')).find(function (b) { return b.textContent.trim() === 'New case'; }).click(); true");
-    await waitFor(cdp, "document.querySelector('.drawer')", 'the new-case drawer');
-    const labelsValid = await evaluate(cdp, "Array.from(document.querySelectorAll('.drawer .fld')).every(function (f) { var l=f.querySelector('label'); var c=f.querySelector('input,select,textarea'); return !l || !c || (c.id && l.htmlFor === c.id); })");
-    assert(labelsValid, 'A new-case field is missing a programmatic label.');
-    await evaluate(cdp, "document.querySelector('.drawer__close').click(); true");
-
-    await evaluate(cdp, "location.hash = '#/workspace/asset-tracing/case-lanternfish/report'; true");
-    await waitFor(cdp, "document.querySelector('.at-report')", 'the report preview');
-    assert(await evaluate(cdp, "document.querySelector('.at-tab.is-active').getAttribute('aria-current') === 'page'"), 'Active report tab lacks aria-current.');
-    assert(await evaluate(cdp, "document.querySelector('.at-report').getAttribute('aria-label') === 'Preliminary asset screening report preview'"), 'Report preview lacks an accessible label.');
-    assert(await evaluate(cdp, "Array.from(document.querySelectorAll('.at-report th')).every(function (th) { return th.getAttribute('scope') === 'col'; })"), 'Report table headers lack column scope.');
-
-    const desktopOverflow = await evaluate(cdp, "document.documentElement.scrollWidth > window.innerWidth + 1");
-    assert(!desktopOverflow, 'Asset Tracing overflows horizontally at desktop width.');
-    await screenshot(cdp, 'desktop-report.png');
-
-    await cdp.send('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 1, mobile: true, screenWidth: 390, screenHeight: 844 });
-    await new Promise((resolve) => setTimeout(resolve, 300));
-    const mobileOverflow = await evaluate(cdp, "document.documentElement.scrollWidth > window.innerWidth + 1");
-    assert(!mobileOverflow, 'Asset Tracing overflows horizontally at 390px mobile width.');
-    await screenshot(cdp, 'mobile-report.png');
-
-    const relevantErrors = browserErrors.filter((message) => !/favicon|manifest/i.test(message));
-    assert(!relevantErrors.length, 'Browser errors: ' + relevantErrors.join(' | '));
-
-    cdp.close();
+    await waitForServer('http://127.0.0.1:' + PORT + '/employee-portal/__qa-asset-tracing.html');
+    runChrome(chrome, 'report', 1440, 1000, 'desktop-report');
+    runChrome(chrome, 'newcase', 390, 844, 'mobile-new-case');
     console.log('✓ Asset Tracing browser smoke test passed.');
-    console.log('  Desktop and mobile screenshots: ' + path.relative(ROOT, ARTIFACT_DIR));
+    console.log('  QA artifacts: ' + path.relative(ROOT, ARTIFACT_DIR));
   } finally {
-    server.close();
-    chrome.kill('SIGTERM');
-    fs.rmSync(profile, { recursive: true, force: true });
-    if (chrome.exitCode && chrome.exitCode !== 0) process.stderr.write(stderr);
+    server.kill('SIGTERM');
+    fs.closeSync(serverLog);
+    fs.rmSync(QA_HTML, { force: true });
+    fs.rmSync(QA_JS, { force: true });
   }
 }
 
