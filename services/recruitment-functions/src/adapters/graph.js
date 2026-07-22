@@ -242,6 +242,26 @@ function createGraphAdapter({
     return { accepted: true };
   }
 
+  async function health({ siteId, applicationsListId, filesListId, mailbox } = {}) {
+    if (![siteId, applicationsListId, filesListId, mailbox].every((value) => typeof value === 'string' && value.length > 0)) {
+      throw new GraphDeliveryError(
+        'GRAPH_HEALTH_CONFIGURATION_INVALID',
+        'Microsoft Graph readiness configuration is incomplete',
+        { permanent: true }
+      );
+    }
+
+    await Promise.all([
+      request(`/sites/${encodeSegment(siteId)}/lists/${encodeSegment(applicationsListId)}?$select=id`, { timeoutMs: 5000 }),
+      request(`/sites/${encodeSegment(siteId)}/lists/${encodeSegment(filesListId)}?$select=id`, { timeoutMs: 5000 }),
+      request(`/users/${encodeSegment(mailbox)}/messages?$select=id&$top=1`, {
+        headers: { Prefer: IMMUTABLE_ID_PREFERENCE },
+        timeoutMs: 5000
+      })
+    ]);
+    return { ok: true };
+  }
+
   return {
     request,
     findListItem,
@@ -252,7 +272,8 @@ function createGraphAdapter({
     getMessage,
     createDraftMessage,
     sendDraftMessage,
-    sendMail
+    sendMail,
+    health
   };
 }
 
