@@ -1,5 +1,29 @@
 name: Recruitment Functions CI
 on:
+  push:
+    branches:
+      - 'agent/**'
+    paths:
+      - '.github/workflows/recruitment-functions.yml'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'scripts/validate-recruitment-roles.js'
+      - 'scripts/generate-clean-public-urls.js'
+      - 'services/recruitment-functions/**'
+      - 'api/recruitment/**'
+      - 'infra/recruitment/**'
+      - 'assets/data/recruitment/**'
+      - 'assets/js/recruitment-*.js'
+      - 'assets/js/site-config.js'
+      - 'assets/css/recruitment-application.css'
+      - 'careers.html'
+      - 'careers_cn.html'
+      - 'careers/**'
+      - 'cn/careers/**'
+      - 'sitemap.xml'
+      - '_headers'
+      - 'tests/recruitment*.test.js'
+      - 'tests/security-headers.test.js'
   pull_request:
     paths:
       - '.github/workflows/recruitment-functions.yml'
