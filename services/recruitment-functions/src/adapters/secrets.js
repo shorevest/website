@@ -27,23 +27,30 @@ function createSecretProvider({ vaultUrl, credential, ttlMs = 300000, client } =
     : null);
   const cache = new Map();
 
+  async function get(name) {
+    const cached = cache.get(name);
+    if (cached && cached.expires > Date.now()) return cached.value;
+    if (!secretClient) {
+      throw Object.assign(new Error('key vault unavailable'), {
+        code: 'INTERNAL_CONFIGURATION_ERROR'
+      });
+    }
+    const result = await secretClient.getSecret(name);
+    if (!result.value) {
+      throw Object.assign(new Error('secret missing'), {
+        code: 'INTERNAL_CONFIGURATION_ERROR'
+      });
+    }
+    cache.set(name, { value: result.value, expires: Date.now() + ttlMs });
+    return result.value;
+  }
+
   return {
-    async get(name) {
-      const cached = cache.get(name);
-      if (cached && cached.expires > Date.now()) return cached.value;
-      if (!secretClient) {
-        throw Object.assign(new Error('key vault unavailable'), {
-          code: 'INTERNAL_CONFIGURATION_ERROR'
-        });
-      }
-      const result = await secretClient.getSecret(name);
-      if (!result.value) {
-        throw Object.assign(new Error('secret missing'), {
-          code: 'INTERNAL_CONFIGURATION_ERROR'
-        });
-      }
-      cache.set(name, { value: result.value, expires: Date.now() + ttlMs });
-      return result.value;
+    get,
+    async health(names = []) {
+      if (!Array.isArray(names) || names.length === 0) return { ok: false };
+      await Promise.all([...new Set(names)].map((name) => get(name)));
+      return { ok: true };
     }
   };
 }
