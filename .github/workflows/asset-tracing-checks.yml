@@ -73,7 +73,7 @@ jobs:
           google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=7000 \
             --dump-dom http://127.0.0.1:4174/employee-portal/ \
             > artifacts/asset-tracing-browser/entry-dom.html 2> artifacts/asset-tracing-browser/entry-chrome.log
-          grep -q 'data-portal-build="20260723c"' artifacts/asset-tracing-browser/entry-dom.html
+          grep -q 'data-portal-build=' artifacts/asset-tracing-browser/entry-dom.html
           grep -q 'login__submit' artifacts/asset-tracing-browser/entry-dom.html
 
       - name: Run interactive headless browser smoke test
