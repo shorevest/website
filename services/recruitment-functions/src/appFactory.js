@@ -15,6 +15,7 @@ const { createCosmosAdapters } = require('./adapters/cosmos');
 const { createProjectionReader } = require('./adapters/projectionReader');
 const { createOutboxCheckpointStore } = require('./adapters/outboxCheckpoint');
 const { secureIdempotencyAdapter } = require('./adapters/idempotencySecurity');
+const { createRetentionAdapter } = require('./adapters/retention');
 const { createBlobAdapter } = require('./adapters/blob');
 const {
   createSecretProvider,
@@ -48,6 +49,11 @@ function createDeps(config = loadConfig(), requestContext = {}) {
     databaseId: config.cosmosDatabase,
     credential
   });
+  const retention = createRetentionAdapter({
+    endpoint: config.cosmosEndpoint,
+    databaseId: config.cosmosDatabase,
+    credential
+  });
   const storage = createBlobAdapter({
     accountUrl: config.storageAccountUrl,
     credential,
@@ -68,6 +74,7 @@ function createDeps(config = loadConfig(), requestContext = {}) {
     idempotency: secureIdempotencyAdapter(cosmos.idempotency),
     projectionReader,
     outboxCheckpoint,
+    retention,
     storage,
     sas: storage,
     tokens: createTokenAdapter(secretProvider, config.completionTokenSecretName),
