@@ -172,18 +172,27 @@ function createOutboxDispatcher({ graph, config } = {}) {
     return application;
   }
 
-  async function loadFile(event, dependencies) {
-    if (!event.fileReference) return null;
-    const file = await dependencies.applicationStore.getFile(event.fileReference);
-    if (!file || file.applicationReference !== event.applicationReference) {
-      throw deliveryError('FILE_PROJECTION_SOURCE_MISSING', 'File projection source was not found', true);
+  async function loadFiles(event, dependencies) {
+    if (event.fileReference) {
+      const file = await dependencies.applicationStore.getFile(event.fileReference);
+      if (!file || file.applicationReference !== event.applicationReference) {
+        throw deliveryError('FILE_PROJECTION_SOURCE_MISSING', 'File projection source was not found', true);
+      }
+      return [file];
     }
-    return file;
+    if (!dependencies.projectionReader || typeof dependencies.projectionReader.getFilesForApplication !== 'function') {
+      throw deliveryError('PROJECTION_READER_MISSING', 'Projection reader is not configured', true);
+    }
+    const files = await dependencies.projectionReader.getFilesForApplication(event.applicationReference);
+    if (!Array.isArray(files) || files.length === 0) {
+      throw deliveryError('FILE_PROJECTION_SOURCE_MISSING', 'No files were found for the application', true);
+    }
+    return files;
   }
 
   async function project(event, dependencies) {
     const application = await loadApplication(event, dependencies);
-    const file = await loadFile(event, dependencies);
+    const files = await loadFiles(event, dependencies);
 
     const applicationItem = await graph.upsertListItem({
       siteId: sharePoint.siteId,
@@ -193,28 +202,29 @@ function createOutboxDispatcher({ graph, config } = {}) {
       fields: applicationFields(application, event)
     });
 
-    let fileItem = null;
-    if (file) {
-      fileItem = await graph.upsertListItem({
+    const fileItems = [];
+    for (const file of files) {
+      const projected = await graph.upsertListItem({
         siteId: sharePoint.siteId,
         listId: sharePoint.filesListId,
         keyField: 'FileReference',
         keyValue: file.fileReference,
         fields: fileFields(file)
       });
+      fileItems.push(projected);
     }
 
     return {
       deliveryReference: [
         `application:${applicationItem.itemId}`,
-        fileItem ? `file:${fileItem.itemId}` : null
-      ].filter(Boolean).join('|')
+        ...fileItems.map((item) => `file:${item.itemId}`)
+      ].join('|')
     };
   }
 
   async function acknowledge(event, dependencies) {
-    if (acknowledgement.enabled !== true) {
-      throw deliveryError('CANDIDATE_ACKNOWLEDGEMENT_DISABLED', 'Candidate acknowledgement is disabled', true);
+    if (acknowledgement.enabled !== true || acknowledgement.templateApproved !== true) {
+      throw deliveryError('CANDIDATE_ACKNOWLEDGEMENT_DISABLED', 'Candidate acknowledgement is not approved and enabled', true);
     }
     const application = await loadApplication(event, dependencies);
     if (!application.finalizedAtUtc || application.candidateSubmissionStatus !== 'Submitted') {
