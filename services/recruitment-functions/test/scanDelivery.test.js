@@ -25,8 +25,11 @@ function validEvent() {
     eventType: 'Microsoft.Security.MalwareScanningResult',
     eventTime: '2026-07-23T00:00:00.000Z',
     data: {
-      blobUri: 'https://account.blob.core.windows.net/recruitment-quarantine/recruitment/2026/legal-assistant/SV-APP-2026-ABC123/SV-FILE-ABC12345.pdf',
-      scanResultType: 'No threats found'
+      blobUri: 'https://account.blob.core.windows.net/recruitment-quarantine/recruitment/2026/legal-assistant/SV-APP-2026-123456/SV-FILE-12345678.pdf',
+      scanResultType: 'No threats found',
+      scanFinishedTimeUtc: '2026-07-23T00:00:00.000Z',
+      blobETag: 'etag-1',
+      sha256: 'a'.repeat(64)
     }
   };
 }
@@ -74,7 +77,13 @@ test('retryable scan outcomes throw so Event Grid redelivers the event', async (
         context: ctx,
         config: config(),
         createDependencies: () => ({ marker: true }),
-        processScanResult: async () => ({ success: false, errorCode })
+        processScanResult: async (normalized, dependencies) => {
+          assert.equal(normalized.applicationReference, 'SV-APP-2026-123456');
+          assert.equal(normalized.fileReference, 'SV-FILE-12345678');
+          assert.equal(normalized.result, 'Clean');
+          assert.equal(dependencies.marker, true);
+          return { success: false, errorCode };
+        }
       }),
       (error) => error.code === errorCode && error.retryable === true
     );
@@ -101,6 +110,18 @@ test('permanent scan outcomes are returned without requesting redelivery', async
     errorCode: ERROR_CODES.BLOB_MISMATCH
   });
   assert.deepEqual(ctx.warnings, []);
+});
+
+test('successful scan outcomes return normally', async () => {
+  const expected = { success: true, reconciled: true };
+  const result = await deliverDefenderScanEvent({
+    event: validEvent(),
+    context: context(),
+    config: config(),
+    createDependencies: () => ({}),
+    processScanResult: async () => expected
+  });
+  assert.equal(result, expected);
 });
 
 test('dependency-construction failures propagate to Event Grid', async () => {
