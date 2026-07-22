@@ -12,46 +12,62 @@
     style.id = "team-section-intro-editorial-styles";
     style.textContent = `
       html body.team-page-v2 .group__head {
-        grid-template-columns: 1fr !important;
-        align-items: start !important;
-        gap: clamp(18px, 2vw, 24px) !important;
-        padding-bottom: 0 !important;
-        border-bottom: 0 !important;
+        grid-template-columns: minmax(250px, max-content) minmax(360px, 640px) !important;
+        justify-content: space-between !important;
+        align-items: end !important;
+        gap: clamp(28px, 4vw, 64px) !important;
+        padding-bottom: clamp(18px, 2vw, 24px) !important;
+        border-bottom: 1px solid var(--tr-border) !important;
       }
 
       html body.team-page-v2 .group__summary {
         box-sizing: border-box;
-        width: 100% !important;
-        max-width: none !important;
-        align-self: stretch !important;
+        width: min(100%, 640px) !important;
+        max-width: 640px !important;
+        justify-self: end !important;
+        align-self: end !important;
         margin: 0 !important;
-        padding: clamp(24px, 2.4vw, 32px) clamp(24px, 3vw, 40px) !important;
+        padding: clamp(15px, 1.5vw, 19px) clamp(18px, 2vw, 24px) !important;
         background: var(--tr-parchment) !important;
         border: 0 !important;
-        border-left: 5px solid var(--tr-cinnabar) !important;
-        font: 600 clamp(12px, 1vw, 14px) / 1.55 var(--tr-font) !important;
-        letter-spacing: 0.12em !important;
+        border-left: 4px solid var(--tr-cinnabar) !important;
+        font: 600 clamp(11px, 0.82vw, 12.5px) / 1.55 var(--tr-font) !important;
+        letter-spacing: 0.095em !important;
         text-transform: uppercase !important;
         color: var(--tr-oxblood) !important;
+        text-align: left !important;
         text-wrap: pretty;
       }
 
       html body.team-page-v2.team-page--cn .group__summary {
-        letter-spacing: 0.08em !important;
+        letter-spacing: 0.06em !important;
         text-transform: none !important;
+      }
+
+      @media (max-width: 900px) {
+        html body.team-page-v2 .group__head {
+          grid-template-columns: minmax(220px, 0.8fr) minmax(320px, 1.2fr) !important;
+          gap: 28px !important;
+        }
       }
 
       @media (max-width: 760px) {
         html body.team-page-v2 .group__head {
+          grid-template-columns: 1fr !important;
+          align-items: start !important;
           gap: 16px !important;
+          padding-bottom: 20px !important;
         }
 
         html body.team-page-v2 .group__summary {
-          padding: 20px 18px !important;
+          width: 100% !important;
+          max-width: none !important;
+          justify-self: stretch !important;
+          padding: 16px 17px !important;
           border-left-width: 4px !important;
-          font-size: 11.5px !important;
-          line-height: 1.7 !important;
-          letter-spacing: 0.09em !important;
+          font-size: 11px !important;
+          line-height: 1.65 !important;
+          letter-spacing: 0.08em !important;
         }
       }
     `;
