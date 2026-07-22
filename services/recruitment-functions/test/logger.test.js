@@ -5,6 +5,7 @@ const assert = require('node:assert');
 const {
   MAX_STRING_LENGTH,
   safeEventName,
+  safeErrorCode,
   sanitizeFields,
   createStructuredLogger
 } = require('../src/lib/logger');
@@ -55,6 +56,19 @@ test('structured logger bounds strings and normalizes unsafe event names', () =>
   assert.equal(fields.nested, undefined);
   assert.equal(safeEventName('Finalize Application!'), 'recruitment_event');
   assert.equal(safeEventName('valid_event_2'), 'valid_event_2');
+});
+
+test('error-code sanitizer never returns exception messages or paths', () => {
+  assert.equal(safeErrorCode({ code: 'BLOB_MISMATCH' }), 'BLOB_MISMATCH');
+  assert.equal(
+    safeErrorCode({ code: '/recruitment/private/candidate.pdf' }, 'SCAN_EVENT_REJECTED'),
+    'SCAN_EVENT_REJECTED'
+  );
+  assert.equal(
+    safeErrorCode(new Error('wrong blob path: recruitment/private/candidate.pdf'), 'SCAN_EVENT_REJECTED'),
+    'SCAN_EVENT_REJECTED'
+  );
+  assert.equal(sanitizeFields({ errorCode: 'not a safe code' }).errorCode, 'UNEXPECTED_ERROR');
 });
 
 test('structured logger rejects an invalid sink', () => {
