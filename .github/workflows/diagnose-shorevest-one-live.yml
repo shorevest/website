@@ -17,181 +17,97 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Inspect GitHub Pages configuration and recent builds
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: Wait for fixed portal build to reach the live site
         shell: bash
         run: |
           mkdir -p artifacts/live-portal
-          curl -fsSL \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${GH_TOKEN}" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            "https://api.github.com/repos/${GITHUB_REPOSITORY}/pages" \
-            > artifacts/live-portal/pages-site.json || true
-          curl -fsSL \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${GH_TOKEN}" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            "https://api.github.com/repos/${GITHUB_REPOSITORY}/pages/builds?per_page=10" \
-            > artifacts/live-portal/pages-builds.json || true
-          cat artifacts/live-portal/pages-site.json || true
-          cat artifacts/live-portal/pages-builds.json || true
+          for attempt in $(seq 1 60); do
+            curl -fsSL "https://shorevest.com/employee-portal/?deploy-check=${GITHUB_SHA}-${attempt}" \
+              -o artifacts/live-portal/live-index.html
+            if grep -q 'data-portal-build="20260723c"' artifacts/live-portal/live-index.html; then
+              echo "Fixed build is live."
+              exit 0
+            fi
+            echo "Waiting for GitHub Pages build 20260723c (${attempt}/60)…"
+            sleep 5
+          done
+          echo "Fixed build did not reach the live site within five minutes."
+          exit 1
 
-      - name: Fetch the exact live portal and startup assets
+      - name: Install lightweight browser driver
+        shell: bash
+        run: npm install --no-save playwright-core@1.54.1
+
+      - name: Enter live portal, hold on Home, and open Asset Tracing
         shell: bash
         run: |
-          mkdir -p artifacts/live-portal
-          DIAG="${GITHUB_SHA}-$(date +%s)"
-          curl -sS -L -D artifacts/live-portal/live-index-headers.txt \
-            -o artifacts/live-portal/live-index.html \
-            "https://shorevest.com/employee-portal/?diag=${DIAG}"
-          curl -sS -L -D artifacts/live-portal/live-app-headers.txt \
-            -o artifacts/live-portal/live-app.js \
-            "https://shorevest.com/assets/js/employee-portal/app.js?diag=${DIAG}"
-          curl -sS -L -D artifacts/live-portal/live-guard-headers.txt \
-            -o artifacts/live-portal/live-guard.js \
-            "https://shorevest.com/assets/js/employee-portal/boot-guard.js?diag=${DIAG}"
-          printf '\n--- live build markers ---\n'
-          grep -nE 'data-portal-build|boot-guard|employee-portal/app.js' artifacts/live-portal/live-index.html || true
-          printf '\n--- response headers ---\n'
-          cat artifacts/live-portal/live-index-headers.txt
-
-      - name: Run Chrome against the live URL
-        shell: bash
-        run: |
-          DIAG="${GITHUB_SHA}-$(date +%s)"
-          google-chrome --headless=new --no-sandbox --disable-gpu \
-            --virtual-time-budget=15000 \
-            --window-size=1440,1000 \
-            --dump-dom "https://shorevest.com/employee-portal/?diag=${DIAG}" \
-            > artifacts/live-portal/live-dom.html \
-            2> artifacts/live-portal/live-chrome.log || true
-          google-chrome --headless=new --no-sandbox --disable-gpu \
-            --virtual-time-budget=15000 \
-            --window-size=1440,1000 \
-            --screenshot=artifacts/live-portal/live-page.png \
-            "https://shorevest.com/employee-portal/?diag=${DIAG}" \
-            >> artifacts/live-portal/live-chrome.log 2>&1 || true
-
-      - name: Run WebKit through live entry and Asset Tracing
-        shell: bash
-        run: |
-          mkdir -p /tmp/sv-webkit
-          cd /tmp/sv-webkit
-          npm init -y >/dev/null 2>&1
-          npm install playwright@1.54.1 >/dev/null
-          npx playwright install --with-deps webkit >/dev/null
           node - <<'JS'
           const fs = require('fs');
-          const { webkit } = require('playwright');
+          const { chromium } = require('playwright-core');
           (async () => {
             const messages = [];
-            const browser = await webkit.launch({ headless: true });
+            const browser = await chromium.launch({
+              headless: true,
+              executablePath: '/usr/bin/google-chrome',
+              args: ['--no-sandbox', '--disable-gpu']
+            });
             const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
-            page.on('console', msg => messages.push({ type: 'console:' + msg.type(), text: msg.text() }));
+            page.on('console', msg => {
+              if (msg.type() === 'error') messages.push({ type: 'console', text: msg.text() });
+            });
             page.on('pageerror', err => messages.push({ type: 'pageerror', text: err.stack || err.message }));
-            page.on('requestfailed', req => messages.push({ type: 'requestfailed', text: req.url() + ' :: ' + (req.failure() && req.failure().errorText) }));
-            const url = 'https://shorevest.com/employee-portal/?webkit-diag=' + Date.now();
-            let navigationError = null;
-            let clickError = null;
-            let routeError = null;
-            try {
-              await page.goto(url, { waitUntil: 'networkidle', timeout: 60000 });
-              await page.waitForSelector('.login__submit', { timeout: 15000 });
-            } catch (err) {
-              navigationError = err.stack || err.message;
-            }
-            const beforeClickLogin = await page.locator('.login__submit').count() > 0;
-            if (beforeClickLogin) {
-              try {
-                await page.locator('.login__submit').click();
-                await page.waitForTimeout(2500);
-              } catch (err) {
-                clickError = err.stack || err.message;
-              }
-            }
-            const afterClickLogin = await page.locator('.login__submit').count() > 0;
-            const afterClickShell = await page.locator('.ops-shell').count() > 0;
-            const afterClickButtonLoading = await page.locator('.login__submit.is-loading').count() > 0;
-            let sessionValue = null;
-            try { sessionValue = await page.evaluate(() => sessionStorage.getItem('svops.session.v2')); } catch (_) {}
-            if (afterClickShell) {
-              try {
-                await page.evaluate(() => { location.hash = '#/workspace/asset-tracing'; });
-                await page.waitForSelector('.at-workspace', { timeout: 15000 });
-              } catch (err) {
-                routeError = err.stack || err.message;
-              }
-            }
+            page.on('requestfailed', req => messages.push({
+              type: 'requestfailed',
+              text: req.url() + ' :: ' + ((req.failure() && req.failure().errorText) || '')
+            }));
+
+            const url = 'https://shorevest.com/employee-portal/?live-entry-check=' + Date.now();
+            await page.goto(url, { waitUntil: 'networkidle', timeout: 60000 });
+            await page.waitForSelector('.login__submit', { timeout: 15000 });
+            await page.locator('.login__submit').click();
+            await page.waitForSelector('.ops-shell', { timeout: 15000 });
+            await page.waitForSelector('.guided-home', { timeout: 15000 });
+
+            /* The old defect continuously rewrote Home because this signature
+               changed on every synthetic calendar read. It must now settle. */
+            await page.waitForTimeout(1500);
+            const signatureOne = await page.evaluate(() => window.SVOps.state.dashboardTravelSignature || '');
+            const homeOne = await page.locator('.guided-home').count();
+            await page.waitForTimeout(3500);
+            const signatureTwo = await page.evaluate(() => window.SVOps.state.dashboardTravelSignature || '');
+            const homeTwo = await page.locator('.guided-home').count();
+            const pending = await page.evaluate(() => !!window.SVOps.state.dashboardTravelPending);
+
+            await page.evaluate(() => { location.hash = '#/workspace/asset-tracing'; });
+            await page.waitForSelector('.at-workspace', { timeout: 15000 });
             await page.waitForTimeout(1000);
-            const html = await page.content();
+
             const result = {
               url,
-              navigationError,
-              clickError,
-              routeError,
-              title: await page.title(),
-              beforeClickLogin,
-              afterClickLogin,
-              afterClickShell,
-              afterClickButtonLoading,
-              assetTracingRendered: await page.locator('.at-workspace').count() > 0,
-              renderedRecovery: await page.locator('[data-boot-recovery="true"]').count() > 0,
-              stillRenderingLoader: html.includes('Loading ShoreVest One'),
               buildMarker: await page.locator('html').getAttribute('data-portal-build'),
-              hash: await page.evaluate(() => location.hash),
-              sessionWritten: !!sessionValue,
+              signedInShell: await page.locator('.ops-shell').count() === 1,
+              homeRemainedMounted: homeOne === 1 && homeTwo === 1,
+              travelSignatureSettled: !!signatureOne && signatureOne === signatureTwo,
+              travelRequestPending: pending,
+              assetTracingRendered: await page.locator('.at-workspace').count() === 1,
+              finalHash: await page.evaluate(() => location.hash),
               messages
             };
-            const out = process.env.GITHUB_WORKSPACE + '/artifacts/live-portal/';
-            fs.writeFileSync(out + 'webkit-result.json', JSON.stringify(result, null, 2) + '\n');
-            fs.writeFileSync(out + 'webkit-dom.html', html);
-            await page.screenshot({ path: out + 'webkit-page.png', fullPage: true });
+            fs.writeFileSync('artifacts/live-portal/result.json', JSON.stringify(result, null, 2) + '\n');
+            await page.screenshot({ path: 'artifacts/live-portal/asset-tracing-live.png', fullPage: true });
             console.log(JSON.stringify(result, null, 2));
             await browser.close();
-          })().catch(err => {
-            fs.writeFileSync(process.env.GITHUB_WORKSPACE + '/artifacts/live-portal/webkit-run-error.txt', err.stack || String(err));
-            console.error(err);
-            process.exitCode = 0;
+
+            if (result.buildMarker !== '20260723c' || !result.signedInShell ||
+                !result.homeRemainedMounted || !result.travelSignatureSettled ||
+                result.travelRequestPending || !result.assetTracingRendered ||
+                result.messages.length) process.exit(1);
+          })().catch(error => {
+            fs.writeFileSync('artifacts/live-portal/run-error.txt', error.stack || String(error));
+            console.error(error);
+            process.exit(1);
           });
           JS
-
-      - name: Summarize the live result
-        shell: bash
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          import json
-          root = Path('artifacts/live-portal')
-          html = (root/'live-index.html').read_text(errors='replace') if (root/'live-index.html').exists() else ''
-          dom = (root/'live-dom.html').read_text(errors='replace') if (root/'live-dom.html').exists() else ''
-          webkit = {}
-          if (root/'webkit-result.json').exists():
-              webkit = json.loads((root/'webkit-result.json').read_text())
-          result = {
-              'live_index_bytes': len(html.encode()),
-              'has_current_build_marker': 'data-portal-build="20260723b"' in html,
-              'has_boot_guard_reference': 'boot-guard.js' in html,
-              'has_app_reference': 'employee-portal/app.js' in html,
-              'chrome_rendered_login': 'login__submit' in dom,
-              'webkit_before_click_login': webkit.get('beforeClickLogin'),
-              'webkit_after_click_login': webkit.get('afterClickLogin'),
-              'webkit_after_click_shell': webkit.get('afterClickShell'),
-              'webkit_button_stuck_loading': webkit.get('afterClickButtonLoading'),
-              'webkit_asset_tracing_rendered': webkit.get('assetTracingRendered'),
-              'webkit_session_written': webkit.get('sessionWritten'),
-              'webkit_hash': webkit.get('hash'),
-              'webkit_rendered_recovery': webkit.get('renderedRecovery'),
-              'webkit_build_marker': webkit.get('buildMarker'),
-              'webkit_navigation_error': webkit.get('navigationError'),
-              'webkit_click_error': webkit.get('clickError'),
-              'webkit_route_error': webkit.get('routeError'),
-              'webkit_messages': webkit.get('messages', []),
-          }
-          (root/'summary.json').write_text(json.dumps(result, indent=2) + '\n')
-          print(json.dumps(result, indent=2))
-          PY
 
       - name: Upload live diagnostics
         if: always()
