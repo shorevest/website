@@ -53,6 +53,7 @@ function dependencies(patch = {}) {
           originalFileName: 'candidate-cv.pdf',
           declaredMimeType: 'application/pdf',
           sizeBytes: 1024,
+          expectedHash: 'a'.repeat(64),
           technicalStatus: 'Ready',
           scanResult: 'Clean',
           cleanBlobPath: 'recruitment/2026/legal-assistant/SV-APP-2026-ABC123/SV-FILE-ABC12345.pdf'
@@ -60,8 +61,12 @@ function dependencies(patch = {}) {
       }
     },
     storage: {
-      async properties() {
-        return { sizeBytes: 1024, contentType: 'application/pdf' };
+      async verify(input) {
+        assert.equal(input.container, 'recruitment-clean');
+        assert.equal(input.expectedSizeBytes, 1024);
+        assert.equal(input.expectedContentType, 'application/pdf');
+        assert.equal(input.expectedHash, 'a'.repeat(64));
+        return { ok: true, sha256: 'a'.repeat(64) };
       },
       async issueRead(input) {
         return {
@@ -88,7 +93,7 @@ test('unauthenticated and wrong-role requests are denied before storage access',
   let reads = 0;
   const deps = dependencies({
     storage: {
-      async properties() {
+      async verify() {
         reads += 1;
       }
     }
@@ -140,8 +145,8 @@ test('dirty, unfinalized and mismatched records do not receive a SAS', async () 
 
   const mismatch = dependencies({
     storage: {
-      async properties() {
-        return { sizeBytes: 2048, contentType: 'application/pdf' };
+      async verify() {
+        return { ok: false, reason: 'hash' };
       }
     }
   });
@@ -159,4 +164,5 @@ test('authorized HR receives one five-minute read-only clean Blob URL', async ()
   assert.equal(result.jsonBody.cleanBlobPath, undefined);
   assert.equal(deps.logs.length, 1);
   assert.equal(deps.logs[0].fields.principalObjectId, 'hr-object-id');
+  assert.equal(deps.logs[0].fields.verifiedSha256, 'a'.repeat(64));
 });
