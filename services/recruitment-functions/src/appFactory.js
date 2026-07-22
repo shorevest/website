@@ -5,6 +5,7 @@ const { DefaultAzureCredential } = require('@azure/identity');
 const {
   initiateApplication,
   completeUpload,
+  finalizeApplication,
   processScanResult,
   retryQuarantineCleanup
 } = require('../../../api/recruitment/core/flows');
@@ -84,5 +85,11 @@ function createDeps(config = loadConfig(), requestContext = {}) {
 
 module.exports = {
   createDeps,
-  flows: { initiateApplication, completeUpload, processScanResult, retryQuarantineCleanup }
+  flows: {
+    initiateApplication,
+    completeUpload,
+    finalizeApplication,
+    processScanResult,
+    retryQuarantineCleanup
+  }
 };
