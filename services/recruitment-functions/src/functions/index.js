@@ -13,6 +13,8 @@ const {
 const { createDeps, flows } = require('../appFactory');
 const { normalizeEventGridEvent } = require('../lib/eventGrid');
 const { accessCleanDocument } = require('../hr/documentAccess');
+const { updateRetentionControl } = require('../hr/retentionControl');
+const { runPolicyAssignment, runRetentionPurge } = require('../retention/worker');
 
 async function httpFlow(req, context, flow, options = {}) {
   const config = loadConfig();
@@ -110,6 +112,36 @@ app.http('hrCleanDocumentAccess', {
   }
 });
 
+app.http('hrRetentionControl', {
+  methods: ['POST'],
+  authLevel: 'anonymous',
+  route: 'recruitment/hr/applications/{applicationReference}/retention',
+  handler: async (req, context) => {
+    const config = loadConfig();
+    const parsed = await readJson(req, config);
+    if (parsed.error) return { ...parsed.error, headers: withCors(req, config) };
+    if (!parsed.body || typeof parsed.body !== 'object' || Array.isArray(parsed.body)) {
+      return {
+        status: 400,
+        headers: withCors(req, config),
+        jsonBody: { success: false, errorCode: 'RETENTION_CONTROL_INVALID' }
+      };
+    }
+    try {
+      const dependencies = createDeps(config);
+      const result = await updateRetentionControl(req, config, dependencies, parsed.body);
+      return { ...result, headers: withCors(req, config) };
+    } catch (error) {
+      context.error('recruitment_retention_control_failed', { code: error.code });
+      return {
+        status: 500,
+        headers: withCors(req, config),
+        jsonBody: { success: false, errorCode: 'RETENTION_CONTROL_FAILED' }
+      };
+    }
+  }
+});
+
 app.eventGrid('defenderScanResult', {
   handler: async (event, context) => {
     const config = loadConfig();
@@ -136,6 +168,30 @@ app.timer('quarantineCleanup', {
     for (const file of batch) {
       await flows.retryQuarantineCleanup({ fileReference: file.fileReference }, dependencies);
     }
+  }
+});
+
+app.timer('retentionPolicyAssignment', {
+  schedule: '0 15 * * * *',
+  handler: async (_, context) => {
+    const config = loadConfig();
+    if (config.retention.enabled !== true) {
+      context.log('recruitment_retention_disabled');
+      return;
+    }
+    await runPolicyAssignment(config, createDeps(config), context);
+  }
+});
+
+app.timer('retentionPurge', {
+  schedule: '0 45 * * * *',
+  handler: async (_, context) => {
+    const config = loadConfig();
+    if (config.retention.enabled !== true || config.retention.deletionEnabled !== true) {
+      context.log('recruitment_retention_deletion_disabled');
+      return;
+    }
+    await runRetentionPurge(config, createDeps(config), context);
   }
 });
 
