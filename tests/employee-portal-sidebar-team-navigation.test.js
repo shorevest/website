@@ -12,20 +12,9 @@ const css = fs.readFileSync(path.join(rootDir, 'assets/css/employee-portal-sideb
 const index = fs.readFileSync(path.join(rootDir, 'employee-portal/index.html'), 'utf8');
 
 const persona = { nav: [] };
-const documentStub = {
-  readyState: 'loading',
-  addEventListener() {},
-  getElementById() { return null; },
-  createElement() { return {}; }
-};
-const browser = {
-  SVPortalPersonas: { list: [persona] },
-  document: documentStub,
-  MutationObserver: function () {},
-  setTimeout() {}
-};
+const browser = { SVPortalPersonas: { list: [persona] } };
 
-vm.runInNewContext(source, { self: browser, Array, Object, String }, {
+vm.runInNewContext(source, { self: browser, Array, Object }, {
   filename: 'sidebar-team-navigation.js'
 });
 
@@ -54,11 +43,10 @@ const tools = nav.find((item) => item.key === 'tools');
 assert.strictEqual(tools.label, 'Operations Tools');
 assert.strictEqual(tools.hash, '#/tools');
 
-assert.ok(source.includes('LP relationships, outreach and delivery'));
-assert.ok(source.includes('Credit screening and recovery support'));
-assert.ok(source.includes('Company resources and administration'));
-assert.ok(css.includes('.ops-nav__sep-hint'));
-assert.ok(css.includes('.ops-shell.is-collapsed'));
+assert.ok(css.includes('border-top: 1px solid var(--ops-hairline)'));
+assert.ok(css.includes('text-transform: uppercase'));
+assert.ok(!source.includes('MutationObserver'), 'sidebar grouping should not install a DOM observer');
+assert.ok(!source.includes('querySelectorAll'), 'sidebar grouping should not rewrite rendered navigation');
 
 const personasAt = index.indexOf('employee-portal/personas.js');
 const teamsAt = index.indexOf('employee-portal/sidebar-team-navigation.js');
