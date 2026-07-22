@@ -45,7 +45,11 @@
   }
   function fail(e) { toast(e.message || String(e), true); }
   function chip(status) {
-    var map = { ready: 'ready', held: 'held', 'Needs review': 'needs', blocked: 'blocked', removed: 'muted', Ready: 'ready', Waiting: 'waiting', 'On hold': 'held', Blocked: 'blocked', Suggested: 'suggested', Complete: 'complete', Failed: 'failed', sent: 'sent', failed: 'failed', approved: 'approved', submitted: 'needs', executed: 'complete', partial: 'held', invalidated: 'blocked', accepted: 'ready', draft: 'muted', needs_review: 'needs', changes_requested: 'held' };
+    var map = { ready: 'ready', held: 'held', 'Needs review': 'needs', blocked: 'blocked', removed: 'muted', Ready: 'ready', Waiting: 'waiting', 'On hold': 'held', Blocked: 'blocked', Suggested: 'suggested', Complete: 'complete', Failed: 'failed', sent: 'sent', failed: 'failed', approved: 'approved', submitted: 'needs', executed: 'complete', partial: 'held', invalidated: 'blocked', accepted: 'ready', draft: 'muted', needs_review: 'needs', changes_requested: 'held',
+      // Investment / IC Deck QC
+      ok: 'ready', mismatch: 'failed', stale: 'held', missing: 'needs', orphan: 'suggested',
+      clean: 'ready', review_advised: 'held', issues_found: 'failed',
+      open: 'needs', acknowledged: 'waiting', fixed: 'complete', waived: 'waiting' };
     return h('span', { class: 'chip ' + (map[status] || '') }, String(status));
   }
   var view = document.getElementById('view');
@@ -55,6 +59,7 @@
   var NAV = [
     { group: null, items: [['#/home', 'Home'], ['#/my-work', 'My Work']] },
     { group: 'Workspaces', items: [['#/outreach', 'Outreach'], ['#/relationships', 'Relationships'], ['#/approvals', 'Approvals'], ['#/workspace/meetings', 'Meetings'], ['#/workspace/diligence', 'Diligence & Requests'], ['#/workspace/investor-intel', 'Investor Intelligence']] },
+    { group: 'Investment', items: [['#/investment', 'IC Deck QC']] },
     { group: 'System', items: [['#/audit', 'Audit history'], ['#/connectors', 'Connectors']] },
   ];
   function renderNav() {
@@ -102,6 +107,11 @@
     if (top === 'approvals') return parts[1] ? viewApprovalDetail(parts[1]) : viewApprovals();
     if (top === 'audit') return viewAudit();
     if (top === 'connectors') return viewConnectors();
+    if (top === 'investment') {
+      if (parts[1] === 'deal') return viewDeal(parts[2]);
+      if (parts[1] === 'run') return viewQcRun(parts[2]);
+      return viewInvestment();
+    }
     if (top === 'workspace') return viewWorkspaceShell(parts[1]);
     viewHome();
   }
@@ -111,7 +121,7 @@
   function viewHome() {
     call('GET', '/workspaces').then(function (r) {
       var cards = r.workspaces.map(function (w) {
-        var link = w.maturity === 'shell' ? '#/workspace/' + w.key : (w.key === 'my-work' ? '#/my-work' : '#/' + w.key.replace('investor-intel', 'workspace/investor-intel'));
+        var link = w.maturity === 'shell' ? '#/workspace/' + w.key : (w.key === 'my-work' ? '#/my-work' : w.key === 'investment-qc' ? '#/investment' : '#/' + w.key.replace('investor-intel', 'workspace/investor-intel'));
         return h('div', { class: 'card' },
           h('div', { class: 'between' }, h('strong', {}, w.name), h('span', { class: 'maturity-tag ' + w.maturity }, w.maturity.replace('_', ' '))),
           h('p', { class: 'sub small', style: 'margin:8px 0' }, w.description),
@@ -403,6 +413,165 @@
         h('p', {}, h('strong', {}, w.records + ' '), 'related records already in the shared database.'),
         w.dependencies.length ? h('p', { class: 'notice' }, 'Not connected yet. Depends on: ' + w.dependencies.join(', ') + '. The data model and API boundary exist; connecting is an integration task, not a redesign.') : null));
     }).catch(fail);
+  }
+
+  // ── Investment Toolbox — IC Deck QC ─────────────────────────────────────────
+  var SEV_RANK = { mismatch: 0, stale: 1, missing: 2, orphan: 3, ok: 4 };
+  var SEV_LABEL = { ok: 'OK', mismatch: 'Mismatch', stale: 'Stale', missing: 'Missing', orphan: 'Unsourced' };
+  var RUN_LABEL = { clean: 'Clean', review_advised: 'Review advised', issues_found: 'Issues found' };
+
+  function fmtValue(num, text, unit, format) {
+    if (text != null && text !== '') return text;
+    if (num == null) return '—';
+    var noSpace = unit === '%' || unit === 'x';
+    return String(num) + (unit ? (noSpace ? '' : ' ') + unit : '');
+  }
+  function fmtDelta(f) {
+    if (f.delta_num == null) return '';
+    var d = f.delta_num;
+    var sign = d > 0 ? '+' : (d < 0 ? '−' : '');
+    return sign + Math.abs(d) + (f.unit && f.unit !== '%' && f.unit !== 'x' ? ' ' + f.unit : (f.unit || ''));
+  }
+
+  // Deal list.
+  function viewInvestment() {
+    call('GET', '/investment/deals').then(function (r) {
+      var rows = r.deals.map(function (d) {
+        var lr = d.lastRun;
+        var summary = lr ? (lr.status === 'clean'
+          ? h('span', { class: 'small muted' }, 'All ' + lr.counts.ok + ' figures tie out')
+          : h('span', { class: 'small' }, [lr.counts.mismatch ? (lr.counts.mismatch + ' mismatch ') : '', lr.counts.stale ? (lr.counts.stale + ' stale ') : '', lr.counts.missing ? (lr.counts.missing + ' missing ') : '', lr.counts.orphan ? (lr.counts.orphan + ' unsourced') : ''].join('').trim()))
+          : h('span', { class: 'small muted' }, 'Not run yet');
+        return h('tr', {},
+          h('td', {}, h('a', { href: '#/investment/deal/' + d.id }, h('strong', {}, d.code)), h('div', { class: 'small muted' }, d.name)),
+          h('td', { class: 'small' }, d.asset_type + (d.jurisdiction ? ' · ' + d.jurisdiction : '')),
+          h('td', { class: 'small muted' }, d.ic_date || '—'),
+          h('td', {}, d.currentDeck ? ('deck v' + d.currentDeck.version) : '—', d.currentModel ? h('span', { class: 'small muted' }, ' vs model v' + d.currentModel.version) : null),
+          h('td', {}, lr ? chip(lr.status) : chip('open')),
+          h('td', {}, summary),
+          h('td', {}, h('a', { class: 'btn', href: '#/investment/deal/' + d.id }, 'Open')));
+      });
+      setView(
+        h('h1', {}, 'IC Deck QC'),
+        h('p', { class: 'sub' }, 'Reconcile every figure in a deal deck against its Excel model before Investment Committee. Catches mis-transcribed numbers, values carried over from an old model, dropped figures, and numbers with no model source.'),
+        h('div', { class: 'card' }, table(['Deal', 'Asset', 'IC date', 'Checking', 'Status', 'Last result', ''], rows)),
+        legend());
+    }).catch(fail);
+  }
+
+  function legend() {
+    return h('div', { class: 'card small muted' },
+      h('strong', {}, 'How figures are classified: '),
+      h('span', {}, [
+        chip('mismatch'), ' deck differs from the current model  ',
+        chip('stale'), ' deck matches an older model version  ',
+        chip('missing'), ' model has it, deck omits it  ',
+        chip('orphan'), ' number in the deck with no model source  ',
+        chip('ok'), ' ties out within tolerance']));
+  }
+
+  // Deal detail — pick versions and run QC.
+  function viewDeal(id) {
+    call('GET', '/investment/deals/' + id).then(function (r) {
+      var deal = r.deal;
+      var deckSel = select(r.decks.map(function (d) { return [d.id, 'Deck v' + d.version + ' · ' + d.label]; }));
+      var modelSel = select(r.models.map(function (m) { return [m.id, 'Model v' + m.version + ' · ' + m.label]; }));
+      var curDeck = r.decks.filter(function (d) { return d.is_current; })[0] || r.decks[0];
+      var curModel = r.models.filter(function (m) { return m.is_current; })[0] || r.models[0];
+      if (curDeck) deckSel.value = curDeck.id;
+      if (curModel) modelSel.value = curModel.id;
+
+      var runBtn = h('button', { class: 'primary', disabled: !can('edit_audience') || !curDeck || !curModel, onclick: function () {
+        call('POST', '/investment/deals/' + id + '/qc-runs', { deckId: deckSel.value, modelId: modelSel.value })
+          .then(function (res) { toast('QC run complete'); location.hash = '#/investment/run/' + res.run.id; }).catch(fail);
+      } }, 'Run QC');
+
+      var runsRows = r.runs.map(function (run) {
+        return h('tr', {},
+          h('td', { class: 'small muted' }, (run.created_at || '').replace('T', ' ').slice(0, 16)),
+          h('td', {}, chip(run.status)),
+          h('td', { class: 'small' }, run.counts.mismatch + run.counts.stale + ' errors · ' + (run.counts.missing + run.counts.orphan) + ' warnings · ' + run.counts.ok + ' ok'),
+          h('td', {}, h('a', { class: 'btn', href: '#/investment/run/' + run.id }, 'View')));
+      });
+
+      setView(
+        h('div', { class: 'row between' }, h('h1', {}, deal.code + ' · ' + deal.name), h('a', { class: 'btn ghost small', href: '#/investment' }, '← All deals')),
+        h('p', { class: 'sub' }, deal.asset_type + (deal.jurisdiction ? ' · ' + deal.jurisdiction : '') + ' · IC ' + (deal.ic_date || 'TBD') + ' · ' + deal.stage),
+        h('div', { class: 'card' }, h('h2', {}, 'Run a check'),
+          h('p', { class: 'small muted' }, 'Compares the deck’s figures against the model’s authoritative values.'),
+          h('div', { class: 'row', style: 'gap:10px;align-items:flex-end;flex-wrap:wrap' },
+            h('label', { class: 'small' }, 'Deck', deckSel),
+            h('span', { class: 'muted', style: 'padding-bottom:6px' }, 'vs'),
+            h('label', { class: 'small' }, 'Model', modelSel),
+            runBtn)),
+        h('div', { class: 'card' }, h('h2', {}, 'Model versions'),
+          table(['Version', 'Label', 'Source', 'Current'], r.models.map(function (m) { return h('tr', {}, h('td', {}, 'v' + m.version), h('td', { class: 'small' }, m.label), h('td', { class: 'small muted mono' }, m.source_ref || '—'), h('td', {}, m.is_current ? chip('ok') : h('span', { class: 'small muted' }, '—'))); }))),
+        h('div', { class: 'card' }, h('h2', {}, 'Deck versions'),
+          table(['Version', 'Label', 'Source', 'Current'], r.decks.map(function (d) { return h('tr', {}, h('td', {}, 'v' + d.version), h('td', { class: 'small' }, d.label), h('td', { class: 'small muted mono' }, d.source_ref || '—'), h('td', {}, d.is_current ? chip('ok') : h('span', { class: 'small muted' }, '—'))); }))),
+        r.runs.length ? h('div', { class: 'card' }, h('h2', {}, 'Run history'), table(['When', 'Status', 'Result', ''], runsRows)) : null);
+    }).catch(fail);
+  }
+
+  // QC run detail — the findings and their resolution.
+  function viewQcRun(id) {
+    call('GET', '/investment/qc-runs/' + id).then(function (r) {
+      var run = r.run; var c = run.counts;
+      var findings = r.findings.slice().sort(function (a, b) {
+        var ra = SEV_RANK[a.severity], rb = SEV_RANK[b.severity];
+        if (ra !== rb) return ra - rb;
+        return (a.slide || 0) - (b.slide || 0);
+      });
+
+      var rows = findings.map(function (f) {
+        var canResolve = can('resolve_held_record') && f.severity !== 'ok';
+        var actions = [];
+        if (canResolve && f.resolution === 'open') {
+          actions.push(actBtn('Acknowledge', function () { resolveFinding(id, f.id, 'acknowledged'); }));
+          actions.push(actBtn('Fixed', function () { resolveFinding(id, f.id, 'fixed'); }));
+          actions.push(actBtn('Waive', function () { resolveFinding(id, f.id, 'waived'); }));
+        } else if (f.resolution !== 'open') {
+          actions.push(chip(f.resolution));
+        }
+        var note = f.severity === 'stale' && f.matched_version != null ? h('div', { class: 'small muted' }, 'matches model v' + f.matched_version) : null;
+        return h('tr', {},
+          h('td', {}, chip(f.severity)),
+          h('td', {}, h('strong', {}, f.label), note),
+          h('td', { class: 'small muted' }, f.slide ? ('Slide ' + f.slide) : '—'),
+          h('td', { class: 'mono' }, fmtValue(f.model_num, f.model_text, f.unit, f.format)),
+          h('td', { class: 'mono' + (f.severity === 'mismatch' || f.severity === 'stale' ? ' bad' : '') }, fmtValue(f.deck_num, f.deck_text, f.unit, f.format)),
+          h('td', { class: 'small muted mono' }, fmtDelta(f)),
+          h('td', {}, actions));
+      });
+
+      var assignBtn = h('button', { disabled: !can('edit_audience'), onclick: function () {
+        call('POST', '/investment/qc-runs/' + id + '/assign', {}).then(function () { toast('Assigned for review — see My Work'); }).catch(fail);
+      } }, 'Assign for review');
+      var exportBtn = h('button', { class: 'ghost', onclick: function () { exportRun(r); } }, 'Export QC report (CSV)');
+
+      setView(
+        h('div', { class: 'row between' }, h('h1', {}, 'QC · ' + (r.deal ? r.deal.code : '')), h('a', { class: 'btn ghost small', href: r.deal ? ('#/investment/deal/' + r.deal.id) : '#/investment' }, '← Deal')),
+        h('p', { class: 'sub' }, 'Deck v' + (r.deck ? r.deck.version : '?') + ' checked against model v' + (r.model ? r.model.version : '?') + ' · ' + (run.created_at || '').replace('T', ' ').slice(0, 16)),
+        h('div', { class: 'row', style: 'gap:10px;align-items:center;flex-wrap:wrap' }, chip(run.status), h('strong', {}, RUN_LABEL[run.status] || run.status)),
+        h('div', { class: 'row', style: 'gap:12px;flex-wrap:wrap;margin:12px 0' },
+          stat(c.mismatch, 'mismatch'), stat(c.stale, 'stale'), stat(c.missing, 'missing'), stat(c.orphan, 'unsourced'), stat(c.ok, 'tie out')),
+        h('div', { class: 'row', style: 'gap:8px;margin-bottom:12px' }, assignBtn, exportBtn),
+        h('div', { class: 'card' }, table(['', 'Figure', 'Location', 'Model', 'In deck', 'Δ', 'Resolution'], rows)),
+        legend());
+    }).catch(fail);
+  }
+
+  function resolveFinding(runId, findingId, resolution) {
+    call('POST', '/investment/findings/' + findingId + '/resolve', { resolution: resolution }).then(function () { toast('Marked ' + resolution); viewQcRun(runId); }).catch(fail);
+  }
+
+  function exportRun(r) {
+    var head = ['deal', 'severity', 'metric', 'label', 'slide', 'model_value', 'deck_value', 'delta', 'matched_model_version', 'resolution'];
+    var lines = [head.join(',')];
+    r.findings.forEach(function (f) {
+      var row = [r.deal ? r.deal.code : '', f.severity, f.metric_key, '"' + String(f.label).replace(/"/g, '""') + '"', f.slide || '', (f.model_num != null ? f.model_num : (f.model_text || '')), (f.deck_num != null ? f.deck_num : (f.deck_text || '')), (f.delta_num != null ? f.delta_num : ''), (f.matched_version != null ? f.matched_version : ''), f.resolution];
+      lines.push(row.join(','));
+    });
+    downloadCsv('qc-' + (r.deal ? r.deal.code : 'run') + '.csv', lines.join('\n'));
   }
 
   // ── small builders ────────────────────────────────────────────────────────

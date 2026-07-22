@@ -46,6 +46,11 @@ class DocumentConnector {
   async createRecipientVersion() { return notImplemented('DocumentConnector.createRecipientVersion')(); }
   async getApprovedTemplate() { return notImplemented('DocumentConnector.getApprovedTemplate')(); }
   async createControlledLink() { return notImplemented('DocumentConnector.createControlledLink')(); }
+  // Investment Toolbox — figure extraction. Later: parse an Excel model /
+  // PowerPoint deck out of SharePoint into structured figures. The QC engine
+  // reconciles whatever these return; it does not care how they were parsed.
+  async extractModelMetrics() { return notImplemented('DocumentConnector.extractModelMetrics')(); }
+  async extractDeckFigures() { return notImplemented('DocumentConnector.extractDeckFigures')(); }
   async health() { return { name: 'document', ok: false, detail: 'not connected' }; }
 }
 

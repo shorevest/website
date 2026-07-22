@@ -8,6 +8,7 @@ implementing a connector, not rebuilding the product.
 - Architecture, audit, and plan: [`IMPLEMENTATION_PLAN.md`](./IMPLEMENTATION_PLAN.md)
 - Connector integration guide: [`CONNECTORS.md`](./CONNECTORS.md)
 - Remaining blockers before a connected pilot: [`BLOCKERS.md`](./BLOCKERS.md)
+- Investment Toolbox — IC Deck QC: [`INVESTMENT_QC.md`](./INVESTMENT_QC.md)
 
 ## Layers
 
@@ -54,5 +55,12 @@ choose actions → prepare messages → build & submit approval package → appr
 request guarded execution (mock connectors, with deterministic partial failures)
 → Sent & responses update → full audit trail. My Work and Approvals are
 functioning shared queues over the same records. Relationships is a read view of
-the shared people. Meetings, Diligence, and Investor Intelligence are
-production-shaped shells backed by the same database.
+the shared people.
+
+**IC Deck QC** (Investment Toolbox) is a second working slice: pick a deal deck
+and its Excel model → run a reconciliation → review flagged figures
+(mismatch / stale / missing / unsourced) → resolve or assign for review → export
+→ full audit trail. See [`INVESTMENT_QC.md`](./INVESTMENT_QC.md).
+
+Meetings, Diligence, and Investor Intelligence are production-shaped shells
+backed by the same database.
