@@ -12,16 +12,58 @@ param location string = resourceGroup().location
 @description('Paid Microsoft Defender for Storage malware scanning. Explicit opt-in only.')
 param enableDefenderForStorage bool = false
 
-@description('Function app package URL supplied at deployment time.')
-param packageUrl string = ''
+@description('Name of the Key Vault secret used to sign upload-completion tokens.')
+param completionTokenSecretName string = 'recruitment-completion-token-key'
+
+@description('Name of the Key Vault secret used to HMAC request fingerprints and rate-limit keys.')
+param fingerprintSecretName string = 'recruitment-fingerprint-key'
+
+@description('Name of the Key Vault secret containing the Cloudflare Turnstile secret.')
+param botVerificationSecretName string = 'recruitment-turnstile-secret'
+
+@description('Expected Turnstile token hostname. Override for non-production test environments.')
+param botVerificationHostname string = 'shorevest.com'
+
+@minValue(1)
+@description('Maximum application-initiation requests permitted per fixed window and server-derived client key.')
+param rateLimitCount int = 5
+
+@minValue(60)
+@description('Fixed rate-limit window length in seconds.')
+param rateLimitWindowSeconds int = 300
+
+@minValue(1024)
+@description('Maximum accepted JSON request body size in bytes.')
+param maxBodyBytes int = 65536
+
+@minValue(1)
+@maxValue(100)
+@description('Maximum Flex Consumption instance count.')
+param maximumInstanceCount int = 20
+
+@allowed([
+  512
+  2048
+  4096
+])
+@description('Flex Consumption instance memory in MB.')
+param instanceMemoryMB int = 2048
 
 var tags = {
   workload: 'recruitment'
   phase: '2B.1'
   environment: environmentName
 }
+var runtimeEnvironment = environmentName == 'prod' ? 'production' : environmentName
 var functionName = '${namePrefix}-recruit-fn-${environmentName}'
 var identityName = '${namePrefix}-recruit-mi-${environmentName}'
+var deploymentContainerName = 'recruitment-functions'
+var quarantineContainerName = 'recruitment-quarantine'
+var cleanContainerName = 'recruitment-clean'
+var storageBlobDataOwnerRoleId = 'b7e6dc6d-f1e8-4753-8033-0f276bb0955b'
+var storageBlobDataContributorRoleId = 'ba92f5b4-2d11-453d-a403-e96b0029c9fe'
+var cosmosDataContributorRoleId = '00000000-0000-0000-0000-000000000002'
+var keyVaultSecretsUserRoleId = '4633458b-17de-408a-b874-0445c86b69e6c'
 
 resource log 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
   name: '${namePrefix}-recruit-law-${environmentName}'
@@ -62,8 +104,23 @@ resource deployStorage 'Microsoft.Storage/storageAccounts@2023-05-01' = {
   kind: 'StorageV2'
   properties: {
     allowBlobPublicAccess: false
+    allowSharedKeyAccess: false
     minimumTlsVersion: 'TLS1_2'
     supportsHttpsTrafficOnly: true
+    publicNetworkAccess: 'Enabled'
+  }
+}
+
+resource deployBlobService 'Microsoft.Storage/storageAccounts/blobServices@2023-05-01' = {
+  parent: deployStorage
+  name: 'default'
+}
+
+resource deploymentPackages 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-05-01' = {
+  parent: deployBlobService
+  name: deploymentContainerName
+  properties: {
+    publicAccess: 'None'
   }
 }
 
@@ -77,21 +134,32 @@ resource cvStorage 'Microsoft.Storage/storageAccounts@2023-05-01' = {
   kind: 'StorageV2'
   properties: {
     allowBlobPublicAccess: false
+    allowSharedKeyAccess: false
     minimumTlsVersion: 'TLS1_2'
     supportsHttpsTrafficOnly: true
-    publicNetworkAccess: 'Disabled'
+    // Candidate browsers upload directly to one exact blob using a short-lived,
+    // write-only user-delegation SAS. Network reachability must therefore remain
+    // public while anonymous container access and Shared Key access stay disabled.
+    publicNetworkAccess: 'Enabled'
   }
 }
 
+resource cvBlobService 'Microsoft.Storage/storageAccounts/blobServices@2023-05-01' = {
+  parent: cvStorage
+  name: 'default'
+}
+
 resource quarantine 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-05-01' = {
-  name: '${cvStorage.name}/default/recruitment-quarantine'
+  parent: cvBlobService
+  name: quarantineContainerName
   properties: {
     publicAccess: 'None'
   }
 }
 
 resource clean 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-05-01' = {
-  name: '${cvStorage.name}/default/recruitment-clean'
+  parent: cvBlobService
+  name: cleanContainerName
   properties: {
     publicAccess: 'None'
   }
@@ -112,6 +180,7 @@ resource cosmos 'Microsoft.DocumentDB/databaseAccounts@2024-05-15' = {
       }
     ]
     disableLocalAuth: true
+    publicNetworkAccess: 'Enabled'
     capabilities: []
   }
 }
@@ -191,6 +260,10 @@ resource vault 'Microsoft.KeyVault/vaults@2023-07-01' = {
     }
     enableRbacAuthorization: true
     enabledForTemplateDeployment: false
+    enableSoftDelete: true
+    softDeleteRetentionInDays: 90
+    enablePurgeProtection: environmentName == 'prod'
+    publicNetworkAccess: 'Enabled'
   }
 }
 
@@ -204,7 +277,6 @@ resource topic 'Microsoft.EventGrid/topics@2023-12-15-preview' = {
 resource plan 'Microsoft.Web/serverfarms@2024-04-01' = {
   name: '${namePrefix}-recruit-flex-${environmentName}'
   location: location
-  tags: tags
   sku: {
     name: 'FC1'
     tier: 'FlexConsumption'
@@ -212,6 +284,48 @@ resource plan 'Microsoft.Web/serverfarms@2024-04-01' = {
   kind: 'functionapp'
   properties: {
     reserved: true
+  }
+}
+
+// Functions host and deployment package storage, both using the assigned identity.
+resource deployStorageBlobOwner 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(deployStorage.id, mi.id, 'functions-host-storage')
+  scope: deployStorage
+  properties: {
+    principalId: mi.properties.principalId
+    principalType: 'ServicePrincipal'
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', storageBlobDataOwnerRoleId)
+  }
+}
+
+// Application CV access and user-delegation SAS issuance without storage keys.
+resource cvStorageBlobData 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(cvStorage.id, mi.id, 'recruitment-blob-data')
+  scope: cvStorage
+  properties: {
+    principalId: mi.properties.principalId
+    principalType: 'ServicePrincipal'
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', storageBlobDataContributorRoleId)
+  }
+}
+
+resource cosmosData 'Microsoft.DocumentDB/databaseAccounts/sqlRoleAssignments@2024-05-15' = {
+  parent: cosmos
+  name: guid(cosmos.id, mi.id, 'cosmos-data')
+  properties: {
+    principalId: mi.properties.principalId
+    roleDefinitionId: '${cosmos.id}/sqlRoleDefinitions/${cosmosDataContributorRoleId}'
+    scope: cosmos.id
+  }
+}
+
+resource kvSecrets 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(vault.id, mi.id, 'kv-secrets-user')
+  scope: vault
+  properties: {
+    principalId: mi.properties.principalId
+    principalType: 'ServicePrincipal'
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', keyVaultSecretsUserRoleId)
   }
 }
 
@@ -229,8 +343,32 @@ resource fn 'Microsoft.Web/sites@2024-04-01' = {
   properties: {
     serverFarmId: plan.id
     httpsOnly: true
+    publicNetworkAccess: 'Enabled'
+    keyVaultReferenceIdentity: mi.id
+    functionAppConfig: {
+      deployment: {
+        storage: {
+          type: 'blobContainer'
+          value: '${deployStorage.properties.primaryEndpoints.blob}${deploymentContainerName}'
+          authentication: {
+            type: 'UserAssignedIdentity'
+            userAssignedIdentityResourceId: mi.id
+          }
+        }
+      }
+      runtime: {
+        name: 'node'
+        version: '20'
+      }
+      scaleAndConcurrency: {
+        maximumInstanceCount: maximumInstanceCount
+        instanceMemoryMB: instanceMemoryMB
+      }
+    }
     siteConfig: {
-      linuxFxVersion: 'Node|20'
+      minTlsVersion: '1.2'
+      ftpsState: 'Disabled'
+      http20Enabled: true
       appSettings: [
         {
           name: 'FUNCTIONS_EXTENSION_VERSION'
@@ -241,16 +379,44 @@ resource fn 'Microsoft.Web/sites@2024-04-01' = {
           value: 'node'
         }
         {
-          name: 'WEBSITE_RUN_FROM_PACKAGE'
-          value: packageUrl
+          name: 'AzureWebJobsStorage__accountName'
+          value: deployStorage.name
+        }
+        {
+          name: 'AzureWebJobsStorage__credential'
+          value: 'managedidentity'
+        }
+        {
+          name: 'AzureWebJobsStorage__clientId'
+          value: mi.properties.clientId
+        }
+        {
+          name: 'AZURE_CLIENT_ID'
+          value: mi.properties.clientId
+        }
+        {
+          name: 'RECRUITMENT_MANAGED_IDENTITY_CLIENT_ID'
+          value: mi.properties.clientId
         }
         {
           name: 'RECRUITMENT_API_ENABLED'
           value: 'false'
         }
         {
+          name: 'RECRUITMENT_ENVIRONMENT'
+          value: runtimeEnvironment
+        }
+        {
           name: 'RECRUITMENT_ALLOWED_ORIGINS'
           value: 'https://shorevest.com,https://www.shorevest.com'
+        }
+        {
+          name: 'RECRUITMENT_REQUIRE_ORIGIN'
+          value: 'true'
+        }
+        {
+          name: 'RECRUITMENT_MAX_BODY_BYTES'
+          value: string(maxBodyBytes)
         }
         {
           name: 'RECRUITMENT_COSMOS_ENDPOINT'
@@ -262,15 +428,55 @@ resource fn 'Microsoft.Web/sites@2024-04-01' = {
         }
         {
           name: 'RECRUITMENT_STORAGE_ACCOUNT_URL'
-          value: 'https://${cvStorage.name}.blob.${environment().suffixes.storage}'
+          value: cvStorage.properties.primaryEndpoints.blob
         }
         {
           name: 'RECRUITMENT_UPLOAD_STORAGE_ACCOUNT_NAME'
           value: cvStorage.name
         }
         {
+          name: 'RECRUITMENT_QUARANTINE_CONTAINER'
+          value: quarantineContainerName
+        }
+        {
+          name: 'RECRUITMENT_CLEAN_CONTAINER'
+          value: cleanContainerName
+        }
+        {
           name: 'RECRUITMENT_KEYVAULT_URL'
           value: vault.properties.vaultUri
+        }
+        {
+          name: 'RECRUITMENT_COMPLETION_TOKEN_SECRET_NAME'
+          value: completionTokenSecretName
+        }
+        {
+          name: 'RECRUITMENT_FINGERPRINT_SECRET_NAME'
+          value: fingerprintSecretName
+        }
+        {
+          name: 'RECRUITMENT_RATE_LIMIT_ENABLED'
+          value: 'true'
+        }
+        {
+          name: 'RECRUITMENT_RATE_LIMIT_COUNT'
+          value: string(rateLimitCount)
+        }
+        {
+          name: 'RECRUITMENT_RATE_LIMIT_WINDOW_SECONDS'
+          value: string(rateLimitWindowSeconds)
+        }
+        {
+          name: 'RECRUITMENT_BOT_VERIFICATION_MODE'
+          value: 'turnstile'
+        }
+        {
+          name: 'RECRUITMENT_BOT_VERIFICATION_SECRET_NAME'
+          value: botVerificationSecretName
+        }
+        {
+          name: 'RECRUITMENT_BOT_VERIFICATION_HOSTNAME'
+          value: botVerificationHostname
         }
         {
           name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
@@ -279,45 +485,13 @@ resource fn 'Microsoft.Web/sites@2024-04-01' = {
       ]
     }
   }
-}
-
-// Cosmos DB Built-in Data Contributor - data-plane access only.
-resource cosmosData 'Microsoft.DocumentDB/databaseAccounts/sqlRoleAssignments@2024-05-15' = {
-  parent: cosmos
-  name: guid(cosmos.id, mi.id, 'cosmos-data')
-  properties: {
-    principalId: mi.properties.principalId
-    roleDefinitionId: '${cosmos.id}/sqlRoleDefinitions/00000000-0000-0000-0000-000000000002'
-    scope: cosmos.id
-  }
-}
-
-// Storage Blob Data Contributor permits scoped blob read/write/delete and user-delegation SAS generation without account keys.
-resource blobData 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(cvStorage.id, mi.id, 'blob-data-contributor')
-  scope: cvStorage
-  properties: {
-    principalId: mi.properties.principalId
-    principalType: 'ServicePrincipal'
-    roleDefinitionId: subscriptionResourceId(
-      'Microsoft.Authorization/roleDefinitions',
-      'ba92f5b4-2d11-453d-a403-e96b0029c9fe'
-    )
-  }
-}
-
-// Key Vault Secrets User permits reading only configured secret values, not vault administration.
-resource kvSecrets 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(vault.id, mi.id, 'kv-secrets-user')
-  scope: vault
-  properties: {
-    principalId: mi.properties.principalId
-    principalType: 'ServicePrincipal'
-    roleDefinitionId: subscriptionResourceId(
-      'Microsoft.Authorization/roleDefinitions',
-      '4633458b-17de-408a-b874-0445c86b69e6c'
-    )
-  }
+  dependsOn: [
+    deploymentPackages
+    deployStorageBlobOwner
+    cvStorageBlobData
+    cosmosData
+    kvSecrets
+  ]
 }
 
 // Optional paid Defender for Storage must be explicitly enabled by parameter.
@@ -337,3 +511,7 @@ resource defender 'Microsoft.Security/defenderForStorageSettings@2022-12-01-prev
 }
 
 output functionAppName string = fn.name
+output managedIdentityClientId string = mi.properties.clientId
+output deploymentContainerUrl string = '${deployStorage.properties.primaryEndpoints.blob}${deploymentContainerName}'
+output recruitmentStorageAccountName string = cvStorage.name
+output keyVaultName string = vault.name
