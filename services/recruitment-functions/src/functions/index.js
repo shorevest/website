@@ -6,6 +6,11 @@ const { createReadinessProbe } = require('../lib/readiness');
 const { safeErrorCode } = require('../lib/logger');
 const { deliverDefenderScanEvent } = require('../lib/scanDelivery');
 const {
+  applyEndpointRateLimit,
+  rateLimitedResponse
+} = require('../lib/endpointRateLimit');
+const { RATE_LIMIT_SCOPES } = require('../adapters/rateLimit');
+const {
   originAllowed,
   withCors,
   readJson,
@@ -59,24 +64,36 @@ async function httpFlow(req, context, flow, options = {}) {
     };
   }
 
-  const parsed = await readJson(req, config);
-  if (parsed.error) return { ...parsed.error, headers: withCors(req, config) };
-  if (!parsed.body || typeof parsed.body !== 'object' || Array.isArray(parsed.body)) {
-    return {
-      status: 400,
-      headers: withCors(req, config),
-      jsonBody: { success: false, errorCode: 'VALIDATION_FAILED' }
-    };
-  }
-
   const trustedContext = requestContext(req);
-  if (options.attachRequestContext === true) {
-    parsed.body._requestContext = trustedContext;
-  }
-
   try {
     const dependencies = createDeps(config, trustedContext);
+    const rateLimit = await applyEndpointRateLimit({
+      req,
+      config,
+      dependencies,
+      scope: options.rateLimitScope,
+      reuseForCoreInitiation: options.rateLimitScope === RATE_LIMIT_SCOPES.initiate
+    });
+    if (rateLimit.allowed !== true) return rateLimit.response;
+
+    const parsed = await readJson(req, config);
+    if (parsed.error) return { ...parsed.error, headers: withCors(req, config) };
+    if (!parsed.body || typeof parsed.body !== 'object' || Array.isArray(parsed.body)) {
+      return {
+        status: 400,
+        headers: withCors(req, config),
+        jsonBody: { success: false, errorCode: 'VALIDATION_FAILED' }
+      };
+    }
+
+    if (options.attachRequestContext === true) {
+      parsed.body._requestContext = trustedContext;
+    }
+
     const result = await flow(parsed.body, dependencies);
+    if (result?.success !== true && result?.errorCode === 'RATE_LIMITED') {
+      return rateLimitedResponse(req, config, result);
+    }
     return {
       status: result.success ? 200 : 400,
       headers: withCors(req, config),
@@ -96,21 +113,28 @@ app.http('initiateApplication', {
   methods: ['POST'],
   authLevel: 'anonymous',
   route: 'recruitment/applications/initiate',
-  handler: (req, context) => httpFlow(req, context, flows.initiateApplication, { attachRequestContext: true })
+  handler: (req, context) => httpFlow(req, context, flows.initiateApplication, {
+    attachRequestContext: true,
+    rateLimitScope: RATE_LIMIT_SCOPES.initiate
+  })
 });
 
 app.http('completeUpload', {
   methods: ['POST'],
   authLevel: 'anonymous',
   route: 'recruitment/applications/complete',
-  handler: (req, context) => httpFlow(req, context, flows.completeUpload)
+  handler: (req, context) => httpFlow(req, context, flows.completeUpload, {
+    rateLimitScope: RATE_LIMIT_SCOPES.complete
+  })
 });
 
 app.http('finalizeApplication', {
   methods: ['POST'],
   authLevel: 'anonymous',
   route: 'recruitment/applications/finalize',
-  handler: (req, context) => httpFlow(req, context, flows.finalizeApplication)
+  handler: (req, context) => httpFlow(req, context, flows.finalizeApplication, {
+    rateLimitScope: RATE_LIMIT_SCOPES.finalize
+  })
 });
 
 app.http('hrCleanDocumentAccess', {
