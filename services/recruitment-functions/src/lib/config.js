@@ -9,13 +9,38 @@ function positiveInteger(value, fallback) {
   return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback;
 }
 
+function commaList(value) {
+  return [...new Set(String(value || '')
+    .split(',')
+    .map((item) => item.trim())
+    .filter(Boolean))];
+}
+
+function originHostnames(origins) {
+  const hostnames = [];
+  for (const origin of origins || []) {
+    try {
+      const parsed = new URL(origin);
+      if (parsed.protocol !== 'https:' || parsed.username || parsed.password || parsed.pathname !== '/' || parsed.search || parsed.hash) {
+        continue;
+      }
+      hostnames.push(parsed.hostname.toLowerCase().replace(/\.$/, ''));
+    } catch (_) {}
+  }
+  return [...new Set(hostnames)].sort();
+}
+
+function sameStringSet(left, right) {
+  return [...new Set(left || [])].sort().join('\n') === [...new Set(right || [])].sort().join('\n');
+}
+
 function loadConfig(env = process.env) {
   const environment = env.RECRUITMENT_ENVIRONMENT || 'production';
   const production = environment === 'production' || environment === 'prod';
-  const origins = (env.RECRUITMENT_ALLOWED_ORIGINS || (production ? 'https://shorevest.com,https://www.shorevest.com' : ''))
-    .split(',')
-    .map((value) => value.trim())
-    .filter(Boolean);
+  const origins = commaList(
+    env.RECRUITMENT_ALLOWED_ORIGINS ||
+    (production ? 'https://shorevest.com,https://www.shorevest.com' : '')
+  );
 
   return {
     apiEnabled: bool(env.RECRUITMENT_API_ENABLED),
@@ -42,7 +67,9 @@ function loadConfig(env = process.env) {
       mode: (env.RECRUITMENT_BOT_VERIFICATION_MODE || 'disabled').toLowerCase(),
       secretName: env.RECRUITMENT_BOT_VERIFICATION_SECRET_NAME,
       endpoint: env.RECRUITMENT_BOT_VERIFICATION_ENDPOINT || 'https://challenges.cloudflare.com/turnstile/v0/siteverify',
-      expectedHostname: env.RECRUITMENT_BOT_VERIFICATION_HOSTNAME || ''
+      expectedHostnames: commaList(env.RECRUITMENT_BOT_VERIFICATION_HOSTNAME)
+        .map((hostname) => hostname.toLowerCase().replace(/\.$/, '')),
+      expectedAction: String(env.RECRUITMENT_BOT_VERIFICATION_ACTION || '').trim()
     },
     outboxDelivery: {
       enabled: bool(env.RECRUITMENT_OUTBOX_DELIVERY_ENABLED),
@@ -147,6 +174,13 @@ function validateConfig(config) {
     if (config.rateLimit?.enabled !== true) invalid.push('rateLimit.enabled');
     if (config.botVerification?.mode !== 'turnstile') invalid.push('botVerification.mode');
     if (!config.botVerification?.secretName) missing.push('botVerification.secretName');
+    const expectedHostnames = config.botVerification?.expectedHostnames || [];
+    if (!sameStringSet(expectedHostnames, originHostnames(config.allowedOrigins))) {
+      invalid.push('botVerification.expectedHostnames');
+    }
+    if (!/^[a-z0-9_-]{1,64}$/i.test(config.botVerification?.expectedAction || '')) {
+      invalid.push('botVerification.expectedAction');
+    }
     if (config.outboxDelivery?.enabled !== true) invalid.push('outboxDelivery.enabled');
     if (config.hrAccess?.enabled !== true) invalid.push('hrAccess.enabled');
     if (config.retention?.enabled !== true) invalid.push('retention.enabled');
@@ -160,4 +194,12 @@ function validateConfig(config) {
   };
 }
 
-module.exports = { bool, positiveInteger, loadConfig, validateConfig };
+module.exports = {
+  bool,
+  positiveInteger,
+  commaList,
+  originHostnames,
+  sameStringSet,
+  loadConfig,
+  validateConfig
+};
