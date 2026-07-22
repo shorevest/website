@@ -2,6 +2,7 @@
 
 const GRAPH_SCOPE = 'https://graph.microsoft.com/.default';
 const DEFAULT_ENDPOINT = 'https://graph.microsoft.com/v1.0';
+const IMMUTABLE_ID_PREFERENCE = 'IdType="ImmutableId"';
 
 class GraphDeliveryError extends Error {
   constructor(code, message, options = {}) {
@@ -49,7 +50,7 @@ function isPermanentStatus(status) {
 }
 
 async function safeJson(response) {
-  if (!response || response.status === 204) return null;
+  if (!response || response.status === 204 || response.status === 202) return null;
   const contentType = response.headers?.get?.('content-type') || '';
   if (!/application\/json/i.test(contentType)) return null;
   try {
@@ -145,7 +146,7 @@ function createGraphAdapter({
     return items[0] || null;
   }
 
-  async function createListItem(siteId, listId, fields) {
+  function createListItem(siteId, listId, fields) {
     return request(`/sites/${encodeSegment(siteId)}/lists/${encodeSegment(listId)}/items`, {
       method: 'POST',
       body: { fields },
@@ -153,7 +154,7 @@ function createGraphAdapter({
     });
   }
 
-  async function updateListItem(siteId, listId, itemId, fields) {
+  function updateListItem(siteId, listId, itemId, fields) {
     return request(
       `/sites/${encodeSegment(siteId)}/lists/${encodeSegment(listId)}/items/${encodeSegment(itemId)}/fields`,
       {
@@ -185,6 +186,53 @@ function createGraphAdapter({
     }
   }
 
+  async function findMessagesByExtendedProperty(mailbox, propertyId, propertyValue) {
+    const filter = `singleValueExtendedProperties/Any(ep: ep/id eq '${escapeFilterString(propertyId)}' and ep/value eq '${escapeFilterString(propertyValue)}')`;
+    const query = new URLSearchParams({
+      '$filter': filter,
+      '$select': 'id,isDraft,sentDateTime,subject',
+      '$top': '5'
+    });
+    const result = await request(
+      `/users/${encodeSegment(mailbox)}/messages?${query.toString()}`,
+      { headers: { Prefer: IMMUTABLE_ID_PREFERENCE } }
+    );
+    return Array.isArray(result?.value) ? result.value : [];
+  }
+
+  async function getMessage(mailbox, messageId) {
+    try {
+      return await request(
+        `/users/${encodeSegment(mailbox)}/messages/${encodeSegment(messageId)}?$select=id,isDraft,sentDateTime,subject`,
+        { headers: { Prefer: IMMUTABLE_ID_PREFERENCE } }
+      );
+    } catch (error) {
+      if (error instanceof GraphDeliveryError && error.code === 'GRAPH_RESOURCE_NOT_FOUND') return null;
+      throw error;
+    }
+  }
+
+  function createDraftMessage(mailbox, message, extendedProperty) {
+    return request(`/users/${encodeSegment(mailbox)}/messages`, {
+      method: 'POST',
+      body: {
+        ...message,
+        singleValueExtendedProperties: [extendedProperty]
+      },
+      headers: { Prefer: IMMUTABLE_ID_PREFERENCE },
+      expectedStatuses: [201]
+    });
+  }
+
+  async function sendDraftMessage(mailbox, messageId) {
+    await request(`/users/${encodeSegment(mailbox)}/messages/${encodeSegment(messageId)}/send`, {
+      method: 'POST',
+      headers: { Prefer: IMMUTABLE_ID_PREFERENCE },
+      expectedStatuses: [202]
+    });
+    return { accepted: true };
+  }
+
   async function sendMail(mailbox, message) {
     await request(`/users/${encodeSegment(mailbox)}/sendMail`, {
       method: 'POST',
@@ -200,6 +248,10 @@ function createGraphAdapter({
     createListItem,
     updateListItem,
     upsertListItem,
+    findMessagesByExtendedProperty,
+    getMessage,
+    createDraftMessage,
+    sendDraftMessage,
     sendMail
   };
 }
@@ -207,6 +259,7 @@ function createGraphAdapter({
 module.exports = {
   GRAPH_SCOPE,
   DEFAULT_ENDPOINT,
+  IMMUTABLE_ID_PREFERENCE,
   GraphDeliveryError,
   escapeFilterString,
   retryAfterMs,
