@@ -30,7 +30,7 @@ function fakeClient(seed = {}) {
     });
   }
 
-  function container(records, name) {
+  function container(records) {
     return {
       records,
       items: {
@@ -41,16 +41,18 @@ function fakeClient(seed = {}) {
               if (options.partitionKey) {
                 values = values.filter((item) => item.applicationReference === options.partitionKey);
               }
-              if (spec.query.includes("c.docType = @type")) {
+              if (spec.query.includes('c.docType = @type')) {
                 values = values.filter((item) => item.docType === 'file');
               }
               if (spec.query.includes('c.retentionDeleteAfterUtc <= @now')) {
-                const now = spec.parameters.find((item) => item.name === '@now').value;
+                const current = spec.parameters.find((item) => item.name === '@now').value;
                 values = values.filter((item) =>
                   item.docType === 'application' &&
-                  item.retentionState === 'Active' &&
+                  (item.retentionState === 'Active' ||
+                    (item.retentionState === 'Processing' && item.retentionLeaseExpiresAtUtc < current)) &&
                   item.legalHold !== true &&
-                  item.retentionDeleteAfterUtc <= now
+                  item.retentionDeleteAfterUtc <= current &&
+                  (!item.retentionNextAttemptAtUtc || item.retentionNextAttemptAtUtc <= current)
                 );
               }
               if (spec.query.includes('c.retentionPolicyVersion')) {
@@ -63,6 +65,7 @@ function fakeClient(seed = {}) {
           };
         },
         async batch(operations, partitionKey) {
+          const replacements = [];
           for (const operation of operations) {
             if (operation.operationType === 'Replace') {
               const key = recordKey(partitionKey, operation.id);
@@ -70,11 +73,17 @@ function fakeClient(seed = {}) {
               if (!current || current._etag !== operation.ifMatch) {
                 return { result: [{ statusCode: 412 }] };
               }
-              records.set(key, {
-                ...operation.resourceBody,
-                _etag: `etag-${etag++}`
-              });
-            } else if (operation.operationType === 'Create') {
+              replacements.push({ key, operation });
+            }
+          }
+          for (const { key, operation } of replacements) {
+            records.set(key, {
+              ...operation.resourceBody,
+              _etag: `etag-${etag++}`
+            });
+          }
+          for (const operation of operations) {
+            if (operation.operationType === 'Create') {
               const body = operation.resourceBody;
               records.set(recordKey(partitionKey, body.id), {
                 ...body,
@@ -119,9 +128,7 @@ function fakeClient(seed = {}) {
     database() {
       return {
         container(name) {
-          return name === 'submissions'
-            ? container(submissions, name)
-            : container(idempotency, name);
+          return name === 'submissions' ? container(submissions) : container(idempotency);
         }
       };
     }
@@ -146,6 +153,8 @@ function application(patch = {}) {
     technicalStatus: 'Ready',
     hiringStage: 'New',
     retentionState: 'Processing',
+    retentionLeaseOwner: 'worker-1',
+    retentionLeaseExpiresAtUtc: '2026-07-22T01:15:00.000Z',
     retentionDeleteAfterUtc: '2026-07-22T00:00:00.000Z',
     legalHold: false,
     ...patch
@@ -169,6 +178,14 @@ function file(patch = {}) {
   };
 }
 
+function adapterFor(client) {
+  return createRetentionAdapter({
+    client,
+    databaseId: 'recruitment',
+    now: () => new Date('2026-07-22T01:00:00.000Z')
+  });
+}
+
 test('redaction removes candidate PII and document paths while preserving audit references', () => {
   const redactedApplication = redactApplication(application(), '2026-07-22T01:00:00.000Z');
   assert.equal(redactedApplication.applicationReference, 'SV-APP-2026-ABC123');
@@ -187,17 +204,12 @@ test('redaction removes candidate PII and document paths while preserving audit 
 });
 
 test('legal hold prevents any Blob deletion or redaction', async () => {
-  const client = fakeClient({
-    submissions: [application({ legalHold: true }), file()]
-  });
-  const adapter = createRetentionAdapter({
-    client,
-    databaseId: 'recruitment',
-    now: () => new Date('2026-07-22T01:00:00.000Z')
-  });
+  const heldApplication = application({ legalHold: true });
+  const client = fakeClient({ submissions: [heldApplication, file()] });
+  const adapter = adapterFor(client);
   let deletes = 0;
   await assert.rejects(
-    () => adapter.purge(application({ legalHold: true }), {
+    () => adapter.purge(heldApplication, {
       async delete() { deletes += 1; }
     }, {
       quarantine: 'recruitment-quarantine',
@@ -209,22 +221,47 @@ test('legal hold prevents any Blob deletion or redaction', async () => {
   assert.equal(client.submissions.get('SV-APP-2026-ABC123::application').candidateEmail, 'candidate@example.com');
 });
 
+test('retention controls cannot overwrite an active purge lease', async () => {
+  const client = fakeClient({ submissions: [application(), file()] });
+  const adapter = adapterFor(client);
+  await assert.rejects(
+    () => adapter.updateControls({
+      applicationReference: 'SV-APP-2026-ABC123',
+      legalHold: true,
+      reason: 'Preserve for active proceedings.',
+      principalObjectId: 'legal-admin'
+    }),
+    (error) => error.code === 'RETENTION_PURGE_IN_PROGRESS'
+  );
+  assert.equal(client.submissions.get('SV-APP-2026-ABC123::application').legalHold, false);
+});
+
+test('purge rejects stale or expired lease ownership before deleting Blobs', async () => {
+  const client = fakeClient({ submissions: [application(), file()] });
+  const adapter = adapterFor(client);
+  let deletes = 0;
+  await assert.rejects(
+    () => adapter.purge(application({ retentionLeaseOwner: 'other-worker' }), {
+      async delete() { deletes += 1; }
+    }, { quarantine: 'q', clean: 'c' }),
+    (error) => error.code === 'RETENTION_LEASE_INVALID'
+  );
+  assert.equal(deletes, 0);
+});
+
 test('purge deletes both Blob copies, redacts Cosmos, removes idempotency and emits projection event', async () => {
+  const claimed = application();
   const client = fakeClient({
-    submissions: [application(), file()],
+    submissions: [claimed, file()],
     idempotency: [{
       id: 'init:legal-assistant:uuid',
       idempotencyKey: 'init:legal-assistant:uuid',
       state: 'CredentialsIssued'
     }]
   });
-  const adapter = createRetentionAdapter({
-    client,
-    databaseId: 'recruitment',
-    now: () => new Date('2026-07-22T01:00:00.000Z')
-  });
+  const adapter = adapterFor(client);
   const deleted = [];
-  const result = await adapter.purge(application(), {
+  const result = await adapter.purge(claimed, {
     async delete(container, path) {
       deleted.push({ container, path });
       return true;
@@ -255,25 +292,22 @@ test('purge deletes both Blob copies, redacts Cosmos, removes idempotency and em
   assert.equal(outbox.state, 'Pending');
 });
 
-test('due-application claims skip held records and use conditional leases', async () => {
+test('due claims skip held records and reclaim expired processing leases', async () => {
   const client = fakeClient({
     submissions: [
-      application({ applicationReference: 'APP-DUE', idempotencyKey: 'due', retentionState: 'Active' }),
-      application({ applicationReference: 'APP-HELD', idempotencyKey: 'held', retentionState: 'Active', legalHold: true })
+      application({ applicationReference: 'APP-DUE', idempotencyKey: 'due', retentionState: 'Active', retentionLeaseOwner: null, retentionLeaseExpiresAtUtc: null }),
+      application({ applicationReference: 'APP-HELD', idempotencyKey: 'held', retentionState: 'Active', retentionLeaseOwner: null, retentionLeaseExpiresAtUtc: null, legalHold: true }),
+      application({ applicationReference: 'APP-EXPIRED', idempotencyKey: 'expired', retentionState: 'Processing', retentionLeaseOwner: 'dead-worker', retentionLeaseExpiresAtUtc: '2026-07-22T00:30:00.000Z' }),
+      application({ applicationReference: 'APP-ACTIVE-LEASE', idempotencyKey: 'active-lease', retentionState: 'Processing', retentionLeaseOwner: 'other-worker', retentionLeaseExpiresAtUtc: '2026-07-22T01:30:00.000Z' })
     ]
   });
-  const adapter = createRetentionAdapter({
-    client,
-    databaseId: 'recruitment',
-    now: () => new Date('2026-07-22T01:00:00.000Z')
-  });
+  const adapter = adapterFor(client);
   const claimed = await adapter.claimDueBatch({
     limit: 10,
     owner: 'worker-1',
     leaseExpiresAtUtc: '2026-07-22T01:15:00.000Z'
   });
-  assert.equal(claimed.length, 1);
-  assert.equal(claimed[0].applicationReference, 'APP-DUE');
-  assert.equal(claimed[0].retentionState, 'Processing');
-  assert.equal(claimed[0].retentionLeaseOwner, 'worker-1');
+  assert.deepEqual(claimed.map((item) => item.applicationReference).sort(), ['APP-DUE', 'APP-EXPIRED']);
+  assert.ok(claimed.every((item) => item.retentionState === 'Processing'));
+  assert.ok(claimed.every((item) => item.retentionLeaseOwner === 'worker-1'));
 });
