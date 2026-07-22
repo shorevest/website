@@ -74,6 +74,56 @@ jobs:
             "https://shorevest.com/employee-portal/?diag=${DIAG}" \
             >> artifacts/live-portal/live-chrome.log 2>&1 || true
 
+      - name: Run WebKit against the live URL
+        shell: bash
+        run: |
+          mkdir -p /tmp/sv-webkit
+          cd /tmp/sv-webkit
+          npm init -y >/dev/null 2>&1
+          npm install playwright@1.54.1 >/dev/null
+          npx playwright install --with-deps webkit >/dev/null
+          node - <<'JS'
+          const fs = require('fs');
+          const { webkit } = require('playwright');
+          (async () => {
+            const messages = [];
+            const browser = await webkit.launch({ headless: true });
+            const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+            page.on('console', msg => messages.push({ type: 'console:' + msg.type(), text: msg.text() }));
+            page.on('pageerror', err => messages.push({ type: 'pageerror', text: err.stack || err.message }));
+            page.on('requestfailed', req => messages.push({ type: 'requestfailed', text: req.url() + ' :: ' + (req.failure() && req.failure().errorText) }));
+            const url = 'https://shorevest.com/employee-portal/?webkit-diag=' + Date.now();
+            let navigationError = null;
+            try {
+              await page.goto(url, { waitUntil: 'networkidle', timeout: 60000 });
+              await page.waitForTimeout(8000);
+            } catch (err) {
+              navigationError = err.stack || err.message;
+            }
+            const html = await page.content();
+            const result = {
+              url,
+              navigationError,
+              title: await page.title(),
+              renderedLogin: await page.locator('.login__submit').count() > 0,
+              renderedShell: await page.locator('.ops-shell').count() > 0,
+              renderedRecovery: await page.locator('[data-boot-recovery="true"]').count() > 0,
+              stillRenderingLoader: html.includes('Loading ShoreVest One'),
+              buildMarker: await page.locator('html').getAttribute('data-portal-build'),
+              messages
+            };
+            fs.writeFileSync(process.env.GITHUB_WORKSPACE + '/artifacts/live-portal/webkit-result.json', JSON.stringify(result, null, 2) + '\n');
+            fs.writeFileSync(process.env.GITHUB_WORKSPACE + '/artifacts/live-portal/webkit-dom.html', html);
+            await page.screenshot({ path: process.env.GITHUB_WORKSPACE + '/artifacts/live-portal/webkit-page.png', fullPage: true });
+            console.log(JSON.stringify(result, null, 2));
+            await browser.close();
+          })().catch(err => {
+            fs.writeFileSync(process.env.GITHUB_WORKSPACE + '/artifacts/live-portal/webkit-run-error.txt', err.stack || String(err));
+            console.error(err);
+            process.exitCode = 0;
+          });
+          JS
+
       - name: Summarize the live result
         shell: bash
         run: |
@@ -83,16 +133,24 @@ jobs:
           root = Path('artifacts/live-portal')
           html = (root/'live-index.html').read_text(errors='replace') if (root/'live-index.html').exists() else ''
           dom = (root/'live-dom.html').read_text(errors='replace') if (root/'live-dom.html').exists() else ''
+          webkit = {}
+          if (root/'webkit-result.json').exists():
+              webkit = json.loads((root/'webkit-result.json').read_text())
           result = {
               'live_index_bytes': len(html.encode()),
               'has_current_build_marker': 'data-portal-build="20260723b"' in html,
               'has_boot_guard_reference': 'boot-guard.js' in html,
               'has_app_reference': 'employee-portal/app.js' in html,
-              'rendered_login': 'login__submit' in dom,
-              'rendered_shell': 'ops-shell' in dom,
-              'rendered_recovery': 'data-boot-recovery="true"' in dom,
-              'still_rendering_loader': 'Loading ShoreVest One' in dom,
-              'dom_bytes': len(dom.encode()),
+              'chrome_rendered_login': 'login__submit' in dom,
+              'chrome_rendered_shell': 'ops-shell' in dom,
+              'chrome_rendered_recovery': 'data-boot-recovery="true"' in dom,
+              'chrome_still_rendering_loader': 'Loading ShoreVest One' in dom,
+              'webkit_rendered_login': webkit.get('renderedLogin'),
+              'webkit_rendered_shell': webkit.get('renderedShell'),
+              'webkit_rendered_recovery': webkit.get('renderedRecovery'),
+              'webkit_still_rendering_loader': webkit.get('stillRenderingLoader'),
+              'webkit_build_marker': webkit.get('buildMarker'),
+              'webkit_messages': webkit.get('messages', []),
           }
           (root/'summary.json').write_text(json.dumps(result, indent=2) + '\n')
           print(json.dumps(result, indent=2))
