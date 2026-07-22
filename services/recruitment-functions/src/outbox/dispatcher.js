@@ -35,6 +35,22 @@ function retentionPurged(record, event) {
   return event?.type === EVENTS.RetentionPurged || record?.retentionState === 'Purged';
 }
 
+function setNotificationState(fields, prefix, event) {
+  fields[`${prefix}NotificationState`] = 'Pending';
+  fields[`${prefix}NotificationEventKey`] = event.idempotencyKey;
+  fields[`${prefix}NotificationSentAtUtc`] = null;
+  fields[`${prefix}NotificationAttemptCount`] = 0;
+  fields[`${prefix}NotificationLastErrorCode`] = null;
+}
+
+function clearNotificationState(fields, prefix) {
+  fields[`${prefix}NotificationState`] = null;
+  fields[`${prefix}NotificationEventKey`] = null;
+  fields[`${prefix}NotificationSentAtUtc`] = null;
+  fields[`${prefix}NotificationAttemptCount`] = null;
+  fields[`${prefix}NotificationLastErrorCode`] = null;
+}
+
 function applicationFields(application, event = {}) {
   const purged = retentionPurged(application, event);
   const fields = compactFields({
@@ -75,12 +91,16 @@ function applicationFields(application, event = {}) {
     LastUpdatedAtUtc: application.lastUpdatedAtUtc
   });
 
-  if ([EVENTS.ApplicationReceived, EVENTS.DocumentsReady].includes(event.type)) {
+  if (event.type === EVENTS.ApplicationReceived) {
     fields.NotificationState = 'Pending';
     fields.NotificationEventKey = event.idempotencyKey;
     fields.NotificationSentAtUtc = null;
     fields.NotificationAttemptCount = 0;
     fields.NotificationLastErrorCode = null;
+    setNotificationState(fields, 'ApplicationReceived', event);
+  }
+  if (event.type === EVENTS.DocumentsReady) {
+    setNotificationState(fields, 'DocumentsReady', event);
   }
   if (purged) {
     fields.NotificationState = null;
@@ -88,6 +108,8 @@ function applicationFields(application, event = {}) {
     fields.NotificationSentAtUtc = null;
     fields.NotificationAttemptCount = null;
     fields.NotificationLastErrorCode = null;
+    clearNotificationState(fields, 'ApplicationReceived');
+    clearNotificationState(fields, 'DocumentsReady');
   }
   return fields;
 }
@@ -235,7 +257,8 @@ function createOutboxDispatcher({ graph, config } = {}) {
 
   async function project(event, dependencies) {
     const application = await loadApplication(event, dependencies);
-    if (!application.finalizedAtUtc || application.candidateSubmissionStatus !== 'Submitted' && application.candidateSubmissionStatus !== 'Deleted') {
+    const finalizedStatus = ['Submitted', 'Deleted'].includes(application.candidateSubmissionStatus);
+    if (!application.finalizedAtUtc || !finalizedStatus) {
       return {
         deliveryReference: `deferred:${event.type}:${application.applicationReference}`,
         skipped: true,
