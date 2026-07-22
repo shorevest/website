@@ -18,8 +18,8 @@ test('base recruitment infrastructure remains disabled by default', () => {
   assert.doesNotMatch(source, /name:\s*'RECRUITMENT_API_ENABLED'\s*\n\s*value:\s*'true'/);
 });
 
-test('authoritative runtime settings deploy exact Turnstile hostname and action constraints', () => {
-  const source = read('infra/recruitment/runtime-settings.bicep');
+test('authoritative runtime settings v2 deploy exact Turnstile hostname and action constraints', () => {
+  const source = read('infra/recruitment/runtime-settings.v2.bicep');
   assert.match(
     source,
     /param botVerificationHostnames string = 'shorevest\.com,www\.shorevest\.com'/
@@ -38,17 +38,17 @@ test('authoritative runtime settings deploy exact Turnstile hostname and action 
   );
 });
 
-test('runtime settings keep every external and destructive capability off by default', () => {
-  const source = read('infra/recruitment/runtime-settings.bicep');
+test('authoritative runtime settings v2 keep every external and destructive capability off by default', () => {
+  const source = read('infra/recruitment/runtime-settings.v2.bicep');
   for (const declaration of [
-    'param apiEnabled bool = false',
-    'param outboxDeliveryEnabled bool = false',
-    'param candidateAcknowledgementEnabled bool = false',
+    'param enableApi bool = false',
+    'param enableOutboxDelivery bool = false',
+    'param enableCandidateAcknowledgement bool = false',
     'param candidateAcknowledgementTemplateApproved bool = false',
-    'param hrAccessEnabled bool = false',
+    'param enableHrAccess bool = false',
     'param platformAuthenticationEnabled bool = false',
-    'param retentionEnabled bool = false',
-    'param retentionDeletionEnabled bool = false'
+    'param enableRetention bool = false',
+    'param enableRetentionDeletion bool = false'
   ]) {
     assert.ok(source.includes(declaration), `missing safe default: ${declaration}`);
   }
