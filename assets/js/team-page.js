@@ -46,13 +46,6 @@
         letter-spacing: 0 !important;
       }
 
-      html body.team-page-v2 .group--client-solutions .group__summary,
-      html body.team-page-v2 .group--senior-advisers .group__summary {
-        width: min(100%, 470px) !important;
-        max-width: 470px !important;
-        justify-self: end !important;
-      }
-
       @media (max-width: 900px) {
         html body.team-page-v2 .group__head {
           grid-template-columns: minmax(200px, 0.72fr) minmax(340px, 1.28fr) !important;
