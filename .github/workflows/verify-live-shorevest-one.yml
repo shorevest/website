@@ -1,0 +1,114 @@
+name: Verify live ShoreVest One
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/verify-live-shorevest-one.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Wait for fixed portal build
+        shell: bash
+        run: |
+          mkdir -p artifacts/live-portal
+          for attempt in $(seq 1 60); do
+            curl -fsSL "https://shorevest.com/employee-portal/?deploy-check=${GITHUB_SHA}-${attempt}" \
+              -o artifacts/live-portal/live-index.html
+            if grep -q 'data-portal-build="20260723c"' artifacts/live-portal/live-index.html; then
+              echo "Fixed build is live."
+              exit 0
+            fi
+            echo "Waiting for build 20260723c (${attempt}/60)…"
+            sleep 5
+          done
+          echo "Fixed build did not reach the live site within five minutes."
+          exit 1
+
+      - name: Install browser driver
+        run: npm install --no-save playwright-core@1.54.1
+
+      - name: Verify live entry, stable Home, and Asset Tracing
+        shell: bash
+        run: |
+          node - <<'JS'
+          const fs = require('fs');
+          const { chromium } = require('playwright-core');
+          (async () => {
+            const messages = [];
+            const browser = await chromium.launch({
+              headless: true,
+              executablePath: '/usr/bin/google-chrome',
+              args: ['--no-sandbox', '--disable-gpu']
+            });
+            const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+            page.on('console', msg => {
+              if (msg.type() === 'error') messages.push({ type: 'console', text: msg.text() });
+            });
+            page.on('pageerror', err => messages.push({ type: 'pageerror', text: err.stack || err.message }));
+            page.on('requestfailed', req => messages.push({
+              type: 'requestfailed',
+              text: req.url() + ' :: ' + ((req.failure() && req.failure().errorText) || '')
+            }));
+
+            const url = 'https://shorevest.com/employee-portal/?live-entry-check=' + Date.now();
+            await page.goto(url, { waitUntil: 'networkidle', timeout: 60000 });
+            await page.waitForSelector('.login__submit', { timeout: 15000 });
+            await page.locator('.login__submit').click();
+            await page.waitForSelector('.ops-shell', { timeout: 15000 });
+            await page.waitForSelector('.guided-home', { timeout: 15000 });
+
+            await page.waitForTimeout(1500);
+            const signatureOne = await page.evaluate(() => window.SVOps.state.dashboardTravelSignature || '');
+            const homeOne = await page.locator('.guided-home').count();
+            await page.waitForTimeout(3500);
+            const signatureTwo = await page.evaluate(() => window.SVOps.state.dashboardTravelSignature || '');
+            const homeTwo = await page.locator('.guided-home').count();
+            const pending = await page.evaluate(() => !!window.SVOps.state.dashboardTravelPending);
+
+            await page.evaluate(() => { location.hash = '#/workspace/asset-tracing'; });
+            await page.waitForSelector('.at-workspace', { timeout: 15000 });
+            await page.waitForTimeout(1000);
+
+            const result = {
+              url,
+              buildMarker: await page.locator('html').getAttribute('data-portal-build'),
+              signedInShell: await page.locator('.ops-shell').count() === 1,
+              homeRemainedMounted: homeOne === 1 && homeTwo === 1,
+              travelSignatureSettled: !!signatureOne && signatureOne === signatureTwo,
+              travelRequestPending: pending,
+              assetTracingRendered: await page.locator('.at-workspace').count() === 1,
+              finalHash: await page.evaluate(() => location.hash),
+              messages
+            };
+            fs.writeFileSync('artifacts/live-portal/result.json', JSON.stringify(result, null, 2) + '\n');
+            await page.screenshot({ path: 'artifacts/live-portal/asset-tracing-live.png', fullPage: true });
+            console.log(JSON.stringify(result, null, 2));
+            await browser.close();
+
+            if (result.buildMarker !== '20260723c' || !result.signedInShell ||
+                !result.homeRemainedMounted || !result.travelSignatureSettled ||
+                result.travelRequestPending || !result.assetTracingRendered ||
+                result.messages.length) process.exit(1);
+          })().catch(error => {
+            fs.writeFileSync('artifacts/live-portal/run-error.txt', error.stack || String(error));
+            console.error(error);
+            process.exit(1);
+          });
+          JS
+
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-shorevest-one-verification
+          path: artifacts/live-portal/*
+          if-no-files-found: error
