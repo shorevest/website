@@ -4,28 +4,37 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const GUARD_VERSION = '20260722-google-search-refresh';
-const FAVICON_ROOT = '/favicon.ico';
-const FAVICON_SVG = '/assets/favicon-shorevest-20260722.svg';
-const FAVICON_ICO = '/assets/favicon-shorevest-20260722.ico';
-const FAVICON_32 = '/assets/favicon-shorevest-20260722-32x32.png';
-const FAVICON_16 = '/assets/favicon-shorevest-20260722-16x16.png';
-const APPLE_TOUCH = '/assets/apple-touch-icon-shorevest-20260722.png';
-const MANIFEST = '/site-20260722.webmanifest';
+const GUARD_VERSION = '20260724-sitewide-favicon';
+const FAVICON_SVG = '/assets/favicon-shorevest-20260724.svg';
+const FAVICON_ICO = '/assets/favicon-shorevest-20260724.ico';
+const FAVICON_32 = '/assets/favicon-shorevest-20260724-32x32.png';
+const FAVICON_16 = '/assets/favicon-shorevest-20260724-16x16.png';
+const APPLE_TOUCH = '/assets/apple-touch-icon-shorevest-20260724.png';
+const MANIFEST = '/site-20260724.webmanifest';
 const HOME_TITLE = 'ShoreVest Partners | China Asset-Backed Private Credit';
 const HOME_DESCRIPTION = 'ShoreVest Partners is a specialist in asset-backed private credit in China, providing solutions for borrowers and financial institutions.';
 
 const FAVICON_BLOCK = [
-  '<!-- ShoreVest favicon: the stable root URL gives search engines one canonical icon. -->',
-  `<link rel="icon" href="${FAVICON_ROOT}" sizes="48x48">`,
-  `<link rel="shortcut icon" href="${FAVICON_ROOT}">`,
+  '<!-- ShoreVest favicon: dated filenames prevent browsers from reusing retired tab artwork. -->',
   `<link rel="icon" href="${FAVICON_SVG}" type="image/svg+xml" sizes="any">`,
   `<link rel="icon" href="${FAVICON_ICO}" sizes="any">`,
+  `<link rel="shortcut icon" href="${FAVICON_ICO}">`,
   `<link rel="icon" href="${FAVICON_32}" type="image/png" sizes="32x32">`,
   `<link rel="icon" href="${FAVICON_16}" type="image/png" sizes="16x16">`,
   `<link rel="apple-touch-icon" href="${APPLE_TOUCH}" sizes="180x180">`,
   `<link rel="manifest" href="${MANIFEST}">`
 ].join('\n');
+
+const REQUIRED_FAVICON_HREFS = [
+  FAVICON_SVG,
+  FAVICON_ICO,
+  FAVICON_32,
+  FAVICON_16,
+  APPLE_TOUCH,
+  MANIFEST
+];
+
+const LEGACY_FAVICON_PATTERN = /(?:\/favicon\.ico|favicon-(?:cinnabar|shorevest-20260722)|apple-touch-icon-(?:cinnabar|shorevest-20260722)|site-20260722\.webmanifest|site\.webmanifest)/i;
 
 const WEBSITE_SCHEMA = [
   '<script type="application/ld+json" data-sv-website-schema="true">',
@@ -119,7 +128,7 @@ function normalizeHomepageSearchSignals(html) {
   if (!/<meta\b(?=[^>]*\bproperty=(["'])og:site_name\1)[^>]*>/i.test(output)) {
     const ogLocale = /(<meta\b[^>]*\bproperty=(["'])og:locale\2[^>]*>\s*)/i;
     if (ogLocale.test(output)) {
-      output = output.replace(ogLocale, `$1<meta property="og:site_name" content="ShoreVest">\n`);
+      output = output.replace(ogLocale, '$1<meta property="og:site_name" content="ShoreVest">\n');
     } else {
       output = output.replace(/<\/head>/i, '<meta property="og:site_name" content="ShoreVest">\n</head>');
     }
@@ -129,7 +138,7 @@ function normalizeHomepageSearchSignals(html) {
 
   output = output.replace(/^[ \t]*"foundingDate"\s*:\s*"[^"]+",\s*\r?\n/m, '');
   output = output.replace(/"description"\s*:\s*"ShoreVest is a specialist in private credit, providing solutions for both borrowers and financial institutions across China\."/, `"description": "${HOME_DESCRIPTION}"`);
-  output = output.replace(/https:\/\/shorevest\.com\/assets\/apple-touch-icon-cinnabar\.png/g, 'https://shorevest.com/assets/favicon-shorevest-20260722.svg');
+  output = output.replace(/https:\/\/shorevest\.com\/assets\/(?:apple-touch-icon-(?:cinnabar|shorevest-20260722|shorevest-20260724)\.png|favicon-shorevest-20260722\.svg)/g, `https://shorevest.com${FAVICON_SVG}`);
   output = output.replace(/"width"\s*:\s*180/g, '"width": 512');
   output = output.replace(/"height"\s*:\s*180/g, '"height": 512');
 
@@ -142,6 +151,27 @@ function normalizeHomepageSearchSignals(html) {
   }
 
   return output;
+}
+
+function faviconLinkHrefs(html) {
+  const hrefs = [];
+  const links = html.match(/<link\b[^>]*>/gi) || [];
+  for (const tag of links) {
+    const relMatch = tag.match(/\brel\s*=\s*(["'])(.*?)\1/i);
+    const hrefMatch = tag.match(/\bhref\s*=\s*(["'])(.*?)\1/i);
+    if (!relMatch || !hrefMatch) continue;
+    const rels = relMatch[2].toLowerCase().trim().split(/\s+/).filter(Boolean);
+    if (rels.some(rel => rel === 'icon' || rel === 'shortcut' || rel === 'apple-touch-icon' || rel === 'mask-icon' || rel === 'manifest')) {
+      hrefs.push(hrefMatch[2].split(/[?#]/)[0]);
+    }
+  }
+  return hrefs;
+}
+
+function hasValidFaviconSet(html) {
+  const hrefs = faviconLinkHrefs(html);
+  if (hrefs.some(href => LEGACY_FAVICON_PATTERN.test(href))) return false;
+  return REQUIRED_FAVICON_HREFS.every(href => hrefs.includes(href));
 }
 
 function normalize(html) {
@@ -158,8 +188,9 @@ function main() {
   const changed = [];
   const invalid = [];
   const invalidHomepageSignals = [];
+  const publicHtml = walk(ROOT).filter(isPublicHtml);
 
-  for (const absolute of walk(ROOT).filter(isPublicHtml)) {
+  for (const absolute of publicHtml) {
     const relative = path.relative(ROOT, absolute).split(path.sep).join('/');
     const before = fs.readFileSync(absolute, 'utf8');
     const after = normalize(before);
@@ -170,11 +201,7 @@ function main() {
     }
 
     const inspected = validate ? before : after;
-    if (/<head(?:\s|>)/i.test(inspected)) {
-      const hasRootIcon = /<link\b(?=[^>]*\brel=(["'])(?:shortcut\s+)?icon\1)(?=[^>]*\bhref=(["'])\/favicon\.ico\2)[^>]*>/i.test(inspected);
-      const hasBrandedSvg = /<link\b(?=[^>]*\brel=(["'])icon\1)(?=[^>]*\bhref=(["'])\/assets\/favicon-shorevest-20260722\.svg\2)[^>]*>/i.test(inspected);
-      if (!hasRootIcon || !hasBrandedSvg) invalid.push(relative);
-    }
+    if (/<head(?:\s|>)/i.test(inspected) && !hasValidFaviconSet(inspected)) invalid.push(relative);
 
     if (isCanonicalHomepage(inspected)) {
       const validTitle = inspected.includes(`<title>${HOME_TITLE}</title>`);
@@ -186,13 +213,13 @@ function main() {
   }
 
   if (validate && (invalid.length || invalidHomepageSignals.length)) {
-    if (invalid.length) console.error(`Invalid favicon declarations in ${invalid.length} file(s): ${invalid.slice(0, 10).join(', ')}`);
+    if (invalid.length) console.error(`Invalid favicon declarations in ${invalid.length} file(s): ${invalid.slice(0, 20).join(', ')}`);
     if (invalidHomepageSignals.length) console.error(`Invalid homepage search signals in ${invalidHomepageSignals.length} file(s): ${invalidHomepageSignals.join(', ')}`);
     process.exit(1);
   }
 
-  if (!validate) console.log(`Normalized favicon declarations and homepage search signals across ${changed.length} public HTML file(s).`);
-  else console.log('Validated stable favicon declarations and homepage search signals across public HTML files.');
+  if (!validate) console.log(`Normalized the 20260724 ShoreVest favicon set across ${changed.length} of ${publicHtml.length} public HTML file(s).`);
+  else console.log(`Validated the 20260724 ShoreVest favicon set across ${publicHtml.length} public HTML file(s).`);
 }
 
 main();
