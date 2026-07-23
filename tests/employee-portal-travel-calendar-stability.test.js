@@ -53,7 +53,13 @@ async function main() {
   const homeAt = index.indexOf('employee-portal/views-home.js');
   assert.ok(adapterAt !== -1 && stabilityAt > adapterAt, 'stability layer must load after the calendar adapter');
   assert.ok(homeAt !== -1 && stabilityAt < homeAt, 'stability layer must load before Home views');
-  assert.ok(index.includes('data-portal-build="20260723c"'), 'portal build key should force fresh files');
+
+  const buildMatch = index.match(/data-portal-build="([^"]+)"/);
+  assert.ok(buildMatch && buildMatch[1], 'portal should declare a build key');
+  const buildKey = buildMatch[1];
+  const portalRefs = index.match(/(?:assets\/css\/employee-portal[^"']+|assets\/js\/employee-portal[^"']+|assets\/js\/vendor\/msal-browser[^"']+)/g) || [];
+  assert.ok(portalRefs.length > 20, 'expected full portal asset list');
+  portalRefs.forEach((ref) => assert.ok(ref.includes('v=' + buildKey), 'stale portal asset key: ' + ref));
 
   ['fetch(', 'XMLHttpRequest', 'WebSocket', 'navigator.sendBeacon', 'localStorage.setItem'].forEach((token) => {
     assert.ok(!source.includes(token), 'stability layer contains prohibited action: ' + token);

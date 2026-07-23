@@ -1,0 +1,27 @@
+/* ShoreVest One — team-grouped sidebar labels. */
+.ops-nav__sep {
+  margin: 18px 18px 7px;
+  padding-top: 12px;
+  border-top: 1px solid var(--ops-hairline);
+  font: 700 9.5px/1.2 var(--ops-font);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ops-charcoal);
+}
+
+.ops-nav__sep:first-child {
+  margin-top: 7px;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.ops-nav__sep + .ops-navlink {
+  margin-top: 4px;
+}
+
+@media (max-width: 760px) {
+  .ops-nav__sep {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+}

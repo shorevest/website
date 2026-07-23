@@ -87,11 +87,6 @@ function writeQaFiles() {
   function openNewCase() {
     location.hash = '#/workspace/asset-tracing';
     waitFor(function () { return document.querySelector('.at-workspace'); }, function () {
-      var queueHelp = document.querySelector('.at-queue-help');
-      var rowActions = document.querySelectorAll('.at-case-panel .at-row-action');
-      if (queueHelp && rowActions.length) {
-        document.body.dataset.qaQueueGuidance = 'true';
-      }
       var button = Array.prototype.slice.call(document.querySelectorAll('button')).filter(function (b) {
         return b.textContent.trim() === 'New case';
       })[0];
@@ -99,6 +94,8 @@ function writeQaFiles() {
       button.click();
       waitFor(function () { return document.querySelector('.drawer'); }, function () {
         waitFor(function () {
+          var queueHelp = document.querySelector('.at-queue-help');
+          var rowActions = document.querySelectorAll('.at-case-panel .at-row-action');
           var fields = Array.prototype.slice.call(document.querySelectorAll('.drawer .fld'));
           var primary = Array.prototype.slice.call(document.querySelectorAll('.drawer button')).filter(function (b) {
             return b.textContent.trim() === 'Create case';
@@ -110,9 +107,10 @@ function writeQaFiles() {
             var control = field.querySelector('input, select, textarea');
             return !label || !control || (control.id && label.htmlFor === control.id);
           });
-          return labelsReady && required.length === 5 && primary && primary.disabled &&
-            status && /required fields/.test(status.textContent);
+          return queueHelp && rowActions.length && labelsReady && required.length === 5 &&
+            primary && primary.disabled && status && /required fields/.test(status.textContent);
         }, function () {
+          document.body.dataset.qaQueueGuidance = 'true';
           document.body.dataset.qaLabels = 'true';
           document.body.dataset.qaRequired = 'true';
           document.body.dataset.qaBlockedIncomplete = 'true';

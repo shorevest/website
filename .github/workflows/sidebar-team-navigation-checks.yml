@@ -1,0 +1,57 @@
+name: Sidebar team navigation checks
+
+on:
+  pull_request:
+    paths:
+      - 'employee-portal/index.html'
+      - 'assets/js/employee-portal/sidebar-team-navigation.js'
+      - 'assets/css/employee-portal-sidebar-teams.css'
+      - 'tests/employee-portal-sidebar-team-navigation.test.js'
+      - '.github/workflows/sidebar-team-navigation-checks.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sidebar-navigation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Check JavaScript syntax
+        run: |
+          node --check assets/js/employee-portal/sidebar-team-navigation.js
+          node --check tests/employee-portal-sidebar-team-navigation.test.js
+
+      - name: Run team navigation regression test
+        run: node tests/employee-portal-sidebar-team-navigation.test.js
+
+      - name: Render signed-in sidebar in Chrome
+        shell: bash
+        run: |
+          mkdir -p artifacts/sidebar-navigation
+          python3 -m http.server 4175 --bind 127.0.0.1 > artifacts/sidebar-navigation/server.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill $SERVER_PID || true' EXIT
+          sleep 1
+          google-chrome --headless=new --no-sandbox --disable-gpu --virtual-time-budget=12000 \
+            --window-size=1440,1000 \
+            --dump-dom 'http://127.0.0.1:4175/employee-portal/#/home' \
+            > artifacts/sidebar-navigation/login-dom.html \
+            2> artifacts/sidebar-navigation/chrome.log
+          grep -q 'login__submit' artifacts/sidebar-navigation/login-dom.html
+
+      - name: Upload diagnostic artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sidebar-navigation-qa
+          path: artifacts/sidebar-navigation/*
+          if-no-files-found: error
