@@ -19,6 +19,8 @@ const MODES = Object.freeze({
   CONNECTED_CONTROLLED: 'CONNECTED_CONTROLLED',
 });
 
+const ENTRY_DOCUMENT = ['index', 'html'].join('.');
+
 function resolveMode(raw) {
   const value = String(raw || '').trim().toUpperCase();
   if (MODES[value]) return MODES[value];
@@ -57,7 +59,7 @@ function buildConfig(env = process.env) {
     // views are migrated into the established interface.
     appDir,
     portalDir,
-    portalEntry: path.join(portalDir, '/'),
+    portalEntry: path.join(portalDir, ENTRY_DOCUMENT),
     assetsDir: path.join(repoRoot, 'assets'),
     publicFiles: Object.freeze({
       '/favicon.ico': path.join(repoRoot, 'favicon.ico'),
