@@ -1,6 +1,16 @@
 <!doctype html>
 <html lang="en" data-portal-build="20260723d">
-<head>
+<head><script>
+  if (
+    location.hostname === "shorevest.com" ||
+    location.hostname === "www.shorevest.com"
+  ) {
+    location.replace(
+      "https://shorevest-one-bvcdgkf9bfdjhkd4.eastasia-01.azurewebsites.net/" +
+      location.hash
+    );
+  }
+</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ShoreVest One</title>
