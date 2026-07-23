@@ -28,6 +28,8 @@ function resolveMode(raw) {
 function buildConfig(env = process.env) {
   const mode = resolveMode(env.SHOREVEST_ONE_MODE);
   const repoRoot = path.resolve(__dirname, '..');
+  const appDir = path.join(repoRoot, 'app');
+  const portalDir = path.join(repoRoot, 'employee-portal');
 
   return Object.freeze({
     mode,
@@ -49,7 +51,20 @@ function buildConfig(env = process.env) {
     banner: bannerFor(mode),
 
     repoRoot,
-    appDir: path.join(repoRoot, 'app'),
+
+    // The established employee portal is the primary Azure frontend. The newer
+    // server-backed shell remains available under /app/ while its API-backed
+    // views are migrated into the established interface.
+    appDir,
+    portalDir,
+    portalEntry: path.join(portalDir, 'index.html'),
+    assetsDir: path.join(repoRoot, 'assets'),
+    publicFiles: Object.freeze({
+      '/favicon.ico': path.join(repoRoot, 'favicon.ico'),
+      '/site.webmanifest': path.join(repoRoot, 'site.webmanifest'),
+      '/site-20260722.webmanifest': path.join(repoRoot, 'site-20260722.webmanifest'),
+      '/robots.txt': path.join(repoRoot, 'robots.txt'),
+    }),
 
     // Connector configuration placeholders. Real values arrive via env vars.
     // Presence of a value does NOT enable writes — the mode does.
