@@ -1,5 +1,5 @@
 (function () {
-  var VERSION = "20260722-cn-serif-unify";
+  var VERSION = "20260724-favicon-runtime-refresh";
 
   function removeEmptyLegacyToken() {
     try {
@@ -23,15 +23,18 @@
     base = script.src.replace(/assets\/js\/favicon-guard\.js.*$/, "");
   }
 
+  // The stable root favicon remains in the server-rendered HTML for crawlers.
+  // At runtime, use only the versioned asset paths so browsers cannot select a
+  // stale cached copy of /favicon.ico for the active tab.
+  var iconVersion = "?v=" + VERSION;
   var ICONS = [
-    { rel: "icon", href: base + "favicon.ico", sizes: "48x48" },
-    { rel: "shortcut icon", href: base + "favicon.ico" },
-    { rel: "icon", href: base + "assets/favicon-shorevest-20260722.svg", type: "image/svg+xml", sizes: "any" },
-    { rel: "icon", href: base + "assets/favicon-shorevest-20260722.ico", sizes: "any" },
-    { rel: "icon", href: base + "assets/favicon-shorevest-20260722-32x32.png", type: "image/png", sizes: "32x32" },
-    { rel: "icon", href: base + "assets/favicon-shorevest-20260722-16x16.png", type: "image/png", sizes: "16x16" },
-    { rel: "apple-touch-icon", href: base + "assets/apple-touch-icon-shorevest-20260722.png", sizes: "180x180" },
-    { rel: "manifest", href: base + "site-20260722.webmanifest" }
+    { rel: "icon", href: base + "assets/favicon-shorevest-20260722.svg" + iconVersion, type: "image/svg+xml", sizes: "any" },
+    { rel: "icon", href: base + "assets/favicon-shorevest-20260722.ico" + iconVersion, sizes: "any" },
+    { rel: "shortcut icon", href: base + "assets/favicon-shorevest-20260722.ico" + iconVersion },
+    { rel: "icon", href: base + "assets/favicon-shorevest-20260722-32x32.png" + iconVersion, type: "image/png", sizes: "32x32" },
+    { rel: "icon", href: base + "assets/favicon-shorevest-20260722-16x16.png" + iconVersion, type: "image/png", sizes: "16x16" },
+    { rel: "apple-touch-icon", href: base + "assets/apple-touch-icon-shorevest-20260722.png" + iconVersion, sizes: "180x180" },
+    { rel: "manifest", href: base + "site-20260722.webmanifest" + iconVersion }
   ];
 
   function setAttr(el, key, value) {
