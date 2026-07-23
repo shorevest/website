@@ -57,7 +57,7 @@ function buildConfig(env = process.env) {
     // views are migrated into the established interface.
     appDir,
     portalDir,
-    portalEntry: path.join(portalDir, 'index.html'),
+    portalEntry: path.join(portalDir, '/'),
     assetsDir: path.join(repoRoot, 'assets'),
     publicFiles: Object.freeze({
       '/favicon.ico': path.join(repoRoot, 'favicon.ico'),
