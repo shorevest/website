@@ -78,6 +78,28 @@
     document.head.appendChild(style);
   };
 
+  const removeRetiredProfiles = () => {
+    ["bio-yao-fu"].forEach((bioId) => {
+      const bio = document.getElementById(bioId);
+      const profile =
+        bio?.closest(".team-profile[data-team-profile]") ||
+        document
+          .querySelector(`[data-team-photo="${bioId}"]`)
+          ?.closest(".team-profile[data-team-profile]");
+
+      if (!profile) return;
+
+      const grid = profile.closest("[data-team-grid]");
+      profile.remove();
+
+      if (grid) {
+        grid.dataset.teamCount = String(
+          grid.querySelectorAll(".team-profile[data-team-profile]").length,
+        );
+      }
+    });
+  };
+
   const hideIncompleteFunctionsGroup = () => {
     const group = document.querySelector(".group--risk-finance-people");
     if (!group) return;
@@ -301,6 +323,7 @@
 
   const initAllGrids = () => {
     if (isChinesePage) document.body.classList.add("team-page--cn");
+    removeRetiredProfiles();
     applyEditorialSectionIntroStyles();
     hideIncompleteFunctionsGroup();
     const grids = Array.from(document.querySelectorAll("[data-team-grid]"));
