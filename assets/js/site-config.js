@@ -166,8 +166,8 @@
       portrait.removeAttribute('srcset');
       portrait.setAttribute('width', '973');
       portrait.setAttribute('height', '1104');
-      portrait.style.transform = 'scale(1.06)';
-      portrait.style.transformOrigin = '50% 42%';
+      portrait.style.transform = 'scale(1.12)';
+      portrait.style.transformOrigin = '50% 40%';
     }
   }
 
