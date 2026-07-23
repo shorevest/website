@@ -1,5 +1,5 @@
 (function () {
-  var VERSION = "20260724-contact-filename-refresh";
+  var VERSION = "20260724-sitewide-favicon";
 
   function removeEmptyLegacyToken() {
     try {
@@ -23,9 +23,7 @@
     base = script.src.replace(/assets\/js\/favicon-guard\.js.*$/, "");
   }
 
-  // The stable root favicon remains in the server-rendered HTML for crawlers.
-  // At runtime, use only the versioned asset paths so browsers cannot select a
-  // stale cached copy of /favicon.ico for the active tab.
+  // Use only dated favicon filenames so browsers cannot reuse retired tab art.
   var iconVersion = "?v=" + VERSION;
   var ICONS = [
     { rel: "icon", href: base + "assets/favicon-shorevest-20260724.svg" + iconVersion, type: "image/svg+xml", sizes: "any" },
@@ -34,7 +32,7 @@
     { rel: "icon", href: base + "assets/favicon-shorevest-20260724-32x32.png" + iconVersion, type: "image/png", sizes: "32x32" },
     { rel: "icon", href: base + "assets/favicon-shorevest-20260724-16x16.png" + iconVersion, type: "image/png", sizes: "16x16" },
     { rel: "apple-touch-icon", href: base + "assets/apple-touch-icon-shorevest-20260724.png" + iconVersion, sizes: "180x180" },
-    { rel: "manifest", href: base + "site-20260722.webmanifest" + iconVersion }
+    { rel: "manifest", href: base + "site-20260724.webmanifest" + iconVersion }
   ];
 
   function setAttr(el, key, value) {
