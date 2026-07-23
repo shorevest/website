@@ -39,6 +39,7 @@
      Public-site content corrections (22 July 2026)
      ------------------------------------------------------------------------ */
   var ADA_LINKEDIN_URL = 'https://www.linkedin.com/in/ada-bi-cpa-fcca-6185a218?utm_source=share_via&utm_content=profile&utm_medium=member_ios';
+  var ADA_PORTRAIT_URL = '/4.%20Ada_Bi.png?v=20260723-ada-approved';
   var SHADOW_BANKING_SOURCE = '/assets/data/china-debt-dynamics-v5i4.json?v=20260722-full-article';
 
   function eachNode(nodes, callback) {
@@ -158,6 +159,14 @@
         link.setAttribute('rel', 'noopener noreferrer');
       }
     });
+
+    var portrait = scope.querySelector('[data-team-photo="bio-ada-bi"] img');
+    if (portrait) {
+      portrait.setAttribute('src', ADA_PORTRAIT_URL);
+      portrait.removeAttribute('srcset');
+      portrait.setAttribute('width', '973');
+      portrait.setAttribute('height', '1104');
+    }
   }
 
   function isShadowBankingIssue() {
