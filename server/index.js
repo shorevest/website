@@ -54,17 +54,25 @@ function startServer(overrides = {}) {
 }
 
 function serveStatic(config, url, res) {
-  let rel = decodeURIComponent(url.pathname);
-  if (rel === '/' || rel === '') rel = '/';
-  const filePath = path.join(config.appDir, rel);
+  const pathname = decodeURIComponent(url.pathname);
+  const relativePath = pathname === '/' || pathname === ''
+    ? 'index.html'
+    : pathname.replace(/^\/+/, '');
+  const appRoot = path.resolve(config.appDir);
+  const filePath = path.resolve(appRoot, relativePath);
+
   // Prevent path traversal outside appDir.
-  if (!filePath.startsWith(config.appDir)) { sendText(res, 403, 'Forbidden'); return; }
+  if (filePath !== appRoot && !filePath.startsWith(`${appRoot}${path.sep}`)) {
+    sendText(res, 403, 'Forbidden');
+    return;
+  }
+
   fs.readFile(filePath, (err, data) => {
     if (err) {
-      // SPA fallback: serve / for unknown non-file routes.
-      if (!path.extname(rel)) {
-        fs.readFile(path.join(config.appDir, '/'), (e2, html) => {
-          if (e2) { sendText(res, 404, 'Not found'); return; }
+      // SPA fallback: unknown routes serve the application entry point.
+      if (!path.extname(pathname)) {
+        fs.readFile(path.join(appRoot, 'index.html'), (fallbackError, html) => {
+          if (fallbackError) { sendText(res, 404, 'Not found'); return; }
           res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
           res.end(html);
         });
@@ -73,6 +81,7 @@ function serveStatic(config, url, res) {
       sendText(res, 404, 'Not found');
       return;
     }
+
     const ext = path.extname(filePath).toLowerCase();
     res.writeHead(200, { 'Content-Type': MIME[ext] || 'application/octet-stream' });
     res.end(data);
