@@ -23,8 +23,8 @@
 
       html body.team-page-v2 .group__summary {
         box-sizing: border-box;
-        width: min(100%, 660px) !important;
-        max-width: 660px !important;
+        width: min(100%, 580px) !important;
+        max-width: 580px !important;
         justify-self: end !important;
         align-self: end !important;
         margin: 0 !important;
