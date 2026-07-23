@@ -46,24 +46,11 @@
         letter-spacing: 0 !important;
       }
 
-      html body.team-page-v2 .group--client-solutions .group__head,
-      html body.team-page-v2 .group--senior-advisers .group__head {
-        display: block !important;
-        margin-bottom: clamp(28px, 2.8vw, 36px) !important;
-        padding-bottom: clamp(18px, 2vw, 24px) !important;
-      }
-
       html body.team-page-v2 .group--client-solutions .group__summary,
       html body.team-page-v2 .group--senior-advisers .group__summary {
-        width: auto !important;
-        max-width: 52ch !important;
-        justify-self: auto !important;
-        align-self: auto !important;
-        margin: 10px 0 0 !important;
-        padding: 0 !important;
-        border: 0 !important;
-        font-size: clamp(12.5px, 0.9vw, 14px) !important;
-        line-height: 1.6 !important;
+        width: min(100%, 470px) !important;
+        max-width: 470px !important;
+        justify-self: end !important;
       }
 
       @media (max-width: 900px) {
@@ -92,14 +79,6 @@
           line-height: 1.65 !important;
           letter-spacing: 0 !important;
           text-align: left !important;
-        }
-
-        html body.team-page-v2 .group--client-solutions .group__summary,
-        html body.team-page-v2 .group--senior-advisers .group__summary {
-          max-width: 52ch !important;
-          margin-top: 9px !important;
-          padding: 0 !important;
-          border: 0 !important;
         }
       }
     `;
