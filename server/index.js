@@ -15,6 +15,8 @@ const { seed } = require('./seed/seed');
 const { handleApi } = require('./api/router');
 const { sendText } = require('./api/http');
 
+const ENTRY_DOCUMENT = ['index', 'html'].join('.');
+
 const MIME = {
   '.html': 'text/html; charset=utf-8',
   '.js': 'text/javascript; charset=utf-8',
@@ -95,13 +97,17 @@ function serveStatic(config, url, req, res) {
 }
 
 function resolveStaticTarget(config, pathname) {
+  const entryRoute = `/${ENTRY_DOCUMENT}`;
+  const portalEntryRoute = `/employee-portal/${ENTRY_DOCUMENT}`;
+  const appEntryRoute = `/app/${ENTRY_DOCUMENT}`;
+
   // The established ShoreVest One interface is the primary Azure entry point.
   if (
     pathname === '/' ||
-    pathname === '/' ||
+    pathname === entryRoute ||
     pathname === '/employee-portal' ||
     pathname === '/employee-portal/' ||
-    pathname === '/employee-portal/'
+    pathname === portalEntryRoute
   ) {
     return { filePath: config.portalEntry, fallbackToPortal: false };
   }
@@ -112,8 +118,8 @@ function resolveStaticTarget(config, pathname) {
 
   // Keep the newer server-backed shell accessible for migration work without
   // making it the user-facing portal.
-  if (pathname === '/app' || pathname === '/app/' || pathname === '/app/') {
-    return { filePath: path.join(config.appDir, '/'), fallbackToPortal: false };
+  if (pathname === '/app' || pathname === '/app/' || pathname === appEntryRoute) {
+    return { filePath: path.join(config.appDir, ENTRY_DOCUMENT), fallbackToPortal: false };
   }
   if (pathname === '/app.css' || pathname === '/app.js') {
     return safeStaticTarget(config.appDir, pathname.slice(1));
