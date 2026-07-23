@@ -87,7 +87,7 @@
       'body.home-page .sv-platform__head-r p {',
       '  margin: 0 !important;',
       '  max-width: none !important;',
-      '  font: 600 clamp(11px, 0.82vw, 12.5px) / 1.55 var(--sv-font) !important;',
+      '  font: 400 clamp(11px, 0.82vw, 12.5px) / 1.55 var(--sv-font) !important;',
       '  letter-spacing: 0.025em !important;',
       '  text-transform: none !important;',
       '  color: var(--sv-oxide, #8F2A20) !important;',
