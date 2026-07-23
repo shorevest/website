@@ -31,17 +31,17 @@
         background: var(--tr-parchment) !important;
         border: 0 !important;
         border-left: 4px solid var(--tr-cinnabar) !important;
-        font: 600 clamp(11px, 0.82vw, 12.5px) / 1.55 var(--tr-font) !important;
-        letter-spacing: 0.095em !important;
-        text-transform: uppercase !important;
+        font: 500 clamp(10.5px, 0.72vw, 11.5px) / 1.65 var(--tr-font) !important;
+        letter-spacing: 0.035em !important;
+        text-transform: none !important;
         color: var(--tr-oxblood) !important;
         text-align: right !important;
         text-wrap: pretty;
       }
 
       html body.team-page-v2.team-page--cn .group__summary {
-        letter-spacing: 0.06em !important;
-        text-transform: none !important;
+        letter-spacing: 0.025em !important;
+        line-height: 1.8 !important;
       }
 
       @media (max-width: 900px) {
@@ -65,9 +65,9 @@
           justify-self: stretch !important;
           padding: 16px 17px !important;
           border-left-width: 4px !important;
-          font-size: 11px !important;
-          line-height: 1.65 !important;
-          letter-spacing: 0.08em !important;
+          font-size: 10.5px !important;
+          line-height: 1.72 !important;
+          letter-spacing: 0.025em !important;
         }
       }
     `;
