@@ -98,10 +98,10 @@ function resolveStaticTarget(config, pathname) {
   // The established ShoreVest One interface is the primary Azure entry point.
   if (
     pathname === '/' ||
-    pathname === '/index.html' ||
+    pathname === '/' ||
     pathname === '/employee-portal' ||
     pathname === '/employee-portal/' ||
-    pathname === '/employee-portal/index.html'
+    pathname === '/employee-portal/'
   ) {
     return { filePath: config.portalEntry, fallbackToPortal: false };
   }
@@ -112,8 +112,8 @@ function resolveStaticTarget(config, pathname) {
 
   // Keep the newer server-backed shell accessible for migration work without
   // making it the user-facing portal.
-  if (pathname === '/app' || pathname === '/app/' || pathname === '/app/index.html') {
-    return { filePath: path.join(config.appDir, 'index.html'), fallbackToPortal: false };
+  if (pathname === '/app' || pathname === '/app/' || pathname === '/app/') {
+    return { filePath: path.join(config.appDir, '/'), fallbackToPortal: false };
   }
   if (pathname === '/app.css' || pathname === '/app.js') {
     return safeStaticTarget(config.appDir, pathname.slice(1));
