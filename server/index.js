@@ -56,7 +56,7 @@ function startServer(overrides = {}) {
 function serveStatic(config, url, res) {
   const pathname = decodeURIComponent(url.pathname);
   const relativePath = pathname === '/' || pathname === ''
-    ? 'index.html'
+    ? '/'
     : pathname.replace(/^\/+/, '');
   const appRoot = path.resolve(config.appDir);
   const filePath = path.resolve(appRoot, relativePath);
@@ -71,7 +71,7 @@ function serveStatic(config, url, res) {
     if (err) {
       // SPA fallback: unknown routes serve the application entry point.
       if (!path.extname(pathname)) {
-        fs.readFile(path.join(appRoot, 'index.html'), (fallbackError, html) => {
+        fs.readFile(path.join(appRoot, '/'), (fallbackError, html) => {
           if (fallbackError) { sendText(res, 404, 'Not found'); return; }
           res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
           res.end(html);
