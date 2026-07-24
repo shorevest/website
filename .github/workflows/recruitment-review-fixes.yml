@@ -20,6 +20,7 @@ jobs:
         shell: python
         run: |
           from pathlib import Path
+          from textwrap import dedent
 
           functions_path = Path('services/recruitment-functions/src/functions/index.js')
           functions = functions_path.read_text()
@@ -43,19 +44,20 @@ jobs:
               raise SystemExit('Packaging command did not match the expected contract text')
           contract = contract.replace(package_old, package_new, 1)
 
-          auth_old = """    functionAppName=<function-app> \\
-              tenantId=<tenant-id> \\
-              entraClientId=<application-client-id> \\
-              appRegistrationIssuer=<issuer-url>"""
-          auth_new = """    functionAppName=<function-app> \\
-              entraClientId=<application-client-id> \\
-              openIdIssuer=<tenant-specific-openid-issuer>"""
-          if auth_old not in contract:
+          tenant_parameter = '    tenantId=<tenant-id> \\\n'
+          issuer_parameter = '    appRegistrationIssuer=<issuer-url>'
+          if tenant_parameter not in contract or issuer_parameter not in contract:
               raise SystemExit('Easy Auth command did not match the expected contract text')
-          contract = contract.replace(auth_old, auth_new, 1)
+          contract = contract.replace(tenant_parameter, '', 1)
+          contract = contract.replace(
+              issuer_parameter,
+              '    openIdIssuer=<tenant-specific-openid-issuer>',
+              1
+          )
           contract_path.write_text(contract)
 
-          Path('services/recruitment-functions/test/preFlowErrorResponse.test.js').write_text("""'use strict';
+          Path('services/recruitment-functions/test/preFlowErrorResponse.test.js').write_text(dedent("""
+          'use strict';
 
           const fs = require('fs');
           const path = require('path');
@@ -74,9 +76,10 @@ jobs:
             );
             assert.ok(!source.includes('{ ...parsed.error, headers: withCors(req, config) }'));
           });
-          """.replace(/^          /gm, ''))
+          """).lstrip())
 
-          Path('services/recruitment-functions/test/deploymentCommandParity.test.js').write_text("""'use strict';
+          Path('services/recruitment-functions/test/deploymentCommandParity.test.js').write_text(dedent("""
+          'use strict';
 
           const fs = require('fs');
           const path = require('path');
@@ -106,7 +109,7 @@ jobs:
             assert.ok(!contract.includes('tenantId=<tenant-id>'));
             assert.ok(!contract.includes('appRegistrationIssuer=<issuer-url>'));
           });
-          """.replace(/^          /gm, ''))
+          """).lstrip())
       - name: Commit review fixes
         shell: bash
         run: |
