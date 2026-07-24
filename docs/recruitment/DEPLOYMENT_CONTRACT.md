@@ -13,6 +13,7 @@ All deployment and launch controls default off:
 - `RECRUITMENT_RETENTION_ENABLED=false`
 - `RECRUITMENT_RETENTION_DELETION_ENABLED=false`
 - Microsoft Defender for Storage disabled unless explicitly enabled
+- Azure Monitor alert rules disabled unless explicitly enabled
 
 Deploying the Function package does not make recruitment applications public.
 
@@ -71,7 +72,7 @@ az deployment group create \
   --parameters environmentName=<environment> namePrefix=<prefix>
 ```
 
-This creates the Function App, managed identity, Cosmos DB, private Blob containers, Key Vault, monitoring resources and least-privilege Azure RBAC. It leaves the public API and external delivery disabled.
+This creates the Function App, managed identity, Cosmos DB, private Blob containers, Key Vault, workspace-based Application Insights, monitoring resources and least-privilege Azure RBAC. It leaves the public API and external delivery disabled.
 
 ### 2. Apply candidate-upload Blob CORS
 
@@ -90,12 +91,12 @@ This is required for direct candidate browser uploads. The policy allows only:
 
 It does not allow browser `GET`, listing, deletion or wildcard origins. Do not test the public upload flow until this step is complete.
 
-### 3. Apply the complete runtime settings contract
+### 3. Apply the complete runtime settings v2 contract
 
 ```bash
 az deployment group create \
   --resource-group <resource-group> \
-  --template-file infra/recruitment/runtime-settings.bicep \
+  --template-file infra/recruitment/runtime-settings.v2.bicep \
   --parameters \
     functionAppName=<function-app> \
     managedIdentityName=<managed-identity> \
@@ -107,7 +108,7 @@ az deployment group create \
     environmentName=<environment>
 ```
 
-Keep every enablement parameter at its default `false` during initial deployment.
+Keep every enablement parameter at its default `false` during initial deployment. Reapply the same template after each approved capability change so the full settings set remains authoritative and identity-based Functions host settings are preserved.
 
 ### 4. Build and upload an immutable Function package
 
@@ -148,7 +149,22 @@ Assign `Recruitment.HR` only to approved HR reviewers and `Recruitment.Retention
 - configure the two event-specific Power Automate notification state machines;
 - verify the identity cannot access unrelated sites, lists or mailboxes.
 
-### 7. Enable Defender in non-production only
+### 7. Enable and verify non-public delivery capabilities
+
+Reapply `runtime-settings.v2.bicep` with only the approved delivery controls enabled:
+
+- `enableOutboxDelivery=true` after SharePoint grants are verified;
+- `enableCandidateAcknowledgement=true` only with `candidateAcknowledgementTemplateApproved=true` and the mailbox restriction verified.
+
+Keep `enableApi`, `enableRetention`, `enableRetentionDeletion` and `enableHrAccess` false during this stage. Verify SharePoint upserts, notification state isolation, Graph retry/reconciliation and candidate acknowledgement recovery before proceeding.
+
+### 8. Enable retention policy assignment, then HR access
+
+After delivery is healthy and the retention policy is approved, reapply `runtime-settings.v2.bicep` with `enableRetention=true`. Keep `enableRetentionDeletion=false` until destructive recovery tests pass and explicit approval is recorded.
+
+After Easy Auth and app-role boundaries are verified, enable `enableHrAccess=true` with `platformAuthenticationEnabled=true`. Confirm an approved HR user can obtain a five-minute read-only link only for a clean, fully verified CV, and that an unassigned user is denied.
+
+### 9. Enable Defender in non-production only
 
 Redeploy `main.bicep` with `enableDefenderForStorage=true` only after the cost decision is approved.
 
@@ -165,26 +181,30 @@ az deployment group create \
 
 The subscription filters only `Microsoft.Security.MalwareScanningResult`. Retryable processing failures are thrown back to Event Grid, which applies the configured redelivery policy. Long-running private clean-Blob copies return `Pending` and resume on redelivery rather than starting duplicate copies.
 
-### 8. Deploy monitoring rules
+### 10. Deploy monitoring v4
+
+The Application Insights resource must be workspace-based. The authoritative alert template queries `AppTraces` and `AppRequests` directly and does not use unsupported `search` or `union` query patterns.
 
 ```bash
 az deployment group create \
   --resource-group <resource-group> \
-  --template-file infra/recruitment/monitoring-rules.bicep \
+  --template-file infra/recruitment/monitoring-rules.v4.bicep \
   --parameters \
     applicationInsightsName=<application-insights> \
-    actionGroupResourceId=<action-group-resource-id>
+    actionGroupResourceId=<action-group-resource-id> \
+    enableAlerts=true
 ```
 
-Verify alert delivery to the named operational and security owners.
+Run each query in non-production, generate controlled test events and verify alert delivery to the named operational and security owners. Confirm alert payloads contain no candidate PII or document identifiers.
 
-### 9. Execute non-production end-to-end tests
+### 11. Execute non-production end-to-end tests
 
 Required cases include:
 
 - successful PDF and DOCX submissions;
 - rejected malformed, oversized, encrypted and mismatched files;
 - duplicate initiate, complete, finalize and Event Grid delivery;
+- initiation retry while the first upload credential is still active;
 - clean scan completing before and after finalization;
 - pending clean copy across multiple Event Grid deliveries;
 - malicious, unsupported, timeout and scan-error outcomes;
@@ -196,29 +216,25 @@ Required cases include:
 - dependency outage and recovery;
 - expired upload, completion, finalization and HR read credentials.
 
-### 10. Enable capabilities incrementally
+### 12. Enable destructive retention and the public API last
 
-Enable one capability at a time through `runtime-settings.bicep`, verifying readiness, logs and alerts after each change:
+Enable destructive retention only after legal-hold, partial-deletion and purge-projection recovery tests pass and the approval is recorded. Reapply `runtime-settings.v2.bicep` with `enableRetentionDeletion=true` while the public API remains off, then verify one controlled eligible record through the complete purge and SharePoint projection path.
 
-1. retention policy assignment only;
-2. HR clean-document access;
-3. SharePoint/outbox projection;
-4. candidate acknowledgement;
-5. destructive retention only after explicit approval and recovery testing;
-6. public candidate API last.
+Enable `enableApi=true` only after every prerequisite above is healthy, the public application form is integrated, privacy copy is approved and final production launch approval is recorded.
 
-The frontend application form and public role switches remain separate final steps.
+The Careers role-publication switches and frontend application form remain separate final release steps.
 
 ## Rollback
 
 Rollback in this order:
 
-1. set `RECRUITMENT_API_ENABLED=false`;
-2. set external delivery, HR access and retention-deletion settings false;
+1. reapply `runtime-settings.v2.bicep` with `enableApi=false`;
+2. disable external delivery, HR access and retention deletion as required;
 3. disable the Event Grid subscription if scan processing is unsafe;
-4. revert to the last approved immutable package;
-5. preserve Cosmos, Blob, SharePoint and monitoring records for investigation;
-6. do not delete candidate data as part of an application rollback.
+4. redeploy monitoring v4 with `enableAlerts=false` if alerts are misconfigured;
+5. revert to the last approved immutable Function package;
+6. preserve Cosmos, Blob, SharePoint and monitoring records for investigation;
+7. do not delete candidate data as part of an application rollback.
 
 ## Evidence to retain
 
