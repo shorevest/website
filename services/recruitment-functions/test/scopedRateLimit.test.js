@@ -2,32 +2,38 @@
 
 const test = require('node:test');
 const assert = require('node:assert');
-const { createRateLimiter } = require('../src/adapters/rateLimit');
+const {
+  RATE_LIMIT_SCOPES,
+  createRateLimiter
+} = require('../src/adapters/rateLimit');
 
 function fakeCosmos() {
   const documents = new Map();
+  let etag = 0;
   const container = {
     items: {
       async create(document) {
         if (documents.has(document.id)) {
           throw Object.assign(new Error('conflict'), { code: 409 });
         }
-        documents.set(document.id, { ...document });
-        return { resource: { ...document } };
+        const stored = { ...document, _etag: String(++etag) };
+        documents.set(document.id, stored);
+        return { resource: { ...stored } };
       }
     },
     item(id) {
       return {
-        async patch(operations) {
-          const document = documents.get(id);
-          if (!document) throw Object.assign(new Error('not found'), { code: 404 });
-          for (const operation of operations) {
-            if (operation.op === 'incr' && operation.path === '/count') {
-              document.count += operation.value;
-            }
+        async read() {
+          return { resource: documents.get(id) || null };
+        },
+        async replace(document, options) {
+          const current = documents.get(id);
+          if (!current || options?.accessCondition?.condition !== current._etag) {
+            throw Object.assign(new Error('precondition failed'), { code: 412 });
           }
-          documents.set(id, document);
-          return { resource: { ...document } };
+          const stored = { ...document, _etag: String(++etag) };
+          documents.set(id, stored);
+          return { resource: { ...stored } };
         }
       };
     }
@@ -68,33 +74,34 @@ test('candidate submission IDs cannot create arbitrary initiation buckets', asyn
   assert.equal((await adapter.check('candidate-controlled-id-1')).allowed, true);
   const second = await adapter.check('different-candidate-controlled-id');
   assert.equal(second.allowed, false);
-  assert.equal(second.errorCode, 'RATE_LIMITED');
+  assert.equal(second.scope, RATE_LIMIT_SCOPES.initiate);
+  assert.ok(second.retryAfterMs > 0);
   assert.equal(client.documents.size, 1);
 
   const document = [...client.documents.values()][0];
-  assert.equal(document.scope, 'initiate');
+  assert.equal(document.scope, RATE_LIMIT_SCOPES.initiate);
 });
 
 test('complete and finalize use independent fixed server scopes', async () => {
   const { adapter, client } = limiter();
 
-  assert.equal((await adapter.checkScope('complete')).allowed, true);
-  assert.equal((await adapter.checkScope('finalize')).allowed, true);
-  assert.equal((await adapter.checkScope('complete')).allowed, false);
-  assert.equal((await adapter.checkScope('finalize')).allowed, false);
+  assert.equal((await adapter.checkScope(RATE_LIMIT_SCOPES.complete)).allowed, true);
+  assert.equal((await adapter.checkScope(RATE_LIMIT_SCOPES.finalize)).allowed, true);
+  assert.equal((await adapter.checkScope(RATE_LIMIT_SCOPES.complete)).allowed, false);
+  assert.equal((await adapter.checkScope(RATE_LIMIT_SCOPES.finalize)).allowed, false);
 
   assert.equal(client.documents.size, 2);
   assert.deepEqual(
     [...client.documents.values()].map((document) => document.scope).sort(),
-    ['complete', 'finalize']
+    [RATE_LIMIT_SCOPES.complete, RATE_LIMIT_SCOPES.finalize].sort()
   );
 });
 
 test('unknown rate-limit scopes fail closed without creating storage records', async () => {
   const { adapter, client } = limiter();
-  assert.deepEqual(await adapter.checkScope('candidate-defined-scope'), {
-    allowed: false,
-    errorCode: 'RATE_LIMITED'
-  });
+  await assert.rejects(
+    () => adapter.checkScope('candidate-defined-scope'),
+    (error) => error.code === 'INTERNAL_CONFIGURATION_ERROR'
+  );
   assert.equal(client.documents.size, 0);
 });
