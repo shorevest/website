@@ -13,6 +13,7 @@ const { RATE_LIMIT_SCOPES } = require('../adapters/rateLimit');
 const {
   originAllowed,
   withCors,
+  preflightResponse,
   readJson,
   requestContext,
   candidate,
@@ -47,6 +48,8 @@ function configurationUnavailable(req, config, context, operation) {
 async function httpFlow(req, context, flow, options = {}) {
   const config = loadConfig();
   if (!config.apiEnabled) return unavailable(req, config);
+  if (req.method === 'OPTIONS') return preflightResponse(req, config);
+
   const invalidConfiguration = configurationUnavailable(req, config, context, 'public-api');
   if (invalidConfiguration) return invalidConfiguration;
   if (req.method !== 'POST') {
@@ -110,7 +113,7 @@ async function httpFlow(req, context, flow, options = {}) {
 }
 
 app.http('initiateApplication', {
-  methods: ['POST'],
+  methods: ['POST', 'OPTIONS'],
   authLevel: 'anonymous',
   route: 'recruitment/applications/initiate',
   handler: (req, context) => httpFlow(req, context, flows.initiateApplication, {
@@ -120,7 +123,7 @@ app.http('initiateApplication', {
 });
 
 app.http('completeUpload', {
-  methods: ['POST'],
+  methods: ['POST', 'OPTIONS'],
   authLevel: 'anonymous',
   route: 'recruitment/applications/complete',
   handler: (req, context) => httpFlow(req, context, flows.completeUpload, {
@@ -129,7 +132,7 @@ app.http('completeUpload', {
 });
 
 app.http('finalizeApplication', {
-  methods: ['POST'],
+  methods: ['POST', 'OPTIONS'],
   authLevel: 'anonymous',
   route: 'recruitment/applications/finalize',
   handler: (req, context) => httpFlow(req, context, flows.finalizeApplication, {
