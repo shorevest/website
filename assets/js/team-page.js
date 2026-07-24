@@ -12,10 +12,10 @@
     style.id = "team-section-intro-editorial-styles";
     style.textContent = `
       html body.team-page-v2 .group__head {
-        grid-template-columns: minmax(230px, max-content) minmax(420px, 660px) !important;
-        justify-content: space-between !important;
-        align-items: end !important;
-        gap: clamp(32px, 4vw, 64px) !important;
+        grid-template-columns: 1fr !important;
+        justify-content: stretch !important;
+        align-items: start !important;
+        gap: clamp(14px, 1.6vw, 20px) !important;
         margin-bottom: clamp(30px, 3vw, 40px) !important;
         padding-bottom: clamp(20px, 2.2vw, 28px) !important;
         border-bottom: 1px solid var(--tr-border) !important;
@@ -23,15 +23,15 @@
 
       html body.team-page-v2 .group__summary {
         box-sizing: border-box;
-        width: min(100%, 580px) !important;
-        max-width: 580px !important;
-        justify-self: end !important;
-        align-self: end !important;
+        width: 100% !important;
+        max-width: none !important;
+        justify-self: stretch !important;
+        align-self: start !important;
         margin: 0 !important;
-        padding: 0 0 1px clamp(18px, 1.8vw, 24px) !important;
+        padding: clamp(14px, 1.5vw, 18px) 0 0 !important;
         background: transparent !important;
         border: 0 !important;
-        border-left: 2px solid var(--tr-cinnabar) !important;
+        border-top: 2px solid var(--tr-cinnabar) !important;
         font: 400 clamp(12.5px, 0.9vw, 14px) / 1.62 var(--tr-font) !important;
         letter-spacing: 0 !important;
         text-transform: none !important;
@@ -46,32 +46,16 @@
         letter-spacing: 0 !important;
       }
 
-      @media (max-width: 900px) {
-        html body.team-page-v2 .group__head {
-          grid-template-columns: minmax(200px, 0.72fr) minmax(340px, 1.28fr) !important;
-          gap: 28px !important;
-        }
-      }
-
       @media (max-width: 760px) {
         html body.team-page-v2 .group__head {
-          grid-template-columns: 1fr !important;
-          align-items: start !important;
-          gap: 14px !important;
+          gap: 12px !important;
           padding-bottom: 20px !important;
         }
 
         html body.team-page-v2 .group__summary {
-          width: 100% !important;
-          max-width: none !important;
-          justify-self: stretch !important;
-          padding: 14px 0 0 !important;
-          border-left: 0 !important;
-          border-top: 2px solid var(--tr-cinnabar) !important;
+          padding-top: 12px !important;
           font-size: 13px !important;
           line-height: 1.65 !important;
-          letter-spacing: 0 !important;
-          text-align: left !important;
         }
       }
     `;
