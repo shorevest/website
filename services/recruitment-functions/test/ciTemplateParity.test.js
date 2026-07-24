@@ -52,6 +52,14 @@ test('GitHub Actions delegates Bicep validation to authoritative root scripts', 
   assert.ok(!workflow.includes('az bicep build --file infra/recruitment/main.bicep'));
 });
 
+test('recruitment CI executes and verifies the immutable Function package', () => {
+  assert.ok(workflow.includes('Build and verify immutable Function package'));
+  assert.ok(workflow.includes('services/recruitment-functions/scripts/package.ps1'));
+  assert.ok(workflow.includes("'deployment-metadata.json'"));
+  assert.ok(workflow.includes("'node_modules/@azure/functions/package.json'"));
+  assert.ok(workflow.includes('Archive digest sidecar does not match the generated ZIP.'));
+});
+
 test('recruitment CI still runs application, security, function and whitespace validation', () => {
   for (const command of [
     'npm run validate:recruitment',
