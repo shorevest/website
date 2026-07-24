@@ -32,9 +32,9 @@ The script:
 1. installs production dependencies with `npm ci --omit=dev`;
 2. creates a temporary staging directory;
 3. copies only the Function runtime, bundled domain core, manifest contract and production dependencies;
-4. writes `deployment-metadata.json` with the source commit, package time and package SHA-256;
+4. writes `deployment-metadata.json` with the source commit, package time, a deterministic staged-payload SHA-256 and the expected archive-digest sidecar name;
 5. runs syntax checks against the staged files;
-6. creates the ZIP from the staging root;
+6. creates the ZIP from the staging root and writes the final ZIP SHA-256 to an adjacent `.sha256` sidecar;
 7. rejects forbidden local settings, environment files, keys, certificates and archives.
 
 The ZIP root must contain:
@@ -122,7 +122,7 @@ az storage blob upload \
   --overwrite false
 ```
 
-Use an immutable commit-addressed Blob name. Do not overwrite deployment artifacts. Retain the metadata and package SHA-256 with the change record.
+Use an immutable commit-addressed Blob name. Do not overwrite deployment artifacts. Retain `deployment-metadata.json`, the staged-payload digest and the final archive `.sha256` sidecar with the change record.
 
 Update the Flex Consumption deployment storage package reference through the approved Azure deployment command for the environment. Do not use storage account keys or connection strings.
 
@@ -240,7 +240,7 @@ Rollback in this order:
 
 - approved deployment parameters;
 - source commit and PR;
-- package SHA-256 and `deployment-metadata.json`;
+- `deployment-metadata.json`, staged-payload SHA-256 and final archive `.sha256` sidecar;
 - Bicep deployment results;
 - CORS verification result;
 - Key Vault secret version identifiers, not secret values;
