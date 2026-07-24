@@ -3,6 +3,7 @@
   "Values": {
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "node",
+    "FUNCTIONS_REQUEST_BODY_SIZE_LIMIT": "65536",
     "RECRUITMENT_API_ENABLED": "false",
     "RECRUITMENT_ENVIRONMENT": "local",
     "RECRUITMENT_ALLOWED_ORIGINS": "http://localhost:7071",
