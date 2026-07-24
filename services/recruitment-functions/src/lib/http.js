@@ -32,6 +32,51 @@ function withCors(req, config, extra = {}) {
   };
 }
 
+function preflightResponse(req, config) {
+  if (!originAllowed(req, config)) {
+    return {
+      status: 403,
+      headers: withCors(req, config),
+      jsonBody: { success: false, errorCode: 'FORBIDDEN' }
+    };
+  }
+
+  const requestedMethod = String(header(req, 'access-control-request-method') || '')
+    .trim()
+    .toUpperCase();
+  const corsHeaders = {
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Max-Age': '600',
+    Vary: 'Origin, Access-Control-Request-Method, Access-Control-Request-Headers'
+  };
+
+  if (requestedMethod !== 'POST') {
+    return {
+      status: 405,
+      headers: withCors(req, config, corsHeaders),
+      jsonBody: { success: false, errorCode: 'METHOD_NOT_ALLOWED' }
+    };
+  }
+
+  const requestedHeaders = String(header(req, 'access-control-request-headers') || '')
+    .split(',')
+    .map((value) => value.trim().toLowerCase())
+    .filter(Boolean);
+  if (requestedHeaders.some((value) => value !== 'content-type')) {
+    return {
+      status: 403,
+      headers: withCors(req, config, corsHeaders),
+      jsonBody: { success: false, errorCode: 'FORBIDDEN' }
+    };
+  }
+
+  return {
+    status: 204,
+    headers: withCors(req, config, corsHeaders)
+  };
+}
+
 async function readJson(req, config) {
   const contentType = header(req, 'content-type') || '';
   if (!/^application\/json\b/i.test(contentType)) {
@@ -106,6 +151,7 @@ module.exports = {
   header,
   originAllowed,
   withCors,
+  preflightResponse,
   readJson,
   normalizeAppServiceClientIp,
   requestContext,
