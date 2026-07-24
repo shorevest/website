@@ -50,6 +50,7 @@ on:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -57,7 +58,7 @@ jobs:
           node-version: '24'
       - run: npm ci
       - name: Install recruitment function dependencies
-        run: npm install --ignore-scripts --no-audit --no-fund --package-lock=false
+        run: npm ci --ignore-scripts --no-audit --no-fund
         working-directory: services/recruitment-functions
       - run: npm run validate:recruitment
       - run: npm run check:recruitment
