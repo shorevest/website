@@ -124,7 +124,7 @@ async function readJson(req, config) {
 
 function normalizeAppServiceClientIp(value) {
   if (typeof value !== 'string') return '';
-  let candidate = value.split(',')[0].trim().slice(0, 128);
+  const candidate = value.split(',')[0].trim().slice(0, 128);
   if (net.isIP(candidate)) return candidate;
 
   const bracketed = candidate.match(/^\[([^\]]+)\](?::\d{1,5})?$/);
@@ -139,6 +139,7 @@ function requestContext(req) {
   const clientIp = normalizeAppServiceClientIp(
     header(req, 'x-client-ip') ||
     header(req, 'client-ip') ||
+    header(req, 'x-forwarded-for') ||
     ''
   );
   const userAgent = String(header(req, 'user-agent') || '').slice(0, 512);
