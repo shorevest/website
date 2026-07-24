@@ -6,30 +6,34 @@ const fs = require('fs');
 const path = require('path');
 
 const template = fs.readFileSync(
-  path.resolve(__dirname, '../../../infra/recruitment/runtime-settings.bicep'),
+  path.resolve(__dirname, '../../../infra/recruitment/runtime-settings.v2.bicep'),
   'utf8'
 );
 
-test('all external recruitment capabilities default disabled', () => {
-  assert.ok(template.includes('param apiEnabled bool = false'));
-  assert.ok(template.includes('param outboxDeliveryEnabled bool = false'));
-  assert.ok(template.includes('param candidateAcknowledgementEnabled bool = false'));
-  assert.ok(template.includes('param candidateAcknowledgementTemplateApproved bool = false'));
-  assert.ok(template.includes('param hrAccessEnabled bool = false'));
-  assert.ok(template.includes('param platformAuthenticationEnabled bool = false'));
-  assert.ok(template.includes('param retentionEnabled bool = false'));
-  assert.ok(template.includes('param retentionDeletionEnabled bool = false'));
+test('all external recruitment capabilities default disabled in runtime settings v2', () => {
+  for (const parameter of [
+    'enableApi',
+    'enableOutboxDelivery',
+    'enableCandidateAcknowledgement',
+    'candidateAcknowledgementTemplateApproved',
+    'enableHrAccess',
+    'platformAuthenticationEnabled',
+    'enableRetention',
+    'enableRetentionDeletion'
+  ]) {
+    assert.ok(template.includes(`param ${parameter} bool = false`), `${parameter} must default false`);
+  }
 });
 
-test('runtime settings use managed identity and no storage connection string', () => {
+test('runtime settings v2 uses managed identity and no storage connection string', () => {
   assert.ok(template.includes("AzureWebJobsStorage__credential: 'managedidentity'"));
-  assert.ok(template.includes('AzureWebJobsStorage__clientId: managedIdentity.properties.clientId'));
-  assert.ok(template.includes('RECRUITMENT_MANAGED_IDENTITY_CLIENT_ID: managedIdentity.properties.clientId'));
+  assert.ok(template.includes('AzureWebJobsStorage__clientId: identity.properties.clientId'));
+  assert.ok(template.includes('RECRUITMENT_MANAGED_IDENTITY_CLIENT_ID: identity.properties.clientId'));
   assert.ok(!template.includes('AccountKey='));
   assert.ok(!template.includes('SharedAccessSignature='));
 });
 
-test('runtime settings centralize SharePoint, acknowledgement, HR and retention gates', () => {
+test('runtime settings v2 centralizes SharePoint, acknowledgement, HR and retention gates', () => {
   for (const setting of [
     'RECRUITMENT_SHAREPOINT_SITE_ID',
     'RECRUITMENT_APPLICATIONS_LIST_ID',
@@ -46,6 +50,11 @@ test('runtime settings centralize SharePoint, acknowledgement, HR and retention 
     'RECRUITMENT_RETENTION_SUBMITTED_DAYS',
     'RECRUITMENT_RETENTION_MALICIOUS_DAYS'
   ]) {
-    assert.ok(template.includes(setting));
+    assert.ok(template.includes(setting), `${setting} is missing from runtime settings v2`);
   }
+});
+
+test('runtime settings v2 preserves identical host and application body ceilings', () => {
+  assert.ok(template.includes('FUNCTIONS_REQUEST_BODY_SIZE_LIMIT: string(maxBodyBytes)'));
+  assert.ok(template.includes('RECRUITMENT_MAX_BODY_BYTES: string(maxBodyBytes)'));
 });
