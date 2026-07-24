@@ -15,7 +15,8 @@ const source = fs.readFileSync(packagingScriptPath, 'utf8');
 test('immutable recruitment packaging script exists and uses the lockfile', () => {
   assert.equal(fs.existsSync(packagingScriptPath), true);
   assert.ok(source.includes("Join-Path $serviceRoot 'package-lock.json'"));
-  assert.ok(source.includes('npm ci --omit=dev --no-audit --no-fund'));
+  assert.ok(source.includes("-Command 'npm'"));
+  assert.ok(source.includes("@('ci', '--omit=dev', '--no-audit', '--no-fund')"));
 });
 
 test('package stages only the required Function and recruitment runtime trees', () => {
