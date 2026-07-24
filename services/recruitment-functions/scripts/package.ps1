@@ -50,7 +50,7 @@ function Copy-DirectoryContents {
     throw "Required directory is missing: $Source"
   }
   New-Item -ItemType Directory -Path $Destination -Force | Out-Null
-  Copy-Item -LiteralPath (Join-Path $Source '*') -Destination $Destination -Recurse -Force
+  Copy-Item -Path (Join-Path $Source '*') -Destination $Destination -Recurse -Force
 }
 
 function Get-PayloadDigest {
@@ -121,6 +121,7 @@ try {
     sourceCommit = $CommitSha.ToLowerInvariant()
     packagedAtUtc = [DateTime]::UtcNow.ToString('o')
     payloadSha256 = Get-PayloadDigest -Root $stagingRoot
+    payloadSha256Scope = 'staged-files-excluding-deployment-metadata'
     archiveSha256Sidecar = ([System.IO.Path]::GetFileName($outputFullPath) + '.sha256')
   }
   $metadataPath = Join-Path $stagingRoot 'deployment-metadata.json'
