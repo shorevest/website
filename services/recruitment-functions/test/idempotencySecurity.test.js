@@ -3,6 +3,7 @@
 const test = require('node:test');
 const assert = require('node:assert');
 const {
+  activeCredentialGeneration,
   sanitizeIdempotencyRecord,
   secureIdempotencyAdapter
 } = require('../src/adapters/idempotencySecurity');
@@ -36,6 +37,32 @@ test('credential fields are removed from idempotency records and claim wrappers'
   assert.ok(!JSON.stringify(sanitized).includes('signed-secret'));
 });
 
+test('active credential metadata identifies only unexpired issued generations', () => {
+  assert.equal(activeCredentialGeneration({
+    state: 'CredentialsIssued',
+    stableResult: {
+      credentialGeneration: 3,
+      lastCredentialExpiryUtc: '2999-01-01T00:00:00.000Z'
+    }
+  }, Date.parse('2026-07-22T00:00:00.000Z')), 3);
+
+  assert.equal(activeCredentialGeneration({
+    state: 'CredentialsIssued',
+    stableResult: {
+      credentialGeneration: 3,
+      lastCredentialExpiryUtc: '2026-07-21T23:59:59.000Z'
+    }
+  }, Date.parse('2026-07-22T00:00:00.000Z')), null);
+
+  assert.equal(activeCredentialGeneration({
+    state: 'SubmissionReserved',
+    stableResult: {
+      credentialGeneration: 3,
+      lastCredentialExpiryUtc: '2999-01-01T00:00:00.000Z'
+    }
+  }), null);
+});
+
 test('production credentialsIssued persists only stable metadata', async () => {
   const calls = [];
   const underlying = {
@@ -55,6 +82,9 @@ test('production credentialsIssued persists only stable metadata', async () => {
         result: { upload: { url: 'legacy-sas' } },
         stableResult: { applicationReference: 'APP-1' }
       };
+    },
+    async beginCredentialIssuance() {
+      return { status: 'claimed', generation: 2 };
     },
     async credentialsIssued(key, credentialResult, stableResult) {
       calls.push({ key, credentialResult, stableResult });
@@ -87,4 +117,73 @@ test('production credentialsIssued persists only stable metadata', async () => {
   assert.equal(calls[0].stableResult.credentialGeneration, 3);
   assert.ok(!JSON.stringify(calls).includes('do-not-store'));
   assert.ok(!JSON.stringify(calls).includes('write-sas'));
+});
+
+test('retry reissues credentials on the active generation without exposing stored secrets', async () => {
+  const calls = [];
+  const underlying = {
+    async get() {
+      return {
+        state: 'CredentialsIssued',
+        result: {
+          upload: { url: 'https://blob.example/legacy-sas' },
+          completionToken: 'legacy-token'
+        },
+        stableResult: {
+          credentialGeneration: 7,
+          lastCredentialExpiryUtc: '2999-01-01T00:00:00.000Z'
+        }
+      };
+    },
+    async beginCredentialIssuance(key, owner, leaseExpiresAtUtc) {
+      calls.push({ key, owner, leaseExpiresAtUtc });
+      return {
+        status: 'claimed',
+        generation: 8,
+        record: {
+          result: {
+            upload: { url: 'https://blob.example/another-secret-sas' },
+            completionToken: 'another-secret-token'
+          }
+        }
+      };
+    },
+    async credentialsIssued() {}
+  };
+
+  const secured = secureIdempotencyAdapter(underlying);
+  const lease = await secured.beginCredentialIssuance(
+    'init:role:submission',
+    'worker-1',
+    '2999-01-01T00:02:00.000Z'
+  );
+
+  assert.equal(calls.length, 1);
+  assert.equal(lease.status, 'claimed');
+  assert.equal(lease.generation, 7);
+  assert.equal(lease.reissuedActiveCredentials, true);
+  assert.equal(lease.record.result, undefined);
+  assert.ok(!JSON.stringify(lease).includes('secret'));
+});
+
+test('expired credential metadata allows the next generation to advance', async () => {
+  const underlying = {
+    async get() {
+      return {
+        state: 'CredentialsIssued',
+        stableResult: {
+          credentialGeneration: 7,
+          lastCredentialExpiryUtc: '2000-01-01T00:00:00.000Z'
+        }
+      };
+    },
+    async beginCredentialIssuance() {
+      return { status: 'claimed', generation: 8 };
+    },
+    async credentialsIssued() {}
+  };
+
+  const lease = await secureIdempotencyAdapter(underlying).beginCredentialIssuance('key');
+  assert.equal(lease.generation, 8);
+  assert.equal(lease.reissuedActiveCredentials, undefined);
 });
