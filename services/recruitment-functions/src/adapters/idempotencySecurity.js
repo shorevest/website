@@ -19,7 +19,8 @@ function sanitizeIdempotencyRecord(record) {
 }
 
 function activeCredentialGeneration(record, nowMs = Date.now()) {
-  if (!record || record.state !== 'CredentialsIssued') return null;
+  if (!record || typeof record !== 'object') return null;
+  if (record.state === 'Completed' || record.state === 'PermanentFailure') return null;
   const stable = record.stableResult;
   const generation = Number(stable?.credentialGeneration);
   const expiresAtMs = Date.parse(stable?.lastCredentialExpiryUtc || '');
