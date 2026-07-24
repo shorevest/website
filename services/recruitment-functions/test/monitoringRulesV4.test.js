@@ -38,12 +38,13 @@ test('every monitored critical event is emitted by runtime code', () => {
   }
 });
 
-test('classic and workspace telemetry normalize to TimeGenerated before union', () => {
-  assert.ok(template.includes('(traces | project TimeGenerated = timestamp'));
-  assert.ok(template.includes('(AppTraces | project TimeGenerated'));
-  assert.ok(template.includes('(requests'));
-  assert.ok(template.includes('TimeGenerated = timestamp'));
-  assert.ok(template.includes('(AppRequests'));
+test('alert queries use only workspace-based Application Insights tables', () => {
+  assert.ok(template.includes("AppTraces\n| where Message has_any"));
+  assert.ok(template.includes("AppRequests\n| where Name has \"recruitment\""));
+  assert.ok(!template.includes('union '));
+  assert.ok(!template.includes('\ntraces\n'));
+  assert.ok(!template.includes('\nrequests\n'));
+  assert.ok(!template.includes('timestamp'));
   assert.ok(!template.includes('column_ifexists'));
   assert.ok(!template.includes('coalesce('));
 });
@@ -60,8 +61,8 @@ test('queries return raw matching rows for scheduled-query Count aggregation', (
 
 test('security-response alert is recruitment-scoped and contains only status categories', () => {
   assert.ok(template.includes('var securityResponseSpikeQuery'));
-  assert.ok(template.includes('toint(ResultCodeText) in (401, 403, 429)'));
-  assert.ok(template.includes('RequestName has "recruitment" or RequestUrl has "/recruitment/"'));
+  assert.ok(template.includes('toint(ResultCode) in (401, 403, 429)'));
+  assert.ok(template.includes('Name has "recruitment" or Url has "/recruitment/"'));
   assert.ok(template.includes("name: 'recruitment-security-response-spike-v4'"));
   assert.ok(template.includes("windowSize: 'PT10M'"));
 });
