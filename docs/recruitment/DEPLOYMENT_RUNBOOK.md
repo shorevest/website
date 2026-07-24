@@ -1,192 +1,106 @@
 # Recruitment backend deployment runbook
 
-This runbook deliberately separates backend deployment from public Careers launch. Completing these steps does not publish roles or expose an application form.
+This runbook separates backend deployment from the public Careers launch. Completing it does not publish roles or expose an application form.
 
-## Non-negotiable initial state
+`docs/recruitment/DEPLOYMENT_CONTRACT.md` is authoritative.
 
-The first deployment must use all of the following values:
+## Initial state
 
-- `RECRUITMENT_API_ENABLED=false`
-- `RECRUITMENT_OUTBOX_DELIVERY_ENABLED=false`
-- `RECRUITMENT_CANDIDATE_ACK_ENABLED=false`
-- `RECRUITMENT_CANDIDATE_ACK_TEMPLATE_APPROVED=false`
-- `RECRUITMENT_HR_ACCESS_ENABLED=false`
-- `RECRUITMENT_PLATFORM_AUTH_ENABLED=false`
-- `careersOpenRolesEnabled=false`
-- every role-level `application.enabled=false`
-- `enableDefenderForStorage=false`
+The first deployment must keep every capability disabled:
 
-No later step may change the public website flags until the non-production acceptance suite is complete.
+- public recruitment API;
+- SharePoint and email delivery;
+- candidate acknowledgement;
+- HR document access;
+- retention policy assignment;
+- destructive retention;
+- Defender for Storage;
+- Azure Monitor alerts;
+- `careersOpenRolesEnabled`;
+- every role-level `application.enabled` flag.
 
-## Deployment order
+Do not change public website flags until non-production acceptance is complete.
 
-### 1. Deploy base Azure resources
+## Deployment sequence
 
-Deploy:
+### 1. Azure foundation
 
-`infra/recruitment/main.bicep`
+Deploy `infra/recruitment/main.bicep` with Defender disabled. Confirm the Function App, managed identity, host storage, private CV storage, Cosmos DB, Key Vault and workspace-based Application Insights resources exist.
 
-This creates the Function App, managed identity, identity-based host storage, CV storage, private quarantine and clean containers, Cosmos containers, Key Vault, monitoring, and the custom Event Grid topic.
+### 2. Candidate-upload CORS
 
-Do not enable Defender yet. The scan-result Function must exist before its Event Grid subscription can be created.
+Deploy `infra/recruitment/candidate-upload-cors.bicep`. Confirm only approved ShoreVest origins can use the required upload methods and headers.
 
-### 2. Populate Key Vault
+### 3. Key Vault
 
-Create three independent high-entropy secrets through an approved administrative process:
+Populate the approved token-signing, fingerprint and bot-verification secrets through the controlled administrative process. Do not place secret values in source control, parameters, deployment output or logs.
 
-- completion/finalization token signing secret;
-- idempotency fingerprint HMAC secret;
-- Cloudflare Turnstile verification secret.
+### 4. Runtime settings v2
 
-Do not put values in source control, Bicep parameters, deployment output, Function App settings, or CI logs.
+Deploy `infra/recruitment/runtime-settings.v2.bicep` with every enablement parameter false. Reapply the complete template after each approved settings change rather than editing the portal manually.
 
-### 3. Deploy the Function package
+### 5. Function package
 
-Build and deploy `services/recruitment-functions/` to the package container created by the base template. Confirm the following Functions are indexed:
+Build the immutable package through the repository packaging script, upload it under the full source commit SHA and deploy that package reference. Confirm the expected public, scan, outbox, HR, retention and health Functions are indexed. The public API must remain unavailable.
 
-- `initiateApplication`
-- `completeUpload`
-- `finalizeApplication`
-- `defenderScanResult`
-- `quarantineCleanup`
-- `outboxWorker`
-- `hrCleanDocumentAccess`
-- `health`
+### 6. Entra and Easy Auth
 
-The API must still return unavailable because `RECRUITMENT_API_ENABLED=false`.
+Create the approved Entra application and separate `Recruitment.HR` and `Recruitment.RetentionAdmin` roles, then deploy `infra/recruitment/hr-auth.bicep`.
 
-### 4. Apply authoritative runtime settings
+Verify anonymous candidate access remains possible, protected endpoints reject anonymous users, users without the exact role are denied and the two privileged roles do not grant each other.
 
-Deploy:
+### 7. Microsoft 365 resources
 
-`infra/recruitment/runtime-settings.bicep`
+Create exactly `RecruitmentApplications` and `RecruitmentFiles` from `infra/recruitment/sharepoint-lists.v1.json`. Grant selected access to those lists only and restrict Graph mail permissions to the approved recruitment mailbox.
 
-This replaces manual portal configuration with one controlled app-settings source. Leave every external enablement parameter false. SharePoint IDs and the acknowledgement mailbox remain blank until they are provisioned and approved.
+Keep delivery disabled until the permission tests pass.
 
-### 5. Configure Microsoft Entra App Service Authentication
+### 8. Non-public delivery
 
-Create the approved Entra application registration and the `Recruitment.HR` application role, then deploy:
+Reapply runtime settings v2 with SharePoint IDs and the restricted mailbox. Enable outbox delivery first. Enable candidate acknowledgement only after the copy is approved.
 
-`infra/recruitment/hr-auth.bicep`
+Verify deterministic SharePoint updates, separate notification states, retry and reconciliation behavior, and that CV bytes are never copied into SharePoint or email.
 
-Public candidate endpoints remain anonymous. Easy Auth validates supplied Entra tokens and injects the trusted client principal. The HR document endpoint separately requires the exact `Recruitment.HR` role.
+### 9. Retention policy and HR access
 
-Verify that:
+After delivery is healthy and policy approval is recorded, enable retention policy assignment while destructive deletion remains disabled.
 
-- HTTPS is required;
-- the issuer is tenant-specific;
-- allowed audiences are exact;
-- token storage is disabled;
-- an anonymous candidate endpoint remains anonymous;
-- an anonymous HR endpoint request receives 401;
-- an authenticated user without `Recruitment.HR` receives 403.
+After Easy Auth role tests pass, enable HR document access with platform authentication enabled. Confirm approved HR users receive only short-lived read access to a verified clean CV and unassigned users are denied.
 
-Only after those checks may `RECRUITMENT_PLATFORM_AUTH_ENABLED=true` be used in the runtime-settings deployment.
+### 10. Defender and Event Grid
 
-### 6. Provision Microsoft 365 resources and selected permissions
+Deploy `infra/recruitment/event-grid-subscription.bicep`, then enable Defender in non-production. Verify clean, malicious, failed and delayed scan outcomes, including scans completing before application finalization.
 
-Follow `docs/recruitment/MICROSOFT_365_SETUP.md`.
+### 11. Monitoring v4
 
-Create exactly two generic SharePoint lists using:
+Confirm Application Insights is workspace-based. Deploy `infra/recruitment/monitoring-rules.v4.bicep` with `enableAlerts=true` explicitly.
 
-`infra/recruitment/sharepoint-lists.v1.json`
+Run each query in non-production, generate controlled events and verify the action group. Confirm monitoring contains no candidate or document identifiers.
 
-Grant the Function identity selected write access to those two lists only. Restrict `Mail.ReadWrite` and `Mail.Send` to the approved recruitment mailbox. Record immutable site/list IDs and the approved mailbox in the runtime-settings parameters.
+### 12. Acceptance and recovery tests
 
-Keep outbox delivery and candidate acknowledgement disabled.
+Test successful and rejected files, duplicate and retry behavior, active-upload initiation retries, scoped rate limits, provider failures, scan ordering, SharePoint and email reconciliation, role boundaries, legal holds, partial purge recovery, cleanup retry and disabled-API behavior.
 
-### 7. Connect Defender scan results to the Function
+### 13. Destructive retention
 
-After the Function package is deployed, deploy:
+Enable destructive retention only after recovery testing and explicit approval. Keep the public API disabled and process one controlled eligible record through the full purge and external projection path.
 
-`infra/recruitment/event-grid-subscription.bicep`
+### 14. Non-production API
 
-The subscription targets the `defenderScanResult` Azure Function resource directly and accepts only:
+Enable the non-production public API only after the complete backend acceptance suite passes. Test it directly without exposing the Careers application form.
 
-`Microsoft.Security.MalwareScanningResult`
+### 15. Production
 
-It delivers one event per invocation and retries for up to 24 hours. Confirm the subscription is healthy before enabling malware scanning.
+Repeat the approved deployment and acceptance sequence in production with the API disabled. Production enablement requires recorded HR, Legal, IT/Security and operational-owner approval.
 
-### 8. Enable Defender for Storage
+## Public launch
 
-Redeploy the base template with:
-
-`enableDefenderForStorage=true`
-
-Confirm:
-
-- quarantine uploads are scanned;
-- clean-container promotion does not create a scan loop;
-- the Event Grid handler receives a clean test result;
-- malicious and scan-failed files never become HR-readable;
-- scan-result delivery failure is alerted and investigated before the 24-hour retry window expires.
-
-### 9. Enable non-production delivery only
-
-In a dedicated non-production environment, redeploy runtime settings with:
-
-- real SharePoint IDs;
-- the restricted test recruitment mailbox;
-- `RECRUITMENT_OUTBOX_DELIVERY_ENABLED=true`;
-- `RECRUITMENT_CANDIDATE_ACK_ENABLED=true`;
-- `RECRUITMENT_CANDIDATE_ACK_TEMPLATE_APPROVED=true` only after copy approval;
-- `RECRUITMENT_HR_ACCESS_ENABLED=true`;
-- `RECRUITMENT_PLATFORM_AUTH_ENABLED=true`.
-
-Keep `RECRUITMENT_API_ENABLED=false` until direct backend tests pass.
-
-### 10. Run backend acceptance tests
-
-Test at minimum:
-
-- valid PDF and DOCX;
-- extension/MIME/signature mismatch;
-- oversized and empty files;
-- expired and tampered completion/finalization tokens;
-- duplicate initiation, completion, finalization and scan events;
-- rate-limit exhaustion;
-- Turnstile failure and provider outage;
-- malicious, failed, timed-out and replayed scan results;
-- clean-file promotion and quarantine cleanup retry;
-- SharePoint projection replay;
-- process crashes before candidate mail draft creation, after draft creation, after Cosmos checkpoint, and after send;
-- wrong-role and anonymous HR document access;
-- five-minute, read-only, one-Blob HR SAS;
-- disabled API behavior;
-- audit and alert visibility without candidate document content in logs.
-
-### 11. Enable the non-production API
-
-Only after the acceptance suite passes may the non-production runtime-settings deployment set:
-
-`RECRUITMENT_API_ENABLED=true`
-
-The production API remains disabled.
-
-### 12. Production approval and deployment
-
-Production enablement requires documented approval from HR, Legal, IT/Security, and the named support owner for:
-
-- privacy and consent wording/version;
-- file types, maximum size and count;
-- retention/deletion and legal-hold rules;
-- malicious-file incident treatment;
-- cross-border data locations;
-- candidate acknowledgement wording and mailbox;
-- notification recipients;
-- rate-limit threshold;
-- monitoring and incident escalation.
-
-Repeat the non-production deployment and acceptance sequence in production with the API still disabled. Enable the backend only after the production smoke test passes.
-
-## Public launch remains the final step
-
-Only after the production backend is proven may a separate frontend PR:
+A separate frontend change may proceed only after the production backend is proven. It must:
 
 1. add the application form;
 2. connect it to the deployed API;
 3. enable approved role applications;
 4. enable `careersOpenRolesEnabled`;
-5. restore role pages to the sitemap and indexability.
+5. restore approved role pages to indexing and the sitemap.
 
-Backend and public launch must not be merged as one change.
+Do not combine backend rollout and public launch in one release.
