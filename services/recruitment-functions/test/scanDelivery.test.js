@@ -9,6 +9,9 @@ const {
   deliverDefenderScanEvent
 } = require('../src/lib/scanDelivery');
 
+const APPLICATION_REFERENCE = 'SV-APP-2026-ABCDEF0123456789';
+const FILE_REFERENCE = 'SV-FILE-0123456789ABCDEF';
+
 function context() {
   const warnings = [];
   return {
@@ -25,7 +28,7 @@ function validEvent() {
     eventType: 'Microsoft.Security.MalwareScanningResult',
     eventTime: '2026-07-23T00:00:00.000Z',
     data: {
-      blobUri: 'https://account.blob.core.windows.net/recruitment-quarantine/recruitment/2026/legal-assistant/SV-APP-2026-123456/SV-FILE-12345678.pdf',
+      blobUri: `https://account.blob.core.windows.net/recruitment-quarantine/recruitment/2026/legal-assistant/${APPLICATION_REFERENCE}/${FILE_REFERENCE}.pdf`,
       scanResultType: 'No threats found',
       scanFinishedTimeUtc: '2026-07-23T00:00:00.000Z',
       blobETag: 'etag-1',
@@ -78,8 +81,8 @@ test('retryable scan outcomes throw so Event Grid redelivers the event', async (
         config: config(),
         createDependencies: () => ({ marker: true }),
         processScanResult: async (normalized, dependencies) => {
-          assert.equal(normalized.applicationReference, 'SV-APP-2026-123456');
-          assert.equal(normalized.fileReference, 'SV-FILE-12345678');
+          assert.equal(normalized.applicationReference, APPLICATION_REFERENCE);
+          assert.equal(normalized.fileReference, FILE_REFERENCE);
           assert.equal(normalized.result, 'Clean');
           assert.equal(dependencies.marker, true);
           return { success: false, errorCode };
