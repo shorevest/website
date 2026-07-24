@@ -37,6 +37,10 @@ const initiateApplication = createInitiateApplication(coreInitiateApplication);
 const finalizeApplication = createFinalizeApplication(coreFinalizeApplication);
 const processScanResult = createProcessScanResult(coreProcessScanResult);
 
+function randomHex(length) {
+  return crypto.randomUUID().replace(/-/g, '').slice(0, length).toUpperCase();
+}
+
 function createDeps(config = loadConfig(), requestContext = {}) {
   const credentialOptions = config.managedIdentityClientId
     ? { managedIdentityClientId: config.managedIdentityClientId }
@@ -124,10 +128,10 @@ function createDeps(config = loadConfig(), requestContext = {}) {
     loadManifest: async () => loadManifest(),
     references: {
       async application() {
-        return `SV-APP-${new Date().getUTCFullYear()}-${crypto.randomUUID().slice(0, 6).toUpperCase()}`;
+        return `SV-APP-${new Date().getUTCFullYear()}-${randomHex(16)}`;
       },
       async file() {
-        return `SV-FILE-${crypto.randomUUID().replace(/-/g, '').slice(0, 8).toUpperCase()}`;
+        return `SV-FILE-${randomHex(16)}`;
       },
       async tokenId() {
         return crypto.randomUUID();
@@ -138,6 +142,7 @@ function createDeps(config = loadConfig(), requestContext = {}) {
 }
 
 module.exports = {
+  randomHex,
   createDeps,
   flows: {
     initiateApplication,
