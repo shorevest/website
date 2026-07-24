@@ -1,0 +1,39 @@
+name: Recruitment Functions Diagnostics
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/recruitment-functions-diagnostics.yml'
+      - 'services/recruitment-functions/**'
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install recruitment function dependencies
+        run: npm install --ignore-scripts --no-audit --no-fund --package-lock=false
+        working-directory: services/recruitment-functions
+      - name: Capture Functions test output
+        id: functions_test
+        shell: bash
+        run: |
+          set +e
+          npm run test:functions > recruitment-functions-test.log 2>&1
+          status=$?
+          echo "exit_code=$status" >> "$GITHUB_OUTPUT"
+          exit 0
+      - name: Upload diagnostic output
+        uses: actions/upload-artifact@v4
+        with:
+          name: recruitment-functions-test-output
+          path: recruitment-functions-test.log
+          if-no-files-found: error
+          retention-days: 1
+      - name: Preserve failure status
+        if: steps.functions_test.outputs.exit_code != '0'
+        run: exit 1
