@@ -24,7 +24,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
       - name: Validate runtime settings contract tests
         run: node --test services/recruitment-functions/test/runtimeSettingsV2.test.js
       - name: Compile runtime settings Bicep v2
