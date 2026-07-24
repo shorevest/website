@@ -1,6 +1,29 @@
 name: Recruitment Functions CI
-
 on:
+  push:
+    branches:
+      - 'agent/**'
+    paths:
+      - '.github/workflows/recruitment-functions.yml'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'scripts/validate-recruitment-roles.js'
+      - 'scripts/generate-clean-public-urls.js'
+      - 'services/recruitment-functions/**'
+      - 'api/recruitment/**'
+      - 'infra/recruitment/**'
+      - 'assets/data/recruitment/**'
+      - 'assets/js/recruitment-*.js'
+      - 'assets/js/site-config.js'
+      - 'assets/css/recruitment-application.css'
+      - 'careers.html'
+      - 'careers_cn.html'
+      - 'careers/**'
+      - 'cn/careers/**'
+      - 'sitemap.xml'
+      - '_headers'
+      - 'tests/recruitment*.test.js'
+      - 'tests/security-headers.test.js'
   pull_request:
     paths:
       - '.github/workflows/recruitment-functions.yml'
@@ -24,7 +47,6 @@ on:
       - 'tests/recruitment*.test.js'
       - 'tests/security-headers.test.js'
   workflow_dispatch:
-
 jobs:
   validate:
     runs-on: ubuntu-latest
@@ -44,7 +66,7 @@ jobs:
       - run: npm run check:functions
       - run: npm run test:functions
       - name: Compile recruitment Bicep
-        run: az bicep build --file infra/recruitment/main.bicep
+        run: npm run bicep:build:recruitment
       - name: Lint recruitment Bicep
-        run: az bicep build --file infra/recruitment/main.bicep --stdout >/dev/null
+        run: npm run bicep:lint:recruitment
       - run: git diff --check
