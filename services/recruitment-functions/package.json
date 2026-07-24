@@ -10,7 +10,8 @@
   "scripts": {
     "check": "node scripts/check-syntax.js",
     "test": "node --test test/*.test.js",
-    "validate:manifest": "node scripts/validate-manifest.js"
+    "validate:manifest": "node scripts/validate-manifest.js",
+    "validate:sharepoint": "node scripts/validate-sharepoint-schema.js"
   },
   "dependencies": {
     "@azure/cosmos": "4.4.1",
