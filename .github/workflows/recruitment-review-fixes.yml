@@ -1,0 +1,121 @@
+name: Recruitment Review Fixes
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/recruitment-review-fixes.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/rebuild-recruitment-backend
+      - name: Apply reviewed contract fixes
+        shell: python
+        run: |
+          from pathlib import Path
+
+          functions_path = Path('services/recruitment-functions/src/functions/index.js')
+          functions = functions_path.read_text()
+          old = "if (parsed.error) return { ...parsed.error, headers: withCors(req, config) };"
+          replacement = """if (parsed.error) {
+                return {
+                  status: parsed.error.status,
+                  headers: withCors(req, config),
+                  jsonBody: parsed.error.body
+                };
+              }"""
+          if functions.count(old) != 2:
+              raise SystemExit(f'Expected two pre-flow error response sites, found {functions.count(old)}')
+          functions_path.write_text(functions.replace(old, replacement))
+
+          contract_path = Path('docs/recruitment/DEPLOYMENT_CONTRACT.md')
+          contract = contract_path.read_text()
+          package_old = 'powershell -ExecutionPolicy Bypass -File services/recruitment-functions/scripts/package.ps1 \\\n'
+          package_new = 'pwsh -NoProfile -File services/recruitment-functions/scripts/package.ps1 \\\n'
+          if package_old not in contract:
+              raise SystemExit('Packaging command did not match the expected contract text')
+          contract = contract.replace(package_old, package_new, 1)
+
+          auth_old = """    functionAppName=<function-app> \\
+              tenantId=<tenant-id> \\
+              entraClientId=<application-client-id> \\
+              appRegistrationIssuer=<issuer-url>"""
+          auth_new = """    functionAppName=<function-app> \\
+              entraClientId=<application-client-id> \\
+              openIdIssuer=<tenant-specific-openid-issuer>"""
+          if auth_old not in contract:
+              raise SystemExit('Easy Auth command did not match the expected contract text')
+          contract = contract.replace(auth_old, auth_new, 1)
+          contract_path.write_text(contract)
+
+          Path('services/recruitment-functions/test/preFlowErrorResponse.test.js').write_text("""'use strict';
+
+          const fs = require('fs');
+          const path = require('path');
+          const test = require('node:test');
+          const assert = require('node:assert');
+
+          const source = fs.readFileSync(
+            path.resolve(__dirname, '../src/functions/index.js'),
+            'utf8'
+          );
+
+          test('pre-flow validation failures use Azure Functions jsonBody responses', () => {
+            assert.equal(
+              (source.match(/jsonBody: parsed\\.error\\.body/g) || []).length,
+              2
+            );
+            assert.ok(!source.includes('{ ...parsed.error, headers: withCors(req, config) }'));
+          });
+          """.replace(/^          /gm, ''))
+
+          Path('services/recruitment-functions/test/deploymentCommandParity.test.js').write_text("""'use strict';
+
+          const fs = require('fs');
+          const path = require('path');
+          const test = require('node:test');
+          const assert = require('node:assert');
+
+          const root = path.resolve(__dirname, '../../..');
+          const contract = fs.readFileSync(
+            path.join(root, 'docs/recruitment/DEPLOYMENT_CONTRACT.md'),
+            'utf8'
+          );
+          const authTemplate = fs.readFileSync(
+            path.join(root, 'infra/recruitment/hr-auth.bicep'),
+            'utf8'
+          );
+
+          test('deployment contract invokes the PowerShell 7 packaging script', () => {
+            assert.ok(contract.includes('pwsh -NoProfile -File services/recruitment-functions/scripts/package.ps1'));
+            assert.ok(!contract.includes('powershell -ExecutionPolicy Bypass -File services/recruitment-functions/scripts/package.ps1'));
+          });
+
+          test('Easy Auth deployment command uses parameters declared by hr-auth.bicep', () => {
+            assert.ok(authTemplate.includes('param functionAppName string'));
+            assert.ok(authTemplate.includes('param entraClientId string'));
+            assert.ok(authTemplate.includes('param openIdIssuer string'));
+            assert.ok(contract.includes('openIdIssuer=<tenant-specific-openid-issuer>'));
+            assert.ok(!contract.includes('tenantId=<tenant-id>'));
+            assert.ok(!contract.includes('appRegistrationIssuer=<issuer-url>'));
+          });
+          """.replace(/^          /gm, ''))
+      - name: Commit review fixes
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add \
+            services/recruitment-functions/src/functions/index.js \
+            docs/recruitment/DEPLOYMENT_CONTRACT.md \
+            services/recruitment-functions/test/preFlowErrorResponse.test.js \
+            services/recruitment-functions/test/deploymentCommandParity.test.js
+          git commit -m 'Fix recruitment response and deployment contracts'
+          git push origin HEAD:agent/rebuild-recruitment-backend
