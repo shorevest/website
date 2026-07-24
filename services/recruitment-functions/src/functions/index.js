@@ -77,7 +77,13 @@ async function httpFlow(req, context, flow, options = {}) {
     if (rateLimit.allowed !== true) return rateLimit.response;
 
     const parsed = await readJson(req, config);
-    if (parsed.error) return { ...parsed.error, headers: withCors(req, config) };
+    if (parsed.error) {
+      return {
+        status: parsed.error.status,
+        headers: withCors(req, config),
+        jsonBody: parsed.error.body
+      };
+    }
     if (!parsed.body || typeof parsed.body !== 'object' || Array.isArray(parsed.body)) {
       return {
         status: 400,
@@ -158,7 +164,13 @@ app.http('hrRetentionControl', {
   handler: async (req, context) => {
     const config = loadConfig();
     const parsed = await readJson(req, config);
-    if (parsed.error) return { ...parsed.error, headers: withCors(req, config) };
+    if (parsed.error) {
+      return {
+        status: parsed.error.status,
+        headers: withCors(req, config),
+        jsonBody: parsed.error.body
+      };
+    }
     if (!parsed.body || typeof parsed.body !== 'object' || Array.isArray(parsed.body)) {
       return {
         status: 400,

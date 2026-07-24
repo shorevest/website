@@ -22,7 +22,7 @@ Deploying the Function package does not make recruitment applications public.
 Create the deployment artifact only through:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File services/recruitment-functions/scripts/package.ps1 \
+pwsh -NoProfile -File services/recruitment-functions/scripts/package.ps1 \
   -CommitSha <full-commit-sha> \
   -OutputPath artifacts/recruitment-functions.zip
 ```
@@ -134,9 +134,8 @@ az deployment group create \
   --template-file infra/recruitment/hr-auth.bicep \
   --parameters \
     functionAppName=<function-app> \
-    tenantId=<tenant-id> \
     entraClientId=<application-client-id> \
-    appRegistrationIssuer=<issuer-url>
+    openIdIssuer=<tenant-specific-openid-issuer>
 ```
 
 Assign `Recruitment.HR` only to approved HR reviewers and `Recruitment.RetentionAdmin` only to approved Legal/retention administrators.
