@@ -20,19 +20,16 @@ jobs:
           node-version: '24'
       - name: Capture immutable package build output
         id: package
-        shell: pwsh
+        shell: bash
         run: |
-          $log = 'recruitment-package.log'
-          $succeeded = $true
-          try {
-            & ./services/recruitment-functions/scripts/package.ps1 `
-              -CommitSha '${{ github.sha }}' `
-              -OutputPath 'artifacts/recruitment-functions.zip' *> $log
-          } catch {
-            $succeeded = $false
-            ($_ | Out-String) | Add-Content -LiteralPath $log
-          }
-          "succeeded=$($succeeded.ToString().ToLowerInvariant())" >> $env:GITHUB_OUTPUT
+          set +e
+          pwsh -NoProfile -File services/recruitment-functions/scripts/package.ps1 \
+            -CommitSha '${{ github.sha }}' \
+            -OutputPath 'artifacts/recruitment-functions.zip' \
+            > recruitment-package.log 2>&1
+          status=$?
+          echo "exit_code=$status" >> "$GITHUB_OUTPUT"
+          exit 0
       - name: Upload package diagnostic output
         uses: actions/upload-artifact@v4
         with:
@@ -41,5 +38,5 @@ jobs:
           if-no-files-found: error
           retention-days: 1
       - name: Preserve package failure status
-        if: steps.package.outputs.succeeded != 'true'
+        if: steps.package.outputs.exit_code != '0'
         run: exit 1
