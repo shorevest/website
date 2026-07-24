@@ -77,14 +77,41 @@ function preflightResponse(req, config) {
   };
 }
 
+function declaredContentLength(req) {
+  const raw = header(req, 'content-length');
+  if (raw == null || String(raw).trim() === '') return null;
+  const normalized = String(raw).trim();
+  if (!/^(0|[1-9]\d*)$/.test(normalized)) return Number.NaN;
+  const value = Number(normalized);
+  return Number.isSafeInteger(value) && value >= 0 ? value : Number.NaN;
+}
+
+function encodedBodyAllowed(req) {
+  const raw = header(req, 'content-encoding');
+  if (raw == null || String(raw).trim() === '') return true;
+  return String(raw).trim().toLowerCase() === 'identity';
+}
+
 async function readJson(req, config) {
   const contentType = header(req, 'content-type') || '';
   if (!/^application\/json\b/i.test(contentType)) {
     return { error: { status: 415, body: { success: false, errorCode: 'UNSUPPORTED_MEDIA_TYPE' } } };
   }
 
+  if (!encodedBodyAllowed(req)) {
+    return { error: { status: 415, body: { success: false, errorCode: 'UNSUPPORTED_CONTENT_ENCODING' } } };
+  }
+
+  const declaredLength = declaredContentLength(req);
+  if (Number.isNaN(declaredLength)) {
+    return { error: { status: 400, body: { success: false, errorCode: 'VALIDATION_FAILED' } } };
+  }
+  if (declaredLength !== null && declaredLength > config.maxBodyBytes) {
+    return { error: { status: 413, body: { success: false, errorCode: 'PAYLOAD_TOO_LARGE' } } };
+  }
+
   const text = await req.text();
-  if (Buffer.byteLength(text) > config.maxBodyBytes) {
+  if (Buffer.byteLength(text, 'utf8') > config.maxBodyBytes) {
     return { error: { status: 413, body: { success: false, errorCode: 'PAYLOAD_TOO_LARGE' } } };
   }
 
@@ -152,6 +179,8 @@ module.exports = {
   originAllowed,
   withCors,
   preflightResponse,
+  declaredContentLength,
+  encodedBodyAllowed,
   readJson,
   normalizeAppServiceClientIp,
   requestContext,
