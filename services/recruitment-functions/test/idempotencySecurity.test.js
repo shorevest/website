@@ -37,14 +37,24 @@ test('credential fields are removed from idempotency records and claim wrappers'
   assert.ok(!JSON.stringify(sanitized).includes('signed-secret'));
 });
 
-test('active credential metadata identifies only unexpired issued generations', () => {
-  assert.equal(activeCredentialGeneration({
-    state: 'CredentialsIssued',
+test('active credential metadata survives retryable and lease-recovery states', () => {
+  const active = {
     stableResult: {
       credentialGeneration: 3,
       lastCredentialExpiryUtc: '2999-01-01T00:00:00.000Z'
     }
-  }, Date.parse('2026-07-22T00:00:00.000Z')), 3);
+  };
+
+  for (const state of [
+    'CredentialsIssued',
+    'CredentialIssuing',
+    'CredentialRetryable',
+    'RetryableFailure',
+    'Claimed',
+    'SubmissionReserved'
+  ]) {
+    assert.equal(activeCredentialGeneration({ ...active, state }, Date.parse('2026-07-22T00:00:00.000Z')), 3);
+  }
 
   assert.equal(activeCredentialGeneration({
     state: 'CredentialsIssued',
@@ -54,13 +64,9 @@ test('active credential metadata identifies only unexpired issued generations', 
     }
   }, Date.parse('2026-07-22T00:00:00.000Z')), null);
 
-  assert.equal(activeCredentialGeneration({
-    state: 'SubmissionReserved',
-    stableResult: {
-      credentialGeneration: 3,
-      lastCredentialExpiryUtc: '2999-01-01T00:00:00.000Z'
-    }
-  }), null);
+  for (const state of ['Completed', 'PermanentFailure']) {
+    assert.equal(activeCredentialGeneration({ ...active, state }, Date.parse('2026-07-22T00:00:00.000Z')), null);
+  }
 });
 
 test('production credentialsIssued persists only stable metadata', async () => {
@@ -164,6 +170,28 @@ test('retry reissues credentials on the active generation without exposing store
   assert.equal(lease.reissuedActiveCredentials, true);
   assert.equal(lease.record.result, undefined);
   assert.ok(!JSON.stringify(lease).includes('secret'));
+});
+
+test('retryable issuance failure does not rotate an earlier active upload generation', async () => {
+  const underlying = {
+    async get() {
+      return {
+        state: 'RetryableFailure',
+        stableResult: {
+          credentialGeneration: 7,
+          lastCredentialExpiryUtc: '2999-01-01T00:00:00.000Z'
+        }
+      };
+    },
+    async beginCredentialIssuance() {
+      return { status: 'claimed', generation: 9 };
+    },
+    async credentialsIssued() {}
+  };
+
+  const lease = await secureIdempotencyAdapter(underlying).beginCredentialIssuance('key');
+  assert.equal(lease.generation, 7);
+  assert.equal(lease.reissuedActiveCredentials, true);
 });
 
 test('expired credential metadata allows the next generation to advance', async () => {
