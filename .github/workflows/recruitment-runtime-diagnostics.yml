@@ -9,6 +9,12 @@ on:
       - 'infra/recruitment/runtime-settings.v2.bicep'
       - 'services/recruitment-functions/src/lib/config.js'
       - 'services/recruitment-functions/test/runtimeSettingsV2.test.js'
+  pull_request:
+    paths:
+      - '.github/workflows/recruitment-runtime-diagnostics.yml'
+      - 'infra/recruitment/runtime-settings.v2.bicep'
+      - 'services/recruitment-functions/src/lib/config.js'
+      - 'services/recruitment-functions/test/runtimeSettingsV2.test.js'
   workflow_dispatch:
 
 jobs:
