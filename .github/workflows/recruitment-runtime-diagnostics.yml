@@ -1,0 +1,37 @@
+name: Recruitment Runtime Diagnostics
+
+on:
+  push:
+    branches:
+      - 'agent/rebuild-recruitment-backend'
+    paths:
+      - '.github/workflows/recruitment-runtime-diagnostics.yml'
+      - 'infra/recruitment/runtime-settings.v2.bicep'
+      - 'services/recruitment-functions/src/lib/config.js'
+      - 'services/recruitment-functions/test/runtimeSettingsV2.test.js'
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Capture runtime settings test output
+        id: runtime_test
+        shell: bash
+        run: |
+          set +e
+          node --test services/recruitment-functions/test/runtimeSettingsV2.test.js > runtime-settings-test.log 2>&1
+          status=$?
+          echo "exit_code=$status" >> "$GITHUB_OUTPUT"
+          exit 0
+      - name: Upload diagnostic output
+        uses: actions/upload-artifact@v4
+        with:
+          name: recruitment-runtime-test-output
+          path: runtime-settings-test.log
+          if-no-files-found: error
+          retention-days: 1
+      - name: Preserve failure status
+        if: steps.runtime_test.outputs.exit_code != '0'
+        run: exit 1
