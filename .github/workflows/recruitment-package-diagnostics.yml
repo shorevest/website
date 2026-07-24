@@ -18,6 +18,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
+      - name: Regenerate recruitment Functions lockfile
+        run: npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+        working-directory: services/recruitment-functions
       - name: Capture immutable package build output
         id: package
         shell: bash
@@ -30,11 +33,13 @@ jobs:
           status=$?
           echo "exit_code=$status" >> "$GITHUB_OUTPUT"
           exit 0
-      - name: Upload package diagnostic output
+      - name: Upload generated lockfile and package output
         uses: actions/upload-artifact@v4
         with:
           name: recruitment-package-output
-          path: recruitment-package.log
+          path: |
+            recruitment-package.log
+            services/recruitment-functions/package-lock.json
           if-no-files-found: error
           retention-days: 1
       - name: Preserve package failure status
