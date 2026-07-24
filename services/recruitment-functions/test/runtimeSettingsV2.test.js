@@ -132,6 +132,10 @@ test('runtime settings v2 keeps exact ShoreVest origins, Turnstile constraints a
 
 test('runtime settings v2 cannot silently fall back to the single apex hostname', () => {
   assert.ok(!template.includes("param botVerificationHostname string = 'shorevest.com'"));
-  assert.ok(!template.includes('RECRUITMENT_BOT_VERIFICATION_HOSTNAME: botVerificationHostname'));
+  assert.doesNotMatch(
+    template,
+    /RECRUITMENT_BOT_VERIFICATION_HOSTNAME:\s*botVerificationHostname\b/,
+    'the runtime setting must reference the plural approved-hostname set'
+  );
   assert.ok(template.includes('RECRUITMENT_BOT_VERIFICATION_ACTION'));
 });
