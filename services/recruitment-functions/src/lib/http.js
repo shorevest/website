@@ -136,12 +136,11 @@ function normalizeAppServiceClientIp(value) {
 }
 
 function requestContext(req) {
-  const clientIp = normalizeAppServiceClientIp(
-    header(req, 'x-client-ip') ||
-    header(req, 'client-ip') ||
-    header(req, 'x-forwarded-for') ||
-    ''
-  );
+  const platformClientIp = header(req, 'x-client-ip') || header(req, 'client-ip') || '';
+  const forwardedFor = header(req, 'x-forwarded-for') || '';
+  const competingProxyIp = header(req, 'cf-connecting-ip') || '';
+  const networkIdentifier = platformClientIp || (forwardedFor && !competingProxyIp ? forwardedFor : '');
+  const clientIp = normalizeAppServiceClientIp(networkIdentifier);
   const userAgent = String(header(req, 'user-agent') || '').slice(0, 512);
   return { clientIp, userAgent };
 }
