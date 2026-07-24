@@ -16,13 +16,12 @@ resource insights 'Microsoft.Insights/components@2020-02-02' existing = {
   name: applicationInsightsName
 }
 
-// Return one row per matching telemetry record. The scheduled-query rule performs
-// the Count aggregation across the evaluation window; do not pre-summarize here.
+// The deployment contract requires workspace-based Application Insights. Alert queries
+// therefore begin with one workspace table and return one row per matching telemetry
+// record. Scheduled-query Count aggregation applies the threshold across the window.
 var criticalEventsQuery = '''
-union isfuzzy=true
-  (traces | project TimeGenerated = timestamp, EventMessage = tostring(message)),
-  (AppTraces | project TimeGenerated, EventMessage = tostring(Message))
-| where EventMessage has_any (
+AppTraces
+| where Message has_any (
     "recruitment_configuration_invalid",
     "recruitment_outbox_configuration_invalid",
     "recruitment_scan_event_rejected",
@@ -37,35 +36,23 @@ union isfuzzy=true
 '''
 
 var repeatedApiFailuresQuery = '''
-union isfuzzy=true
-  (requests
-    | project TimeGenerated = timestamp, RequestName = tostring(name), RequestUrl = tostring(url), ResultCodeText = tostring(resultCode)),
-  (AppRequests
-    | project TimeGenerated, RequestName = tostring(Name), RequestUrl = tostring(Url), ResultCodeText = tostring(ResultCode))
-| where RequestName has "recruitment" or RequestUrl has "/recruitment/"
-| where toint(ResultCodeText) >= 500
+AppRequests
+| where Name has "recruitment" or Url has "/recruitment/"
+| where toint(ResultCode) >= 500
 | project TimeGenerated
 '''
 
 var readinessFailuresQuery = '''
-union isfuzzy=true
-  (requests
-    | project TimeGenerated = timestamp, RequestName = tostring(name), RequestUrl = tostring(url), ResultCodeText = tostring(resultCode)),
-  (AppRequests
-    | project TimeGenerated, RequestName = tostring(Name), RequestUrl = tostring(Url), ResultCodeText = tostring(ResultCode))
-| where RequestName has "health" or RequestUrl endswith "/recruitment/health"
-| where toint(ResultCodeText) >= 500
+AppRequests
+| where Name has "health" or Url endswith "/recruitment/health"
+| where toint(ResultCode) >= 500
 | project TimeGenerated
 '''
 
 var securityResponseSpikeQuery = '''
-union isfuzzy=true
-  (requests
-    | project TimeGenerated = timestamp, RequestName = tostring(name), RequestUrl = tostring(url), ResultCodeText = tostring(resultCode)),
-  (AppRequests
-    | project TimeGenerated, RequestName = tostring(Name), RequestUrl = tostring(Url), ResultCodeText = tostring(ResultCode))
-| where RequestName has "recruitment" or RequestUrl has "/recruitment/"
-| where toint(ResultCodeText) in (401, 403, 429)
+AppRequests
+| where Name has "recruitment" or Url has "/recruitment/"
+| where toint(ResultCode) in (401, 403, 429)
 | project TimeGenerated
 '''
 
