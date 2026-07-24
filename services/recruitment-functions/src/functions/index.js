@@ -5,10 +5,7 @@ const { loadConfig, validateConfig } = require('../lib/config');
 const { createReadinessProbe } = require('../lib/readiness');
 const { safeErrorCode } = require('../lib/logger');
 const { deliverDefenderScanEvent } = require('../lib/scanDelivery');
-const {
-  applyEndpointRateLimit,
-  rateLimitedResponse
-} = require('../lib/endpointRateLimit');
+const { applyEndpointRateLimit } = require('../lib/endpointRateLimit');
 const { RATE_LIMIT_SCOPES } = require('../adapters/rateLimit');
 const {
   originAllowed,
@@ -16,9 +13,9 @@ const {
   preflightResponse,
   readJson,
   requestContext,
-  candidate,
   unavailable
 } = require('../lib/http');
+const { flowHttpResponse } = require('../lib/flowResponse');
 const { createDeps, flows } = require('../appFactory');
 const { accessCleanDocument } = require('../hr/documentAccess');
 const { updateRetentionControl } = require('../hr/retentionControl');
@@ -94,14 +91,7 @@ async function httpFlow(req, context, flow, options = {}) {
     }
 
     const result = await flow(parsed.body, dependencies);
-    if (result?.success !== true && result?.errorCode === 'RATE_LIMITED') {
-      return rateLimitedResponse(req, config, result);
-    }
-    return {
-      status: result.success ? 200 : 400,
-      headers: withCors(req, config),
-      jsonBody: candidate(result)
-    };
+    return flowHttpResponse(req, config, result);
   } catch (error) {
     context.error('recruitment_http_failed', { code: safeErrorCode(error) });
     return {
