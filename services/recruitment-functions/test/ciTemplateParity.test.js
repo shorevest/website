@@ -17,8 +17,12 @@ const authoritativeTemplates = [
   'infra/recruitment/event-grid-subscription.bicep',
   'infra/recruitment/hr-auth.bicep',
   'infra/recruitment/runtime-settings.v2.bicep',
-  'infra/recruitment/lifecycle.bicep',
   'infra/recruitment/monitoring-rules.v4.bicep'
+];
+
+const supersededTemplates = [
+  'infra/recruitment/runtime-settings.bicep',
+  'infra/recruitment/lifecycle.bicep'
 ];
 
 test('root Bicep build and lint scripts cover every authoritative recruitment template', () => {
@@ -33,11 +37,13 @@ test('root Bicep build and lint scripts cover every authoritative recruitment te
   }
 });
 
-test('root scripts do not compile the superseded runtime settings draft', () => {
+test('root scripts do not compile superseded recruitment templates', () => {
   const build = packageJson.scripts['bicep:build:recruitment'];
   const lint = packageJson.scripts['bicep:lint:recruitment'];
-  assert.ok(!build.includes('--file infra/recruitment/runtime-settings.bicep'));
-  assert.ok(!lint.includes('--file infra/recruitment/runtime-settings.bicep'));
+  for (const template of supersededTemplates) {
+    assert.ok(!build.includes(`--file ${template}`), `build script still references ${template}`);
+    assert.ok(!lint.includes(`--file ${template}`), `lint script still references ${template}`);
+  }
 });
 
 test('GitHub Actions delegates Bicep validation to authoritative root scripts', () => {
