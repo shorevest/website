@@ -27,8 +27,7 @@ function Invoke-CheckedCommand {
     [Parameter(Mandatory = $true)]
     [string] $Command,
 
-    [Parameter(ValueFromRemainingArguments = $true)]
-    [string[]] $Arguments
+    [string[]] $Arguments = @()
   )
 
   & $Command @Arguments
@@ -81,7 +80,7 @@ try {
 
   Push-Location $serviceRoot
   try {
-    Invoke-CheckedCommand npm ci --omit=dev --no-audit --no-fund
+    Invoke-CheckedCommand -Command 'npm' -Arguments @('ci', '--omit=dev', '--no-audit', '--no-fund')
   } finally {
     Pop-Location
   }
@@ -114,7 +113,7 @@ try {
   }
 
   Get-ChildItem -LiteralPath $stagingRoot -Recurse -Filter '*.js' -File | ForEach-Object {
-    Invoke-CheckedCommand node --check $_.FullName
+    Invoke-CheckedCommand -Command 'node' -Arguments @('--check', $_.FullName)
   }
 
   $metadata = [ordered]@{
