@@ -112,8 +112,13 @@ try {
     throw "Forbidden files found in deployment staging: $($relativeForbidden -join ', ')"
   }
 
-  Get-ChildItem -LiteralPath $stagingRoot -Recurse -Filter '*.js' -File | ForEach-Object {
-    Invoke-CheckedCommand -Command 'node' -Arguments @('--check', $_.FullName)
+  foreach ($ownedRuntimeRoot in @(
+    (Join-Path $stagingRoot 'src'),
+    (Join-Path $stagingRoot 'api/recruitment/core')
+  )) {
+    Get-ChildItem -LiteralPath $ownedRuntimeRoot -Recurse -Filter '*.js' -File | ForEach-Object {
+      Invoke-CheckedCommand -Command 'node' -Arguments @('--check', $_.FullName)
+    }
   }
 
   $metadata = [ordered]@{
