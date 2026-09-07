@@ -1,0 +1,91 @@
+name: Actions storage cleanup
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 3 * * 1'
+  push:
+    paths:
+      - '.github/workflows/actions-storage-cleanup.yml'
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Delete stale Actions artifacts and caches
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          KEEP_DAYS: '7'
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import urllib.request
+          from datetime import datetime, timedelta, timezone
+
+          token = os.environ['GH_TOKEN']
+          repo = os.environ['REPO']
+          keep_days = int(os.environ.get('KEEP_DAYS', '7'))
+          cutoff = datetime.now(timezone.utc) - timedelta(days=keep_days)
+          base = f'https://api.github.com/repos/{repo}'
+          headers = {
+              'Authorization': f'Bearer {token}',
+              'Accept': 'application/vnd.github+json',
+              'X-GitHub-Api-Version': '2022-11-28',
+              'User-Agent': 'shorevest-actions-storage-cleanup',
+          }
+
+          def request(path, method='GET'):
+              req = urllib.request.Request(base + path, headers=headers, method=method)
+              with urllib.request.urlopen(req) as resp:
+                  body = resp.read()
+                  return json.loads(body) if body else None
+
+          def parse_ts(value):
+              return datetime.fromisoformat(value.replace('Z', '+00:00'))
+
+          deleted_artifacts = 0
+          deleted_artifact_bytes = 0
+          page = 1
+          while True:
+              data = request(f'/actions/artifacts?per_page=100&page={page}')
+              artifacts = data.get('artifacts', [])
+              if not artifacts:
+                  break
+              for artifact in artifacts:
+                  if parse_ts(artifact['created_at']) < cutoff:
+                      request(f"/actions/artifacts/{artifact['id']}", method='DELETE')
+                      deleted_artifacts += 1
+                      deleted_artifact_bytes += int(artifact.get('size_in_bytes') or 0)
+              if len(artifacts) < 100:
+                  break
+              page += 1
+
+          deleted_caches = 0
+          deleted_cache_bytes = 0
+          page = 1
+          while True:
+              data = request(f'/actions/caches?per_page=100&page={page}')
+              caches = data.get('actions_caches', [])
+              if not caches:
+                  break
+              for cache in caches:
+                  if parse_ts(cache['last_accessed_at']) < cutoff:
+                      request(f"/actions/caches/{cache['id']}", method='DELETE')
+                      deleted_caches += 1
+                      deleted_cache_bytes += int(cache.get('size_in_bytes') or 0)
+              if len(caches) < 100:
+                  break
+              page += 1
+
+          mb = lambda n: round(n / 1024 / 1024, 1)
+          print(f'Cutoff: {cutoff.isoformat()}')
+          print(f'Deleted artifacts: {deleted_artifacts} ({mb(deleted_artifact_bytes)} MB)')
+          print(f'Deleted caches: {deleted_caches} ({mb(deleted_cache_bytes)} MB)')
+          PY
