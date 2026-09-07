@@ -69,11 +69,13 @@ jobs:
           [[ "$(value RECRUITMENT_API_ENABLED)" == 'true' ]] || { echo 'Test API is not enabled.' >&2; exit 1; }
           [[ "$(value RECRUITMENT_CAPTURE_ONLY_MODE)" == 'true' ]] || { echo 'Capture-only mode is not enabled.' >&2; exit 1; }
           for key in \
-            RECRUITMENT_HR_ACCESS_ENABLED \
             RECRUITMENT_RETENTION_ENABLED \
             RECRUITMENT_RETENTION_DELETION_ENABLED; do
-            [[ "$(value "$key")" != 'true' ]] || { echo "$key is unexpectedly enabled." >&2; exit 1; }
+            [[ "$(value "$key")" != 'true' ]] || { echo "$key is unexpectedly enabled; refusing deployment." >&2; exit 1; }
           done
+          if [[ "$(value RECRUITMENT_HR_ACCESS_ENABLED)" == 'true' ]]; then
+            echo 'HR access is currently enabled and will be disabled for contained testing.'
+          fi
 
           az functionapp config appsettings set \
             --resource-group "$AZURE_RESOURCE_GROUP" \
