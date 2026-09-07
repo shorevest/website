@@ -2,7 +2,8 @@ const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
 const root = path.resolve(__dirname, '..');
-// Containment state: public listings and candidate capture stay closed until the deployed backend and malware-scanning path pass controlled end-to-end verification.
+// Containment state: public listings and candidate capture stay closed until the
+// committed/deployed backend and malware-scanning path pass controlled end-to-end verification.
 function read(f){return fs.readFileSync(path.join(root,f),'utf8');}
 
 const rolePages = [
@@ -61,6 +62,20 @@ assert.match(appClient, /botToken/, 'Turnstile token is sent to the backend');
 assert.match(appClient, /clientSubmissionId/, 'client submission idempotency key is generated');
 assert.doesNotMatch(appClient, /localStorage|sessionStorage|indexedDB|document\.cookie|console\.(?:log|info|debug)/, 'application client does not persist or log applicant data');
 assert.doesNotMatch(appClient, /AccountKey=|SharedAccessSignature=|clientSecret|BEGIN PRIVATE KEY|recruitment-turnstile-secret/, 'application client contains no backend secret material');
+
+const coreFlows = require('../api/recruitment/core/flows');
+assert.strictEqual(typeof coreFlows.finalizeApplication, 'function', 'committed core exports the frontend finalize flow');
+const appFactory = read('services/recruitment-functions/src/appFactory.js');
+assert.match(appFactory, /flows:\s*\{[\s\S]*?finalizeApplication[,\s]/, 'Function composition exports the finalize flow');
+const functionIndex = read('services/recruitment-functions/src/functions/index.js');
+assert.match(functionIndex, /route:\s*['"]recruitment\/applications\/finalize['"]/, 'Functions host registers the finalize route');
+const publicResponse = require('../services/recruitment-functions/src/lib/http').candidate({
+  success: true,
+  finalizationToken: 'contract-test-token',
+  alreadyFinalized: true
+});
+assert.strictEqual(publicResponse.finalizationToken, 'contract-test-token', 'complete response does not strip the finalization token');
+assert.strictEqual(publicResponse.alreadyFinalized, true, 'idempotent finalize state survives response filtering');
 
 const roleDetail = read('assets/js/recruitment-role-detail.js');
 assert.match(roleDetail, /applicationsEnabled===true/, 'role detail requires the public application switch');

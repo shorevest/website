@@ -6,6 +6,7 @@ const TYPE = 'Microsoft.Security.MalwareScanningResult';
 const APP_PATTERN = 'SV-APP-[0-9]{4}-[0-9A-F]{16}';
 const FILE_PATTERN = 'SV-FILE-[0-9A-F]{16}';
 const PATH_RE = new RegExp(`^recruitment/(\\d{4})/([^/]+)/(${APP_PATTERN})/(${FILE_PATTERN})\\.([A-Za-z0-9]+)$`);
+const BLOB_CREATED_TYPE = 'Microsoft.Storage.BlobCreated';
 
 function parseBlob(uri) {
   const parsed = new URL(uri);
@@ -24,6 +25,40 @@ function normalizeResult(rawValue) {
     'Scan timed out': SCAN_RESULTS.Timeout
   };
   return resultMap[rawValue];
+}
+
+function normalizeStorageBlobCreatedEvent(event, config) {
+  if (!event || typeof event !== 'object') throw new Error('malformed event');
+  const eventType = event.eventType || event.type;
+  if (eventType !== BLOB_CREATED_TYPE) throw new Error('wrong event type');
+
+  const data = event.data || {};
+  const blobUri = data.url || data.blobUrl || data.blobUri;
+  if (!event.id || !blobUri) throw new Error('malformed event');
+
+  const blob = parseBlob(blobUri);
+  if (config.uploadStorageAccountName && blob.account !== config.uploadStorageAccountName) {
+    throw new Error('wrong storage account');
+  }
+  if (blob.container !== config.quarantineContainer) throw new Error('wrong container');
+
+  const match = blob.path.match(PATH_RE);
+  if (!match) throw new Error('malformed blob path');
+
+  const eventTime = event.eventTime || event.time;
+  return {
+    eventId: event.id,
+    eventTime: eventTime && !Number.isNaN(Date.parse(eventTime)) ? eventTime : null,
+    account: blob.account,
+    container: blob.container,
+    blobPath: blob.path,
+    roleId: match[2],
+    applicationReference: match[3],
+    fileReference: match[4],
+    extension: match[5],
+    api: data.api || null,
+    contentLength: typeof data.contentLength === 'number' ? data.contentLength : null
+  };
 }
 
 function normalizeEventGridEvent(event, config) {
@@ -63,4 +98,10 @@ function normalizeEventGridEvent(event, config) {
   };
 }
 
-module.exports = { normalizeEventGridEvent, TYPE, PATH_RE };
+module.exports = {
+  normalizeEventGridEvent,
+  normalizeStorageBlobCreatedEvent,
+  TYPE,
+  BLOB_CREATED_TYPE,
+  PATH_RE
+};
