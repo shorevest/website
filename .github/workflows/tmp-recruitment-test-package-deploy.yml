@@ -1,0 +1,179 @@
+name: Temporary Recruitment Test Package Deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/tmp-recruitment-test-package-deploy.yml
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: recruitment-test-package-deploy
+  cancel-in-progress: false
+
+env:
+  AZURE_CLIENT_ID: 2a5392be-62d3-44ad-8581-0ab5966b4964
+  AZURE_TENANT_ID: 768bd74c-6be4-4c55-b52d-33673e3b8700
+  AZURE_SUBSCRIPTION_ID: 4146f1fc-590f-4ee4-a7b7-57f15c08c74e
+  AZURE_RESOURCE_GROUP: rg-shorevest-recruitment-test-eastasia
+  FUNCTION_APP: svrc26hk-recruit-fn-test
+
+jobs:
+  deploy:
+    name: Deploy contained recruitment test package
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    environment: recruitment-test
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: services/recruitment-functions/package-lock.json
+
+      - name: Sign in to Azure with the recruitment-test identity
+        uses: azure/login@v2
+        with:
+          client-id: ${{ env.AZURE_CLIENT_ID }}
+          tenant-id: ${{ env.AZURE_TENANT_ID }}
+          subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Verify target and contain outbound delivery
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$(az account show --query id -o tsv)" == "$AZURE_SUBSCRIPTION_ID" ]]
+          [[ "$(az account show --query tenantId -o tsv)" == "$AZURE_TENANT_ID" ]]
+
+          settings="$(az functionapp config appsettings list \
+            --resource-group "$AZURE_RESOURCE_GROUP" \
+            --name "$FUNCTION_APP" \
+            --output json)"
+          value() { jq -r --arg key "$1" '.[] | select(.name == $key) | .value' <<<"$settings" | tr '[:upper:]' '[:lower:]'; }
+
+          [[ "$(value RECRUITMENT_API_ENABLED)" == 'true' ]] || { echo 'Test API is not enabled.' >&2; exit 1; }
+          [[ "$(value RECRUITMENT_CAPTURE_ONLY_MODE)" == 'true' ]] || { echo 'Capture-only mode is not enabled.' >&2; exit 1; }
+          [[ "$(value RECRUITMENT_HR_ACCESS_ENABLED)" == 'false' ]]
+          [[ "$(value RECRUITMENT_RETENTION_ENABLED)" == 'false' ]]
+          [[ "$(value RECRUITMENT_RETENTION_DELETION_ENABLED)" == 'false' ]]
+
+          az functionapp config appsettings set \
+            --resource-group "$AZURE_RESOURCE_GROUP" \
+            --name "$FUNCTION_APP" \
+            --settings \
+              RECRUITMENT_OUTBOX_DELIVERY_ENABLED=false \
+              RECRUITMENT_CANDIDATE_ACK_ENABLED=false \
+              RECRUITMENT_TEAM_NOTIFICATION_ENABLED=false \
+              RECRUITMENT_HR_ACCESS_ENABLED=false \
+              RECRUITMENT_RETENTION_ENABLED=false \
+              RECRUITMENT_RETENTION_DELETION_ENABLED=false \
+            --output none
+
+      - name: Build immutable Function package
+        shell: pwsh
+        run: |
+          $archive = Join-Path $env:RUNNER_TEMP 'recruitment-functions.zip'
+          ./services/recruitment-functions/scripts/package.ps1 -CommitSha '${{ github.sha }}' -OutputPath $archive
+          $metadata = unzip -p $archive deployment-metadata.json | ConvertFrom-Json
+          if ($metadata.sourceCommit -ne '${{ github.sha }}') {
+            throw 'Package source commit does not match the checked-out deployment commit.'
+          }
+
+      - name: Deploy package
+        shell: bash
+        run: |
+          set -euo pipefail
+          az functionapp deployment source config-zip \
+            --resource-group "$AZURE_RESOURCE_GROUP" \
+            --name "$FUNCTION_APP" \
+            --src "$RUNNER_TEMP/recruitment-functions.zip" \
+            --build-remote false \
+            --timeout 600 \
+            --output none
+
+      - name: Verify indexed routes and contained runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          expected=(initiateApplication completeUpload finalizeApplication health)
+          indexed=false
+          for attempt in $(seq 1 24); do
+            names="$(az functionapp function list \
+              --resource-group "$AZURE_RESOURCE_GROUP" \
+              --name "$FUNCTION_APP" \
+              --query '[].name' -o tsv 2>/dev/null | sed 's#^.*/##' || true)"
+            missing=0
+            for name in "${expected[@]}"; do
+              grep -qx "$name" <<<"$names" || missing=$((missing + 1))
+            done
+            if [[ "$missing" == '0' ]]; then indexed=true; break; fi
+            sleep 10
+          done
+          [[ "$indexed" == 'true' ]]
+
+          healthy=false
+          for attempt in $(seq 1 24); do
+            status="$(curl -sS -o "$RUNNER_TEMP/health.json" -w '%{http_code}' \
+              "https://${FUNCTION_APP}.azurewebsites.net/api/recruitment/health" || true)"
+            if [[ "$status" == '200' ]] && jq -e \
+              '.ok == true and .configuration == "valid" and .dependencies == "ready"' \
+              "$RUNNER_TEMP/health.json" >/dev/null 2>&1; then
+              healthy=true
+              break
+            fi
+            sleep 10
+          done
+          [[ "$healthy" == 'true' ]]
+
+          settings="$(az functionapp config appsettings list \
+            --resource-group "$AZURE_RESOURCE_GROUP" \
+            --name "$FUNCTION_APP" \
+            --output json)"
+          value() { jq -r --arg key "$1" '.[] | select(.name == $key) | .value' <<<"$settings" | tr '[:upper:]' '[:lower:]'; }
+          [[ "$(value RECRUITMENT_API_ENABLED)" == 'true' ]]
+          [[ "$(value RECRUITMENT_CAPTURE_ONLY_MODE)" == 'true' ]]
+          for key in \
+            RECRUITMENT_OUTBOX_DELIVERY_ENABLED \
+            RECRUITMENT_CANDIDATE_ACK_ENABLED \
+            RECRUITMENT_TEAM_NOTIFICATION_ENABLED \
+            RECRUITMENT_HR_ACCESS_ENABLED \
+            RECRUITMENT_RETENTION_ENABLED \
+            RECRUITMENT_RETENTION_DELETION_ENABLED; do
+            [[ "$(value "$key")" == 'false' ]] || { echo "$key is not disabled." >&2; exit 1; }
+          done
+
+          for route in initiate complete finalize; do
+            code="$(curl -sS -o /dev/null -w '%{http_code}' -X OPTIONS \
+              -H 'Origin: https://shorevest.com' \
+              -H 'Access-Control-Request-Method: POST' \
+              -H 'Access-Control-Request-Headers: content-type' \
+              "https://${FUNCTION_APP}.azurewebsites.net/api/recruitment/applications/${route}")"
+            [[ "$code" == '204' ]] || { echo "$route preflight returned $code." >&2; exit 1; }
+          done
+
+      - name: Record non-sensitive scanner inventory
+        shell: bash
+        run: |
+          set -euo pipefail
+          az resource list \
+            --resource-group "$AZURE_RESOURCE_GROUP" \
+            --query "[?type=='Microsoft.ContainerRegistry/registries' || type=='Microsoft.App/containerApps' || type=='Microsoft.App/managedEnvironments' || contains(name, 'scan') || contains(name, 'clamav')].{name:name,type:type,location:location}" \
+            --output json > "$RUNNER_TEMP/recruitment-scanner-inventory.json"
+          jq -c '.[]' "$RUNNER_TEMP/recruitment-scanner-inventory.json"
+
+      - name: Upload deployment evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: recruitment-test-package-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/recruitment-functions.zip.sha256
+            ${{ runner.temp }}/health.json
+            ${{ runner.temp }}/recruitment-scanner-inventory.json
+          if-no-files-found: error
+          retention-days: 30
