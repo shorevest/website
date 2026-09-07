@@ -50,42 +50,48 @@ jobs:
           def parse_ts(value):
               return datetime.fromisoformat(value.replace('Z', '+00:00'))
 
-          deleted_artifacts = 0
-          deleted_artifact_bytes = 0
+          stale_artifacts = []
           page = 1
           while True:
               data = request(f'/actions/artifacts?per_page=100&page={page}')
               artifacts = data.get('artifacts', [])
               if not artifacts:
                   break
-              for artifact in artifacts:
-                  if parse_ts(artifact['created_at']) < cutoff:
-                      request(f"/actions/artifacts/{artifact['id']}", method='DELETE')
-                      deleted_artifacts += 1
-                      deleted_artifact_bytes += int(artifact.get('size_in_bytes') or 0)
+              stale_artifacts.extend(
+                  artifact for artifact in artifacts
+                  if parse_ts(artifact['created_at']) < cutoff
+              )
               if len(artifacts) < 100:
                   break
               page += 1
 
-          deleted_caches = 0
-          deleted_cache_bytes = 0
+          deleted_artifact_bytes = 0
+          for artifact in stale_artifacts:
+              request(f"/actions/artifacts/{artifact['id']}", method='DELETE')
+              deleted_artifact_bytes += int(artifact.get('size_in_bytes') or 0)
+
+          stale_caches = []
           page = 1
           while True:
               data = request(f'/actions/caches?per_page=100&page={page}')
               caches = data.get('actions_caches', [])
               if not caches:
                   break
-              for cache in caches:
-                  if parse_ts(cache['last_accessed_at']) < cutoff:
-                      request(f"/actions/caches/{cache['id']}", method='DELETE')
-                      deleted_caches += 1
-                      deleted_cache_bytes += int(cache.get('size_in_bytes') or 0)
+              stale_caches.extend(
+                  cache for cache in caches
+                  if parse_ts(cache['last_accessed_at']) < cutoff
+              )
               if len(caches) < 100:
                   break
               page += 1
 
+          deleted_cache_bytes = 0
+          for cache in stale_caches:
+              request(f"/actions/caches/{cache['id']}", method='DELETE')
+              deleted_cache_bytes += int(cache.get('size_in_bytes') or 0)
+
           mb = lambda n: round(n / 1024 / 1024, 1)
           print(f'Cutoff: {cutoff.isoformat()}')
-          print(f'Deleted artifacts: {deleted_artifacts} ({mb(deleted_artifact_bytes)} MB)')
-          print(f'Deleted caches: {deleted_caches} ({mb(deleted_cache_bytes)} MB)')
+          print(f'Deleted artifacts: {len(stale_artifacts)} ({mb(deleted_artifact_bytes)} MB)')
+          print(f'Deleted caches: {len(stale_caches)} ({mb(deleted_cache_bytes)} MB)')
           PY
