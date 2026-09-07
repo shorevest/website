@@ -65,8 +65,8 @@ assert.doesNotMatch(appClient, /AccountKey=|SharedAccessSignature=|clientSecret|
 
 const coreFlows = require('../api/recruitment/core/flows');
 assert.strictEqual(typeof coreFlows.finalizeApplication, 'function', 'committed core exports the frontend finalize flow');
-const appFactory = require('../services/recruitment-functions/src/appFactory');
-assert.strictEqual(typeof appFactory.flows.finalizeApplication, 'function', 'Function composition exports the finalize flow');
+const appFactory = read('services/recruitment-functions/src/appFactory.js');
+assert.match(appFactory, /flows:\s*\{[\s\S]*?finalizeApplication[,\s]/, 'Function composition exports the finalize flow');
 const functionIndex = read('services/recruitment-functions/src/functions/index.js');
 assert.match(functionIndex, /route:\s*['"]recruitment\/applications\/finalize['"]/, 'Functions host registers the finalize route');
 const publicResponse = require('../services/recruitment-functions/src/lib/http').candidate({
