@@ -57,11 +57,23 @@ jobs:
             --output json)"
           value() { jq -r --arg key "$1" '.[] | select(.name == $key) | .value' <<<"$settings" | tr '[:upper:]' '[:lower:]'; }
 
+          for key in \
+            RECRUITMENT_API_ENABLED \
+            RECRUITMENT_CAPTURE_ONLY_MODE \
+            RECRUITMENT_HR_ACCESS_ENABLED \
+            RECRUITMENT_RETENTION_ENABLED \
+            RECRUITMENT_RETENTION_DELETION_ENABLED; do
+            echo "$key=$(value "$key")"
+          done
+
           [[ "$(value RECRUITMENT_API_ENABLED)" == 'true' ]] || { echo 'Test API is not enabled.' >&2; exit 1; }
           [[ "$(value RECRUITMENT_CAPTURE_ONLY_MODE)" == 'true' ]] || { echo 'Capture-only mode is not enabled.' >&2; exit 1; }
-          [[ "$(value RECRUITMENT_HR_ACCESS_ENABLED)" == 'false' ]]
-          [[ "$(value RECRUITMENT_RETENTION_ENABLED)" == 'false' ]]
-          [[ "$(value RECRUITMENT_RETENTION_DELETION_ENABLED)" == 'false' ]]
+          for key in \
+            RECRUITMENT_HR_ACCESS_ENABLED \
+            RECRUITMENT_RETENTION_ENABLED \
+            RECRUITMENT_RETENTION_DELETION_ENABLED; do
+            [[ "$(value "$key")" != 'true' ]] || { echo "$key is unexpectedly enabled." >&2; exit 1; }
+          done
 
           az functionapp config appsettings set \
             --resource-group "$AZURE_RESOURCE_GROUP" \
