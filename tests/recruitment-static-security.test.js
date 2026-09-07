@@ -2,7 +2,7 @@ const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
 const root = path.resolve(__dirname, '..');
-// Public launch: approved role pages are visible and both approved roles use the secure online application flow.
+// Containment state: public listings and candidate capture stay closed until the deployed backend and malware-scanning path pass controlled end-to-end verification.
 function read(f){return fs.readFileSync(path.join(root,f),'utf8');}
 
 const rolePages = [
@@ -15,8 +15,8 @@ const applicationPages = ['careers/apply.html','careers/apply_cn.html'];
 const manifest = JSON.parse(read('assets/data/recruitment/roles.v1.json'));
 const publicConfig = JSON.parse(read('assets/data/recruitment/public-config.json'));
 
-assert.strictEqual(publicConfig.openRolesEnabled, true, 'approved Open Roles are publicly visible');
-assert.strictEqual(publicConfig.applicationsEnabled, true, 'the dedicated application page is enabled');
+assert.strictEqual(publicConfig.openRolesEnabled, false, 'Open Roles stay hidden until go-live is verified');
+assert.strictEqual(publicConfig.applicationsEnabled, false, 'candidate capture stays closed until go-live is verified');
 assert.strictEqual(publicConfig.turnstileSiteKey, '0x4AAAAAAEJh3KNuIlG3ZdgM', 'only the public Turnstile site key is published');
 assert.strictEqual(publicConfig.apiBase, 'https://svrc26hk-recruit-fn-test.azurewebsites.net/api/recruitment');
 assert.strictEqual(publicConfig.turnstileAction, 'recruitment-application');
