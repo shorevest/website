@@ -15,6 +15,11 @@ param enableKeyVaultSecretAccess bool = false
 @description('Paid Microsoft Defender for Storage malware scanning. Explicit opt-in only.')
 param enableDefenderForStorage bool = false
 
+@minValue(1)
+@maxValue(500)
+@description('Monthly Defender scan-volume cap. Azure allows up to 20 GB deviation; this is not a strict billing cap.')
+param defenderScanCapGBPerMonth int = 1
+
 @description('Name of the Key Vault secret used to sign upload-completion tokens.')
 param completionTokenSecretName string = 'recruitment-completion-token-key'
 
@@ -543,15 +548,23 @@ resource fn 'Microsoft.Web/sites@2024-04-01' = {
 }
 
 // Optional paid Defender for Storage must be explicitly enabled by parameter.
-resource defender 'Microsoft.Security/defenderForStorageSettings@2022-12-01-preview' = if (enableDefenderForStorage) {
+resource defender 'Microsoft.Security/defenderForStorageSettings@2025-06-01' = if (enableDefenderForStorage) {
   name: 'current'
   scope: cvStorage
   properties: {
     isEnabled: true
+    overrideSubscriptionLevelSettings: true
+    sensitiveDataDiscovery: {
+      isEnabled: false
+    }
     malwareScanning: {
+      blobScanResultsOptions: 'None'
       onUpload: {
         isEnabled: true
-        capGBPerMonth: 500
+        capGBPerMonth: defenderScanCapGBPerMonth
+        filters: {
+          excludeBlobsWithPrefix: ['${cleanContainerName}/']
+        }
       }
       scanResultsEventGridTopicResourceId: topic.id
     }

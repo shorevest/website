@@ -92,4 +92,13 @@ assert.match(read('assets/js/site-config.js'), /careersOpenRolesEnabled: true/, 
 for (const f of ['api/recruitment/applicationValidation.js','api/recruitment/fileSignatures.js','api/recruitment/handler.js','api/recruitment/core/flows.js']) {
   assert.doesNotMatch(read(f), /applicationStatement|status: active|applicationEnabled|role\.files/, `${f} does not preserve the obsolete upload-through-API contract`);
 }
+
+const defenderTemplate = read('infra/recruitment/defender-scanning.bicep');
+assert.match(defenderTemplate, /param enablePaidScanning bool = false/, 'paid scanning requires an explicit opt-in');
+assert.match(defenderTemplate, /param capGBPerMonth int = 1/, 'test scanner has a small explicit volume cap');
+assert.match(defenderTemplate, /scope: cvStorage/, 'Defender is scoped to the existing CV account');
+assert.match(defenderTemplate, /overrideSubscriptionLevelSettings: true/, 'account-level configuration overrides inherited settings');
+assert.match(defenderTemplate, /excludeBlobsWithPrefix: \['\$\{cleanContainerName\}\/'\]/, 'promoted clean files are excluded from rescanning');
+assert.match(defenderTemplate, /dependsOn: \[delivery\]/, 'the scan-result consumer is configured before scanning is enabled');
+assert.doesNotMatch(defenderTemplate, /resource\s+\w+\s+'Microsoft\.Security\/pricings/, 'no subscription-wide paid plan is enabled');
 console.log('recruitment static security checks passed');

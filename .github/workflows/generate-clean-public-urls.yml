@@ -11,6 +11,9 @@ on:
       - 'scripts/normalize-favicons.cjs'
       - 'scripts/add-insight-social-metadata.cjs'
       - 'assets/js/site-config.js'
+      - 'assets/js/recruitment-role-detail.js'
+      - 'tests/recruitment-role-detail.test.js'
+      - 'tests/recruitment-static-security.test.js'
       - 'assets/js/sv-navigation.js'
       - 'assets/js/insights-new-edition.js'
       - 'assets/js/favicon-guard.js'
@@ -66,6 +69,9 @@ jobs:
 
       - name: Generate clean routes
         run: node scripts/generate-clean-public-urls.js
+
+      - name: Verify recruitment links and containment after generation
+        run: node tests/recruitment-role-detail.test.js && node tests/recruitment-static-security.test.js
 
       - name: Normalize same-page section links
         run: node scripts/normalize-current-page-fragments.cjs
@@ -129,6 +135,9 @@ jobs:
 
       - name: Generate clean routes
         run: node scripts/generate-clean-public-urls.js
+
+      - name: Verify recruitment links and containment after generation
+        run: node tests/recruitment-role-detail.test.js && node tests/recruitment-static-security.test.js
 
       - name: Normalize same-page section links
         run: node scripts/normalize-current-page-fragments.cjs

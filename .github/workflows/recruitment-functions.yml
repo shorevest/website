@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - '.github/workflows/recruitment-functions.yml'
+      - '.github/workflows/tmp-recruitment-test-defender-setup.yml'
       - 'package.json'
       - 'package-lock.json'
       - 'scripts/validate-recruitment-roles.js'
