@@ -20,8 +20,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          old='20260911-superscript-1'
-          new='20260911-references-2'
+          old='20260911-references-2'
+          new='20260911-references-3'
           files=(
             assets/js/cdd-citations.js
             assets/js/cdd-issue-pager.js
@@ -38,5 +38,5 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add "${files[@]}"
-          git commit -m 'Bump standardized Insight reference style'
+          git commit -m 'Bump final Insight reference style cache'
           git push origin HEAD:main
