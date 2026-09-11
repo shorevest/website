@@ -1,0 +1,251 @@
+name: Fresh full Insights recheck
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/tmp-insights-recheck-20260911.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Recheck live Insights end to end
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm ci --ignore-scripts
+          node <<'NODE'
+          const { chromium } = require('playwright-core');
+          const fs = require('fs');
+          const path = require('path');
+
+          const BASE = 'https://shorevest.com';
+          const LATEST = 'v10i3';
+          const LATEST_TITLE = 'Perceptions Versus Reality in China Real Estate';
+          const LATEST_CN = '中国房地产：认知与现实';
+          const chrome = ['/usr/bin/google-chrome','/usr/bin/google-chrome-stable','/usr/bin/chromium','/usr/bin/chromium-browser'].find(fs.existsSync);
+          if (!chrome) throw new Error('Chrome/Chromium unavailable');
+
+          const root = path.join(process.cwd(),'insights','china-debt-dynamics');
+          const issues = fs.readdirSync(root,{withFileTypes:true})
+            .filter(d=>d.isDirectory() && /^v\d+i\d+$/i.test(d.name))
+            .map(d=>d.name).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
+
+          const failures=[];
+          const warnings=[];
+          const internal=new Set();
+          const external=new Set();
+          const fail=m=>{failures.push(m);console.error('FAIL',m)};
+          const warn=m=>{warnings.push(m);console.warn('WARN',m)};
+          const pass=m=>console.log('PASS',m);
+          const bust=(raw,label)=>{const u=new URL(raw,BASE);u.searchParams.set('qa',`${Date.now()}-${label}-${Math.random().toString(36).slice(2)}`);return u.href};
+          const clean=raw=>{const u=new URL(raw,BASE);u.searchParams.delete('qa');u.hash='';return u.href};
+
+          function expectedVolumeIssue(issue){
+            const m=issue.match(/^v(\d+)i(\d+)$/i);
+            return m ? `Volume ${m[1]} | Issue ${m[2]}` : '';
+          }
+
+          function pageAudit(){
+            const figures=[...document.querySelectorAll('.cdd-figure')].map((f,i)=>{
+              const img=f.querySelector('img');
+              const fr=f.getBoundingClientRect();
+              const ir=img?.getBoundingClientRect();
+              return {i,fl:fr.left,fr:fr.right,fw:fr.width,il:ir?.left||0,ir:ir?.right||0,iw:ir?.width||0,nw:img?.naturalWidth||0,nh:img?.naturalHeight||0,src:img?.currentSrc||img?.src||'',loading:img?.loading||''};
+            });
+            const ids=[...document.querySelectorAll('[id]')].map(x=>x.id).filter(Boolean);
+            return {
+              vw:innerWidth,
+              sw:document.documentElement.scrollWidth,
+              ready:document.body?.dataset?.cddReady||'',
+              title:document.title,
+              h1:document.querySelector('h1')?.textContent.trim()||'',
+              canonical:document.querySelector('link[rel="canonical"]')?.href||'',
+              ogTitle:document.querySelector('meta[property="og:title"]')?.content||'',
+              ogImage:document.querySelector('meta[property="og:image"]')?.content||'',
+              citations:[...document.querySelectorAll('.cdd-inline-citation')].map(x=>x.textContent.trim()),
+              sourceIndexes:[...document.querySelectorAll('.cdd-source-note__index')].map(x=>x.textContent.trim()),
+              duplicateIds:[...new Set(ids.filter((x,i)=>ids.indexOf(x)!==i))],
+              figures,
+              pdf:document.querySelector('.cdd-actions a.cdd-btn--solid')?.getAttribute('href')||'',
+              back:document.querySelector('.cdd-actions a.cdd-btn:not(.cdd-btn--solid)')?.getAttribute('href')||'',
+              links:[...document.querySelectorAll('a[href]')].map(a=>a.href)
+            };
+          }
+
+          async function loadFigures(page){
+            await page.evaluate(async()=>{
+              const imgs=[...document.querySelectorAll('.cdd-figure img')];
+              imgs.forEach(img=>img.loading='eager');
+              for(const img of imgs){
+                img.scrollIntoView({block:'center'});
+                await new Promise(r=>setTimeout(r,70));
+                if(!img.complete) await new Promise(r=>{const done=()=>r();img.addEventListener('load',done,{once:true});img.addEventListener('error',done,{once:true});setTimeout(done,3000)});
+                try{await img.decode()}catch(_){ }
+              }
+              scrollTo(0,0);
+            });
+          }
+
+          function validateArticle(label,a,issue){
+            if(a.ready!=='true') fail(`${label}: renderer not ready`);
+            if(a.sw>a.vw+3) fail(`${label}: horizontal overflow ${a.sw}>${a.vw}`);
+            if(!a.h1) fail(`${label}: missing H1`);
+            if(!a.canonical.endsWith(`/insights/china-debt-dynamics/${issue}/`)) fail(`${label}: wrong canonical ${a.canonical}`);
+            if(a.duplicateIds.length) fail(`${label}: duplicate ids ${a.duplicateIds.join(',')}`);
+            if(a.citations.some(x=>/[\[\]]/.test(x))) fail(`${label}: bracketed inline citation remains`);
+            if(a.sourceIndexes.some(x=>/[\[\]]/.test(x))) fail(`${label}: bracketed source index remains`);
+            for(const f of a.figures){
+              if(f.nw<=0||f.nh<=0) fail(`${label}: figure ${f.i+1} failed to load`);
+              if(f.il<f.fl-2||f.ir>f.fr+2) fail(`${label}: figure ${f.i+1} clips/overflows container`);
+            }
+            const expected=`source=assets/data/china-debt-dynamics-${issue}.json`;
+            if(!a.pdf.includes('/insights/china-debt-dynamics/print/')||!a.pdf.includes(expected)||!a.pdf.includes('pdf=1')) fail(`${label}: wrong PDF action ${a.pdf}`);
+            if(a.back!=='/insights/') fail(`${label}: wrong Back to Insights link ${a.back}`);
+          }
+
+          (async()=>{
+            if(issues.length!==22) fail(`expected 22 CDD issues, found ${issues.length}`); else pass('22 canonical CDD issues present');
+            if(issues[issues.length-1]!==LATEST) fail(`latest canonical issue is ${issues[issues.length-1]}, expected ${LATEST}`);
+
+            for(const issue of issues){
+              const jsonPath=path.join(process.cwd(),'assets','data',`china-debt-dynamics-${issue}.json`);
+              const htmlPath=path.join(root,issue,'index.html');
+              if(!fs.existsSync(jsonPath)){fail(`${issue}: missing JSON`);continue}
+              if(!fs.existsSync(htmlPath)) fail(`${issue}: missing canonical route HTML`);
+              try{
+                const d=JSON.parse(fs.readFileSync(jsonPath,'utf8'));
+                if(d.volumeIssue!==expectedVolumeIssue(issue)) fail(`${issue}: volume/issue mismatch ${d.volumeIssue}`);
+                if(!d.title||!d.published||!Array.isArray(d.sections)||!d.sections.length) fail(`${issue}: incomplete article JSON`);
+                if(issue===LATEST){
+                  if(d.title!==LATEST_TITLE) fail(`${LATEST}: title mismatch`);
+                  if(d.published!=='September 2026') fail(`${LATEST}: published date mismatch ${d.published}`);
+                  const body=JSON.stringify(d);
+                  const markers=(body.match(/\[\d+\]/g)||[]).length;
+                  if(markers<7) fail(`${LATEST}: source markers unexpectedly low (${markers})`);
+                }
+              }catch(e){fail(`${issue}: invalid JSON ${e.message}`)}
+            }
+
+            const browser=await chromium.launch({headless:true,executablePath:chrome,args:['--no-sandbox']});
+            const context=await browser.newContext({viewport:{width:1440,height:1000}});
+            const page=await context.newPage();
+            await page.addInitScript(()=>{window.print=()=>{}});
+
+            for(const spec of [{path:'/insights/',label:'EN',title:LATEST_TITLE},{path:'/cn/insights/',label:'CN',title:LATEST_CN}]){
+              for(const width of [1440,390]){
+                await page.setViewportSize({width,height:width===390?844:1000});
+                const r=await page.goto(bust(BASE+spec.path,`${spec.label}-${width}`),{waitUntil:'networkidle',timeout:60000});
+                if(!r||r.status()>=400){fail(`${spec.label} archive ${width}: HTTP ${r?.status()}`);continue}
+                const a=await page.evaluate(()=>{
+                  const rows=[...document.querySelectorAll('.cdd-arc__row')];
+                  const first=rows[0];
+                  return {
+                    vw:innerWidth,sw:document.documentElement.scrollWidth,
+                    count:document.querySelector('[data-cdd-arc-count]')?.textContent.trim()||'',
+                    rows:rows.length,uniq:new Set(rows.map(x=>x.dataset.href)).size,
+                    first:first?.dataset.href||'',firstTitle:first?.querySelector('.cdd-arc__row-title')?.textContent.trim()||'',
+                    hero:document.querySelector('.cdd-hero__panel-cta')?.getAttribute('href')||'',heroTitle:document.querySelector('.cdd-hero__panel-title')?.textContent.trim()||'',
+                    items:rows.map(row=>({route:row.dataset.href||'',read:row.querySelector('.cdd-arc__read')?.getAttribute('href')||'',pdf:row.querySelector('.cdd-arc__pdf')?.getAttribute('href')||''})),
+                    links:[...document.querySelectorAll('a[href]')].map(x=>x.href),
+                    images:[...document.images].map(x=>({ok:x.complete&&x.naturalWidth>0,src:x.currentSrc||x.src}))
+                  };
+                });
+                if(a.rows!==22||a.count!=='22'||a.uniq!==22) fail(`${spec.label} archive ${width}: count mismatch ${a.rows}/${a.count}/${a.uniq}`);
+                if(!a.first.endsWith(`/${LATEST}/`)||!a.hero.endsWith(`/${LATEST}/`)) fail(`${spec.label} archive ${width}: latest issue not first/hero`);
+                if(!a.firstTitle.includes(spec.title)||!a.heroTitle.includes(spec.title)) fail(`${spec.label} archive ${width}: latest title mismatch`);
+                if(a.sw>a.vw+3) fail(`${spec.label} archive ${width}: horizontal overflow`);
+                if(a.images.some(x=>!x.ok)) fail(`${spec.label} archive ${width}: broken image`);
+                for(const item of a.items){
+                  const issue=item.route.match(/\/(v\d+i\d+)\/$/)?.[1];
+                  if(!issue){fail(`${spec.label}: malformed archive route ${item.route}`);continue}
+                  if(item.read!==item.route) fail(`${spec.label}: Read link mismatch ${issue}`);
+                  if(!item.pdf.includes(`/insights/china-debt-dynamics/print/?source=assets/data/china-debt-dynamics-${issue}.json`)||!item.pdf.includes('pdf=1')) fail(`${spec.label}: PDF link mismatch ${issue}`);
+                }
+                a.links.forEach(raw=>{try{const u=new URL(raw);if(u.origin===BASE&&(u.pathname.startsWith('/insights')||u.pathname.startsWith('/cn/insights')||/^\/china-debt-dynamics-/i.test(u.pathname)))internal.add(clean(raw))}catch(_){}});
+                pass(`${spec.label} archive ${width}px`);
+              }
+            }
+
+            for(const issue of issues){
+              for(const width of [1440,390]){
+                await page.setViewportSize({width,height:width===390?844:1000});
+                const r=await page.goto(bust(`${BASE}/insights/china-debt-dynamics/${issue}/`,`${issue}-${width}`),{waitUntil:'networkidle',timeout:60000});
+                if(!r||r.status()>=400){fail(`${issue} ${width}: HTTP ${r?.status()}`);continue}
+                await page.waitForFunction(()=>document.body?.dataset?.cddReady==='true',null,{timeout:30000});
+                await loadFigures(page);
+                const a=await page.evaluate(pageAudit);
+                validateArticle(`${issue} ${width}`,a,issue);
+                if(issue===LATEST){
+                  if(!a.title.includes(LATEST_TITLE)||!a.h1.includes(LATEST_TITLE)) fail(`${LATEST}: title missing from live article`);
+                  if(a.citations.length!==7) fail(`${LATEST}: expected 7 superscript citations, found ${a.citations.length}`);
+                  if(!a.ogTitle.includes(LATEST_TITLE)||!a.ogImage) fail(`${LATEST}: incomplete social metadata`);
+                }
+                a.links.forEach(raw=>{try{const u=new URL(raw);if(u.origin===BASE&&(u.pathname.startsWith('/insights')||u.pathname.startsWith('/cn/insights')||/^\/china-debt-dynamics-/i.test(u.pathname)))internal.add(clean(raw))}catch(_){}});
+                const srcs=await page.evaluate(()=>[...document.querySelectorAll('a[data-cdd-source-url]')].map(a=>a.href));
+                srcs.forEach(x=>external.add(x));
+                pass(`${issue} article ${width}px`);
+              }
+            }
+
+            await page.setViewportSize({width:900,height:1200});
+            for(const issue of issues){
+              const src=`assets/data/china-debt-dynamics-${issue}.json`;
+              const url=`${BASE}/insights/china-debt-dynamics/print/?source=${encodeURIComponent(src)}&pdf=1`;
+              const r=await page.goto(bust(url,`${issue}-print`),{waitUntil:'networkidle',timeout:60000});
+              if(!r||r.status()>=400){fail(`${issue} print: HTTP ${r?.status()}`);continue}
+              await page.waitForFunction(()=>document.body?.dataset?.cddReady==='true',null,{timeout:30000});
+              await loadFigures(page);
+              await page.emulateMedia({media:'print'});
+              const a=await page.evaluate(pageAudit);
+              if(a.sw>a.vw+3) fail(`${issue} print: horizontal overflow`);
+              if(a.citations.some(x=>/[\[\]]/.test(x))) fail(`${issue} print: bracketed citation remains`);
+              if(a.sourceIndexes.some(x=>/[\[\]]/.test(x))) fail(`${issue} print: bracketed source index remains`);
+              for(const f of a.figures){if(f.nw<=0||f.il<f.fl-2||f.ir>f.fr+2) fail(`${issue} print: figure ${f.i+1} failed/clipped`)}
+              const active=await page.evaluate(()=>document.body.dataset.articleSource||'');
+              if(active!==src) fail(`${issue} print: wrong source ${active}`);
+              const pdf=await page.pdf({format:'A4',printBackground:true,margin:{top:'0',right:'0',bottom:'0',left:'0'}});
+              if(pdf.length<10000) fail(`${issue} print: generated PDF too small ${pdf.length}`);
+              if(issue===LATEST&&(!a.h1.includes(LATEST_TITLE)||a.citations.length!==7)) fail(`${LATEST} print: content/citations mismatch`);
+              pass(`${issue} print/PDF ${pdf.length} bytes`);
+              await page.emulateMedia({media:'screen'});
+            }
+
+            for(const issue of issues){
+              const r=await context.request.get(bust(`${BASE}/china-debt-dynamics-${issue}.html`,`${issue}-legacy`),{maxRedirects:10,timeout:30000,failOnStatusCode:false});
+              if(r.status()>=400) fail(`${issue} legacy URL: HTTP ${r.status()}`);
+            }
+            pass('all legacy CDD URLs return without 4xx/5xx');
+
+            for(const raw of internal){
+              const r=await context.request.get(raw,{maxRedirects:10,timeout:30000,failOnStatusCode:false});
+              if(r.status()>=400) fail(`internal link HTTP ${r.status()}: ${raw}`);
+            }
+            pass(`${internal.size} unique internal Insights links checked`);
+
+            for(const raw of external){
+              try{
+                const r=await context.request.get(raw,{maxRedirects:10,timeout:30000,failOnStatusCode:false,headers:{'User-Agent':'Mozilla/5.0 ShoreVest-QA'}});
+                const s=r.status();
+                if(s===404||s===410) fail(`dead citation source HTTP ${s}: ${raw}`);
+                else if(s>=400) warn(`citation source returned HTTP ${s}: ${raw}`);
+              }catch(e){warn(`citation source request failed: ${raw} (${e.message})`)}
+            }
+            pass(`${external.size} citation source URLs checked (404/410 treated as failures)`);
+
+            await browser.close();
+            console.log(`SUMMARY issues=${issues.length} internal=${internal.size} external=${external.size} warnings=${warnings.length} failures=${failures.length}`);
+            if(warnings.length) console.log('WARNINGS\n'+warnings.join('\n'));
+            if(failures.length) throw new Error(`Insights recheck failed with ${failures.length} issue(s):\n${failures.join('\n')}`);
+            console.log('PASS: FRESH FULL INSIGHTS RECHECK COMPLETE');
+          })().catch(e=>{console.error(e);process.exit(1)});
+          NODE
