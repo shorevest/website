@@ -1,4 +1,4 @@
-/* Standardized source references for ShoreVest Insights / China Debt Dynamics. */
+/* Standardized citations and reference notes for ShoreVest Insights / China Debt Dynamics. */
 body.cdd-article-page .cdd-inline-citation,
 body.cdd-print-layout .cdd-inline-citation {
   display: inline;
@@ -40,30 +40,116 @@ body.cdd-print-layout .cdd-inline-citation a:focus-visible {
   outline: none;
 }
 
+/* --------------------------------------------------------------------------
+   Sources and Notes
+   Editorial reference treatment shared by normal web articles, browser print
+   preview and final PDFs. This deliberately overrides generic article bullets.
+   -------------------------------------------------------------------------- */
+body.cdd-article-page .cdd-sources-heading,
+body.cdd-print-layout .cdd-sources-heading {
+  color: var(--sv-ink, var(--p-ink, #182524));
+  letter-spacing: -0.01em;
+}
+
+body.cdd-article-page .cdd-sources-heading {
+  margin-top: clamp(52px, 5vw, 72px) !important;
+  margin-bottom: 22px !important;
+  padding-top: 24px !important;
+  border-top: 1px solid var(--sv-border-light-strong, rgba(23, 53, 54, 0.18)) !important;
+  font: 500 clamp(22px, 2vw, 26px)/1.2 var(--sv-font, "DIN 2014", "Barlow", system-ui, sans-serif) !important;
+}
+
+body.cdd-print-layout .cdd-sources-heading {
+  margin: 28px 0 16px !important;
+  padding-top: 18px !important;
+  border-top: 1px solid var(--p-line, rgba(23, 53, 54, 0.16)) !important;
+  font: 500 20px/1.2 var(--p-font, "DIN 2014", "Barlow", system-ui, sans-serif) !important;
+}
+
+body.cdd-article-page .cdd-sources-list,
+body.cdd-print-layout .cdd-sources-list {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
 body.cdd-article-page .cdd-source-note,
 body.cdd-print-layout .cdd-source-note {
+  display: grid !important;
+  grid-template-columns: 2.25em minmax(0, 1fr);
+  column-gap: 0.55em;
+  align-items: start;
+  position: relative;
+  padding: 0 !important;
+  border: 0 !important;
   scroll-margin-top: 96px;
   transition: background-color 220ms ease;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+/* Remove the generic cinnabar square used for normal article bullet lists. */
+body.cdd-article-page .cdd-source-note::before,
+body.cdd-print-layout .cdd-source-note::before {
+  content: none !important;
+  display: none !important;
+}
+
+body.cdd-article-page .cdd-sources-list .cdd-source-note {
+  margin: 0 0 0.78em !important;
+  font: 400 15.5px/1.62 var(--sv-font, "DIN 2014", "Barlow", system-ui, sans-serif) !important;
+  color: var(--sv-ink-2, #2A302E) !important;
+}
+
+body.cdd-print-layout .cdd-sources-list .cdd-source-note,
+body.cdd-print-layout p.cdd-source-note {
+  margin: 0 0 0.62em !important;
+  font: 400 12px/1.5 var(--p-font, "DIN 2014", "Barlow", system-ui, sans-serif) !important;
+  color: var(--p-ink-2, #2A302E) !important;
+}
+
+/* Some archive issues store source notes as paragraphs instead of list items. */
+body.cdd-article-page p.cdd-source-note {
+  margin: 0 0 0.78em !important;
+  font: 400 15.5px/1.62 var(--sv-font, "DIN 2014", "Barlow", system-ui, sans-serif) !important;
+  color: var(--sv-ink-2, #2A302E) !important;
 }
 
 body.cdd-article-page .cdd-source-note:target {
-  background: rgba(201, 59, 42, 0.07);
+  background: rgba(201, 59, 42, 0.055);
 }
 
 body.cdd-article-page .cdd-source-note__index,
 body.cdd-print-layout .cdd-source-note__index {
+  display: block;
+  min-width: 0;
+  padding: 0;
   font-variant-numeric: tabular-nums;
-  font-weight: 600;
+  font-weight: 500;
+  text-align: right;
+  color: var(--sv-muted, var(--p-muted, #6E7169));
+  white-space: nowrap;
+}
+
+body.cdd-article-page .cdd-source-note__copy,
+body.cdd-print-layout .cdd-source-note__copy {
+  display: block;
+  min-width: 0;
 }
 
 body.cdd-article-page .cdd-source-note__copy a[data-cdd-source-url],
 body.cdd-print-layout .cdd-source-note__copy a[data-cdd-source-url] {
-  display: inline-block;
-  margin: 0 0.16em;
-  border-bottom: 1px solid rgba(201, 59, 42, 0.38);
+  display: inline;
+  margin: 0 0.08em;
+  border-bottom: 1px solid rgba(201, 59, 42, 0.32);
   color: var(--sv-cinnabar, #C93B2A) !important;
-  font-weight: 600;
+  font-weight: 500;
   text-decoration: none !important;
+}
+
+body.cdd-article-page .cdd-source-note__copy a[data-cdd-source-url]:hover,
+body.cdd-article-page .cdd-source-note__copy a[data-cdd-source-url]:focus-visible {
+  border-bottom-color: currentColor;
 }
 
 @media (max-width: 700px) {
@@ -73,8 +159,24 @@ body.cdd-print-layout .cdd-source-note__copy a[data-cdd-source-url] {
     font-size: 0.68em;
   }
 
+  body.cdd-article-page .cdd-sources-heading {
+    margin-top: 44px !important;
+    margin-bottom: 18px !important;
+    padding-top: 20px !important;
+    font-size: 21px !important;
+  }
+
   body.cdd-article-page .cdd-source-note {
+    grid-template-columns: 2em minmax(0, 1fr);
+    column-gap: 0.45em;
     scroll-margin-top: 76px;
+  }
+
+  body.cdd-article-page .cdd-sources-list .cdd-source-note,
+  body.cdd-article-page p.cdd-source-note {
+    margin-bottom: 0.72em !important;
+    font-size: 14.5px !important;
+    line-height: 1.58 !important;
   }
 }
 
@@ -94,6 +196,27 @@ body.cdd-print-layout .cdd-source-note__copy a[data-cdd-source-url] {
   body.cdd-article-page .cdd-inline-citation__separator {
     border: 0;
     color: inherit !important;
+    text-decoration: none !important;
+  }
+
+  body.cdd-print-layout .cdd-source-note,
+  body.cdd-article-page .cdd-source-note {
+    grid-template-columns: 2.25em minmax(0, 1fr);
+    column-gap: 0.5em;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  body.cdd-print-layout .cdd-source-note__index,
+  body.cdd-article-page .cdd-source-note__index {
+    color: #5f625d !important;
+  }
+
+  body.cdd-print-layout .cdd-source-note__copy a[data-cdd-source-url],
+  body.cdd-article-page .cdd-source-note__copy a[data-cdd-source-url] {
+    border: 0 !important;
+    color: inherit !important;
+    font-weight: inherit !important;
     text-decoration: none !important;
   }
 }
