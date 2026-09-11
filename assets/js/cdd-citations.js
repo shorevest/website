@@ -5,7 +5,7 @@
 (function () {
   'use strict';
 
-  var VERSION = '20260911-references-2';
+  var VERSION = '20260911-references-3';
   var STYLE_URL = '/assets/css/cdd-citations.css?v=' + VERSION;
   var observer = null;
   var scheduled = false;
