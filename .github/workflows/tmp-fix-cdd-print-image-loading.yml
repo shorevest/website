@@ -1,0 +1,101 @@
+name: CDD print image-loading repair
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/tmp-fix-cdd-print-image-loading.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Make print figures eager and regenerate clean routes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          js = Path('assets/js/cdd-article-template.js')
+          text = js.read_text()
+          old = "      img.loading = 'lazy';"
+          new = "      img.loading = isPrint ? 'eager' : 'lazy';"
+          if old in text:
+              text = text.replace(old, new, 1)
+          elif new not in text:
+              raise SystemExit('image loading assignment not found')
+
+          old_wait = """    const imagePromises = Array.from(document.images || []).map((img) => {
+      if (img.complete) return Promise.resolve();
+      return new Promise((resolve) => {
+        img.addEventListener('load', resolve, { once: true });
+        img.addEventListener('error', resolve, { once: true });
+      });
+    });"""
+          new_wait = """    const imagePromises = Array.from(document.images || []).map(async (img) => {
+      // A print route cannot rely on viewport-driven lazy loading: figures below
+      // the fold must begin fetching before we wait for them and open print.
+      img.loading = 'eager';
+      if (!img.complete) {
+        await new Promise((resolve) => {
+          img.addEventListener('load', resolve, { once: true });
+          img.addEventListener('error', resolve, { once: true });
+        });
+      }
+      if (typeof img.decode === 'function') {
+        await img.decode().catch(() => {});
+      }
+    });"""
+          if old_wait in text:
+              text = text.replace(old_wait, new_wait, 1)
+          elif new_wait not in text:
+              raise SystemExit('print image wait block not found')
+          js.write_text(text)
+
+          p = Path('china-debt-dynamics-print.html')
+          text = p.read_text()
+          old_script = 'var s=["assets/js/cdd-article-template.js"];'
+          new_script = 'var s=["assets/js/cdd-article-template.js?v=20260911-print-figures-1"];'
+          if old_script in text:
+              text = text.replace(old_script, new_script, 1)
+          elif new_script not in text:
+              raise SystemExit('print renderer script include not found')
+          p.write_text(text)
+          PY
+
+          node scripts/run-normalize-public-site.cjs
+          node scripts/normalize-cdd-publication.cjs
+          node scripts/generate-clean-public-urls.js
+          node scripts/normalize-current-page-fragments.cjs
+          node scripts/add-insight-social-metadata.cjs
+          node scripts/run-normalize-public-site.cjs --validate
+          node scripts/add-insight-social-metadata.cjs --validate
+          node scripts/normalize-favicons.cjs
+          node scripts/normalize-favicons.cjs --validate
+
+          grep -Fq "img.loading = isPrint ? 'eager' : 'lazy';" assets/js/cdd-article-template.js
+          grep -Fq "img.loading = 'eager';" assets/js/cdd-article-template.js
+          grep -Fq 'cdd-article-template.js?v=20260911-print-figures-1' china-debt-dynamics-print.html
+          grep -Fq 'cdd-article-template.js?v=20260911-print-figures-1' insights/china-debt-dynamics/print/index.html
+          grep -Fq 'cdd-v9i3-figure-fit.css?v=20260911-v9i3-fit-2' insights/china-debt-dynamics/print/index.html
+          git diff --check
+
+          rm .github/workflows/tmp-fix-cdd-print-image-loading.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Make CDD print figures load reliably'
+          git pull --rebase origin main
+          git push origin main
