@@ -90,7 +90,7 @@
       const img = document.createElement('img');
       img.src = safeText(image.src);
       img.alt = safeText(image.alt || image.caption || '');
-      img.loading = 'lazy';
+      img.loading = isPrint ? 'eager' : 'lazy';
       figure.appendChild(img);
       if (image.caption) {
         const caption = document.createElement('figcaption');
@@ -155,12 +155,19 @@
       ? document.fonts.ready.catch(() => {})
       : Promise.resolve();
 
-    const imagePromises = Array.from(document.images || []).map((img) => {
-      if (img.complete) return Promise.resolve();
-      return new Promise((resolve) => {
-        img.addEventListener('load', resolve, { once: true });
-        img.addEventListener('error', resolve, { once: true });
-      });
+    const imagePromises = Array.from(document.images || []).map(async (img) => {
+      // A print route cannot rely on viewport-driven lazy loading.
+      // Figures below the fold must fetch before printing.
+      img.loading = 'eager';
+      if (!img.complete) {
+        await new Promise((resolve) => {
+          img.addEventListener('load', resolve, { once: true });
+          img.addEventListener('error', resolve, { once: true });
+        });
+      }
+      if (typeof img.decode === 'function') {
+        await img.decode().catch(() => {});
+      }
     });
 
     await Promise.all([fontPromise, ...imagePromises]);
