@@ -41,23 +41,25 @@ body.cdd-print-layout .cdd-inline-citation a:focus-visible {
 }
 
 /* --------------------------------------------------------------------------
-   Sources and Notes
-   Editorial reference treatment shared by normal web articles, browser print
-   preview and final PDFs. This deliberately overrides generic article bullets
-   and decorative section-heading treatments.
+   Sources and Notes — one canonical editorial treatment for screen + print.
+   Reference styling belongs here, not in figure/article-detail styles.
    -------------------------------------------------------------------------- */
+body.cdd-article-page .cdd-body > h2.cdd-sources-heading,
+body.cdd-print-layout .cdd-body > h2.cdd-sources-heading,
 body.cdd-article-page .cdd-sources-heading,
 body.cdd-print-layout .cdd-sources-heading {
-  color: var(--sv-ink, var(--p-ink, #182524));
-  letter-spacing: -0.01em;
+  color: var(--sv-ink, var(--p-ink, #182524)) !important;
+  letter-spacing: -0.01em !important;
   background: transparent !important;
-  border-left: 0 !important;
   border-right: 0 !important;
   border-bottom: 0 !important;
+  border-left: 0 !important;
   box-shadow: none !important;
   text-align: left !important;
+  text-transform: none !important;
 }
 
+body.cdd-article-page .cdd-body > h2.cdd-sources-heading,
 body.cdd-article-page .cdd-sources-heading {
   margin-top: clamp(52px, 5vw, 72px) !important;
   margin-bottom: 20px !important;
@@ -66,6 +68,7 @@ body.cdd-article-page .cdd-sources-heading {
   font: 500 clamp(22px, 2vw, 25px)/1.2 var(--sv-font, "DIN 2014", "Barlow", system-ui, sans-serif) !important;
 }
 
+body.cdd-print-layout .cdd-body > h2.cdd-sources-heading,
 body.cdd-print-layout .cdd-sources-heading {
   margin: 28px 0 16px !important;
   padding: 18px 0 0 !important;
@@ -81,53 +84,42 @@ body.cdd-print-layout .cdd-sources-heading::after {
   display: none !important;
 }
 
+body.cdd-article-page .cdd-body > ul.cdd-sources-list,
+body.cdd-article-page .cdd-body > ol.cdd-sources-list,
 body.cdd-article-page .cdd-sources-list,
 body.cdd-print-layout .cdd-sources-list {
   list-style: none !important;
-  margin: 0 !important;
+  margin: 0 0 2.2em !important;
   padding: 0 !important;
+  border-top: 1px solid var(--sv-border-light-strong, var(--p-line, rgba(23, 53, 54, 0.16))) !important;
 }
 
+body.cdd-article-page .cdd-body > ul.cdd-sources-list > li.cdd-source-note,
+body.cdd-article-page .cdd-body > ol.cdd-sources-list > li.cdd-source-note,
+body.cdd-article-page .cdd-body > p.cdd-source-note,
 body.cdd-article-page .cdd-source-note,
 body.cdd-print-layout .cdd-source-note {
   display: grid !important;
-  grid-template-columns: 1.9em minmax(0, 1fr);
-  column-gap: 0.45em;
-  align-items: start;
+  grid-template-columns: 2em minmax(0, 1fr) !important;
+  column-gap: 0.5em !important;
+  align-items: start !important;
   position: relative;
+  max-width: none !important;
+  margin: 0 0 0.78em !important;
   padding: 0 !important;
   border: 0 !important;
+  color: var(--sv-ink-2, var(--p-ink-2, #2A302E)) !important;
+  font: 400 15.5px/1.62 var(--sv-font, "DIN 2014", "Barlow", system-ui, sans-serif) !important;
   scroll-margin-top: 96px;
   transition: background-color 220ms ease;
-  break-inside: avoid;
-  page-break-inside: avoid;
+  break-inside: avoid !important;
+  page-break-inside: avoid !important;
 }
 
-/* Remove the generic cinnabar square used for normal article bullet lists. */
 body.cdd-article-page .cdd-source-note::before,
 body.cdd-print-layout .cdd-source-note::before {
   content: none !important;
   display: none !important;
-}
-
-body.cdd-article-page .cdd-sources-list .cdd-source-note {
-  margin: 0 0 0.78em !important;
-  font: 400 15.5px/1.62 var(--sv-font, "DIN 2014", "Barlow", system-ui, sans-serif) !important;
-  color: var(--sv-ink-2, #2A302E) !important;
-}
-
-body.cdd-print-layout .cdd-sources-list .cdd-source-note,
-body.cdd-print-layout p.cdd-source-note {
-  margin: 0 0 0.64em !important;
-  font: 400 12.5px/1.52 var(--p-font, "DIN 2014", "Barlow", system-ui, sans-serif) !important;
-  color: var(--p-ink-2, #2A302E) !important;
-}
-
-/* Some archive issues store source notes as paragraphs instead of list items. */
-body.cdd-article-page p.cdd-source-note {
-  margin: 0 0 0.78em !important;
-  font: 400 15.5px/1.62 var(--sv-font, "DIN 2014", "Barlow", system-ui, sans-serif) !important;
-  color: var(--sv-ink-2, #2A302E) !important;
 }
 
 body.cdd-article-page .cdd-source-note:target {
@@ -136,20 +128,25 @@ body.cdd-article-page .cdd-source-note:target {
 
 body.cdd-article-page .cdd-source-note__index,
 body.cdd-print-layout .cdd-source-note__index {
-  display: block;
-  min-width: 0;
-  padding: 0;
+  display: block !important;
+  min-width: 0 !important;
+  padding: 0.08em 0 0 !important;
+  color: var(--sv-muted, var(--p-muted, #6E7169)) !important;
+  font-size: 0.88em !important;
+  font-weight: 500 !important;
+  line-height: 1.45 !important;
+  letter-spacing: 0 !important;
+  text-align: right !important;
   font-variant-numeric: tabular-nums;
-  font-weight: 500;
-  text-align: right;
-  color: var(--sv-muted, var(--p-muted, #6E7169));
   white-space: nowrap;
 }
 
 body.cdd-article-page .cdd-source-note__copy,
 body.cdd-print-layout .cdd-source-note__copy {
-  display: block;
-  min-width: 0;
+  display: block !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  color: inherit !important;
 }
 
 body.cdd-article-page .cdd-source-note__copy a[data-cdd-source-url],
@@ -174,6 +171,7 @@ body.cdd-article-page .cdd-source-note__copy a[data-cdd-source-url]:focus-visibl
     font-size: 0.68em;
   }
 
+  body.cdd-article-page .cdd-body > h2.cdd-sources-heading,
   body.cdd-article-page .cdd-sources-heading {
     margin-top: 44px !important;
     margin-bottom: 17px !important;
@@ -181,17 +179,16 @@ body.cdd-article-page .cdd-source-note__copy a[data-cdd-source-url]:focus-visibl
     font-size: 21px !important;
   }
 
+  body.cdd-article-page .cdd-body > ul.cdd-sources-list > li.cdd-source-note,
+  body.cdd-article-page .cdd-body > ol.cdd-sources-list > li.cdd-source-note,
+  body.cdd-article-page .cdd-body > p.cdd-source-note,
   body.cdd-article-page .cdd-source-note {
-    grid-template-columns: 1.75em minmax(0, 1fr);
-    column-gap: 0.4em;
-    scroll-margin-top: 76px;
-  }
-
-  body.cdd-article-page .cdd-sources-list .cdd-source-note,
-  body.cdd-article-page p.cdd-source-note {
+    grid-template-columns: 1.9em minmax(0, 1fr) !important;
+    column-gap: 0.45em !important;
     margin-bottom: 0.72em !important;
     font-size: 14.5px !important;
     line-height: 1.58 !important;
+    scroll-margin-top: 76px;
   }
 }
 
@@ -214,10 +211,16 @@ body.cdd-article-page .cdd-source-note__copy a[data-cdd-source-url]:focus-visibl
     text-decoration: none !important;
   }
 
+  body.cdd-print-layout .cdd-body > ul.cdd-sources-list > li.cdd-source-note,
+  body.cdd-print-layout .cdd-body > ol.cdd-sources-list > li.cdd-source-note,
+  body.cdd-print-layout .cdd-body > p.cdd-source-note,
   body.cdd-print-layout .cdd-source-note,
   body.cdd-article-page .cdd-source-note {
-    grid-template-columns: 2em minmax(0, 1fr);
-    column-gap: 0.45em;
+    grid-template-columns: 2em minmax(0, 1fr) !important;
+    column-gap: 0.45em !important;
+    margin: 0 0 0.64em !important;
+    font: 400 12.5px/1.52 var(--p-font, "DIN 2014", "Barlow", system-ui, sans-serif) !important;
+    color: var(--p-ink-2, #2A302E) !important;
     break-inside: avoid !important;
     page-break-inside: avoid !important;
   }
