@@ -37,27 +37,27 @@ jobs:
           elif new not in text:
               raise SystemExit('image loading assignment not found')
 
-          old_wait = """    const imagePromises = Array.from(document.images || []).map((img) => {
-      if (img.complete) return Promise.resolve();
-      return new Promise((resolve) => {
-        img.addEventListener('load', resolve, { once: true });
-        img.addEventListener('error', resolve, { once: true });
-      });
-    });"""
-          new_wait = """    const imagePromises = Array.from(document.images || []).map(async (img) => {
-      // A print route cannot rely on viewport-driven lazy loading: figures below
-      // the fold must begin fetching before we wait for them and open print.
-      img.loading = 'eager';
-      if (!img.complete) {
-        await new Promise((resolve) => {
-          img.addEventListener('load', resolve, { once: true });
-          img.addEventListener('error', resolve, { once: true });
-        });
-      }
-      if (typeof img.decode === 'function') {
-        await img.decode().catch(() => {});
-      }
-    });"""
+          old_wait = ("    const imagePromises = Array.from(document.images || []).map((img) => {\n"
+                      "      if (img.complete) return Promise.resolve();\n"
+                      "      return new Promise((resolve) => {\n"
+                      "        img.addEventListener('load', resolve, { once: true });\n"
+                      "        img.addEventListener('error', resolve, { once: true });\n"
+                      "      });\n"
+                      "    });")
+          new_wait = ("    const imagePromises = Array.from(document.images || []).map(async (img) => {\n"
+                      "      // A print route cannot rely on viewport-driven lazy loading.\n"
+                      "      // Figures below the fold must fetch before printing.\n"
+                      "      img.loading = 'eager';\n"
+                      "      if (!img.complete) {\n"
+                      "        await new Promise((resolve) => {\n"
+                      "          img.addEventListener('load', resolve, { once: true });\n"
+                      "          img.addEventListener('error', resolve, { once: true });\n"
+                      "        });\n"
+                      "      }\n"
+                      "      if (typeof img.decode === 'function') {\n"
+                      "        await img.decode().catch(() => {});\n"
+                      "      }\n"
+                      "    });")
           if old_wait in text:
               text = text.replace(old_wait, new_wait, 1)
           elif new_wait not in text:
