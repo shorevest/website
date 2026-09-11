@@ -1,0 +1,137 @@
+name: Verify live CDD citations
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/tmp-verify-cdd-citations-live.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify live citation rendering across archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm ci --ignore-scripts
+          node <<'NODE'
+          const { chromium } = require('playwright-core');
+          const fs = require('fs');
+          const path = require('path');
+
+          const executablePath = [
+            '/usr/bin/google-chrome',
+            '/usr/bin/google-chrome-stable',
+            '/usr/bin/chromium',
+            '/usr/bin/chromium-browser'
+          ].find(fs.existsSync);
+          if (!executablePath) throw new Error('Chrome/Chromium not found');
+
+          const root = path.join(process.cwd(), 'insights', 'china-debt-dynamics');
+          const issues = fs.readdirSync(root, {withFileTypes:true})
+            .filter(d => d.isDirectory() && /^v\d+i\d+$/i.test(d.name))
+            .map(d => d.name)
+            .sort((a,b) => a.localeCompare(b, undefined, {numeric:true}));
+
+          function bodyAudit() {
+            const article = document.querySelector('[data-cdd-body]');
+            if (!article) return { missingArticle:true };
+            const headings = [...article.querySelectorAll(':scope > h2')];
+            const sourceHeading = headings.find(h => /^(sources(?:\s+(?:and|&)\s+notes)?|notes\s+and\s+sources|references)$/i.test(h.textContent.trim()));
+            const refs = [...article.querySelectorAll('.cdd-inline-citation')];
+            const sourceIndexes = [...article.querySelectorAll('.cdd-source-note__index')];
+
+            const rawMarkers = [];
+            const walker = document.createTreeWalker(article, NodeFilter.SHOW_TEXT);
+            let node;
+            while ((node = walker.nextNode())) {
+              const p = node.parentElement;
+              if (!p || p.closest('.cdd-source-note, .cdd-inline-citation, script, style')) continue;
+              if (sourceHeading && (sourceHeading === p || sourceHeading.compareDocumentPosition(p) & Node.DOCUMENT_POSITION_FOLLOWING)) continue;
+              if (/\[(?:\d+(?:\s*[,;]\s*\d+)*)\]/.test(node.nodeValue || '')) rawMarkers.push((node.nodeValue || '').trim());
+            }
+
+            return {
+              missingArticle:false,
+              citationCount: refs.length,
+              citationTexts: refs.map(x => x.textContent.trim()),
+              citationHTML: refs.slice(0,3).map(x => x.outerHTML),
+              rawMarkers,
+              sourceHeading: sourceHeading ? sourceHeading.textContent.trim() : '',
+              sourceIndexes: sourceIndexes.map(x => x.textContent.trim()),
+              citationVersion: window.__CDD_CITATIONS_VERSION || '',
+              ready: document.body.dataset.cddReady || ''
+            };
+          }
+
+          function validate(label, audit) {
+            const failures = [];
+            if (audit.missingArticle) failures.push('missing article body');
+            if (audit.ready !== 'true') failures.push('article not ready');
+            if (audit.citationVersion && audit.citationVersion !== '20260911-superscript-1') failures.push('wrong citation version ' + audit.citationVersion);
+            if (audit.rawMarkers.length) failures.push('raw bracket markers remain: ' + audit.rawMarkers.slice(0,3).join(' | '));
+            if (audit.citationTexts.some(t => /[\[\]]/.test(t))) failures.push('brackets remain inside superscripts');
+            if (audit.sourceIndexes.some(t => /[\[\]]/.test(t))) failures.push('brackets remain in source list indexes');
+            if (failures.length) throw new Error(label + ': ' + failures.join('; ') + '\n' + JSON.stringify(audit, null, 2));
+          }
+
+          (async () => {
+            const browser = await chromium.launch({headless:true, executablePath, args:['--no-sandbox']});
+            const context = await browser.newContext({viewport:{width:1440,height:1000}});
+            const page = await context.newPage();
+            await page.addInitScript(() => { window.print = () => {}; });
+
+            let totalCitations = 0;
+            for (const issue of issues) {
+              const url = `https://shorevest.com/insights/china-debt-dynamics/${issue}/?t=${Date.now()}-${issue}`;
+              await page.goto(url, {waitUntil:'domcontentloaded', timeout:60000});
+              await page.waitForFunction(() => document.body && document.body.dataset.cddReady === 'true', null, {timeout:30000});
+              await page.waitForTimeout(150);
+              const audit = await page.evaluate(bodyAudit);
+              validate(issue + ' screen', audit);
+              totalCitations += audit.citationCount;
+              console.log(`PASS ${issue}: ${audit.citationCount} superscript citations; source indexes ${audit.sourceIndexes.length}`);
+            }
+
+            // Verify the dynamic PDF route for each issue source too.
+            for (const issue of issues) {
+              const source = `assets/data/china-debt-dynamics-${issue}.json`;
+              if (!fs.existsSync(path.join(process.cwd(), source))) continue;
+              const url = `https://shorevest.com/insights/china-debt-dynamics/print/?source=${encodeURIComponent(source)}&t=${Date.now()}-${issue}`;
+              await page.goto(url, {waitUntil:'domcontentloaded', timeout:60000});
+              await page.waitForFunction(() => document.body && document.body.dataset.cddReady === 'true', null, {timeout:30000});
+              await page.waitForTimeout(150);
+              const audit = await page.evaluate(bodyAudit);
+              validate(issue + ' print', audit);
+              console.log(`PASS ${issue} print: ${audit.citationCount} superscript citations`);
+            }
+
+            // Visual/style sanity check on an issue known to contain citations.
+            await page.goto(`https://shorevest.com/insights/china-debt-dynamics/v9i3/?t=${Date.now()}-style`, {waitUntil:'domcontentloaded', timeout:60000});
+            await page.waitForFunction(() => document.querySelector('.cdd-inline-citation a'), null, {timeout:30000});
+            const screenStyle = await page.$eval('.cdd-inline-citation', el => ({
+              text: el.textContent.trim(),
+              fontSize: getComputedStyle(el).fontSize,
+              fontWeight: getComputedStyle(el).fontWeight,
+              top: getComputedStyle(el).top,
+              lineHeight: getComputedStyle(el).lineHeight
+            }));
+            if (/[\[\]]/.test(screenStyle.text)) throw new Error('v9i3 screen citation still bracketed');
+            await page.emulateMedia({media:'print'});
+            const printStyle = await page.$eval('.cdd-inline-citation a', el => ({text:el.textContent.trim(), color:getComputedStyle(el).color, decoration:getComputedStyle(el).textDecorationLine}));
+            if (/[\[\]]/.test(printStyle.text)) throw new Error('v9i3 print citation still bracketed');
+            console.log('SCREEN STYLE', JSON.stringify(screenStyle));
+            console.log('PRINT STYLE', JSON.stringify(printStyle));
+            console.log(`PASS: ${issues.length} live Insight routes and their dynamic print routes audited; ${totalCitations} screen citations standardized.`);
+            await browser.close();
+          })().catch(err => { console.error(err); process.exit(1); });
+          NODE
