@@ -12,29 +12,29 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 6
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Wait for live Pages content
+      - name: Wait for durable live Pages content
         shell: bash
         run: |
           set -euo pipefail
-          url="https://shorevest.com/insights/china-debt-dynamics/print/?source=assets/data/china-debt-dynamics-v9i3.json&pdf=1&t=${GITHUB_SHA}"
+          url="https://shorevest.com/insights/china-debt-dynamics/print/?source=assets/data/china-debt-dynamics-v9i3.json&t=${GITHUB_SHA}"
           for i in $(seq 1 24); do
             html="$(curl -fsSL --retry 2 --connect-timeout 10 "$url" || true)"
-            if printf '%s' "$html" | grep -Fq 'cdd-v9i3-figure-fit.css?v=20260911-v9i3-fit-1'; then
-              echo "Live print route is serving the repaired stylesheet set."
+            if printf '%s' "$html" | grep -Fq 'cdd-v9i3-figure-fit.css?v=20260911-v9i3-fit-2'; then
+              echo "Live print route is serving the durable v9i3 repair."
               exit 0
             fi
             echo "Attempt $i: waiting for updated Pages content..."
             sleep 10
           done
-          echo "Timed out waiting for repaired live print route." >&2
+          echo "Timed out waiting for durable live print route." >&2
           exit 1
-      - name: Measure first live figure in headless Chrome
+      - name: Measure live figure in screen and print media
         shell: bash
         run: |
           set -euo pipefail
@@ -51,27 +51,45 @@ jobs:
           const executablePath = candidates.find(fs.existsSync);
           if (!executablePath) throw new Error('No Chrome/Chromium executable found on runner');
 
+          function validate(label, m) {
+            console.log(`${label}:\n${JSON.stringify(m, null, 2)}`);
+            const tol = 1.5;
+            const failures = [];
+            if (!String(m.source || '').includes('china-debt-dynamics-v9i3')) failures.push(`wrong article source: ${m.source}`);
+            if (m.figure.left < m.shell.left - tol) failures.push(`figure overruns shell left by ${(m.shell.left - m.figure.left).toFixed(2)}px`);
+            if (m.figure.right > m.shell.right + tol) failures.push(`figure overruns shell right by ${(m.figure.right - m.shell.right).toFixed(2)}px`);
+            if (m.image.left < m.media.left - tol) failures.push(`image overruns media left by ${(m.media.left - m.image.left).toFixed(2)}px`);
+            if (m.image.right > m.media.right + tol) failures.push(`image overruns media right by ${(m.image.right - m.media.right).toFixed(2)}px`);
+            if (m.image.width > m.media.width + tol) failures.push(`image wider than media by ${(m.image.width - m.media.width).toFixed(2)}px`);
+            if (m.figureBoxSizing !== 'border-box') failures.push(`figure box-sizing is ${m.figureBoxSizing}`);
+            if (m.imageObjectFit !== 'contain') failures.push(`image object-fit is ${m.imageObjectFit}`);
+            if (m.naturalWidth !== 1200 || m.naturalHeight !== 680) failures.push(`unexpected first SVG size ${m.naturalWidth}x${m.naturalHeight}`);
+            if (failures.length) throw new Error(`${label}: ${failures.join('; ')}`);
+          }
+
           (async () => {
             const browser = await chromium.launch({ headless: true, executablePath, args: ['--no-sandbox'] });
             const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
-            const url = `https://shorevest.com/insights/china-debt-dynamics/print/?source=assets/data/china-debt-dynamics-v9i3.json&pdf=1&t=${process.env.GITHUB_SHA}`;
-            await page.goto(url, { waitUntil: 'networkidle', timeout: 120000 });
+            const url = `https://shorevest.com/insights/china-debt-dynamics/print/?source=assets/data/china-debt-dynamics-v9i3.json&t=${process.env.GITHUB_SHA}`;
+            await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
             await page.waitForSelector('.cdd-figure img', { state: 'visible', timeout: 60000 });
             await page.evaluate(async () => {
               await Promise.all([...document.images].map(img => img.decode ? img.decode().catch(() => {}) : Promise.resolve()));
             });
 
-            const m = await page.evaluate(() => {
+            const measure = () => page.evaluate(() => {
               const shell = document.querySelector('.cdd-print-shell');
               const figure = document.querySelector('.cdd-figure');
               const media = document.querySelector('.cdd-figure__media') || figure;
               const img = figure && figure.querySelector('img');
+              if (!shell || !figure || !media || !img) throw new Error('Required live layout nodes missing');
               const rect = el => {
                 const r = el.getBoundingClientRect();
                 return { left: r.left, right: r.right, width: r.width, top: r.top, bottom: r.bottom, height: r.height };
               };
               return {
                 source: document.body.dataset.articleSource,
+                viewportWidth: innerWidth,
                 shell: rect(shell),
                 figure: rect(figure),
                 media: rect(media),
@@ -83,19 +101,11 @@ jobs:
                 imageMaxWidth: getComputedStyle(img).maxWidth
               };
             });
-            console.log(JSON.stringify(m, null, 2));
 
-            const tol = 1.5;
-            const failures = [];
-            if (!String(m.source || '').includes('china-debt-dynamics-v9i3')) failures.push(`wrong article source: ${m.source}`);
-            if (m.figure.right > m.shell.right + tol) failures.push(`figure overruns shell by ${(m.figure.right - m.shell.right).toFixed(2)}px`);
-            if (m.image.right > m.media.right + tol) failures.push(`image overruns media by ${(m.image.right - m.media.right).toFixed(2)}px`);
-            if (m.image.width > m.media.width + tol) failures.push(`image wider than media by ${(m.image.width - m.media.width).toFixed(2)}px`);
-            if (m.figureBoxSizing !== 'border-box') failures.push(`figure box-sizing is ${m.figureBoxSizing}`);
-            if (m.imageObjectFit !== 'contain') failures.push(`image object-fit is ${m.imageObjectFit}`);
-            if (failures.length) throw new Error(failures.join('; '));
-
-            console.log('PASS: live v9i3 figure fits within the printable shell.');
+            validate('SCREEN', await measure());
+            await page.emulateMedia({ media: 'print' });
+            validate('PRINT', await measure());
+            console.log('PASS: live v9i3 first figure is contained in both screen preview and print media.');
             await browser.close();
           })().catch(err => { console.error(err); process.exit(1); });
           NODE
