@@ -48,6 +48,49 @@
     return clean.length > 180 ? clean.slice(0, 177).trim() + '…' : clean;
   }
 
+  function linkifySourceUrls(copy) {
+    if (!copy || copy.querySelector('a[data-cdd-source-url]')) return;
+
+    var text = copy.textContent || '';
+    var pattern = /https?:\/\/[^\s]+/g;
+    var match;
+    var cursor = 0;
+    var fragment = document.createDocumentFragment();
+    var changed = false;
+
+    while ((match = pattern.exec(text))) {
+      fragment.appendChild(document.createTextNode(text.slice(cursor, match.index)));
+
+      var href = match[0].replace(/[.,;)]+$/, '');
+      var trailing = match[0].slice(href.length);
+      var link = document.createElement('a');
+      link.href = href;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.setAttribute('data-cdd-source-url', 'true');
+
+      try {
+        var host = new URL(href).hostname.replace(/^www\./, '');
+        if (host.indexOf('savills') !== -1) link.textContent = 'Savills';
+        else if (host.indexOf('cbre') !== -1) link.textContent = 'CBRE';
+        else if (host.indexOf('jll') !== -1) link.textContent = 'JLL';
+        else link.textContent = 'Source';
+      } catch (_) {
+        link.textContent = 'Source';
+      }
+
+      fragment.appendChild(link);
+      if (trailing) fragment.appendChild(document.createTextNode(trailing));
+      cursor = match.index + match[0].length;
+      changed = true;
+    }
+
+    if (!changed) return;
+    fragment.appendChild(document.createTextNode(text.slice(cursor)));
+    copy.textContent = '';
+    copy.appendChild(fragment);
+  }
+
   function upgradeSourceEntry(entry) {
     var number = sourceNumber(entry);
     if (!number) return null;
@@ -70,6 +113,7 @@
     entry.dataset.cddSourceNumber = number;
     entry.id = 'cdd-source-' + number;
     index.textContent = number + '.';
+    linkifySourceUrls(copy);
 
     return {
       number: number,
