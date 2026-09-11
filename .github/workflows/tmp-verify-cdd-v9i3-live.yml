@@ -18,21 +18,22 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Wait for durable live Pages content
+      - name: Wait for repaired live Pages content
         shell: bash
         run: |
           set -euo pipefail
           url="https://shorevest.com/insights/china-debt-dynamics/print/?source=assets/data/china-debt-dynamics-v9i3.json&t=${GITHUB_SHA}"
           for i in $(seq 1 24); do
             html="$(curl -fsSL --retry 2 --connect-timeout 10 "$url" || true)"
-            if printf '%s' "$html" | grep -Fq 'cdd-v9i3-figure-fit.css?v=20260911-v9i3-fit-2'; then
-              echo "Live print route is serving the durable v9i3 repair."
+            if printf '%s' "$html" | grep -Fq 'cdd-v9i3-figure-fit.css?v=20260911-v9i3-fit-2' && \
+               printf '%s' "$html" | grep -Fq 'cdd-article-template.js?v=20260911-print-figures-1'; then
+              echo "Live print route is serving the durable layout and renderer repairs."
               exit 0
             fi
             echo "Attempt $i: waiting for updated Pages content..."
             sleep 10
           done
-          echo "Timed out waiting for durable live print route." >&2
+          echo "Timed out waiting for repaired live print route." >&2
           exit 1
       - name: Measure all live figures in screen and print media
         shell: bash
@@ -59,6 +60,7 @@ jobs:
             if (m.figures.length !== 5) failures.push(`expected 5 figures, found ${m.figures.length}`);
             for (const f of m.figures) {
               const tag = `figure ${f.index + 1} (${f.src.split('/').pop()})`;
+              if (f.loading !== 'eager') failures.push(`${tag} loading is ${f.loading}`);
               if (f.figure.left < m.body.left - tol) failures.push(`${tag} overruns body left by ${(m.body.left - f.figure.left).toFixed(2)}px`);
               if (f.figure.right > m.body.right + tol) failures.push(`${tag} overruns body right by ${(f.figure.right - m.body.right).toFixed(2)}px`);
               if (f.figure.left < m.shell.left - tol) failures.push(`${tag} overruns shell left`);
@@ -77,16 +79,15 @@ jobs:
             const browser = await chromium.launch({ headless: true, executablePath, args: ['--no-sandbox'] });
             const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
 
-            // The production print template intentionally auto-opens the print dialog.
-            // Neutralize only that browser API in the verifier so the page can finish
-            // rendering; print CSS is exercised separately with emulateMedia('print').
+            // The production template auto-opens print. Suppress only that browser
+            // dialog in the verifier; print CSS is tested with emulateMedia below.
             await page.addInitScript(() => { window.print = () => {}; });
 
             const url = `https://shorevest.com/insights/china-debt-dynamics/print/?source=assets/data/china-debt-dynamics-v9i3.json&t=${process.env.GITHUB_SHA}`;
             await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
             await page.waitForFunction(() => {
               const imgs = [...document.querySelectorAll('.cdd-figure img')];
-              return imgs.length === 5 && imgs.every(img => img.complete && img.naturalWidth > 0);
+              return imgs.length === 5 && imgs.every(img => img.loading === 'eager' && img.complete && img.naturalWidth > 0);
             }, null, { timeout: 60000 });
             await page.evaluate(async () => {
               await Promise.all([...document.querySelectorAll('.cdd-figure img')].map(img => img.decode ? img.decode().catch(() => {}) : Promise.resolve()));
@@ -107,6 +108,7 @@ jobs:
                 return {
                   index,
                   src: img.currentSrc || img.src || '',
+                  loading: img.loading,
                   figure: rect(figure),
                   media: rect(media),
                   image: rect(img),
@@ -129,7 +131,7 @@ jobs:
             validate('SCREEN', await measure());
             await page.emulateMedia({ media: 'print' });
             validate('PRINT', await measure());
-            console.log('PASS: all 5 live v9i3 figures are contained in both screen preview and print media.');
+            console.log('PASS: all 5 live v9i3 figures are eager-loaded and contained in both screen preview and print media.');
             await browser.close();
           })().catch(err => { console.error(err); process.exit(1); });
           NODE
