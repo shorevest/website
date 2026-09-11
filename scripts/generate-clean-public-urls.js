@@ -26,6 +26,7 @@ function slugFromFilename(filename) {
 }
 
 function routeForSource(source) {
+  if (source === 'china-debt-dynamics-v8i6.html' || source === 'china-debt-dynamics-v9i4.html') return null;
   const overrides = {
     'home.html': '/',
     'index.html': '/',
