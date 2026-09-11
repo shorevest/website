@@ -1,0 +1,197 @@
+name: Repair live CDD v9i3 figures
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/tmp-repair-cdd-v9i3-figures.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Patch article and PDF figure layout
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          version = '20260911-v9i3-fit-1'
+          base_css = f"    <script>document.write('<link rel=\"stylesheet\" href=\"assets/css/cdd-article-figures.css?v={version}\">');</script>"
+          fit_css = f"    <script>document.write('<link rel=\"stylesheet\" href=\"assets/css/cdd-v9i3-figure-fit.css?v={version}\">');</script>"
+
+          article = Path('insights/china-debt-dynamics/v9i3/index.html')
+          text = article.read_text()
+          anchor = "    <script>document.write('<link rel=\"stylesheet\" href=\"assets/css/cdd-article-template.css?v=20260703-fullwidth\">');</script>"
+          if 'cdd-v9i3-figure-fit.css' not in text:
+              if anchor not in text:
+                  raise SystemExit('article stylesheet anchor missing')
+              text = text.replace(anchor, anchor + '\n' + base_css + '\n' + fit_css, 1)
+          article.write_text(text)
+
+          print_page = Path('insights/china-debt-dynamics/print/index.html')
+          text = print_page.read_text()
+          print_anchor = "  <script>document.write('<link rel=\"stylesheet\" href=\"assets/css/cdd-article-print.css?v=20260719-no-top-rule\">');</script>"
+          print_base = f"  <script>document.write('<link rel=\"stylesheet\" href=\"assets/css/cdd-article-figures.css?v={version}\">');</script>"
+          print_fit = f"  <script>document.write('<link rel=\"stylesheet\" href=\"assets/css/cdd-v9i3-figure-fit.css?v={version}\">');</script>"
+          if 'cdd-v9i3-figure-fit.css' not in text:
+              if print_anchor not in text:
+                  raise SystemExit('print stylesheet anchor missing')
+              text = text.replace(print_anchor, print_anchor + '\n' + print_base + '\n' + print_fit, 1)
+
+          body = '<body class="cdd-print-layout" data-auto-print="true" data-default-article-source="assets/data/china-debt-dynamics-v10i2.json">'
+          hook = '''<script>\ndocument.body.dataset.articleSource =\n  (new URLSearchParams(location.search)).get('source') ||\n  document.body.dataset.defaultArticleSource ||\n  '';\n</script>'''
+          if 'document.body.dataset.articleSource' not in text:
+              if body not in text:
+                  raise SystemExit('print body anchor missing')
+              text = text.replace(body, body + '\n' + hook, 1)
+          print_page.write_text(text)
+
+          css = Path('assets/css/cdd-v9i3-figure-fit.css')
+          css.write_text(r'''/* ShoreVest CDD v9i3 figure fit — page and print/PDF. */
+body.cdd-article-page .cdd-figure,
+body.cdd-print-layout .cdd-figure,
+body.cdd-article-page .cdd-figure__media,
+body.cdd-print-layout .cdd-figure__media,
+body.cdd-article-page .cdd-figure img,
+body.cdd-print-layout .cdd-figure img,
+body.cdd-article-page .cdd-figure figcaption,
+body.cdd-print-layout .cdd-figure figcaption {
+  box-sizing: border-box;
+  max-width: 100%;
+  min-width: 0;
+}
+
+body.cdd-article-page .cdd-figure,
+body.cdd-print-layout .cdd-figure {
+  width: 100%;
+  overflow: visible;
+}
+
+body.cdd-article-page .cdd-figure__media,
+body.cdd-print-layout .cdd-figure__media {
+  width: 100%;
+}
+
+body.cdd-article-page .cdd-figure img,
+body.cdd-print-layout .cdd-figure img {
+  display: block;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  height: auto !important;
+  object-fit: contain !important;
+  object-position: center;
+}
+
+body.cdd-article-page[data-article-source*="china-debt-dynamics-v9i3"] .cdd-figure {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  margin: clamp(48px, 5.5vw, 72px) 0 !important;
+  padding: clamp(18px, 2vw, 26px) clamp(18px, 2.4vw, 30px) 16px !important;
+}
+
+body.cdd-article-page[data-article-source*="china-debt-dynamics-v9i3"] .cdd-figure img {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  height: auto !important;
+}
+
+body.cdd-article-page[data-article-source*="china-debt-dynamics-v9i3"] .cdd-figure figcaption {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+@media (max-width: 700px) {
+  body.cdd-article-page[data-article-source*="china-debt-dynamics-v9i3"] .cdd-figure {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin: 40px 0 48px !important;
+    padding: 12px 12px 10px !important;
+  }
+}
+
+@media print {
+  html,
+  body.cdd-print-layout,
+  body.cdd-print-layout .cdd-page,
+  body.cdd-print-layout .cdd-print-shell,
+  body.cdd-print-layout .cdd-grid,
+  body.cdd-print-layout .cdd-body,
+  body.cdd-print-layout .cdd-figure,
+  body.cdd-print-layout .cdd-figure__media,
+  body.cdd-print-layout .cdd-figure img,
+  body.cdd-print-layout .cdd-figure figcaption {
+    box-sizing: border-box !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  body.cdd-print-layout .cdd-print-shell,
+  body.cdd-print-layout .cdd-grid,
+  body.cdd-print-layout .cdd-body,
+  body.cdd-print-layout .cdd-figure,
+  body.cdd-print-layout .cdd-figure__media,
+  body.cdd-print-layout .cdd-figure img {
+    width: 100% !important;
+  }
+
+  body.cdd-print-layout .cdd-figure {
+    overflow: visible !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  body.cdd-print-layout[data-article-source*="china-debt-dynamics-v9i3"] .cdd-figure {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    padding: 10px !important;
+  }
+
+  body.cdd-print-layout .cdd-figure img,
+  body.cdd-print-layout[data-article-source*="china-debt-dynamics-v9i3"] .cdd-figure img {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    object-fit: contain !important;
+  }
+
+  body.cdd-print-layout .cdd-figure figcaption {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+}
+''')
+          PY
+
+          grep -Fq 'cdd-v9i3-figure-fit.css?v=20260911-v9i3-fit-1' insights/china-debt-dynamics/v9i3/index.html
+          grep -Fq 'cdd-v9i3-figure-fit.css?v=20260911-v9i3-fit-1' insights/china-debt-dynamics/print/index.html
+          grep -Fq 'document.body.dataset.articleSource' insights/china-debt-dynamics/print/index.html
+          grep -Fq 'width: 100% !important' assets/css/cdd-v9i3-figure-fit.css
+          git diff --check
+
+          rm .github/workflows/tmp-repair-cdd-v9i3-figures.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Fix v9i3 figures on article and PDF'
+          git pull --rebase origin main
+          git push origin main
