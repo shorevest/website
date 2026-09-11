@@ -9,6 +9,35 @@ const AUDIT = path.join(__dirname, 'audit-cdd-completeness.cjs');
 const REPORT = path.join(ROOT, 'cdd-completeness-report.json');
 const MANIFEST = path.join(ROOT, 'assets', 'data', 'clean-url-manifest.json');
 
+function decodeHtml(value) {
+  return String(value || '')
+    .replace(/&amp;/gi, '&')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#0*39;|&apos;/gi, "'")
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function staticTitleMatchesData(issue) {
+  if (!issue || !issue.source || !issue.data) return false;
+  const sourcePath = path.join(ROOT, issue.source);
+  const dataPath = path.join(ROOT, issue.data);
+  if (!fs.existsSync(sourcePath) || !fs.existsSync(dataPath)) return false;
+
+  const html = fs.readFileSync(sourcePath, 'utf8');
+  const titleMatch = /<title>([\s\S]*?)<\/title>/i.exec(html);
+  if (!titleMatch) return false;
+
+  let data;
+  try { data = JSON.parse(fs.readFileSync(dataPath, 'utf8')); }
+  catch (_) { return false; }
+
+  const staticTitle = decodeHtml(titleMatch[1]).replace(/\s*\|\s*ShoreVest\s*$/i, '');
+  return staticTitle === decodeHtml(data.title);
+}
+
 const run = spawnSync(process.execPath, [AUDIT], {
   cwd: ROOT,
   encoding: 'utf8'
@@ -24,6 +53,12 @@ const report = JSON.parse(fs.readFileSync(REPORT, 'utf8'));
 const retained = [];
 
 for (const message of report.errors || []) {
+  const titleMismatch = message.match(/^(\/insights\/china-debt-dynamics\/v\d+i\d+\/): static page title does not match article title$/i);
+  if (titleMismatch) {
+    const issue = (report.issues || []).find(item => item.route === titleMismatch[1]);
+    if (staticTitleMatchesData(issue)) continue;
+  }
+
   const match = message.match(/^(\/insights\/china-debt-dynamics\/v\d+i\d+\/): section (\d+) has no content$/i);
   if (!match) {
     retained.push(message);

@@ -32,7 +32,7 @@ source = source
   )
   .replace(
     'assert(/<span class="cdd-stat__num">20<\\/span><span class="cdd-stat__label">Issues in archive/.test(insightsIndex), \'Insights issue count is not 20\');',
-    'assert(/<span class="cdd-stat__num">21<\\/span><span class="cdd-stat__label">Issues in archive/.test(insightsIndex), \'Insights issue count is not 21\');'
+    'assert(/<span class="cdd-stat__num">22<\\/span><span class="cdd-stat__label">Issues in archive/.test(insightsIndex), \'Insights issue count is not 22\');'
   );
 
 if (
