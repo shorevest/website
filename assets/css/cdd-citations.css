@@ -41,19 +41,19 @@ body.cdd-print-layout .cdd-inline-citation a:focus-visible {
 }
 
 /* --------------------------------------------------------------------------
-   Sources and Notes — one canonical editorial treatment for screen + print.
-   Reference styling belongs here, not in figure/article-detail styles.
+   Sources and Notes — canonical ShoreVest editorial treatment.
+   The section uses a restrained brand accent, a clear number gutter and
+   hairline row rules so it reads like research apparatus rather than bullets.
    -------------------------------------------------------------------------- */
 body.cdd-article-page .cdd-body > h2.cdd-sources-heading,
 body.cdd-print-layout .cdd-body > h2.cdd-sources-heading,
 body.cdd-article-page .cdd-sources-heading,
 body.cdd-print-layout .cdd-sources-heading {
+  position: relative !important;
   color: var(--sv-ink, var(--p-ink, #182524)) !important;
-  letter-spacing: -0.01em !important;
+  letter-spacing: -0.015em !important;
   background: transparent !important;
-  border-right: 0 !important;
-  border-bottom: 0 !important;
-  border-left: 0 !important;
+  border: 0 !important;
   box-shadow: none !important;
   text-align: left !important;
   text-transform: none !important;
@@ -61,24 +61,37 @@ body.cdd-print-layout .cdd-sources-heading {
 
 body.cdd-article-page .cdd-body > h2.cdd-sources-heading,
 body.cdd-article-page .cdd-sources-heading {
-  margin-top: clamp(52px, 5vw, 72px) !important;
-  margin-bottom: 20px !important;
-  padding: 24px 0 0 !important;
-  border-top: 1px solid var(--sv-border-light-strong, rgba(23, 53, 54, 0.18)) !important;
-  font: 500 clamp(22px, 2vw, 25px)/1.2 var(--sv-font, "DIN 2014", "Barlow", system-ui, sans-serif) !important;
+  margin-top: clamp(56px, 5vw, 76px) !important;
+  margin-bottom: 22px !important;
+  padding: 0 0 0 20px !important;
+  font: 500 clamp(25px, 2.25vw, 30px)/1.16 var(--sv-font, "DIN 2014", "Barlow", system-ui, sans-serif) !important;
 }
 
 body.cdd-print-layout .cdd-body > h2.cdd-sources-heading,
 body.cdd-print-layout .cdd-sources-heading {
-  margin: 28px 0 16px !important;
-  padding: 18px 0 0 !important;
-  border-top: 1px solid var(--p-line, rgba(23, 53, 54, 0.16)) !important;
-  font: 500 20px/1.2 var(--p-font, "DIN 2014", "Barlow", system-ui, sans-serif) !important;
+  margin: 30px 0 17px !important;
+  padding: 0 0 0 15px !important;
+  font: 500 21px/1.18 var(--p-font, "DIN 2014", "Barlow", system-ui, sans-serif) !important;
 }
 
 body.cdd-article-page .cdd-sources-heading::before,
+body.cdd-print-layout .cdd-sources-heading::before {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 0.05em !important;
+  width: 3px !important;
+  height: 1.34em !important;
+  background: var(--sv-cinnabar, #C93B2A) !important;
+  border: 0 !important;
+}
+
+body.cdd-print-layout .cdd-sources-heading::before {
+  width: 2.5px !important;
+}
+
 body.cdd-article-page .cdd-sources-heading::after,
-body.cdd-print-layout .cdd-sources-heading::before,
 body.cdd-print-layout .cdd-sources-heading::after {
   content: none !important;
   display: none !important;
@@ -89,7 +102,7 @@ body.cdd-article-page .cdd-body > ol.cdd-sources-list,
 body.cdd-article-page .cdd-sources-list,
 body.cdd-print-layout .cdd-sources-list {
   list-style: none !important;
-  margin: 0 0 2.2em !important;
+  margin: 0 0 2.4em !important;
   padding: 0 !important;
   border-top: 1px solid var(--sv-border-light-strong, var(--p-line, rgba(23, 53, 54, 0.16))) !important;
 }
@@ -100,16 +113,17 @@ body.cdd-article-page .cdd-body > p.cdd-source-note,
 body.cdd-article-page .cdd-source-note,
 body.cdd-print-layout .cdd-source-note {
   display: grid !important;
-  grid-template-columns: 2em minmax(0, 1fr) !important;
-  column-gap: 0.5em !important;
+  grid-template-columns: 2.6em minmax(0, 1fr) !important;
+  column-gap: 0.75em !important;
   align-items: start !important;
   position: relative;
   max-width: none !important;
-  margin: 0 0 0.78em !important;
-  padding: 0 !important;
+  margin: 0 !important;
+  padding: 15px 0 16px !important;
   border: 0 !important;
+  border-bottom: 1px solid var(--sv-border-light-strong, var(--p-line, rgba(23, 53, 54, 0.13))) !important;
   color: var(--sv-ink-2, var(--p-ink-2, #2A302E)) !important;
-  font: 400 15.5px/1.62 var(--sv-font, "DIN 2014", "Barlow", system-ui, sans-serif) !important;
+  font: 400 15.5px/1.58 var(--sv-font, "DIN 2014", "Barlow", system-ui, sans-serif) !important;
   scroll-margin-top: 96px;
   transition: background-color 220ms ease;
   break-inside: avoid !important;
@@ -123,7 +137,7 @@ body.cdd-print-layout .cdd-source-note::before {
 }
 
 body.cdd-article-page .cdd-source-note:target {
-  background: rgba(201, 59, 42, 0.055);
+  background: rgba(201, 59, 42, 0.045);
 }
 
 body.cdd-article-page .cdd-source-note__index,
@@ -131,12 +145,12 @@ body.cdd-print-layout .cdd-source-note__index {
   display: block !important;
   min-width: 0 !important;
   padding: 0.08em 0 0 !important;
-  color: var(--sv-muted, var(--p-muted, #6E7169)) !important;
+  color: var(--sv-cinnabar, #C93B2A) !important;
   font-size: 0.88em !important;
   font-weight: 500 !important;
   line-height: 1.45 !important;
   letter-spacing: 0 !important;
-  text-align: right !important;
+  text-align: left !important;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
@@ -173,21 +187,26 @@ body.cdd-article-page .cdd-source-note__copy a[data-cdd-source-url]:focus-visibl
 
   body.cdd-article-page .cdd-body > h2.cdd-sources-heading,
   body.cdd-article-page .cdd-sources-heading {
-    margin-top: 44px !important;
-    margin-bottom: 17px !important;
-    padding-top: 20px !important;
-    font-size: 21px !important;
+    margin-top: 46px !important;
+    margin-bottom: 18px !important;
+    padding-left: 15px !important;
+    font-size: 22px !important;
+  }
+
+  body.cdd-article-page .cdd-sources-heading::before {
+    width: 3px !important;
+    height: 1.3em !important;
   }
 
   body.cdd-article-page .cdd-body > ul.cdd-sources-list > li.cdd-source-note,
   body.cdd-article-page .cdd-body > ol.cdd-sources-list > li.cdd-source-note,
   body.cdd-article-page .cdd-body > p.cdd-source-note,
   body.cdd-article-page .cdd-source-note {
-    grid-template-columns: 1.9em minmax(0, 1fr) !important;
-    column-gap: 0.45em !important;
-    margin-bottom: 0.72em !important;
+    grid-template-columns: 2.25em minmax(0, 1fr) !important;
+    column-gap: 0.6em !important;
+    padding: 12px 0 13px !important;
     font-size: 14.5px !important;
-    line-height: 1.58 !important;
+    line-height: 1.56 !important;
     scroll-margin-top: 76px;
   }
 }
@@ -216,10 +235,12 @@ body.cdd-article-page .cdd-source-note__copy a[data-cdd-source-url]:focus-visibl
   body.cdd-print-layout .cdd-body > p.cdd-source-note,
   body.cdd-print-layout .cdd-source-note,
   body.cdd-article-page .cdd-source-note {
-    grid-template-columns: 2em minmax(0, 1fr) !important;
-    column-gap: 0.45em !important;
-    margin: 0 0 0.64em !important;
-    font: 400 12.5px/1.52 var(--p-font, "DIN 2014", "Barlow", system-ui, sans-serif) !important;
+    grid-template-columns: 2.3em minmax(0, 1fr) !important;
+    column-gap: 0.6em !important;
+    margin: 0 !important;
+    padding: 9px 0 10px !important;
+    border-bottom: 1px solid var(--p-line, rgba(23, 53, 54, 0.14)) !important;
+    font: 400 12.5px/1.5 var(--p-font, "DIN 2014", "Barlow", system-ui, sans-serif) !important;
     color: var(--p-ink-2, #2A302E) !important;
     break-inside: avoid !important;
     page-break-inside: avoid !important;
@@ -227,7 +248,7 @@ body.cdd-article-page .cdd-source-note__copy a[data-cdd-source-url]:focus-visibl
 
   body.cdd-print-layout .cdd-source-note__index,
   body.cdd-article-page .cdd-source-note__index {
-    color: #5f625d !important;
+    color: var(--sv-cinnabar, #C93B2A) !important;
   }
 
   body.cdd-print-layout .cdd-source-note__copy a[data-cdd-source-url],
