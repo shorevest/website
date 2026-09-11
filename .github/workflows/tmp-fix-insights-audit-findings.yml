@@ -1,0 +1,124 @@
+name: Fix Insights audit findings
+
+on:
+  push:
+    branches: [fix/insights-full-audit-20260911]
+    paths:
+      - '.github/workflows/tmp-fix-insights-audit-findings.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Apply canonical CDD mappings and legacy aliases
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 <<'PY'
+          from pathlib import Path
+
+          root = Path('.')
+
+          def read(rel):
+              return (root / rel).read_text(encoding='utf-8')
+
+          def write(rel, text):
+              p = root / rel
+              p.parent.mkdir(parents=True, exist_ok=True)
+              p.write_text(text, encoding='utf-8')
+
+          # The 2024 source files inherited historical filenames that no longer
+          # match their corrected public issue numbers. Preserve the old files for
+          # compatibility, but give every public issue its own canonical JSON name.
+          v8i1 = read('assets/data/china-debt-dynamics-v8i1.json')   # content is Volume 8 | Issue 3
+          v8i3_old = read('assets/data/china-debt-dynamics-v8i3.json') # content is Volume 8 | Issue 5
+          v8i5_old = read('assets/data/china-debt-dynamics-v8i5.json') # content is Volume 8 | Issue 6
+          write('assets/data/china-debt-dynamics-v8i6.json', v8i5_old)
+          write('assets/data/china-debt-dynamics-v8i5.json', v8i3_old)
+          write('assets/data/china-debt-dynamics-v8i3.json', v8i1)
+
+          # Source article shells used by the clean-route generator.
+          source_swaps = {
+              'china-debt-dynamics-v8i1.html': ('china-debt-dynamics-v8i1.json', 'china-debt-dynamics-v8i3.json'),
+              'china-debt-dynamics-v8i3.html': ('china-debt-dynamics-v8i3.json', 'china-debt-dynamics-v8i5.json'),
+              'china-debt-dynamics-v8i5.html': ('china-debt-dynamics-v8i5.json', 'china-debt-dynamics-v8i6.json'),
+              'insights/china-debt-dynamics/v8i3/index.html': ('china-debt-dynamics-v8i1.json', 'china-debt-dynamics-v8i3.json'),
+              'insights/china-debt-dynamics/v8i5/index.html': ('china-debt-dynamics-v8i3.json', 'china-debt-dynamics-v8i5.json'),
+              'insights/china-debt-dynamics/v8i6/index.html': ('china-debt-dynamics-v8i5.json', 'china-debt-dynamics-v8i6.json'),
+          }
+          for rel, (old, new) in source_swaps.items():
+              text = read(rel)
+              if old not in text:
+                  raise SystemExit(f'{rel}: expected {old} not found')
+              write(rel, text.replace(old, new))
+
+          # Archive PDF buttons should always target the canonical issue source.
+          archive_files = ['insights.html', 'insights/index.html', 'insights_cn.html', 'cn/insights/index.html']
+          for rel in archive_files:
+              text = read(rel)
+              swaps = {
+                  'source=assets/data/china-debt-dynamics-v8i1.json': 'source=assets/data/china-debt-dynamics-__V8I3__.json',
+                  'source=assets/data/china-debt-dynamics-v8i3.json': 'source=assets/data/china-debt-dynamics-__V8I5__.json',
+                  'source=assets/data/china-debt-dynamics-v8i5.json': 'source=assets/data/china-debt-dynamics-__V8I6__.json',
+              }
+              for old, tmp in swaps.items():
+                  text = text.replace(old, tmp)
+              text = (text
+                  .replace('china-debt-dynamics-__V8I3__.json', 'china-debt-dynamics-v8i3.json')
+                  .replace('china-debt-dynamics-__V8I5__.json', 'china-debt-dynamics-v8i5.json')
+                  .replace('china-debt-dynamics-__V8I6__.json', 'china-debt-dynamics-v8i6.json'))
+              # CN had one old static v10i2 PDF while EN uses the shared print route.
+              text = text.replace(
+                  'href="assets/pdfs/china-debt-dynamics-47-high-private-credit-returns-low-rate-environment.pdf"',
+                  'href="/insights/china-debt-dynamics/print/?source=assets/data/china-debt-dynamics-v10i2.json&amp;pdf=1"'
+              )
+              write(rel, text)
+
+          # These two corrected canonical issue IDs never had matching root-level
+          # legacy filenames. Add lightweight compatibility pages so old-style URLs
+          # do not 404, while keeping the clean routes canonical.
+          def alias_html(issue, title):
+              target = f'/insights/china-debt-dynamics/{issue}/'
+              return f'''<!doctype html>\n<html lang="en">\n<head>\n  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <title>{title} | ShoreVest</title>\n  <meta name="robots" content="noindex, follow">\n  <link rel="canonical" href="https://shorevest.com{target}">\n  <meta http-equiv="refresh" content="0; url={target}">\n  <script>location.replace('{target}' + location.search + location.hash);</script>\n</head>\n<body>\n  <p><a href="{target}">Continue to the ShoreVest Insight</a></p>\n</body>\n</html>\n'''
+          write('china-debt-dynamics-v8i6.html', alias_html('v8i6', 'United States of China'))
+          write('china-debt-dynamics-v9i4.html', alias_html('v9i4', "Beijing’s Campaign Against Overcapacity Creates Private Credit Opportunities"))
+
+          # Do not let the clean-route generator treat the compatibility aliases as
+          # competing source pages for routes already generated from approved shells.
+          gen_rel = 'scripts/generate-clean-public-urls.js'
+          gen = read(gen_rel)
+          marker = 'function routeForSource(source) {\n'
+          guard = "function routeForSource(source) {\n  if (source === 'china-debt-dynamics-v8i6.html' || source === 'china-debt-dynamics-v9i4.html') return null;\n"
+          if guard not in gen:
+              if marker not in gen:
+                  raise SystemExit('routeForSource marker not found')
+              gen = gen.replace(marker, guard, 1)
+          write(gen_rel, gen)
+
+          # The full live audit must activate lazy figures before judging whether
+          # their image bytes loaded. This avoids treating intentionally lazy images
+          # below the fold as broken on a desktop viewport.
+          audit_rel = '.github/workflows/tmp-full-insights-live-audit.yml'
+          audit = read(audit_rel)
+          old = """                await page.waitForFunction(() => document.body?.dataset?.cddReady === 'true', null, {timeout:30000});\n                const dom = await page.evaluate(auditDom);\n                validateLayout(`${issue} ${width}`, dom);"""
+          new = """                await page.waitForFunction(() => document.body?.dataset?.cddReady === 'true', null, {timeout:30000});\n                await page.evaluate(async () => {\n                  const imgs = [...document.querySelectorAll('.cdd-figure img')];\n                  for (const img of imgs) {\n                    img.scrollIntoView({block:'center'});\n                    await new Promise(resolve => setTimeout(resolve, 80));\n                    try { await img.decode(); } catch (_) {}\n                  }\n                  window.scrollTo(0, 0);\n                });\n                const dom = await page.evaluate(auditDom);\n                validateLayout(`${issue} ${width}`, dom);"""
+          if old not in audit:
+              raise SystemExit('audit article block marker not found')
+          audit = audit.replace(old, new, 1)
+          write(audit_rel, audit)
+          PY
+
+          # No temporary fixer should remain in the final branch diff.
+          git rm .github/workflows/tmp-fix-insights-audit-findings.yml
+          git config user.name "shorevest-site-bot"
+          git config user.email "shorevest-site-bot@users.noreply.github.com"
+          git add -A
+          git diff --check
+          git commit -m "Fix Insights canonical PDF mappings and legacy routes"
+          git push origin HEAD:fix/insights-full-audit-20260911
