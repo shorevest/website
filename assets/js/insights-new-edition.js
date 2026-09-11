@@ -232,27 +232,6 @@
     figures.forEach(upgradeFigure);
   }
 
-  function upgradeSourceEntry(entry) {
-    if (!entry || entry.querySelector('.cdd-source-note__copy')) return;
-
-    var text = entry.textContent.trim();
-    var match = text.match(/^\[(\d+)\]\s*([\s\S]*)$/);
-    if (!match) return;
-
-    entry.classList.add('cdd-source-note');
-    entry.textContent = '';
-
-    var index = document.createElement('span');
-    index.className = 'cdd-source-note__index';
-    index.textContent = match[1] + '.';
-
-    var copy = document.createElement('span');
-    copy.className = 'cdd-source-note__copy';
-    copy.textContent = match[2];
-
-    entry.append(index, copy);
-  }
-
   function enhanceCddStructure() {
     if (!document.body || !document.body.classList.contains('cdd-article-page')) return;
 
@@ -273,24 +252,6 @@
       }
     });
 
-    var sourcesHeading = headings.find(function (heading) {
-      return heading.textContent.trim().toLowerCase() === 'sources and notes';
-    });
-    if (!sourcesHeading) return;
-
-    sourcesHeading.classList.add('cdd-sources-heading');
-
-    var node = sourcesHeading.nextElementSibling;
-    while (node && node.tagName !== 'H2') {
-      if (node.tagName === 'P') {
-        upgradeSourceEntry(node);
-      } else if (node.tagName === 'UL' || node.tagName === 'OL') {
-        node.classList.add('cdd-sources-list');
-        node.setAttribute('aria-label', 'Sources and notes');
-        Array.from(node.children).forEach(upgradeSourceEntry);
-      }
-      node = node.nextElementSibling;
-    }
   }
 
   function start() {
