@@ -23,70 +23,76 @@ jobs:
           node <<'NODE'
           const { chromium } = require('playwright-core');
           const fs = require('fs');
-          const candidates = ['/usr/bin/google-chrome','/usr/bin/google-chrome-stable','/usr/bin/chromium','/usr/bin/chromium-browser'];
-          const executablePath = candidates.find(p => fs.existsSync(p));
-          if (!executablePath) throw new Error('No system Chrome/Chromium found');
 
-          const url = `https://shorevest.com/insights/china-debt-dynamics/v9i3/?t=refs5-${Date.now()}`;
-          const browser = await chromium.launch({ headless: true, executablePath });
+          (async () => {
+            const candidates = ['/usr/bin/google-chrome','/usr/bin/google-chrome-stable','/usr/bin/chromium','/usr/bin/chromium-browser'];
+            const executablePath = candidates.find(p => fs.existsSync(p));
+            if (!executablePath) throw new Error('No system Chrome/Chromium found');
 
-          async function inspect(viewport, media) {
-            const page = await browser.newPage({ viewport });
-            await page.goto(url, { waitUntil: 'networkidle', timeout: 90000 });
-            if (media === 'print') await page.emulateMedia({ media: 'print' });
-            await page.waitForSelector('.cdd-sources-heading', { timeout: 30000 });
-            await page.waitForSelector('.cdd-source-note__index', { timeout: 30000 });
-            const result = await page.evaluate(() => {
-              const heading = document.querySelector('.cdd-sources-heading');
-              const note = document.querySelector('.cdd-source-note');
-              const index = document.querySelector('.cdd-source-note__index');
-              const list = document.querySelector('.cdd-sources-list');
-              const before = getComputedStyle(heading, '::before');
-              const noteStyle = getComputedStyle(note);
-              const indexStyle = getComputedStyle(index);
-              const listStyle = getComputedStyle(list);
-              const scripts = [...document.scripts].map(s => s.src).filter(Boolean);
-              const styleHref = document.querySelector('link[data-cdd-citation-styles]')?.href || '';
-              return {
-                headingText: heading.textContent.trim(),
-                beforeContent: before.content,
-                beforeDisplay: before.display,
-                beforeWidth: parseFloat(before.width),
-                beforeHeight: parseFloat(before.height),
-                beforeBg: before.backgroundColor,
-                indexColor: indexStyle.color,
-                indexWeight: indexStyle.fontWeight,
-                noteBorderBottomWidth: noteStyle.borderBottomWidth,
-                noteBorderBottomStyle: noteStyle.borderBottomStyle,
-                listBorderTopWidth: listStyle.borderTopWidth,
-                gridTemplateColumns: noteStyle.gridTemplateColumns,
-                articleTemplateFresh: scripts.some(s => s.includes('cdd-article-template.js?v=20260911-citations-2')),
-                issuePagerFresh: scripts.some(s => s.includes('cdd-issue-pager.js?v=20260911-citations-2')),
-                citationCssFresh: styleHref.includes('cdd-citations.css?v=20260911-references-5'),
-              };
-            });
-            await page.close();
-            return result;
-          }
+            const url = `https://shorevest.com/insights/china-debt-dynamics/v9i3/?t=refs5-${Date.now()}`;
+            const browser = await chromium.launch({ headless: true, executablePath });
 
-          function assertResult(label, r) {
-            console.log(label, JSON.stringify(r, null, 2));
-            const red = r.beforeBg === 'rgb(201, 59, 42)' && r.indexColor === 'rgb(201, 59, 42)';
-            if (r.headingText !== 'Sources and Notes') throw new Error(`${label}: heading missing`);
-            if (r.beforeDisplay === 'none' || r.beforeContent === 'none' || !(r.beforeWidth >= 2)) throw new Error(`${label}: cinnabar heading bar missing`);
-            if (!red) throw new Error(`${label}: ShoreVest cinnabar treatment missing`);
-            if (r.noteBorderBottomWidth === '0px' || r.noteBorderBottomStyle === 'none') throw new Error(`${label}: row separators missing`);
-            if (r.listBorderTopWidth === '0px') throw new Error(`${label}: list top rule missing`);
-            if (!r.articleTemplateFresh || !r.issuePagerFresh || !r.citationCssFresh) throw new Error(`${label}: fresh cache-busted assets not loaded`);
-          }
+            async function inspect(viewport, media) {
+              const page = await browser.newPage({ viewport });
+              await page.goto(url, { waitUntil: 'networkidle', timeout: 90000 });
+              if (media === 'print') await page.emulateMedia({ media: 'print' });
+              await page.waitForSelector('.cdd-sources-heading', { timeout: 30000 });
+              await page.waitForSelector('.cdd-source-note__index', { timeout: 30000 });
+              const result = await page.evaluate(() => {
+                const heading = document.querySelector('.cdd-sources-heading');
+                const note = document.querySelector('.cdd-source-note');
+                const index = document.querySelector('.cdd-source-note__index');
+                const list = document.querySelector('.cdd-sources-list');
+                const before = getComputedStyle(heading, '::before');
+                const noteStyle = getComputedStyle(note);
+                const indexStyle = getComputedStyle(index);
+                const listStyle = getComputedStyle(list);
+                const scripts = [...document.scripts].map(s => s.src).filter(Boolean);
+                const styleHref = document.querySelector('link[data-cdd-citation-styles]')?.href || '';
+                return {
+                  headingText: heading.textContent.trim(),
+                  beforeContent: before.content,
+                  beforeDisplay: before.display,
+                  beforeWidth: parseFloat(before.width),
+                  beforeHeight: parseFloat(before.height),
+                  beforeBg: before.backgroundColor,
+                  indexColor: indexStyle.color,
+                  indexWeight: indexStyle.fontWeight,
+                  noteBorderBottomWidth: noteStyle.borderBottomWidth,
+                  noteBorderBottomStyle: noteStyle.borderBottomStyle,
+                  listBorderTopWidth: listStyle.borderTopWidth,
+                  gridTemplateColumns: noteStyle.gridTemplateColumns,
+                  articleTemplateFresh: scripts.some(s => s.includes('cdd-article-template.js?v=20260911-citations-2')),
+                  issuePagerFresh: scripts.some(s => s.includes('cdd-issue-pager.js?v=20260911-citations-2')),
+                  citationCssFresh: styleHref.includes('cdd-citations.css?v=20260911-references-5'),
+                };
+              });
+              await page.close();
+              return result;
+            }
 
-          const desktop = await inspect({ width: 1440, height: 1000 }, 'screen');
-          assertResult('DESKTOP', desktop);
-          const mobile = await inspect({ width: 390, height: 844 }, 'screen');
-          assertResult('MOBILE', mobile);
-          const print = await inspect({ width: 1440, height: 1000 }, 'print');
-          assertResult('PRINT', print);
+            function assertResult(label, r) {
+              console.log(label, JSON.stringify(r, null, 2));
+              const red = r.beforeBg === 'rgb(201, 59, 42)' && r.indexColor === 'rgb(201, 59, 42)';
+              if (r.headingText !== 'Sources and Notes') throw new Error(`${label}: heading missing`);
+              if (r.beforeDisplay === 'none' || r.beforeContent === 'none' || !(r.beforeWidth >= 2)) throw new Error(`${label}: cinnabar heading bar missing`);
+              if (!red) throw new Error(`${label}: ShoreVest cinnabar treatment missing`);
+              if (r.noteBorderBottomWidth === '0px' || r.noteBorderBottomStyle === 'none') throw new Error(`${label}: row separators missing`);
+              if (r.listBorderTopWidth === '0px') throw new Error(`${label}: list top rule missing`);
+              if (!r.articleTemplateFresh || !r.issuePagerFresh || !r.citationCssFresh) throw new Error(`${label}: fresh cache-busted assets not loaded`);
+            }
 
-          await browser.close();
-          console.log('PASS: live ShoreVest Sources and Notes styling is visibly updated and cache-busted.');
+            const desktop = await inspect({ width: 1440, height: 1000 }, 'screen');
+            assertResult('DESKTOP', desktop);
+            const mobile = await inspect({ width: 390, height: 844 }, 'screen');
+            assertResult('MOBILE', mobile);
+            const print = await inspect({ width: 1440, height: 1000 }, 'print');
+            assertResult('PRINT', print);
+
+            await browser.close();
+            console.log('PASS: live ShoreVest Sources and Notes styling is visibly updated and cache-busted.');
+          })().catch((error) => {
+            console.error(error);
+            process.exit(1);
+          });
           NODE
