@@ -81,7 +81,7 @@ jobs:
             console.log(issue,media,width,JSON.stringify(a));
             if(a.version!==VERSION)die(`${issue} ${media}: ${a.version}`);
             if(!a.heading||!a.notes)die(`${issue} ${media}: missing source section`);
-            if(a.hBorderLeft!=='0px')die(`${issue} ${media}: red/decorative heading left border remains (${a.hBorderLeft})`);
+            if(a.hBorderLeft!=='0px')die(`${issue} ${media}: decorative heading left border remains (${a.hBorderLeft})`);
             if(a.hPaddingLeft!=='0px')die(`${issue} ${media}: heading left padding remains (${a.hPaddingLeft})`);
             if(a.hBefore!=='none' && !['none','normal'].includes(a.hBeforeContent))die(`${issue}: heading before decoration remains`);
             if(a.hAfter!=='none' && !['none','normal'].includes(a.hAfterContent))die(`${issue}: heading after decoration remains`);
@@ -118,3 +118,5 @@ jobs:
           name: insight-reference-style-final
           path: qa-final-reference-style
           if-no-files-found: ignore
+
+# Temporary workflow used only for this final live verification pass.
