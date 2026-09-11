@@ -123,6 +123,8 @@
   disclaimer.textContent = safeText(data.disclaimer);
   copyright.textContent = safeText(data.copyright);
 
+  await ensureCitationEnhancer();
+
   if (!isPrint) enhanceScreenLayout();
 
   document.querySelectorAll('[data-print-action="print"]').forEach((button) => {
@@ -172,6 +174,40 @@
 
     await Promise.all([fontPromise, ...imagePromises]);
     await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  }
+
+
+  async function ensureCitationEnhancer() {
+    const citationVersion = '20260911-superscript-1';
+
+    if (window.__CDD_CITATIONS_VERSION !== citationVersion ||
+        typeof window.__cddEnhanceCitations !== 'function') {
+      await new Promise((resolve) => {
+        const script = document.createElement('script');
+        const raw = `/assets/js/cdd-citations.js?v=${citationVersion}`;
+        script.src = typeof window.__svTok === 'function' ? window.__svTok(raw) : raw;
+        script.async = false;
+        script.setAttribute('data-cdd-citations', citationVersion);
+        script.onload = resolve;
+        script.onerror = resolve;
+        document.head.appendChild(script);
+      });
+    }
+
+    if (typeof window.__cddEnhanceCitations === 'function') {
+      window.__cddEnhanceCitations();
+    }
+
+    const style = document.querySelector('link[data-cdd-citation-styles]');
+    if (style && !style.sheet) {
+      await new Promise((resolve) => {
+        style.addEventListener('load', resolve, { once: true });
+        style.addEventListener('error', resolve, { once: true });
+        setTimeout(resolve, 1500);
+      });
+    }
+
+    await new Promise((resolve) => requestAnimationFrame(resolve));
   }
 
 

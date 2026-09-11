@@ -1,34 +1,47 @@
-/* Polished inline source references for China Debt Dynamics. */
-body.cdd-article-page .cdd-inline-citation {
-  display: inline-block;
+/* Standardized source references for ShoreVest Insights / China Debt Dynamics. */
+body.cdd-article-page .cdd-inline-citation,
+body.cdd-print-layout .cdd-inline-citation {
+  display: inline;
   position: relative;
   top: -0.42em;
-  margin-left: 0.14em;
+  margin-left: 0.07em;
   font-family: var(--sv-font, "DIN 2014", "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif);
-  font-size: 0.72em;
-  font-weight: 700;
-  line-height: 1;
+  font-size: 0.66em;
+  font-weight: 600;
+  line-height: 0;
   vertical-align: baseline;
   white-space: nowrap;
+  letter-spacing: 0;
 }
 
-body.cdd-article-page .cdd-inline-citation a {
-  display: inline-block;
-  padding: 0 0.04em;
-  border-bottom: 1px solid transparent;
+body.cdd-article-page .cdd-inline-citation a,
+body.cdd-print-layout .cdd-inline-citation a {
+  display: inline;
+  padding: 0;
+  border: 0;
   color: var(--sv-cinnabar, #C93B2A) !important;
   text-decoration: none !important;
-  transition: border-color 140ms ease, color 140ms ease;
+}
+
+body.cdd-article-page .cdd-inline-citation__separator,
+body.cdd-print-layout .cdd-inline-citation__separator {
+  margin-right: 0.08em;
+  color: currentColor;
 }
 
 body.cdd-article-page .cdd-inline-citation a:hover,
-body.cdd-article-page .cdd-inline-citation a:focus-visible {
-  border-bottom-color: currentColor;
+body.cdd-article-page .cdd-inline-citation a:focus-visible,
+body.cdd-print-layout .cdd-inline-citation a:hover,
+body.cdd-print-layout .cdd-inline-citation a:focus-visible {
   color: var(--sv-cinnabar-d, #9F2F24) !important;
+  text-decoration: underline !important;
+  text-decoration-thickness: 1px !important;
+  text-underline-offset: 0.14em;
   outline: none;
 }
 
-body.cdd-article-page .cdd-source-note {
+body.cdd-article-page .cdd-source-note,
+body.cdd-print-layout .cdd-source-note {
   scroll-margin-top: 96px;
   transition: background-color 220ms ease;
 }
@@ -37,32 +50,27 @@ body.cdd-article-page .cdd-source-note:target {
   background: rgba(201, 59, 42, 0.07);
 }
 
-body.cdd-article-page .cdd-source-note__index {
+body.cdd-article-page .cdd-source-note__index,
+body.cdd-print-layout .cdd-source-note__index {
   font-variant-numeric: tabular-nums;
+  font-weight: 600;
 }
 
-body.cdd-article-page .cdd-source-note__copy a[data-cdd-source-url] {
+body.cdd-article-page .cdd-source-note__copy a[data-cdd-source-url],
+body.cdd-print-layout .cdd-source-note__copy a[data-cdd-source-url] {
   display: inline-block;
   margin: 0 0.16em;
   border-bottom: 1px solid rgba(201, 59, 42, 0.38);
   color: var(--sv-cinnabar, #C93B2A) !important;
   font-weight: 600;
   text-decoration: none !important;
-  transition: border-color 140ms ease, color 140ms ease;
-}
-
-body.cdd-article-page .cdd-source-note__copy a[data-cdd-source-url]:hover,
-body.cdd-article-page .cdd-source-note__copy a[data-cdd-source-url]:focus-visible {
-  border-bottom-color: currentColor;
-  color: var(--sv-cinnabar-d, #9F2F24) !important;
-  outline: none;
 }
 
 @media (max-width: 700px) {
   body.cdd-article-page .cdd-inline-citation {
     top: -0.38em;
-    margin-left: 0.12em;
-    font-size: 0.74em;
+    margin-left: 0.06em;
+    font-size: 0.68em;
   }
 
   body.cdd-article-page .cdd-source-note {
@@ -73,13 +81,17 @@ body.cdd-article-page .cdd-source-note__copy a[data-cdd-source-url]:focus-visibl
 @media print {
   body.cdd-print-layout .cdd-inline-citation,
   body.cdd-article-page .cdd-inline-citation {
-    top: -0.36em;
-    margin-left: 0.1em;
+    top: -0.38em;
+    margin-left: 0.06em;
+    font-size: 0.64em;
+    font-weight: 500;
     color: inherit;
   }
 
   body.cdd-print-layout .cdd-inline-citation a,
-  body.cdd-article-page .cdd-inline-citation a {
+  body.cdd-article-page .cdd-inline-citation a,
+  body.cdd-print-layout .cdd-inline-citation__separator,
+  body.cdd-article-page .cdd-inline-citation__separator {
     border: 0;
     color: inherit !important;
     text-decoration: none !important;

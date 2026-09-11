@@ -244,7 +244,7 @@
 
     var index = document.createElement('span');
     index.className = 'cdd-source-note__index';
-    index.textContent = '[' + match[1] + ']';
+    index.textContent = match[1] + '.';
 
     var copy = document.createElement('span');
     copy.className = 'cdd-source-note__copy';

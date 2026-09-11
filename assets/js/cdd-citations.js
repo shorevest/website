@@ -1,13 +1,16 @@
-/* China Debt Dynamics inline citation treatment.
- * Converts manuscript-style markers such as [7] into visible, accessible
- * superscript links and ties them to the matching Sources and Notes entry.
+/* China Debt Dynamics citation treatment.
+ * Manuscript markers such as [7], [1][2] or [1, 2] are rendered as
+ * clean linked superscript numerals and tied to Sources and Notes.
  */
 (function () {
   'use strict';
 
-  var STYLE_URL = '/assets/css/cdd-citations.css?v=20260722-inline-citations-v2';
+  var VERSION = '20260911-superscript-1';
+  var STYLE_URL = '/assets/css/cdd-citations.css?v=' + VERSION;
   var observer = null;
   var scheduled = false;
+
+  window.__CDD_CITATIONS_VERSION = VERSION;
 
   function withToken(url) {
     if (typeof window.__svTok === 'function') return window.__svTok(url);
@@ -17,12 +20,18 @@
   }
 
   function installStyles() {
-    if (document.querySelector('link[data-cdd-citation-styles]')) return;
-    var link = document.createElement('link');
+    var desired = withToken(STYLE_URL);
+    var link = document.querySelector('link[data-cdd-citation-styles]');
+    if (link) {
+      if (link.href.indexOf('v=' + VERSION) === -1) link.href = desired;
+      return link;
+    }
+    link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = withToken(STYLE_URL);
+    link.href = desired;
     link.setAttribute('data-cdd-citation-styles', 'true');
     document.head.appendChild(link);
+    return link;
   }
 
   function sourceNumber(entry) {
@@ -31,7 +40,7 @@
 
     var index = entry.querySelector && entry.querySelector('.cdd-source-note__index');
     var text = index ? index.textContent : entry.textContent;
-    var match = String(text || '').trim().match(/^\[?(\d+)\]?[.]?/);
+    var match = String(text || '').trim().match(/^\[?(\d+)\]?[.)]?/);
     return match ? match[1] : '';
   }
 
@@ -39,7 +48,7 @@
     var copy = entry.querySelector && entry.querySelector('.cdd-source-note__copy');
     if (copy) return copy.textContent.trim();
     return String(entry.textContent || '')
-      .replace(new RegExp('^\\s*\\[' + number + '\\]\\s*'), '')
+      .replace(new RegExp('^\\s*(?:\\[' + number + '\\]|' + number + '[.)]?)\\s*'), '')
       .trim();
   }
 
@@ -135,7 +144,10 @@
       } else if (node.tagName === 'UL' || node.tagName === 'OL') {
         node.classList.add('cdd-sources-list');
         node.setAttribute('aria-label', 'Sources and notes');
-        Array.from(node.children).forEach(function (entry) {
+        Array.from(node.children).forEach(function (entry, index) {
+          if (!sourceNumber(entry) && node.tagName === 'OL') {
+            entry.dataset.cddSourceNumber = String(index + 1);
+          }
           var listSource = upgradeSourceEntry(entry);
           if (listSource) sources[listSource.number] = listSource;
         });
@@ -153,10 +165,36 @@
     return !parent.closest('a, sup, code, pre, script, style, .cdd-source-note');
   }
 
+  function makeCitationGroup(numbers, sources) {
+    var sup = document.createElement('sup');
+    sup.className = 'cdd-inline-citation';
+
+    numbers.forEach(function (number, index) {
+      var source = sources[number];
+      if (index) {
+        var separator = document.createElement('span');
+        separator.className = 'cdd-inline-citation__separator';
+        separator.textContent = ',';
+        separator.setAttribute('aria-hidden', 'true');
+        sup.appendChild(separator);
+      }
+
+      var link = document.createElement('a');
+      link.href = '#' + source.id;
+      link.textContent = source.number;
+      link.setAttribute('aria-label', 'View source ' + source.number);
+      link.setAttribute('data-cdd-citation', source.number);
+      if (source.title) link.title = 'Source ' + source.number + ': ' + source.title;
+      sup.appendChild(link);
+    });
+
+    return sup;
+  }
+
   function replaceCitationMarkers(root, sources) {
     var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
       acceptNode: function (node) {
-        return eligibleTextNode(node) && /\[\d+\]/.test(node.nodeValue)
+        return eligibleTextNode(node) && /\[\s*\d+/.test(node.nodeValue)
           ? NodeFilter.FILTER_ACCEPT
           : NodeFilter.FILTER_REJECT;
       }
@@ -167,30 +205,20 @@
 
     textNodes.forEach(function (textNode) {
       var text = textNode.nodeValue;
-      var pattern = /\[(\d+)\]/g;
+      var pattern = /(?:\[(?:\d+(?:\s*[,;]\s*\d+)*)\])(?:\s*\[(?:\d+(?:\s*[,;]\s*\d+)*)\])*/g;
       var match;
       var cursor = 0;
       var fragment = document.createDocumentFragment();
       var changed = false;
 
       while ((match = pattern.exec(text))) {
-        var source = sources[match[1]];
-        if (!source) continue;
+        var numbers = (match[0].match(/\d+/g) || []).filter(function (number, index, all) {
+          return all.indexOf(number) === index;
+        });
+        if (!numbers.length || numbers.some(function (number) { return !sources[number]; })) continue;
 
         fragment.appendChild(document.createTextNode(text.slice(cursor, match.index)));
-
-        var sup = document.createElement('sup');
-        sup.className = 'cdd-inline-citation';
-
-        var link = document.createElement('a');
-        link.href = '#' + source.id;
-        link.textContent = '[' + source.number + ']';
-        link.setAttribute('aria-label', 'View source ' + source.number);
-        link.setAttribute('data-cdd-citation', source.number);
-        if (source.title) link.title = 'Source ' + source.number + ': ' + source.title;
-
-        sup.appendChild(link);
-        fragment.appendChild(sup);
+        fragment.appendChild(makeCitationGroup(numbers, sources));
         cursor = pattern.lastIndex;
         changed = true;
       }
@@ -201,17 +229,28 @@
     });
   }
 
+  function isSourcesHeading(heading) {
+    var text = heading.textContent.trim().toLowerCase().replace(/\s+/g, ' ');
+    return text === 'sources and notes' ||
+      text === 'sources & notes' ||
+      text === 'notes and sources' ||
+      text === 'sources' ||
+      text === 'references';
+  }
+
   function enhance() {
     scheduled = false;
-    if (!document.body || !document.body.classList.contains('cdd-article-page')) return;
+    if (!document.body) return;
+    var supported = document.body.classList.contains('cdd-article-page') ||
+      document.body.classList.contains('cdd-print-layout');
+    if (!supported) return;
 
     var article = document.querySelector('[data-cdd-body]');
     if (!article) return;
+    if (article.dataset.cddCitationsEnhanced === VERSION) return;
 
     var headings = Array.from(article.querySelectorAll(':scope > h2'));
-    var sourcesHeading = headings.find(function (heading) {
-      return heading.textContent.trim().toLowerCase() === 'sources and notes';
-    });
+    var sourcesHeading = headings.find(isSourcesHeading);
     if (!sourcesHeading) return;
 
     var sources = collectSources(sourcesHeading);
@@ -222,6 +261,8 @@
       if (node.tagName !== 'H2') replaceCitationMarkers(node, sources);
       node = node.nextElementSibling;
     }
+
+    article.dataset.cddCitationsEnhanced = VERSION;
   }
 
   function scheduleEnhance() {
@@ -238,6 +279,11 @@
     observer = new MutationObserver(scheduleEnhance);
     observer.observe(document.body, { childList: true, subtree: true });
   }
+
+  window.__cddEnhanceCitations = function () {
+    installStyles();
+    enhance();
+  };
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', start, { once: true });
