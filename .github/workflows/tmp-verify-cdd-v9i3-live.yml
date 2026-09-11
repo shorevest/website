@@ -34,7 +34,7 @@ jobs:
           done
           echo "Timed out waiting for durable live print route." >&2
           exit 1
-      - name: Measure live figure in screen and print media
+      - name: Measure all live figures in screen and print media
         shell: bash
         run: |
           set -euo pipefail
@@ -56,56 +56,80 @@ jobs:
             const tol = 1.5;
             const failures = [];
             if (!String(m.source || '').includes('china-debt-dynamics-v9i3')) failures.push(`wrong article source: ${m.source}`);
-            if (m.figure.left < m.shell.left - tol) failures.push(`figure overruns shell left by ${(m.shell.left - m.figure.left).toFixed(2)}px`);
-            if (m.figure.right > m.shell.right + tol) failures.push(`figure overruns shell right by ${(m.figure.right - m.shell.right).toFixed(2)}px`);
-            if (m.image.left < m.media.left - tol) failures.push(`image overruns media left by ${(m.media.left - m.image.left).toFixed(2)}px`);
-            if (m.image.right > m.media.right + tol) failures.push(`image overruns media right by ${(m.image.right - m.media.right).toFixed(2)}px`);
-            if (m.image.width > m.media.width + tol) failures.push(`image wider than media by ${(m.image.width - m.media.width).toFixed(2)}px`);
-            if (m.figureBoxSizing !== 'border-box') failures.push(`figure box-sizing is ${m.figureBoxSizing}`);
-            if (m.imageObjectFit !== 'contain') failures.push(`image object-fit is ${m.imageObjectFit}`);
-            if (m.naturalWidth !== 1200 || m.naturalHeight !== 680) failures.push(`unexpected first SVG size ${m.naturalWidth}x${m.naturalHeight}`);
+            if (m.figures.length !== 5) failures.push(`expected 5 figures, found ${m.figures.length}`);
+            for (const f of m.figures) {
+              const tag = `figure ${f.index + 1} (${f.src.split('/').pop()})`;
+              if (f.figure.left < m.body.left - tol) failures.push(`${tag} overruns body left by ${(m.body.left - f.figure.left).toFixed(2)}px`);
+              if (f.figure.right > m.body.right + tol) failures.push(`${tag} overruns body right by ${(f.figure.right - m.body.right).toFixed(2)}px`);
+              if (f.figure.left < m.shell.left - tol) failures.push(`${tag} overruns shell left`);
+              if (f.figure.right > m.shell.right + tol) failures.push(`${tag} overruns shell right`);
+              if (f.image.left < f.media.left - tol) failures.push(`${tag} image overruns media left by ${(f.media.left - f.image.left).toFixed(2)}px`);
+              if (f.image.right > f.media.right + tol) failures.push(`${tag} image overruns media right by ${(f.image.right - f.media.right).toFixed(2)}px`);
+              if (f.image.width > f.media.width + tol) failures.push(`${tag} image wider than media by ${(f.image.width - f.media.width).toFixed(2)}px`);
+              if (f.figureBoxSizing !== 'border-box') failures.push(`${tag} figure box-sizing is ${f.figureBoxSizing}`);
+              if (f.imageObjectFit !== 'contain') failures.push(`${tag} image object-fit is ${f.imageObjectFit}`);
+              if (!(f.naturalWidth > 0 && f.naturalHeight > 0)) failures.push(`${tag} failed to load`);
+            }
             if (failures.length) throw new Error(`${label}: ${failures.join('; ')}`);
           }
 
           (async () => {
             const browser = await chromium.launch({ headless: true, executablePath, args: ['--no-sandbox'] });
             const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+
+            // The production print template intentionally auto-opens the print dialog.
+            // Neutralize only that browser API in the verifier so the page can finish
+            // rendering; print CSS is exercised separately with emulateMedia('print').
+            await page.addInitScript(() => { window.print = () => {}; });
+
             const url = `https://shorevest.com/insights/china-debt-dynamics/print/?source=assets/data/china-debt-dynamics-v9i3.json&t=${process.env.GITHUB_SHA}`;
             await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
-            await page.waitForSelector('.cdd-figure img', { state: 'visible', timeout: 60000 });
+            await page.waitForFunction(() => {
+              const imgs = [...document.querySelectorAll('.cdd-figure img')];
+              return imgs.length === 5 && imgs.every(img => img.complete && img.naturalWidth > 0);
+            }, null, { timeout: 60000 });
             await page.evaluate(async () => {
-              await Promise.all([...document.images].map(img => img.decode ? img.decode().catch(() => {}) : Promise.resolve()));
+              await Promise.all([...document.querySelectorAll('.cdd-figure img')].map(img => img.decode ? img.decode().catch(() => {}) : Promise.resolve()));
             });
 
             const measure = () => page.evaluate(() => {
               const shell = document.querySelector('.cdd-print-shell');
-              const figure = document.querySelector('.cdd-figure');
-              const media = document.querySelector('.cdd-figure__media') || figure;
-              const img = figure && figure.querySelector('img');
-              if (!shell || !figure || !media || !img) throw new Error('Required live layout nodes missing');
+              const body = document.querySelector('.cdd-body');
+              if (!shell || !body) throw new Error('Required live layout nodes missing');
               const rect = el => {
                 const r = el.getBoundingClientRect();
                 return { left: r.left, right: r.right, width: r.width, top: r.top, bottom: r.bottom, height: r.height };
               };
+              const figures = [...document.querySelectorAll('.cdd-figure')].map((figure, index) => {
+                const media = figure.querySelector('.cdd-figure__media') || figure;
+                const img = figure.querySelector('img');
+                if (!img) throw new Error(`Figure ${index + 1} has no image`);
+                return {
+                  index,
+                  src: img.currentSrc || img.src || '',
+                  figure: rect(figure),
+                  media: rect(media),
+                  image: rect(img),
+                  naturalWidth: img.naturalWidth,
+                  naturalHeight: img.naturalHeight,
+                  figureBoxSizing: getComputedStyle(figure).boxSizing,
+                  imageObjectFit: getComputedStyle(img).objectFit,
+                  imageMaxWidth: getComputedStyle(img).maxWidth
+                };
+              });
               return {
                 source: document.body.dataset.articleSource,
                 viewportWidth: innerWidth,
                 shell: rect(shell),
-                figure: rect(figure),
-                media: rect(media),
-                image: rect(img),
-                naturalWidth: img.naturalWidth,
-                naturalHeight: img.naturalHeight,
-                figureBoxSizing: getComputedStyle(figure).boxSizing,
-                imageObjectFit: getComputedStyle(img).objectFit,
-                imageMaxWidth: getComputedStyle(img).maxWidth
+                body: rect(body),
+                figures
               };
             });
 
             validate('SCREEN', await measure());
             await page.emulateMedia({ media: 'print' });
             validate('PRINT', await measure());
-            console.log('PASS: live v9i3 first figure is contained in both screen preview and print media.');
+            console.log('PASS: all 5 live v9i3 figures are contained in both screen preview and print media.');
             await browser.close();
           })().catch(err => { console.error(err); process.exit(1); });
           NODE
