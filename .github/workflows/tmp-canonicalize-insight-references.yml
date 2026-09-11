@@ -89,3 +89,5 @@ jobs:
           git add assets/css/cdd-article-figures.css assets/js/insights-new-edition.js assets/js/cdd-citations.js assets/js/cdd-issue-pager.js assets/js/cdd-article-template.js
           git commit -m 'Centralize Insight reference styling and behavior'
           git push origin HEAD:main
+
+# One-time migration to make cdd-citations the sole reference system.
