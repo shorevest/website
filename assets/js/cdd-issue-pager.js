@@ -1,14 +1,15 @@
 /* China Debt Dynamics — issue pager.
    Injects a quiet prev/next-issue navigation + "All issues" link at the foot of
    each article (before the legal disclosures). Chronological, newest → oldest.
-   Shared across every CDD article page; finds the current page by filename. */
+   Shared across every CDD article page; identifies the current issue from the
+   canonical clean route so both clean URLs and legacy source pages work. */
 (function () {
-  // Newest first. file = article page; label = issue number; title = short title.
+  // Newest first. file = public destination; label = issue number; title = short title.
   var ISSUES = [
     { file: "/insights/china-debt-dynamics/v10i3/", label: "10.3", title: "Perceptions Versus Reality in China Real Estate" },
     { file: "/insights/china-debt-dynamics/v10i2/", label: "10.2", title: "The Paradox of High Private Credit Returns in China\u2019s Low-rate Environment" },
     { file: "/insights/china-debt-dynamics/v10i1/", label: "10.1", title: "The End of the \u201CChina Is Uninvestable\u201D Myth" },
-    { file: "assets/pdfs/china-debt-dynamics-45-beijings-campaign-against-overcapacity.pdf", label: "9.4", title: "Beijing\u2019s Campaign Against Overcapacity Creates Private Credit Opportunities" },
+    { file: "/insights/china-debt-dynamics/v9i4/", label: "9.4", title: "Beijing\u2019s Campaign Against Overcapacity Creates Private Credit Opportunities" },
     { file: "/insights/china-debt-dynamics/v9i3/", label: "9.3", title: "Into the Shadows of US Private Credit" },
     { file: "/insights/china-debt-dynamics/v9i2/", label: "9.2", title: "China: An Uncorrelated Harbor in a Stormy World" },
     { file: "/insights/china-debt-dynamics/v9i1/", label: "9.1", title: "Green Finance: Sowing the Seeds of China\u2019s Next Wave of NPLs" },
@@ -35,6 +36,24 @@
     return href + (href.indexOf("?") > -1 ? "&" : "?") + "t=" + t;
   }
 
+  function cleanPath(value) {
+    try {
+      var url = new URL(value, document.baseURI);
+      var pathname = (url.pathname || "/").replace(/\/{2,}/g, "/");
+      if (pathname.length > 1 && pathname.charAt(pathname.length - 1) !== "/" && !/\.[^/]+$/.test(pathname)) {
+        pathname += "/";
+      }
+      return pathname.toLowerCase();
+    } catch (_) {
+      return "";
+    }
+  }
+
+  function currentIssuePath() {
+    var canonical = document.querySelector('link[rel="canonical"]');
+    return cleanPath(canonical && canonical.href ? canonical.href : window.location.href);
+  }
+
   function loadCitationEnhancer() {
     if (document.querySelector('script[data-cdd-citations]')) return;
     var script = document.createElement('script');
@@ -47,8 +66,8 @@
   function build() {
     var disc = document.querySelector(".cdd-disclaimer");
     if (!disc || document.querySelector(".cdd-pager")) return;
-    var file = (location.pathname.split("/").pop() || "").toLowerCase();
-    var idx = ISSUES.findIndex(function (it) { return it.file.toLowerCase() === file; });
+    var current = currentIssuePath();
+    var idx = ISSUES.findIndex(function (it) { return cleanPath(it.file) === current; });
     if (idx === -1) return;
     var newer = idx > 0 ? ISSUES[idx - 1] : null;
     var older = idx < ISSUES.length - 1 ? ISSUES[idx + 1] : null;
