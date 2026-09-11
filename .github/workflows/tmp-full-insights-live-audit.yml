@@ -1,0 +1,291 @@
+name: Full Insights live audit
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/tmp-full-insights-live-audit.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Audit all live Insights routes, layouts, links and PDFs
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm ci --ignore-scripts
+          node <<'NODE'
+          const { chromium } = require('playwright-core');
+          const fs = require('fs');
+          const path = require('path');
+
+          const BASE = 'https://shorevest.com';
+          const latestIssue = 'v10i3';
+          const latestTitle = 'Perceptions Versus Reality in China Real Estate';
+          const latestTitleCN = '中国房地产：认知与现实';
+          const executablePath = [
+            '/usr/bin/google-chrome',
+            '/usr/bin/google-chrome-stable',
+            '/usr/bin/chromium',
+            '/usr/bin/chromium-browser'
+          ].find(fs.existsSync);
+          if (!executablePath) throw new Error('Chrome/Chromium not found');
+
+          const issueRoot = path.join(process.cwd(), 'insights', 'china-debt-dynamics');
+          const issues = fs.readdirSync(issueRoot, {withFileTypes:true})
+            .filter(d => d.isDirectory() && /^v\d+i\d+$/i.test(d.name))
+            .map(d => d.name)
+            .sort((a,b) => a.localeCompare(b, undefined, {numeric:true}));
+
+          const failures = [];
+          const warnings = [];
+          const visitedInternal = new Set();
+          const externalSources = new Set();
+          let sameOriginBadResponses = [];
+
+          function fail(msg) { failures.push(msg); console.error('FAIL', msg); }
+          function warn(msg) { warnings.push(msg); console.warn('WARN', msg); }
+          function ok(msg) { console.log('PASS', msg); }
+          function cache(url, label='audit') {
+            const u = new URL(url, BASE);
+            u.searchParams.set('t', `${Date.now()}-${label}-${Math.random().toString(36).slice(2)}`);
+            return u.href;
+          }
+          function cleanUrl(raw) {
+            const u = new URL(raw, BASE);
+            u.searchParams.delete('t');
+            u.hash = '';
+            return u.href;
+          }
+          function sameOriginInsights(raw) {
+            try {
+              const u = new URL(raw, BASE);
+              return u.origin === BASE && (u.pathname.startsWith('/insights') || u.pathname.startsWith('/cn/insights') || /^\/china-debt-dynamics-/i.test(u.pathname));
+            } catch (_) { return false; }
+          }
+          function auditDom() {
+            const imgs = [...document.images].map(img => ({
+              src: img.currentSrc || img.src,
+              complete: img.complete,
+              naturalWidth: img.naturalWidth,
+              naturalHeight: img.naturalHeight,
+              rect: (() => { const r=img.getBoundingClientRect(); return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height}; })()
+            }));
+            const figs = [...document.querySelectorAll('.cdd-figure')].map(fig => {
+              const fr = fig.getBoundingClientRect();
+              const img = fig.querySelector('img');
+              const ir = img ? img.getBoundingClientRect() : null;
+              return {figure:{left:fr.left,right:fr.right,width:fr.width,height:fr.height}, image: ir ? {left:ir.left,right:ir.right,width:ir.width,height:ir.height,naturalWidth:img.naturalWidth,naturalHeight:img.naturalHeight} : null};
+            });
+            const citations = [...document.querySelectorAll('.cdd-inline-citation')].map(x => x.textContent.trim());
+            const sourceIndexes = [...document.querySelectorAll('.cdd-source-note__index')].map(x => x.textContent.trim());
+            const ids = [...document.querySelectorAll('[id]')].map(x => x.id).filter(Boolean);
+            const dupIds = ids.filter((id,i) => ids.indexOf(id) !== i);
+            return {
+              width: innerWidth,
+              docWidth: document.documentElement.scrollWidth,
+              bodyWidth: document.body ? document.body.scrollWidth : 0,
+              imgs,
+              figs,
+              citations,
+              sourceIndexes,
+              dupIds:[...new Set(dupIds)],
+              title: document.title,
+              h1: document.querySelector('h1')?.textContent.trim() || '',
+              ready: document.body?.dataset?.cddReady || '',
+              canonical: document.querySelector('link[rel="canonical"]')?.href || '',
+              anchors: [...document.querySelectorAll('a[href]')].map(a => a.href)
+            };
+          }
+          function validateLayout(label, dom, {allowNoReady=false}={}) {
+            if (!allowNoReady && dom.ready !== 'true') fail(`${label}: CDD renderer not ready`);
+            if (dom.docWidth > dom.width + 3) fail(`${label}: horizontal overflow ${dom.docWidth}px > viewport ${dom.width}px`);
+            const broken = dom.imgs.filter(i => !i.complete || i.naturalWidth <= 0 || i.naturalHeight <= 0);
+            if (broken.length) fail(`${label}: ${broken.length} broken/unloaded image(s): ${broken.slice(0,3).map(x=>x.src).join(', ')}`);
+            dom.figs.forEach((f,i) => {
+              if (!f.image) return fail(`${label}: figure ${i+1} missing image`);
+              if (f.image.left < f.figure.left - 2 || f.image.right > f.figure.right + 2) fail(`${label}: figure ${i+1} image clips/overflows its figure box`);
+              if (f.image.naturalWidth <= 0) fail(`${label}: figure ${i+1} image failed to load`);
+            });
+            if (dom.citations.some(t => /[\[\]]/.test(t))) fail(`${label}: bracketed inline citation remains`);
+            if (dom.sourceIndexes.some(t => /[\[\]]/.test(t))) fail(`${label}: bracketed source-list index remains`);
+            if (dom.dupIds.length) fail(`${label}: duplicate DOM id(s): ${dom.dupIds.slice(0,5).join(', ')}`);
+          }
+
+          (async () => {
+            const browser = await chromium.launch({headless:true, executablePath, args:['--no-sandbox']});
+            const context = await browser.newContext({viewport:{width:1440,height:1000}});
+            const page = await context.newPage();
+            await page.addInitScript(() => { window.print = () => {}; });
+            page.on('response', response => {
+              try {
+                const u = new URL(response.url());
+                if (u.origin === BASE && response.status() >= 400) sameOriginBadResponses.push(`${response.status()} ${u.pathname}${u.search}`);
+              } catch (_) {}
+            });
+
+            // Static source integrity before hitting live pages.
+            if (issues.length !== 22) fail(`repository has ${issues.length} CDD issue directories, expected 22`); else ok('repository has 22 CDD issue directories');
+            for (const issue of issues) {
+              const dataPath = path.join(process.cwd(), 'assets', 'data', `china-debt-dynamics-${issue}.json`);
+              const htmlPath = path.join(issueRoot, issue, 'index.html');
+              if (!fs.existsSync(dataPath)) fail(`${issue}: missing JSON source`);
+              if (!fs.existsSync(htmlPath)) fail(`${issue}: missing canonical article HTML`);
+              if (fs.existsSync(dataPath)) {
+                try {
+                  const data = JSON.parse(fs.readFileSync(dataPath,'utf8'));
+                  if (!data.title || !data.volumeIssue || !data.published || !Array.isArray(data.sections)) fail(`${issue}: incomplete data JSON`);
+                  if (issue === latestIssue) {
+                    if (data.title !== latestTitle) fail(`${issue}: latest title mismatch in JSON`);
+                    if (!/^September 2026$/i.test(data.published || '')) fail(`${issue}: latest publication date mismatch (${data.published})`);
+                  }
+                } catch (e) { fail(`${issue}: invalid JSON: ${e.message}`); }
+              }
+            }
+
+            // Main EN/CN archive pages at desktop and mobile.
+            for (const spec of [
+              {path:'/insights/', label:'EN Insights', latest:latestTitle},
+              {path:'/cn/insights/', label:'CN Insights', latest:latestTitleCN}
+            ]) {
+              for (const width of [1440,390]) {
+                await page.setViewportSize({width,height: width===390 ? 844 : 1000});
+                const resp = await page.goto(cache(BASE + spec.path, `${spec.label}-${width}`), {waitUntil:'networkidle', timeout:60000});
+                if (!resp || resp.status() >= 400) { fail(`${spec.label} ${width}: HTTP ${resp?.status()}`); continue; }
+                const audit = await page.evaluate(({latestIssue}) => {
+                  const rows = [...document.querySelectorAll('.cdd-arc__row')];
+                  const first = rows[0];
+                  return {
+                    ...(() => {
+                      const imgs = [...document.images].map(img => ({src:img.currentSrc||img.src,complete:img.complete,naturalWidth:img.naturalWidth,naturalHeight:img.naturalHeight}));
+                      return {docWidth:document.documentElement.scrollWidth,width:innerWidth,imgs};
+                    })(),
+                    countText: document.querySelector('[data-cdd-arc-count]')?.textContent.trim() || '',
+                    rows: rows.length,
+                    uniqueTargets: new Set(rows.map(r => r.dataset.href)).size,
+                    firstTarget: first?.dataset.href || '',
+                    heroTitle: document.querySelector('.cdd-hero__panel-title')?.textContent.trim() || '',
+                    heroHref: document.querySelector('.cdd-hero__panel-cta')?.getAttribute('href') || '',
+                    firstTitle: first?.querySelector('.cdd-arc__row-title')?.textContent.trim() || '',
+                    readHrefs: rows.map(r => r.querySelector('.cdd-arc__read')?.getAttribute('href') || ''),
+                    pdfHrefs: rows.map(r => r.querySelector('.cdd-arc__pdf')?.getAttribute('href') || ''),
+                    canonical: document.querySelector('link[rel="canonical"]')?.href || ''
+                  };
+                }, {latestIssue});
+                if (audit.rows !== issues.length) fail(`${spec.label} ${width}: ${audit.rows} archive rows, expected ${issues.length}`);
+                if (audit.countText !== String(issues.length)) fail(`${spec.label} ${width}: displayed count ${audit.countText}, expected ${issues.length}`);
+                if (audit.uniqueTargets !== issues.length) fail(`${spec.label} ${width}: duplicate archive targets`);
+                if (!audit.firstTarget.endsWith(`/${latestIssue}/`)) fail(`${spec.label} ${width}: latest archive row is not ${latestIssue}`);
+                if (!audit.heroHref.endsWith(`/${latestIssue}/`)) fail(`${spec.label} ${width}: featured hero is not ${latestIssue}`);
+                if (!audit.heroTitle.includes(spec.latest) || !audit.firstTitle.includes(spec.latest)) fail(`${spec.label} ${width}: latest title not synchronized in hero/archive`);
+                if (audit.readHrefs.some(h => !h || !/\/insights\/china-debt-dynamics\/v\d+i\d+\/$/.test(h))) fail(`${spec.label} ${width}: malformed Read link in archive`);
+                if (audit.pdfHrefs.some(h => !h || !h.includes('/insights/china-debt-dynamics/print/?source=assets/data/china-debt-dynamics-'))) fail(`${spec.label} ${width}: malformed PDF link in archive`);
+                if (audit.docWidth > audit.width + 3) fail(`${spec.label} ${width}: horizontal overflow`);
+                if (audit.imgs.some(i => !i.complete || i.naturalWidth <= 0)) fail(`${spec.label} ${width}: broken image`);
+                ok(`${spec.label} ${width}px archive/hero/layout`);
+              }
+            }
+
+            // All canonical issue pages: desktop + mobile, navigation, citations, images, figures and PDF links.
+            for (const issue of issues) {
+              for (const width of [1440,390]) {
+                await page.setViewportSize({width,height: width===390 ? 844 : 1000});
+                const url = `${BASE}/insights/china-debt-dynamics/${issue}/`;
+                const resp = await page.goto(cache(url, `${issue}-${width}`), {waitUntil:'networkidle', timeout:60000});
+                if (!resp || resp.status() >= 400) { fail(`${issue} ${width}: HTTP ${resp?.status()}`); continue; }
+                await page.waitForFunction(() => document.body?.dataset?.cddReady === 'true', null, {timeout:30000});
+                const dom = await page.evaluate(auditDom);
+                validateLayout(`${issue} ${width}`, dom);
+                if (!dom.h1) fail(`${issue} ${width}: missing rendered H1`);
+                if (!dom.canonical.endsWith(`/insights/china-debt-dynamics/${issue}/`)) fail(`${issue}: canonical URL mismatch: ${dom.canonical}`);
+                const meta = await page.evaluate(issue => ({
+                  back: document.querySelector('.cdd-actions a.cdd-btn:not(.cdd-btn--solid)')?.getAttribute('href') || '',
+                  pdf: document.querySelector('.cdd-actions a.cdd-btn--solid')?.getAttribute('href') || '',
+                  pager:[...document.querySelectorAll('.cdd-issue-pager a[href]')].map(a=>a.getAttribute('href')),
+                  sourceLinks:[...document.querySelectorAll('a[data-cdd-source-url]')].map(a=>a.href)
+                }), issue);
+                if (meta.back !== '/insights/') fail(`${issue}: Back to Insights link is ${meta.back}`);
+                const expectedSource = `source=assets/data/china-debt-dynamics-${issue}.json`;
+                if (!meta.pdf.includes('/insights/china-debt-dynamics/print/') || !meta.pdf.includes(expectedSource) || !meta.pdf.includes('pdf=1')) fail(`${issue}: PDF link does not target its own source (${meta.pdf})`);
+                meta.pager.forEach(h => { if (h) visitedInternal.add(cleanUrl(h)); });
+                meta.sourceLinks.forEach(h => externalSources.add(h));
+                dom.anchors.filter(sameOriginInsights).forEach(h => visitedInternal.add(cleanUrl(h)));
+                if (issue === latestIssue && !dom.title.includes(latestTitle)) fail(`${issue}: new CDD browser title mismatch`);
+                ok(`${issue} ${width}px article`);
+              }
+            }
+
+            // Dynamic print/PDF route for every issue, plus rendered PDF generation sanity.
+            await page.setViewportSize({width:900,height:1200});
+            for (const issue of issues) {
+              const src = `assets/data/china-debt-dynamics-${issue}.json`;
+              const url = `${BASE}/insights/china-debt-dynamics/print/?source=${encodeURIComponent(src)}&pdf=1`;
+              const resp = await page.goto(cache(url, `${issue}-print`), {waitUntil:'networkidle', timeout:60000});
+              if (!resp || resp.status() >= 400) { fail(`${issue} print: HTTP ${resp?.status()}`); continue; }
+              await page.waitForFunction(() => document.body?.dataset?.cddReady === 'true', null, {timeout:30000});
+              await page.emulateMedia({media:'print'});
+              const dom = await page.evaluate(auditDom);
+              validateLayout(`${issue} print`, dom);
+              const sourceAttr = await page.evaluate(() => document.body.dataset.articleSource || '');
+              if (sourceAttr !== src) fail(`${issue} print: active source is ${sourceAttr}, expected ${src}`);
+              const bytes = await page.pdf({format:'A4', printBackground:true, margin:{top:'0',right:'0',bottom:'0',left:'0'}});
+              if (!bytes || bytes.length < 10000) fail(`${issue} print: generated PDF unexpectedly small (${bytes?.length || 0} bytes)`);
+              if (issue === latestIssue && !dom.h1.includes(latestTitle)) fail(`${issue} print: new CDD title mismatch`);
+              ok(`${issue} print/PDF (${bytes.length} bytes)`);
+              await page.emulateMedia({media:'screen'});
+            }
+
+            // Legacy issue aliases should resolve, never 404. Includes the v9i4 path that previously broke.
+            for (const issue of issues) {
+              const legacy = `${BASE}/china-debt-dynamics-${issue}.html`;
+              const resp = await page.goto(cache(legacy, `${issue}-legacy`), {waitUntil:'domcontentloaded', timeout:30000});
+              if (!resp || resp.status() >= 400) fail(`${issue} legacy alias: HTTP ${resp?.status()}`);
+              const finalPath = new URL(page.url()).pathname;
+              if (!(finalPath === `/insights/china-debt-dynamics/${issue}/` || finalPath === `/china-debt-dynamics-${issue}.html`)) fail(`${issue} legacy alias landed on unexpected ${finalPath}`);
+            }
+            ok('legacy vXiY .html aliases return without 404');
+
+            // Check every unique same-origin Insights link discovered from articles/navigation.
+            for (const raw of [...visitedInternal]) {
+              const u = new URL(raw);
+              const r = await context.request.get(u.href, {maxRedirects:10, timeout:30000, failOnStatusCode:false});
+              if (r.status() >= 400) fail(`internal Insights link ${u.pathname}${u.search}: HTTP ${r.status()}`);
+            }
+            ok(`${visitedInternal.size} unique internal Insights links return without 4xx/5xx`);
+
+            // Source links: hard fail only true not-found responses; warn on bot/rate-limit blocks.
+            for (const raw of [...externalSources]) {
+              let r;
+              try {
+                r = await context.request.get(raw, {maxRedirects:10, timeout:30000, failOnStatusCode:false, headers:{'User-Agent':'Mozilla/5.0 ShoreVest QA'}});
+                const s = r.status();
+                if (s === 404 || s === 410) fail(`source link dead (${s}): ${raw}`);
+                else if (s >= 400) warn(`source link returned ${s} (may be bot protection): ${raw}`);
+              } catch (e) { warn(`source link request failed (${e.message}): ${raw}`); }
+            }
+            ok(`${externalSources.size} source URLs syntactically/link-rendered checked`);
+
+            // Any 4xx/5xx same-origin asset or page response encountered during browser passes is a real regression.
+            sameOriginBadResponses = [...new Set(sameOriginBadResponses)].filter(x => !/favicon\.ico/i.test(x));
+            if (sameOriginBadResponses.length) fail(`same-origin 4xx/5xx responses observed: ${sameOriginBadResponses.slice(0,20).join(' | ')}`);
+
+            await browser.close();
+
+            console.log(`\nSUMMARY: ${issues.length} CDD issues; ${externalSources.size} external sources; ${visitedInternal.size} internal links; ${warnings.length} warnings; ${failures.length} failures.`);
+            if (warnings.length) console.log('WARNINGS\n' + warnings.join('\n'));
+            if (failures.length) {
+              console.error('FAILURES\n' + failures.join('\n'));
+              process.exit(1);
+            }
+            console.log('PASS: full live Insights audit completed cleanly, including latest v10i3.');
+          })().catch(err => { console.error(err); process.exit(1); });
+          NODE
