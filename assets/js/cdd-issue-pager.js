@@ -4,7 +4,7 @@
    Shared across every CDD article page; identifies the current issue from the
    canonical clean route so both clean URLs and legacy source pages work. */
 (function () {
-  // Newest first. file = public destination; label = issue number; title = short title.
+  // Newest first. file = public destination; label = public issue number; title = short title.
   var ISSUES = [
     { file: "/insights/china-debt-dynamics/v10i3/", label: "10.3", title: "Perceptions Versus Reality in China Real Estate" },
     { file: "/insights/china-debt-dynamics/v10i2/", label: "10.2", title: "The Paradox of High Private Credit Returns in China\u2019s Low-rate Environment" },
@@ -13,11 +13,11 @@
     { file: "/insights/china-debt-dynamics/v9i3/", label: "9.3", title: "Into the Shadows of US Private Credit" },
     { file: "/insights/china-debt-dynamics/v9i2/", label: "9.2", title: "China: An Uncorrelated Harbor in a Stormy World" },
     { file: "/insights/china-debt-dynamics/v9i1/", label: "9.1", title: "Green Finance: Sowing the Seeds of China\u2019s Next Wave of NPLs" },
-    { file: "/insights/china-debt-dynamics/v8i6/", label: "8.5", title: "United States of China" },
+    { file: "/insights/china-debt-dynamics/v8i6/", label: "8.6", title: "United States of China" },
+    { file: "/insights/china-debt-dynamics/v8i5/", label: "8.5", title: "Private Credit in a Reset World Order" },
     { file: "/insights/china-debt-dynamics/v8i4/", label: "8.4", title: "Quantifying China\u2019s NPL Market" },
-    { file: "/insights/china-debt-dynamics/v8i5/", label: "8.3", title: "Private Credit in a Reset World Order" },
+    { file: "/insights/china-debt-dynamics/v8i3/", label: "8.3", title: "Bailing Out the Banks: The Hidden Significance of Beijing Property Support Measures" },
     { file: "/insights/china-debt-dynamics/v8i2/", label: "8.2", title: "China Refocuses on Financial Risk and Ramps Up NPL Disposals" },
-    { file: "/insights/china-debt-dynamics/v8i3/", label: "8.1", title: "Bailing Out the Banks: The Hidden Significance of Beijing Property Support Measures" },
     { file: "/insights/china-debt-dynamics/v7i4/", label: "7.4", title: "Beijing\u2019s Strategy for Dealing With Local Government Debt: No Bailouts, but a Helping Hand" },
     { file: "/insights/china-debt-dynamics/v7i3/", label: "7.3", title: "Where\u2019s the Stimulus? Parsing Beijing\u2019s Lackluster Response to Growth" },
     { file: "/insights/china-debt-dynamics/v7i2/", label: "7.2", title: "Bank Exposure to Developers: A Challenge but Not a Risk" },
