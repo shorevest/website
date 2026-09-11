@@ -1,0 +1,101 @@
+name: Verify live CDD v9i3 layout
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/tmp-verify-cdd-v9i3-live.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Wait for live Pages content
+        shell: bash
+        run: |
+          set -euo pipefail
+          url="https://shorevest.com/insights/china-debt-dynamics/print/?source=assets/data/china-debt-dynamics-v9i3.json&pdf=1&t=${GITHUB_SHA}"
+          for i in $(seq 1 24); do
+            html="$(curl -fsSL --retry 2 --connect-timeout 10 "$url" || true)"
+            if printf '%s' "$html" | grep -Fq 'cdd-v9i3-figure-fit.css?v=20260911-v9i3-fit-1'; then
+              echo "Live print route is serving the repaired stylesheet set."
+              exit 0
+            fi
+            echo "Attempt $i: waiting for updated Pages content..."
+            sleep 10
+          done
+          echo "Timed out waiting for repaired live print route." >&2
+          exit 1
+      - name: Measure first live figure in headless Chrome
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm ci --ignore-scripts
+          node <<'NODE'
+          const { chromium } = require('playwright-core');
+          const fs = require('fs');
+          const candidates = [
+            '/usr/bin/google-chrome',
+            '/usr/bin/google-chrome-stable',
+            '/usr/bin/chromium',
+            '/usr/bin/chromium-browser'
+          ];
+          const executablePath = candidates.find(fs.existsSync);
+          if (!executablePath) throw new Error('No Chrome/Chromium executable found on runner');
+
+          (async () => {
+            const browser = await chromium.launch({ headless: true, executablePath, args: ['--no-sandbox'] });
+            const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+            const url = `https://shorevest.com/insights/china-debt-dynamics/print/?source=assets/data/china-debt-dynamics-v9i3.json&pdf=1&t=${process.env.GITHUB_SHA}`;
+            await page.goto(url, { waitUntil: 'networkidle', timeout: 120000 });
+            await page.waitForSelector('.cdd-figure img', { state: 'visible', timeout: 60000 });
+            await page.evaluate(async () => {
+              await Promise.all([...document.images].map(img => img.decode ? img.decode().catch(() => {}) : Promise.resolve()));
+            });
+
+            const m = await page.evaluate(() => {
+              const shell = document.querySelector('.cdd-print-shell');
+              const figure = document.querySelector('.cdd-figure');
+              const media = document.querySelector('.cdd-figure__media') || figure;
+              const img = figure && figure.querySelector('img');
+              const rect = el => {
+                const r = el.getBoundingClientRect();
+                return { left: r.left, right: r.right, width: r.width, top: r.top, bottom: r.bottom, height: r.height };
+              };
+              return {
+                source: document.body.dataset.articleSource,
+                shell: rect(shell),
+                figure: rect(figure),
+                media: rect(media),
+                image: rect(img),
+                naturalWidth: img.naturalWidth,
+                naturalHeight: img.naturalHeight,
+                figureBoxSizing: getComputedStyle(figure).boxSizing,
+                imageObjectFit: getComputedStyle(img).objectFit,
+                imageMaxWidth: getComputedStyle(img).maxWidth
+              };
+            });
+            console.log(JSON.stringify(m, null, 2));
+
+            const tol = 1.5;
+            const failures = [];
+            if (!String(m.source || '').includes('china-debt-dynamics-v9i3')) failures.push(`wrong article source: ${m.source}`);
+            if (m.figure.right > m.shell.right + tol) failures.push(`figure overruns shell by ${(m.figure.right - m.shell.right).toFixed(2)}px`);
+            if (m.image.right > m.media.right + tol) failures.push(`image overruns media by ${(m.image.right - m.media.right).toFixed(2)}px`);
+            if (m.image.width > m.media.width + tol) failures.push(`image wider than media by ${(m.image.width - m.media.width).toFixed(2)}px`);
+            if (m.figureBoxSizing !== 'border-box') failures.push(`figure box-sizing is ${m.figureBoxSizing}`);
+            if (m.imageObjectFit !== 'contain') failures.push(`image object-fit is ${m.imageObjectFit}`);
+            if (failures.length) throw new Error(failures.join('; '));
+
+            console.log('PASS: live v9i3 figure fits within the printable shell.');
+            await browser.close();
+          })().catch(err => { console.error(err); process.exit(1); });
+          NODE
