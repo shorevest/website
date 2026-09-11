@@ -1,3 +1,4 @@
+# Temporary self-deleting repair workflow; second commit registers and triggers it.
 name: Repair live CDD v9i3 figures
 
 on:
