@@ -178,7 +178,7 @@
 
 
   async function ensureCitationEnhancer() {
-    const citationVersion = '20260911-references-4';
+    const citationVersion = '20260911-references-5';
 
     if (window.__CDD_CITATIONS_VERSION !== citationVersion ||
         typeof window.__cddEnhanceCitations !== 'function') {

@@ -57,7 +57,7 @@
   function loadCitationEnhancer() {
     if (document.querySelector('script[data-cdd-citations]')) return;
     var script = document.createElement('script');
-    script.src = withToken('/assets/js/cdd-citations.js?v=20260911-references-4');
+    script.src = withToken('/assets/js/cdd-citations.js?v=20260911-references-5');
     script.async = false;
     script.setAttribute('data-cdd-citations', 'true');
     document.head.appendChild(script);
