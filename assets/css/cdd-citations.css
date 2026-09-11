@@ -41,6 +41,23 @@ body.cdd-article-page .cdd-source-note__index {
   font-variant-numeric: tabular-nums;
 }
 
+body.cdd-article-page .cdd-source-note__copy a[data-cdd-source-url] {
+  display: inline-block;
+  margin: 0 0.16em;
+  border-bottom: 1px solid rgba(201, 59, 42, 0.38);
+  color: var(--sv-cinnabar, #C93B2A) !important;
+  font-weight: 600;
+  text-decoration: none !important;
+  transition: border-color 140ms ease, color 140ms ease;
+}
+
+body.cdd-article-page .cdd-source-note__copy a[data-cdd-source-url]:hover,
+body.cdd-article-page .cdd-source-note__copy a[data-cdd-source-url]:focus-visible {
+  border-bottom-color: currentColor;
+  color: var(--sv-cinnabar-d, #9F2F24) !important;
+  outline: none;
+}
+
 @media (max-width: 700px) {
   body.cdd-article-page .cdd-inline-citation {
     top: -0.38em;
