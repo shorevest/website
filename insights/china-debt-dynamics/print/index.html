@@ -52,16 +52,29 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   <script>document.write('<link rel="stylesheet" href="assets/css/cdd-article-figures.css?v=20260911-v9i3-fit-2">');</script>
   <script>document.write('<link rel="stylesheet" href="assets/css/cdd-v9i3-figure-fit.css?v=20260911-v9i3-fit-2">');</script>
 <script src="assets/js/favicon-guard.js?v=20260730-approved-cn-copy-1" defer></script>
+<style media="print">
+  /* Suppress browser-generated URL/date/page metadata in saved PDFs. Keep the
+     document's own page insets inside the A4 sheet instead of in @page margins,
+     where Safari and Chromium may place their headers and footers. */
+  @page { size: A4; margin: 0; }
+  .cdd-print-layout .cdd-print-shell {
+    min-height: 297mm !important;
+    padding-top: var(--p-page-margin-top) !important;
+    padding-bottom: var(--p-page-margin-bottom) !important;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+  html.cdd-print-safari .cdd-print-layout .cdd-print-shell {
+    padding-top: var(--p-page-margin-top) !important;
+    padding-bottom: var(--p-page-margin-bottom) !important;
+  }
+</style>
 <script>
 (function(){
   var ua = navigator.userAgent;
   var isSafari = /Safari/i.test(ua) && !/(Chrome|Chromium|CriOS|FxiOS|Edg|OPR)\//i.test(ua);
   if (isSafari) {
     document.documentElement.classList.add('cdd-print-safari');
-    var pageStyle = document.createElement('style');
-    pageStyle.media = 'print';
-    pageStyle.textContent = '@page { size: A4; margin: 17mm 0 18mm; }';
-    document.head.appendChild(pageStyle);
   }
 })();
 </script>
@@ -86,7 +99,7 @@ document.body.dataset.articleSource =
           <a class="cdd-btn cdd-btn--secondary" href="/insights/china-debt-dynamics/v10i2/" data-cdd-back-to-issue>Back to Issue</a>
           <button class="cdd-btn cdd-btn--solid" type="button" data-print-action="print">Print / Save as PDF</button>
         </div>
-        <p class="cdd-print-note">Tip: choose “Save as PDF” and set Margins to “None” for an edge-to-edge top rule; browser default margins inset printed content.</p>
+        <p class="cdd-print-note">Use “Save as PDF”; page margins and browser URL/date/page metadata are handled automatically.</p>
       </div>
     </div>
   </div>
