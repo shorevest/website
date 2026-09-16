@@ -1,5 +1,5 @@
 (function () {
-  var VERSION = "20260809-copy-normalizer-1";
+  var VERSION = "20260916-analytics-seo-1";
 
   var GOOGLE_ANALYTICS_ID = "G-CLVYF17N9H";
 
@@ -46,6 +46,28 @@
     document.head.appendChild(analyticsScript);
   }
 
+  function trackAnalyticsEvent(name, parameters) {
+    if (!isPublicAnalyticsPage() || typeof window.gtag !== "function") return;
+    var payload = parameters || {};
+    payload.transport_type = "beacon";
+    window.gtag("event", name, payload);
+  }
+
+  function ensureAnalyticsIntentTracking() {
+    if (!document.documentElement || document.documentElement.getAttribute("data-sv-analytics-intent-ready") === "true") return;
+    document.documentElement.setAttribute("data-sv-analytics-intent-ready", "true");
+
+    document.addEventListener("submit", function (event) {
+      var form = event.target;
+      if (!form || form.id !== "cp-form") return;
+
+      var typeField = form.querySelector('[name="inquiry_type"]');
+      trackAnalyticsEvent("contact_email_open", {
+        inquiry_type: typeField && typeField.value ? typeField.value : "general",
+        site_language: isChinesePage() ? "zh" : "en"
+      });
+    }, true);
+  }
 
   function removeEmptyLegacyToken() {
     try {
@@ -59,8 +81,54 @@
     }
   }
 
+  function legacyInsightTarget() {
+    var pathname = window.location.pathname || "/";
+    var overrides = {
+      "/china-debt-dynamics-v8i5.html": "/insights/china-debt-dynamics/v8i6/",
+      "/china-debt-dynamics-v8i3.html": "/insights/china-debt-dynamics/v8i5/",
+      "/china-debt-dynamics-v8i1.html": "/insights/china-debt-dynamics/v8i3/"
+    };
+    if (overrides[pathname]) return overrides[pathname];
+
+    var match = pathname.match(/^\/china-debt-dynamics-(v\d+i\d+)\.html$/i);
+    return match ? "/insights/china-debt-dynamics/" + match[1].toLowerCase() + "/" : null;
+  }
+
+  function redirectLegacyInsightPage() {
+    var target = legacyInsightTarget();
+    if (!target) return false;
+
+    try {
+      var current = new URL(window.location.href);
+      if (current.searchParams.has("t")) return false;
+    } catch (_) {}
+
+    if (document.head) {
+      var robots = document.head.querySelector('meta[name="robots"]');
+      if (!robots) {
+        robots = document.createElement("meta");
+        robots.setAttribute("name", "robots");
+        document.head.appendChild(robots);
+      }
+      robots.setAttribute("content", "noindex, follow");
+
+      var canonical = document.head.querySelector('link[rel="canonical"]');
+      if (!canonical) {
+        canonical = document.createElement("link");
+        canonical.setAttribute("rel", "canonical");
+        document.head.appendChild(canonical);
+      }
+      canonical.setAttribute("href", "https://shorevest.com" + target);
+    }
+
+    window.location.replace(target + (window.location.search || "") + (window.location.hash || ""));
+    return true;
+  }
+
   removeEmptyLegacyToken();
+  if (redirectLegacyInsightPage()) return;
   ensureGoogleAnalytics();
+  ensureAnalyticsIntentTracking();
 
   // Resolve the site base from this script's own URL so shared assets work
   // whether the site is served from the domain root or a GitHub Pages subpath.
@@ -240,6 +308,10 @@
         return;
       }
 
+      trackAnalyticsEvent("investor_portal_access", {
+        portal_provider: "ideals",
+        site_language: isChinese ? "zh" : "en"
+      });
       window.location.href = "https://app.idealsvdr.com/projects/all/documents?email=" + encodeURIComponent(email);
     }, true);
   }
