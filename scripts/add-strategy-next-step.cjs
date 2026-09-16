@@ -141,7 +141,7 @@ function applyCss(css) {
   if (start !== -1) {
     next = css.slice(0, start).replace(/\s+$/, '') + '\n';
   }
-  return next.replace(/\s*$/, '') + CSS_BLOCK + '\n';
+  return next.replace(/\s*$/, '') + CSS_BLOCK.trimEnd() + '\n';
 }
 
 function validatePage(rel) {
