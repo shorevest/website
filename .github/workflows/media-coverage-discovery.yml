@@ -1,0 +1,98 @@
+name: Media coverage discovery
+
+on:
+  schedule:
+    - cron: '17 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: media-coverage-discovery
+  cancel-in-progress: false
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Prepare persistent review branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "shorevest-media-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+
+          if git ls-remote --exit-code --heads origin automation/media-coverage >/dev/null 2>&1; then
+            git fetch origin automation/media-coverage
+            git switch -C automation/media-coverage origin/automation/media-coverage
+            git merge origin/main --no-edit
+          else
+            git switch -c automation/media-coverage origin/main
+          fi
+
+      - name: Discover recent coverage
+        run: node scripts/discover-media-coverage.mjs
+
+      - name: Commit candidates
+        id: commit
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if git diff --quiet -- assets/data/media-archive.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            git push origin automation/media-coverage
+            exit 0
+          fi
+
+          git add assets/data/media-archive.json
+          git commit -m "chore(media): review discovered coverage"
+          git push origin automation/media-coverage
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Open or refresh review pull request
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          title="Review newly discovered ShoreVest coverage"
+          body=$(cat <<'EOF'
+          Automated media discovery found one or more recent references to ShoreVest or Benjamin Fanger.
+
+          Review checklist before merging:
+          - Confirm the item is genuinely about or materially features ShoreVest.
+          - Confirm the framing is suitable for the public Media page; automation does not make the editorial decision.
+          - Replace the Google News discovery URL with the publisher's canonical URL when practical.
+          - Confirm publication, date, title and format are accurate.
+          - Preserve labels such as Sponsored, Partner Content or Advertorial where applicable.
+          - Remove duplicates and anything that should not appear in the public archive.
+          - Do not add or republish article body text without confirmed rights.
+
+          Merging this PR is the publishing gate. Until it is merged, discovered items do not appear on shorevest.com.
+          EOF
+          )
+
+          pr_number=$(gh pr list --base main --head automation/media-coverage --state open --json number --jq '.[0].number // empty')
+          if [ -n "$pr_number" ]; then
+            gh pr edit "$pr_number" --title "$title" --body "$body"
+          else
+            gh pr create --base main --head automation/media-coverage --title "$title" --body "$body"
+          fi
