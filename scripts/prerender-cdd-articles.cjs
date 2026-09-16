@@ -8,6 +8,8 @@ const RENDERER = 'assets/js/cdd-article-template.js';
 const PRERENDER_ATTR = 'data-cdd-prerendered="true"';
 const SCHEMA_ATTR = 'data-cdd-article-schema="true"';
 const RENDERER_MARKER = 'Static CDD HTML is prerendered for crawlers and no-JS readers.';
+const DEFAULT_ARTICLE_IMAGE = '/assets/img/trees/home-hero-metasequoia-sq.jpg';
+const PUBLISHER_LOGO = 'https://shorevest.com/assets/brand/sv-lockup-fc-dark.png';
 
 function read(rel) {
   return fs.readFileSync(path.join(ROOT, rel), 'utf8');
@@ -110,10 +112,21 @@ function canonicalFromHtml(html) {
 }
 
 function publishedIso(value) {
-  const match = /^\s*(January|February|March|April|May|June|July|August|September|October|November|December)\s+(20\d{2})\s*$/i.exec(String(value || ''));
-  if (!match) return null;
+  const raw = String(value || '').trim();
+  if (!raw) return null;
+  if (/^20\d{2}-\d{2}(?:-\d{2})?$/.test(raw)) return raw;
+
   const months = ['january','february','march','april','may','june','july','august','september','october','november','december'];
-  return `${match[2]}-${String(months.indexOf(match[1].toLowerCase()) + 1).padStart(2, '0')}`;
+  const full = /^\s*(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2}),?\s+(20\d{2})\s*$/i.exec(raw);
+  if (full) {
+    const month = String(months.indexOf(full[1].toLowerCase()) + 1).padStart(2, '0');
+    const day = String(Number(full[2])).padStart(2, '0');
+    return `${full[3]}-${month}-${day}`;
+  }
+
+  const monthOnly = /^\s*(January|February|March|April|May|June|July|August|September|October|November|December)\s+(20\d{2})\s*$/i.exec(raw);
+  if (!monthOnly) return null;
+  return `${monthOnly[2]}-${String(months.indexOf(monthOnly[1].toLowerCase()) + 1).padStart(2, '0')}`;
 }
 
 function absoluteUrl(value) {
@@ -132,7 +145,11 @@ function addSchema(html, data, canonical) {
     publisher: {
       '@type': 'Organization',
       name: 'ShoreVest Partners',
-      url: 'https://shorevest.com/'
+      url: 'https://shorevest.com/',
+      logo: {
+        '@type': 'ImageObject',
+        url: PUBLISHER_LOGO
+      }
     },
     isPartOf: {
       '@type': 'CreativeWorkSeries',
@@ -142,7 +159,7 @@ function addSchema(html, data, canonical) {
   };
   const datePublished = publishedIso(data.published);
   if (datePublished) schema.datePublished = datePublished;
-  const image = absoluteUrl(data.socialImage);
+  const image = absoluteUrl(data.socialImage || DEFAULT_ARTICLE_IMAGE);
   if (image) schema.image = image;
 
   let next = html.replace(/\s*<script\b[^>]*data-cdd-article-schema=["']true["'][^>]*>[\s\S]*?<\/script>\s*/gi, '\n');
