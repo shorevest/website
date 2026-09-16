@@ -5,6 +5,7 @@ on:
     paths:
       - 'scripts/generate-clean-public-urls.js'
       - 'scripts/stamp-legacy-cdd-seo.cjs'
+      - 'scripts/prerender-cdd-articles.cjs'
       - 'scripts/install-google-analytics.cjs'
       - 'scripts/normalize-current-page-fragments.cjs'
       - 'scripts/normalize-public-site.cjs'
@@ -12,6 +13,8 @@ on:
       - 'scripts/normalize-cdd-publication.cjs'
       - 'scripts/normalize-favicons.cjs'
       - 'scripts/add-insight-social-metadata.cjs'
+      - 'assets/data/china-debt-dynamics-*.json'
+      - 'assets/js/cdd-article-template.js'
       - 'assets/js/site-config.js'
       - 'assets/js/recruitment-role-detail.js'
       - 'tests/recruitment-role-detail.test.js'
@@ -68,6 +71,9 @@ jobs:
       - name: Normalize China Debt Dynamics publication files
         run: node scripts/normalize-cdd-publication.cjs
 
+      - name: Prerender China Debt Dynamics article HTML
+        run: node scripts/prerender-cdd-articles.cjs
+
       - name: Refresh public asset versions
         run: |
           sed -i 's/press-page.js?v=20260711-page-size-3/press-page.js?v=20260722-margin-final/g' media.html media_cn.html
@@ -80,6 +86,9 @@ jobs:
 
       - name: Stamp legacy CDD SEO signals
         run: node scripts/stamp-legacy-cdd-seo.cjs
+
+      - name: Validate prerendered CDD article HTML
+        run: node scripts/prerender-cdd-articles.cjs --validate
 
       - name: Validate analytics consent gating
         run: node scripts/install-google-analytics.cjs --validate
@@ -149,6 +158,9 @@ jobs:
       - name: Normalize China Debt Dynamics publication files
         run: node scripts/normalize-cdd-publication.cjs
 
+      - name: Prerender China Debt Dynamics article HTML
+        run: node scripts/prerender-cdd-articles.cjs
+
       - name: Refresh public asset versions
         run: |
           sed -i 's/press-page.js?v=20260711-page-size-3/press-page.js?v=20260722-margin-final/g' media.html media_cn.html
@@ -161,6 +173,9 @@ jobs:
 
       - name: Stamp legacy CDD SEO signals
         run: node scripts/stamp-legacy-cdd-seo.cjs
+
+      - name: Validate prerendered CDD article HTML
+        run: node scripts/prerender-cdd-articles.cjs --validate
 
       - name: Validate analytics consent gating
         run: node scripts/install-google-analytics.cjs --validate
