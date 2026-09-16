@@ -5,9 +5,9 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const GA_ID = 'G-CLVYF17N9H';
-const INSTALLER_VERSION = '20260801-1';
+const INSTALLER_VERSION = '20260916-consent-1';
 
-const GA_BLOCK = [
+const LEGACY_GA_BLOCK = [
   '<!-- Google tag (gtag.js) -->',
   `<script async src="https://www.googletagmanager.com/gtag/js?id=${GA_ID}"></script>`,
   '<script>',
@@ -39,16 +39,17 @@ function isPublicHtml(absolute) {
   return true;
 }
 
-function installTag(html) {
-  if (!/<head(?:\s|>)/i.test(html)) return html;
-  if (html.includes(GA_ID)) return html;
+function removeLegacyDirectTag(html) {
+  if (!html.includes(GA_ID)) return html;
+  return html
+    .replace(LEGACY_GA_BLOCK, '')
+    .replace(/\n{3,}/g, '\n\n');
+}
 
-  const viewport = /<meta\b[^>]*\bname=(["'])viewport\1[^>]*>/i;
-  if (viewport.test(html)) {
-    return html.replace(viewport, match => `${match}\n${GA_BLOCK}`);
-  }
-
-  return html.replace(/<\/head>/i, `${GA_BLOCK}\n</head>`);
+function hasLegacyDirectTag(html) {
+  return html.includes(`googletagmanager.com/gtag/js?id=${GA_ID}`) ||
+    html.includes(`gtag('config', '${GA_ID}')`) ||
+    html.includes(`gtag(\"config\", \"${GA_ID}\")`);
 }
 
 function updateSecurityHeaders() {
@@ -77,12 +78,12 @@ function main() {
   const validate = process.argv.includes('--validate');
   const publicHtml = walk(ROOT).filter(isPublicHtml);
   const changed = [];
-  const missing = [];
+  const remaining = [];
 
   for (const absolute of publicHtml) {
     const relative = path.relative(ROOT, absolute).split(path.sep).join('/');
     const before = fs.readFileSync(absolute, 'utf8');
-    const after = installTag(before);
+    const after = removeLegacyDirectTag(before);
 
     if (after !== before) {
       changed.push(relative);
@@ -90,21 +91,21 @@ function main() {
     }
 
     const inspected = validate ? before : after;
-    if (/<head(?:\s|>)/i.test(inspected) && !inspected.includes(GA_ID)) missing.push(relative);
+    if (hasLegacyDirectTag(inspected)) remaining.push(relative);
   }
 
   const headersChanged = validate ? false : updateSecurityHeaders();
 
-  if (validate && missing.length) {
-    console.error(`Google Analytics tag missing from ${missing.length} public HTML file(s): ${missing.slice(0, 30).join(', ')}`);
+  if (validate && remaining.length) {
+    console.error(`Unconditional Google Analytics tag remains in ${remaining.length} public HTML file(s): ${remaining.slice(0, 30).join(', ')}`);
     process.exit(1);
   }
 
   if (!validate) {
-    console.log(`Installer ${INSTALLER_VERSION}: installed ${GA_ID} across ${changed.length} of ${publicHtml.length} public HTML file(s).`);
-    if (headersChanged) console.log('Updated the static-host Content Security Policy for Google Analytics.');
+    console.log(`Consent normalizer ${INSTALLER_VERSION}: removed unconditional ${GA_ID} tags from ${changed.length} of ${publicHtml.length} public HTML file(s).`);
+    if (headersChanged) console.log('Updated the static-host Content Security Policy for consent-gated Google Analytics.');
   } else {
-    console.log(`Installer ${INSTALLER_VERSION}: validated ${GA_ID} across ${publicHtml.length} public HTML file(s).`);
+    console.log(`Consent normalizer ${INSTALLER_VERSION}: validated ${publicHtml.length} public HTML file(s) have no unconditional ${GA_ID} tag.`);
   }
 }
 
