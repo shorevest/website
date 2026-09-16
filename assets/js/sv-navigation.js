@@ -200,6 +200,40 @@
     archive.parentNode.insertBefore(notice, archive);
   }
 
+  function contactRouteValue(link) {
+    if (!link || !link.querySelector) return '';
+    var label = link.querySelector('.cp-route__label');
+    var text = label ? (label.textContent || '').replace(/\s+/g, ' ').trim().toLowerCase() : '';
+    if (/new opportunities|新项目机会/.test(text)) return 'new_opportunities';
+    if (/investor inquiries|投资者查询/.test(text)) return 'investor';
+    if (/general inquiries|一般咨询/.test(text)) return 'general';
+    return '';
+  }
+
+  function configureContactRoutes() {
+    var form = document.getElementById('cp-form');
+    if (!form) return;
+    eachNode(document.querySelectorAll('.cp-route[href*="#cp-form"]'), function (link) {
+      var inquiryType = contactRouteValue(link);
+      if (inquiryType) link.setAttribute('data-inquiry-type', inquiryType);
+    });
+  }
+
+  document.addEventListener('click', function (event) {
+    var link = event.target && event.target.closest ? event.target.closest('.cp-route[data-inquiry-type]') : null;
+    if (!link) return;
+    var form = document.getElementById('cp-form');
+    var typeField = form && form.querySelector('[name="inquiry_type"]');
+    if (!typeField) return;
+    var inquiryType = link.getAttribute('data-inquiry-type') || '';
+    var option = typeField.querySelector('option[value="' + inquiryType + '"]');
+    if (!option) return;
+    typeField.value = inquiryType;
+    try {
+      typeField.dispatchEvent(new Event('change', { bubbles: true }));
+    } catch (_) {}
+  }, true);
+
   function configureContactForm(config) {
     if (config.contactFormMode !== 'mailto') return;
     var form = document.getElementById('cp-form');
@@ -213,6 +247,34 @@
         ? '提交后将打开您的邮件应用。只有在您检查并发送邮件后，查询才会送达新岸资本。'
         : 'Submitting opens your email application. Your inquiry is not sent to ShoreVest until you review and send the email.';
     }
+
+    var fallback = form.querySelector('.cp-form__fallback');
+    if (!fallback) {
+      fallback = document.createElement('p');
+      fallback.className = 'cp-form__consent cp-form__fallback';
+      fallback.innerHTML = isChinesePage()
+        ? '如果邮件窗口未打开，可直接发送至 <a class="cp-form__fallback-link" href="mailto:inquiries@shorevest.com">inquiries@shorevest.com</a>。'
+        : 'If no email window opens, email <a class="cp-form__fallback-link" href="mailto:inquiries@shorevest.com">inquiries@shorevest.com</a> directly.';
+      if (consent && consent.parentNode) consent.parentNode.insertBefore(fallback, consent.nextSibling);
+      else form.appendChild(fallback);
+    }
+
+    var typeField = form.querySelector('[name="inquiry_type"]');
+    var fallbackLink = fallback.querySelector('.cp-form__fallback-link');
+    function refreshFallbackRecipient() {
+      if (!fallbackLink) return;
+      var recipient = typeField && typeField.value === 'media'
+        ? (config.mediaInquiryRecipient || 'media@shorevest.com')
+        : (config.contactInquiryRecipient || 'inquiries@shorevest.com');
+      fallbackLink.href = 'mailto:' + recipient;
+      fallbackLink.textContent = recipient;
+    }
+    refreshFallbackRecipient();
+    if (typeField && typeField.getAttribute('data-sv-fallback-bound') !== 'true') {
+      typeField.setAttribute('data-sv-fallback-bound', 'true');
+      typeField.addEventListener('change', refreshFallbackRecipient);
+    }
+
     form.setAttribute('data-delivery-mode', 'mailto');
   }
 
@@ -291,6 +353,7 @@
   loadSiteConfig(function (config) {
     if (enforceFeatureRoutes(config)) return;
     applyMediaArchiveState(config);
+    configureContactRoutes();
     configureContactForm(config);
   });
 
