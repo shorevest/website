@@ -76,13 +76,15 @@ function metadataFor(file, html) {
 
   const documentTitle = extract(html, /<title>([\s\S]*?)<\/title>/i).replace(/\s*\|\s*ShoreVest\s*$/i, '');
   const title = String(data.title || documentTitle || 'China Debt Dynamics').trim();
+  const brandedTitle = `${title} | ShoreVest`;
+  const seoTitle = brandedTitle.length <= 60 ? brandedTitle : title;
   const description = compactDescription(data.dek || 'Read China Debt Dynamics from ShoreVest.');
   const image = absoluteUrl(data.socialImage);
   const imageWidth = Number(data.socialImageWidth) || null;
   const imageHeight = Number(data.socialImageHeight) || null;
   const imageAlt = String(data.socialImageAlt || `${title} | ShoreVest`).trim();
 
-  return { canonical, title, description, image, imageWidth, imageHeight, imageAlt };
+  return { canonical, title, seoTitle, description, image, imageWidth, imageHeight, imageAlt };
 }
 
 function metadataBlock(meta) {
@@ -124,6 +126,7 @@ function stripExistingMetadata(html) {
 
 function validate(file, html, meta) {
   const checks = [
+    ['title', new RegExp(`<title>${escapeRegExp(escapeHtml(meta.seoTitle))}<\\/title>`, 'i')],
     ['meta:description', new RegExp(`<meta\\s+name=["']description["'][^>]*content=["']${escapeRegExp(escapeHtml(meta.description))}["']`, 'i')],
     ['og:title', new RegExp(`<meta\\s+property=["']og:title["'][^>]*content=["']${escapeRegExp(escapeHtml(meta.title))}["']`, 'i')],
     ['og:description', new RegExp(`<meta\\s+property=["']og:description["'][^>]*content=["']${escapeRegExp(escapeHtml(meta.description))}["']`, 'i')],
@@ -153,6 +156,7 @@ for (const file of files) {
   }
 
   let updated = stripExistingMetadata(original);
+  updated = updated.replace(/<title>[\s\S]*?<\/title>/i, `<title>${escapeHtml(meta.seoTitle)}</title>`);
   updated = updated.replace(/<\/head>/i, `${metadataBlock(meta)}\n</head>`);
   validate(file, updated, meta);
   if (updated !== original) fs.writeFileSync(file, updated);
