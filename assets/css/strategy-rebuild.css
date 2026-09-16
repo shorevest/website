@@ -1729,3 +1729,47 @@ body.strategy-page .sx-hero__image { display: none !important; }
   body.strategy-page .st-head,
   body.strategy-page .sv-exec__head { column-gap: 0; }
 }
+
+/* ==========================================================================
+   STRATEGY NEXT STEP — engagement bridge
+   Quiet institutional continuation path between strategy content and disclosures.
+   ========================================================================== */
+body.strategy-page .st-next {
+  padding-block: clamp(60px, 6.5vw, 92px);
+  background: var(--sv-stone);
+}
+body.strategy-page .st-next__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(280px, .75fr);
+  gap: clamp(32px, 6vw, 88px);
+  align-items: end;
+}
+body.strategy-page .st-next__copy .sv-h2 {
+  margin-top: 16px;
+  max-width: 17ch;
+}
+body.strategy-page .st-next__body {
+  margin: 20px 0 0;
+  max-width: 48rem;
+  font: 400 16px/1.66 var(--sv-font);
+  color: var(--sv-ink-2);
+}
+body.strategy-page .st-next__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 12px;
+}
+body.strategy-page .st-next__actions .sv-btn:not(.sv-btn--primary) {
+  background: transparent;
+  color: var(--sv-ink);
+  border-color: var(--sv-border-light-strong);
+}
+body.strategy-page .st-next__actions .sv-btn:not(.sv-btn--primary):hover {
+  border-color: var(--sv-ink);
+}
+@media (max-width: 880px) {
+  body.strategy-page .st-next__inner { grid-template-columns: 1fr; gap: 28px; }
+  body.strategy-page .st-next__copy .sv-h2 { max-width: none; }
+  body.strategy-page .st-next__actions { justify-content: flex-start; }
+}
