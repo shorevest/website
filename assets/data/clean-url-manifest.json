@@ -566,117 +566,117 @@
       "route": "/media/aim-summit-unique-post-covid-19-dynamics-in-private-credit/",
       "destination": "media/aim-summit-unique-post-covid-19-dynamics-in-private-credit/index.html",
       "indexable": false,
-      "disabled": true,
-      "reason": "media-archive-disabled",
-      "redirectTarget": "/media/"
+      "disabled": false,
+      "reason": null,
+      "redirectTarget": null
     },
     {
       "source": "media-allaboutalpha-a-comparative-analysis-of-chinese-private-debt.html",
       "route": "/media/allaboutalpha-a-comparative-analysis-of-chinese-private-debt/",
       "destination": "media/allaboutalpha-a-comparative-analysis-of-chinese-private-debt/index.html",
       "indexable": false,
-      "disabled": true,
-      "reason": "media-archive-disabled",
-      "redirectTarget": "/media/"
+      "disabled": false,
+      "reason": null,
+      "redirectTarget": null
     },
     {
       "source": "media-bloomberg-us-firms-could-win-a-lucrative-role-in-cleaning-up-chinas-bad-debt.html",
       "route": "/media/bloomberg-us-firms-could-win-a-lucrative-role-in-cleaning-up-chinas-bad-debt/",
       "destination": "media/bloomberg-us-firms-could-win-a-lucrative-role-in-cleaning-up-chinas-bad-debt/index.html",
       "indexable": false,
-      "disabled": true,
-      "reason": "media-archive-disabled",
-      "redirectTarget": "/media/"
+      "disabled": false,
+      "reason": null,
+      "redirectTarget": null
     },
     {
       "source": "media-debtwire-the-new-global-npl-markets.html",
       "route": "/media/debtwire-the-new-global-npl-markets/",
       "destination": "media/debtwire-the-new-global-npl-markets/index.html",
       "indexable": false,
-      "disabled": true,
-      "reason": "media-archive-disabled",
-      "redirectTarget": "/media/"
+      "disabled": false,
+      "reason": null,
+      "redirectTarget": null
     },
     {
       "source": "media-nikkei-asia-china-debt-could-prompt-7-7-trillion-asset-sale.html",
       "route": "/media/nikkei-asia-china-debt-could-prompt-7-7-trillion-asset-sale/",
       "destination": "media/nikkei-asia-china-debt-could-prompt-7-7-trillion-asset-sale/index.html",
       "indexable": false,
-      "disabled": true,
-      "reason": "media-archive-disabled",
-      "redirectTarget": "/media/"
+      "disabled": false,
+      "reason": null,
+      "redirectTarget": null
     },
     {
       "source": "media-pensions-investments-few-foreign-investors-positioned-for-china-npls.html",
       "route": "/media/pensions-investments-few-foreign-investors-positioned-for-china-npls/",
       "destination": "media/pensions-investments-few-foreign-investors-positioned-for-china-npls/index.html",
       "indexable": false,
-      "disabled": true,
-      "reason": "media-archive-disabled",
-      "redirectTarget": "/media/"
+      "disabled": false,
+      "reason": null,
+      "redirectTarget": null
     },
     {
       "source": "media-private-debt-investor-shorevest-partners-on-the-case-for-china.html",
       "route": "/media/private-debt-investor-shorevest-partners-on-the-case-for-china/",
       "destination": "media/private-debt-investor-shorevest-partners-on-the-case-for-china/index.html",
       "indexable": false,
-      "disabled": true,
-      "reason": "media-archive-disabled",
-      "redirectTarget": "/media/"
+      "disabled": false,
+      "reason": null,
+      "redirectTarget": null
     },
     {
       "source": "media-reorg-china-npl-investors-call-the-us-china-trade-deal-a-positive-development.html",
       "route": "/media/reorg-china-npl-investors-call-the-us-china-trade-deal-a-positive-development/",
       "destination": "media/reorg-china-npl-investors-call-the-us-china-trade-deal-a-positive-development/index.html",
       "indexable": false,
-      "disabled": true,
-      "reason": "media-archive-disabled",
-      "redirectTarget": "/media/"
+      "disabled": false,
+      "reason": null,
+      "redirectTarget": null
     },
     {
       "source": "media-reuters-the-exchange-chinas-bad-debt-opportunity.html",
       "route": "/media/reuters-the-exchange-chinas-bad-debt-opportunity/",
       "destination": "media/reuters-the-exchange-chinas-bad-debt-opportunity/index.html",
       "indexable": false,
-      "disabled": true,
-      "reason": "media-archive-disabled",
-      "redirectTarget": "/media/"
+      "disabled": false,
+      "reason": null,
+      "redirectTarget": null
     },
     {
       "source": "media-shorevest-chinas-credit-environment-in-the-wake-of-covid-19.html",
       "route": "/media/shorevest-chinas-credit-environment-in-the-wake-of-covid-19/",
       "destination": "media/shorevest-chinas-credit-environment-in-the-wake-of-covid-19/index.html",
       "indexable": false,
-      "disabled": true,
-      "reason": "media-archive-disabled",
-      "redirectTarget": "/media/"
+      "disabled": false,
+      "reason": null,
+      "redirectTarget": null
     },
     {
       "source": "media-the-economist-as-chinas-debt-soars-the-market-for-buying-bad-loans-revs-up.html",
       "route": "/media/the-economist-as-chinas-debt-soars-the-market-for-buying-bad-loans-revs-up/",
       "destination": "media/the-economist-as-chinas-debt-soars-the-market-for-buying-bad-loans-revs-up/index.html",
       "indexable": false,
-      "disabled": true,
-      "reason": "media-archive-disabled",
-      "redirectTarget": "/media/"
+      "disabled": false,
+      "reason": null,
+      "redirectTarget": null
     },
     {
       "source": "media-the-economist-breaking-bad.html",
       "route": "/media/the-economist-breaking-bad/",
       "destination": "media/the-economist-breaking-bad/index.html",
       "indexable": false,
-      "disabled": true,
-      "reason": "media-archive-disabled",
-      "redirectTarget": "/media/"
+      "disabled": false,
+      "reason": null,
+      "redirectTarget": null
     },
     {
       "source": "media-the-economist-money-talks-china-financial-system-distressed-debt.html",
       "route": "/media/the-economist-money-talks-china-financial-system-distressed-debt/",
       "destination": "media/the-economist-money-talks-china-financial-system-distressed-debt/index.html",
       "indexable": false,
-      "disabled": true,
-      "reason": "media-archive-disabled",
-      "redirectTarget": "/media/"
+      "disabled": false,
+      "reason": null,
+      "redirectTarget": null
     },
     {
       "source": "privacy-policy.html",
