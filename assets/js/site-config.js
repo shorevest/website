@@ -27,7 +27,7 @@
   var SITE_CONFIG = {
     showShoreVestOnePublicLink: false,
     careersOpenRolesEnabled: true,
-    mediaArchiveEnabled: false,
+    mediaArchiveEnabled: true,
     contactFormMode: 'mailto',
     contactInquiryRecipient: 'inquiries@shorevest.com',
     mediaInquiryRecipient: 'media@shorevest.com'
