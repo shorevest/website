@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'scripts/generate-clean-public-urls.js'
+      - 'scripts/stamp-legacy-cdd-seo.cjs'
       - 'scripts/install-google-analytics.cjs'
       - 'scripts/normalize-current-page-fragments.cjs'
       - 'scripts/normalize-public-site.cjs'
@@ -77,6 +78,9 @@ jobs:
       - name: Generate clean routes
         run: node scripts/generate-clean-public-urls.js
 
+      - name: Stamp legacy CDD SEO signals
+        run: node scripts/stamp-legacy-cdd-seo.cjs
+
       - name: Validate analytics consent gating
         run: node scripts/install-google-analytics.cjs --validate
 
@@ -100,6 +104,9 @@ jobs:
 
       - name: Validate favicon declarations
         run: node scripts/normalize-favicons.cjs --validate
+
+      - name: Validate legacy CDD SEO signals
+        run: node scripts/stamp-legacy-cdd-seo.cjs --validate
 
       - name: Check generated changes
         run: git diff --check
@@ -152,6 +159,9 @@ jobs:
       - name: Generate clean routes
         run: node scripts/generate-clean-public-urls.js
 
+      - name: Stamp legacy CDD SEO signals
+        run: node scripts/stamp-legacy-cdd-seo.cjs
+
       - name: Validate analytics consent gating
         run: node scripts/install-google-analytics.cjs --validate
 
@@ -175,6 +185,9 @@ jobs:
 
       - name: Validate favicon declarations
         run: node scripts/normalize-favicons.cjs --validate
+
+      - name: Validate legacy CDD SEO signals
+        run: node scripts/stamp-legacy-cdd-seo.cjs --validate
 
       - name: Check generated changes
         run: git diff --check
