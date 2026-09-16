@@ -1,0 +1,82 @@
+name: Temporary Recruitment Test Readback
+
+# Read-only diagnosis of the failed 8 September scanner verification.
+# Remove after the effective configuration and remaining blocker are recorded.
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/tmp-recruitment-test-readback.yml]
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: recruitment-test-infrastructure
+  cancel-in-progress: false
+
+env:
+  AZURE_CLIENT_ID: 2a5392be-62d3-44ad-8581-0ab5966b4964
+  AZURE_TENANT_ID: 768bd74c-6be4-4c55-b52d-33673e3b8700
+  AZURE_SUBSCRIPTION_ID: 4146f1fc-590f-4ee4-a7b7-57f15c08c74e
+  AZURE_RESOURCE_GROUP: rg-shorevest-recruitment-test-eastasia
+  FUNCTION_APP: svrc26hk-recruit-fn-test
+  CV_STORAGE_ACCOUNT: svrc26hkcvtest
+  SCAN_TOPIC: svrc26hk-recruit-scan-test
+
+jobs:
+  readback:
+    name: Read contained recruitment test configuration
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: recruitment-test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ env.AZURE_CLIENT_ID }}
+          tenant-id: ${{ env.AZURE_TENANT_ID }}
+          subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Verify exact target and public containment
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$(az account show --query id -o tsv)" == "$AZURE_SUBSCRIPTION_ID" ]]
+          [[ "$(az account show --query tenantId -o tsv)" == "$AZURE_TENANT_ID" ]]
+          jq -e '.openRolesEnabled == false and .applicationsEnabled == false' assets/data/recruitment/public-config.json >/dev/null
+          curl --fail --silent --show-error --max-time 30 \
+            https://shorevest.com/assets/data/recruitment/public-config.json \
+            | jq -e '.openRolesEnabled == false and .applicationsEnabled == false' >/dev/null
+
+      - name: Read scanner settings and event destination
+        shell: bash
+        run: |
+          set -euo pipefail
+          scope="/subscriptions/${AZURE_SUBSCRIPTION_ID}/resourceGroups/${AZURE_RESOURCE_GROUP}/providers"
+          storage_id="${scope}/Microsoft.Storage/storageAccounts/${CV_STORAGE_ACCOUNT}"
+          az storage account show -g "$AZURE_RESOURCE_GROUP" -n "$CV_STORAGE_ACCOUNT" \
+            --query '{location:location,allowBlobPublicAccess:allowBlobPublicAccess,allowSharedKeyAccess:allowSharedKeyAccess}' -o json
+          for version in 2025-06-01 2025-07-01-preview; do
+            echo "Scanner readback API: $version"
+            az rest --method get \
+              --url "https://management.azure.com${storage_id}/providers/Microsoft.Security/defenderForStorageSettings/current?api-version=${version}" \
+              --query '{isEnabled:properties.isEnabled,overrideSubscriptionLevelSettings:properties.overrideSubscriptionLevelSettings,malwareScanning:properties.malwareScanning,sensitiveDataDiscovery:properties.sensitiveDataDiscovery}' -o json
+          done
+          az eventgrid event-subscription show \
+            --source-resource-id "${scope}/Microsoft.EventGrid/topics/${SCAN_TOPIC}" \
+            --name defender-malware-results \
+            --query '{state:provisioningState,destination:destination,filter:filter}' -o json
+
+      - name: Read runtime switches and verify health
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Only these non-sensitive flags are emitted. Never print app settings,
+          # tokens, keys, candidate records, storage URLs or document contents.
+          az functionapp config appsettings list -g "$AZURE_RESOURCE_GROUP" -n "$FUNCTION_APP" -o json \
+            | jq '[.[] | select(.name == "RECRUITMENT_API_ENABLED" or .name == "RECRUITMENT_CAPTURE_ONLY_MODE" or .name == "RECRUITMENT_ENVIRONMENT" or .name == "RECRUITMENT_BOT_VERIFICATION_MODE" or .name == "RECRUITMENT_OUTBOX_DELIVERY_ENABLED" or .name == "RECRUITMENT_CANDIDATE_ACK_ENABLED" or .name == "RECRUITMENT_TEAM_NOTIFICATION_ENABLED" or .name == "RECRUITMENT_HR_ACCESS_ENABLED" or .name == "RECRUITMENT_RETENTION_ENABLED" or .name == "RECRUITMENT_RETENTION_DELETION_ENABLED") | {name,value}]'
+          az functionapp function list -g "$AZURE_RESOURCE_GROUP" -n "$FUNCTION_APP" --query '[].name' -o json
+          curl --fail --silent --show-error --max-time 45 \
+            "https://${FUNCTION_APP}.azurewebsites.net/api/recruitment/health" \
+            | jq '{ok,configuration,dependencies}'
