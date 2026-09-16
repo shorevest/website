@@ -1,7 +1,7 @@
-name: Temporary Recruitment Test Defender Setup
+name: Temporary Recruitment Test Defender Repair
 
-# One contained setup run, authorized for this test account only. Remove after
-# evidence is recorded. This does not deploy a Function package or open careers.
+# Repair the existing enabled test-account settings after the verified 500 GB
+# readback mismatch. No new account, subscription plan or Function deployment.
 on:
   push:
     branches: [main]
@@ -26,7 +26,7 @@ env:
 
 jobs:
   setup:
-    name: Configure single-account test malware scanning
+    name: Repair existing test-account scanner settings
     runs-on: ubuntu-latest
     timeout-minutes: 25
     environment: recruitment-test
@@ -90,60 +90,73 @@ jobs:
             > "$RUNNER_TEMP/recruitment-resource-inventory.json"
           jq -c '.[]' "$RUNNER_TEMP/recruitment-resource-inventory.json"
 
-      - name: Compile and preview single-account changes
+      - name: Correct the existing scanner at account scope
+        shell: bash
         run: |
           set -euo pipefail
-          az bicep build --file infra/recruitment/defender-scanning.bicep
-          az deployment group what-if -g "$AZURE_RESOURCE_GROUP" \
-            --template-file infra/recruitment/defender-scanning.bicep \
-            --parameters cvStorageAccountName="$CV_STORAGE_ACCOUNT" \
-              topicName="$SCAN_TOPIC" functionAppName="$FUNCTION_APP" location=eastasia \
-              enablePaidScanning=true capGBPerMonth=1 \
-            --no-pretty-print > "$RUNNER_TEMP/recruitment-defender-what-if.json"
-          # Reject deletions or changes beyond the four declared resource targets.
-          scope="/subscriptions/${AZURE_SUBSCRIPTION_ID}/resourceGroups/${AZURE_RESOURCE_GROUP}/providers"
-          jq -e --arg scope "$scope" --arg account "$CV_STORAGE_ACCOUNT" --arg topic "$SCAN_TOPIC" '
-            [
-              ($scope + "/Microsoft.EventGrid/topics/" + $topic),
-              ($scope + "/Microsoft.EventGrid/topics/" + $topic + "/providers/Microsoft.EventGrid/eventSubscriptions/defender-malware-results"),
-              ($scope + "/Microsoft.EventGrid/topics/" + $topic + "/eventSubscriptions/defender-malware-results"),
-              ($scope + "/Microsoft.Storage/storageAccounts/" + $account + "/providers/Microsoft.Security/defenderForStorageSettings/current"),
-              ($scope + "/Microsoft.Resources/deployments/recruitment-defender-event-delivery")
-            ] | map(ascii_downcase) as $allowed |
-            input.changes | all(.[];
-              .changeType != "Delete" and
-              (.changeType == "Ignore" or .changeType == "NoChange" or
-                ((.resourceId | ascii_downcase) as $id | $allowed | index($id) != null)))
-          ' --null-input "$RUNNER_TEMP/recruitment-defender-what-if.json" >/dev/null
-
-      - name: Enable paid scanner on the test CV account only
-        run: |
-          set -euo pipefail
-          az deployment group create -g "$AZURE_RESOURCE_GROUP" \
-            --name "recruitment-defender-${GITHUB_RUN_ID}" \
-            --template-file infra/recruitment/defender-scanning.bicep \
-            --parameters cvStorageAccountName="$CV_STORAGE_ACCOUNT" \
-              topicName="$SCAN_TOPIC" functionAppName="$FUNCTION_APP" location=eastasia \
-              enablePaidScanning=true capGBPerMonth=1 \
-            --query '{state:properties.provisioningState,outputs:properties.outputs}' \
-            -o json > "$RUNNER_TEMP/recruitment-defender-deployment.json"
+          storage_id="$(jq -r .id "$RUNNER_TEMP/recruitment-storage-controls.json")"
+          settings_url="https://management.azure.com${storage_id}/providers/Microsoft.Security/defenderForStorageSettings/current?api-version=2025-07-01-preview"
+          topic_id="/subscriptions/${AZURE_SUBSCRIPTION_ID}/resourceGroups/${AZURE_RESOURCE_GROUP}/providers/Microsoft.EventGrid/topics/${SCAN_TOPIC}"
+          az rest --method get --url "$settings_url" --query properties -o json \
+            > "$RUNNER_TEMP/recruitment-defender-before.json"
+          # Never turn on a previously disabled paid plan from this repair.
+          jq -e '.isEnabled == true and .overrideSubscriptionLevelSettings == true and .malwareScanning.onUpload.isEnabled == true' \
+            "$RUNNER_TEMP/recruitment-defender-before.json" >/dev/null
+          jq -n --arg topic "$topic_id" '{properties: {
+            isEnabled: true,
+            overrideSubscriptionLevelSettings: true,
+            sensitiveDataDiscovery: {isEnabled: false},
+            malwareScanning: {
+              automatedResponse: "None",
+              blobScanResultsOptions: "None",
+              onUpload: {isEnabled: true, capGBPerMonth: 1,
+                filters: {excludeBlobsWithPrefix: ["recruitment-clean/"]}},
+              scanResultsEventGridTopicResourceId: $topic
+            }
+          }}' > "$RUNNER_TEMP/recruitment-defender-request.json"
+          # Official account-level REST contract. The only Azure write in this
+          # workflow is to the exact existing Defender settings resource above.
+          az rest --method put --url "$settings_url" \
+            --body @"$RUNNER_TEMP/recruitment-defender-request.json" \
+            --query properties -o json > "$RUNNER_TEMP/recruitment-defender-response.json"
+          jq -c . "$RUNNER_TEMP/recruitment-defender-response.json"
 
       - name: Verify effective scanner and event destination
         run: |
           set -euo pipefail
           storage_id="$(jq -r .id "$RUNNER_TEMP/recruitment-storage-controls.json")"
-          az rest --method get \
-            --url "https://management.azure.com${storage_id}/providers/Microsoft.Security/defenderForStorageSettings/current?api-version=2025-06-01" \
-            --query properties -o json > "$RUNNER_TEMP/recruitment-defender-effective.json"
-          jq -e --arg topic "/subscriptions/${AZURE_SUBSCRIPTION_ID}/resourceGroups/${AZURE_RESOURCE_GROUP}/providers/Microsoft.EventGrid/topics/${SCAN_TOPIC}" '
-            .isEnabled == true and .overrideSubscriptionLevelSettings == true and
-            .malwareScanning.onUpload.isEnabled == true and
-            .malwareScanning.onUpload.capGBPerMonth == 1 and
-            .malwareScanning.onUpload.filters.excludeBlobsWithPrefix == ["recruitment-clean/"] and
-            .malwareScanning.scanResultsEventGridTopicResourceId == $topic and
-            (.malwareScanning.operationStatus.code // "Succeeded") == "Succeeded"
-          ' "$RUNNER_TEMP/recruitment-defender-effective.json" >/dev/null
+          scanner_matches() {
+            jq -e --arg topic "/subscriptions/${AZURE_SUBSCRIPTION_ID}/resourceGroups/${AZURE_RESOURCE_GROUP}/providers/Microsoft.EventGrid/topics/${SCAN_TOPIC}" '
+              .isEnabled == true and .overrideSubscriptionLevelSettings == true and
+              .sensitiveDataDiscovery.isEnabled == false and
+              .malwareScanning.automatedResponse == "None" and
+              .malwareScanning.blobScanResultsOptions == "None" and
+              .malwareScanning.onUpload.isEnabled == true and
+              .malwareScanning.onUpload.capGBPerMonth == 1 and
+              .malwareScanning.onUpload.filters.excludeBlobsWithPrefix == ["recruitment-clean/"] and
+              ((.malwareScanning.onUpload.filters.excludeBlobsWithSuffix // []) | length) == 0 and
+              .malwareScanning.onUpload.filters.excludeBlobsLargerThan == null and
+              .malwareScanning.scanResultsEventGridTopicResourceId == $topic and
+              (.malwareScanning.operationStatus.code == null or .malwareScanning.operationStatus.code == "Succeeded")
+            ' "$RUNNER_TEMP/recruitment-defender-effective.json" >/dev/null
+          }
+          # A successful PUT does not prove persistence. Require two successive
+          # matching GETs and retain the mismatched response on failure.
+          matched_reads=0
+          for attempt in $(seq 1 12); do
+            az rest --method get \
+              --url "https://management.azure.com${storage_id}/providers/Microsoft.Security/defenderForStorageSettings/current?api-version=2025-07-01-preview" \
+              --query properties -o json > "$RUNNER_TEMP/recruitment-defender-effective.json"
+            if scanner_matches; then
+              matched_reads=$((matched_reads + 1))
+              if [[ "$matched_reads" == 2 ]]; then break; fi
+            else
+              matched_reads=0
+            fi
+            sleep 5
+          done
           jq -c . "$RUNNER_TEMP/recruitment-defender-effective.json"
+          [[ "$matched_reads" == 2 ]] || { echo 'Effective scanner controls still differ; keep candidate capture disabled.' >&2; exit 1; }
           topic_id="/subscriptions/${AZURE_SUBSCRIPTION_ID}/resourceGroups/${AZURE_RESOURCE_GROUP}/providers/Microsoft.EventGrid/topics/${SCAN_TOPIC}"
           az eventgrid event-subscription show --source-resource-id "$topic_id" \
             --name defender-malware-results \
@@ -163,8 +176,9 @@ jobs:
           path: |
             ${{ runner.temp }}/recruitment-storage-controls.json
             ${{ runner.temp }}/recruitment-resource-inventory.json
-            ${{ runner.temp }}/recruitment-defender-what-if.json
-            ${{ runner.temp }}/recruitment-defender-deployment.json
+            ${{ runner.temp }}/recruitment-defender-before.json
+            ${{ runner.temp }}/recruitment-defender-request.json
+            ${{ runner.temp }}/recruitment-defender-response.json
             ${{ runner.temp }}/recruitment-defender-effective.json
             ${{ runner.temp }}/recruitment-scan-delivery.json
           if-no-files-found: warn
