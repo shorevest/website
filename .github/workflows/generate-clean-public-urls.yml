@@ -6,6 +6,7 @@ on:
       - 'scripts/generate-clean-public-urls.js'
       - 'scripts/stamp-legacy-cdd-seo.cjs'
       - 'scripts/prerender-cdd-articles.cjs'
+      - 'scripts/add-strategy-next-step.cjs'
       - 'scripts/install-google-analytics.cjs'
       - 'scripts/normalize-current-page-fragments.cjs'
       - 'scripts/normalize-public-site.cjs'
@@ -15,6 +16,7 @@ on:
       - 'scripts/add-insight-social-metadata.cjs'
       - 'assets/data/china-debt-dynamics-*.json'
       - 'assets/js/cdd-article-template.js'
+      - 'assets/js/strategy-engagement.js'
       - 'assets/js/site-config.js'
       - 'assets/js/recruitment-role-detail.js'
       - 'tests/recruitment-role-detail.test.js'
@@ -60,7 +62,7 @@ jobs:
           node-version: '24'
 
       - name: Validate analytics scripts
-        run: node --check assets/js/favicon-guard.js && node --check scripts/install-google-analytics.cjs
+        run: node --check assets/js/favicon-guard.js && node --check assets/js/strategy-engagement.js && node --check scripts/install-google-analytics.cjs
 
       - name: Remove unconditional analytics tags
         run: node scripts/install-google-analytics.cjs
@@ -74,6 +76,9 @@ jobs:
       - name: Prerender China Debt Dynamics article HTML
         run: node scripts/prerender-cdd-articles.cjs
 
+      - name: Add Strategy engagement next step
+        run: node scripts/add-strategy-next-step.cjs
+
       - name: Refresh public asset versions
         run: |
           sed -i 's/press-page.js?v=20260711-page-size-3/press-page.js?v=20260722-margin-final/g' media.html media_cn.html
@@ -86,6 +91,9 @@ jobs:
 
       - name: Stamp legacy CDD SEO signals
         run: node scripts/stamp-legacy-cdd-seo.cjs
+
+      - name: Validate Strategy engagement next step
+        run: node scripts/add-strategy-next-step.cjs --validate
 
       - name: Validate prerendered CDD article HTML
         run: node scripts/prerender-cdd-articles.cjs --validate
@@ -147,7 +155,7 @@ jobs:
             templates/media-coverage/media-coverage-print.html
 
       - name: Validate analytics scripts
-        run: node --check assets/js/favicon-guard.js && node --check scripts/install-google-analytics.cjs
+        run: node --check assets/js/favicon-guard.js && node --check assets/js/strategy-engagement.js && node --check scripts/install-google-analytics.cjs
 
       - name: Remove unconditional analytics tags
         run: node scripts/install-google-analytics.cjs
@@ -161,6 +169,9 @@ jobs:
       - name: Prerender China Debt Dynamics article HTML
         run: node scripts/prerender-cdd-articles.cjs
 
+      - name: Add Strategy engagement next step
+        run: node scripts/add-strategy-next-step.cjs
+
       - name: Refresh public asset versions
         run: |
           sed -i 's/press-page.js?v=20260711-page-size-3/press-page.js?v=20260722-margin-final/g' media.html media_cn.html
@@ -173,6 +184,9 @@ jobs:
 
       - name: Stamp legacy CDD SEO signals
         run: node scripts/stamp-legacy-cdd-seo.cjs
+
+      - name: Validate Strategy engagement next step
+        run: node scripts/add-strategy-next-step.cjs --validate
 
       - name: Validate prerendered CDD article HTML
         run: node scripts/prerender-cdd-articles.cjs --validate
