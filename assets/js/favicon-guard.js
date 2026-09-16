@@ -1,5 +1,5 @@
 (function () {
-  var VERSION = "20260916-analytics-seo-1";
+  var VERSION = "20260916-analytics-seo-2";
 
   var GOOGLE_ANALYTICS_ID = "G-CLVYF17N9H";
 
@@ -83,11 +83,12 @@
 
   function legacyInsightTarget() {
     var pathname = window.location.pathname || "/";
-    var overrides = {
-      "/insights/china-debt-dynamics/v8i6/": "/insights/china-debt-dynamics/v8i6/",
-      "/insights/china-debt-dynamics/v8i5/": "/insights/china-debt-dynamics/v8i5/",
-      "/insights/china-debt-dynamics/v8i3/": "/insights/china-debt-dynamics/v8i3/"
-    };
+    var legacyPrefix = "/china-debt-dynamics-";
+    var legacySuffix = ".html";
+    var overrides = {};
+    overrides[legacyPrefix + "v8i5" + legacySuffix] = "/insights/china-debt-dynamics/v8i6/";
+    overrides[legacyPrefix + "v8i3" + legacySuffix] = "/insights/china-debt-dynamics/v8i5/";
+    overrides[legacyPrefix + "v8i1" + legacySuffix] = "/insights/china-debt-dynamics/v8i3/";
     if (overrides[pathname]) return overrides[pathname];
 
     var match = pathname.match(/^\/china-debt-dynamics-(v\d+i\d+)\.html$/i);
