@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'scripts/generate-clean-public-urls.js'
+      - 'scripts/install-google-analytics.cjs'
       - 'scripts/normalize-current-page-fragments.cjs'
       - 'scripts/normalize-public-site.cjs'
       - 'scripts/run-normalize-public-site.cjs'
@@ -54,6 +55,12 @@ jobs:
         with:
           node-version: '24'
 
+      - name: Validate analytics scripts
+        run: node --check assets/js/favicon-guard.js && node --check scripts/install-google-analytics.cjs
+
+      - name: Remove unconditional analytics tags
+        run: node scripts/install-google-analytics.cjs
+
       - name: Normalize source URLs and publication exclusions
         run: node scripts/run-normalize-public-site.cjs
 
@@ -69,6 +76,9 @@ jobs:
 
       - name: Generate clean routes
         run: node scripts/generate-clean-public-urls.js
+
+      - name: Validate analytics consent gating
+        run: node scripts/install-google-analytics.cjs --validate
 
       - name: Verify recruitment links and containment after generation
         run: node tests/recruitment-role-detail.test.js && node tests/recruitment-static-security.test.js
@@ -120,6 +130,12 @@ jobs:
             assets/js/employee-portal/views-cdd-publisher.js \
             templates/media-coverage/media-coverage-print.html
 
+      - name: Validate analytics scripts
+        run: node --check assets/js/favicon-guard.js && node --check scripts/install-google-analytics.cjs
+
+      - name: Remove unconditional analytics tags
+        run: node scripts/install-google-analytics.cjs
+
       - name: Normalize source URLs and publication exclusions
         run: node scripts/run-normalize-public-site.cjs
 
@@ -135,6 +151,9 @@ jobs:
 
       - name: Generate clean routes
         run: node scripts/generate-clean-public-urls.js
+
+      - name: Validate analytics consent gating
+        run: node scripts/install-google-analytics.cjs --validate
 
       - name: Verify recruitment links and containment after generation
         run: node tests/recruitment-role-detail.test.js && node tests/recruitment-static-security.test.js

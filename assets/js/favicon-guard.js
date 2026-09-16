@@ -1,7 +1,9 @@
 (function () {
-  var VERSION = "20260916-analytics-seo-2";
+  var VERSION = "20260916-analytics-consent-1";
 
   var GOOGLE_ANALYTICS_ID = "G-CLVYF17N9H";
+  var ANALYTICS_CONSENT_KEY = "sv_analytics_consent_v1";
+  var ANALYTICS_CONSENT_TTL_MS = 180 * 24 * 60 * 60 * 1000;
 
   function isPublicAnalyticsPage() {
     var hostname = (window.location.hostname || "").toLowerCase();
@@ -17,14 +19,41 @@
     }
   }
 
-  function ensureGoogleAnalytics() {
-    if (!document.head || !isPublicAnalyticsPage() || window.__SV_GA4_INSTALLED) return;
-    window.__SV_GA4_INSTALLED = true;
+  function readAnalyticsConsent() {
+    try {
+      var raw = window.localStorage.getItem(ANALYTICS_CONSENT_KEY);
+      if (!raw) return null;
+      var stored = JSON.parse(raw);
+      if (!stored || (stored.choice !== "accepted" && stored.choice !== "rejected")) return null;
+      if (!stored.savedAt || Date.now() - stored.savedAt > ANALYTICS_CONSENT_TTL_MS) {
+        window.localStorage.removeItem(ANALYTICS_CONSENT_KEY);
+        return null;
+      }
+      return stored.choice;
+    } catch (_) {
+      return null;
+    }
+  }
 
+  function writeAnalyticsConsent(choice) {
+    try {
+      window.localStorage.setItem(ANALYTICS_CONSENT_KEY, JSON.stringify({
+        choice: choice,
+        savedAt: Date.now()
+      }));
+    } catch (_) {}
+  }
+
+  function ensureGtagQueue() {
     window.dataLayer = window.dataLayer || [];
     window.gtag = window.gtag || function () {
       window.dataLayer.push(arguments);
     };
+  }
+
+  function ensureGoogleAnalytics() {
+    if (!document.head || !isPublicAnalyticsPage() || readAnalyticsConsent() !== "accepted") return;
+    ensureGtagQueue();
 
     window.gtag("consent", "default", {
       analytics_storage: "granted",
@@ -32,13 +61,18 @@
       ad_user_data: "denied",
       ad_personalization: "denied"
     });
-    window.gtag("js", new Date());
-    window.gtag("config", GOOGLE_ANALYTICS_ID, {
-      send_page_view: true,
-      allow_google_signals: false,
-      allow_ad_personalization_signals: false
-    });
 
+    if (!window.__SV_GA4_CONFIGURED) {
+      window.__SV_GA4_CONFIGURED = true;
+      window.gtag("js", new Date());
+      window.gtag("config", GOOGLE_ANALYTICS_ID, {
+        send_page_view: true,
+        allow_google_signals: false,
+        allow_ad_personalization_signals: false
+      });
+    }
+
+    if (document.querySelector('script[data-sv-google-analytics="true"]')) return;
     var analyticsScript = document.createElement("script");
     analyticsScript.async = true;
     analyticsScript.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(GOOGLE_ANALYTICS_ID);
@@ -46,8 +80,106 @@
     document.head.appendChild(analyticsScript);
   }
 
+  function clearGoogleAnalyticsCookies() {
+    try {
+      var cookies = document.cookie ? document.cookie.split(";") : [];
+      for (var i = 0; i < cookies.length; i += 1) {
+        var name = cookies[i].split("=")[0].trim();
+        if (name !== "_ga" && name.indexOf("_ga_") !== 0) continue;
+        document.cookie = name + "=; Max-Age=0; path=/; SameSite=Lax";
+        document.cookie = name + "=; Max-Age=0; path=/; domain=.shorevest.com; SameSite=Lax";
+      }
+    } catch (_) {}
+  }
+
+  function disableGoogleAnalytics() {
+    if (typeof window.gtag === "function") {
+      window.gtag("consent", "update", {
+        analytics_storage: "denied",
+        ad_storage: "denied",
+        ad_user_data: "denied",
+        ad_personalization: "denied"
+      });
+    }
+    clearGoogleAnalyticsCookies();
+  }
+
+  function setAnalyticsConsent(choice) {
+    writeAnalyticsConsent(choice);
+    if (choice === "accepted") ensureGoogleAnalytics();
+    else disableGoogleAnalytics();
+    var banner = document.getElementById("sv-analytics-consent");
+    if (banner) banner.remove();
+  }
+
+  function ensureAnalyticsConsentStyles() {
+    if (!document.head || document.getElementById("sv-analytics-consent-styles")) return;
+    var style = document.createElement("style");
+    style.id = "sv-analytics-consent-styles";
+    style.textContent = [
+      "#sv-analytics-consent{position:fixed;left:20px;right:20px;bottom:20px;z-index:2147483000;max-width:760px;margin:0 auto;padding:18px 20px;background:#fffdf7;color:#1f2b22;border:1px solid rgba(31,43,34,.18);box-shadow:0 12px 40px rgba(0,0,0,.18);font:14px/1.55 Arial,Helvetica,sans-serif}",
+      "#sv-analytics-consent strong{display:block;margin-bottom:4px;font-size:15px}",
+      "#sv-analytics-consent p{margin:0 0 12px}",
+      "#sv-analytics-consent a{color:inherit;text-decoration:underline;text-underline-offset:2px}",
+      "#sv-analytics-consent .sv-consent-actions{display:flex;gap:10px;flex-wrap:wrap}",
+      "#sv-analytics-consent button{min-height:38px;padding:8px 14px;border:1px solid #2e4a18;background:transparent;color:#2e4a18;font:600 13px/1 Arial,Helvetica,sans-serif;cursor:pointer}",
+      "#sv-analytics-consent button[data-choice=accepted]{background:#2e4a18;color:#fff}",
+      ".sv-cookie-settings-button{appearance:none;border:0;background:none;padding:0;color:inherit;font:inherit;cursor:pointer;text-decoration:underline;text-underline-offset:2px}",
+      "@media(max-width:600px){#sv-analytics-consent{left:12px;right:12px;bottom:12px;padding:16px}#sv-analytics-consent .sv-consent-actions{display:grid;grid-template-columns:1fr}#sv-analytics-consent button{width:100%}}"
+    ].join("");
+    document.head.appendChild(style);
+  }
+
+  function showAnalyticsConsentBanner() {
+    if (!isPublicAnalyticsPage() || !document.body) return;
+    ensureAnalyticsConsentStyles();
+    var existing = document.getElementById("sv-analytics-consent");
+    if (existing) existing.remove();
+
+    var chinese = isChinesePage();
+    var banner = document.createElement("section");
+    banner.id = "sv-analytics-consent";
+    banner.setAttribute("role", "dialog");
+    banner.setAttribute("aria-live", "polite");
+    banner.setAttribute("aria-label", chinese ? "Cookie 偏好设置" : "Cookie preferences");
+
+    var noticeHref = chinese ? "/cn/cookie-notice/" : "/cookie-notice/";
+    banner.innerHTML = chinese
+      ? '<strong>Cookie 偏好设置</strong><p>新岸资本仅在您同意后启用可选的分析 Cookie，以了解网站的使用情况。您可以接受分析 Cookie，或拒绝非必要 Cookie。详见 <a href="' + noticeHref + '">Cookie 通知</a>。</p><div class="sv-consent-actions"><button type="button" data-choice="accepted">接受分析 Cookie</button><button type="button" data-choice="rejected">拒绝非必要 Cookie</button></div>'
+      : '<strong>Cookie preferences</strong><p>ShoreVest only enables optional analytics cookies after you consent. You can accept analytics cookies or reject non-essential cookies. See the <a href="' + noticeHref + '">Cookie Notice</a>.</p><div class="sv-consent-actions"><button type="button" data-choice="accepted">Accept analytics</button><button type="button" data-choice="rejected">Reject non-essential</button></div>';
+
+    banner.addEventListener("click", function (event) {
+      var button = event.target && event.target.closest ? event.target.closest("button[data-choice]") : null;
+      if (!button) return;
+      setAnalyticsConsent(button.getAttribute("data-choice"));
+    });
+    document.body.appendChild(banner);
+  }
+
+  function ensureCookieSettingsControl() {
+    if (!document.body || !isPublicAnalyticsPage() || document.querySelector(".sv-cookie-settings-button")) return;
+    ensureAnalyticsConsentStyles();
+    var footerLinks = document.querySelector(".sv-footer__links");
+    if (!footerLinks) return;
+    var button = document.createElement("button");
+    button.type = "button";
+    button.className = "sv-cookie-settings-button";
+    button.textContent = isChinesePage() ? "Cookie 设置" : "Cookie settings";
+    button.addEventListener("click", showAnalyticsConsentBanner);
+    footerLinks.appendChild(button);
+  }
+
+  function initializeAnalyticsConsent() {
+    if (!isPublicAnalyticsPage()) return;
+    var choice = readAnalyticsConsent();
+    if (choice === "accepted") ensureGoogleAnalytics();
+    else if (choice === "rejected") disableGoogleAnalytics();
+    else showAnalyticsConsentBanner();
+    ensureCookieSettingsControl();
+  }
+
   function trackAnalyticsEvent(name, parameters) {
-    if (!isPublicAnalyticsPage() || typeof window.gtag !== "function") return;
+    if (!isPublicAnalyticsPage() || readAnalyticsConsent() !== "accepted" || typeof window.gtag !== "function") return;
     var payload = parameters || {};
     payload.transport_type = "beacon";
     window.gtag("event", name, payload);
@@ -128,7 +260,6 @@
 
   removeEmptyLegacyToken();
   if (redirectLegacyInsightPage()) return;
-  ensureGoogleAnalytics();
   ensureAnalyticsIntentTracking();
 
   // Resolve the site base from this script's own URL so shared assets work
@@ -317,25 +448,32 @@
     }, true);
   }
 
-  ensureFavicons();
-  ensureChineseCopyOverrides();
-  ensureChineseFontUniformity();
-  ensureSiteCopyNormalizer();
-  ensureWebsiteSearchSignals();
-  ensureInvestorPortalEmailLogin();
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", ensureFavicons);
-    document.addEventListener("DOMContentLoaded", ensureChineseCopyOverrides);
-    document.addEventListener("DOMContentLoaded", ensureChineseFontUniformity);
-    document.addEventListener("DOMContentLoaded", ensureSiteCopyNormalizer);
-    document.addEventListener("DOMContentLoaded", ensureWebsiteSearchSignals);
-    document.addEventListener("DOMContentLoaded", ensureInvestorPortalEmailLogin);
+  function runDomReadyTasks() {
+    initializeAnalyticsConsent();
+    ensureCookieSettingsControl();
+    ensureFavicons();
+    ensureChineseCopyOverrides();
+    ensureChineseFontUniformity();
+    ensureSiteCopyNormalizer();
+    ensureWebsiteSearchSignals();
+    ensureInvestorPortalEmailLogin();
   }
-  window.addEventListener("pageshow", ensureFavicons);
-  window.addEventListener("pageshow", ensureChineseCopyOverrides);
-  window.addEventListener("pageshow", ensureChineseFontUniformity);
-  window.addEventListener("pageshow", ensureSiteCopyNormalizer);
-  window.addEventListener("pageshow", ensureWebsiteSearchSignals);
-  window.addEventListener("pageshow", ensureInvestorPortalEmailLogin);
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", runDomReadyTasks);
+  } else {
+    runDomReadyTasks();
+  }
+
+  window.addEventListener("pageshow", function () {
+    initializeAnalyticsConsent();
+    ensureCookieSettingsControl();
+    ensureFavicons();
+    ensureChineseCopyOverrides();
+    ensureChineseFontUniformity();
+    ensureSiteCopyNormalizer();
+    ensureWebsiteSearchSignals();
+    ensureInvestorPortalEmailLogin();
+  });
   document.addEventListener("visibilitychange", ensureFavicons);
 })();
