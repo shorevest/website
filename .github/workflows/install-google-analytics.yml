@@ -1,4 +1,4 @@
-name: Install Google Analytics
+name: Normalize Google Analytics Consent
 
 on:
   push:
@@ -13,7 +13,7 @@ permissions:
   contents: write
 
 jobs:
-  install:
+  normalize:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
@@ -28,24 +28,24 @@ jobs:
         with:
           node-version: '24'
 
-      - name: Install tag across public pages
+      - name: Remove unconditional analytics tags
         run: node scripts/install-google-analytics.cjs
 
-      - name: Validate installation
+      - name: Validate consent gating
         run: node scripts/install-google-analytics.cjs --validate
 
       - name: Check generated changes
         run: git diff --check
 
-      - name: Commit sitewide tag installation
+      - name: Commit consent normalization
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
           if git diff --cached --quiet; then
-            echo "Google Analytics is already installed."
+            echo "Analytics consent normalization is already applied."
             exit 0
           fi
-          git commit -m "Install Google Analytics across public pages"
+          git commit -m "Gate Google Analytics behind consent across public pages"
           git push origin HEAD:main
