@@ -18,6 +18,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Test analytics URL builder
+        run: node --test tests/shorevest-utm.test.js
+
       - name: Check pull request changes
         if: github.event_name == 'pull_request'
         run: python3 scripts/check-repository-hygiene.py --base "${{ github.event.pull_request.base.sha }}"
