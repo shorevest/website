@@ -7,6 +7,16 @@
   var isChinese = (document.documentElement.getAttribute("lang") || "").toLowerCase().indexOf("zh") === 0 ||
     /(?:^|\/)cn(?:\/|$)|_cn(?:\.html)?(?:$|[?#])/.test(pathname);
 
+  function ensureBusinessAnalytics() {
+    if (!document.head || document.querySelector('script[data-sv-business-analytics="true"]')) return;
+    var script = document.createElement("script");
+    script.src = "/assets/js/sv-analytics-events.js?v=20260916-business-events-1";
+    script.async = false;
+    script.setAttribute("data-sv-business-analytics", "true");
+    document.head.appendChild(script);
+  }
+  ensureBusinessAnalytics();
+
   var EN_REPLACEMENTS = {
     "Asset-backed lending · Asset restructuring · Debt resolution": "Asset-backed lending, asset restructuring and debt resolution",
     "Claim priority · enforceability · exit routes": "Claim priority, enforceability and exit routes",
