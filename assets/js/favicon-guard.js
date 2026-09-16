@@ -1,5 +1,5 @@
 (function () {
-  var VERSION = "20260916-analytics-consent-1";
+  var VERSION = "20260916-analytics-consent-2";
 
   var GOOGLE_ANALYTICS_ID = "G-CLVYF17N9H";
   var ANALYTICS_CONSENT_KEY = "sv_analytics_consent_v1";
@@ -192,6 +192,7 @@
     document.addEventListener("submit", function (event) {
       var form = event.target;
       if (!form || form.id !== "cp-form") return;
+      if (typeof form.checkValidity === "function" && !form.checkValidity()) return;
 
       var typeField = form.querySelector('[name="inquiry_type"]');
       trackAnalyticsEvent("contact_email_open", {
