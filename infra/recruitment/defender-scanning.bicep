@@ -49,7 +49,7 @@ module delivery './event-grid-subscription.bicep' = if (enablePaidScanning) {
   dependsOn: [topic]
 }
 
-resource defender 'Microsoft.Security/defenderForStorageSettings@2025-06-01' = if (enablePaidScanning) {
+resource defender 'Microsoft.Security/defenderForStorageSettings@2025-07-01-preview' = if (enablePaidScanning) {
   name: 'current'
   scope: cvStorage
   properties: {
@@ -60,6 +60,7 @@ resource defender 'Microsoft.Security/defenderForStorageSettings@2025-06-01' = i
       isEnabled: false
     }
     malwareScanning: {
+      automatedResponse: 'None'
       blobScanResultsOptions: 'None'
       onUpload: {
         isEnabled: true
