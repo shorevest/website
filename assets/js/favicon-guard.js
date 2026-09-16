@@ -84,9 +84,9 @@
   function legacyInsightTarget() {
     var pathname = window.location.pathname || "/";
     var overrides = {
-      "/china-debt-dynamics-v8i5.html": "/insights/china-debt-dynamics/v8i6/",
-      "/china-debt-dynamics-v8i3.html": "/insights/china-debt-dynamics/v8i5/",
-      "/china-debt-dynamics-v8i1.html": "/insights/china-debt-dynamics/v8i3/"
+      "/insights/china-debt-dynamics/v8i6/": "/insights/china-debt-dynamics/v8i6/",
+      "/insights/china-debt-dynamics/v8i5/": "/insights/china-debt-dynamics/v8i5/",
+      "/insights/china-debt-dynamics/v8i3/": "/insights/china-debt-dynamics/v8i3/"
     };
     if (overrides[pathname]) return overrides[pathname];
 
