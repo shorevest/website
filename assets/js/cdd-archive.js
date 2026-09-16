@@ -10,6 +10,40 @@
   const search = root.querySelector('[data-cdd-arc-search]');
   const empty = root.querySelector('[data-cdd-arc-empty]');
   const reset = root.querySelector('[data-cdd-arc-reset]');
+  const ANALYTICS_CONSENT_KEY = 'sv_analytics_consent_v1';
+
+  function analyticsEnabled() {
+    try {
+      const raw = window.localStorage.getItem(ANALYTICS_CONSENT_KEY);
+      if (!raw) return false;
+      const stored = JSON.parse(raw);
+      return Boolean(stored && stored.choice === 'accepted');
+    } catch (_) {
+      return false;
+    }
+  }
+
+  function trackAnalyticsEvent(name, parameters) {
+    if (!analyticsEnabled() || typeof window.gtag !== 'function') return;
+    window.gtag('event', name, Object.assign({ transport_type: 'beacon' }, parameters || {}));
+  }
+
+  function trackedPath(href) {
+    try {
+      return new URL(href, window.location.href).pathname;
+    } catch (_) {
+      return String(href || '').split('?')[0].split('#')[0];
+    }
+  }
+
+  function rowAnalytics(row, href, interaction) {
+    return {
+      content_path: trackedPath(href),
+      archive_topic: row ? (row.getAttribute('data-topic') || 'unknown') : 'unknown',
+      interaction: interaction,
+      site_language: (document.documentElement.lang || '').toLowerCase().indexOf('zh') === 0 ? 'zh' : 'en'
+    };
+  }
 
   /* Fragment-only links resolve against <base href="/"> on clean routes.
      Keep the subscription CTA on the current Insights page instead. */
@@ -23,6 +57,11 @@
 
     link.addEventListener('click', (event) => {
       if (!subscriptionTarget) return;
+
+      trackAnalyticsEvent('research_subscribe_cta', {
+        source_page: currentPath,
+        site_language: (document.documentElement.lang || '').toLowerCase().indexOf('zh') === 0 ? 'zh' : 'en'
+      });
 
       event.preventDefault();
       subscriptionTarget.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -65,11 +104,35 @@
         ? ['您好，', '', '请将我加入《中国债务动态》更新名单。', '', '姓名：' + name, '电邮：' + email].join('\n')
         : ['Hello,', '', 'Please add me to the China Debt Dynamics update list.', '', 'Name: ' + name, 'Email: ' + email].join('\n');
 
+      /* Deliberately do not send name/email to GA4. This event records only
+         that a valid subscription attempt happened. */
+      trackAnalyticsEvent('research_subscribe_intent', {
+        source_page: currentPath,
+        site_language: isChinese ? 'zh' : 'en'
+      });
+
       window.location.href = 'mailto:' + recipient +
         '?subject=' + encodeURIComponent(subject) +
         '&body=' + encodeURIComponent(body);
     });
   }
+
+  // Track explicit Read/PDF links without collecting any visitor-entered text.
+  root.addEventListener('click', (event) => {
+    const link = event.target && event.target.closest ? event.target.closest('a') : null;
+    if (!link) return;
+
+    const href = link.getAttribute('href') || '';
+    const row = link.closest('.cdd-arc__row');
+    if (link.classList.contains('cdd-arc__pdf') || /\.pdf(?:$|[?#])/i.test(href)) {
+      trackAnalyticsEvent('research_pdf_download', rowAnalytics(row, href, 'link'));
+      return;
+    }
+
+    if (link.classList.contains('cdd-arc__read') || /china-debt-dynamics/i.test(href)) {
+      trackAnalyticsEvent('research_article_open', rowAnalytics(row, href, 'link'));
+    }
+  });
 
   // Cache each row's searchable text once (title + excerpt + category).
   rows.forEach((row) => {
@@ -87,12 +150,14 @@
     row.addEventListener('click', (event) => {
       // Let real links (Read / PDF) behave normally.
       if (event.target.closest('a')) return;
+      trackAnalyticsEvent('research_article_open', rowAnalytics(row, href, 'row'));
       window.open(href, '_blank', 'noopener');
     });
 
     row.addEventListener('keydown', (event) => {
       if (event.key === 'Enter') {
         event.preventDefault();
+        trackAnalyticsEvent('research_article_open', rowAnalytics(row, href, 'keyboard'));
         window.open(href, '_blank', 'noopener');
       }
     });
@@ -141,6 +206,10 @@
         c.setAttribute('aria-selected', c === chip ? 'true' : 'false');
       });
       activeTopic = chip.getAttribute('data-topic') || 'all';
+      trackAnalyticsEvent('research_archive_filter', {
+        archive_topic: activeTopic,
+        site_language: (document.documentElement.lang || '').toLowerCase().indexOf('zh') === 0 ? 'zh' : 'en'
+      });
       applyFilter();
     });
   });
