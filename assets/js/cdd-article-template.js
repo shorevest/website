@@ -60,6 +60,10 @@
     backToIssueLink.href = issueHref;
   }
 
+  // Static CDD HTML is prerendered for crawlers and no-JS readers.
+  // Replace that static copy only after the JSON payload has loaded successfully.
+  body.innerHTML = '';
+
   (data.sections || []).forEach((section) => {
     if (section.heading) {
       const h2 = document.createElement('h2');
