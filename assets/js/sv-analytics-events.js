@@ -1,6 +1,9 @@
 (function () {
   "use strict";
 
+  if (window.__SV_BUSINESS_ANALYTICS_READY) return;
+  window.__SV_BUSINESS_ANALYTICS_READY = true;
+
   var CONSENT_KEY = "sv_analytics_consent_v1";
   var QUALIFIED_DELAY_MS = 15000;
   var qualifiedSent = false;
@@ -51,13 +54,17 @@
     if (url.searchParams.get("pdf") !== "1") return null;
 
     var source = url.searchParams.get("source") || "";
-    var issueMatch = source.match(/china-debt-dynamics-(v\d+i\d+)\.json$/i);
-
-    return {
+    var issueMatch = source.match(/china-debt-dynamics-(v\d+i\d+)\.json(?:$|[?#])/i);
+    var context = {
       research_series: "china_debt_dynamics",
-      research_issue: issueMatch ? issueMatch[1].toLowerCase() : "unknown",
       document_path: url.pathname
     };
+
+    if (issueMatch) {
+      context.research_issue = issueMatch[1].toLowerCase();
+    }
+
+    return context;
   }
 
   function trackCurrentCddPdfOpen() {
@@ -65,6 +72,14 @@
     try { context = cddPdfContext(new URL(window.location.href)); }
     catch (_) { return; }
     if (!context) return;
+
+    try {
+      var referrer = new URL(document.referrer);
+      if (referrer.origin === window.location.origin && /^\/insights\/china-debt-dynamics\/v\d+i\d+\/?$/i.test(referrer.pathname)) {
+        context.content_path = referrer.pathname;
+      }
+    } catch (_) {}
+
     track("research_pdf_open", context);
   }
 
