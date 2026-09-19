@@ -10,6 +10,7 @@ const ROOT = path.resolve(__dirname, '..');
 const tracker = fs.readFileSync(path.join(ROOT, 'assets/js/sv-analytics-events.js'), 'utf8');
 const loader = fs.readFileSync(path.join(ROOT, 'assets/js/site-copy-normalizer.js'), 'utf8');
 const v10i3 = fs.readFileSync(path.join(ROOT, 'insights/china-debt-dynamics/v10i3/index.html'), 'utf8');
+const publisher = fs.readFileSync(path.join(ROOT, 'assets/js/employee-portal/views-cdd-publisher.js'), 'utf8');
 
 const expectedEvents = [
   'qualified_visit',
@@ -170,6 +171,13 @@ test('all published CDD issue buttons identify their own issue in the print rout
       new RegExp(`china-debt-dynamics-${issue.name}\\.json$`, 'i'),
     );
   }
+});
+
+test('future CDD publishing packs include the canonical tracked PDF route', () => {
+  assert.match(publisher, /\/insights\/china-debt-dynamics\/print\/\?source=assets\/data\//);
+  assert.match(publisher, /&amp;pdf=1/);
+  assert.match(publisher, /favicon-guard\.js/);
+  assert.doesNotMatch(publisher, /href=\\?"china-debt-dynamics-print\.html/);
 });
 
 test('tracks a successful PDF route load once, including after repeated script execution', () => {
