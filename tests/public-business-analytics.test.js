@@ -18,6 +18,8 @@ const expectedEvents = [
   'careers_apply_click',
   'careers_application_submit_attempt',
   'document_download',
+  'research_pdf_click',
+  'research_pdf_open',
   'outbound_link_click',
 ];
 
@@ -35,6 +37,14 @@ test('tracks the agreed business event taxonomy', () => {
   for (const eventName of expectedEvents) {
     assert.match(tracker, new RegExp('"' + eventName + '"'));
   }
+});
+
+test('tracks China Debt Dynamics PDF clicks and successful PDF-route opens', () => {
+  assert.match(tracker, /china-debt-dynamics\\\/print/);
+  assert.match(tracker, /searchParams\.get\("pdf"\) !== "1"/);
+  assert.match(tracker, /research_pdf_click/);
+  assert.match(tracker, /research_pdf_open/);
+  assert.match(tracker, /research_issue/);
 });
 
 test('does not send visitor-entered PII to GA4', () => {
