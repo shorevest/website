@@ -10,7 +10,7 @@
   function ensureBusinessAnalytics() {
     if (!document.head || document.querySelector('script[data-sv-business-analytics="true"]')) return;
     var script = document.createElement("script");
-    script.src = "/assets/js/sv-analytics-events.js?v=20260919-research-pdf-1";
+    script.src = "/assets/js/sv-analytics-events.js?v=20260919-research-pdf-2";
     script.async = false;
     script.setAttribute("data-sv-business-analytics", "true");
     document.head.appendChild(script);
