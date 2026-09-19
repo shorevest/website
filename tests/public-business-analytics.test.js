@@ -133,6 +133,7 @@ test('tracks the actual v10i3 PDF button as research_pdf_click', () => {
 
   const analytics = runTracker({
     url: 'https://shorevest.com/insights/china-debt-dynamics/v10i3/',
+    executeTwice: true,
   });
   analytics.click(pdfButton[1].replace(/&amp;/g, '&'));
 
@@ -148,6 +149,27 @@ test('tracks the actual v10i3 PDF button as research_pdf_click', () => {
     document_path: '/insights/china-debt-dynamics/print/',
   });
   assert.equal(events(analytics.calls, 'document_download').length, 0);
+});
+
+test('all published CDD issue buttons identify their own issue in the print route', () => {
+  const issuesRoot = path.join(ROOT, 'insights/china-debt-dynamics');
+  const issueDirectories = fs.readdirSync(issuesRoot, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory() && /^v\d+i\d+$/i.test(entry.name));
+
+  assert.ok(issueDirectories.length > 1, 'expected multiple published CDD issues');
+  for (const issue of issueDirectories) {
+    const html = fs.readFileSync(path.join(issuesRoot, issue.name, 'index.html'), 'utf8');
+    const pdfButton = html.match(/<a[\s\S]*?href="([^"]*china-debt-dynamics\/print\/[^"]*pdf=1)"[\s\S]*?>\s*PDF\s*<\/a>/i);
+    assert.ok(pdfButton, `${issue.name} must contain the public PDF anchor`);
+
+    const printUrl = new URL(pdfButton[1].replace(/&amp;/g, '&'), 'https://shorevest.com/');
+    assert.equal(printUrl.pathname, '/insights/china-debt-dynamics/print/');
+    assert.equal(printUrl.searchParams.get('pdf'), '1');
+    assert.match(
+      printUrl.searchParams.get('source') || '',
+      new RegExp(`china-debt-dynamics-${issue.name}\\.json$`, 'i'),
+    );
+  }
 });
 
 test('tracks a successful PDF route load once, including after repeated script execution', () => {
