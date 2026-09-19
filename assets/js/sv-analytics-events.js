@@ -45,6 +45,29 @@
     window.gtag("event", name, payload);
   }
 
+  function cddPdfContext(url) {
+    if (!url || url.origin !== window.location.origin) return null;
+    if (!/^\/insights\/china-debt-dynamics\/print\/?$/i.test(url.pathname)) return null;
+    if (url.searchParams.get("pdf") !== "1") return null;
+
+    var source = url.searchParams.get("source") || "";
+    var issueMatch = source.match(/china-debt-dynamics-(v\d+i\d+)\.json$/i);
+
+    return {
+      research_series: "china_debt_dynamics",
+      research_issue: issueMatch ? issueMatch[1].toLowerCase() : "unknown",
+      document_path: url.pathname
+    };
+  }
+
+  function trackCurrentCddPdfOpen() {
+    var context;
+    try { context = cddPdfContext(new URL(window.location.href)); }
+    catch (_) { return; }
+    if (!context) return;
+    track("research_pdf_open", context);
+  }
+
   function maybeQualifiedVisit() {
     if (qualifiedSent || !interactionSeen || !visibleTimeReached || document.visibilityState !== "visible") return;
     qualifiedSent = true;
@@ -66,6 +89,7 @@
   }, QUALIFIED_DELAY_MS);
 
   document.addEventListener("visibilitychange", maybeQualifiedVisit);
+  trackCurrentCddPdfOpen();
 
   document.addEventListener("click", function (event) {
     var link = event.target && event.target.closest ? event.target.closest("a[href]") : null;
@@ -81,6 +105,12 @@
 
     var url;
     try { url = new URL(href, window.location.href); } catch (_) { return; }
+
+    var cddPdf = cddPdfContext(url);
+    if (cddPdf) {
+      cddPdf.content_path = window.location.pathname || "/";
+      track("research_pdf_click", cddPdf);
+    }
 
     if (/\.pdf(?:$|[?#])/i.test(href)) {
       track("document_download", { document_path: cleanPath(url.href) });
