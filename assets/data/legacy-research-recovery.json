@@ -1,0 +1,25 @@
+{
+  "redirects": {
+    "/china-debt-dynamics/quantifying-chinas-npl-market/": "/insights/china-debt-dynamics/v8i4/",
+    "/china-debt-dynamics/evergrande-a-result-of-china-deleveraging-and-what-next/": "/insights/china-debt-dynamics/v5i7/",
+    "/china-debt-dynamics/wheres-the-stimulus-parsing-beijings-lackluster-response-to-growth/": "/insights/china-debt-dynamics/v7i3/",
+    "/china-debt-dynamics/the-end-of-the-chinas-univestable-myth/": "/insights/china-debt-dynamics/v10i1/",
+    "/news-insights/the-end-of-the-chinas-univestable-myth/": "/insights/china-debt-dynamics/v10i1/",
+    "/news-insights/into-the-shadows-of-us-private-credit-a-china-perspective/": "/insights/china-debt-dynamics/v9i3/"
+  },
+  "pdfs": {
+    "/wp-content/uploads/2024/11/China-Debt-Dynamics-Private-Credit-in-a-Reset-World-Order-1.pdf": "assets/pdfs/china-debt-dynamics-40-private-credit-in-a-reset-world-order.pdf",
+    "/wp-content/uploads/2024/05/China-Debt-Dynamics-Bank-Exposure-to-Property-Developers-A-Challenge-but-not-a-Risk.pdf": "assets/pdfs/china-debt-dynamics-bank-exposure-to-property-developers.pdf",
+    "/wp-content/uploads/2020/11/20.-ShoreVest-China-Debt-Dynamics-Dealing-With-a-Coming-Surge-in-Nonperforming-Loans.pdf": "assets/pdfs/china-debt-dynamics-20-dealing-with-a-coming-surge-in-nonperforming-loans.pdf",
+    "/wp-content/uploads/2019/03/ShoreVest-China-Debt-Dynamics-Disclose-Dispose-–-Stricter-Accounting-Requirements-To-Push-Up-NPLs-Further.pdf": "assets/pdfs/china-debt-dynamics-disclose-dispose.pdf",
+    "/wp-content/uploads/2022/12/31_ShoreVest-China-Debt-Dynmaics_Chinas-Property-Support-Measures_Rescue-not-Reflation-1.pdf": "assets/pdfs/china-debt-dynamics-31-chinas-property-support-measures-rescue-not-reflation.pdf",
+    "/wp-content/uploads/2024/05/China-Debt-Dynamics-New-Regulations-Set-to-Accelerate-NPL-Disposals.pdf": "assets/pdfs/china-debt-dynamics-32-new-regulations-set-to-accelerate-npl-disposals.pdf",
+    "/wp-content/uploads/2021/04/ShoreVest-China-Debt-Dynamics-Sustained-Shadow-Banking-Contraction-Creating-Private-Credit-Opportunities-1.pdf": "assets/pdfs/china-debt-dynamics-sustained-shadow-banking-contraction.pdf",
+    "/wp-content/uploads/2024/05/37.-China-Debt-Dynamics-China-refocuses-on-financial-risk-–-and-ramps-up-NPL-disposals.pdf": "assets/pdfs/china-debt-dynamics-37-china-refocuses-on-financial-risk.pdf",
+    "/wp-content/uploads/2025/07/White-Paper_Into-The-Shadows-of-US-Private-Credit.pdf": "assets/pdfs/china-debt-dynamics-44-into-the-shadows-of-us-private-credit.pdf",
+    "/wp-content/uploads/2021/09/China-Debt-Dynamics-Evergrande.pdf": "assets/pdfs/china-debt-dynamics-evergrande.pdf",
+    "/wp-content/uploads/2024/07/38.-China-Debt-Dynamics-Bailing-out-the-banks-–-the-hidden-significance-of-Beijing-property-support-measures.pdf": "assets/pdfs/china-debt-dynamics-38-bailing-out-the-banks.pdf",
+    "/wp-content/uploads/2025/01/China-Debt-Dynamics-Green-finance-Sowing-the-seeds-of-Chinas-next-wave-of-NPLs.pdf": "assets/pdfs/china-debt-dynamics-42-green-finance-sowing-the-seeds-of-chinas-next-wave-of-npls.pdf",
+    "/wp-content/uploads/2024/05/35.-China-Debt-Dynamics-Beijings-Strategy-For-Dealing-With-Local-Government-Debt-–-No-Bailouts-But-A-Helping-Hand.pdf": "assets/pdfs/china-debt-dynamics-35-beijings-strategy-for-dealing-with-local-government-debt.pdf"
+  }
+}
