@@ -21,6 +21,9 @@ jobs:
       - name: Test analytics URL builder
         run: node --test tests/shorevest-utm.test.js
 
+      - name: Test public business analytics
+        run: node --test tests/public-business-analytics.test.js
+
       - name: Check pull request changes
         if: github.event_name == 'pull_request'
         run: python3 scripts/check-repository-hygiene.py --base "${{ github.event.pull_request.base.sha }}"

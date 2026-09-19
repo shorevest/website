@@ -42,13 +42,23 @@ function archiveRows() {
   return rows;
 }
 
-function printSource(href) {
+function printUrl(href) {
   try {
-    const url = new URL(href, 'https://shorevest.com');
-    return (url.searchParams.get('source') || '').replace(/^\//, '');
+    return new URL(String(href || '').replace(/&amp;/gi, '&'), 'https://shorevest.com');
   } catch (_) {
-    return '';
+    return null;
   }
+}
+
+function validatePrintLink(href, dataRel, fail, label) {
+  const url = printUrl(href);
+  if (!url) { fail(`${label} PDF link is invalid`); return; }
+  if (url.pathname !== '/insights/china-debt-dynamics/print/') {
+    fail(`${label} PDF link does not use the canonical print route`);
+  }
+  if (url.searchParams.get('pdf') !== '1') fail(`${label} PDF link is missing pdf=1`);
+  const source = (url.searchParams.get('source') || '').replace(/^\//, '');
+  if (source !== dataRel) fail(`${label} PDF link loads ${source || 'no source'}, expected ${dataRel}`);
 }
 
 if (!fs.existsSync(MANIFEST)) throw new Error('Missing clean URL manifest.');
@@ -161,21 +171,18 @@ for (const item of routes) {
   else if (normalize(staticTitle) !== normalize(data.title)) fail('static page title does not match article title');
   if (!/cdd-article-template\.js/i.test(html)) fail('missing article renderer script');
   if (!/cdd-article-template\.css/i.test(html)) fail('missing article stylesheet');
+  if (!/favicon-guard\.js/i.test(html)) fail('missing consent and analytics bootstrap');
 
   const pdf = /href=["']([^"']*\/insights\/china-debt-dynamics\/print\/[^"']*)["']/i.exec(html);
   if (!pdf) fail('missing PDF/print link');
-  else {
-    const source = printSource(pdf[1]);
-    if (source && source !== dataRel) fail(`PDF link loads ${source}, expected ${dataRel}`);
-  }
+  else validatePrintLink(pdf[1], dataRel, fail, 'Article');
 
   const row = archive.get(item.route);
   result.inArchive = Boolean(row);
   if (item.indexable && !row) fail('indexable issue is missing from the archive');
   if (row) {
     if (normalize(row.title) !== normalize(data.title)) fail('archive title does not match article title');
-    const source = printSource(row.pdf);
-    if (source && source !== dataRel) fail(`archive PDF loads ${source}, expected ${dataRel}`);
+    validatePrintLink(row.pdf, dataRel, fail, 'Archive');
   }
   issues.push(result);
 }
