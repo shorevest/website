@@ -271,6 +271,18 @@ body.press-page .press-date {
   font: 500 13px/1.3 var(--sv-font); color: var(--sv-ink); font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
+body.press-page .press-access {
+  display: block; font: 400 13px/1.45 var(--sv-font); color: var(--sv-muted, #6E7169);
+}
+body.press-page .press-action {
+  display: block; margin-top: 5px; font: 600 14px/1.4 var(--sv-font); color: var(--sv-cinnabar);
+}
+body.press-page .press-row > a:focus-visible,
+body.press-page .pr-featured:focus-visible {
+  outline: 2px solid var(--sv-cinnabar); outline-offset: 4px;
+}
+body.press-page .press-row:target { background: rgba(122,175,175,.10); }
+body.press-page .press-headline { overflow-wrap: anywhere; }
 @media (max-width: 880px) {
   body.press-page .press-row > a,
   body.press-page .press-row > .press-row__item {
@@ -279,7 +291,7 @@ body.press-page .press-date {
   }
   body.press-page .press-publication { padding-top: 0; }
   body.press-page .press-row__meta {
-    flex-direction: row; gap: 14px; align-items: baseline; justify-self: start;
+    flex-direction: row; flex-wrap: wrap; gap: 8px 14px; align-items: baseline; justify-self: start;
   }
 }
 
@@ -467,3 +479,8 @@ body.press-page :is(.sv-hero__field, .sv-hero__panel) {
   text-transform: uppercase;
   white-space: nowrap;
 }
+
+/* Existing archive typography and spacing, reused on preserved detail URLs. */
+.media-record { padding-block: clamp(40px, 6vw, 96px); }
+.media-record__title { max-width: 22ch; font: 500 clamp(32px, 4.5vw, 64px)/1.12 var(--sv-font); letter-spacing: -.025em; color: var(--sv-ink); overflow-wrap: anywhere; }
+.media-record__summary { margin-block: 28px; max-width: 66ch; }

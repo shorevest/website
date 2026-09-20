@@ -1,19 +1,30 @@
 {
-  "version": 1,
-  "updatedAt": "2026-09-16",
+  "version": 2,
+  "updatedAt": "2026-09-20",
   "items": [
     {
       "id": "fii-institute-2025-11-06-private-credit-market-discussion",
       "publication": "FII Institute",
-      "date": "2025-11-06",
+      "date": "2025-12-22",
       "type": "Panel",
-      "title": "Private credit market discussion",
-      "summary": "A panel discussion on the credit environment and how global investors assess market structure in China.",
+      "title": "Is Private Credit in a Bubble?",
+      "summary": "Benjamin Fanger joins a panel on private credit risk and differences between lending markets in North America, Brazil and China.",
       "url": "https://www.youtube.com/watch?v=t9BHji_UQlA",
       "linkType": "video",
       "status": "published",
-      "featured": true,
-      "autoDiscovered": false
+      "featured": false,
+      "autoDiscovered": false,
+      "rights": "link-only",
+      "access": "open",
+      "verification": {
+        "checkedAt": "2026-09-20",
+        "status": "verified",
+        "dateBasis": "Official video publication date; the previous 6 November date is not the upload date.",
+        "featureEvidence": "FII Institute official YouTube description names Benjamin Fanger, Founder & Managing Partner, ShoreVest Partners.",
+        "urlStatus": "Direct HTTP audit: 200 on 2026-09-20.",
+        "hostingPermission": "Not established. No publisher content or assets may be rehosted."
+      },
+      "summaryZh": "Benjamin Fanger 参与讨论私募信贷风险，以及北美、巴西和中国信贷市场的差异。"
     },
     {
       "id": "private-debt-investor-2025-06-02-shorevest-partners-on-the-case-for-china",
@@ -21,12 +32,47 @@
       "date": "2025-06-02",
       "type": "Sponsored content",
       "title": "ShoreVest Partners on the case for China",
-      "summary": "A sponsored interview addressing common perceptions of Chinese private credit and the importance of experienced local execution.",
+      "summary": "In this sponsored interview, Benjamin Fanger discusses lending structures, collateral and creditor enforcement in China.",
       "url": "https://www.pei-privatecredit.com/shorevest-partners-on-the-case-for-china/",
       "linkType": "external",
       "status": "published",
       "featured": false,
-      "autoDiscovered": false
+      "autoDiscovered": false,
+      "rights": "link-only",
+      "access": "subscription",
+      "verification": {
+        "checkedAt": "2026-09-20",
+        "status": "verified",
+        "dateBasis": "Publisher publication date",
+        "featureEvidence": "Publisher headline, standfirst and sponsored label name ShoreVest and Benjamin Fanger. The repository PDF matches this interview.",
+        "urlStatus": "Direct HTTP audit: 200 on 2026-09-20.",
+        "hostingPermission": "Not established. No publisher content or assets may be rehosted."
+      },
+      "summaryZh": "在这篇赞助访谈中，Benjamin Fanger 讨论中国信贷的交易结构、抵押品及债权执行。"
+    },
+    {
+      "id": "private-debt-investor-2025-04-01-asia-pacific-distressed-debt",
+      "publication": "Private Debt Investor",
+      "date": "2025-04-01",
+      "type": "Article",
+      "title": "Asia-Pacific is a tough market to crack",
+      "summary": "PEI examines distressed debt fundraising and investment conditions in Asia-Pacific, with ShoreVest among the firms covered.",
+      "summaryZh": "PEI 探讨亚太地区困境债务的募资与投资环境，新岸资本为报道涉及的机构之一。",
+      "url": "https://www.pei-privatecredit.com/asia-pacific-is-a-tough-market-to-crack/",
+      "linkType": "external",
+      "status": "published",
+      "featured": false,
+      "autoDiscovered": false,
+      "rights": "link-only",
+      "access": "subscription",
+      "verification": {
+        "checkedAt": "2026-09-20",
+        "status": "verified",
+        "dateBasis": "Publisher publication date",
+        "featureEvidence": "Publisher metadata confirms Amy Carroll, publication date and ShoreVest as a key mention; full article is subscription-restricted.",
+        "urlStatus": "Direct HTTP audit: 200 on 2026-09-20.",
+        "hostingPermission": "Not established; external link and original ShoreVest summary only."
+      }
     },
     {
       "id": "hsbc-2024-10-02-finding-opportunities-in-chinese-property",
@@ -34,38 +80,119 @@
       "date": "2024-10-02",
       "type": "Article",
       "title": "Finding opportunities in Chinese property",
-      "summary": "A discussion of opportunities emerging from the Chinese property downturn, including distressed assets with underlying cash flow and collateral.",
-      "url": "https://www.gbm.hsbc.com/en-gb/insights/market-and-regulatory-insights/finding-opportunities-in-chinese-property",
+      "summary": "HSBC discusses China property investment opportunities, with comments from Rebekah Woo, identified as a ShoreVest limited partner and LPAC member.",
+      "url": "https://www.business.hsbc.com/en-gb/insights/finding-opportunities-in-chinese-property",
       "linkType": "external",
       "status": "published",
       "featured": false,
-      "autoDiscovered": false
+      "autoDiscovered": false,
+      "rights": "link-only",
+      "access": "open",
+      "verification": {
+        "checkedAt": "2026-09-20",
+        "status": "verified",
+        "dateBasis": "Publisher publication date",
+        "featureEvidence": "Quotes Rebekah Woo in her stated ShoreVest LP/LPAC capacity; does not quote Benjamin Fanger.",
+        "urlStatus": "Direct HTTP audit: 200 on 2026-09-20.",
+        "hostingPermission": "Not established. No publisher content or assets may be rehosted."
+      },
+      "summaryZh": "汇丰探讨中国房地产投资机会，并引述 Rebekah Woo 的观点；原文将其列为新岸资本有限合伙人及 LPAC 成员。"
+    },
+    {
+      "id": "reuters-2024-09-11-china-banks-indigestion",
+      "publication": "Reuters Breakingviews",
+      "date": "2024-09-11",
+      "type": "Commentary",
+      "title": "China’s banks have a nasty case of indigestion",
+      "summary": "Robyn Mak examines pressure on Chinese banks and quotes Benjamin Fanger on cash-generating collateral behind distressed loans.",
+      "summaryZh": "Robyn Mak 分析中国银行面临的压力，并引述 Benjamin Fanger 对困境贷款背后现金流资产的看法。",
+      "url": "https://www.reuters.com/breakingviews/chinas-banks-have-nasty-case-indigestion-2024-09-10/",
+      "linkType": "external",
+      "status": "published",
+      "featured": false,
+      "autoDiscovered": false,
+      "rights": "link-only",
+      "access": "subscription",
+      "verification": {
+        "checkedAt": "2026-09-20",
+        "status": "verified",
+        "dateBasis": "Publisher publication date",
+        "featureEvidence": "Original Reuters page identifies Robyn Mak and directly quotes Benjamin Fanger; published 11 September 2024 UTC despite 10 September URL slug.",
+        "urlStatus": "Direct HTTP audit: 401 on 2026-09-20. Access restriction; not evidence of a dead link. See featureEvidence for independent publisher-page evidence.",
+        "hostingPermission": "Not established; external link and original ShoreVest summary only."
+      }
     },
     {
       "id": "the-economist-2024-02-14-money-talks",
       "publication": "The Economist",
-      "date": "2024-02-14",
+      "date": "2024-02-08",
       "type": "Podcast",
-      "title": "The Economist speaks with ShoreVest on China's financial system and distressed debt",
-      "summary": "A Money Talks discussion on China's financial system and distressed debt. Access is subject to the publisher's subscription terms.",
-      "url": "",
-      "linkType": "none",
+      "title": "Money Talks: How much trouble is China’s economy in?",
+      "summary": "Benjamin Fanger joins Money Talks to discuss China’s economic slowdown, property market stress and the outlook for investors.",
+      "url": "https://shows.acast.com/theeconomistmoneytalks/episodes/money-talks-how-much-trouble-is-chinas-economy-in",
+      "linkType": "podcast",
+      "status": "published",
+      "featured": true,
+      "autoDiscovered": false,
+      "rights": "link-only",
+      "access": "subscription",
+      "verification": {
+        "checkedAt": "2026-09-20",
+        "status": "verified",
+        "dateBasis": "8 February 2024 from official episode page and RSS; 14 February was the ShoreVest archive date.",
+        "featureEvidence": "Official Economist Acast episode page and RSS feed explicitly list Ben Fanger, founder of ShoreVest Partners, as a guest.",
+        "urlStatus": "Direct HTTP audit: 200 on 2026-09-20.",
+        "hostingPermission": "Not established. No publisher content or assets may be rehosted."
+      },
+      "summaryZh": "Benjamin Fanger 参与 Money Talks 节目，讨论中国经济放缓、房地产市场压力及投资者面临的环境。"
+    },
+    {
+      "id": "dealstreetasia-2023-10-16-ifc-shorevest-spv",
+      "publication": "DealStreetAsia",
+      "date": "2023-10-16",
+      "type": "Article",
+      "title": "IFC proposes $150m investment in ShoreVest’s SPV for distressed assets in China",
+      "summary": "DealStreetAsia reports on IFC’s proposed investment in a ShoreVest vehicle targeting distressed assets in China.",
+      "summaryZh": "DealStreetAsia 报道 IFC 拟投资新岸资本旗下中国困境资产投资载体。",
+      "url": "https://www.dealstreetasia.com/stories/ifc-shorevest-spv-367122",
+      "linkType": "external",
       "status": "published",
       "featured": false,
-      "autoDiscovered": false
+      "autoDiscovered": false,
+      "rights": "link-only",
+      "access": "subscription",
+      "verification": {
+        "checkedAt": "2026-09-20",
+        "status": "verified",
+        "dateBasis": "Publisher publication date",
+        "featureEvidence": "Original publisher headline names ShoreVest and describes a proposed investment; author Mars W. Mosqueda Jr., dated 16 October 2023. Do not imply a completed transaction.",
+        "urlStatus": "Direct HTTP audit: 200 on 2026-09-20.",
+        "hostingPermission": "Not established; external link and original ShoreVest summary only."
+      }
     },
     {
       "id": "portico-advisers-2022-07-14-ben-fanger-on-distressed-debt-in-china",
       "publication": "Portico Advisers",
       "date": "2022-07-14",
       "type": "Podcast",
-      "title": "Ben Fanger on distressed debt in China",
-      "summary": "A conversation covering non-performing loans, special situations and the demands of local execution.",
+      "title": "Ben Fanger on Distressed Debt in China",
+      "summary": "Mike Casey interviews Benjamin Fanger about China’s distressed debt market, non-performing loans and special situations investing.",
       "url": "https://www.porticopodcast.com/1894108/episodes/10958676-ben-fanger-on-distressed-debt-in-china",
       "linkType": "podcast",
       "status": "published",
       "featured": false,
-      "autoDiscovered": false
+      "autoDiscovered": false,
+      "rights": "link-only",
+      "access": "open",
+      "verification": {
+        "checkedAt": "2026-09-20",
+        "status": "verified",
+        "dateBasis": "Publisher publication date",
+        "featureEvidence": "Official Portico episode 16 page names Ben Fanger and ShoreVest Partners; Apple episode is a duplicate distribution channel.",
+        "urlStatus": "Direct HTTP audit: 200 on 2026-09-20.",
+        "hostingPermission": "Not established. No publisher content or assets may be rehosted."
+      },
+      "summaryZh": "Mike Casey 访谈 Benjamin Fanger，探讨中国困境债务、不良贷款及特殊机会投资。"
     },
     {
       "id": "cfunds-2021-12-14-capital-radio-benjamin-fanger",
@@ -73,12 +200,23 @@
       "date": "2021-12-14",
       "type": "Podcast",
       "title": "Capital Radio — Benjamin Fanger, Founding Partner of ShoreVest Partners",
-      "summary": "A conversation about ShoreVest's approach to Chinese private credit and distressed debt investing.",
+      "summary": "Benjamin Fanger discusses China’s business environment, geopolitical risk and competition in distressed debt investing.",
       "url": "https://www.cfunds.io/s1e8-capital-radio-benjamin-fanger-founding-partner-of-shorevest-partners/",
       "linkType": "podcast",
       "status": "published",
       "featured": false,
-      "autoDiscovered": false
+      "autoDiscovered": false,
+      "rights": "link-only",
+      "access": "open",
+      "verification": {
+        "checkedAt": "2026-09-20",
+        "status": "verified",
+        "dateBasis": "Publisher publication date",
+        "featureEvidence": "Publisher episode page names Benjamin Fanger as the guest and founding partner of ShoreVest.",
+        "urlStatus": "Direct HTTP audit: 200 on 2026-09-20.",
+        "hostingPermission": "Not established. No publisher content or assets may be rehosted."
+      },
+      "summaryZh": "Benjamin Fanger 讨论中国营商环境、地缘政治风险及困境债务投资的竞争格局。"
     },
     {
       "id": "pensions-investments-2021-10-18-few-foreign-investors-positioned-for-china-npls",
@@ -86,12 +224,23 @@
       "date": "2021-10-18",
       "type": "Article",
       "title": "Few foreign investors positioned for China NPLs",
-      "summary": "Coverage citing ShoreVest on participation in China's non-performing-loan market.",
-      "url": "https://www.pionline.com/investing/few-foreign-investors-positioned-china-npls",
+      "summary": "Pensions & Investments reports on overseas participation in China’s non-performing-loan market, including commentary from Benjamin Fanger.",
+      "url": "https://www.pionline.com/investing/few-foreign-investors-positioned-china-npls/",
       "linkType": "external",
       "status": "published",
       "featured": false,
-      "autoDiscovered": false
+      "autoDiscovered": false,
+      "rights": "link-only",
+      "access": "subscription",
+      "verification": {
+        "checkedAt": "2026-09-20",
+        "status": "access-limited",
+        "dateBasis": "18 October 2021 in repository publisher copy, by Douglas Appell.",
+        "featureEvidence": "Existing publisher copy in the repository contains Benjamin Fanger and ShoreVest commentary.",
+        "urlStatus": "Direct HTTP audit: 200 on 2026-09-20. Canonical trailing-slash destination retrieved; initial access checks returned 403.",
+        "hostingPermission": "Not established. No publisher content or assets may be rehosted."
+      },
+      "summaryZh": "Pensions & Investments 报道海外投资者参与中国不良贷款市场的情况，包括 Benjamin Fanger 的观点。"
     },
     {
       "id": "allaboutalpha-2021-05-13-comparative-analysis-chinese-private-debt",
@@ -104,46 +253,90 @@
       "linkType": "none",
       "status": "published",
       "featured": false,
-      "autoDiscovered": false
+      "autoDiscovered": false,
+      "rights": "metadata-only",
+      "access": "unavailable",
+      "verification": {
+        "checkedAt": "2026-09-20",
+        "status": "historical",
+        "dateBasis": "Existing ShoreVest archive; original publication date not independently confirmed.",
+        "featureEvidence": "Retained from the existing ShoreVest archive; original source requires confirmation.",
+        "urlStatus": "No verified original URL recovered.",
+        "hostingPermission": "Not established. No publisher content or assets may be rehosted."
+      },
+      "summaryZh": "关于中国私募债务的历史资料；目前尚未确认可用的原始出版链接。"
     },
     {
       "id": "investment-briefing-2021-04-28-credit-crunch-happening-in-china",
-      "publication": "Investment Briefing",
-      "date": "2021-04-28",
-      "type": "Article",
-      "title": "The credit crunch happening in China: defaults and the efficient allocation",
-      "summary": "A discussion of how rising defaults were reshaping China's financing environment.",
+      "publication": "Investment Magazine",
+      "date": "2021-03-30",
+      "type": "Conference session",
+      "title": "Benjamin Fanger: The credit crunch happening in China: Defaults and the efficient allocation",
+      "summary": "A conference session with Benjamin Fanger on Chinese corporate defaults, liquidity pressures and distressed investment opportunities.",
       "url": "https://www.investmentmagazine.com.au/2021/03/benjamin-fanger-the-credit-crunch-happening-in-china-defaults-and-the-efficient-allocation/",
       "linkType": "external",
       "status": "published",
       "featured": false,
-      "autoDiscovered": false
+      "autoDiscovered": false,
+      "rights": "link-only",
+      "access": "open",
+      "verification": {
+        "checkedAt": "2026-09-20",
+        "status": "verified",
+        "dateBasis": "30 March 2021, 23:36, as displayed by the publisher; replaces 28 April archive date.",
+        "featureEvidence": "Original Investment Magazine session page identifies Benjamin Fanger as speaker and ShoreVest managing partner.",
+        "urlStatus": "Direct HTTP audit: 200 on 2026-09-20.",
+        "hostingPermission": "Not established. No publisher content or assets may be rehosted."
+      },
+      "summaryZh": "Benjamin Fanger 在会议环节中讨论中国企业违约、流动性压力与困境投资机会。"
     },
     {
       "id": "reuters-2020-09-15-the-exchange-chinas-bad-debt-opportunity",
-      "publication": "Reuters",
+      "publication": "Reuters Breakingviews",
       "date": "2020-09-15",
       "type": "Podcast",
       "title": "The Exchange: China's bad debt opportunity",
-      "summary": "A discussion of China's distressed-credit opportunity and the role of collateral-led execution.",
-      "url": "",
-      "linkType": "none",
+      "summary": "Pete Sweeney interviews Benjamin Fanger about bank failures, credit-market reform and opportunities for foreign investors in Chinese distressed debt.",
+      "url": "https://www.reuters.com/article/breakingviews/breakingviews-the-exchange-chinas-bad-debt-opportunity-idUSKBN26607Z/",
+      "linkType": "podcast",
       "status": "published",
       "featured": false,
-      "autoDiscovered": false
+      "autoDiscovered": false,
+      "rights": "link-only",
+      "access": "open",
+      "verification": {
+        "checkedAt": "2026-09-20",
+        "status": "verified",
+        "dateBasis": "15 September 2020 UTC from Reuters; 14 September displayed in US Pacific time.",
+        "featureEvidence": "Reuters original episode introduction explicitly names Benjamin Fanger, ShoreVest and interviewer Pete Sweeney.",
+        "urlStatus": "Direct HTTP audit: 401 on 2026-09-20. Access restriction; not evidence of a dead link. See featureEvidence for independent publisher-page evidence.",
+        "hostingPermission": "Not established. No publisher content or assets may be rehosted."
+      },
+      "summaryZh": "Pete Sweeney 访谈 Benjamin Fanger，讨论银行倒闭、信贷市场改革及外国投资者参与中国困境债务市场的机会。"
     },
     {
       "id": "aim-summit-2020-07-08-post-covid-private-credit",
       "publication": "AIM Summit",
-      "date": "2020-07-08",
+      "date": "2020-07-09",
       "type": "Webinar",
-      "title": "Unique post-COVID-19 dynamics in private credit (Europe & Asia)",
-      "summary": "A comparison of market dislocation and capital-allocation conditions across Europe and Asia in 2020.",
-      "url": "",
-      "linkType": "none",
+      "title": "Unique Market Dynamics in Private Credit Post COVID-19",
+      "summary": "Benjamin Fanger joins an AIM Summit discussion of the pandemic’s effects on private credit conditions in Asia and Europe.",
+      "url": "https://www.youtube.com/watch?v=JAdw9sjZBo8",
+      "linkType": "video",
       "status": "published",
       "featured": false,
-      "autoDiscovered": false
+      "autoDiscovered": false,
+      "rights": "link-only",
+      "access": "open",
+      "verification": {
+        "checkedAt": "2026-09-20",
+        "status": "verified",
+        "dateBasis": "9 July 2020 official video publication date; original archive used 8 July.",
+        "featureEvidence": "Official AIM Summit YouTube description names Benjamin Fanger, Managing Partner at ShoreVest Partners.",
+        "urlStatus": "Direct HTTP audit: 200 on 2026-09-20.",
+        "hostingPermission": "Not established. No publisher content or assets may be rehosted."
+      },
+      "summaryZh": "Benjamin Fanger 参与 AIM Summit 网络研讨会，探讨疫情后亚洲与欧洲私募信贷市场的变化。"
     },
     {
       "id": "debtwire-2020-06-04-new-global-npl-markets",
@@ -156,7 +349,42 @@
       "linkType": "none",
       "status": "published",
       "featured": false,
-      "autoDiscovered": false
+      "autoDiscovered": false,
+      "rights": "metadata-only",
+      "access": "unavailable",
+      "verification": {
+        "checkedAt": "2026-09-20",
+        "status": "historical",
+        "dateBasis": "Existing ShoreVest archive; original publication date not independently confirmed.",
+        "featureEvidence": "Retained from the existing ShoreVest archive; original source requires confirmation.",
+        "urlStatus": "No verified original URL recovered.",
+        "hostingPermission": "Not established. No publisher content or assets may be rehosted."
+      },
+      "summaryZh": "关于全球不良贷款市场的历史网络研讨会记录；目前尚未确认官方录播链接。"
+    },
+    {
+      "id": "private-debt-investor-2020-06-01-why-lending-in-china",
+      "publication": "Private Debt Investor",
+      "date": "2020-06-01",
+      "type": "Article",
+      "title": "Why lending in China may be safer than you think",
+      "summary": "Private Debt Investor examines China real estate lending and creditor protections, with ShoreVest among the managers covered.",
+      "summaryZh": "Private Debt Investor 探讨中国房地产信贷与债权保护，新岸资本为报道涉及的管理人之一。",
+      "url": "https://www.pei-privatecredit.com/why-lending-in-china-may-be-safer-than-you-think/",
+      "linkType": "external",
+      "status": "published",
+      "featured": false,
+      "autoDiscovered": false,
+      "rights": "link-only",
+      "access": "subscription",
+      "verification": {
+        "checkedAt": "2026-09-20",
+        "status": "verified",
+        "dateBasis": "Publisher publication date",
+        "featureEvidence": "Publisher metadata names Adalla Kim, date and ShoreVest as a key mention; archived firm date of 27 May is not the publisher date.",
+        "urlStatus": "Direct HTTP audit: 200 on 2026-09-20.",
+        "hostingPermission": "Not established; external link and original ShoreVest summary only."
+      }
     },
     {
       "id": "investment-magazine-2020-05-17-special-situations-recovery-rates",
@@ -164,25 +392,47 @@
       "date": "2020-05-17",
       "type": "Podcast",
       "title": "Ben Fanger: special situations, recovery rates and Chinese distressed debt",
-      "summary": "A conversation focused on special situations, recovery rates and process discipline in distressed credit.",
+      "summary": "Alex Proimos interviews Benjamin Fanger about special situations, debt recoveries and investing in China’s distressed credit market.",
       "url": "https://www.investmentmagazine.com.au/2020/05/ben-fanger-special-situations-recovery-rates-and-chinese-distressed-debt-2/",
       "linkType": "podcast",
       "status": "published",
       "featured": false,
-      "autoDiscovered": false
+      "autoDiscovered": false,
+      "rights": "link-only",
+      "access": "open",
+      "verification": {
+        "checkedAt": "2026-09-20",
+        "status": "verified",
+        "dateBasis": "17 May 2020, 04:00 from publisher page.",
+        "featureEvidence": "Publisher page identifies episode 7 with Ben Fanger of ShoreVest and hosts an official Transistor player.",
+        "urlStatus": "Direct HTTP audit: 200 on 2026-09-20.",
+        "hostingPermission": "Not established. No publisher content or assets may be rehosted."
+      },
+      "summaryZh": "Alex Proimos 访谈 Benjamin Fanger，探讨特殊机会、债务回收及中国困境信贷投资。"
     },
     {
       "id": "shorevest-2020-05-07-credit-environment-wake-of-covid-19",
       "publication": "ShoreVest",
       "date": "2020-05-07",
-      "type": "Webinar",
+      "type": "Firm webinar",
       "title": "China's credit environment in the wake of COVID-19",
       "summary": "An investor briefing recorded during the early months of the COVID-19 disruption.",
       "url": "",
       "linkType": "none",
       "status": "published",
       "featured": false,
-      "autoDiscovered": false
+      "autoDiscovered": false,
+      "rights": "metadata-only",
+      "access": "unavailable",
+      "verification": {
+        "checkedAt": "2026-09-20",
+        "status": "historical",
+        "dateBasis": "Existing ShoreVest archive; original publication date not independently confirmed.",
+        "featureEvidence": "Retained from the existing ShoreVest archive; original source requires confirmation.",
+        "urlStatus": "No verified original URL recovered.",
+        "hostingPermission": "Not established. No publisher content or assets may be rehosted."
+      },
+      "summaryZh": "新岸资本于疫情初期举办的投资者简报；目前尚未确认可用的录播链接。"
     },
     {
       "id": "reorg-2020-01-17-china-npl-investors-trade-deal",
@@ -195,7 +445,18 @@
       "linkType": "none",
       "status": "published",
       "featured": false,
-      "autoDiscovered": false
+      "autoDiscovered": false,
+      "rights": "metadata-only",
+      "access": "unavailable",
+      "verification": {
+        "checkedAt": "2026-09-20",
+        "status": "historical",
+        "dateBasis": "Existing ShoreVest archive; original publication date not independently confirmed.",
+        "featureEvidence": "Retained from the existing ShoreVest archive; original source requires confirmation.",
+        "urlStatus": "No verified original URL recovered.",
+        "hostingPermission": "Not established. No publisher content or assets may be rehosted."
+      },
+      "summaryZh": "有关中美贸易协议与中国不良贷款市场的历史报道；目前尚未确认可用的原始出版链接。"
     },
     {
       "id": "bloomberg-2020-01-16-us-firms-china-bad-debt",
@@ -208,7 +469,18 @@
       "linkType": "none",
       "status": "published",
       "featured": false,
-      "autoDiscovered": false
+      "autoDiscovered": false,
+      "rights": "metadata-only",
+      "access": "unavailable",
+      "verification": {
+        "checkedAt": "2026-09-20",
+        "status": "historical",
+        "dateBasis": "Existing ShoreVest archive; original publication date not independently confirmed.",
+        "featureEvidence": "Retained from the existing ShoreVest archive; original source requires confirmation.",
+        "urlStatus": "No verified original URL recovered.",
+        "hostingPermission": "Not established. No publisher content or assets may be rehosted."
+      },
+      "summaryZh": "有关外资参与中国不良贷款处置的历史报道；目前尚未确认可用的彭博原始链接。"
     },
     {
       "id": "asia-society-2019-10-30-executive-roundtable-china-debt-markets",
@@ -216,12 +488,23 @@
       "date": "2019-10-30",
       "type": "Roundtable",
       "title": "Executive Roundtable on China debt markets",
-      "summary": "An executive roundtable on trade-policy trends, China's debt conditions and the country's non-performing-loan market.",
+      "summary": "Asia Society’s executive roundtable with Benjamin Fanger and Howard Chao on China’s debt markets and trade-policy environment.",
       "url": "https://asiasociety.org/northern-california/executive-roundtable-benjamin-fanger-and-howard-chao",
-      "linkType": "external",
+      "linkType": "event",
       "status": "published",
       "featured": false,
-      "autoDiscovered": false
+      "autoDiscovered": false,
+      "rights": "link-only",
+      "access": "access-limited",
+      "verification": {
+        "checkedAt": "2026-09-20",
+        "status": "access-limited",
+        "dateBasis": "30 October 2019 from existing ShoreVest event record.",
+        "featureEvidence": "Named Asia Society event URL and existing firm archive; live body could not be revalidated.",
+        "urlStatus": "Direct HTTP audit: 403 on 2026-09-20. Access restriction; not evidence of a dead link. See featureEvidence for independent publisher-page evidence.",
+        "hostingPermission": "Not established. No publisher content or assets may be rehosted."
+      },
+      "summaryZh": "亚洲协会邀请 Benjamin Fanger 和 Howard Chao 参加高层圆桌会议，讨论中国债务市场与贸易政策环境。"
     },
     {
       "id": "the-economist-2019-01-17-china-debt-bad-loans",
@@ -234,7 +517,42 @@
       "linkType": "none",
       "status": "published",
       "featured": false,
-      "autoDiscovered": false
+      "autoDiscovered": false,
+      "rights": "metadata-only",
+      "access": "unavailable",
+      "verification": {
+        "checkedAt": "2026-09-20",
+        "status": "historical",
+        "dateBasis": "Existing ShoreVest archive; original publication date not independently confirmed.",
+        "featureEvidence": "Retained from the existing ShoreVest archive; original source requires confirmation.",
+        "urlStatus": "No verified original URL recovered.",
+        "hostingPermission": "Not established. No publisher content or assets may be rehosted."
+      },
+      "summaryZh": "有关中国不良贷款投资市场的历史报道；目前尚未确认可用的原始出版链接。"
+    },
+    {
+      "id": "private-debt-investor-2017-06-13-shorevest-china-fund",
+      "publication": "Private Debt Investor",
+      "date": "2017-06-13",
+      "type": "Article",
+      "title": "ShoreVest targets $750m for China fund",
+      "summary": "Coverage of ShoreVest’s 2017 fundraising plans and a co-investment arrangement for larger transactions.",
+      "summaryZh": "关于新岸资本 2017 年募资计划及大型交易共同投资安排的报道。",
+      "url": "https://www.pei-privatecredit.com/shorevest-targets-750m-for-china-fund/",
+      "linkType": "external",
+      "status": "published",
+      "featured": false,
+      "autoDiscovered": false,
+      "rights": "link-only",
+      "access": "subscription",
+      "verification": {
+        "checkedAt": "2026-09-20",
+        "status": "verified",
+        "dateBasis": "Publisher publication date",
+        "featureEvidence": "Publisher headline names ShoreVest; author Christie Ou and 13 June 2017 date verified. Historical target, not an assertion of funds raised.",
+        "urlStatus": "Direct HTTP audit: 200 on 2026-09-20.",
+        "hostingPermission": "Not established; external link and original ShoreVest summary only."
+      }
     },
     {
       "id": "nikkei-asia-2017-06-01-china-debt-asset-sale",
@@ -247,7 +565,42 @@
       "linkType": "none",
       "status": "published",
       "featured": false,
-      "autoDiscovered": false
+      "autoDiscovered": false,
+      "rights": "metadata-only",
+      "access": "unavailable",
+      "verification": {
+        "checkedAt": "2026-09-20",
+        "status": "historical",
+        "dateBasis": "Existing ShoreVest archive; original publication date not independently confirmed.",
+        "featureEvidence": "Retained from the existing ShoreVest archive; original source requires confirmation.",
+        "urlStatus": "No verified original URL recovered.",
+        "hostingPermission": "Not established. No publisher content or assets may be rehosted."
+      },
+      "summaryZh": "有关中国债务与资产出售的历史报道；目前尚未确认可用的原始出版链接。"
+    },
+    {
+      "id": "private-debt-investor-2016-11-15-shorevest-launch",
+      "publication": "Private Debt Investor",
+      "date": "2016-11-15",
+      "type": "Article",
+      "title": "Shoreline founder launches new distressed debt firm",
+      "summary": "Private Debt Investor reports on Benjamin Fanger’s launch of ShoreVest and the team’s focus on Chinese distressed debt.",
+      "summaryZh": "Private Debt Investor 报道 Benjamin Fanger 创立新岸资本及其中国困境债务投资方向。",
+      "url": "https://www.pei-privatecredit.com/shoreline-founder-launches-new-distressed-debt-firm/",
+      "linkType": "external",
+      "status": "published",
+      "featured": false,
+      "autoDiscovered": false,
+      "rights": "link-only",
+      "access": "subscription",
+      "verification": {
+        "checkedAt": "2026-09-20",
+        "status": "verified",
+        "dateBasis": "Publisher publication date",
+        "featureEvidence": "Original publisher page identifies ShoreVest as a key mention; Christie Ou, 15 November 2016. Firm launch corroborated by existing archive record.",
+        "urlStatus": "Direct HTTP audit: 200 on 2026-09-20.",
+        "hostingPermission": "Not established; external link and original ShoreVest summary only."
+      }
     },
     {
       "id": "the-economist-2016-05-07-breaking-bad",
@@ -260,7 +613,18 @@
       "linkType": "none",
       "status": "published",
       "featured": false,
-      "autoDiscovered": false
+      "autoDiscovered": false,
+      "rights": "metadata-only",
+      "access": "unavailable",
+      "verification": {
+        "checkedAt": "2026-09-20",
+        "status": "historical",
+        "dateBasis": "Existing ShoreVest archive; original publication date not independently confirmed.",
+        "featureEvidence": "Retained from the existing ShoreVest archive; original source requires confirmation.",
+        "urlStatus": "No verified original URL recovered.",
+        "hostingPermission": "Not established. No publisher content or assets may be rehosted."
+      },
+      "summaryZh": "有关中国不良贷款市场的历史报道；目前尚未确认可用的原始出版链接。"
     }
   ]
 }

@@ -149,7 +149,9 @@ for (const candidate of candidates) {
     summary: '',
     url: candidate.link,
     linkType: 'external',
-    status: 'published',
+    // Discovery is a lead, not editorial verification. Public rendering only
+    // includes published records after title/date/mention/URL/rights review.
+    status: 'pending-review',
     featured: false,
     autoDiscovered: true,
     discoveredAt,

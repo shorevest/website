@@ -17,6 +17,7 @@
   }
 
   var exact = {
+    '/ShoreVest_PDI_Jun25.pdf': '/media/#private-debt-investor-2025-06-02-shorevest-partners-on-the-case-for-china',
     '/news-insights': '/insights/',
 
     '/john-jones': '/team/',
@@ -77,21 +78,21 @@
     '/china-approaching-lehman-moment': '/media/',
     '/china-crackdown-bad-debt-forces-wave-loans-market': '/media/',
     '/china-debt-prompt-7-7-trillion-asset-sale': '/media/',
-    '/news-insights/china-debt-prompt-7-7-trillion-asset-sale': '/media/',
+    '/news-insights/china-debt-prompt-7-7-trillion-asset-sale': '/media/#nikkei-asia-2017-06-01-china-debt-asset-sale',
     '/china-npl-investors-call-us-china-trade-deal-positive-development-agreement-unlikely-to-remove-main-hurdles-for-investors': '/media/',
     '/distressed-funds-find-treasure-chinas-mounting-bad-debts': '/media/',
     '/empea-professional-development-webcast-chinese-pe-market-overview': '/media/',
     '/empea-professional-development-webcast-chinese-private-distressed-debt-investing-opportunities-challenges': '/media/',
     '/new-firm-shorevest-launches-to-invest-in-chinese-distressed-debt': '/media/',
     '/news-insights/new-firm-shorevest-launches-to-invest-in-chinese-distressed-debt': '/media/',
-    '/news-insights/aim-summits-webinar-unique-market-dynamics-in-private-credit-post-covid-19-europe-asia': '/media/',
+    '/news-insights/aim-summits-webinar-unique-market-dynamics-in-private-credit-post-covid-19-europe-asia': '/media/#aim-summit-2020-07-08-post-covid-private-credit',
     '/news-insights/big-ignore-internationalisation-chinese-balance-sheets': '/media/',
     '/news-insights/cambridge-associates-touts-fleeting-china-real-estate-opportunity': '/media/',
     '/news-insights/china-can-deflate-worlds-largest-credit-bubble-orderly-fashion': '/media/',
     '/news-insights/china-tipped-to-see-more-npl-deal-flow': '/media/',
     '/news-insights/chinas-credit-excess-unlike-anything-world-ever-seen': '/media/',
     '/news-insights/chinas-legal-system-came-long-way-enforcing-creditor-claims-bad-debt': '/media/',
-    '/news-insights/debtwires-webinar-the-new-global-npl-markets': '/media/',
+    '/news-insights/debtwires-webinar-the-new-global-npl-markets': '/media/#debtwire-2020-06-04-new-global-npl-markets',
     '/news-insights/doing-your-homework-pays-in-chinese-distressed-debt': '/media/',
     '/news-insights/four-reasons-china-opening-bond-market-world': '/media/',
     '/news-insights/industry-qa-benjamin-fanger': '/media/',
@@ -101,24 +102,24 @@
     '/wp-content/uploads/2020/04/South-China-Morning-Post-Opportunity-of-a-lifetime-for-distress-investors-as-companies-from-HNA-to-Chinas-LVMH-flounder-and-bad-debts-balloon.pdf': '/media/',
     '/news-insights/playing-doctor': '/media/',
     '/playing-doctor': '/media/',
-    '/news-insights/shoreline-founder-launches-new-distressed-debt-firm': '/media/',
+    '/news-insights/shoreline-founder-launches-new-distressed-debt-firm': '/media/#private-debt-investor-2016-11-15-shorevest-launch',
     '/news-insights/shorevest-china-aims-orderly-deflating-worlds-largest-credit-excess': '/media/',
     '/shorevest-china-aims-orderly-deflating-worlds-largest-credit-excess': '/media/',
     '/news-insights/shorevest-launches-750m-fund-tap-npl-portfolios-china': '/media/',
     '/wp-content/uploads/2017/06/ShoreVest-launches-750m-fund-to-tap-NPL-portfolios-in-China.pdf': '/media/',
-    '/wp-content/uploads/2017/06/ShoreVest-targets-750m-for-China-distress-fund.pdf': '/media/',
+    '/wp-content/uploads/2017/06/ShoreVest-targets-750m-for-China-distress-fund.pdf': '/media/#private-debt-investor-2017-06-13-shorevest-china-fund',
     '/shorevest-eyeing-chinas-bad-debt-industry-750m-fund': '/media/',
     '/news-insights/shorevests-benjamin-fanger-on-private-market-solutions-for-npls': '/media/',
-    '/news-insights/shorevests-webinar-chinas-credit-environment-in-the-wake-of-covid-19': '/media/',
-    '/news-insights/the-case-for-china': '/media/',
-    '/news-insights/the-economist-money-talks': '/media/',
-    '/wp-content/uploads/2024/02/Economist-Money-Talks-Interview-1.mp3': '/media/',
+    '/news-insights/shorevests-webinar-chinas-credit-environment-in-the-wake-of-covid-19': '/media/#shorevest-2020-05-07-credit-environment-wake-of-covid-19',
+    '/news-insights/the-case-for-china': '/media/#private-debt-investor-2025-06-02-shorevest-partners-on-the-case-for-china',
+    '/news-insights/the-economist-money-talks': '/media/#the-economist-2024-02-14-money-talks',
+    '/wp-content/uploads/2024/02/Economist-Money-Talks-Interview-1.mp3': '/media/#the-economist-2024-02-14-money-talks',
     '/news-insights/views-from-the-field-reflecting-on-2013-and-the-outlook-for-em-pe-in-2014': '/media/',
     '/views-from-the-field-reflecting-on-2013-and-the-outlook-for-em-pe-in-2014': '/media/',
-    '/news-insights/why-lending-in-china-may-be-safer-than-you-think': '/media/',
-    '/wp-content/uploads/2020/05/PDI-Why-lending-in-China-may-be-safer-than-you-think.pdf': '/media/',
+    '/news-insights/why-lending-in-china-may-be-safer-than-you-think': '/media/#private-debt-investor-2020-06-01-why-lending-in-china',
+    '/wp-content/uploads/2020/05/PDI-Why-lending-in-China-may-be-safer-than-you-think.pdf': '/media/#private-debt-investor-2020-06-01-why-lending-in-china',
     '/news-insights/global-investors-return-to-chinas-bad-debt-market': '/media/',
-    '/news-insights/investment-magazines-podcast-ben-fanger-special-situations-recovery-rates-and-chinese-distressed-debt': '/media/',
+    '/news-insights/investment-magazines-podcast-ben-fanger-special-situations-recovery-rates-and-chinese-distressed-debt': '/media/#investment-magazine-2020-05-17-special-situations-recovery-rates',
     '/podcast-benjamin-fanger-ballooning-bad-loans-in-china-are-the-next-great-opportunity': '/media/',
     '/benjamin-fanger-ballooning-bad-loans-in-china-are-the-next-great-opportunity-transcript-of-podcast': '/media/',
     '/shoreline-capitals-fanger-on-chinas-coming-debt-crisis': '/media/',
@@ -146,6 +147,7 @@
   var target = exact[path];
   if (!target) return;
 
-  var suffix = (window.location.search || '') + (window.location.hash || '');
-  window.location.replace(target + suffix);
+  var parts = target.split('#');
+  var fragment = parts[1] ? '#' + parts[1] : (window.location.hash || '');
+  window.location.replace(parts[0] + (window.location.search || '') + fragment);
 }());
