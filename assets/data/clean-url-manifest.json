@@ -322,7 +322,7 @@
       "source": "china-debt-dynamics-v10i1.html",
       "route": "/insights/china-debt-dynamics/v10i1/",
       "destination": "insights/china-debt-dynamics/v10i1/index.html",
-      "indexable": false,
+      "indexable": true,
       "disabled": false,
       "reason": null,
       "redirectTarget": null
@@ -331,7 +331,7 @@
       "source": "china-debt-dynamics-v10i2.html",
       "route": "/insights/china-debt-dynamics/v10i2/",
       "destination": "insights/china-debt-dynamics/v10i2/index.html",
-      "indexable": false,
+      "indexable": true,
       "disabled": false,
       "reason": null,
       "redirectTarget": null
@@ -340,7 +340,7 @@
       "source": "china-debt-dynamics-v10i3.html",
       "route": "/insights/china-debt-dynamics/v10i3/",
       "destination": "insights/china-debt-dynamics/v10i3/index.html",
-      "indexable": false,
+      "indexable": true,
       "disabled": false,
       "reason": null,
       "redirectTarget": null
@@ -349,7 +349,7 @@
       "source": "china-debt-dynamics-v2i4.html",
       "route": "/insights/china-debt-dynamics/v2i4/",
       "destination": "insights/china-debt-dynamics/v2i4/index.html",
-      "indexable": false,
+      "indexable": true,
       "disabled": false,
       "reason": null,
       "redirectTarget": null
@@ -358,7 +358,7 @@
       "source": "china-debt-dynamics-v3i5.html",
       "route": "/insights/china-debt-dynamics/v3i5/",
       "destination": "insights/china-debt-dynamics/v3i5/index.html",
-      "indexable": false,
+      "indexable": true,
       "disabled": false,
       "reason": null,
       "redirectTarget": null
@@ -367,7 +367,7 @@
       "source": "china-debt-dynamics-v4i4.html",
       "route": "/insights/china-debt-dynamics/v4i4/",
       "destination": "insights/china-debt-dynamics/v4i4/index.html",
-      "indexable": false,
+      "indexable": true,
       "disabled": false,
       "reason": null,
       "redirectTarget": null
@@ -376,7 +376,7 @@
       "source": "china-debt-dynamics-v5i4.html",
       "route": "/insights/china-debt-dynamics/v5i4/",
       "destination": "insights/china-debt-dynamics/v5i4/index.html",
-      "indexable": false,
+      "indexable": true,
       "disabled": false,
       "reason": null,
       "redirectTarget": null
@@ -385,7 +385,7 @@
       "source": "china-debt-dynamics-v5i7.html",
       "route": "/insights/china-debt-dynamics/v5i7/",
       "destination": "insights/china-debt-dynamics/v5i7/index.html",
-      "indexable": false,
+      "indexable": true,
       "disabled": false,
       "reason": null,
       "redirectTarget": null
@@ -394,7 +394,7 @@
       "source": "china-debt-dynamics-v6i3.html",
       "route": "/insights/china-debt-dynamics/v6i3/",
       "destination": "insights/china-debt-dynamics/v6i3/index.html",
-      "indexable": false,
+      "indexable": true,
       "disabled": false,
       "reason": null,
       "redirectTarget": null
@@ -403,7 +403,7 @@
       "source": "china-debt-dynamics-v7i1.html",
       "route": "/insights/china-debt-dynamics/v7i1/",
       "destination": "insights/china-debt-dynamics/v7i1/index.html",
-      "indexable": false,
+      "indexable": true,
       "disabled": false,
       "reason": null,
       "redirectTarget": null
@@ -412,7 +412,7 @@
       "source": "china-debt-dynamics-v7i2.html",
       "route": "/insights/china-debt-dynamics/v7i2/",
       "destination": "insights/china-debt-dynamics/v7i2/index.html",
-      "indexable": false,
+      "indexable": true,
       "disabled": false,
       "reason": null,
       "redirectTarget": null
@@ -421,7 +421,7 @@
       "source": "china-debt-dynamics-v7i3.html",
       "route": "/insights/china-debt-dynamics/v7i3/",
       "destination": "insights/china-debt-dynamics/v7i3/index.html",
-      "indexable": false,
+      "indexable": true,
       "disabled": false,
       "reason": null,
       "redirectTarget": null
@@ -439,7 +439,7 @@
       "source": "china-debt-dynamics-v8i2.html",
       "route": "/insights/china-debt-dynamics/v8i2/",
       "destination": "insights/china-debt-dynamics/v8i2/index.html",
-      "indexable": false,
+      "indexable": true,
       "disabled": false,
       "reason": null,
       "redirectTarget": null
@@ -448,7 +448,7 @@
       "source": "china-debt-dynamics-v8i1.html",
       "route": "/insights/china-debt-dynamics/v8i3/",
       "destination": "insights/china-debt-dynamics/v8i3/index.html",
-      "indexable": false,
+      "indexable": true,
       "disabled": false,
       "reason": null,
       "redirectTarget": null
@@ -457,7 +457,7 @@
       "source": "china-debt-dynamics-v8i4.html",
       "route": "/insights/china-debt-dynamics/v8i4/",
       "destination": "insights/china-debt-dynamics/v8i4/index.html",
-      "indexable": false,
+      "indexable": true,
       "disabled": false,
       "reason": null,
       "redirectTarget": null
@@ -466,7 +466,7 @@
       "source": "china-debt-dynamics-v8i3.html",
       "route": "/insights/china-debt-dynamics/v8i5/",
       "destination": "insights/china-debt-dynamics/v8i5/index.html",
-      "indexable": false,
+      "indexable": true,
       "disabled": false,
       "reason": null,
       "redirectTarget": null
@@ -475,7 +475,7 @@
       "source": "china-debt-dynamics-v8i5.html",
       "route": "/insights/china-debt-dynamics/v8i6/",
       "destination": "insights/china-debt-dynamics/v8i6/index.html",
-      "indexable": false,
+      "indexable": true,
       "disabled": false,
       "reason": null,
       "redirectTarget": null
@@ -484,7 +484,7 @@
       "source": "china-debt-dynamics-v9i1.html",
       "route": "/insights/china-debt-dynamics/v9i1/",
       "destination": "insights/china-debt-dynamics/v9i1/index.html",
-      "indexable": false,
+      "indexable": true,
       "disabled": false,
       "reason": null,
       "redirectTarget": null
@@ -493,7 +493,7 @@
       "source": "china-debt-dynamics-v9i2.html",
       "route": "/insights/china-debt-dynamics/v9i2/",
       "destination": "insights/china-debt-dynamics/v9i2/index.html",
-      "indexable": false,
+      "indexable": true,
       "disabled": false,
       "reason": null,
       "redirectTarget": null
@@ -502,7 +502,7 @@
       "source": "china-debt-dynamics-into-the-shadows-of-us-private-credit.html",
       "route": "/insights/china-debt-dynamics/v9i3/",
       "destination": "insights/china-debt-dynamics/v9i3/index.html",
-      "indexable": false,
+      "indexable": true,
       "disabled": false,
       "reason": null,
       "redirectTarget": null
@@ -511,7 +511,7 @@
       "source": "china-debt-dynamics-45-beijings-campaign-against-overcapacity-creates-private-credit-opportunities.html",
       "route": "/insights/china-debt-dynamics/v9i4/",
       "destination": "insights/china-debt-dynamics/v9i4/index.html",
-      "indexable": false,
+      "indexable": true,
       "disabled": false,
       "reason": null,
       "redirectTarget": null
