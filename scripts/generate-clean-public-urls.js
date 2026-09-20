@@ -247,6 +247,10 @@ function ensureNoindex(html) {
   return html.replace(/<\/head>/i, `  ${tag}\n</head>`);
 }
 
+function removeNoindexDirective(html) {
+  return html.replace(/\s*<meta\s+name=["']robots["'][^>]*content=["'][^"']*noindex[^"']*["'][^>]*>\s*/ig, '\n');
+}
+
 function setCanonicalRoute(html, route) {
   const absolute = `${SITE_ORIGIN}${route}`;
   if (/<link\s+rel=["']canonical["'][^>]*>/i.test(html)) {
@@ -425,6 +429,7 @@ function main() {
     html = rewriteRuntimeUrlBases(html);
     html = ensureBaseHref(html);
     html = setCanonicalRoute(html, item.route);
+    if (isCddArticleRoute(item.route)) html = removeNoindexDirective(html);
     writeIfChanged(item.destination, html);
   }
 
@@ -450,6 +455,10 @@ function main() {
       if (!html.includes(item.redirectTarget)) throw new Error(`Disabled route target missing in ${item.destination}`);
     } else if (!html.includes(`${SITE_ORIGIN}${item.route}`)) {
       throw new Error(`Missing clean canonical URL in ${item.destination}`);
+    }
+
+    if (isCddArticleRoute(item.route) && /<meta\s+name=["']robots["'][^>]*content=["'][^"']*noindex/i.test(html)) {
+      throw new Error(`Clean CDD canonical route contains noindex: ${item.destination}`);
     }
 
     if (/new URL\(([^,\n]+),\s*location\.href\)/.test(html)) throw new Error(`Runtime URL still ignores base href in ${item.destination}`);
