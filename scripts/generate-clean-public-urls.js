@@ -110,6 +110,10 @@ function isMediaArticleRoute(route) {
   return /^\/media\/[^/]+\/$/i.test(route);
 }
 
+function isCddArticleRoute(route) {
+  return /^\/insights\/china-debt-dynamics\/v\d+i\d+\/$/i.test(route);
+}
+
 function disabledRouteState(route) {
   if (isCareersApplicationRoute(route)) {
     if (RECRUITMENT_PUBLIC_CONFIG.applicationsEnabled !== true) {
@@ -363,8 +367,12 @@ function main() {
     const source = choosePrimarySource(route, sources);
     const original = fs.readFileSync(path.join(ROOT, source), 'utf8');
     const disabledState = disabledRouteState(route);
+    const sourceHasNoindex = /<meta[^>]+name=["']robots["'][^>]+content=["'][^"']*noindex/i.test(original);
+    // Legacy CDD .html compatibility files are intentionally noindex so Google
+    // consolidates on the clean canonical route. That legacy directive must not
+    // make the canonical /insights/china-debt-dynamics/vXiY/ page non-indexable.
     const indexable = !disabledState &&
-      !/<meta[^>]+name=["']robots["'][^>]+content=["'][^"']*noindex/i.test(original) &&
+      (!sourceHasNoindex || isCddArticleRoute(route)) &&
       !route.includes('/investor-portal/') &&
       route !== '/insights/china-debt-dynamics/print/';
     primaryRoutes.push({
@@ -457,6 +465,12 @@ function main() {
     if (sitemap.includes(`<loc>${SITE_ORIGIN}${item.route}</loc>`)) {
       throw new Error(`Disabled route remains in sitemap: ${item.route}`);
     }
+  }
+
+  const cddRoutes = primaryRoutes.filter(item => isCddArticleRoute(item.route));
+  const nonIndexableCddRoutes = cddRoutes.filter(item => !item.indexable);
+  if (nonIndexableCddRoutes.length) {
+    throw new Error(`Public CDD route omitted from sitemap: ${nonIndexableCddRoutes[0].route}`);
   }
 
   const disabledCount = primaryRoutes.filter(item => item.disabled).length;
