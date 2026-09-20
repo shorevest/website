@@ -3,6 +3,12 @@ name: Generate clean public URLs
 on:
   pull_request:
     paths:
+      - 'assets/data/media-archive.json'
+      - 'content/media-pdfs/*.json'
+      - 'assets/js/media-archive.js'
+      - 'assets/css/press-rebuild.css'
+      - 'scripts/render-media-archive.cjs'
+      - 'scripts/render-media-records.cjs'
       - 'scripts/generate-clean-public-urls.js'
       - 'scripts/stamp-legacy-cdd-seo.cjs'
       - 'scripts/prerender-cdd-articles.cjs'
@@ -85,6 +91,9 @@ jobs:
           find . -name '*.html' -exec sed -i \
             -e 's/insights-new-edition.js?v=20260722-linkedin-target/insights-new-edition.js?v=20260722-linkedin-direct-navigation/g' \
             -e 's/insights-new-edition.js?v=20260722-linkedin-working/insights-new-edition.js?v=20260722-linkedin-direct-navigation/g' {} +
+
+      - name: Render reviewed media archive and records
+        run: node scripts/render-media-archive.cjs && node scripts/render-media-records.cjs
 
       - name: Generate clean routes
         run: node scripts/generate-clean-public-urls.js
@@ -178,6 +187,9 @@ jobs:
           find . -name '*.html' -exec sed -i \
             -e 's/insights-new-edition.js?v=20260722-linkedin-target/insights-new-edition.js?v=20260722-linkedin-direct-navigation/g' \
             -e 's/insights-new-edition.js?v=20260722-linkedin-working/insights-new-edition.js?v=20260722-linkedin-direct-navigation/g' {} +
+
+      - name: Render reviewed media archive and records
+        run: node scripts/render-media-archive.cjs && node scripts/render-media-records.cjs
 
       - name: Generate clean routes
         run: node scripts/generate-clean-public-urls.js

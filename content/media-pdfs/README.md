@@ -6,6 +6,9 @@ Use this folder for structured content files that are approved for a ShoreVest-h
 
 - Do not scrape or republish paywalled articles automatically.
 - Do not reproduce content merely because it is publicly viewable.
+- Sponsorship, authorship, possession of a publisher PDF or subscriber access does not establish web reprint rights. Record the actual licence or publisher permission before reproducing publisher text, artwork or files.
+- The default is a short original ShoreVest summary and an external original-source link. Keep subscription labels; a paywall or automated 403 is not a dead link.
+- June 2025 PDI and October 2021 Pensions & Investments records were reduced to original summaries on 20 September 2026 because hosting permission was not documented. Do not restore their full text from Git history without permission evidence.
 - Only add full article text when ShoreVest has supplied the source material and confirmed that it may be hosted.
 - Preserve original source attribution and labels such as `Sponsored`, `Partner Content` or `Advertorial`.
 - Do not invent missing authors, dates, descriptions or article text.
@@ -24,7 +27,7 @@ The generator renders the branded print template in headless Chrome/Chromium, so
 node scripts/generate-media-coverage-pdf.mjs content/media-pdfs/<file>.json --preview
 ```
 
-5. Once rights are established, set `permissionStatus` to `confirmed — <evidence, e.g. publisher email + date>` (or `shorevest-owned` for ShoreVest material) and run the same command without `--preview`. The generator refuses to write into `public/media/archive-pdfs/` for any other permission status.
+5. Once rights are established, set `permissionStatus` to `confirmed — <evidence, e.g. publisher email + date>` (or `shorevest-owned` for ShoreVest material) and run the same command without `--preview`. Also record `permissionEvidence.reference` (the written permission or ownership evidence), `permissionEvidence.rightsHolder`, and `permissionEvidence.scope` set to `public-web-reproduction`. The generator requires both an approved status and these evidence fields before writing into `public/media/archive-pdfs/`.
 6. Confirm the generated file opens in desktop and mobile browsers, then commit it and add the PDF to the relevant Media archive entry with:
 
 ```json

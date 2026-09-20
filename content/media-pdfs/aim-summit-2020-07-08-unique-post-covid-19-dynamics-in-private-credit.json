@@ -1,24 +1,19 @@
 {
   "pdfSlug": "aim-summit-2020-07-08-unique-post-covid-19-dynamics-in-private-credit",
+  "archiveId": "aim-summit-2020-07-08-post-covid-private-credit",
   "publication": "AIM Summit",
-  "title": "Unique post-COVID-19 dynamics in private credit (Europe & Asia)",
-  "date": "8 Jul 2020",
+  "title": "Unique Market Dynamics in Private Credit Post COVID-19",
+  "date": "2020-07-09",
   "format": "Webinar",
-  "permissionStatus": "pending — metadata-only archive stub; awaiting ShoreVest-supplied source material",
-  "summary": "Compares dislocation and deployment conditions across the two regions in 2020.",
+  "permissionStatus": "pending — no publisher reproduction permission established; original ShoreVest summary only",
+  "summary": "Benjamin Fanger joins an AIM Summit discussion of the pandemic’s effects on private credit conditions in Asia and Europe.",
+  "sourceUrl": "https://www.youtube.com/watch?v=JAdw9sjZBo8",
   "body": [
     {
-      "type": "editorialNote",
-      "text": "This ShoreVest-hosted archival record was created during the July 2026 media-page link audit using the approved archive metadata from /media/. It intentionally contains the coverage summary only. Replace this summary-only body with the approved full text once ShoreVest supplies the source material and reproduction rights are confirmed."
-    },
-    {
-      "type": "heading",
-      "text": "Coverage summary"
-    },
-    {
-      "type": "paragraph",
-      "text": "Compares dislocation and deployment conditions across the two regions in 2020."
+      "type": "sourceLink",
+      "href": "https://www.youtube.com/watch?v=JAdw9sjZBo8",
+      "text": "Visit the original publisher"
     }
   ],
-  "copyrightNote": "Originally published by AIM Summit on 8 Jul 2020. Copyright remains with the original publisher and/or author. This ShoreVest-hosted record currently contains archive metadata only; no third-party article text is reproduced."
+  "copyrightNote": "This record contains an original ShoreVest summary. Copyright in the linked publication remains with its publisher and authors."
 }

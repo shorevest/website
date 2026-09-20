@@ -127,7 +127,7 @@
       type: 'Panel',
       title: 'PDI APAC Forum',
       location: 'Singapore',
-      description: 'A forum panel on Asian distressed debt and special situations.',
+      description: 'Benjamin Fanger joins the panel on Asian distressed debt and special situations on 24 June.',
       ctaLabel: 'View →',
       href: 'https://www.peievents.com/en/event/pdi-apac-forum/',
       ariaLabel: 'View PDI APAC Forum event page',

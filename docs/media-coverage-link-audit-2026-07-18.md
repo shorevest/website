@@ -1,3 +1,5 @@
+> Superseded for publication decisions by the 20 September 2026 media audit. Sponsorship and possession of a PDF do not establish reproduction rights. Use external publisher links unless written permission is recorded.
+
 # Media page link audit — Coverage & events (18 Jul 2026)
 
 Audit of every outbound link on `media.html` / `media_cn.html` (hero, Upcoming events, Previous events, Coverage & events archive), plus the migration of all third-party **article** rows into the ShoreVest third-party coverage template (`templates/media-coverage/`), per the direction that third-party articles should be hosted locally because originals may be taken down.

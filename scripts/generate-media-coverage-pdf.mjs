@@ -34,10 +34,12 @@ if (!input) {
 const dataPath = path.resolve(root, input);
 const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 
-const approved = /^(confirmed|shorevest-owned)\b/i.test(String(data.permissionStatus || '').trim());
+const evidence = data.permissionEvidence || {};
+const approved = /^(confirmed|shorevest-owned)\b/i.test(String(data.permissionStatus || '').trim())
+  && Boolean(evidence.reference && evidence.rightsHolder && evidence.scope === 'public-web-reproduction');
 if (!approved && !preview) {
   console.error(`Refusing to write to public/: permissionStatus is "${data.permissionStatus || ''}".`);
-  console.error('Set permissionStatus to "confirmed — <evidence>" or "shorevest-owned" once rights are');
+  console.error('Record permissionEvidence.reference, rightsHolder and scope=public-web-reproduction once rights are');
   console.error('established, or re-run with --preview to generate a QA copy outside the public folder.');
   process.exit(1);
 }
