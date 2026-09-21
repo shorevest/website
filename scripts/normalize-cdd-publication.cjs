@@ -47,6 +47,8 @@ const LATEST = {
   published: 'September 2026',
   archiveDate: 'Sep 2026',
   title: 'Perceptions Versus Reality in China Real Estate',
+  seoTitle: 'China Real Estate Private Credit: Perceptions Versus Reality',
+  seoDescription: 'ShoreVest examines China real estate private credit, separating the residential downturn from income-producing commercial assets and asset-backed credit opportunities.',
   dek: 'Shanghai or Ghost Town? A tale of two markets, and why the distinction matters for asset-backed credit.',
   excerpt: "China's residential downturn is real, but completed commercial assets continue to transact, attract tenants and generate cash flow.",
   data: 'assets/data/china-debt-dynamics-v10i3.json',
@@ -68,13 +70,13 @@ let changed = 0;
   const templateRel = 'china-debt-dynamics-v10i2.html';
   let html = read(templateRel);
   html = html.replace(/v10i2/g, LATEST.slug);
-  html = html.replace(/<title>[\s\S]*?<\/title>/i, `<title>${escapeHtml(LATEST.title)} | ShoreVest</title>`);
-  html = replaceMeta(html, 'name', 'description', LATEST.dek);
-  html = replaceMeta(html, 'property', 'og:title', LATEST.title);
-  html = replaceMeta(html, 'property', 'og:description', LATEST.dek);
+  html = html.replace(/<title>[\s\S]*?<\/title>/i, `<title>${escapeHtml(LATEST.seoTitle)} | ShoreVest</title>`);
+  html = replaceMeta(html, 'name', 'description', LATEST.seoDescription);
+  html = replaceMeta(html, 'property', 'og:title', LATEST.seoTitle);
+  html = replaceMeta(html, 'property', 'og:description', LATEST.seoDescription);
   html = replaceMeta(html, 'property', 'og:url', `https://shorevest.com${LATEST.cleanHref}`);
-  html = replaceMeta(html, 'name', 'twitter:title', LATEST.title);
-  html = replaceMeta(html, 'name', 'twitter:description', LATEST.dek);
+  html = replaceMeta(html, 'name', 'twitter:title', LATEST.seoTitle);
+  html = replaceMeta(html, 'name', 'twitter:description', LATEST.seoDescription);
   html = html.replace(
     /<link rel="canonical" href="[^"]+">/i,
     `<link rel="canonical" href="https://shorevest.com${LATEST.cleanHref}">`
