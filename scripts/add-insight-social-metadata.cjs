@@ -76,9 +76,10 @@ function metadataFor(file, html) {
 
   const documentTitle = extract(html, /<title>([\s\S]*?)<\/title>/i).replace(/\s*\|\s*ShoreVest\s*$/i, '');
   const title = String(data.title || documentTitle || 'China Debt Dynamics').trim();
-  const brandedTitle = `${title} | ShoreVest`;
-  const seoTitle = brandedTitle.length <= 60 ? brandedTitle : title;
-  const description = compactDescription(data.dek || 'Read China Debt Dynamics from ShoreVest.');
+  const searchTitle = String(data.seoTitle || title).trim();
+  const brandedTitle = `${searchTitle} | ShoreVest`;
+  const seoTitle = brandedTitle.length <= 70 ? brandedTitle : searchTitle;
+  const description = compactDescription(data.seoDescription || data.dek || 'Read China Debt Dynamics from ShoreVest.');
   const image = absoluteUrl(data.socialImage);
   const imageWidth = Number(data.socialImageWidth) || null;
   const imageHeight = Number(data.socialImageHeight) || null;
