@@ -241,7 +241,8 @@ body.press-page .press-publication {
   color: var(--sv-ink); align-self: start; padding-top: 3px;
 }
 body.press-page .press-row__content { min-width: 0; }
-body.press-page .press-type-line { display: block; margin-bottom: 10px; }
+/* Format labels are content, not decorative lines; override the global -line reset. */
+body.press-page .press-type-line { display: block !important; margin-bottom: 10px; }
 body.press-page .press-tag {
   display: inline-block;
   font: 600 10.5px/1 var(--sv-font); letter-spacing: 0.14em; text-transform: uppercase;
