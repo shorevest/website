@@ -36,7 +36,12 @@
       location: 'Guangzhou',
       description: 'ShoreVest’s annual meeting for investors and invited guests.',
       ctaLabel: 'INVITE ONLY',
-      isClickable: false
+      isClickable: false,
+      post: {
+        href: 'https://www.linkedin.com/posts/shorevest-partners_privatecredit-china-distresseddebt-activity-7508874379985084416-WZS4',
+        label: 'LinkedIn →',
+        ariaLabel: 'View ShoreVest LinkedIn post for the 2026 Annual General Meeting'
+      }
     },
     {
       startDate: '2026-09-28',
