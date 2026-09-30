@@ -1,7 +1,31 @@
 {
   "version": 2,
-  "updatedAt": "2026-09-20",
+  "updatedAt": "2026-09-30",
   "items": [
+    {
+      "id": "gusu-release-2026-09-24-shorevest-cooperation-agreement",
+      "publication": "姑苏发布",
+      "date": "2026-09-24",
+      "type": "Article",
+      "title": "亿元项目+1！姑苏区与新岸资本完成签约",
+      "summary": "Gusu District reports on a cooperation agreement with ShoreVest following the firm’s successful bid for Golden Plaza, outlining plans to revitalise the asset and introduce new commercial uses.",
+      "summaryZh": "姑苏区报道与新岸资本签署合作协议，并提及新岸资本于9月竞得黄金大厦，计划通过更新改造导入新消费及文商旅业态。",
+      "url": "https://feng.ifeng.com/c/8wgmidEpHoS",
+      "linkType": "external",
+      "status": "published",
+      "featured": false,
+      "autoDiscovered": false,
+      "rights": "link-only",
+      "access": "open",
+      "verification": {
+        "checkedAt": "2026-09-30",
+        "status": "verified",
+        "dateBasis": "Publication date shown on the Gusu District publicity release.",
+        "featureEvidence": "The release names ShoreVest (新岸资本), Benjamin Fanger (方杰明) and Golden Plaza (黄金大厦), and describes the cooperation agreement with Gusu District.",
+        "urlStatus": "Syndicated source URL recorded on 2026-09-30.",
+        "hostingPermission": "Not established. External link and original ShoreVest summary only."
+      }
+    },
     {
       "id": "fii-institute-2025-11-06-private-credit-market-discussion",
       "publication": "FII Institute",
