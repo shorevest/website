@@ -71,6 +71,13 @@ fs.mkdirSync('artifacts/homepage-draft', {recursive:true});
         }
         await page.screenshot({path:'artifacts/homepage-draft/' + language + '-' + device + '-full.png',fullPage:true});
         await page.screenshot({path:'artifacts/homepage-draft/' + language + '-' + device + '-viewport.png',fullPage:false});
+
+        // Emit a compact rendered review image through the log transport.
+        // PNG originals remain in the downloadable artifact.
+        const reviewImage = (await page.screenshot({type:'jpeg',quality:72,fullPage:true})).toString('base64');
+        for (let offset = 0; offset < reviewImage.length; offset += 12000) {
+          console.log('SHOREVEST_IMAGE ' + language + '-' + device + ' ' + String(offset / 12000) + ' ' + reviewImage.slice(offset, offset + 12000));
+        }
         await page.locator('.sv-cookie-settings-button').click();
         await page.locator('#sv-analytics-consent button[data-choice="accepted"]').click();
         await page.waitForFunction(() => window.__SV_GA4_CONFIGURED === true);
