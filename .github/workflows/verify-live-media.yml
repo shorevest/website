@@ -1,0 +1,36 @@
+name: Verify live Media page
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/verify-live-media.yml'
+      - 'media.html'
+      - 'media/index.html'
+      - 'media_cn.html'
+      - 'cn/media/index.html'
+      - 'assets/data/media-archive.json'
+
+permissions:
+  contents: read
+
+jobs:
+  verify-live-media:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify public Media page contains latest coverage
+        shell: bash
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 60); do
+            body="$(curl -fsSL --retry 2 --connect-timeout 10 --max-time 30 https://shorevest.com/media/ || true)"
+            if printf '%s' "$body" | grep -Fq '27 items' && printf '%s' "$body" | grep -Fq '亿元项目+1！姑苏区与新岸资本完成签约'; then
+              echo "Live Media page verified on attempt $attempt."
+              exit 0
+            fi
+            echo "Attempt $attempt: live page not updated yet."
+            sleep 10
+          done
+          echo "Live Media page did not update within the verification window."
+          exit 1
