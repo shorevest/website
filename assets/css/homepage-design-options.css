@@ -1,0 +1,86 @@
+/* Three branch-only compositions; all use the same approved content. */
+body.hp-draft { --page-max:1280px; --pad-x:clamp(22px,4vw,52px); }
+body.hp-draft .hp-hero-image { position:relative; margin:0; isolation:isolate; }
+body.hp-draft .hp-hero-image img { display:block; width:100%; height:100%; object-fit:cover; }
+body.hp-draft .hp-hero-image::before { content:""; position:absolute; inset:20px -18px -20px 18px; background:var(--sv-cinnabar); z-index:-1; }
+body.hp-draft .hp-mandate .hp-wrap { display:grid; grid-template-columns:1.1fr 1fr; gap:54px; align-items:center; }
+body.hp-draft .hp-mandate { padding-block:46px 52px; }
+body.hp-draft .hp-mandate h1 { font-size:clamp(34px,3.65vw,51px); max-width:20ch; line-height:1.12; }
+body.hp-draft .hp-intro { font-size:18px; max-width:43ch; margin-top:24px; }
+body.hp-draft .hp-hero-image { height:380px; }
+body.hp-draft .hp-section { padding-block:34px; }
+body.hp-draft .hp-research { background:transparent; margin:0; }
+body.hp-draft .hp-section .hp-wrap { padding-top:24px; border-top:1px solid #c8ccc5; }
+body.hp-draft .hp-reading-grid { grid-template-columns:250px minmax(0,1fr); gap:56px; }
+body.hp-draft .hp-section h2 { font-size:25px; }
+body.hp-draft .hp-reading { max-width:none; font-size:17px; line-height:1.6; }
+body.hp-draft .hp-lead { font-size:23px; line-height:1.45; }
+body.hp-draft .hp-disciplines { margin-top:24px; }
+body.hp-draft .hp-note { font-size:13px; }
+body.hp-option-1 .hp-research .hp-report-title { max-width:25ch; font-size:37px; }
+body.hp-option-1 #strategy .hp-disciplines > div { display:grid; grid-template-columns:210px 1fr; gap:24px; padding-block:12px; border-bottom:1px solid #d9dcd6; }
+body.hp-option-1 #strategy .hp-disciplines { margin-top:0; }
+body.hp-option-2 .hp-mandate .hp-wrap { grid-template-columns:1fr 1.15fr; gap:0; align-items:center; }
+body.hp-option-2 .hp-hero-copy { position:relative; z-index:2; background:var(--sv-ivory); padding:34px 44px 34px 0; margin-right:-54px; }
+body.hp-option-2 .hp-mandate h1 { font-size:48px; }
+body.hp-option-2 .hp-hero-image { height:440px; margin-left:12px; }
+body.hp-option-2 .hp-hero-image::before { inset: -16px -18px 28px 32px; background:var(--sv-ink); }
+body.hp-option-2 .hp-reading-grid { grid-template-columns:1fr; gap:20px; }
+body.hp-option-2 .hp-underwriting .hp-reading { display:grid; grid-template-columns:1fr 1.1fr; column-gap:64px; }
+body.hp-option-2 .hp-underwriting .hp-lead { grid-column:1; font-size:27px; }
+body.hp-option-2 .hp-underwriting .hp-disciplines { grid-column:2; grid-row:1 / span 2; margin-top:0; }
+body.hp-option-2 .hp-underwriting .hp-note { grid-column:1; }
+body.hp-option-2 .hp-research { padding-block:40px 46px; }
+body.hp-option-2 .hp-research .hp-wrap { border:0; position:relative; }
+body.hp-option-2 .hp-research h2 { margin-bottom:10px; }
+body.hp-option-2 .hp-research article { margin-left:120px; padding:30px 38px; background:var(--sv-ivory); position:relative; isolation:isolate; }
+body.hp-option-2 .hp-research article::before { content:""; position:absolute; inset: -16px 22px 18px -22px; background:var(--sv-stone); z-index:-1; }
+body.hp-option-2 .hp-research article::after { content:""; position:absolute; top:-16px; bottom:18px; left:-22px; width:4px; background:var(--sv-cinnabar); }
+body.hp-option-2 .hp-report-title { font-size:42px; max-width:27ch; }
+body.hp-option-2 #strategy .hp-disciplines { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:40px; margin-top:0; }
+body.hp-option-2 #firm .hp-reading { max-width:72ch; margin-left:120px; }
+body.hp-option-2 .hp-contact .hp-reading { margin-left:120px; }
+body.hp-option-3 .hp-mandate .hp-wrap { grid-template-columns:1fr; gap:28px; }
+body.hp-option-3 .hp-hero-copy { display:grid; grid-template-columns:1.5fr 1fr; gap:64px; align-items:end; }
+body.hp-option-3 .hp-mandate h1 { font-size:52px; max-width:24ch; }
+body.hp-option-3 .hp-intro { margin:0 0 4px; }
+body.hp-option-3 .hp-hero-image { height:270px; margin-right:18px; }
+body.hp-option-3 .hp-hero-image img { object-position:center 48%; }
+body.hp-option-3 .hp-hero-image::before { inset:14px -18px -14px 38%; }
+body.hp-option-3 .hp-underwriting .hp-reading-grid { grid-template-columns:350px minmax(0,1fr); gap:72px; }
+body.hp-option-3 .hp-underwriting h2 { font-size:36px; max-width:12ch; }
+body.hp-option-3 .hp-underwriting-sequence details { border-top:1px solid #c8ccc5; padding:16px 0; }
+body.hp-option-3 .hp-underwriting-sequence summary { font-weight:600; cursor:pointer; min-height:30px; padding-right:30px; position:relative; list-style:none; }
+body.hp-option-3 .hp-underwriting-sequence summary::-webkit-details-marker { display:none; }
+body.hp-option-3 .hp-underwriting-sequence summary::after { content:"+"; position:absolute; right:0; top:0; color:var(--sv-cinnabar-d); font-weight:400; font-size:22px; }
+body.hp-option-3 .hp-underwriting-sequence details[open] summary::after { content:"−"; }
+body.hp-option-3 .hp-underwriting-sequence p { margin:10px 0 0; }
+body.hp-option-3 .hp-research .hp-reading-grid { grid-template-columns:350px minmax(0,1fr); gap:72px; }
+body.hp-option-3 .hp-report-title { font-size:40px; }
+@media(max-width:767px) {
+ body.hp-draft .hp-mandate { padding-block:28px 36px; }
+ body.hp-draft .hp-mandate .hp-wrap,body.hp-option-2 .hp-mandate .hp-wrap { grid-template-columns:1fr; gap:26px; }
+ body.hp-draft .hp-mandate h1,body.hp-option-2 .hp-mandate h1,body.hp-option-3 .hp-mandate h1 { font-size:35px; line-height:1.13; }
+ body.hp-draft .hp-hero-image { height:270px; margin-right:14px; }
+ body.hp-draft .hp-hero-image::before { right:-14px; bottom:-14px; }
+ body.hp-draft .hp-intro { font-size:17px; margin-top:18px; }
+ body.hp-draft .hp-section { padding-block:24px; }
+ body.hp-draft .hp-section .hp-wrap { padding-top:20px; }
+ body.hp-draft .hp-reading-grid,body.hp-option-3 .hp-underwriting .hp-reading-grid,body.hp-option-3 .hp-research .hp-reading-grid { grid-template-columns:1fr; gap:20px; }
+ body.hp-draft .hp-lead { font-size:21px; }
+ body.hp-draft .hp-section h2,body.hp-option-3 .hp-underwriting h2 { font-size:25px; max-width:none; }
+ body.hp-option-1 #strategy .hp-disciplines > div { grid-template-columns:1fr; gap:5px; }
+ body.hp-option-1 .hp-research .hp-report-title,body.hp-option-2 .hp-report-title,body.hp-option-3 .hp-report-title { font-size:31px; }
+ body.hp-option-2 .hp-hero-copy { padding:0; margin:0; background:transparent; }
+ body.hp-option-2 .hp-hero-image { margin:0 14px 0 14px; height:300px; }
+ body.hp-option-2 .hp-underwriting .hp-reading { display:block; }
+ body.hp-option-2 .hp-underwriting .hp-disciplines { margin-top:24px; }
+ body.hp-option-2 .hp-research article { margin:8px 0 0 12px; padding:18px 6px 0 10px; }
+ body.hp-option-2 .hp-research article::before { inset:-10px 10px 16px -12px; }
+ body.hp-option-2 .hp-research article::after { top:-10px; bottom:16px; left:-12px; width:3px; }
+ body.hp-option-2 #strategy .hp-disciplines { grid-template-columns:1fr; gap:0; }
+ body.hp-option-2 #firm .hp-reading,body.hp-option-2 .hp-contact .hp-reading { margin-left:0; }
+ body.hp-option-3 .hp-hero-copy { grid-template-columns:1fr; gap:18px; }
+ body.hp-option-3 .hp-intro { margin:0; }
+ body.hp-option-3 .hp-hero-image { height:220px; }
+}

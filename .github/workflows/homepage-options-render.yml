@@ -1,0 +1,37 @@
+name: Render ShoreVest homepage options
+on:
+  push:
+    branches: [design/impeccable-20260930]
+    paths:
+      - 'internal-preview/homepage-options/**'
+      - 'assets/css/homepage-design-options.css'
+      - 'scripts/render-homepage-options.cjs'
+      - '.github/workflows/homepage-options-render.yml'
+permissions:
+  contents: read
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Render twelve variants and comparison boards
+        shell: bash
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/shorevest-options-server.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" || true' EXIT
+          node scripts/render-homepage-options.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: shorevest-homepage-options
+          path: artifacts/homepage-options/
+          retention-days: 7
+          if-no-files-found: error
