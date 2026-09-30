@@ -17,7 +17,7 @@ body.hp-option-8 .hp-mandate .hp-wrap{display:block;position:relative}
 body.hp-option-8 .hp-hero-image{height:560px;margin:0 34px 0 0}
 body.hp-option-8 .hp-hero-image img{object-position:center 46%}
 body.hp-option-8 .hp-hero-image::before{inset:24px -34px -24px 68%;background:var(--sv-cinnabar)}
-body.hp-option-8 .hp-hero-copy{position:absolute;left:var(--pad-x);bottom:34px;width:min(610px,50%);background:var(--sv-ivory);padding:30px 36px 32px 0}
+body.hp-option-8 .hp-hero-copy{position:absolute;z-index:2;left:var(--pad-x);bottom:34px;width:min(610px,50%);background:var(--sv-ivory);padding:30px 36px 32px 0}
 body.hp-option-8 .hp-mandate h1{font-size:clamp(48px,5vw,70px);line-height:.98;max-width:13ch;letter-spacing:-.035em;margin:0}
 body.hp-option-8 .hp-intro{font-size:19px;line-height:1.55;max-width:39ch;margin-top:24px}
 body.hp-option-8 .hp-section{padding-block:66px}
