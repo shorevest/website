@@ -58,6 +58,20 @@
       isClickable: true
     },
     {
+      startDate: '2026-10-07',
+      endDate: '2026-10-08',
+      timeZone: 'Asia/Riyadh',
+      displayDate: '7–8 Oct 2026',
+      type: 'Forum',
+      title: 'Saudi Arabia Credit & Investment Forum 2026',
+      location: 'Riyadh',
+      description: 'Benjamin Fanger is speaking at DDC’s forum on private credit, restructuring and strategic investment opportunities across Saudi Arabia and the GCC.',
+      ctaLabel: 'View →',
+      href: 'https://ddc-financial.com/saudi2026',
+      ariaLabel: 'View Saudi Arabia Credit & Investment Forum 2026 event page',
+      isClickable: true
+    },
+    {
       startDate: '2026-10-15',
       endDate: '2026-10-16',
       timeZone: 'Asia/Hong_Kong',
