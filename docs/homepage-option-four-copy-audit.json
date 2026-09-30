@@ -1,0 +1,637 @@
+{
+  "sourceCommit": "92b0c2cc6f5afd97aa67aadbef61ea34a41f0a42",
+  "option": "editorial-synthesis",
+  "policy": "Existing wording only. No paraphrases, translations or new labels introduced.",
+  "languages": [
+    {
+      "language": "en",
+      "target": "internal-preview/homepage-options/editorial-synthesis/index.html",
+      "source": "internal-preview/homepage-options/institutional-editorial/index.html",
+      "entries": [
+        {
+          "text": "ShoreVest Partners | China Asset-Backed Private Credit",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Firm",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Strategy",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Insights",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Media",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Team",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Careers",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "EN",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "|",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "中文",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Investor Portal",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Contact",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Firm",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Strategy",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Insights",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Media",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Team",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Careers",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "中文",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Investor Portal",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Contact",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "China asset-backed private credit,",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "since 2004.",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "ShoreVest provides asset-backed credit solutions to borrowers and financial institutions across China.",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Underwriting discipline",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "For a secured credit investor, the relevant question is not whether every part of the property market is healthy. It is whether a specific asset can generate cash, attract users and transact at a price that leaves the lender with a meaningful margin of safety.",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Collateral value and margin of safety",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Entry terms are assessed against downside cases and expected recovery value. Higher cap rates and recent transaction evidence should be reflected in collateral values.",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Legal and structural position",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Claim priority, documentation and enforceability are reviewed for each situation.",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Exit and recovery routes",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Potential repayment, restructuring and resolution routes are considered before capital is committed.",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Risk management and downside analysis are applied across investments, at both the transaction and portfolio level.",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "China Debt Dynamics",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Selected research · September 2026 · Volume 10, Issue 3",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Perceptions Versus Reality in China Real Estate",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Shanghai or Ghost Town? A tale of two markets, and why the distinction matters for asset-backed credit.",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "China's residential development downturn is real. But it does not follow that every completed commercial property is empty, untradeable, or unsuitable as collateral. The data increasingly points to a more segmented reality: severe stress in new residential development alongside improving liquidity and stabilization in selected completed, income-producing commercial assets.",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Read the selected issue",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "China Debt Dynamics archive",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "This letter expresses the views of the author as of the date indicated and such views are subject to change without notice.",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Strategy scope",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Asset-backed lending",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Asset-backed financing for companies with identifiable collateral and financing needs, including bridge, refinancing and acquisition situations.",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Asset restructuring",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Capital for situations involving viable assets and challenged balance sheets, including restructurings and deep value acquisitions.",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Debt resolution",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Credit solutions for financial institutions and other claim holders seeking to transfer, restructure or resolve distressed credit, including non-performing loans.",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Explore our strategy",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "People and execution",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Local teams support sourcing, due diligence, legal structuring, asset servicing and resolution across China, coordinated through ShoreVest’s institutional investment-management platform.",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "ShoreVest Asset Solutions is ShoreVest’s onshore asset-servicing and resolution platform, supporting local execution and credit recovery across China.",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Meet the team",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Institutional inquiries",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Contact ShoreVest for general institutional inquiries.",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Contact ShoreVest",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Guangzhou, Shanghai, Beijing and Hong Kong",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "General inquiries",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Firm",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Strategy",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Insights",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Media",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Team",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Careers",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Contact",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "China Debt Dynamics",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Access",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Investor Portal",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "LinkedIn",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "ShoreVest Partners and its affiliates provide investment management services to institutional investors. This website is for informational purposes only and does not constitute an offer to sell or a solicitation of an offer to buy any security or investment product, nor investment, legal, or tax advice.",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Past performance is not indicative of future results. Investments in private credit and private debt involve risk, including the possible loss of principal. Figures shown are approximate and subject to change.",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Privacy Policy",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Cookie Notice",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Terms of Use",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Important Information",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "Legal Notices &amp; Disclaimers",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        },
+        {
+          "text": "© 2026 ShoreVest Partners. All rights reserved.",
+          "source": "internal-preview/homepage-options/institutional-editorial/index.html"
+        }
+      ]
+    },
+    {
+      "language": "zh",
+      "target": "internal-preview/homepage-options/editorial-synthesis/index_cn.html",
+      "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html",
+      "entries": [
+        {
+          "text": "新岸资本 | 中国资产支持私募信贷",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "公司",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "策略",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "洞察",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "媒体",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "团队",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "人才招聘",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "EN",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "|",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "中文",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "投资者门户",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "联系",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "公司",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "策略",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "洞察",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "媒体",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "团队",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "人才招聘",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "EN",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "投资者门户",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "联系",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "中国资产支持私募信贷，",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "始于 2004 年。",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "新岸资本为中国各地的借款人及金融机构提供资产支持信贷解决方案。",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "承销纪律",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "对于有抵押信贷投资者而言，关键并非房地产市场的每个领域是否都健康，而是某项具体资产能否产生现金流、吸引使用者，并以为贷款人留下实质安全边际的价格成交。",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "抵押品价值与安全边际",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "入场条款按下行情景及预期回收价值进行评估。抵押品估值应反映更高的资本化率及近期交易证据。",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "法律与结构地位",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "逐项情境审查债权优先级、文件质量及可执行性。",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "退出与回收路径",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "在投入资本前评估潜在的还款、重组及处置路径。",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "风险管理和下行分析在交易层面与投资组合层面均应用于各项投资。",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "中国债务动态",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "精选研究 · 2026 年 9 月 · 第 10 卷，第 3 期",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "中国房地产：认知与现实",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "上海还是“鬼城”？两类市场的不同现实，以及这一区别为何对资产支持信贷至关重要。",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "中国住宅开发市场的低迷是真实存在的。但这并不意味着每一处已竣工商用物业都空置、无法交易，或不适合作为抵押品。数据日益显示出更为分化的现实：新住宅开发面临严重压力，而部分已竣工、产生收入的商业资产则出现流动性改善和企稳。",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "阅读精选报告（英文）",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "中国债务动态归档",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "本刊表达作者截至所示日期的观点，该等观点可能在未经通知的情况下变更。",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "策略范围",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "资产支持贷款",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "为拥有可识别抵押品及融资需求的企业提供资产支持融资，包括过桥、再融资及收购情境。",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "资产重组",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "为涉及可行资产与承压资产负债表的情境提供资本，包括重组及深度价值收购。",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "债务处置",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "为寻求转让、重组或化解不良信贷（包括不良贷款）的金融机构及其他债权持有人提供信贷解决方案。",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "了解我们的策略",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "团队与执行",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "本地团队支持中国各地的项目寻源、尽职调查、法律结构设计、资产服务及处置，并通过新岸资本的机构化投资管理平台进行协调。",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "新岸资产解决方案是新岸资本的境内资产服务与处置平台，支持中国各地的本地执行及信贷回收。",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "认识团队",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "机构咨询",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "如有一般机构咨询，可联系新岸资本。",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "联系新岸资本",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "广州、上海、北京和香港",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "一般咨询",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "公司",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "策略",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "洞察",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "媒体",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "团队",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "人才招聘",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "联系",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "中国债务动态",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "入口",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "投资者门户",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "LinkedIn",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "新岸资本（ShoreVest Partners）及其关联机构向机构投资者提供投资管理服务。本网站仅供信息参考，不构成出售任何证券或投资产品的要约，或购买任何证券或投资产品的要约邀请，亦不构成投资、法律或税务建议。",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "过往表现并不预示未来结果。私募信贷与私募债务投资涉及风险，包括可能损失本金。所示数据均为近似值，可能发生变动。",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "隐私政策",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "Cookie 通知",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "使用条款",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "重要信息",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "法律声明与免责声明",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        },
+        {
+          "text": "© 2026 ShoreVest Partners. All rights reserved.",
+          "source": "internal-preview/homepage-options/institutional-editorial/index_cn.html"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+name: Render ShoreVest homepage Option 4
+on:
+  push:
+    branches: [design/impeccable-20260930]
+    paths:
+      - 'internal-preview/homepage-options/editorial-synthesis/**'
+      - 'assets/css/homepage-option-four.css'
+      - 'scripts/render-homepage-option-four.cjs'
+      - 'docs/homepage-option-four-copy-audit.json'
+      - '.github/workflows/homepage-option-four-render.yml'
+permissions:
+  contents: read
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Verify copy provenance then render four views
+        shell: bash
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/shorevest-option-four-server.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" || true' EXIT
+          node scripts/render-homepage-option-four.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: shorevest-homepage-option-four
+          path: artifacts/homepage-option-four/
+          retention-days: 7
+          if-no-files-found: error
