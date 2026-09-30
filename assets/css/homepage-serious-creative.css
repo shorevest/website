@@ -1,0 +1,174 @@
+/* Impeccable serious-creative homepage directions 8–10.
+   Same content and architecture; creativity comes from composition, typography and pacing. */
+body:is(.hp-option-8,.hp-option-9,.hp-option-10) .hp-hero-image,
+body:is(.hp-option-8,.hp-option-9,.hp-option-10) .hp-hero-image img{
+  box-shadow:none!important;border-radius:0!important;filter:none!important
+}
+body:is(.hp-option-8,.hp-option-9,.hp-option-10) .hp-editorial{overflow:clip}
+body:is(.hp-option-8,.hp-option-9,.hp-option-10) .sv-nav a::after,
+body:is(.hp-option-8,.hp-option-9,.hp-option-10) .sv-footer a{transition:none!important;animation:none!important}
+
+/* 8 — Architectural Monograph
+   The homepage behaves like a serious architectural/investment monograph:
+   image first, square editorial plate, vertically-set publication metadata. */
+body.hp-option-8{--page-max:1400px;--pad-x:clamp(24px,4vw,58px)}
+body.hp-option-8 .hp-mandate{padding:34px 0 92px}
+body.hp-option-8 .hp-mandate .hp-wrap{display:block;position:relative}
+body.hp-option-8 .hp-hero-image{height:560px;margin:0 34px 0 0}
+body.hp-option-8 .hp-hero-image img{object-position:center 46%}
+body.hp-option-8 .hp-hero-image::before{inset:24px -34px -24px 68%;background:var(--sv-cinnabar)}
+body.hp-option-8 .hp-hero-copy{position:absolute;left:var(--pad-x);bottom:-44px;width:min(650px,54%);background:var(--sv-ivory);padding:34px 42px 34px 0}
+body.hp-option-8 .hp-mandate h1{font-size:clamp(48px,5vw,70px);line-height:.98;max-width:13ch;letter-spacing:-.035em;margin:0}
+body.hp-option-8 .hp-intro{font-size:19px;line-height:1.55;max-width:39ch;margin-top:24px}
+body.hp-option-8 .hp-section{padding-block:66px}
+body.hp-option-8 .hp-section .hp-wrap{border-top:0;padding-top:0}
+body.hp-option-8 .hp-underwriting .hp-reading-grid{grid-template-columns:280px minmax(0,1fr);gap:88px}
+body.hp-option-8 .hp-underwriting h2{font-size:40px;line-height:1.02;max-width:8ch}
+body.hp-option-8 .hp-underwriting .hp-lead{font-size:31px;line-height:1.35;max-width:38ch}
+body.hp-option-8 .hp-underwriting .hp-disciplines{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:42px;border-top:1px solid var(--sv-ink)}
+body.hp-option-8 .hp-underwriting .hp-disciplines>div{margin:0;padding:22px 30px 0 0}
+body.hp-option-8 .hp-underwriting .hp-disciplines>div+div{border-left:1px solid #c8ccc5;padding-left:30px}
+body.hp-option-8 .hp-underwriting .hp-note{margin-top:34px}
+body.hp-option-8 .hp-research{background:var(--sv-stone);padding-block:62px;margin:0}
+body.hp-option-8 .hp-research .hp-reading-grid{grid-template-columns:150px 330px minmax(0,1fr);gap:42px}
+body.hp-option-8 .hp-publication{display:contents}
+body.hp-option-8 .hp-publication h2{grid-column:2;font-size:45px;line-height:.98;letter-spacing:-.03em;margin:0;max-width:7ch}
+body.hp-option-8 .hp-publication .hp-meta{grid-column:1;grid-row:1 / span 2;writing-mode:vertical-rl;transform:rotate(180deg);font-size:12px;letter-spacing:.08em;text-transform:none;margin:0;justify-self:end;align-self:start}
+body.hp-option-8 .hp-research .hp-reading{grid-column:3;display:grid;grid-template-columns:.9fr 1.1fr;gap:48px}
+body.hp-option-8 .hp-report-title{font-size:42px;line-height:1.08;margin:0 0 18px}
+body.hp-option-8 .hp-report-dek{font-size:20px}
+body.hp-option-8 #strategy{padding-block:60px}
+body.hp-option-8 #strategy .hp-reading-grid{grid-template-columns:280px minmax(0,1fr);gap:88px}
+body.hp-option-8 #strategy h2{font-size:36px;line-height:1.02}
+body.hp-option-8 #strategy .hp-disciplines{margin:0}
+body.hp-option-8 #strategy .hp-disciplines>div{display:grid;grid-template-columns:250px 1fr;gap:40px;padding:18px 0;margin:0;border-top:1px solid #c8ccc5}
+body.hp-option-8 #strategy .hp-disciplines>div:last-child{border-bottom:1px solid #c8ccc5}
+body.hp-option-8 #firm .hp-reading-grid,body.hp-option-8 .hp-contact .hp-reading-grid{grid-template-columns:280px minmax(0,1fr);gap:88px}
+body.hp-option-8 #firm{padding-bottom:28px}
+body.hp-option-8 .hp-contact{padding-top:28px}
+
+/* 9 — Cinnabar Spine
+   A precise red structural spine links the page, like a bound report or marked-up credit file. */
+body.hp-option-9{--page-max:1320px;--pad-x:clamp(28px,4.6vw,64px)}
+body.hp-option-9 .hp-editorial{position:relative}
+body.hp-option-9 .hp-editorial::before{content:"";position:absolute;left:max(20px,calc((100vw - var(--page-max))/2 + var(--pad-x)));top:48px;bottom:80px;width:3px;background:var(--sv-cinnabar);z-index:0}
+body.hp-option-9 .hp-editorial>section{position:relative;z-index:1}
+body.hp-option-9 .hp-mandate{padding-block:58px 68px}
+body.hp-option-9 .hp-mandate .hp-wrap{grid-template-columns:.9fr 1.1fr;gap:68px;align-items:center;padding-left:calc(var(--pad-x) + 34px)}
+body.hp-option-9 .hp-mandate h1{font-size:clamp(46px,4.6vw,64px);line-height:1.02;max-width:13ch;letter-spacing:-.034em}
+body.hp-option-9 .hp-intro{font-size:19px;max-width:38ch}
+body.hp-option-9 .hp-hero-image{height:500px;margin-right:26px}
+body.hp-option-9 .hp-hero-image::before{inset:24px -26px -20px 32px;background:var(--sv-cinnabar)}
+body.hp-option-9 .hp-section{padding-block:52px}
+body.hp-option-9 .hp-section .hp-wrap{padding-left:calc(var(--pad-x) + 34px);border-top:0}
+body.hp-option-9 .hp-reading-grid{grid-template-columns:250px minmax(0,1fr);gap:64px}
+body.hp-option-9 .hp-section h2{font-size:32px;line-height:1.05;letter-spacing:-.026em}
+body.hp-option-9 .hp-underwriting .hp-lead{font-size:30px;line-height:1.38;max-width:43ch}
+body.hp-option-9 .hp-underwriting .hp-disciplines{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:38px}
+body.hp-option-9 .hp-underwriting .hp-disciplines>div{padding-top:16px;border-top:1px solid var(--sv-ink)}
+body.hp-option-9 .hp-research{background:var(--sv-ink);color:var(--sv-ivory);margin:0;padding-block:58px}
+body.hp-option-9 .hp-research .hp-wrap{padding-left:calc(var(--pad-x) + 34px)}
+body.hp-option-9 .hp-research h2,body.hp-option-9 .hp-research .hp-report-title{color:var(--sv-ivory)}
+body.hp-option-9 .hp-research .hp-meta,body.hp-option-9 .hp-research .hp-note{color:rgba(242,236,216,.68)}
+body.hp-option-9 .hp-research .hp-reading-grid{grid-template-columns:250px minmax(0,1fr);gap:64px}
+body.hp-option-9 .hp-research .hp-reading{display:grid;grid-template-columns:.9fr 1.1fr;gap:52px}
+body.hp-option-9 .hp-report-title{font-size:40px;line-height:1.08;margin-top:0}
+body.hp-option-9 .hp-report-dek{font-size:20px;color:var(--sv-ivory)}
+body.hp-option-9 .hp-research :is(.hp-links a){color:#f1b0a8}
+body.hp-option-9 #strategy .hp-disciplines{margin:0;border-top:1px solid var(--sv-ink)}
+body.hp-option-9 #strategy .hp-disciplines>div{display:grid;grid-template-columns:230px 1fr;gap:34px;padding:18px 0;margin:0;border-bottom:1px solid #c8ccc5}
+body.hp-option-9 #firm .hp-reading-grid,body.hp-option-9 .hp-contact .hp-reading-grid{grid-template-columns:250px minmax(0,1fr);gap:64px}
+
+/* 10 — Dark Opening
+   A serious institutional opening: hero + underwriting operate as one ink field, then the page opens into editorial ivory. */
+body.hp-option-10{--page-max:1360px;--pad-x:clamp(24px,4.2vw,60px)}
+body.hp-option-10 .hp-mandate{background:var(--sv-ink);padding-block:58px 70px}
+body.hp-option-10 .hp-mandate .hp-wrap{grid-template-columns:.82fr 1.18fr;gap:72px;align-items:center}
+body.hp-option-10 .hp-mandate h1{font-size:clamp(48px,4.9vw,68px);line-height:1.0;max-width:13ch;letter-spacing:-.034em;color:var(--sv-ivory)}
+body.hp-option-10 .hp-intro{font-size:20px;line-height:1.5;max-width:37ch;color:rgba(242,236,216,.82)}
+body.hp-option-10 .hp-hero-image{height:520px;margin-right:24px}
+body.hp-option-10 .hp-hero-image::before{inset:26px -24px -22px 38px;background:var(--sv-cinnabar)}
+body.hp-option-10 .hp-underwriting{background:var(--sv-ink);color:var(--sv-ivory);padding-block:18px 76px}
+body.hp-option-10 .hp-underwriting .hp-wrap{padding-top:40px;border-top:1px solid rgba(242,236,216,.28)}
+body.hp-option-10 .hp-underwriting .hp-reading-grid{grid-template-columns:330px minmax(0,1fr);gap:78px}
+body.hp-option-10 .hp-underwriting h2{font-size:38px;line-height:1.02;color:var(--sv-ivory);max-width:9ch}
+body.hp-option-10 .hp-underwriting .hp-lead{font-size:30px;line-height:1.38;color:var(--sv-ivory);max-width:42ch}
+body.hp-option-10 .hp-underwriting .hp-disciplines{margin-top:38px;display:grid;grid-template-columns:repeat(3,1fr);gap:34px}
+body.hp-option-10 .hp-underwriting .hp-disciplines>div{padding-top:16px;border-top:1px solid rgba(242,236,216,.28)}
+body.hp-option-10 .hp-underwriting .hp-disciplines dt{color:var(--sv-ivory)}
+body.hp-option-10 .hp-underwriting .hp-disciplines dd{color:rgba(242,236,216,.82)}
+body.hp-option-10 .hp-underwriting .hp-note{color:rgba(242,236,216,.62);margin-top:32px}
+body.hp-option-10 .hp-research{background:var(--sv-ivory);padding-block:74px;margin:0}
+body.hp-option-10 .hp-research .hp-reading-grid{grid-template-columns:330px minmax(0,1fr);gap:78px}
+body.hp-option-10 .hp-publication h2{font-size:50px;line-height:.97;letter-spacing:-.032em;max-width:8ch;margin:0 0 18px}
+body.hp-option-10 .hp-publication .hp-meta{max-width:24ch;padding-top:14px;border-top:2px solid var(--sv-cinnabar)}
+body.hp-option-10 .hp-research .hp-reading{display:grid;grid-template-columns:.9fr 1.1fr;gap:54px}
+body.hp-option-10 .hp-report-title{font-size:42px;line-height:1.08;margin-top:0}
+body.hp-option-10 #strategy{padding-block:62px;background:var(--sv-stone)}
+body.hp-option-10 #strategy .hp-reading-grid{grid-template-columns:1fr;gap:30px}
+body.hp-option-10 #strategy h2{font-size:36px}
+body.hp-option-10 #strategy .hp-disciplines{display:grid;grid-template-columns:repeat(3,1fr);gap:42px;margin:0}
+body.hp-option-10 #strategy .hp-disciplines>div{padding-top:16px;border-top:1px solid var(--sv-ink)}
+body.hp-option-10 #firm .hp-reading-grid,body.hp-option-10 .hp-contact .hp-reading-grid{grid-template-columns:300px minmax(0,1fr);gap:72px}
+body.hp-option-10 #firm{padding-top:54px;padding-bottom:24px}
+body.hp-option-10 .hp-contact{padding-top:24px}
+
+@media(max-width:980px) and (min-width:768px){
+ body.hp-option-8 .hp-hero-image{height:470px}
+ body.hp-option-8 .hp-underwriting .hp-reading-grid,body.hp-option-8 #strategy .hp-reading-grid{grid-template-columns:220px 1fr;gap:42px}
+ body.hp-option-8 .hp-research .hp-reading-grid{grid-template-columns:90px 240px 1fr;gap:26px}
+ body.hp-option-9 .hp-mandate .hp-wrap{gap:38px}
+ body.hp-option-9 .hp-reading-grid{grid-template-columns:210px 1fr;gap:38px}
+ body.hp-option-10 .hp-mandate .hp-wrap{gap:40px}
+ body.hp-option-10 .hp-underwriting .hp-reading-grid,body.hp-option-10 .hp-research .hp-reading-grid{grid-template-columns:240px 1fr;gap:42px}
+}
+@media(max-width:767px){
+ body:is(.hp-option-8,.hp-option-9,.hp-option-10) .hp-mandate h1{font-size:36px;line-height:1.05;max-width:none}
+ body:is(.hp-option-8,.hp-option-9,.hp-option-10) .hp-intro{font-size:17px}
+ body.hp-option-8 .hp-mandate{padding:28px 0 42px}
+ body.hp-option-8 .hp-hero-image{height:330px;margin:0 14px 0 0}
+ body.hp-option-8 .hp-hero-image::before{inset:16px -14px -14px 48%}
+ body.hp-option-8 .hp-hero-copy{position:relative;left:auto;bottom:auto;width:auto;padding:24px 0 0;background:transparent}
+ body.hp-option-8 .hp-section{padding-block:42px}
+ body.hp-option-8 .hp-underwriting .hp-reading-grid,body.hp-option-8 #strategy .hp-reading-grid,body.hp-option-8 #firm .hp-reading-grid,body.hp-option-8 .hp-contact .hp-reading-grid{grid-template-columns:1fr;gap:22px}
+ body.hp-option-8 .hp-underwriting h2{font-size:30px;max-width:none}
+ body.hp-option-8 .hp-underwriting .hp-lead{font-size:23px}
+ body.hp-option-8 .hp-underwriting .hp-disciplines{grid-template-columns:1fr}
+ body.hp-option-8 .hp-underwriting .hp-disciplines>div,body.hp-option-8 .hp-underwriting .hp-disciplines>div+div{border-left:0;border-top:1px solid #c8ccc5;padding:16px 0;margin:0}
+ body.hp-option-8 .hp-research{padding-block:42px}
+ body.hp-option-8 .hp-research .hp-reading-grid{grid-template-columns:1fr;gap:22px}
+ body.hp-option-8 .hp-publication{display:block}
+ body.hp-option-8 .hp-publication h2{font-size:36px;max-width:none;margin-bottom:10px}
+ body.hp-option-8 .hp-publication .hp-meta{writing-mode:horizontal-tb;transform:none;margin:0}
+ body.hp-option-8 .hp-research .hp-reading{display:block}
+ body.hp-option-8 .hp-report-title{font-size:31px}
+ body.hp-option-8 #strategy .hp-disciplines>div{grid-template-columns:1fr;gap:6px}
+ body.hp-option-9 .hp-editorial::before{display:none}
+ body.hp-option-9 .hp-mandate{padding-block:28px 38px}
+ body.hp-option-9 .hp-mandate .hp-wrap{grid-template-columns:1fr;gap:28px;padding-left:var(--pad-x)}
+ body.hp-option-9 .hp-hero-image{height:300px;margin-right:14px}
+ body.hp-option-9 .hp-hero-image::before{inset:16px -14px -14px 24px}
+ body.hp-option-9 .hp-section{padding-block:38px}
+ body.hp-option-9 .hp-section .hp-wrap,body.hp-option-9 .hp-research .hp-wrap{padding-left:var(--pad-x)}
+ body.hp-option-9 .hp-reading-grid,body.hp-option-9 .hp-research .hp-reading-grid,body.hp-option-9 #firm .hp-reading-grid,body.hp-option-9 .hp-contact .hp-reading-grid{grid-template-columns:1fr;gap:22px}
+ body.hp-option-9 .hp-section h2{font-size:29px}
+ body.hp-option-9 .hp-underwriting .hp-lead{font-size:23px}
+ body.hp-option-9 .hp-underwriting .hp-disciplines{grid-template-columns:1fr;gap:18px}
+ body.hp-option-9 .hp-research .hp-reading{grid-template-columns:1fr;gap:8px}
+ body.hp-option-9 .hp-report-title{font-size:31px}
+ body.hp-option-9 #strategy .hp-disciplines>div{grid-template-columns:1fr;gap:6px}
+ body.hp-option-10 .hp-mandate{padding-block:32px 44px}
+ body.hp-option-10 .hp-mandate .hp-wrap{grid-template-columns:1fr;gap:30px}
+ body.hp-option-10 .hp-hero-image{height:310px;margin-right:14px}
+ body.hp-option-10 .hp-hero-image::before{inset:16px -14px -14px 24px}
+ body.hp-option-10 .hp-underwriting{padding-block:12px 48px}
+ body.hp-option-10 .hp-underwriting .hp-reading-grid,body.hp-option-10 .hp-research .hp-reading-grid,body.hp-option-10 #firm .hp-reading-grid,body.hp-option-10 .hp-contact .hp-reading-grid{grid-template-columns:1fr;gap:22px}
+ body.hp-option-10 .hp-underwriting h2{font-size:30px;max-width:none}
+ body.hp-option-10 .hp-underwriting .hp-lead{font-size:23px}
+ body.hp-option-10 .hp-underwriting .hp-disciplines{grid-template-columns:1fr;gap:16px}
+ body.hp-option-10 .hp-research{padding-block:44px}
+ body.hp-option-10 .hp-publication h2{font-size:38px;max-width:none}
+ body.hp-option-10 .hp-research .hp-reading{grid-template-columns:1fr;gap:8px}
+ body.hp-option-10 .hp-report-title{font-size:31px}
+ body.hp-option-10 #strategy .hp-disciplines{grid-template-columns:1fr;gap:22px}
+}

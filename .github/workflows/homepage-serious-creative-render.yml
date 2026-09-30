@@ -1,0 +1,39 @@
+name: Render ShoreVest serious creative options
+on:
+  push:
+    branches: [design/impeccable-20260930]
+    paths:
+      - 'internal-preview/homepage-options/architectural-monograph/**'
+      - 'internal-preview/homepage-options/cinnabar-spine/**'
+      - 'internal-preview/homepage-options/dark-opening/**'
+      - 'assets/css/homepage-serious-creative.css'
+      - 'scripts/render-homepage-serious-creative.cjs'
+      - '.github/workflows/homepage-serious-creative-render.yml'
+permissions:
+  contents: read
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Render serious creative homepage directions
+        shell: bash
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/shorevest-serious-creative.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" || true' EXIT
+          node scripts/render-homepage-serious-creative.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: shorevest-homepage-serious-creative
+          path: artifacts/homepage-serious-creative/
+          retention-days: 7
+          if-no-files-found: error
