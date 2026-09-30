@@ -1,0 +1,242 @@
+/* Impeccable: two China Modernist + two Architectural Sequence directions.
+   Preview-only. Existing public copy is untouched. */
+
+body:is(.hp-option-11,.hp-option-12,.hp-option-13,.hp-option-14) .hp-hero-image,
+body:is(.hp-option-11,.hp-option-12,.hp-option-13,.hp-option-14) .hp-hero-image img{
+  border-radius:0!important;box-shadow:none!important;filter:none!important
+}
+body:is(.hp-option-11,.hp-option-12,.hp-option-13,.hp-option-14) .hp-editorial{overflow:clip}
+body:is(.hp-option-11,.hp-option-12,.hp-option-13,.hp-option-14) .hp-section .hp-wrap{border-top:0}
+body:is(.hp-option-11,.hp-option-12,.hp-option-13,.hp-option-14) .sv-nav a::after,
+body:is(.hp-option-11,.hp-option-12,.hp-option-13,.hp-option-14) .sv-footer a{transition:none!important;animation:none!important}
+
+/* 11 — China Modernist / Offset Register
+   Large image field, assertive asymmetric type, cinnabar as a registration plane rather than a card. */
+body.hp-option-11{--page-max:1420px;--pad-x:clamp(24px,3.8vw,54px)}
+body.hp-option-11 .hp-mandate{padding:34px 0 82px}
+body.hp-option-11 .hp-mandate .hp-wrap{display:grid;grid-template-columns:.72fr 1.28fr;gap:0;align-items:stretch}
+body.hp-option-11 .hp-hero-copy{position:relative;z-index:2;padding:62px 38px 52px 0;display:flex;flex-direction:column;justify-content:flex-end}
+body.hp-option-11 .hp-hero-copy::after{content:"";position:absolute;left:-42vw;right:42%;bottom:0;height:18px;background:var(--sv-cinnabar);z-index:-1}
+body.hp-option-11 .hp-mandate h1{font-size:clamp(52px,5.3vw,76px);line-height:.94;letter-spacing:-.038em;max-width:9.4ch;margin:0}
+body.hp-option-11 .hp-intro{font-size:19px;line-height:1.55;max-width:34ch;margin:34px 0 0}
+body.hp-option-11 .hp-hero-image{height:600px;margin:0 28px 0 0}
+body.hp-option-11 .hp-hero-image img{object-position:center 48%}
+body.hp-option-11 .hp-hero-image::before{inset:34px -28px -28px 72%;background:var(--sv-cinnabar)}
+body.hp-option-11 .hp-section{padding-block:70px}
+body.hp-option-11 .hp-underwriting .hp-reading-grid{grid-template-columns:1fr;gap:34px}
+body.hp-option-11 .hp-underwriting h2{font-size:46px;line-height:.98;max-width:10ch;letter-spacing:-.035em}
+body.hp-option-11 .hp-underwriting .hp-reading{display:grid;grid-template-columns:1.04fr .96fr;gap:0 72px}
+body.hp-option-11 .hp-underwriting .hp-lead{font-size:31px;line-height:1.35;margin:0;max-width:39ch}
+body.hp-option-11 .hp-underwriting .hp-disciplines{margin:0;display:grid;grid-template-columns:1fr}
+body.hp-option-11 .hp-underwriting .hp-disciplines>div{display:grid;grid-template-columns:220px 1fr;gap:30px;padding:18px 0;margin:0;border-top:1px solid #bfc4be}
+body.hp-option-11 .hp-underwriting .hp-disciplines>div:last-child{border-bottom:1px solid #bfc4be}
+body.hp-option-11 .hp-underwriting .hp-note{grid-column:1;margin-top:28px;max-width:50ch}
+body.hp-option-11 .hp-research{background:var(--sv-stone);margin:0;padding-block:64px}
+body.hp-option-11 .hp-research .hp-reading-grid{grid-template-columns:260px minmax(0,1fr);gap:72px}
+body.hp-option-11 .hp-publication h2{font-size:54px;line-height:.9;letter-spacing:-.038em;max-width:7ch;margin:0 0 22px}
+body.hp-option-11 .hp-publication .hp-meta{font-size:12px;max-width:22ch;padding-top:12px;border-top:1px solid var(--sv-ink)}
+body.hp-option-11 .hp-research .hp-reading{display:grid;grid-template-columns:.88fr 1.12fr;gap:56px}
+body.hp-option-11 .hp-report-title{font-size:42px;line-height:1.07;margin:0 0 18px}
+body.hp-option-11 .hp-report-dek{font-size:20px}
+body.hp-option-11 #strategy .hp-reading-grid{grid-template-columns:1fr;gap:32px}
+body.hp-option-11 #strategy h2{font-size:38px}
+body.hp-option-11 #strategy .hp-disciplines{display:grid;grid-template-columns:repeat(3,1fr);gap:42px;margin:0}
+body.hp-option-11 #strategy .hp-disciplines>div{padding-top:18px;border-top:2px solid var(--sv-ink)}
+body.hp-option-11 #firm .hp-reading-grid,body.hp-option-11 .hp-contact .hp-reading-grid{grid-template-columns:270px minmax(0,1fr);gap:70px}
+body.hp-option-11 #firm{padding-bottom:24px}
+body.hp-option-11 .hp-contact{padding-top:24px}
+
+/* 12 — China Modernist / Editorial Fold
+   Deliberately print-led: image and copy share one geometric field, research becomes the strongest spread. */
+body.hp-option-12{--page-max:1380px;--pad-x:clamp(24px,4vw,56px)}
+body.hp-option-12 .hp-mandate{padding:40px 0 72px}
+body.hp-option-12 .hp-mandate .hp-wrap{display:grid;grid-template-columns:1.08fr .92fr;grid-template-rows:auto auto;gap:0 58px;align-items:end}
+body.hp-option-12 .hp-hero-image{grid-column:1;grid-row:1 / span 2;height:590px;margin:0}
+body.hp-option-12 .hp-hero-image::before{inset:auto -26px 34px 62%;height:46%;background:var(--sv-cinnabar)}
+body.hp-option-12 .hp-hero-copy{display:contents}
+body.hp-option-12 .hp-mandate h1{grid-column:2;grid-row:1;font-size:clamp(50px,5vw,72px);line-height:.96;letter-spacing:-.038em;max-width:9.5ch;margin:0 0 34px}
+body.hp-option-12 .hp-intro{grid-column:2;grid-row:2;font-size:19px;line-height:1.52;max-width:35ch;margin:0 0 4px;padding-top:22px;border-top:1px solid var(--sv-ink)}
+body.hp-option-12 .hp-section{padding-block:64px}
+body.hp-option-12 .hp-underwriting .hp-reading-grid{grid-template-columns:300px minmax(0,1fr);gap:80px}
+body.hp-option-12 .hp-underwriting h2{font-size:38px;line-height:1.02;max-width:8ch}
+body.hp-option-12 .hp-underwriting .hp-lead{font-size:29px;line-height:1.38;max-width:42ch}
+body.hp-option-12 .hp-underwriting .hp-disciplines{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;margin-top:36px}
+body.hp-option-12 .hp-underwriting .hp-disciplines>div{padding-top:16px;border-top:1px solid var(--sv-ink)}
+body.hp-option-12 .hp-research{padding:0;margin:0;background:var(--sv-ink);color:var(--sv-ivory)}
+body.hp-option-12 .hp-research .hp-wrap{max-width:none;padding:0;display:grid;grid-template-columns:minmax(290px,.72fr) minmax(0,1.28fr);gap:0}
+body.hp-option-12 .hp-publication{padding:72px clamp(34px,5vw,76px);background:var(--sv-cinnabar);display:flex;flex-direction:column;justify-content:space-between}
+body.hp-option-12 .hp-publication h2{font-size:clamp(48px,5vw,72px);line-height:.9;max-width:6.5ch;color:var(--sv-ivory);margin:0}
+body.hp-option-12 .hp-publication .hp-meta{color:rgba(242,236,216,.85);max-width:25ch;margin-top:80px}
+body.hp-option-12 .hp-research .hp-reading{padding:72px clamp(38px,5.5vw,88px);max-width:none;display:grid;grid-template-columns:.9fr 1.1fr;gap:56px}
+body.hp-option-12 .hp-report-title{font-size:44px;line-height:1.05;color:var(--sv-ivory);margin:0 0 18px}
+body.hp-option-12 .hp-report-dek{font-size:20px;color:var(--sv-ivory)}
+body.hp-option-12 .hp-report-evidence{color:rgba(242,236,216,.86)}
+body.hp-option-12 .hp-research .hp-note{color:rgba(242,236,216,.62)}
+body.hp-option-12 .hp-research :is(.hp-links a){color:#f4bbb4}
+body.hp-option-12 #strategy{padding-block:68px}
+body.hp-option-12 #strategy .hp-reading-grid{grid-template-columns:300px minmax(0,1fr);gap:80px}
+body.hp-option-12 #strategy .hp-disciplines{margin:0}
+body.hp-option-12 #strategy .hp-disciplines>div{display:grid;grid-template-columns:230px 1fr;gap:36px;padding:18px 0;margin:0;border-top:1px solid #c8ccc5}
+body.hp-option-12 #strategy .hp-disciplines>div:last-child{border-bottom:1px solid #c8ccc5}
+body.hp-option-12 #firm .hp-reading-grid,body.hp-option-12 .hp-contact .hp-reading-grid{grid-template-columns:300px minmax(0,1fr);gap:80px}
+body.hp-option-12 #firm{padding-bottom:26px}
+body.hp-option-12 .hp-contact{padding-top:26px}
+
+/* 13 — Architectural Sequence / Structural Axis
+   The image is the opening exhibit; a single structural line carries the reader into underwriting. */
+body.hp-option-13{--page-max:1420px;--pad-x:clamp(24px,3.8vw,54px)}
+body.hp-option-13 .hp-mandate{padding:34px 0 86px}
+body.hp-option-13 .hp-mandate .hp-wrap{display:block;position:relative}
+body.hp-option-13 .hp-hero-image{height:600px;margin:0 28px 0 0}
+body.hp-option-13 .hp-hero-image img{object-position:center 46%}
+body.hp-option-13 .hp-hero-image::before{inset:24px -28px -24px 78%;background:var(--sv-cinnabar)}
+body.hp-option-13 .hp-hero-copy{position:absolute;z-index:2;left:var(--pad-x);top:56px;width:min(560px,45%);background:var(--sv-ivory);padding:28px 36px 32px 0}
+body.hp-option-13 .hp-mandate h1{font-size:clamp(48px,4.8vw,68px);line-height:.99;letter-spacing:-.035em;max-width:12ch;margin:0}
+body.hp-option-13 .hp-intro{font-size:18px;max-width:38ch;margin-top:22px}
+body.hp-option-13 .hp-underwriting{padding-block:70px 82px}
+body.hp-option-13 .hp-underwriting .hp-reading-grid{grid-template-columns:300px minmax(0,1fr);gap:86px;position:relative}
+body.hp-option-13 .hp-underwriting .hp-reading-grid::before{content:"";position:absolute;left:330px;top:8px;bottom:0;width:1px;background:#aeb4ae}
+body.hp-option-13 .hp-underwriting h2{font-size:40px;line-height:1.02;max-width:8ch;position:sticky;top:108px}
+body.hp-option-13 .hp-underwriting .hp-lead{font-size:30px;line-height:1.38;max-width:42ch;margin:0 0 48px;padding-left:42px}
+body.hp-option-13 .hp-underwriting .hp-disciplines{margin:0;padding-left:42px}
+body.hp-option-13 .hp-underwriting .hp-disciplines>div{position:relative;margin:0;padding:22px 0 28px;border-top:1px solid #c8ccc5}
+body.hp-option-13 .hp-underwriting .hp-disciplines>div::before{content:"";position:absolute;left:-49px;top:27px;width:13px;height:13px;border:2px solid var(--sv-cinnabar);background:var(--sv-ivory)}
+body.hp-option-13 .hp-underwriting .hp-disciplines>div:nth-child(2){margin-left:8%}
+body.hp-option-13 .hp-underwriting .hp-disciplines>div:nth-child(3){margin-left:16%;border-bottom:1px solid #c8ccc5}
+body.hp-option-13 .hp-underwriting .hp-note{margin:28px 0 0 42px;max-width:52ch}
+body.hp-option-13 .hp-research{background:var(--sv-stone);padding-block:64px;margin:0}
+body.hp-option-13 .hp-research .hp-reading-grid{grid-template-columns:300px minmax(0,1fr);gap:86px}
+body.hp-option-13 .hp-publication h2{font-size:46px;line-height:.98;max-width:8ch;margin:0 0 20px}
+body.hp-option-13 .hp-research .hp-reading{display:grid;grid-template-columns:.86fr 1.14fr;gap:54px}
+body.hp-option-13 .hp-report-title{font-size:42px;line-height:1.08;margin:0 0 18px}
+body.hp-option-13 #strategy .hp-reading-grid{grid-template-columns:300px minmax(0,1fr);gap:86px}
+body.hp-option-13 #strategy .hp-disciplines{margin:0}
+body.hp-option-13 #strategy .hp-disciplines>div{display:grid;grid-template-columns:235px 1fr;gap:36px;padding:18px 0;margin:0;border-top:1px solid #c8ccc5}
+body.hp-option-13 #strategy .hp-disciplines>div:last-child{border-bottom:1px solid #c8ccc5}
+body.hp-option-13 #firm .hp-reading-grid,body.hp-option-13 .hp-contact .hp-reading-grid{grid-template-columns:300px minmax(0,1fr);gap:86px}
+body.hp-option-13 #firm{padding-bottom:24px}
+body.hp-option-13 .hp-contact{padding-top:24px}
+
+/* 14 — Architectural Sequence / Aperture
+   One authored motion idea: the image aperture widens as the hero leaves view; the static fallback remains complete. */
+body.hp-option-14{--page-max:1420px;--pad-x:clamp(24px,3.8vw,54px)}
+body.hp-option-14 .hp-mandate{padding:34px 0 78px}
+body.hp-option-14 .hp-mandate .hp-wrap{display:grid;grid-template-columns:.7fr 1.3fr;gap:54px;align-items:center}
+body.hp-option-14 .hp-mandate h1{font-size:clamp(50px,5vw,70px);line-height:.98;letter-spacing:-.036em;max-width:11ch}
+body.hp-option-14 .hp-intro{font-size:19px;max-width:36ch;margin-top:28px}
+body.hp-option-14 .hp-hero-image{height:590px;margin-right:30px;clip-path:inset(0 0 0 18%)}
+body.hp-option-14 .hp-hero-image::before{inset:26px -30px -24px 58%;background:var(--sv-cinnabar)}
+@supports (animation-timeline:view()){
+ body.hp-option-14 .hp-hero-image{animation:sv-aperture linear both;animation-timeline:view();animation-range:entry 0% exit 42%}
+ @keyframes sv-aperture{from{clip-path:inset(0 0 0 18%)}to{clip-path:inset(0 0 0 0)}}
+}
+body.hp-option-14 .hp-underwriting{padding-block:68px 78px}
+body.hp-option-14 .hp-underwriting .hp-reading-grid{grid-template-columns:1fr;gap:28px}
+body.hp-option-14 .hp-underwriting h2{font-size:44px;line-height:1;max-width:12ch}
+body.hp-option-14 .hp-underwriting .hp-reading{display:grid;grid-template-columns:.82fr 1.18fr;gap:0 72px}
+body.hp-option-14 .hp-underwriting .hp-lead{font-size:30px;line-height:1.38;margin:0;max-width:39ch}
+body.hp-option-14 .hp-underwriting .hp-disciplines{margin:0;display:flex;flex-direction:column;gap:0}
+body.hp-option-14 .hp-underwriting .hp-disciplines>div{padding:18px 0 20px;border-top:1px solid #c8ccc5;margin:0;max-width:720px}
+body.hp-option-14 .hp-underwriting .hp-disciplines>div:nth-child(1){margin-left:0}
+body.hp-option-14 .hp-underwriting .hp-disciplines>div:nth-child(2){margin-left:10%}
+body.hp-option-14 .hp-underwriting .hp-disciplines>div:nth-child(3){margin-left:20%;border-bottom:1px solid #c8ccc5}
+body.hp-option-14 .hp-underwriting .hp-note{grid-column:1;max-width:50ch;margin-top:28px}
+body.hp-option-14 .hp-research{margin:0;padding-block:68px;background:var(--sv-ivory)}
+body.hp-option-14 .hp-research .hp-wrap{border-top:3px solid var(--sv-cinnabar);padding-top:28px}
+body.hp-option-14 .hp-research .hp-reading-grid{grid-template-columns:270px minmax(0,1fr);gap:76px}
+body.hp-option-14 .hp-publication h2{font-size:48px;line-height:.98;max-width:8ch;margin:0 0 18px}
+body.hp-option-14 .hp-research .hp-reading{display:grid;grid-template-columns:.9fr 1.1fr;gap:54px}
+body.hp-option-14 .hp-report-title{font-size:43px;line-height:1.06;margin:0 0 18px}
+body.hp-option-14 #strategy{background:var(--sv-stone);padding-block:62px}
+body.hp-option-14 #strategy .hp-reading-grid{grid-template-columns:1fr;gap:28px}
+body.hp-option-14 #strategy h2{font-size:36px}
+body.hp-option-14 #strategy .hp-disciplines{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin:0}
+body.hp-option-14 #strategy .hp-disciplines>div{padding-top:16px;border-top:1px solid var(--sv-ink)}
+body.hp-option-14 #firm .hp-reading-grid,body.hp-option-14 .hp-contact .hp-reading-grid{grid-template-columns:280px minmax(0,1fr);gap:72px}
+body.hp-option-14 #firm{padding-bottom:24px}
+body.hp-option-14 .hp-contact{padding-top:24px}
+
+@media(max-width:980px) and (min-width:768px){
+ body.hp-option-11 .hp-mandate .hp-wrap{grid-template-columns:.86fr 1.14fr}
+ body.hp-option-11 .hp-hero-image{height:500px}
+ body.hp-option-11 .hp-underwriting .hp-reading{gap:42px}
+ body.hp-option-11 .hp-research .hp-reading-grid{grid-template-columns:230px 1fr;gap:42px}
+ body.hp-option-12 .hp-mandate .hp-wrap{gap:38px}
+ body.hp-option-12 .hp-research .hp-wrap{grid-template-columns:260px 1fr}
+ body.hp-option-12 .hp-research .hp-reading{gap:36px}
+ body.hp-option-13 .hp-hero-image{height:500px}
+ body.hp-option-13 .hp-underwriting .hp-reading-grid{grid-template-columns:240px 1fr;gap:42px}
+ body.hp-option-13 .hp-underwriting .hp-reading-grid::before{left:266px}
+ body.hp-option-13 .hp-research .hp-reading-grid,body.hp-option-13 #strategy .hp-reading-grid{grid-template-columns:240px 1fr;gap:42px}
+ body.hp-option-14 .hp-mandate .hp-wrap{grid-template-columns:.85fr 1.15fr;gap:38px}
+ body.hp-option-14 .hp-underwriting .hp-reading{gap:42px}
+ body.hp-option-14 .hp-research .hp-reading-grid{grid-template-columns:240px 1fr;gap:42px}
+}
+
+@media(max-width:767px){
+ body:is(.hp-option-11,.hp-option-12,.hp-option-13,.hp-option-14) .hp-mandate h1{font-size:36px;line-height:1.04;max-width:none}
+ body:is(.hp-option-11,.hp-option-12,.hp-option-13,.hp-option-14) .hp-intro{font-size:17px}
+ body.hp-option-11 .hp-mandate{padding:28px 0 44px}
+ body.hp-option-11 .hp-mandate .hp-wrap{grid-template-columns:1fr}
+ body.hp-option-11 .hp-hero-copy{padding:0 0 30px}
+ body.hp-option-11 .hp-hero-copy::after{left:0;right:54%;height:10px}
+ body.hp-option-11 .hp-hero-image{height:330px;margin-right:14px}
+ body.hp-option-11 .hp-hero-image::before{inset:16px -14px -14px 56%}
+ body.hp-option-11 .hp-section{padding-block:42px}
+ body.hp-option-11 .hp-underwriting h2{font-size:31px;max-width:none}
+ body.hp-option-11 .hp-underwriting .hp-reading{grid-template-columns:1fr;gap:28px}
+ body.hp-option-11 .hp-underwriting .hp-lead{font-size:23px}
+ body.hp-option-11 .hp-underwriting .hp-disciplines>div{grid-template-columns:1fr;gap:6px}
+ body.hp-option-11 .hp-research .hp-reading-grid,body.hp-option-11 #firm .hp-reading-grid,body.hp-option-11 .hp-contact .hp-reading-grid{grid-template-columns:1fr;gap:22px}
+ body.hp-option-11 .hp-publication h2{font-size:38px;max-width:none}
+ body.hp-option-11 .hp-research .hp-reading{grid-template-columns:1fr;gap:8px}
+ body.hp-option-11 .hp-report-title{font-size:31px}
+ body.hp-option-11 #strategy .hp-disciplines{grid-template-columns:1fr;gap:22px}
+ body.hp-option-12 .hp-mandate{padding:28px 0 42px}
+ body.hp-option-12 .hp-mandate .hp-wrap{display:flex;flex-direction:column;gap:24px}
+ body.hp-option-12 .hp-hero-copy{display:contents}
+ body.hp-option-12 .hp-mandate h1{order:1;margin:0}
+ body.hp-option-12 .hp-intro{order:2;margin:0;padding-top:16px}
+ body.hp-option-12 .hp-hero-image{order:3;height:340px;width:calc(100% - 14px)}
+ body.hp-option-12 .hp-hero-image::before{inset:auto -14px 16px 58%;height:45%}
+ body.hp-option-12 .hp-underwriting .hp-reading-grid,body.hp-option-12 #strategy .hp-reading-grid,body.hp-option-12 #firm .hp-reading-grid,body.hp-option-12 .hp-contact .hp-reading-grid{grid-template-columns:1fr;gap:22px}
+ body.hp-option-12 .hp-underwriting .hp-lead{font-size:23px}
+ body.hp-option-12 .hp-underwriting .hp-disciplines{grid-template-columns:1fr;gap:18px}
+ body.hp-option-12 .hp-research .hp-wrap{grid-template-columns:1fr}
+ body.hp-option-12 .hp-publication{padding:42px 22px}
+ body.hp-option-12 .hp-publication h2{font-size:42px;max-width:none}
+ body.hp-option-12 .hp-publication .hp-meta{margin-top:28px}
+ body.hp-option-12 .hp-research .hp-reading{padding:42px 22px;grid-template-columns:1fr;gap:8px}
+ body.hp-option-12 .hp-report-title{font-size:31px}
+ body.hp-option-12 #strategy .hp-disciplines>div{grid-template-columns:1fr;gap:6px}
+ body.hp-option-13 .hp-mandate{padding:28px 0 46px}
+ body.hp-option-13 .hp-hero-image{height:340px;margin-right:14px}
+ body.hp-option-13 .hp-hero-image::before{inset:16px -14px -14px 62%}
+ body.hp-option-13 .hp-hero-copy{position:relative;left:auto;top:auto;width:auto;padding:24px 0 0;background:transparent}
+ body.hp-option-13 .hp-underwriting{padding-block:42px}
+ body.hp-option-13 .hp-underwriting .hp-reading-grid,body.hp-option-13 .hp-research .hp-reading-grid,body.hp-option-13 #strategy .hp-reading-grid,body.hp-option-13 #firm .hp-reading-grid,body.hp-option-13 .hp-contact .hp-reading-grid{grid-template-columns:1fr;gap:22px}
+ body.hp-option-13 .hp-underwriting .hp-reading-grid::before{display:none}
+ body.hp-option-13 .hp-underwriting h2{position:static;font-size:30px;max-width:none}
+ body.hp-option-13 .hp-underwriting .hp-lead{font-size:23px;padding-left:0;margin-bottom:28px}
+ body.hp-option-13 .hp-underwriting .hp-disciplines{padding-left:0}
+ body.hp-option-13 .hp-underwriting .hp-disciplines>div,body.hp-option-13 .hp-underwriting .hp-disciplines>div:nth-child(2),body.hp-option-13 .hp-underwriting .hp-disciplines>div:nth-child(3){margin-left:0;padding:16px 0}
+ body.hp-option-13 .hp-underwriting .hp-disciplines>div::before{display:none}
+ body.hp-option-13 .hp-underwriting .hp-note{margin-left:0}
+ body.hp-option-13 .hp-research .hp-reading{grid-template-columns:1fr;gap:8px}
+ body.hp-option-13 .hp-report-title{font-size:31px}
+ body.hp-option-13 #strategy .hp-disciplines>div{grid-template-columns:1fr;gap:6px}
+ body.hp-option-14 .hp-mandate{padding:28px 0 42px}
+ body.hp-option-14 .hp-mandate .hp-wrap{grid-template-columns:1fr;gap:26px}
+ body.hp-option-14 .hp-hero-image{height:340px;margin-right:14px;clip-path:none}
+ body.hp-option-14 .hp-hero-image::before{inset:16px -14px -14px 48%}
+ body.hp-option-14 .hp-underwriting{padding-block:42px}
+ body.hp-option-14 .hp-underwriting h2{font-size:31px}
+ body.hp-option-14 .hp-underwriting .hp-reading{grid-template-columns:1fr;gap:28px}
+ body.hp-option-14 .hp-underwriting .hp-lead{font-size:23px}
+ body.hp-option-14 .hp-underwriting .hp-disciplines>div,body.hp-option-14 .hp-underwriting .hp-disciplines>div:nth-child(2),body.hp-option-14 .hp-underwriting .hp-disciplines>div:nth-child(3){margin-left:0}
+ body.hp-option-14 .hp-research .hp-reading-grid,body.hp-option-14 #firm .hp-reading-grid,body.hp-option-14 .hp-contact .hp-reading-grid{grid-template-columns:1fr;gap:22px}
+ body.hp-option-14 .hp-publication h2{font-size:38px;max-width:none}
+ body.hp-option-14 .hp-research .hp-reading{grid-template-columns:1fr;gap:8px}
+ body.hp-option-14 .hp-report-title{font-size:31px}
+ body.hp-option-14 #strategy .hp-disciplines{grid-template-columns:1fr;gap:22px}
+}

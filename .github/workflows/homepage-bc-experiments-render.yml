@@ -1,0 +1,40 @@
+name: Render ShoreVest B-C experiments
+on:
+  push:
+    branches: [design/impeccable-20260930]
+    paths:
+      - 'internal-preview/homepage-options/china-modernist-register/**'
+      - 'internal-preview/homepage-options/china-modernist-fold/**'
+      - 'internal-preview/homepage-options/architectural-axis/**'
+      - 'internal-preview/homepage-options/architectural-aperture/**'
+      - 'assets/css/homepage-bc-experiments.css'
+      - 'scripts/render-homepage-bc-experiments.cjs'
+      - '.github/workflows/homepage-bc-experiments-render.yml'
+permissions:
+  contents: read
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Render China Modernist and Architectural Sequence options
+        shell: bash
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/shorevest-bc.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" || true' EXIT
+          node scripts/render-homepage-bc-experiments.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: shorevest-homepage-bc-experiments
+          path: artifacts/homepage-bc-experiments/
+          retention-days: 7
+          if-no-files-found: error
