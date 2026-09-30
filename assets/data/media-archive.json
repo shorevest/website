@@ -12,7 +12,7 @@
       "summaryZh": "姑苏区报道与新岸资本签署合作协议，并提及新岸资本于9月竞得黄金大厦，计划通过更新改造导入新消费及文商旅业态。",
       "url": "https://feng.ifeng.com/c/8wgmidEpHoS",
       "linkType": "external",
-      "status": "published",
+      "status": "draft",
       "featured": false,
       "autoDiscovered": false,
       "rights": "link-only",
@@ -23,7 +23,8 @@
         "dateBasis": "Publication date shown on the Gusu District publicity release.",
         "featureEvidence": "The release names ShoreVest (新岸资本), Benjamin Fanger (方杰明) and Golden Plaza (黄金大厦), and describes the cooperation agreement with Gusu District.",
         "urlStatus": "Syndicated source URL recorded on 2026-09-30.",
-        "hostingPermission": "Not established. External link and original ShoreVest summary only."
+        "hostingPermission": "Not established. External link and original ShoreVest summary only.",
+        "visibilityNote": "Temporarily hidden from the public Media archive at ShoreVest request."
       }
     },
     {
