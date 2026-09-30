@@ -46,7 +46,6 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
     --sv-cn: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
   }
 </style>
-<link rel="preload" as="image" href="assets/img/trees/home-hero-max-zhang.jpg" fetchpriority="high">
 
 <link rel="canonical" href="https://shorevest.com/cn/">
 <link rel="alternate" hreflang="zh-Hans" href="https://shorevest.com/cn/">
@@ -88,8 +87,9 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
 <script src="/assets/js/chrome-scroll-guard.js?v=20260730-live-scroll-15" defer></script>
 <script src="assets/js/favicon-guard.js?v=20260916-analytics-consent-2" defer></script>
 <link rel="stylesheet" href="/assets/css/visual-review-overrides.css?v=20260801-typography-fix-1" data-sv-visual-review="direct">
+<link rel="stylesheet" href="/assets/css/homepage-editorial-draft.css?v=20260930-draft-1">
 </head>
-<body id="top" class="homepage home-page">
+<body id="top" class="homepage home-page hp-draft">
 
 <!-- ============================================================ A, HEADER -->
 <header class="sv-header">
@@ -136,111 +136,69 @@ window.__SVT=(new URLSearchParams(location.search)).get('t')||'';
   </nav>
 </div>
 
-<main id="content">
-
-<!-- ============================================================ B, HERO -->
-<section class="sv-hero" id="hero" data-screen-label="首页" aria-label="新岸资本简介">
-  <div class="sv-hero__inner">
-    <div class="sv-hero__main">
-      <span class="sv-hero__rule" aria-hidden="true"></span>
-      <p class="sv-hero__label">信贷解决方案</p>
-      <h1 class="sv-hero__headline">中国资产支持私募信贷 <span class="sv-hero__since">始于 <span class="sv-hero__headline-accent">2004</span> 年</span></h1>
-      <p class="sv-hero__body">新岸资本是一家私募信贷公司，为中国各地的借款人与金融机构提供解决方案。</p>
-      <p class="sv-hero__body">作为该领域二十余年来的先行者，新岸资本的平台将无可比拟的本地执行能力与国际机构化风险管理相结合。</p>
-      <div class="sv-hero__cta">
-        <a href="/cn/strategy/" class="sv-textlink">了解我们的策略<span aria-hidden="true">→</span></a>
-      </div>
-    </div>
-    <div class="sv-hero__field">
-      <div class="sv-hero__image" aria-hidden="true"><img src="assets/img/trees/home-hero-max-zhang.jpg" alt="" width="1600" height="1600" loading="eager" decoding="async" fetchpriority="high"></div>
+<main id="content" class="hp-editorial">
+<section id="hero" class="hp-mandate" aria-labelledby="hp-mandate-title" data-screen-label="Home">
+  <div class="hp-wrap">
+    <h1 id="hp-mandate-title">中国资产支持私募信贷，<br class="hp-desktop-break">始于 2004 年。</h1>
+    <p class="hp-intro">新岸资本为中国各地的借款人及金融机构提供资产支持信贷解决方案。</p>
+  </div>
+</section>
+<section id="underwriting" class="hp-section hp-underwriting" aria-labelledby="hp-underwriting-title">
+  <div class="hp-wrap hp-reading-grid">
+    <h2 id="hp-underwriting-title">承销纪律</h2>
+    <div class="hp-reading">
+      <p class="hp-lead">对于有抵押信贷投资者而言，关键并非房地产市场的每个领域是否都健康，而是某项具体资产能否产生现金流、吸引使用者，并以为贷款人留下实质安全边际的价格成交。</p>
+      <dl class="hp-disciplines">
+        <div><dt>抵押品价值与安全边际</dt><dd>入场条款按下行情景及预期回收价值进行评估。抵押品估值应反映更高的资本化率及近期交易证据。</dd></div>
+        <div><dt>法律与结构地位</dt><dd>逐项情境审查债权优先级、文件质量及可执行性。</dd></div>
+        <div><dt>退出与回收路径</dt><dd>在投入资本前评估潜在的还款、重组及处置路径。</dd></div>
+      </dl>
+      <p class="hp-note">风险管理和下行分析在交易层面与投资组合层面均应用于各项投资。</p>
     </div>
   </div>
 </section>
-
-<!-- ============================================================ D, THE FIRM -->
-<section class="sv-bridge home-firm-preview" id="firm" data-screen-label="公司" aria-labelledby="sv-bridge-title">
-  <div class="sv-shell sv-grid12 sv-bridge__inner home-firm-preview__grid">
-    <div class="sv-bridge__head home-firm-preview__copy">
-      <p class="sv-label">公司</p>
-      <h2 class="sv-h2" id="sv-bridge-title">历经二十余年积淀而成。</h2>
-    </div>
-    <div class="sv-bridge__body home-firm-preview__statement">
-      <p>新岸资本将本地市场关系与机构化投资管理能力相结合，覆盖项目寻源、承销、法律结构设计、资产服务及处置。</p>
-      <div class="home-firm-preview__proof" aria-label="公司能力">
-        <span>本地寻源</span>
-        <span>法律结构设计</span>
-        <span>资产服务</span>
-      </div>
-      <a class="sv-textlink home-firm-preview__link" href="/cn/firm/">了解公司 <span aria-hidden="true">&rarr;</span></a>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================================ E, STRATEGY -->
-<section class="sv-strategy" id="strategy" data-screen-label="策略" aria-labelledby="sv-strategy-title">
-  <div class="sv-shell sv-grid12 sv-strategy__inner">
-    <div class="sv-strategy__lead">
-      <p class="sv-label">策略</p>
-      <h2 class="sv-h2" id="sv-strategy-title">应对复杂情境的信贷解决方案</h2>
-      <p>新岸资本与借款人及金融机构合作，围绕下行保护、可执行性及可行的回收路径来构建资产支持信贷。</p>
-      <a href="/cn/strategy/" class="sv-textlink">了解我们的策略<span aria-hidden="true">→</span></a>
-    </div>
-    <div class="sv-strategy__rows">
-      <a class="sv-srow" href="/cn/strategy/">
-        <span class="sv-srow__content">
-          <h3 class="sv-srow__title">资产支持贷款</h3>
-          <span class="sv-srow__body">围绕抵押品、法律文件及可执行回收路径设计的信贷。</span>
-        </span>
-        <span class="sv-srow__arrow" aria-hidden="true">→</span>
-      </a>
-      <a class="sv-srow" href="/cn/strategy/">
-        <span class="sv-srow__content">
-          <h3 class="sv-srow__title">资产重组</h3>
-          <span class="sv-srow__body">通过运营与法律工作稳定资产，并为处置创造可选方案。</span>
-        </span>
-        <span class="sv-srow__arrow" aria-hidden="true">→</span>
-      </a>
-      <a class="sv-srow" href="/cn/strategy/">
-        <span class="sv-srow__content">
-          <h3 class="sv-srow__title">债务处置</h3>
-          <span class="sv-srow__body">与机构化承销标准一致的严谨债务重组、资产服务及退出。</span>
-        </span>
-        <span class="sv-srow__arrow" aria-hidden="true">→</span>
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================================ H, CHINA DEBT DYNAMICS -->
-<section class="sv-cdd" id="research" data-screen-label="中国债务动态" aria-labelledby="sv-cdd-title">
-  <div class="sv-shell sv-cdd__inner">
-    <div class="sv-cdd__head">
-      <div>
-        <p class="sv-cdd__label">研究系列，始于 2018 年</p>
-        <h2 class="sv-cdd__title" id="sv-cdd-title">中国债务动态</h2>
-      </div>
-      <p class="sv-cdd__desc">关于中国私募信贷市场、政策发展、法律框架及债权人回收的研究。</p>
-    </div>
-
-    <article>
-      <a class="sv-cdd__feature" href="/insights/china-debt-dynamics/v10i3/">
-        <div class="sv-cdd__feature-meta">
-          <span class="sv-cdd__feature-tag">精选报告</span>
-          <span class="sv-cdd__feature-issue">第 48 期，2026 年 9 月</span>
-        </div>
-        <div class="sv-cdd__feature-main">
-          <h3 class="sv-cdd__feature-title">中国房地产：认知与现实</h3>
-          <span class="sv-cdd__feature-read">阅读本期 <span aria-hidden="true">→</span></span>
-        </div>
-      </a>
+<section id="research" class="hp-section hp-research" aria-labelledby="hp-research-title" data-screen-label="China Debt Dynamics" data-selected-research="v10i3">
+  <div class="hp-wrap hp-reading-grid">
+    <h2 id="hp-research-title">中国债务动态</h2>
+    <article class="hp-reading">
+      <p class="hp-meta">精选研究 · 2026 年 9 月 · 第 10 卷，第 3 期</p>
+      <h3 class="hp-report-title">中国房地产：认知与现实</h3>
+      <p class="hp-report-dek">上海还是“鬼城”？两类市场的不同现实，以及这一区别为何对资产支持信贷至关重要。</p>
+      <p>中国住宅开发市场的低迷是真实存在的。但这并不意味着每一处已竣工商用物业都空置、无法交易，或不适合作为抵押品。数据日益显示出更为分化的现实：新住宅开发面临严重压力，而部分已竣工、产生收入的商业资产则出现流动性改善和企稳。</p>
+      <div class="hp-links"><a href="/insights/china-debt-dynamics/v10i3/">阅读精选报告（英文）</a><a href="/cn/insights/#archive">中国债务动态归档</a></div>
+      <p class="hp-note">本刊表达作者截至所示日期的观点，该等观点可能在未经通知的情况下变更。</p>
     </article>
-
-    <div class="sv-cdd__foot sv-cdd__foot--compact">
-      <a class="sv-cdd__archive-btn" href="/cn/insights/#archive">查看完整归档<span aria-hidden="true">→</span></a>
+  </div>
+</section>
+<section id="strategy" class="hp-section" aria-labelledby="hp-strategy-title" data-screen-label="Strategy">
+  <div class="hp-wrap hp-reading-grid">
+    <h2 id="hp-strategy-title">策略范围</h2>
+    <div class="hp-reading">
+      <dl class="hp-disciplines">
+        <div><dt>资产支持贷款</dt><dd>为拥有可识别抵押品及融资需求的企业提供资产支持融资，包括过桥、再融资及收购情境。</dd></div>
+        <div><dt>资产重组</dt><dd>为涉及可行资产与承压资产负债表的情境提供资本，包括重组及深度价值收购。</dd></div>
+        <div><dt>债务处置</dt><dd>为寻求转让、重组或化解不良信贷（包括不良贷款）的金融机构及其他债权持有人提供信贷解决方案。</dd></div>
+      </dl>
+      <a class="hp-link" href="/cn/strategy/">了解我们的策略</a>
     </div>
   </div>
 </section>
-
+<section id="firm" class="hp-section" aria-labelledby="hp-execution-title" data-screen-label="Firm">
+  <div class="hp-wrap hp-reading-grid">
+    <h2 id="hp-execution-title">团队与执行</h2>
+    <div class="hp-reading">
+      <p>本地团队支持中国各地的项目寻源、尽职调查、法律结构设计、资产服务及处置，并通过新岸资本的机构化投资管理平台进行协调。</p>
+      <p>新岸资产解决方案是新岸资本的境内资产服务与处置平台，支持中国各地的本地执行及信贷回收。</p>
+      <a class="hp-link" href="/cn/team/">认识团队</a>
+    </div>
+  </div>
+</section>
+<section id="institutional-contact" class="hp-section hp-contact" aria-labelledby="hp-contact-title">
+  <div class="hp-wrap hp-reading-grid">
+    <h2 id="hp-contact-title">机构咨询</h2>
+    <div class="hp-reading"><p>如有一般机构咨询，可联系新岸资本。</p><a class="hp-link" href="/cn/contact/">联系新岸资本</a></div>
+  </div>
+</section>
 </main>
 
 <!-- ============================================================ I, FOOTER -->
