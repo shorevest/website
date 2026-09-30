@@ -1,6 +1,6 @@
 {
-  "purpose": "Force a fresh GitHub Pages deployment after the Media archive layout correction.",
+  "purpose": "Force a fresh GitHub Pages deployment after adding the Gusu District ShoreVest coverage.",
   "mediaRoute": "/media/",
-  "expectedState": "Archive articles hidden; coming-soon notice aligned to the standard page container.",
-  "requestedAt": "2026-07-22"
+  "expectedState": "Media archive shows 27 items, with the 24 September 2026 姑苏发布 ShoreVest cooperation agreement as the newest entry.",
+  "requestedAt": "2026-09-30"
 }
