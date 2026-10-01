@@ -469,7 +469,7 @@ function main() {
       throw new Error(`Missing clean canonical URL in ${item.destination}`);
     }
 
-    if (isCddArticleRoute(item.route) && /<meta\s+name=["']robots["'][^>]*content=["'][^"']*noindex/i.test(html)) {
+    if (!item.disabled && isCddArticleRoute(item.route) && /<meta\s+name=["']robots["'][^>]*content=["'][^"']*noindex/i.test(html)) {
       throw new Error(`Clean CDD canonical route contains noindex: ${item.destination}`);
     }
 
