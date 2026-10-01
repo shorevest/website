@@ -149,6 +149,13 @@ if (!files.length) throw new Error('No generated Insight article pages found.');
 
 for (const file of files) {
   const original = fs.readFileSync(file, 'utf8');
+
+  // A disabled Insight route is a temporary noindex redirect/hold page, not an
+  // article. Preserve its safe canonical and do not add article social metadata.
+  if (/<meta\s+name=["']sv-disabled-route["']/i.test(original)) {
+    continue;
+  }
+
   const meta = metadataFor(file, original);
 
   if (validateOnly) {
