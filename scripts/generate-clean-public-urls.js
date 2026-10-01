@@ -489,7 +489,7 @@ function main() {
   }
 
   const cddRoutes = primaryRoutes.filter(item => isCddArticleRoute(item.route));
-  const nonIndexableCddRoutes = cddRoutes.filter(item => !item.indexable);
+  const nonIndexableCddRoutes = cddRoutes.filter(item => !item.disabled && !item.indexable);
   if (nonIndexableCddRoutes.length) {
     throw new Error(`Public CDD route omitted from sitemap: ${nonIndexableCddRoutes[0].route}`);
   }
