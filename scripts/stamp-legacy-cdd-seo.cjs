@@ -110,7 +110,8 @@ function main() {
     }
 
     const destinationBefore = fs.readFileSync(destinationPath, 'utf8');
-    const destinationAfter = cleanGeneratedRoute(destinationBefore, route);
+    const destinationDisabled = /<meta\\s+name=[\"']sv-disabled-route[\"']/i.test(destinationBefore);
+    const destinationAfter = destinationDisabled ? destinationBefore : cleanGeneratedRoute(destinationBefore, route);
 
     if (!validateOnly) {
       if (sourceAfter !== sourceBefore) fs.writeFileSync(sourcePath, sourceAfter);
@@ -120,6 +121,13 @@ function main() {
     const sourceToCheck = validateOnly ? sourceBefore : sourceAfter;
     const destinationToCheck = validateOnly ? destinationBefore : destinationAfter;
     errors.push(...validateLegacySource(filename, route, sourceToCheck));
+
+    // Held/disabled clean routes intentionally canonicalize to their safe redirect target.
+    // Do not rewrite or validate them as normal public CDD article destinations.
+    if (destinationDisabled) {
+      cleanCount += 1;
+      continue;
+    }
 
     if (destinationToCheck.includes(MARKER)) {
       errors.push(`${path.relative(ROOT, destinationPath)}: inherited legacy noindex/refresh marker`);
