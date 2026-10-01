@@ -1,6 +1,6 @@
 {
-  "purpose": "Force a fresh GitHub Pages deployment after adding the Gusu District ShoreVest coverage.",
-  "mediaRoute": "/media/",
-  "expectedState": "Media archive shows 27 items, with the 24 September 2026 姑苏发布 ShoreVest cooperation agreement as the newest entry.",
-  "requestedAt": "2026-09-30"
+  "purpose": "Force a fresh GitHub Pages deployment after anonymizing the China Debt Dynamics case study.",
+  "mediaRoute": "/insights/china-debt-dynamics/v10i3/",
+  "expectedState": "Case study identifies only a mall in central Shanghai and a Chinese commercial bank, with transaction figures rounded and no seller or asset name.",
+  "requestedAt": "2026-10-01"
 }
