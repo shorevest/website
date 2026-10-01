@@ -110,7 +110,7 @@ function main() {
     }
 
     const destinationBefore = fs.readFileSync(destinationPath, 'utf8');
-    const destinationDisabled = /<meta\\s+name=[\"']sv-disabled-route[\"']/i.test(destinationBefore);
+    const destinationDisabled = /<meta\s+name=["']sv-disabled-route["']/i.test(destinationBefore);
     const destinationAfter = destinationDisabled ? destinationBefore : cleanGeneratedRoute(destinationBefore, route);
 
     if (!validateOnly) {
