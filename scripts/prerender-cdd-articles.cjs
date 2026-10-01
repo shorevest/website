@@ -290,7 +290,12 @@ function main() {
     if (validateOnly) {
       const destination = destinationFromCanonical(sourceHtml);
       if (destination && fs.existsSync(path.join(ROOT, destination))) {
-        errors.push(...validateHtml(destination, read(destination), context.data));
+        const destinationHtml = read(destination);
+        // Disabled clean routes intentionally render a noindex redirect hold page,
+        // not a prerendered article body.
+        if (!/<meta\s+name=["']sv-disabled-route["']/i.test(destinationHtml)) {
+          errors.push(...validateHtml(destination, destinationHtml, context.data));
+        }
       }
     }
   }
