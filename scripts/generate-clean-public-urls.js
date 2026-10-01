@@ -273,15 +273,22 @@ function setCanonicalRoute(html, route) {
 function buildDisabledRoutePage(item) {
   const chinese = item.route.startsWith('/cn/');
   const targetAbsolute = new URL(item.redirectTarget, SITE_ORIGIN).href;
-  const title = item.reason === 'media-archive-disabled'
-    ? (chinese ? '媒体资料库更新中 | 新岸资本' : 'Media Archive Update | ShoreVest')
-    : (chinese ? '目前暂无开放职位 | 新岸资本' : 'No Current Vacancy | ShoreVest');
-  const heading = item.reason === 'media-archive-disabled'
-    ? (chinese ? '更新后的媒体资料库即将上线。' : 'Updated archive coming soon.')
-    : (chinese ? '目前暂无该开放职位。' : 'This role is not currently open.');
-  const linkText = item.reason === 'media-archive-disabled'
-    ? (chinese ? '返回媒体页面' : 'Return to Media')
-    : (chinese ? '查看人才招聘页面' : 'View Careers');
+  const sensitiveHold = item.reason === 'sensitive-content-hold';
+  const title = sensitiveHold
+    ? (chinese ? '文章更新中 | 新岸资本' : 'Insights Update | ShoreVest')
+    : item.reason === 'media-archive-disabled'
+      ? (chinese ? '媒体资料库更新中 | 新岸资本' : 'Media Archive Update | ShoreVest')
+      : (chinese ? '目前暂无开放职位 | 新岸资本' : 'No Current Vacancy | ShoreVest');
+  const heading = sensitiveHold
+    ? (chinese ? '本文暂时不可用。' : 'This article is temporarily unavailable.')
+    : item.reason === 'media-archive-disabled'
+      ? (chinese ? '更新后的媒体资料库即将上线。' : 'Updated archive coming soon.')
+      : (chinese ? '目前暂无该开放职位。' : 'This role is not currently open.');
+  const linkText = sensitiveHold
+    ? (chinese ? '返回洞察' : 'Return to Insights')
+    : item.reason === 'media-archive-disabled'
+      ? (chinese ? '返回媒体页面' : 'Return to Media')
+      : (chinese ? '查看人才招聘页面' : 'View Careers');
 
   return `<!doctype html>
 <html lang="${chinese ? 'zh-CN' : 'en'}">
