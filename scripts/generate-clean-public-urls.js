@@ -116,9 +116,6 @@ function isCddArticleRoute(route) {
 
 function disabledRouteState(route) {
   // Temporary disclosure hold: keep the September 2026 CDD article off the public site
-  // while third-party copies containing deal-specific information are being removed.
-  if (route === '/insights/china-debt-dynamics/v10i3/') {
-    return { reason: 'sensitive-content-hold', redirectTarget: '/insights/' };
   }
   if (isCareersApplicationRoute(route)) {
     if (RECRUITMENT_PUBLIC_CONFIG.applicationsEnabled !== true) {
