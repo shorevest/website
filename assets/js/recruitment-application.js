@@ -28,8 +28,10 @@
       bot: 'Please complete the security verification.',
       submit: 'Submit application',
       submitting: 'Submitting…',
+      retry: 'Retry submission',
       generic: 'We could not submit your application. Please try again.',
       network: 'We could not submit your application. Please check your connection and try again.',
+      confirmation: 'We could not confirm receipt. Keep this page open and choose Retry submission to check the same application.',
       rate: 'Too many attempts were received. Please wait a few minutes and try again.',
       successTitle: 'Application received',
       successBody: 'Thank you for your interest in ShoreVest. We have received your application. If your experience aligns with the role, a member of our team will contact you regarding next steps.',
@@ -51,8 +53,10 @@
       bot: '请完成安全验证。',
       submit: '提交申请',
       submitting: '正在提交……',
+      retry: '重试提交',
       generic: '您的申请未能提交，请稍后重试。',
       network: '您的申请未能提交，请检查网络连接后重试。',
+      confirmation: '暂时无法确认申请是否已收到。请保持此页面打开，并点击“重试提交”以确认同一份申请。',
       rate: '提交尝试过多，请稍后再试。',
       successTitle: '申请已收到',
       successBody: 'ShoreVest 已安全收到您的申请。',
@@ -91,7 +95,7 @@
     try {
       var url = new URL(String(value).trim());
       var host = url.hostname.toLowerCase().replace(/\.$/, '');
-      return url.protocol === 'https:' && (host === 'linkedin.com' || host.endsWith('.linkedin.com'));
+      return url.protocol === 'https:' && !url.username && !url.password && (host === 'linkedin.com' || host.endsWith('.linkedin.com'));
     } catch (_) {
       return false;
     }
@@ -143,6 +147,87 @@
       credentials: 'omit',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify(body)
+    }).then(function (result) {
+      if (!result || result.success !== true) throw submissionError();
+      return result;
+    });
+  }
+
+  function submissionError() {
+    return Object.assign(new Error('Recruitment response could not be verified'), { code: 'SUBMISSION_FAILED' });
+  }
+
+  function matchesApplication(result, started) {
+    return result && result.applicationReference === started.applicationReference &&
+      result.fileReference === started.fileReference;
+  }
+
+  // Keep a submission's identity and completed stages in memory for retries.
+  // A lost finalization response must never create another application.
+  function submitApplication(win, base, attempt) {
+    return Promise.resolve().then(function () {
+      if (attempt.started) return attempt.started;
+      return post(win, base, '/applications/initiate', attempt.initial).then(function (started) {
+        if (typeof started.applicationReference !== 'string' || !started.applicationReference ||
+            typeof started.fileReference !== 'string' || !started.fileReference ||
+            typeof started.completionToken !== 'string' || !started.completionToken ||
+            !started.upload || typeof started.upload.url !== 'string' || !started.upload.url) {
+          throw submissionError();
+        }
+        attempt.started = started;
+        return started;
+      });
+    }).then(function (started) {
+      if (attempt.uploaded) return;
+      return win.fetch(started.upload.url, {
+        method: 'PUT', mode: 'cors', credentials: 'omit',
+        headers: started.upload.requiredHeaders || {}, body: attempt.file
+      }).then(function (response) {
+        if (!response.ok) throw submissionError();
+        attempt.uploaded = true;
+      });
+    }).then(function () {
+      if (attempt.completed) return attempt.completed;
+      return post(win, base, '/applications/complete', {
+        applicationReference: attempt.started.applicationReference,
+        fileReference: attempt.started.fileReference,
+        completionToken: attempt.started.completionToken
+      }).then(function (completed) {
+        if (!matchesApplication(completed, attempt.started) ||
+            (completed.alreadyFinalized !== true &&
+              (typeof completed.finalizationToken !== 'string' || !completed.finalizationToken))) {
+          throw submissionError();
+        }
+        attempt.completed = completed;
+        return completed;
+      });
+    }).then(function (completed) {
+      if (completed.alreadyFinalized === true) return completed;
+      attempt.finalizationRequested = true;
+      return post(win, base, '/applications/finalize', {
+        applicationReference: attempt.started.applicationReference,
+        fileReference: attempt.started.fileReference,
+        finalizationToken: completed.finalizationToken,
+        privacyAccepted: true, accuracyConfirmed: true
+      }).then(function (result) {
+        if (!matchesApplication(result, attempt.started)) throw submissionError();
+        return result;
+      });
+    });
+  }
+
+  function updateLanguageLinks(doc, params) {
+    if (!params.role) return;
+    Array.prototype.forEach.call(doc.querySelectorAll('[data-application-language]'), function (link) {
+      var target = link.getAttribute('data-application-language') === 'zh-CN'
+        ? '/cn/careers/apply/' : '/careers/apply/';
+      link.setAttribute('href', target + '?role=' + encodeURIComponent(params.role) + '&source=' + encodeURIComponent(params.source));
+    });
+  }
+
+  function lockCandidateFields(doc, locked) {
+    Array.prototype.forEach.call(doc.querySelectorAll('[data-field]'), function (field) {
+      field.disabled = locked;
     });
   }
 
@@ -159,6 +244,8 @@
     var form = doc.querySelector('[data-application-form]');
     var state = doc.querySelector('[data-application-state]');
     if (form) form.hidden = true;
+    var intro = doc.querySelector('[data-application-intro]');
+    if (intro) intro.hidden = true;
     if (state) { state.hidden = false; state.textContent = message; }
   }
 
@@ -227,7 +314,7 @@
     else {
       var ext = extension(file.name);
       var mime = declaredMime(file);
-      if (!cv.allowedExtensions.includes(ext) || !cv.allowedMimeTypes.includes(mime)) errors.cv = strings.fileType;
+      if (!cv.allowedExtensions.includes(ext) || !cv.allowedMimeTypes.includes(mime) || MIME_BY_EXTENSION[ext] !== mime) errors.cv = strings.fileType;
       else if (file.size < 1 || file.size > cv.maxSizeBytes) errors.cv = strings.fileSize;
     }
     var privacy = doc.querySelector('[data-field="privacyAccepted"]');
@@ -294,7 +381,8 @@
     var lang = locale(doc);
     var strings = STRINGS[lang];
     var params = parseParams(win.location && win.location.search);
-    var state = { botToken: '', turnstileId: null, submitting: false };
+    var state = { botToken: '', turnstileId: null, submitting: false, attempt: null };
+    updateLanguageLinks(doc, params);
 
     return Promise.all([
       json(win, PUBLIC_CONFIG_PATH, { credentials: 'same-origin', cache: 'no-store' }),
@@ -317,20 +405,21 @@
       setText(doc.querySelector('[data-application-role-meta]'), [role.department[lang], role.location[lang], role.employmentType[lang]].filter(Boolean).join(' · '));
       var form = doc.querySelector('[data-application-form]');
       var stateNode = doc.querySelector('[data-application-state]');
+      var intro = doc.querySelector('[data-application-intro]');
       if (stateNode) stateNode.hidden = true;
+      if (intro) intro.hidden = false;
       if (form) form.hidden = false;
 
-      return renderTurnstile(win, doc, publicConfig, state).then(function (turnstileReady) {
-        if (!turnstileReady) {
-          var turnstileError = doc.querySelector('[data-field-error="turnstile"]');
-          if (turnstileError) turnstileError.textContent = strings.bot;
-        }
-        if (!form) return 'ready';
+      // Bind immediately, before waiting for the third-party verification script.
+      // Otherwise an early click performs the browser's default form submission.
+      if (form) {
         form.addEventListener('submit', function (event) {
           event.preventDefault();
           if (state.submitting) return;
           clearErrors(doc);
-          var checked = validate(doc, role, strings, state.botToken);
+          var lockedAttempt = state.attempt && state.attempt.finalizationRequested;
+          var checked = lockedAttempt ? { errors: {}, file: state.attempt.file }
+            : validate(doc, role, strings, state.botToken || (state.attempt && state.attempt.started ? 'verified' : ''));
           if (Object.keys(checked.errors).length) {
             showErrors(doc, checked.errors);
             return;
@@ -350,7 +439,6 @@
             roleId: role.id,
             locale: lang,
             source: params.source,
-            clientSubmissionId: uuid(win),
             privacyNoticeVersion: role.application.privacyNoticeVersion,
             submittedAtClientUtc: new Date().toISOString(),
             botToken: state.botToken,
@@ -370,40 +458,26 @@
             }
           };
 
-          post(win, publicConfig.apiBase, '/applications/initiate', initial)
-            .then(function (started) {
-              var headers = started.upload && started.upload.requiredHeaders ? started.upload.requiredHeaders : {};
-              return win.fetch(started.upload.url, {
-                method: 'PUT',
-                mode: 'cors',
-                credentials: 'omit',
-                headers: headers,
-                body: checked.file
-              }).then(function (uploadResponse) {
-                if (!uploadResponse.ok) throw Object.assign(new Error('Upload failed'), { code: 'SUBMISSION_FAILED' });
-                return { started: started };
-              });
-            })
-            .then(function (context) {
-              return post(win, publicConfig.apiBase, '/applications/complete', {
-                applicationReference: context.started.applicationReference,
-                fileReference: context.started.fileReference,
-                completionToken: context.started.completionToken
-              }).then(function (completed) {
-                return { started: context.started, completed: completed };
-              });
-            })
-            .then(function (context) {
-              return post(win, publicConfig.apiBase, '/applications/finalize', {
-                applicationReference: context.started.applicationReference,
-                fileReference: context.started.fileReference,
-                finalizationToken: context.completed.finalizationToken,
-                privacyAccepted: true,
-                accuracyConfirmed: true
-              });
-            })
+          var fingerprint = JSON.stringify({ candidate: initial.candidate, file: initial.file });
+          if (!lockedAttempt && (!state.attempt || state.attempt.fingerprint !== fingerprint || state.attempt.file !== checked.file)) {
+            if (!state.botToken) {
+              state.submitting = false;
+              if (submit) { submit.disabled = false; submit.textContent = strings.submit; }
+              showErrors(doc, { turnstile: strings.bot });
+              return;
+            }
+            initial.clientSubmissionId = uuid(win);
+            state.attempt = { initial: initial, file: checked.file, fingerprint: fingerprint };
+          }
+          // Turnstile tokens are single use. A fresh token can retry initiation
+          // with the same application identity after a lost response.
+          if (!state.attempt.started) state.attempt.initial.botToken = state.botToken;
+          lockCandidateFields(doc, true);
+          return submitApplication(win, publicConfig.apiBase, state.attempt)
             .then(function (result) {
               form.hidden = true;
+              if (intro) intro.hidden = true;
+              state.attempt = null;
               var success = doc.querySelector('[data-application-success]');
               if (success) {
                 success.hidden = false;
@@ -424,15 +498,24 @@
             .catch(function (error) {
               if (submitError) {
                 submitError.hidden = false;
-                submitError.textContent = error && error.name === 'TypeError' ? strings.network : errorMessage(strings, error && error.code);
+                submitError.textContent = state.attempt && state.attempt.finalizationRequested ? strings.confirmation
+                  : error && error.name === 'TypeError' ? strings.network : errorMessage(strings, error && error.code);
               }
               resetTurnstile(win, state);
             })
             .finally(function () {
               state.submitting = false;
-              if (submit) { submit.disabled = false; submit.textContent = strings.submit; }
+              var retryingFinalization = state.attempt && state.attempt.finalizationRequested;
+              lockCandidateFields(doc, Boolean(retryingFinalization));
+              if (submit) { submit.disabled = false; submit.textContent = retryingFinalization ? strings.retry : strings.submit; }
             });
         });
+      }
+      return renderTurnstile(win, doc, publicConfig, state).then(function (turnstileReady) {
+        if (!turnstileReady) {
+          var turnstileError = doc.querySelector('[data-field-error="turnstile"]');
+          if (turnstileError) turnstileError.textContent = strings.bot;
+        }
         return 'ready';
       });
     }).catch(function () {
@@ -450,6 +533,8 @@
     resolveRole: resolveRole,
     validEmail: validEmail,
     validLinkedIn: validLinkedIn,
+    submitApplication: submitApplication,
+    updateLanguageLinks: updateLanguageLinks,
     MANIFEST_PATH: MANIFEST_PATH,
     PUBLIC_CONFIG_PATH: PUBLIC_CONFIG_PATH
   };

@@ -4,6 +4,9 @@ Status: **contained and not ready for public candidate capture.** Both public
 switches are disabled. The backend finalization contract has been reconciled and
 deployed; live scanner and application acceptance evidence remains outstanding.
 
+For the 2 October 2026 UTC browser-flow repairs, current read-only health check,
+and exact administrator handoff, see [portal repair](PORTAL_REPAIR_2026-10-02.md).
+
 ## Verified state — 16 September 2026
 
 [Read-only Azure verification](https://github.com/shorevest/website/actions/runs/35042224023)
